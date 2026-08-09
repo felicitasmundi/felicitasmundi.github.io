@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La mappa — ferma</title>
+<script src="mappa-dati/d3.min.js"></script>
+<script src="mappa-dati/topojson-client.min.js"></script>
+<style>
+  html,body{margin:0;height:100%;background:transparent;overflow:hidden}
+  #m{display:block;width:100%;height:100%;touch-action:none}
+  #cmd{position:fixed;right:0.9rem;bottom:0.9rem;display:none;gap:0.4rem;align-items:center;
+    font-family:'DM Sans',system-ui,sans-serif}
+  #cmd.on{display:flex}
+  #cmd button{background:rgba(10,12,26,0.9);border:1px solid rgba(200,160,85,0.5);color:#F5F0E6;
+    border-radius:999px;padding:0.5rem 0.9rem;font-size:0.95rem;cursor:pointer;line-height:1}
+  #cmd button:hover{border-color:#D4AF6A;color:#D4AF6A}
+</style>
+</head>
+<body>
+<svg id="m"></svg>
+<div id="cmd">
+  <button data-z="italia">Italia</button>
+  <button data-z="mondo">Mondo</button>
+  <button data-z="meno">&minus;</button>
+  <button data-z="piu">+</button>
+</div>
+<script>
+"use strict";
+var SEGNI = {
+  orma:'<path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"/><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"/>',
+  vicinato:'<path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"/><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"/><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"/><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"/><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"/>',
+  tempio:'<path d="M4 14L20 5L36 14Z"/><path d="M5 16.5L35 16.5M8.5 19L8.5 31M31.5 19L31.5 31M5 33.5L35 33.5"/><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"/>',
+  incontro:'<path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"/><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"/><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"/>'
+};
+
+/* segni finti, dichiarati: i contesti veri sono [ in attesa ] */
+var PUNTI = [
+  {ll:[9.12,40.12],  s:"vicinato", k:1.3},
+  {ll:[11.25,43.77], s:"tempio",   k:1.1},
+  {ll:[9.19,45.46],  s:"incontro", k:1.0},
+  {ll:[14.16,42.35], s:"orma",     k:1.0}
+];
+
+var svg = d3.select("#m"), W = 0, H = 0, world = null;
+var VIVO = /vivo=1/.test(location.search);
+
+d3.json("mappa-dati/countries-110m.json").then(function(topo){
+  world = topojson.feature(topo, topo.objects.countries);
+  disegna();
+}).catch(function(err){
+  var s = document.getElementById("m");
+  s.setAttribute("viewBox", "0 0 400 200");
+  s.innerHTML = '<text x="200" y="100" text-anchor="middle" fill="#D4AF6A"'
+              + ' font-family="DM Sans, system-ui, sans-serif" font-size="11">'
+              + '[ in attesa ]</text>';
+  if(window.console) console.error("mappa: dato geografico non caricato —", err);
+});
+
+function disegna(){
+  if(!world) return;
+  W = document.documentElement.clientWidth;
+  H = document.documentElement.clientHeight;
+  svg.attr("viewBox", "0 0 " + W + " " + H).selectAll("*").remove();
+  if(VIVO){ document.documentElement.style.background = "#0A0C1A"; }
+
+  var proj = d3.geoNaturalEarth1().fitExtent([[W*0.04, H*0.10],[W*0.96, H*0.90]], {type:"Sphere"});
+  var path = d3.geoPath(proj);
+  proiezione = proj;
+
+  var gz = svg.append("g");
+  var defs = svg.append("defs");
+  var g = defs.append("radialGradient").attr("id","bagliore");
+  g.append("stop").attr("offset","0%").attr("stop-color","#D4AF6A").attr("stop-opacity","0.55");
+  g.append("stop").attr("offset","45%").attr("stop-color","#D4AF6A").attr("stop-opacity","0.20");
+  g.append("stop").attr("offset","100%").attr("stop-color","#D4AF6A").attr("stop-opacity","0");
+
+  gz.append("path").attr("d", path({type:"Sphere"}))
+     .attr("fill","rgba(10,20,40,0.55)").attr("stroke","rgba(184,150,62,0.22)").attr("stroke-width",1).attr("vector-effect","non-scaling-stroke");
+
+  gz.append("path").attr("d", path(d3.geoGraticule10()))
+     .attr("fill","none").attr("stroke","rgba(184,150,62,0.10)").attr("stroke-width",0.5).attr("vector-effect","non-scaling-stroke");
+
+  gz.append("path").attr("d", path(world))
+     .attr("fill","rgba(245,240,230,0.07)")
+     .attr("stroke","rgba(200,160,85,0.30)").attr("stroke-width",0.6).attr("vector-effect","non-scaling-stroke")
+     .attr("stroke-linejoin","round");
+
+  /* lo spessore visto da lontano: la zona si accende, non il puntino */
+  var c = proj([9.6,41.4]);
+  var r = Math.max(W, H) * 0.085;
+  bagliore = gz.append("circle").attr("cx",c[0]).attr("cy",c[1]).attr("r",r)
+     .attr("fill","url(#bagliore)");
+
+  /* l'Italia riletta sopra il bagliore, più chiara */
+  var italia = world.features.filter(function(f){ return f.id === "380"; });
+  gz.append("path").attr("d", path({type:"FeatureCollection", features:italia}))
+     .attr("fill","rgba(245,240,230,0.16)")
+     .attr("stroke","rgba(212,175,106,0.75)").attr("stroke-width",0.9).attr("vector-effect","non-scaling-stroke");
+
+  var gs = svg.append("g");
+  var scala = Math.max(0.42, Math.min(1, W/900));
+  segni = [];
+  PUNTI.forEach(function(p){
+    var xy = proj(p.ll); if(!xy) return;
+    var lato = 17 * scala * p.k;
+    var nodo = gs.append("g")
+      .attr("transform","translate("+(xy[0]-lato/2)+","+(xy[1]-lato/2)+") scale("+(lato/40)+")")
+      .attr("color","#D4AF6A")
+      .attr("opacity",OPACITA_SEGNO)
+      .html('<g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+SEGNI[p.s]+'</g>');
+    segni.push({nodo:nodo, xy:xy, lato:lato});
+  });
+  attaccaZoom(gz);
+  posaSegni(d3.zoomIdentity);
+}
+
+var zoom = null, proiezione = null, segni = [], bagliore = null;
+
+/* da lontano si vede il bagliore, da vicino i segni: la zona che si accende
+   è lo spessore visto da lontano, il segno è la vista ravvicinata.
+   Sotto K_GIU i segni sono spenti; a K_SU sono pieni; in mezzo salgono
+   mentre il bagliore scende. Alla vista mondiale coprirebbero l'Italia. */
+var K_GIU = 3, K_SU = 4, OPACITA_SEGNO = 0.92;
+
+function veloSegni(k){
+  var q = (k - K_GIU) / (K_SU - K_GIU);
+  return Math.max(0, Math.min(1, q)) * OPACITA_SEGNO;
+}
+
+function posaSegni(t){
+  var op = VIVO ? veloSegni(t.k) : OPACITA_SEGNO;
+  segni.forEach(function(s){
+    var x = t.applyX(s.xy[0]), y = t.applyY(s.xy[1]);
+    s.nodo.attr("transform","translate("+(x-s.lato/2)+","+(y-s.lato/2)+") scale("+(s.lato/40)+")")
+          .attr("opacity", op);
+  });
+}
+
+function attaccaZoom(g){
+  if(!VIVO) return;
+  document.getElementById("cmd").classList.add("on");
+  zoom = d3.zoom().scaleExtent([1,24]).on("zoom", function(ev){
+    g.attr("transform", ev.transform);
+    posaSegni(ev.transform);
+    if(bagliore) bagliore.attr("opacity", Math.max(0, 1 - (ev.transform.k - 1) / (K_SU - 1)));
+  });
+  svg.style("cursor","grab").call(zoom);
+}
+
+function vaiA(ll, k){
+  if(!zoom || !proiezione) return;
+  var xy = proiezione(ll);
+  svg.transition().duration(900).call(
+    zoom.transform,
+    d3.zoomIdentity.translate(W/2, H/2).scale(k).translate(-xy[0], -xy[1])
+  );
+}
+
+document.getElementById("cmd").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if(!b || !zoom) return;
+  var q = b.getAttribute("data-z");
+  if(q === "italia") vaiA([12.5, 42.0], 7);
+  else if(q === "mondo") svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity);
+  else svg.transition().duration(300).call(zoom.scaleBy, q === "piu" ? 1.6 : 1/1.6);
+});
+
+window.addEventListener("resize", function(){ clearTimeout(window.__t); window.__t = setTimeout(disegna, 160); });
+</script>
+</body>
+</html>

@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Spazio Vivo · Comunità Eterna FelicitasMundi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  /* ══ DUE INTERRUTTORI SOLI ══
+     --scala  : la leggibilità di tutto il sito. Tutto in rem: comanda il telefono.
+     --onda-* : ampiezza e lunghezza dell'onda, uguali ovunque.            */
+  :root{
+    --scala:1.4;
+    --onda-amp:0.5rem; --onda-len:11rem;
+
+    --navy:#0A0C1A; --oro:#C8A055; --oro-ch:#D4AF6A; --ivory:#F5F0E6;
+    --line:rgba(184,150,62,0.2); --scafo:#060916;
+
+    --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
+    --terra-f:#EFE3D2; --acqua-f:#D3E3EE; --fuoco-f:#EEDAD3;
+    --aria-f:#DEEDD4;  --etere-f:#E3D6F0;  --nexus-f:#F5F0E6;
+
+    /* nulla sotto 14px equivalenti */
+    --t-eti: calc(0.8125rem * var(--scala));   /* 13px */
+    --t-tas: calc(0.9375rem * var(--scala));   /* 15px */
+    --t-cor: calc(1.0625rem * var(--scala));   /* 17px */
+    --t-scr: calc(1.125rem  * var(--scala));   /* 18px */
+    --t-tit: calc(1.5rem    * var(--scala));
+    --t-big: calc(1.9rem    * var(--scala));
+
+    --barra:16rem;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{background:#02040c;color:var(--ivory);font-family:'DM Sans',sans-serif;
+       min-height:100dvh;-webkit-font-smoothing:antialiased}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:radial-gradient(ellipse at 28% 22%,rgba(38,64,120,0.5),transparent 58%),
+               radial-gradient(ellipse at 76% 74%,rgba(60,44,110,0.4),transparent 60%),
+               radial-gradient(ellipse at 50% 42%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+  a{color:inherit;text-decoration:none}
+
+  /* ══ IL MARGINE SINISTRO — la barra ══ */
+  #barra{position:fixed;left:0;top:0;bottom:0;width:var(--barra);z-index:60;
+    background:rgba(6,9,22,0.82);backdrop-filter:blur(0.8rem);
+    border-right:1px solid var(--line);display:flex;flex-direction:column;
+    padding:1.1rem 0 calc(0.8rem + env(safe-area-inset-bottom));overflow-y:auto}
+  .marchio{display:flex;align-items:center;gap:0.6rem;padding:0 1rem 1rem;
+    border-bottom:1px solid var(--line);margin-bottom:0.7rem}
+  .marchio img{width:2.1rem;height:2.1rem;object-fit:contain}
+  .marchio span{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--oro-ch);line-height:1.3}
+
+  .voce{display:flex;align-items:flex-start;gap:0.65rem;width:100%;background:none;border:0;
+    padding:0.7rem 1rem;cursor:pointer;text-align:left;color:rgba(245,240,230,0.86);
+    font-family:'DM Sans',sans-serif;font-size:var(--t-tas);line-height:1.3;
+    border-left:0.2rem solid transparent}
+  .voce:hover{background:rgba(245,240,230,0.04);color:var(--ivory)}
+  .voce.on{border-left-color:var(--oro);background:rgba(200,160,85,0.1);color:var(--ivory)}
+  .voce small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);margin-top:0.1rem;line-height:1.35}
+  .voce .sg{width:1.05rem;height:1.05rem;flex:0 0 auto;margin-top:0.15rem;opacity:0.85}
+  .voce .sg svg{width:100%;height:100%;display:block}
+
+  .sotto-voci{padding:0.1rem 0 0.4rem 2.6rem}
+  .sotto-voce{display:block;width:100%;background:none;border:0;text-align:left;cursor:pointer;
+    padding:0.4rem 0.6rem 0.45rem;border-left:0.15rem solid var(--sc,var(--line));
+    margin-bottom:0.25rem}
+  .sotto-voce b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    font-weight:500;color:rgba(245,240,230,0.92)}
+  .sotto-voce i{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    font-style:italic;color:rgba(245,240,230,0.78);line-height:1.35;margin-top:0.1rem}
+  .sotto-voce:hover b{color:var(--ivory)}
+
+  /* l'account, piantato in fondo */
+  #acc-tasto{margin-top:auto;display:flex;align-items:center;gap:0.6rem;width:100%;
+    background:none;border:0;border-top:1px solid var(--line);padding:0.85rem 1rem 0.3rem;
+    cursor:pointer;color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:var(--t-tas);
+    text-align:left}
+  #acc-tasto:hover{background:rgba(245,240,230,0.04)}
+  #acc-tasto .pallino{width:1.8rem;height:1.8rem;border-radius:50%;flex:0 0 auto;
+    border:1px solid rgba(200,160,85,0.55);display:grid;place-items:center;
+    font-family:'Cinzel',serif;font-size:var(--t-eti);color:var(--oro-ch)}
+  #acc-tasto small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78)}
+
+  /* ══ IL CENTRO ══ */
+  #centro{margin-left:var(--barra);padding:1.6rem 2.6rem 13rem}
+  #centro > *{max-width:56rem;margin-left:auto;margin-right:auto}
+  .occhio{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.5rem}
+  h1{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-big);line-height:1.2;
+    margin-bottom:0.4rem}
+  h2{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);margin-bottom:0.6rem}
+  .sotto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.82);margin-bottom:1.6rem}
+  p{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;
+    color:rgba(245,240,230,0.88);margin-bottom:0.7rem}
+  .segna{display:inline-block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);border:1px dashed var(--line);border-radius:0.3rem;
+    padding:0.12rem 0.5rem}
+
+  /* il Megafono: la scrittura sopra, le scelte, gli strumenti */
+  .riga-scelte{display:flex;gap:0.45rem;flex-wrap:wrap;align-items:center;
+    padding-top:0.55rem;margin-top:0.5rem;border-top:1px solid var(--line)}
+  .riga-strumenti{display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;
+    padding-top:0.55rem;margin-top:0.5rem;border-top:1px solid var(--line)}
+  .riga-strumenti .invia{margin-left:auto}
+
+  /* ── l'apertura: il mare sotto, il testo sopra ── */
+  .apertura{position:relative;margin:0 auto 1.4rem;padding:1.6rem 0 1.2rem;}
+  .ap-testo{position:relative;z-index:1;text-align:center;max-width:44rem;margin:0 auto}
+  .apertura .t-marchio{display:block;margin:0 auto;max-width:20rem;width:100%;height:auto}
+  .apertura .t-sotto{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;
+    text-transform:uppercase;color:var(--oro-ch);margin-top:0.35rem}
+  .apertura .c-titolo{font-family:'Cinzel',serif;font-size:var(--t-cor);color:var(--oro-ch);
+    margin-top:1.6rem;padding-top:1.1rem;position:relative}
+  .apertura .c-titolo::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+    background:linear-gradient(to right,transparent,var(--oro),transparent)}
+  .apertura .c-frase{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin-top:0.5rem}
+  @media(max-width:38rem){ .apertura .t-marchio{max-width:14rem} }
+
+  /* la testata: Nexus a sinistra, marchio al centro */
+  .testata{margin-bottom:0.9rem}
+  .t-centro{text-align:center;min-width:0}
+  .t-marchio{display:block;margin:0 auto;max-width:18rem;width:100%;height:auto}
+  .t-sotto{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--oro-ch);margin-top:0.25rem}
+  @media(max-width:38rem){ .t-marchio{max-width:13rem} }
+
+  /* i due quadranti della home */
+  .quadranti{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:1rem;
+    margin:1.4rem 0}
+  .quad{border:1px solid var(--line);border-radius:0.9rem;padding:1.1rem;
+    display:flex;flex-direction:column;gap:0.7rem}
+  .quad h3{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);color:var(--oro-ch)}
+  .quad .vuoto{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.78);font-style:italic}
+
+  /* il filo, vuoto: dice cosa aspetta */
+  .filo{display:flex;align-items:center;gap:0;overflow-x:auto;padding:0.4rem 0;scrollbar-width:none;
+    position:relative}
+  .filo::-webkit-scrollbar{display:none}
+  .filo-riga{display:flex;align-items:center;min-width:max-content;position:relative}
+  .filo-riga::before{content:'';position:absolute;left:1.2rem;right:1.2rem;top:50%;height:1px;
+    background:linear-gradient(to right,transparent,rgba(200,160,85,0.4) 10%,rgba(200,160,85,0.4) 90%,transparent)}
+  .cer{position:relative;z-index:2;width:2.1rem;height:2.1rem;border-radius:50%;margin:0 0.4rem;
+    border:1px dashed rgba(200,160,85,0.45);background:#060c1c;flex:0 0 auto}
+
+  /* la ricerca e cosa è in onda: due cose vere */
+  .campo-cerca{display:flex;gap:0.5rem;align-items:center}
+  .campo-cerca input{flex:1;min-width:0;background:rgba(245,240,230,0.05);border:1px solid var(--line);
+    border-radius:0.8rem;color:var(--ivory);font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-cor);padding:0.6rem 0.9rem;outline:none}
+  .campo-cerca input::placeholder{color:rgba(245,240,230,0.5);font-style:italic}
+  .onda-ora{display:flex;align-items:center;gap:0.6rem;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.82)}
+  .pulsa{width:0.5rem;height:0.5rem;border-radius:50%;background:var(--fuoco);flex:0 0 auto;
+    animation:pulsa 2.2s ease-in-out infinite}
+  @keyframes pulsa{0%,100%{opacity:.45}50%{opacity:1}}
+
+  /* le cinque porte di «cosa incontro» */
+  .porte{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));gap:0.7rem;margin:1rem 0}
+  .porta{border:1px solid var(--line);border-left:0.22rem solid var(--pc);border-radius:0.7rem;
+    padding:0.85rem 0.95rem;cursor:pointer;background:none;text-align:left;color:var(--ivory);
+    display:flex;gap:0.7rem;align-items:flex-start}
+  .porta:hover{background:rgba(245,240,230,0.04)}
+  .porta .sg{width:1.5rem;height:1.5rem;flex:0 0 auto;color:var(--pc)}
+  .porta .sg svg{width:100%;height:100%;display:block}
+  .porta b{font-family:'DM Sans',sans-serif;font-size:var(--t-tas);font-weight:500}
+  .porta small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);margin-top:0.1rem;line-height:1.35}
+
+  /* la chat */
+  .chat-testa{display:flex;align-items:center;gap:0.6rem;padding-bottom:0.7rem;
+    border-bottom:1px solid var(--line);margin-bottom:0.9rem}
+  .chat-testa h2{flex:1;margin:0}
+  .mini{background:none;border:1px solid rgba(200,160,85,0.45);color:var(--oro-ch);
+    border-radius:999px;padding:0.3rem 0.7rem;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);cursor:pointer;white-space:nowrap}
+  .mini:hover{background:rgba(200,160,85,0.14)}
+  .giorno{border:1px solid var(--line);border-radius:0.75rem;padding:0.85rem 0.95rem;margin-bottom:0.8rem}
+  .giorno-testa{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem}
+  .giorno-data{flex:1;font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--oro-ch)}
+  .msg{margin-bottom:0.6rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    line-height:1.6;white-space:pre-wrap}
+  .msg:last-child{margin-bottom:0}
+  .msg .chi{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:var(--oro-ch);
+    display:block;white-space:normal}
+  .scrivi{display:flex;gap:0.5rem;margin-top:1rem}
+  .scrivi textarea{flex:1;resize:none;background:rgba(245,240,230,0.05);border:1px solid var(--line);
+    border-radius:0.9rem;color:var(--ivory);font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-scr);line-height:1.45;padding:0.6rem 0.9rem;outline:none;
+    max-height:8rem;min-height:2.7rem}
+
+  /* le orme */
+  .orma{border-left:0.2rem solid var(--oc,var(--oro));background:rgba(245,240,230,0.04);
+    border-radius:0.4rem;padding:0.55rem 0.75rem;margin-bottom:0.5rem}
+  .orma .meta{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.8)}
+  .orma p{margin:0.15rem 0 0}
+
+
+  /* ── la radio: una striscia, ma un apparecchio ──
+     scafo in metallo spazzolato, rilievo vero (luce sopra, ombra sotto),
+     manopola d'ascolto, spia che si accende, scala graduata delle ore.   */
+  .radio{position:relative;border:1px solid var(--line);border-radius:0.35rem;overflow:hidden;
+    background:
+      repeating-linear-gradient(90deg,rgba(245,240,230,0.035) 0 1px,transparent 1px 3px),
+      linear-gradient(to bottom,rgba(245,240,230,0.09) 0,rgba(245,240,230,0.03) 38%,rgba(2,4,12,0.55) 100%);
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.16),
+               inset 0 -1px 0 rgba(2,4,12,0.8),
+               inset 0 0 0 1px rgba(2,4,12,0.35),
+               0 0.35rem 1.1rem rgba(2,4,12,0.5)}
+  .r-striscia{display:flex;align-items:center;gap:0.9rem;padding:0.7rem 1rem 0.65rem;flex-wrap:wrap}
+
+  /* la manopola */
+  .r-play{flex:0 0 auto;width:3rem;height:3rem;border-radius:50%;position:relative;
+    border:1px solid var(--oro);color:var(--oro-ch);cursor:pointer;
+    background:
+      repeating-conic-gradient(from 0deg,rgba(245,240,230,0.07) 0deg 3deg,transparent 3deg 6deg),
+      radial-gradient(circle at 34% 28%,rgba(245,240,230,0.16),rgba(6,9,22,0.9) 72%);
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.22),inset 0 -2px 3px rgba(2,4,12,0.8),
+               0 1px 0 rgba(245,240,230,0.06);
+    display:flex;align-items:center;justify-content:center}
+  .r-play:hover{color:var(--ivory);border-color:var(--oro-ch)}
+  .r-play:active{box-shadow:inset 0 2px 4px rgba(2,4,12,0.9)}
+  .r-play svg{width:1.25rem;height:1.25rem;fill:currentColor}
+
+  .r-freq{flex:1 1 12rem;min-width:0}
+  .r-nome{font-family:'Cinzel',serif;font-size:var(--t-cor);color:var(--oro-ch);
+    letter-spacing:0.1em;line-height:1.2;text-transform:uppercase}
+  .r-nome b{color:var(--ivory);font-weight:500}
+  .r-brano{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.86);margin-top:0.15rem;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .r-brano span{color:rgba(245,240,230,0.76)}
+
+  /* il tasto di scarico: un bottone di metallo, non un cerchio disegnato */
+  .r-scarica{flex:0 0 auto;width:2.4rem;height:2.4rem;border-radius:0.25rem;
+    border:1px solid var(--line);color:var(--oro-ch);display:flex;
+    align-items:center;justify-content:center;text-decoration:none;
+    background:linear-gradient(to bottom,rgba(245,240,230,0.1),rgba(2,4,12,0.4));
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.18),inset 0 -1px 0 rgba(2,4,12,0.7)}
+  .r-scarica:hover{border-color:rgba(200,160,85,0.55);color:var(--ivory)}
+  .r-scarica:active{box-shadow:inset 0 2px 3px rgba(2,4,12,0.85)}
+  .r-scarica svg{width:1.05rem;height:1.05rem;fill:currentColor}
+
+  /* le tre righe del palinsesto */
+  .r-palinsesto{flex:1 1 18rem;min-width:0;border-left:1px solid var(--line);
+    box-shadow:inset 1px 0 0 rgba(2,4,12,0.6);
+    padding-left:1rem;display:flex;flex-direction:column;gap:0.28rem}
+  .r-fascia{display:flex;gap:0.7rem;align-items:baseline;min-width:0;
+    padding:0.1rem 0.4rem 0.12rem 0.45rem;border-left:0.16rem solid transparent}
+  .r-h{flex:0 0 5.3rem;white-space:nowrap;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);font-variant-numeric:tabular-nums}
+  /* la riga in onda: incisa nel pannello e accesa */
+  .r-fascia.ora{border-left-color:var(--oro);border-radius:0.15rem;
+    background:linear-gradient(to right,rgba(200,160,85,0.16),rgba(200,160,85,0.02));
+    box-shadow:inset 0 1px 0 rgba(2,4,12,0.55)}
+  .r-fascia.ora .r-h{color:var(--oro-ch);text-transform:uppercase;
+    letter-spacing:0.12em;font-weight:500}
+  .r-t{min-width:0}
+  .r-t b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    font-weight:500;color:rgba(245,240,230,0.86);line-height:1.3}
+  .r-fascia.ora .r-t b{color:var(--ivory);letter-spacing:0.02em}
+  .r-t i{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.76);line-height:1.35;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* la scala: le ore del giorno, con l'indice sull'ora vera */
+  .r-scala{position:relative;height:1.15rem;margin:0 0.6rem 0.5rem;
+    border-top:1px solid rgba(2,4,12,0.7);
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.07);
+    padding-left:1.5rem}
+  .r-scala::before{content:'';position:absolute;left:0.35rem;top:0.42rem;
+    width:0.42rem;height:0.42rem;border-radius:50%;
+    background:rgba(200,160,85,0.22);box-shadow:inset 0 1px 1px rgba(2,4,12,0.8)}
+  .radio:has(#ic-pausa:not([style*="none"])) .r-scala::before{
+    background:var(--oro-ch);box-shadow:0 0 0.45rem rgba(212,175,106,0.85)}
+  .r-tacche{position:absolute;inset:0.2rem 0.2rem 0.15rem 1.5rem;
+    background:
+      repeating-linear-gradient(90deg,rgba(245,240,230,0.5) 0 1px,transparent 1px 25%),
+      repeating-linear-gradient(90deg,rgba(245,240,230,0.22) 0 1px,transparent 1px calc(100%/24));
+    background-size:100% 100%,100% 45%;background-repeat:no-repeat;
+    background-position:0 0,0 0}
+  .r-indice{position:absolute;top:0.05rem;bottom:0.05rem;width:0.12rem;
+    left:calc(1.5rem + (100% - 1.7rem) * var(--r-pos,0));
+    background:var(--oro-ch);box-shadow:0 0 0.4rem rgba(212,175,106,0.6)}
+
+  @media(max-width:44rem){
+    .r-palinsesto{border-left:0;border-top:1px solid var(--line);
+      box-shadow:inset 0 1px 0 rgba(245,240,230,0.07);
+      padding-left:0;padding-top:0.7rem;flex-basis:100%}
+    .r-fascia{padding-left:0.35rem}
+    .r-t i{white-space:normal}
+  }
+
+
+  /* ── la tua orma ── */
+  .orma-quad{border:1px solid var(--line);border-radius:0.9rem;padding:1.1rem;margin:1.4rem 0}
+  .orma-testa{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem}
+  .piede{width:1.6rem;height:1.6rem;flex:0 0 auto;color:var(--oro-ch)}
+  .piede svg{width:100%;height:100%;display:block}
+  .orma-quad h3{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    letter-spacing:0.1em;text-transform:uppercase;color:var(--oro-ch)}
+  .invito{display:block;width:100%;text-align:left;background:rgba(245,240,230,0.05);
+    border:1px solid var(--line);border-radius:0.9rem;padding:0.75rem 1rem;cursor:pointer;
+    color:rgba(245,240,230,0.6);font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);
+    font-style:italic;margin:0.7rem 0}
+  .invito:hover{border-color:rgba(200,160,85,0.45)}
+  .riga-sentiero{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.82);font-style:italic}
+
+  /* ── le sette domande ── */
+  .dom-riga{border-top:1px solid var(--line)}
+  .dom-riga:last-of-type{border-bottom:1px solid var(--line)}
+  .dom{display:flex;align-items:flex-start;gap:0.7rem;padding:0.85rem 0.1rem;cursor:pointer;
+    font-family:'Cinzel',serif;font-size:var(--t-cor);font-weight:400;line-height:1.4;
+    color:var(--ivory);background:none;border:0;width:100%;text-align:left}
+  .dom:hover{color:var(--oro-ch)}
+  .fre{flex:0 0 auto;color:var(--oro);font-size:var(--t-eti);line-height:1.6;
+    transition:transform .22s ease}
+  .dom-riga.aperta .fre{transform:rotate(90deg)}
+  .risp{overflow:hidden;max-height:0;transition:max-height .34s ease}
+  .risp .dentro-r{padding:0 0.1rem 1.1rem 1.4rem}
+  .risp p:last-child{margin-bottom:0}
+
+  /* ── i moduli dell'account ── */
+  .mod{display:grid;gap:0.8rem;margin-top:0.4rem}
+  .mod label{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.82);margin-bottom:0.25rem}
+  .mod input, .mod select, .mod textarea{width:100%;background:rgba(245,240,230,0.06);
+    border:1px solid var(--line);border-radius:0.5rem;color:var(--ivory);
+    font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    padding:0.55rem 0.7rem;outline:none}
+  .mod input:focus, .mod select:focus, .mod textarea:focus{border-color:rgba(200,160,85,0.55)}
+  .mod textarea{resize:vertical;min-height:6rem;line-height:1.5}
+  .mod .due{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem}
+  @media(max-width:34rem){ .mod .due{grid-template-columns:1fr} }
+
+  .spunta{display:flex;gap:0.7rem;align-items:flex-start;cursor:pointer;
+    padding:0.7rem 0.8rem;border:1px solid var(--line);border-radius:0.6rem}
+  .spunta:hover{border-color:rgba(200,160,85,0.45)}
+  .spunta input{width:1.15rem;height:1.15rem;flex:0 0 auto;margin-top:0.15rem;
+    accent-color:var(--oro)}
+  .spunta .tx{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    line-height:1.45;color:rgba(245,240,230,0.9)}
+  .spunta .tx small{display:block;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.78);margin-top:0.2rem}
+
+  .stato-riga{display:flex;justify-content:space-between;gap:0.8rem;align-items:baseline;
+    padding:0.6rem 0;border-bottom:1px solid var(--line);
+    font-family:'DM Sans',sans-serif;font-size:var(--t-eti)}
+  .stato-riga:last-child{border-bottom:0}
+  .stato-riga b{color:rgba(245,240,230,0.88);font-weight:500}
+  .stato-riga i{font-style:normal;color:var(--oro-ch)}
+  .stato-riga i.no{color:rgba(245,240,230,0.7)}
+
+  .avviso{border:1px solid var(--line);border-left:0.22rem solid var(--fuoco);
+    border-radius:0.55rem;padding:0.7rem 0.85rem;margin-top:0.3rem;
+    font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.45;
+    color:rgba(245,240,230,0.86)}
+  .mod-esito{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    color:var(--oro-ch);min-height:1.4rem;margin-top:0.2rem}
+  .mod-esito.err{color:#f0b0a6}
+
+  /* ── le copertine degli articoli, e l'articolo aperto ── */
+  .lettura{display:grid;gap:1rem;margin-top:1rem}
+  .copertina{display:flex;gap:1rem;align-items:stretch;text-align:left;cursor:pointer;
+    background:rgba(245,240,230,0.04);border:1px solid var(--line);
+    border-left:0.22rem solid var(--cc,var(--oro));border-radius:0.7rem;
+    padding:0;overflow:hidden;color:inherit}
+  .copertina:hover{background:rgba(245,240,230,0.07);border-color:rgba(200,160,85,0.4)}
+  .cp-foto{flex:0 0 10rem;overflow:hidden;background:rgba(6,9,22,0.5)}
+  .cp-foto img{width:100%;height:100%;object-fit:cover;display:block;min-height:8rem}
+  .cp-tx{flex:1;min-width:0;padding:0.9rem 1rem 1rem;display:flex;flex-direction:column;gap:0.25rem}
+  .cp-occ{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.14em;
+    text-transform:uppercase;color:var(--cc,var(--oro-ch))}
+  .copertina b{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    line-height:1.28;color:var(--ivory)}
+  .copertina small{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    line-height:1.45;color:rgba(245,240,230,0.84)}
+  @media(max-width:40rem){
+    .copertina{flex-direction:column}
+    .cp-foto{flex:0 0 auto;height:10rem}
+  }
+
+  .torna{background:none;border:1px solid var(--line);color:var(--oro-ch);
+    border-radius:999px;padding:0.4rem 0.9rem;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);cursor:pointer;margin-bottom:1rem}
+  .torna:hover{border-color:rgba(200,160,85,0.5);color:var(--ivory)}
+  .art-testa{margin-bottom:1rem}
+  .art-guscio{border:1px solid var(--line);border-radius:0.8rem;overflow:hidden;
+    background:rgba(6,9,22,0.35)}
+  .art-guscio iframe{display:block;width:100%;height:78vh;border:0}
+
+  /* ── la legenda, sotto la mappa ── */
+  .leg{margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--line);text-align:center}
+  .leg-tit{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.2em;
+    text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.6rem}
+  .leg-cap{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.55;
+    color:rgba(245,240,230,0.88);max-width:38rem;margin:0 auto 1.1rem}
+  .leg-cap b{font-family:'Cinzel',serif;font-weight:500;color:var(--ivory)}
+  .leg-voci{display:grid;gap:0.85rem;max-width:34rem;margin:0 auto}
+  .leg-v{display:grid;grid-template-columns:2.6rem 1fr;align-items:baseline;
+    gap:0.7rem;text-align:left}
+  .leg-sg{font-size:var(--t-cor);color:var(--oro);text-align:center;line-height:1.3;
+    letter-spacing:-0.05em}
+  .leg-v b{grid-column:2;font-family:'DM Sans',sans-serif;font-weight:500;
+    font-size:var(--t-tas);color:var(--ivory);line-height:1.3}
+  .leg-v i{grid-column:2;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.82);line-height:1.4;display:block;margin-top:0.1rem}
+  .leg-coda{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);margin-top:1.1rem}
+
+  /* ── quello che sta accadendo ── */
+  .ora{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+  .ora-tit{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.2em;
+    text-transform:uppercase;color:var(--oro-ch);text-align:center;margin-bottom:0.9rem}
+  .ora-righe{display:grid;gap:0.6rem;max-width:38rem;margin:0 auto}
+  .ora-r{display:grid;grid-template-columns:1.5rem 1fr;gap:0.7rem;align-items:start;
+    border-left:0.18rem solid var(--rc,var(--oro));padding:0.55rem 0 0.55rem 0.8rem;
+    background:rgba(245,240,230,0.03);border-radius:0 0.45rem 0.45rem 0}
+  .or-sg{width:1.15rem;height:1.15rem;color:var(--rc,var(--oro));margin-top:0.1rem}
+  .or-sg svg{width:100%;height:100%;display:block}
+  .or-tx{min-width:0}
+  .or-tx b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:var(--t-cor);line-height:1.45;color:var(--ivory)}
+  .or-tx i{display:block;font-family:'DM Sans',sans-serif;font-style:normal;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.78);margin-top:0.2rem}
+  .ora-vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-cor);color:rgba(245,240,230,0.78);text-align:center}
+
+  /* ── le scadenze, in Plancia ── */
+  .sc-tit{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    color:var(--oro-ch);margin:0.6rem 0 0.7rem}
+  .sc-lista{display:grid;gap:0.45rem;margin-bottom:1.4rem}
+  .sc-r{display:grid;grid-template-columns:9.5rem 1fr;gap:0.9rem;align-items:baseline;
+    border-left:0.18rem solid var(--sc,var(--oro));padding:0.55rem 0 0.55rem 0.8rem;
+    background:rgba(245,240,230,0.03);border-radius:0 0.45rem 0.45rem 0}
+  .sc-r.urgente{background:rgba(204,102,68,0.12)}
+  .sc-r.vicina{background:rgba(200,160,85,0.09)}
+  .sc-r.passata{opacity:0.45}
+  .sc-q b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:var(--ivory);line-height:1.3}
+  .sc-q i{display:block;font-family:'DM Sans',sans-serif;font-style:normal;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.78);margin-top:0.1rem}
+  .sc-r.urgente .sc-q i{color:var(--fuoco);font-weight:500}
+  .sc-t b{display:block;font-family:'DM Sans',sans-serif;font-weight:500;
+    font-size:var(--t-tas);color:var(--ivory);line-height:1.3}
+  .sc-t small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.82);line-height:1.4;margin-top:0.1rem}
+  @media(max-width:38rem){ .sc-r{grid-template-columns:1fr;gap:0.25rem} }
+
+  /* ── Edizione ── */
+  .ed-tre{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));
+    gap:0.7rem;margin-top:1.2rem}
+  .ed-c{text-align:left;cursor:pointer;background:rgba(245,240,230,0.04);
+    border:1px solid var(--line);border-left:0.22rem solid var(--ec,var(--oro));
+    border-radius:0.7rem;padding:1rem;color:inherit}
+  .ed-c:hover{background:rgba(245,240,230,0.08);border-color:rgba(200,160,85,0.4)}
+  .ed-c b{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-cor);color:var(--ivory);line-height:1.25}
+  .ed-perche{margin:1.2rem 0}
+  .ed-perche p{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    line-height:1.62;color:rgba(245,240,230,0.88);margin-bottom:0.8rem}
+  .ed-perche b{color:var(--ivory)}
+  .ed-scopo{margin-top:1.6rem;padding:1.1rem 1.2rem;border-radius:0.7rem;
+    border-left:0.22rem solid var(--oro);background:rgba(200,160,85,0.07)}
+  .ed-scopo p{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-cor);line-height:1.6;color:var(--ivory)}
+
+  .ed-venuto{margin-top:1.1rem;padding:0.8rem 1rem;border-radius:0.6rem;
+    background:rgba(200,160,85,0.1);border:1px solid rgba(200,160,85,0.3)}
+  .ev-et{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--oro-ch)}
+  .ed-venuto b{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-cor);color:var(--ivory);margin-top:0.25rem;line-height:1.4}
+  .ed-venuto small{display:block;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.78);margin-top:0.15rem}
+
+  /* il tasto che porta in Edizione, da qualunque stanza */
+  .porta-ed{margin-top:0.5rem;background:none;border:1px solid var(--line);
+    color:var(--oro-ch);border-radius:999px;padding:0.3rem 0.8rem;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-eti);cursor:pointer}
+  .porta-ed:hover{border-color:rgba(200,160,85,0.5);color:var(--ivory)}
+  .porta-ed.grande{display:block;width:100%;margin-top:1rem;border-radius:0.6rem;
+    padding:0.7rem;font-size:var(--t-tas)}
+
+  /* ── il Sentiero: la citazione ── */
+  .sent-cita{margin:1.6rem auto;max-width:40rem;padding:1.6rem 1.4rem;
+    text-align:center;position:relative}
+  .sent-cita::before, .sent-cita::after{content:'';position:absolute;
+    left:22%;right:22%;height:1px;
+    background:linear-gradient(to right,transparent,var(--oro),transparent)}
+  .sent-cita::before{top:0}
+  .sent-cita::after{bottom:0}
+  .sent-cita p{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-big);line-height:1.45;color:var(--ivory)}
+  .sent-fonte{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:0.12em;color:var(--oro-ch);margin-top:0.9rem}
+
+  /* ── Edizione: l'indice analitico ── */
+  .ind{margin-top:1.6rem;border-top:1px solid var(--line)}
+  .ind-v{border-bottom:1px solid var(--line)}
+  .ind-t{width:100%;display:grid;grid-template-columns:1fr auto;gap:0.8rem;
+    align-items:baseline;background:none;border:0;color:inherit;cursor:pointer;
+    padding:1rem 0.2rem;text-align:left}
+  .ind-t:hover .ind-n{color:var(--oro-ch)}
+  .ind-n{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    color:var(--ivory);line-height:1.2;grid-column:1}
+  .ind-s{grid-column:1;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);margin-top:0.15rem}
+  .ind-x{grid-row:1;grid-column:2;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-cor);color:var(--oro-ch)}
+  .ind-d{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .ind-v.su .ind-d{max-height:200rem;padding-bottom:1.4rem}
+
+  .ed-riga{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    line-height:1.6;color:rgba(245,240,230,0.88);margin-bottom:0.8rem}
+  .ed-riga b{color:var(--ivory)}
+  .ed-h3{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    color:var(--oro-ch);margin:1.4rem 0 0.5rem}
+
+  /* ordina */
+  .ord-due{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.8rem}
+  @media(max-width:44rem){ .ord-due{grid-template-columns:1fr} }
+  .ord-c{border:1px solid var(--line);border-radius:0.7rem;padding:0.9rem}
+  .ord-c > b{display:block;font-family:'DM Sans',sans-serif;font-weight:500;
+    font-size:var(--t-tas);color:var(--ivory);margin-bottom:0.3rem}
+  .ord-c > small{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.8);line-height:1.4;margin-bottom:0.6rem}
+  .ord-c input[type=text], .ord-c input:not([type]){width:100%;
+    background:rgba(245,240,230,0.06);border:1px solid var(--line);border-radius:0.5rem;
+    color:var(--ivory);font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    padding:0.5rem 0.7rem;outline:none;margin-bottom:0.6rem}
+  .orm-s{display:flex;gap:0.6rem;align-items:flex-start;cursor:pointer;
+    padding:0.5rem 0;border-bottom:1px solid var(--line)}
+  .orm-s:last-child{border-bottom:0}
+  .orm-s input{width:1.1rem;height:1.1rem;flex:0 0 auto;margin-top:0.2rem;
+    accent-color:var(--oro)}
+  .orm-s .tx{min-width:0}
+  .orm-s b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:var(--t-cor);line-height:1.4;color:var(--ivory)}
+  .orm-s i{display:block;font-family:'DM Sans',sans-serif;font-style:normal;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.78);margin-top:0.1rem}
+  .ord-fai{margin-top:1rem;display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap}
+  .ord-conto{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-cor);color:rgba(245,240,230,0.8)}
+  .ord-fai .mod-esito{flex-basis:100%}
+
+  .ord-agg{margin-top:1rem;border:1px solid var(--line);border-radius:0.7rem;padding:0.9rem}
+  .ord-agg > b{display:block;font-family:'DM Sans',sans-serif;font-weight:500;
+    font-size:var(--t-tas);color:var(--ivory)}
+  .ord-agg > small{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.8);margin-bottom:0.6rem}
+
+  /* stampa */
+  .ed-nat{margin-top:0.9rem;padding:0.8rem 1rem;border-radius:0.6rem;
+    border-left:0.22rem solid var(--aria);background:rgba(102,153,68,0.1);
+    font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    line-height:1.5;color:rgba(245,240,230,0.9)}
+  .ed-nat b{color:var(--ivory)}
+
+  /* le due strade */
+  .ed-due{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:0.5rem}
+  @media(max-width:40rem){ .ed-due{grid-template-columns:1fr} }
+  .ed-str{border:1px solid var(--line);border-radius:0.7rem;padding:1rem;
+    background:rgba(245,240,230,0.04)}
+  .ed-str b{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-cor);color:var(--ivory)}
+  .ed-str .pz{font-family:'DM Sans',sans-serif;font-size:var(--t-tas);
+    color:var(--oro-ch);margin:0.3rem 0 0.4rem}
+  .ed-str small{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-cor);line-height:1.45;color:rgba(245,240,230,0.84)}
+
+  /* ── la consolle ── */
+  .cn-stato{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+    gap:0.8rem;margin-top:1.1rem}
+  .cn-riq{border:1px solid var(--line);border-radius:0.7rem;padding:0.9rem 1rem;
+    background:rgba(245,240,230,0.04)}
+  .cn-et{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.35rem}
+  .cn-riq b{display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    color:var(--ivory);line-height:1.25}
+  .cn-riq small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.8);margin-top:0.2rem}
+  .cn-coda{margin-top:0.5rem}
+  .cn-dj{border:1px solid var(--line);border-radius:0.8rem;overflow:hidden;
+    background:rgba(6,9,22,0.4);margin-top:0.6rem}
+  .cn-dj iframe{display:block;width:100%;height:34rem;border:0}
+  .cn-nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);margin-top:0.5rem}
+  .cn-nota a{color:var(--oro-ch)}
+
+  /* ══ IL PIEDE — uguale in ogni pagina ══ */
+  .fm-piede{margin-top:2.4rem;padding:1.3rem 1rem 1.4rem;
+    border-top:1px solid var(--line,rgba(184,150,62,0.2));text-align:center}
+  .fp-marchio{font-family:'Cinzel',serif;font-size:var(--t-eti,0.8125rem);
+    letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--oro-ch,#D4AF6A);margin-bottom:0.6rem}
+  .fp-riga{font-family:'DM Sans',sans-serif;font-size:var(--t-eti,0.8125rem);
+    color:rgba(245,240,230,0.78);line-height:1.5}
+  .fp-link{margin-top:0.7rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap}
+  .fp-link a{font-family:'DM Sans',sans-serif;font-size:var(--t-eti,0.8125rem);
+    color:var(--oro-ch,#D4AF6A);text-decoration:none;
+    border-bottom:1px solid rgba(200,160,85,0.35);padding-bottom:0.1rem}
+  .fp-link a:hover{color:var(--ivory,#F5F0E6);border-bottom-color:var(--ivory,#F5F0E6)}
+  /* ── i tre tasti della visibilità ── */
+  .v-t{background:none;border:1px solid var(--line);color:rgba(245,240,230,0.7);
+    border-radius:999px;padding:0.32rem 0.6rem;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);cursor:pointer;white-space:nowrap}
+  .v-t:hover{border-color:rgba(200,160,85,0.5);color:var(--ivory)}
+  .v-t.on{border-color:var(--oro);background:rgba(200,160,85,0.18);color:var(--ivory)}
+
+  /* ── l'invito ── */
+  .invito-box{border:1px solid var(--line);border-left:0.22rem solid var(--oro);
+    border-radius:0.65rem;padding:0.85rem 0.95rem;margin-bottom:0.6rem;
+    background:rgba(200,160,85,0.05)}
+  .invito-box p{margin-bottom:0.5rem}
+  .invito-box input{width:100%;background:rgba(245,240,230,0.06);border:1px solid var(--line);
+    border-radius:0.5rem;color:var(--ivory);font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-cor);padding:0.5rem 0.7rem;outline:none;margin-bottom:0.5rem}
+  .invito-url{font-family:ui-monospace,monospace;font-size:var(--t-eti);
+    background:rgba(6,9,22,0.7);border:1px solid var(--line);border-radius:0.4rem;
+    padding:0.5rem 0.6rem;word-break:break-all;color:var(--oro-ch);margin:0.4rem 0}
+
+
+  /* ── la mappa incorporata nella home ── */
+  .mappa-box{border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;
+    margin:1.4rem 0;background:rgba(6,9,22,0.4)}
+  .mappa-box iframe{display:block;width:100%;height:26rem;border:0}
+  @media(max-width:52rem){ .mappa-box iframe{height:20rem} }
+  .mappa-didascalia{padding:0.7rem 0.95rem;border-top:1px solid var(--line);
+    font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);font-style:italic;
+    color:rgba(245,240,230,0.8)}
+
+  /* ── la barra del documento della settimana ── */
+  .barra-doc{border:1px solid var(--line);border-left:0.22rem solid var(--oro);
+    border-radius:0.7rem;padding:1rem 1.1rem;margin-bottom:1.2rem;
+    background:rgba(200,160,85,0.06)}
+  .barra-doc h3{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    margin-bottom:0.4rem;color:var(--oro-ch)}
+  .barra-doc p{font-size:var(--t-cor);margin-bottom:0.55rem}
+  .barra-doc a.scarica{display:inline-flex;align-items:center;gap:0.4rem;
+    background:var(--oro);color:var(--navy);border-radius:999px;padding:0.5rem 1rem;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-tas);font-weight:500;
+    text-decoration:none;margin-bottom:0.5rem}
+
+  /* ── l'indice analitico della ricerca ── */
+  .idx{border:1px solid var(--line);border-radius:0.7rem;padding:0.9rem 1rem;margin:1rem 0}
+  .idx h3{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.16em;
+    text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.6rem}
+  .idx a{display:block;padding:0.3rem 0;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.84);cursor:pointer}
+  .idx a:hover{color:var(--oro-ch)}
+  .cap{border-top:1px solid var(--line)}
+  .cap:last-of-type{border-bottom:1px solid var(--line)}
+  .cap-t{display:flex;align-items:flex-start;gap:0.7rem;width:100%;background:none;border:0;
+    text-align:left;cursor:pointer;padding:0.85rem 0.1rem;color:var(--ivory);
+    font-family:'Cinzel',serif;font-size:var(--t-cor);font-weight:400;line-height:1.35}
+  .cap-t:hover{color:var(--oro-ch)}
+  .cap-f{flex:0 0 auto;color:var(--oro);font-size:var(--t-eti);line-height:1.5;
+    transition:transform .22s ease}
+  .cap.aperto .cap-f{transform:rotate(90deg)}
+  .cap-c{overflow:hidden;max-height:0;transition:max-height .34s ease}
+  .cap-c .dentro{padding:0 0.1rem 1rem 1.4rem}
+  .cap-c p:last-child{margin-bottom:0}
+
+  /* ── la mappa: nella home si scorre sopra, toccandola si apre a tutto schermo ── */
+  .mappa-box{position:relative}
+  .mappa-velo{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;
+    justify-content:center;padding-bottom:1.2rem;cursor:pointer;
+    background:linear-gradient(to bottom,rgba(2,4,12,0) 60%,rgba(2,4,12,0.5))}
+  .mappa-velo span{background:rgba(10,12,26,0.86);border:1px solid rgba(200,160,85,0.45);
+    color:var(--ivory);border-radius:999px;padding:0.5rem 1rem;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-tas)}
+  .mappa-piena{position:fixed;inset:0;z-index:90;background:#0A0C1A;display:none}
+  .mappa-piena.on{display:block}
+  .mappa-piena iframe{width:100%;height:100%;border:0;display:block}
+  .mappa-piena .chiudi{position:absolute;top:0.8rem;right:0.8rem;z-index:2;
+    background:rgba(10,12,26,0.9);border:1px solid rgba(200,160,85,0.5);color:var(--ivory);
+    border-radius:999px;padding:0.55rem 1.1rem;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-tas);cursor:pointer}
+
+  /* il conto dei messaggi non letti */
+  .s-avvolge{position:relative;display:inline-flex}
+  .s-conta{position:absolute;top:-0.25rem;right:-0.3rem;min-width:1.05rem;height:1.05rem;
+    padding:0 0.22rem;border-radius:999px;background:var(--fuoco);color:var(--ivory);
+    font-family:'DM Sans',sans-serif;font-size:0.6875rem;font-weight:500;line-height:1.05rem;
+    text-align:center;pointer-events:none;box-shadow:0 0 0 0.12rem var(--scafo)}
+  .s-conta[hidden]{display:none}
+
+  /* ══ IL MARGINE DESTRO — il canto ══ */
+  .canto{position:fixed;top:0.9rem;right:1rem;z-index:70;display:flex;gap:0.6rem;
+    align-items:center;max-width:min(22rem,52vw)}
+  .canto .tondo{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+  .canto .tondo svg{width:1.1rem;height:1.1rem;fill:currentColor}
+  .canto-tx{min-width:0;text-align:right}
+  .canto-tx b{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-eti);color:var(--oro-ch);line-height:1.2;letter-spacing:0.05em}
+  .canto-tx small{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.84);line-height:1.3;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  @media(max-width:44rem){ .canto-tx{display:none} }
+  .tondo{background:none;border:1px solid rgba(200,160,85,0.55);color:var(--oro-ch);
+    border-radius:50%;width:2.5rem;height:2.5rem;font-size:var(--t-tas);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;transition:background .2s}
+  .tondo:hover{background:rgba(200,160,85,0.14)}
+
+  /* ══ IL MEGAFONO ══ */
+  #mg{position:fixed;left:var(--barra);right:0;bottom:0;z-index:65}
+  /* ── dove lo porti: un foglio che sale, con tutto dentro ── */
+  .vele{max-height:0;overflow:hidden;transition:max-height .3s ease;
+    background:var(--scafo);border-top:1px solid var(--line)}
+  .vele.su{max-height:32rem;box-shadow:0 -0.6rem 1.6rem rgba(0,0,0,.5)}
+  .vele-dentro{max-width:56rem;margin:0 auto;padding:0 0.9rem 0.9rem;
+    max-height:31rem;overflow-y:auto}
+  .pista{padding:0.8rem 0 0}
+
+  /* le destinazioni, a riquadri affiancati */
+  .dest-griglia{display:grid;grid-template-columns:repeat(auto-fill,minmax(9.5rem,1fr));
+    gap:0.55rem}
+  .dest{display:flex;flex-direction:column;gap:0.2rem;text-align:left;cursor:pointer;
+    background:rgba(245,240,230,0.04);border:1px solid var(--line);
+    border-radius:0.6rem;padding:0.7rem 0.75rem;color:inherit;min-height:5.2rem}
+  .dest:hover{background:rgba(245,240,230,0.08);border-color:rgba(200,160,85,0.4)}
+  .dest.on{border-color:var(--dc);background:rgba(245,240,230,0.09);
+    box-shadow:inset 0 0 0 1px var(--dc)}
+  .dest.spenta{opacity:0.5;cursor:default}
+  .dest.spenta:hover{background:rgba(245,240,230,0.04);border-color:var(--line)}
+  .d-sg{display:block;width:1.15rem;height:1.15rem;color:var(--dc)}
+  .d-sg svg{width:100%;height:100%;display:block}
+  .d-sg img{width:100%;height:100%;object-fit:contain}
+  .dest b{font-family:'DM Sans',sans-serif;font-weight:500;font-size:var(--t-tas);
+    color:var(--ivory);line-height:1.25}
+  .dest i{font-family:'Cormorant Garamond',serif;font-style:normal;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.8);line-height:1.35}
+
+  /* le sezioni del foglio */
+  .fg-sez{margin-top:0.9rem;padding-top:0.8rem;border-top:1px solid var(--line)}
+  .fg-dom{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.82);margin-bottom:0.5rem}
+  .fg-due{display:grid;grid-template-columns:1fr 1fr;gap:0.55rem}
+  @media(max-width:30rem){ .fg-due{grid-template-columns:1fr} }
+  .fg-campo{text-align:left;background:rgba(245,240,230,0.04);border:1px solid var(--line);
+    border-radius:0.6rem;padding:0.6rem 0.75rem;cursor:pointer;color:inherit}
+  .fg-campo:hover{border-color:rgba(200,160,85,0.45);background:rgba(245,240,230,0.07)}
+  .fg-et{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);margin-bottom:0.15rem}
+  .fg-campo b{display:block;font-family:'DM Sans',sans-serif;font-weight:500;
+    font-size:var(--t-tas);color:var(--oro-ch);line-height:1.25}
+
+  .parola{max-width:56rem;margin:0 auto;padding:0 1.1rem;max-height:0;overflow:hidden;
+    transition:max-height .3s ease}
+  .parola.su{max-height:9rem}
+  .parola p{font-size:var(--t-cor);padding:0.4rem 0 0.75rem;margin:0}
+
+  .onda{display:block;width:100%;height:calc(var(--onda-amp)*2);margin-bottom:-1px;
+    position:relative;z-index:2;pointer-events:none}
+  .ponte{background:var(--scafo);padding:0.35rem 1.1rem calc(0.75rem + env(safe-area-inset-bottom))}
+  .dentro{max-width:56rem;margin:0 auto}
+  #campo{display:block;width:100%;resize:none;overflow-y:auto;background:rgba(245,240,230,0.05);
+    border:1px solid var(--line);border-radius:1rem;color:var(--ivory);
+    font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.5;
+    padding:0.7rem 1rem;outline:none;min-height:2.9rem;max-height:26vh}
+  #campo::placeholder{color:rgba(245,240,230,0.5);font-style:italic}
+  #campo:focus{border-color:rgba(200,160,85,0.45)}
+  .simboli{display:flex;align-items:center;gap:0.45rem;margin-top:0.55rem;overflow-x:auto;
+    scrollbar-width:none}
+  .simboli::-webkit-scrollbar{display:none}
+  .s{background:none;border:1px solid rgba(200,160,85,0.4);color:var(--oro-ch);border-radius:50%;
+    width:2.4rem;height:2.4rem;font-size:var(--t-tas);cursor:pointer;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;transition:background .2s}
+  .s:hover{background:rgba(200,160,85,0.14)}
+  .s.attivo{background:rgba(200,160,85,0.2);border-color:var(--oro-ch)}
+  .s-pill{display:inline-flex;align-items:center;gap:0.4rem;background:none;
+    border:1px solid var(--tc,var(--line));color:var(--tc,rgba(245,240,230,0.86));
+    border-radius:999px;padding:0.42rem 0.8rem;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);letter-spacing:0.06em;cursor:pointer;white-space:nowrap;flex:0 0 auto}
+  .s-pill .sg{width:0.95rem;height:0.95rem;flex:0 0 auto}
+  .s-pill .sg svg{width:100%;height:100%;display:block}
+  .s-pill .sg img{width:100%;height:100%;object-fit:contain}
+  .spazio{flex:1;min-width:0.5rem}
+
+  /* i fogli sopra */
+  .velo{position:fixed;inset:0;z-index:90;background:rgba(10,12,26,0.78);display:none;
+    align-items:flex-end;justify-content:center}
+  .velo.on{display:flex}
+  .foglio{width:100%;max-width:34rem;max-height:84vh;overflow-y:auto;background:#0a1024;
+    border:1px solid rgba(200,160,85,0.3);border-radius:1rem 1rem 0 0;
+    padding:1.3rem 1.3rem calc(1.7rem + env(safe-area-inset-bottom));position:relative}
+  @media(min-width:44rem){.velo{align-items:center}.foglio{border-radius:1rem;margin:0 1rem}}
+  .foglio .x{position:absolute;top:0.6rem;right:0.8rem;background:none;border:0;
+    color:rgba(245,240,230,0.8);font-size:var(--t-scr);cursor:pointer;line-height:1}
+  .foglio h3{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-scr);margin-bottom:0.25rem}
+  .foglio .fs{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.8);margin-bottom:1rem;line-height:1.5}
+  .rigo{display:flex;align-items:center;gap:0.7rem;width:100%;background:none;
+    border:1px solid var(--line);border-radius:0.65rem;padding:0.7rem 0.8rem;margin-bottom:0.45rem;
+    color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:var(--t-tas);
+    cursor:pointer;text-align:left}
+  .rigo:hover{border-color:rgba(200,160,85,0.45)}
+  .rigo .bollo{width:1.8rem;height:1.8rem;border-radius:0.35rem;background:var(--vf);
+    border-left:0.2rem solid var(--vc);flex:0 0 auto;display:grid;place-items:center;color:var(--vc)}
+  .rigo .bollo .sg{width:1rem;height:1rem}
+  .rigo .bollo svg{width:100%;height:100%;display:block}
+  .rigo .tx{flex:1;min-width:0}
+  .rigo small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);line-height:1.35;margin-top:0.08rem}
+  .rigo.spenta{opacity:0.6;cursor:default}
+  .rigo.spenta:hover{border-color:var(--line)}
+  .sgl-i{flex:0 0 auto;font-size:var(--t-eti);color:var(--oro-ch);
+    border:1px solid rgba(200,160,85,0.4);border-radius:999px;padding:0.12rem 0.5rem;white-space:nowrap}
+
+  /* ══ QUANDO LO SPAZIO MANCA: i margini si ritirano, il centro non si tocca ══ */
+  #apri-barra{display:none;position:fixed;top:0.9rem;left:1rem;z-index:71;
+    background:rgba(6,9,22,0.85);border:1px solid rgba(200,160,85,0.5);color:var(--oro-ch);
+    border-radius:0.6rem;width:2.5rem;height:2.5rem;font-size:var(--t-cor);cursor:pointer}
+  @media(max-width:52rem){
+    #apri-barra{display:block}
+    #barra{transform:translateX(-100%);transition:transform .28s ease;width:17rem}
+    body.barra-aperta #barra{transform:none;box-shadow:0 0 3rem rgba(0,0,0,.6)}
+    #centro{margin-left:0;padding-left:1.1rem;padding-right:1.1rem;padding-top:4.2rem}
+    #mg{left:0}
+  }
+</style>
+</head>
+<body>
+
+<button id="apri-barra" aria-label="Il menu">&#9776;</button>
+
+<div class="canto">
+  <button class="tondo" id="play" title="Ascolta">
+    <svg id="p-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="p-pausa" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6z M14 5h4v14h-4z"/></svg>
+  </button>
+  <div class="canto-tx"><b>Come natura crea fm</b><small id="canto-brano">&nbsp;</small></div>
+</div>
+
+<audio id="au" preload="none"></audio>
+
+<!-- ══ IL MARGINE SINISTRO ══ -->
+<nav id="barra">
+  <div class="marchio">
+    <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="">
+    <span>Comunità Eterna<br>FelicitasMundi</span>
+  </div>
+  <div id="voci"></div>
+  <button id="acc-tasto">
+    <span class="pallino" id="acc-iniziale">·</span>
+    <span><span id="acc-nome">[ nome ]</span><small id="acc-grado">&nbsp;</small></span>
+  </button>
+</nav>
+
+<!-- ══ IL CENTRO ══ -->
+<main id="centro"></main>
+
+<!-- ══ IL MEGAFONO ══ -->
+<div id="mg">
+  <div class="vele" id="vele"><div class="vele-dentro">
+    <div class="pista" id="pista"></div>
+
+    <div class="fg-sez">
+      <div class="fg-dom">E chi la vede?</div>
+      <div class="vis" id="vis">
+        <button class="v-t on" data-v="solo_me">solo me</button>
+        <button class="v-t" data-v="vicinato">il mio vicinato</button>
+        <button class="v-t" data-v="pubblico">tutti</button>
+      </div>
+    </div>
+
+    <div class="fg-sez fg-due">
+      <button class="fg-campo" id="s-luogo">
+        <span class="fg-et">Dov&rsquo;&egrave; successo</span>
+        <b id="s-luogo-v">Dove sono io</b>
+      </button>
+      <button class="fg-campo" id="s-quando">
+        <span class="fg-et">Quando</span>
+        <b id="s-quando-v">Oggi</b>
+      </button>
+    </div>
+  </div></div>
+  <div class="parola" id="parola"><p id="parola-tx"></p></div>
+  <svg class="onda" id="onda" preserveAspectRatio="none" aria-hidden="true"></svg>
+  <div class="ponte">
+    <div class="dentro">
+      <textarea id="campo" rows="1" placeholder="Traccia l'orma di oggi"></textarea>
+      <div class="riga-strumenti">
+        <button class="s-pill" id="s-dove" style="--tc:var(--oro-ch)">
+          <span class="sg" id="dove-sg"></span><span id="dove-tx">Dove lo porti</span>
+        </button>
+        <button class="s-pill" id="s-ediz">Edizione &#9662;</button>
+        <button class="s" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
+        <button class="s" id="s-file" title="Allegato">&#128206;&#xFE0E;</button>
+        <button class="s" id="s-aperte" title="Le cose aperte">&#9673;</button>
+        <span class="s-avvolge"><button class="s" id="s-chat" title="Chat">&#128172;&#xFE0E;</button><span class="s-conta" id="s-chat-n" hidden></span></span>
+        <button class="s invia" id="s-invio" title="Manda">&#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- fogli -->
+<div class="velo" id="v-ediz"><div class="foglio">
+  <button class="x" data-x="v-ediz">&times;</button>
+  <h3>Edizione</h3>
+  <div class="fs">Dove la tua opera prende forma: impagina pro, pubblica, stampa, distribuisci.</div>
+  <div id="l-ediz"></div>
+</div></div>
+
+<div class="velo" id="v-aperte"><div class="foglio">
+  <button class="x" data-x="v-aperte">&times;</button>
+  <h3>Le cose che hai aperto</h3>
+  <div class="fs">Solo ciò che è vivo: il concluso e l'eliminato vanno nell'Archivio.</div>
+  <div id="l-aperte"></div>
+</div></div>
+
+<div class="mappa-piena" id="mappa-piena">
+  <button class="chiudi" id="mappa-chiudi">Chiudi</button>
+  <iframe id="mappa-piena-f" title="Collega le tue orme"></iframe>
+</div>
+
+<div class="velo" id="v-quando"><div class="foglio">
+  <button class="x" data-x="v-quando">&times;</button>
+  <h3>Quand'&egrave; successo?</h3>
+  <div class="fs">La data in cui questa cosa &egrave; accaduta &mdash; non quella in cui la stai
+    scrivendo. Se non la dici, vale oggi.</div>
+  <div class="invito-box">
+    <input id="q-data" type="date">
+    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.5rem">
+      <button class="mini" id="q-ok">Segna questa data</button>
+      <button class="mini" id="q-oggi">&Egrave; di oggi</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="velo" id="v-luogo"><div class="foglio">
+  <button class="x" data-x="v-luogo">&times;</button>
+  <h3>Dov'&egrave; successo?</h3>
+  <div class="fs">Il luogo dove questa cosa &egrave; accaduta. Se non lo dici, prende il tuo.</div>
+  <div id="l-luoghi"></div>
+  <div class="invito-box" style="margin-top:0.8rem">
+    <p><b>Un altro posto</b><br>
+      Se il luogo non c'&egrave;, scrivilo: nasce adesso.
+      Un luogo &egrave; un punto sulla carta &mdash; un paese, una zona.
+      Diventa un vicinato quando ci si attivano tre persone.</p>
+    <input id="nl-nome" placeholder="il nome del posto, come lo diresti">
+    <input id="nl-terr" placeholder="il territorio &mdash; il comune, la zona (facoltativo)">
+    <button class="mini" id="nl-crea">Fai nascere il luogo</button>
+    <div id="nl-esito" style="margin-top:0.5rem"></div>
+  </div>
+</div></div>
+
+<div class="velo" id="v-priv"><div class="foglio">
+  <button class="x" data-x="v-priv">&times;</button>
+  <h3>Privacy e consensi</h3>
+  <div class="fs">Cosa hai accettato, cosa condividi, e cosa resta tuo.</div>
+  <div id="priv-corpo"></div>
+</div></div>
+
+<div class="velo" id="v-fatt"><div class="foglio">
+  <button class="x" data-x="v-fatt">&times;</button>
+  <h3>Fatturazione</h3>
+  <div class="fs">I dati per le ricevute. Nessun dato di pagamento viene conservato qui:
+    le carte restano al gestore dei pagamenti.</div>
+  <div id="fatt-corpo"></div>
+</div></div>
+
+<div class="velo" id="v-aut"><div class="foglio">
+  <button class="x" data-x="v-aut">&times;</button>
+  <h3>Autorizzazioni</h3>
+  <div class="fs">Cosa permetti a FelicitasMundi, e cosa permette il tuo dispositivo.
+    Sono due cose diverse, e servono entrambe.</div>
+  <div id="aut-corpo"></div>
+</div></div>
+
+<div class="velo" id="v-segn"><div class="foglio">
+  <button class="x" data-x="v-segn">&times;</button>
+  <h3>Segnala</h3>
+  <div class="fs">Qualcosa non funziona, o un ordine non &egrave; arrivato.
+    Arriva solo a chi la prende in carico: non diventa pubblica.</div>
+  <div id="segn-corpo"></div>
+</div></div>
+
+<div class="velo" id="v-col"><div class="foglio">
+  <button class="x" data-x="v-col">&times;</button>
+  <h3>Colore del sito</h3>
+  <div class="fs">Notturno o diurno.</div>
+  <div id="col-corpo"></div>
+</div></div>
+
+<div class="velo" id="v-acc"><div class="foglio">
+  <button class="x" data-x="v-acc">&times;</button>
+  <h3>Il tuo account</h3>
+  <div class="fs">Qui il contratto e la macchina. La tua vita sta in «le mie orme».</div>
+  <div id="l-acc"></div>
+</div></div>
+<script src="fm-incontro.js"></script>
+<script src="fm-edizione.js"></script>
+<script src="fm-consolle.js"></script>
+<script src="fm-account.js"></script>
+<script>
+"use strict";
+
+var SIMBOLI = {
+  terra: '<svg viewBox="0 0 40 40" fill="none"> <polygon points="20,4 8,10 8,28 20,34 20,18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,4 32,10 32,28 20,34 20,18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,4 8,10 20,18 32,10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <line x1="20" y1="18" x2="20" y2="34" stroke="currentColor" stroke-width="1.4"/> </svg>',
+  acqua: '<svg viewBox="0 0 40 40" fill="none"> <circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="1.3"/> <line x1="20" y1="5" x2="9" y2="12" stroke="currentColor" stroke-width="1.1"/><line x1="20" y1="5" x2="31" y2="12" stroke="currentColor" stroke-width="1.1"/> <line x1="9" y1="12" x2="31" y2="12" stroke="currentColor" stroke-width="1.1"/> <line x1="9" y1="12" x2="5" y2="21" stroke="currentColor" stroke-width="1.1"/><line x1="31" y1="12" x2="35" y2="21" stroke="currentColor" stroke-width="1.1"/> <line x1="5" y1="21" x2="12" y2="31" stroke="currentColor" stroke-width="1.1"/><line x1="35" y1="21" x2="28" y2="31" stroke="currentColor" stroke-width="1.1"/> <line x1="12" y1="31" x2="28" y2="31" stroke="currentColor" stroke-width="1.1"/> <line x1="12" y1="31" x2="20" y2="35" stroke="currentColor" stroke-width="1.1"/><line x1="28" y1="31" x2="20" y2="35" stroke="currentColor" stroke-width="1.1"/> <line x1="9" y1="12" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="31" y1="12" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> <line x1="5" y1="21" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="35" y1="21" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> <line x1="5" y1="21" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="35" y1="21" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> <line x1="12" y1="31" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="28" y1="31" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> </svg>',
+  fuoco: '<svg viewBox="0 0 40 40" fill="none"> <polygon points="20,4 4,34 20,26" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,4 36,34 20,26" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <line x1="4" y1="34" x2="36" y2="34" stroke="currentColor" stroke-width="1.4"/> <line x1="20" y1="26" x2="20" y2="34" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/> <line x1="4" y1="34" x2="20" y2="26" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2" opacity="0.4"/> <line x1="36" y1="34" x2="20" y2="26" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2" opacity="0.4"/> </svg>',
+  aria: '<svg viewBox="0 0 40 40" fill="none"> <polygon points="20,4 8,20 20,20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,4 32,20 20,20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,36 8,20 20,20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,36 32,20 20,20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <line x1="8" y1="20" x2="20" y2="16" stroke="currentColor" stroke-width="0.9" stroke-dasharray="2,2" opacity="0.45"/> <line x1="32" y1="20" x2="20" y2="16" stroke="currentColor" stroke-width="0.9" stroke-dasharray="2,2" opacity="0.45"/> <line x1="8" y1="20" x2="32" y2="20" stroke="currentColor" stroke-width="1.4"/> </svg>',
+  etere: '<svg viewBox="0 0 40 40" fill="none"> <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="1.3"/> <polygon points="20,10 27,15 25,22 15,22 13,15" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/> <line x1="20" y1="10" x2="20" y2="4" stroke="currentColor" stroke-width="1"/> <line x1="20" y1="4" x2="26" y2="6" stroke="currentColor" stroke-width="1"/> <line x1="20" y1="4" x2="14" y2="6" stroke="currentColor" stroke-width="1"/> <line x1="27" y1="15" x2="35" y2="14" stroke="currentColor" stroke-width="1"/> <line x1="35" y1="14" x2="37" y2="21" stroke="currentColor" stroke-width="1"/> <line x1="25" y1="22" x2="30" y2="31" stroke="currentColor" stroke-width="1"/> <line x1="30" y1="31" x2="24" y2="36" stroke="currentColor" stroke-width="1"/> <line x1="24" y1="36" x2="16" y2="36" stroke="currentColor" stroke-width="1"/> <line x1="16" y1="36" x2="10" y2="31" stroke="currentColor" stroke-width="1"/> <line x1="15" y1="22" x2="10" y2="31" stroke="currentColor" stroke-width="1"/> <line x1="13" y1="15" x2="5" y2="14" stroke="currentColor" stroke-width="1"/> <line x1="5" y1="14" x2="3" y2="21" stroke="currentColor" stroke-width="1"/> </svg>',
+  nexus: null   /* il Nexus viene dal disegno a mano: nexus.png, non si ridisegna */
+};
+
+  var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
+  var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+  var NEXUS_IMG   = "https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png";
+  var MARCHIO_IMG = "FM_sigillo_corniceoro_HR.png";
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
+
+  var io=null, permessi=[], scelta=null, nomi={}, vista="spazio", stanza="sviluppo";
+  var cerca=false, veleSu=false, canale=null;
+
+  function $(id){ return document.getElementById(id); }
+  function sg(el){ return SIMBOLI[el] || ""; }
+
+  /* ── l'onda: dai due numeri della radice ── */
+  var svgOnda = $("onda");
+  function misura(v){ var d=document.createElement("div");
+    d.style.cssText="position:absolute;visibility:hidden;width:"+v;
+    document.body.appendChild(d); var n=d.getBoundingClientRect().width; d.remove(); return n; }
+  function onda(){
+    var st=getComputedStyle(document.documentElement);
+    var amp=misura(st.getPropertyValue("--onda-amp").trim());
+    var len=misura(st.getPropertyValue("--onda-len").trim());
+    var w=svgOnda.getBoundingClientRect().width||window.innerWidth, h=amp*2, d="M0,"+amp;
+    for(var x=0;x<w+len;x+=len){
+      d+=" q"+(len/4).toFixed(2)+","+(-amp).toFixed(2)+" "+(len/2).toFixed(2)+",0";
+      d+=" q"+(len/4).toFixed(2)+","+( amp).toFixed(2)+" "+(len/2).toFixed(2)+",0";
+    }
+    svgOnda.setAttribute("viewBox","0 0 "+w+" "+h);
+    svgOnda.innerHTML='<path d="'+d+" L"+(w+len)+","+h+" L0,"+h+' Z" fill="'
+      +st.getPropertyValue("--scafo").trim()+'"/><path d="'+d
+      +'" fill="none" stroke="rgba(184,150,62,0.4)" stroke-width="1"/>';
+  }
+  onda(); window.addEventListener("resize", onda);
+
+  /* ══ LA BARRA — cinque voci ══ */
+  var BARRA = [
+    {id:"spazio",  n:"Spazio Vivo",  s:"", ancore:[
+      {id:"home",  n:"Home",  v:"dove si arriva"},
+      {id:"mappa", n:"Mappa", v:"collega le tue orme"},
+      {id:"radio", n:"Radio", v:"Come natura crea fm"},
+      {id:"consolle", n:"La consolle", v:"la regia, e andare in onda"}
+    ]},
+    {id:"sentiero",n:"Il sentiero",  s:"costi e modalità"},
+    {id:"orme",    n:"Le mie orme",  s:"gli strumenti, il filo del percorso"},
+    {id:"edizione", n:"Edizione", s:""},
+    {id:"incontro",n:"Cosa incontro", s:"", sotto:[
+      {id:"vicinati",  n:"Vicinati",   el:"terra", v:["bisogni","calendario"]},
+      {id:"emporio",   n:"Emporio",    el:"acqua",
+       v:["dono","scambio","vendita","abbigliamento","accessori","oggettistica",
+          "oggettistica devozionale","strumenti di coscienza","cosmesi","accessori casa",
+          "arredamento","strumenti musicali","libri","alimenti"]},
+      {id:"assistenza",n:"Assistenza", el:"fuoco", v:["spirituale","mutuo aiuto","consulenza"]},
+      {id:"edizione",  n:"Edizione",   el:"aria",  v:["impagina pro","pubblica","stampa","distribuisci"]},
+      {id:"scuola",    n:"Scuola",     el:"etere", v:["formazioni","maestri delle tradizioni","la ricerca"]}
+    ]},
+    {id:"annale",  n:"Annale di FelicitasMundi", s:"storico · tour · fondatore"}
+  ];
+
+  /* le destinazioni: colore e simbolo, mai il nome dell'elemento */
+  /* ══ i messaggi non letti · le orme di oggi ══ */
+  var CHIAVE_LETTO = "fm_chat_letto";
+
+  function segnaLetto(){
+    try{ localStorage.setItem(CHIAVE_LETTO, new Date().toISOString()); }catch(e){}
+    var b = $("s-chat-n"); if(b){ b.hidden = true; b.textContent = ""; }
+  }
+
+  function contaNonLetti(){
+    var b = $("s-chat-n"); if(!b) return;
+    if(ospite){ b.hidden = true; return; }
+    var da = null;
+    try{ da = localStorage.getItem(CHIAVE_LETTO); }catch(e){}
+    var q = db.from("sviluppo").select("id", {count:"exact", head:true}).eq("stanza","sviluppo");
+    if(da) q = q.gt("momento", da);
+    if(io && io.id) q = q.neq("persona_id", io.id);
+    q.then(function(r){
+      var n = (r && r.count) ? r.count : 0;
+      if(n > 0){ b.textContent = n > 99 ? "99+" : String(n); b.hidden = false; }
+      else { b.hidden = true; }
+    }).catch(function(){ b.hidden = true; });
+  }
+
+  /* quante orme oggi, sotto il campo */
+  function contaOrme(){
+    var e = $("orme-cenno"); if(!e) return;
+    if(ospite){ e.textContent = ""; return; }
+    var oggi = new Date(); oggi.setHours(0,0,0,0);
+    db.from("orme").select("id").eq("persona_id", io.id)
+      .gte("momento", oggi.toISOString())
+      .then(function(r){
+        var n = ((r && r.data) || []).length;
+        e.textContent = n === 0 ? "Oggi non hai ancora lasciato orme."
+                      : n === 1 ? "Oggi hai lasciato un\u2019orma."
+                      : "Oggi hai lasciato " + n + " orme.";
+      }).catch(function(){ e.textContent = ""; });
+  }
+
+  var DOVE = [
+    {n:"[ il Nexus ]", s:"[ la riga del Nexus — e il riferimento al percorso antahkarana ]",
+     c:"--oro", f:"--nexus-f", el:"nexus", tipo:"anthakarana", dest:"nexus"},
+    {n:"Bacheca", s:"quello che dici a tutti i vicinati · il racconto",
+     c:"--aria", f:"--aria-f", el:"aria", tipo:"racconto", dest:"bacheca"},
+    {n:"Bisogni", s:"quello che serve, adesso",
+     c:"--terra", f:"--terra-f", el:"terra", tipo:"bisogno", dest:"bisogni"},
+    {n:"Dono e scambio", s:"cosa condividi",
+     c:"--acqua", f:"--acqua-f", el:"acqua", tipo:"scambio_dono", dest:"dono"},
+    {n:"Una testimonianza", s:"quello che hai visto accadere",
+     c:"--fuoco", f:"--fuoco-f", el:"fuoco", tipo:"testimonianza", dest:"testimonianza"},
+    {n:"Un contatto", s:"una persona che hai incontrato",
+     c:"--terra", f:"--terra-f", el:"terra", tipo:"contatto", dest:"contatti"},
+    {n:"Un\u2019idea o una nota", s:"quello che ti passa e vuoi tenere",
+     c:"--terra", f:"--terra-f", el:"terra", tipo:"idea_nota", dest:"note"},
+    {n:"Un obiettivo", s:"dove vuoi arrivare",
+     c:"--terra", f:"--terra-f", el:"terra", tipo:"obiettivo", dest:"obiettivi"},
+    {n:"Una spesa", s:"quello che è uscito",
+     c:"--terra", f:"--terra-f", el:"terra", tipo:"spesa", dest:"economia"},
+    {n:"Ore di lavoro", s:"il tempo che hai messo",
+     c:"--terra", f:"--terra-f", el:"terra", tipo:"registro_ore", dest:"economia"},
+    {n:"Un link", s:"entra fra i tuoi saperi",
+     c:"--etere", f:"--etere-f", el:"etere", tipo:"link", dest:"link"},
+    {n:"Prodotti", s:"nell\u2019Emporio, con le tre porte",
+     c:"--acqua", f:"--acqua-f", el:"acqua", tipo:"prodotto", dest:"emporio"},
+    {n:"Ricerca", s:"un insegnamento, uno studio",
+     c:"--etere", f:"--etere-f", el:"etere", tipo:"ricerca", dest:"scuola"}
+  ];
+
+  var EDIZIONE = [
+    {n:"Basic 1", s:"per tenere traccia", c:"--oro-ch", f:"--nexus-f"},
+    {n:"Pro",   s:"capitoli, bussola, quadranti, la veste · e la stampa", c:"--oro-ch", f:"--nexus-f", sg:"praticantato"},
+    {n:"Radio", s:"solo voce: una puntata della tua rubrica", c:"--aria", f:"--aria-f", el:"aria", sg:"praticantato"},
+    {n:"La stampa", s:"volantino, opuscolo, rivista, libro", c:"--oro-ch", f:"--nexus-f", sg:"praticantato"},
+    {n:"La consolle radio", s:"il tuo format, con assistente umano iniziale", c:"--aria", f:"--aria-f", el:"aria", sg:"praticantato"}
+  ];
+
+  /* ── gli articoli, per stanza. Il file vive accanto; qui la copertina. ── */
+  var ARTICOLI = [
+    { stanza: "assistenza",
+      id: "metodo-di-bella",
+      file: "articoli/2026/metodo-di-bella.html",
+      titolo: "Metodo Di Bella: un ponte tra ricerca e coscienza",
+      occhiello: "Assistenza terapeutica",
+      cappello: "Il Prof. Giuseppe Di Bella racconta l\u2019eredit\u00e0 del padre, la somatostatina "
+              + "e la melatonina, e la sua ricerca su tumore della prostata, Alzheimer e Parkinson.",
+      foto: "https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg",
+      el: "fuoco" }
+  ];
+
+  var ACCOUNT = [
+    {n:"Fatturazione", s:"[ da collegare ]"},
+    {n:"Privacy e consensi", s:"l\u2019informativa e le tue scelte"},
+    {n:"Autorizzazioni", s:"posizione e calendario"},
+    {n:"Colore del sito", s:"notturno · diurno"},
+    {n:"Segnala", s:"un problema della piattaforma, o un reclamo"},
+    {n:"Esci", s:""}
+  ];
+
+  var apertoRamo = null;
+
+  function disegnaBarra(){
+    var c=$("voci"); c.innerHTML="";
+    BARRA.forEach(function(v){
+      var b=document.createElement("button");
+      b.className="voce"+(v.id===vista?" on":"");
+      b.innerHTML='<span class="tt"><b></b></span>';
+      var t=b.querySelector(".tt");
+      t.querySelector("b").textContent = v.n + ((v.sotto||v.ancore) ? "  \u203A" : "");
+      if(v.s){ var sm=document.createElement("small"); sm.textContent=v.s; t.appendChild(sm); }
+      b.addEventListener("click", function(){
+        if(v.ancore){
+          apertoRamo = (apertoRamo===v.id) ? null : v.id;
+          disegnaBarra();
+          if(vista!=="spazio") vai("spazio");
+          return;
+        }
+        if(v.sotto){
+          apertoRamo = (apertoRamo===v.id) ? null : v.id;
+          disegnaBarra();
+          if(vista!=="incontro") vai("incontro");
+          return;
+        }
+        apertoRamo=null; vai(v.id);
+      });
+      c.appendChild(b);
+
+      /* i tre affacci della home: portano al blocco, non a un'altra pagina */
+      if(v.ancore && apertoRamo===v.id){
+        var da=document.createElement("div"); da.className="sotto-voci";
+        v.ancore.forEach(function(x){
+          var ab=document.createElement("button");
+          ab.className="sotto-voce";
+          ab.style.setProperty("--sc","var(--oro-ch)");
+          ab.innerHTML='<b></b><i></i>';
+          ab.querySelector("b").textContent=x.n;
+          ab.querySelector("i").textContent=x.v;
+          ab.addEventListener("click", function(e){
+            e.stopPropagation();
+            document.body.classList.remove("barra-aperta");
+            if(vista!=="spazio"){ vai("spazio"); }
+            setTimeout(function(){ vaiAlBlocco(x.id); }, 60);
+          });
+          da.appendChild(ab);
+        });
+        c.appendChild(da);
+      }
+
+      if(v.sotto && apertoRamo===v.id){
+        var d=document.createElement("div"); d.className="sotto-voci";
+        v.sotto.forEach(function(x){
+          var sb=document.createElement("button");
+          sb.className="sotto-voce";
+          sb.style.setProperty("--sc","var(--"+x.el+")");
+          sb.innerHTML='<b></b><i></i>';
+          sb.querySelector("b").textContent=x.n;
+          sb.querySelector("i").textContent=x.v.join(" · ");
+          sb.addEventListener("click", function(e){ e.stopPropagation(); vai("incontro", x.id); });
+          d.appendChild(sb);
+        });
+        c.appendChild(d);
+      }
+    });
+  }
+
+  /* porta al blocco della home, o apre la mappa a tutto schermo */
+  function vaiAlBlocco(quale){
+    if(quale === "consolle"){ vai("consolle"); return; }
+    if(quale === "home"){ window.scrollTo({top:0, behavior:"smooth"}); return; }
+    if(quale === "mappa"){
+      var mv = $("mappa-velo");
+      if(mv){ mv.click(); return; }
+    }
+    var e = $("blocco-" + quale);
+    if(e) e.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  function vai(id, sub){
+    vista=id; disegnaBarra();
+    document.body.classList.remove("barra-aperta");
+    var c=$("centro"); c.innerHTML=""; window.scrollTo(0,0);
+    if(id==="spazio")   home(c);
+    else if(id==="orme") mieOrme(c);
+    else if(id==="incontro") incontro(c, sub);
+    else if(id==="chat"){ chat(c); segnaLetto(); }
+    else if(id==="annale") annale(c);
+    else if(id==="consolle") consolle(c);
+    else if(id==="edizione") edizione(c);
+    else if(id==="sentiero") sentiero(c);
+    else attesa(c, id);
+  }
+
+
+  function attesa(c, id){
+    var v = BARRA.filter(function(x){return x.id===id;})[0] || {n:id};
+    c.innerHTML='<div class="occhio">Comunità Eterna FelicitasMundi</div>'
+      +'<h1></h1><p class="sotto"></p>'
+      +'<p><span class="segna">questa stanza aspetta</span></p>';
+    c.querySelector("h1").textContent=v.n;
+    c.querySelector(".sotto").textContent=v.s||"";
+  }
+
+  var RICERCA = [{"t": "COS'È QUESTO DOCUMENTO", "p": ["Il Cruscotto tiene <b>le decisioni</b>. Questo tiene <b>le ragioni</b>.", "Si legge quando qualcuno chiede <i>«perché è fatto così?»</i>, e si aggiorna quando emergono nuovi riferimenti. È il testo che si manda a chi fa ricerca, ed è la base da cui nascerà una pubblicazione.", "<b>Le quattro domande a cui deve rispondere:</b>", "1. <b>Come funziona la mente</b>, e perché ha bisogno di appoggiarsi fuori di sé. 2. <b>Cos'è la coscienza</b>, e in che senso non finisce dove finisce una persona. 3. <b>Come la coscienza interagisce fra più persone</b> — cosa accade quando due attenzioni si posano sulla stessa cosa. 4. <b>Come tenere l'attenzione su un singolo passo</b> in un tempo pieno di richiami, e come quel passo diventi cooperazione fra persone di più paesi. 5. <b>Come una rete di relazioni può crescere senza un centro</b> — e perché ogni persona che vi entra ne è, a sua volta, un inizio."]}, {"t": "IL FONDAMENTO", "p": ["<b>Questo non è un risultato di ricerca e non è un'ipotesi da verificare. È il punto da cui il resto poggia</b>, e va letto prima delle sezioni che seguono.", "<b>La rete ha un centro, ed è un centro eterno, cosciente e beato: è Dio.</b> L'origine, la fonte, ciò da cui tutto inizia e ciò in cui tutto finisce. <b>Un'esistenza eterna.</b>", "Su questo il progetto non parla di ipotesi. Parla della <b>visione dell'anima</b>, del <b>Paramātmā</b>, e dell'<b>interazione sottile fra tutti gli individui che insieme fanno parte di una coscienza</b> — <b>non che la formano</b>, perché <b>la coscienza cosmica è indipendente dalla materia e dalle forme</b>.", "<b>La fonte è la Bhagavad-gītā</b>, ed è l'origine di gran parte delle realizzazioni su cui questo progetto si fonda. <i>(Il fondatore vi arriva nel 2019, prima del centro buddhista e prima di FelicitasMundi.)</i>", "<i>[I versi e lo sviluppo di questa sezione: in attesa.]</i>", "<b>⚠️ Perché sta qui, in cima.</b> Tutto ciò che segue — la mente estesa, l'attenzione condivisa, la reciprocità, le reti senza gerarchia — <b>descrive come le cose si manifestano, non da dove vengono.</b> La ricerca contemporanea sta sotto questo punto, non sopra: <b>è utile a dire come funziona ciò che accade, non a stabilire cosa sia il fondamento.</b>"]}, {"t": "I PERNI DI RICERCA", "p": ["Questo documento raccoglie la parte scientifica contemporanea. <b>Non è la sola base del progetto</b>, e non è la prima: FelicitasMundi poggia su ricerche portate da persone che ne fanno parte, e ciascuna regge un lato che qui è solo nominato.", "<b>Luca Merolla</b> — ideatore filosofico. Porta la ricerca che unisce <b>la coscienza delle api</b>, anche nel suo aspetto simbolico, con <b>la geometria sacra</b>: forme archetipiche e da sempre esistenti, che possono aiutare la coscienza come strumento per identificare la materia, e attraverso le quali si possono sviluppare e focalizzare aspetti dell'esperienza. Da lui viene la conoscenza del <b>Cubo di Metatron</b>, e la spiegazione dell'<b>antahkarana</b>, il filo della coscienza. <i>[Il suo contributo scritto — parole sue.]</i>", "<b>Riccardo Tonelli</b> — porta un secondo perno di ricerca, e da lui viene la parola <b>Nexus</b>: in latino, il legame, la connessione. <i>[Il suo contributo scritto — parole sue.]</i>", "<b>Il fondatore</b> — la tesi che orienta tutto:", "&gt; <b>«Tutto lo strumento è ciò che manca in questo spazio-tempo: inquadra perfettamente dei bisogni collettivi. Vanno semplicemente resi accessibili, accoglienti, armoniosi, belli.»</b>", "<b>⚠️ E c'è un secondo legame, ancora da scrivere:</b> metafisica, geometria sacra e apicoltura naturale integrata <b>si connettono con l'ambito vedico</b> — la tradizione, il sanscrito, e il riferimento all'Essere Supremo. <i>[Da sviluppare.]</i>"]}, {"t": "① COME FUNZIONA LA MENTE: si estende fuori dal cranio", "p": ["<b>Il riferimento fondativo:</b> Clark e Chalmers, <i>The Extended Mind</i> (1998). Il sistema cognitivo umano non si descrive adeguatamente come il solo cervello e sistema nervoso: comprende <b>le risorse del corpo e gli artefatti dell'ambiente</b>. Un taccuino, in questa prospettiva, è parte del sistema cognitivo — <b>estende la memoria biologica</b>.", "Vent'anni dopo la tesi è consolidata nelle scienze cognitive: la cognizione <b>non è confinata al cervello biologico</b>, ma si realizza in <b>sistemi ibridi</b> fatti di risorse neurali, corporee, sociali, culturali e tecnologiche. Le menti umane sono sistemi che evolvono, <b>continuamente riconfigurati dal loro rapporto con gli strumenti e le pratiche</b>.", "<b>Cosa significa qui.</b> Quando qualcuno scrive <i>«oggi ho raccolto le olive con Marco»</i>, non compila un modulo: <b>estende la propria memoria fuori di sé.</b> Lo strumento non registra un dato — <b>diventa parte del modo in cui quella persona ricorda.</b>", "<b>⚠️ IL CONTRO-RISULTATO, ed è serio.</b> Chi salva un'informazione all'esterno <b>smette di codificarla internamente</b>: la traccia interna si indebolisce. È lo <i>scaricamento cognitivo</i>, documentato negli adulti e nei bambini, e la perdita riguarda <b>non solo i singoli elementi ma anche le relazioni fra essi</b>.", "<b>→ Il guardrail, ed è una scelta di progetto:</b> <b>la traccia non deve sostituire il ricordo, ma richiamarlo.</b> Per questo ha una forma e un colore, per questo si torna a vederla, per questo vive dentro un cammino invece che dentro un archivio. <b>Una lista che si consulta indebolisce la memoria; una traccia che si rivede la rinforza.</b>"]}, {"t": "② COS'È LA COSCIENZA: non finisce dove finisce la persona", "p": ["La filosofia della mente ha smontato il modello cartesiano di <b>sfere di coscienza isolate</b>. L'intersoggettività — <i>una mutualità di connessione cosciente fra due o più individui</i> — è riconosciuta come <b>centrale per il benessere mentale ed emotivo umano</b>, e non come un fenomeno accessorio.", "Nella letteratura si trova anche la posizione più forte: <b>l'empatia</b>, componente essenziale del consenso intersoggettivo, è collegata alla possibilità di <b>esperienze condivise</b> — cioè di due o più individui che partecipano alla stessa esperienza cosciente. E l'uso di parole mentali applicate a collettivi di persone <b>è interpretato come più di una metafora</b>, con un confronto esplicito coi comportamenti collettivi complessi di altre specie sociali.", "<b>Cosa significa qui.</b> La comunità non è una somma di individui che si scambiano messaggi. <b>È una condizione della coscienza di ciascuno.</b> Il progetto non deve <i>collegare utenti</i>: deve <b>rendere praticabile un'esperienza che è già, per natura, condivisa.</b>", "<i>(Il legame con le altre specie sociali — l'alveare — è il punto in cui questa sezione incontra la ricerca di Luca Merolla.)</i>"]}, {"t": "③ COME LE COSCIENZE SI INCONTRANO: l'attenzione condivisa", "p": ["<b>Questo è il cuore del documento</b>, ed è la parte con le prove più solide.", "<b>L'attenzione condivisa</b> si verifica quando due persone guardano la stessa cosa <b>ed entrambe sanno che l'altra la sta guardando</b>. Non è un dettaglio: quel momento <b>causa uno scambio di informazioni fra le due parti</b>, sia sull'ambiente sia sui rispettivi stati mentali.", "<b>⭐ E c'è un risultato che riguarda direttamente FelicitasMundi.</b> È stata proposta una <b>teoria della mente collettiva</b>: l'attribuzione di uno stato mentale unitario a un gruppo di soggetti con esperienze convergenti. Non la distinzione fra la propria prospettiva e quella altrui, ma <b>un'unificazione prospettica fra soggetti</b>, indotta empiricamente <b>dall'arrivo sincrono di informazione condivisa</b>.", "<b>Le tre conseguenze misurate</b>, e sono esattamente ciò che una comunità cerca: 1. <b>amplificazione psicologica</b> di ciò che si guarda insieme; 2. <b>creazione di legami relazionali</b>; 3. <b>aumento della cooperazione</b> fra chi co-attende.", "<b>Cosa significa qui, in concreto.</b> Quando un'orma e un bisogno si incontrano — la stessa cosa cercata, lo stesso luogo, lo stesso momento — <b>quello è un episodio di attenzione condivisa.</b> E la ricerca dice che se le persone <b>sanno</b> di stare guardando la stessa cosa, il legame si forma e la cooperazione aumenta.", "<b>→ Da qui discende la prima regola del disegno visivo: l'incontro deve VEDERSI.</b> Se accade e nessuno se ne accorge, l'effetto non si produce. <b>Non è estetica: è la condizione perché il meccanismo funzioni.</b>", "E c'è un secondo risultato che orienta il tono di tutta la piattaforma: si comprende gli altri <b>non osservandoli da terzi, ma interagendo con loro in seconda persona</b> — la relazione «io e te», non «io osservo lui»."]}, {"t": "④ PERCHÉ SI DEVE POTER SEGNARE UN PASSO: la reciprocità richiede memoria", "p": ["<b>Il riferimento fondativo:</b> Marcel Mauss, <i>Saggio sul dono</i> (1925), e le tre obbligazioni: <b>dare, ricevere, ricambiare</b>. Il dono non è gratuito: <b>crea un legame che dura</b>, e nel legame sta il valore.", "La ricerca successiva mostra che le economie antiche non nascono dal baratto ma <b>da reti di parentela, obbligazione e prestigio</b>. E il punto decisivo, in un lavoro del 2025: la reciprocità è <b>una struttura di interazione estesa nel tempo, fondata su memoria, obbligazione e ripetizione</b>. Precede i mercati <b>non solo storicamente, ma cognitivamente</b>.", "<b>⭐ LA RIGA CHE GIUSTIFICA LA PIATTAFORMA.</b> Lo scambio differito ha una condizione: <b>qualcuno deve ricordare.</b> Chi ha dato, chi ha ricevuto, quando, cosa.", "Nelle comunità piccole quel ricordo è la memoria delle persone. <b>Oltre una certa scala non basta più</b> — ed è il punto in cui una comunità <b>o si burocratizza, o si spegne, o si affida al denaro</b>.", "<b>FelicitasMundi propone una terza via: il registro condiviso.</b> Non un contatore di crediti, non una moneta: <b>una memoria comune di ciò che è passato fra le persone.</b>", "<b>⚠️ E la cautela viene dalla critica interna alla disciplina:</b> insistere troppo sulla reciprocità la semplifica. <b>Se il sistema la misura, la uccide.</b> Il registro deve <b>ricordare, non contabilizzare</b>: nessun saldo, nessun debito, nessun punteggio."]}, {"t": "⑤ TENERE L'ATTENZIONE IN UN TEMPO DI CONFUSIONE", "p": ["Questa è la domanda più pratica, e la più urgente.", "<b>Il contesto</b>, dall'editoriale del ciclo: <i>«negli ultimi sei anni tutto quello che viene detto viene dopo un attimo smentito. Tanti sono lì che non capiscono più nulla. Non c'è più una chiarezza.»</i> A questo si somma un ambiente digitale costruito per <b>catturare</b>: scorrimento infinito, riproduzione automatica, un contenuto che ne chiama un altro.", "<b>La risposta della ricerca si chiama tecnologia lenta.</b> Hallnäs e Redström (2001) propongono un'agenda di progetto per una tecnologia rivolta <b>alla riflessione e a momenti di riposo mentale</b>, invece che all'efficienza nella prestazione — perché i computer non sono più strumenti usati in situazioni specifiche, ma <b>circondano la vita quotidiana per lunghi periodi</b>.", "Il lavoro successivo aggiunge due nozioni utili: - <b><i>ongoingness</b></i>: un artefatto in cui <b>il tempo scorre sempre</b>, che opera secondo il proprio tempo <b>anche quando nessuno interagisce</b>; - <b>progettare una relazione con una cosa computazionale destinata a durare e svilupparsi</b>, la cui forma è costituita dalla propria <b>manifestazione temporale</b>.", "E un risultato applicativo: una visualizzazione dall'aspetto insolito produce un <b>effetto di straniamento</b> che spinge le persone a interpretarla <b>cognitivamente e socialmente</b> — a pensarci e a parlarne. <b>Una barra di progresso non fa questo.</b>", "<b>→ Tre conseguenze dirette:</b> ciò che hai lasciato <b>continua a vivere mentre non guardi</b> — non perché un algoritmo ti stimola, ma perché la comunità si muove · <b>la forma insolita fa fermare</b> · <b>si progetta per anni</b>, non per una sessione."]}, {"t": "⑤bis LA RETE NON HA CENTRO STRUTTURALE, MA HA UN'ORIGINE", "p": ["<b>La tessitura e il modello miceliare</b>", "Questa sezione descrive la struttura che il progetto ha assunto, ed è la più recente: <b>è emersa il 2 agosto 2026, all'altare rupestre di Santo Stefano, a Cheremule.</b>", "<b>Il fatto da cui nasce</b>", "Due persone scoprono di aver avuto <b>lo stesso insegnante di filosofia</b>, in due città diverse, <b>a tredici anni di distanza</b>. Da quell'insegnamento, per strade separate, arrivano entrambe a occuparsi di coscienza.", "<b>Quel legame esisteva già. Nessuno lo aveva creato: nessuno lo aveva visto.</b>", "È il caso esemplare di ciò che questo progetto si propone: <b>non generare connessioni, ma rendere visibili quelle che ci sono.</b>", "<b>La differenza da ciò che i sistemi esistenti chiamano <i>match</b></i>", "Le piattaforme sociali <b>abbinano per somiglianza</b>: gusti dichiarati, età, prossimità geografica, comportamenti simili. È un calcolo di affinità fatto su dati di profilo.", "<b>Qui il legame preesiste all'incontro</b>, e il sistema non lo produce: <b>lo mostra.</b> La differenza non è di qualità dell'algoritmo — <b>è di natura dell'oggetto.</b>", "<b>La struttura: miceliare, non arborescente</b>", "L'immagine è emersa nella conversazione stessa: <b>la rete dei funghi.</b>", "Un albero ha una radice, un tronco e dei rami: <b>c'è una gerarchia, e il flusso ha una direzione sola.</b> Un micelio no. È un tessuto di filamenti in cui <b>nessun nodo comanda gli altri</b>, ognuno è collegato a più altri, e <b>ogni frammento può dare inizio a una rete nuova</b>.", "<b>⚠️ E qui va tenuta ferma una distinzione, perché è facile scambiarla.</b> <i>Senza centro</i> si dice della <b>struttura</b>: nessun nodo è più importante di un altro, nessuno è il proprietario del tessuto. <b>Non si dice dell'origine.</b> Il fondamento c'è, ed è quello dichiarato in apertura. <b>La rete visibile è manifestazione, non fondamento.</b>", "<b>È esattamente la struttura che il progetto assume:</b> - una persona <b>tessa il proprio cammino</b>, collegando ciò che ha fatto, i luoghi in cui è stata e le persone che ha incontrato — <b>anche all'indietro nel tempo</b>; - <b>ogni persona così collegata può cominciare la propria tessitura</b>; - <b>il tessuto risultante non ha un proprietario né un nodo che comandi gli altri.</b>"]}, {"t": "⑥ DALLA PERSONA ALLA COOPERAZIONE FRA PAESI", "p": ["Il passaggio dal singolo al collettivo ha, nella ricerca, un nome e un problema.", "<b>Il nome:</b> <i>civic technology</i> — piattaforme che permettono alle persone di <b>connettersi, deliberare e collaborare</b>, ampliando la partecipazione e la co-creazione. E l'invito, per chi le costruisce, a <b>incorporare gli otto principi di Elinor Ostrom</b> sul governo dei beni comuni <b>nella costruzione stessa della tecnologia</b> — Ostrom avendo dimostrato che le comunità sanno governare risorse condivise <b>senza né mercato né Stato</b>.", "<b>⚠️ IL PROBLEMA, ed è il rischio maggiore del progetto.</b> Gli studi divergono: alcuni trovano che queste piattaforme <b>allargano</b> la partecipazione a gruppi marginalizzati; altri che <b>attraggono le stesse persone che già partecipano</b>.", "<b>Tradotto: il rischio non è tecnico, è di soglia.</b> Si rischia di parlare solo a chi già ci somiglia. <b>Chi cerca autoproduzione, vicinato e mutuo aiuto, ma non ha linguaggio spirituale — entra, o si sente fuori posto?</b>", "<b>Questa domanda è oggi il criterio più severo con cui giudicare ogni scelta di disegno.</b>"]}, {"t": "⑦ IL BUCO CHE FELICITASMUNDI PUÒ RIEMPIRE", "p": ["Nella ricerca sul progetto di tecnologie contemplative si legge che <b>le descrizioni autentiche dell'esperienza vissuta in prima persona che informano il progetto sono poche</b>, perché chi fa ricerca raramente è addestrato a osservare la mente.", "<b>Questo è il vantaggio, e non è retorico.</b> FelicitasMundi non è una piattaforma spirituale in più: <b>è un caso in cui chi progetta pratica</b>, e in cui il progetto porta il segno di quella pratica in ogni decisione.", "<b>E la prova documentale esiste già.</b> Il Cruscotto — oltre novanta versioni con decisioni datate, ragioni, ripensamenti ed errori dichiarati — <b>è un diario di progettazione</b>, che nella <i>ricerca attraverso il progetto</i> è la fonte primaria. Quasi nessun progetto ce l'ha, perché quasi nessuno lo tiene <b>mentre</b> costruisce.", "<b>Al progetto partecipano docenti universitari</b>, il che rende possibile un lavoro co-firmato invece che una segnalazione dall'esterno."]}, {"t": "⑧ L'IPOTESI, E COME SI MISURA", "p": ["<b>L'ipotesi:</b> <i>una comunità che dispone di una memoria condivisa dei propri scambi genera più incontri reali di una che non ce l'ha.</i>", "<b>⚠️ Vanno registrate dal primo giorno.</b> Con sei mesi di dati c'è un caso; senza, c'è un'intenzione."]}, {"t": "⑨ LE DOMANDE APERTE", "p": ["1. <b>Come si rende visibile un incontro già avvenuto, senza esporre le persone?</b> 2. <b>Una traccia che si rivede rinforza la memoria interna, o la sostituisce</b> come nello scaricamento cognitivo? È verificabile, e nessuno l'ha verificato su un sistema di questo tipo. 3. <b>Un registro di reciprocità che non contabilizza regge oltre le poche decine di persone?</b> 4. <b>Una soglia estetica e filosofica alta allarga o restringe?</b> 5. <b>La forma frattale — la stessa immagine per il singolo, il gruppo e la comunità — è comprensibile senza spiegazioni?</b> <i>(È la domanda che incontra la geometria sacra: se una forma è archetipica, dovrebbe riconoscersi senza essere spiegata. È verificabile.)</i> 6. <b>L'attenzione condivisa mediata da uno strumento produce gli stessi effetti di quella diretta?</b> La teoria della mente collettiva è stata studiata su persone compresenti. <b>Se vale anche a distanza, è un risultato nuovo — ed è esattamente ciò che questa piattaforma metterebbe alla prova.</b> 7. <b>Una rete che cresce per riconoscimento di legami preesistenti, invece che per invito, raggiunge una massa critica?</b> <i>(⑤bis)</i> 8. <b>Rendere visibile un legame che esisteva già cambia il legame stesso?</b> 9. <b>Una struttura senza centro può essere governata?</b> — Ostrom applicato a una rete di relazioni invece che a una risorsa materiale."]}];
+
+  /* ── la radio vera ── */
+  var FM_STREAM  = "https://radio.felicitasmundi.com/listen/radio_felicitasmundi/radio.mp3";
+  var FM_ADESSO  = "https://radio.felicitasmundi.com/api/nowplaying/radio_felicitasmundi";
+  var FM_RIPIEGO = "https://www.felicitasmundi.com/wp-content/uploads/2026/07/Visnujana-Swami-Kirtan.mp3";
+
+  /* quello che suona, scritto in tutti e due i posti */
+  var branoOra = { titolo:"", chi:"" };
+
+  function scriviBrano(titolo, chi, soloRipeti){
+    if(!soloRipeti){ branoOra = { titolo: titolo||"", chi: chi||"" }; }
+    var testo = branoOra.titolo || "";
+    var coda  = branoOra.chi ? " \u00b7 " + branoOra.chi : "";
+
+    var b = $("r-brano");
+    if(b){
+      b.innerHTML = "";
+      b.appendChild(document.createTextNode(testo || "\u00a0"));
+      if(coda){ var sp=document.createElement("span"); sp.textContent=coda; b.appendChild(sp); }
+    }
+    var c = $("canto-brano");
+    if(c) c.textContent = testo ? (testo + coda) : "\u00a0";
+  }
+
+  /* chiede alla radio cosa sta suonando */
+  function cosaSuona(){
+    fetch(FM_ADESSO, {cache:"no-store"})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var n = d && d.now_playing && d.now_playing.song;
+        if(!n) return;
+        scriviBrano(n.title || "", n.artist || "");
+      })
+      .catch(function(){ /* se la radio non risponde, resta quello che c'è */ });
+  }
+
+  /* ── le scadenze, dal Cruscotto. Solo il nucleo le vede, in Plancia. ── */
+  var SCADENZE = [
+    {q:"2026-08-06", n:"\u2b50 La parte pratica",
+     d:"il Sentiero \u00b7 le mie orme \u00b7 il team e come scrive sul Megafono \u2014 senza, non si pu\u00f2 proporre nulla",
+     c:"oro"},
+    {q:"2026-08-12", n:"L\u2019apertura ai propri",
+     d:"Luna nuova, eclissi totale. Non \u00e8 il lancio: le persone che gi\u00e0 ci sono entrano e provano",
+     c:"fuoco"},
+    {q:"2026-08-12", n:"P7 \u00b7 la verifica dei permessi",
+     d:"provare a entrare dove non si deve \u2014 prima dell\u2019apertura", c:"fuoco"},
+    {q:"2026-08-31", n:"Gioia Radix \u00b7 la campagna",
+     d:"incassa senza una riga di codice: \u00e8 la voce che pu\u00f2 incassare per prima", c:"terra"},
+    {q:"2026-08-31", n:"Il palinsesto della radio",
+     d:"le nove fasce, e le 150-200 dirette in rotazione", c:"aria"},
+    {q:"2026-09-05", n:"P5 \u00b7 la sorveglianza esterna",
+     d:"qualcuno da fuori che guarda il sito", c:"fuoco"},
+    {q:"2026-09-30", n:"La cassa collegata",
+     d:"Stripe, uscendo da WooCommerce \u2014 senza, non si incassa", c:"acqua"},
+    {q:"2026-09-30", n:"La via di recupero dell\u2019account",
+     d:"chi perde l\u2019accesso alla posta deve poter rientrare", c:"terra"},
+    {q:"2026-09-30", n:"Il consulente legale",
+     d:"privacy, condizioni, il nome d\u2019artista, il modello ponte", c:"etere"},
+    {q:"2026-09-30", n:"Lo spazio Pro per le aziende",
+     d:"i tre livelli, il preventivo tipo, e chi fa il lavoro", c:"acqua"},
+    {q:"2026-10-04", n:"Scade il vincolo sui QR stampati",
+     d:"il percorso /enciclopedia/gioia-radix* si pu\u00f2 spostare", c:"terra"},
+    {q:"2026-12-31", n:"1.000 account",
+     d:"l\u2019obiettivo di dicembre", c:"aria"},
+    {q:"2026-12-31", n:"Il metro della spesa",
+     d:"deve aver aperto porte \u2014 e cosa \u00e8 costato, in denaro, energia, acqua e suolo", c:"etere"},
+    {q:"2027-07-31", n:"La casa si regge",
+     d:"2.000-4.000 \u20ac al mese, e le porte non dipendono da una persona sola", c:"fuoco"}
+  ];
+
+  function quantoManca(q){
+    var d = new Date(q + "T12:00:00"), oggi = new Date();
+    var g = Math.ceil((d - oggi) / 86400000);
+    if(g < 0)   return {tx:"passata", cl:"passata"};
+    if(g === 0) return {tx:"oggi", cl:"urgente"};
+    if(g === 1) return {tx:"domani", cl:"urgente"};
+    if(g < 8)   return {tx:g + " giorni", cl:"urgente"};
+    if(g < 32)  return {tx:g + " giorni", cl:"vicina"};
+    var m = Math.round(g/30);
+    return {tx:"fra " + m + (m===1 ? " mese" : " mesi"), cl:""};
+  }
+
+  function disegnaScadenze(dove){
+    var box = document.getElementById(dove); if(!box) return;
+    var h = '<h3 class="sc-tit">Le scadenze</h3><div class="sc-lista">';
+    SCADENZE.slice().sort(function(a,b){ return a.q < b.q ? -1 : 1; }).forEach(function(x){
+      var m = quantoManca(x.q);
+      var d = new Date(x.q + "T12:00:00").toLocaleDateString("it-IT",
+                {day:"numeric", month:"long", year:"numeric"});
+      h += '<div class="sc-r ' + m.cl + '" style="--sc:var(--' + x.c + ', var(--oro))">'
+        +    '<div class="sc-q"><b>' + d + '</b><i>' + m.tx + '</i></div>'
+        +    '<div class="sc-t"><b></b><small></small></div>'
+        +  '</div>';
+    });
+    h += '</div>';
+    box.innerHTML = h;
+    var righe = box.querySelectorAll(".sc-t");
+    SCADENZE.slice().sort(function(a,b){ return a.q < b.q ? -1 : 1; }).forEach(function(x,i){
+      if(!righe[i]) return;
+      righe[i].querySelector("b").textContent = x.n;
+      righe[i].querySelector("small").textContent = x.d;
+    });
+  }
+
+  /* ── quello che sta accadendo: le ultime orme pubbliche ──
+     Non un esempio: righe vere. Se non ce ne sono, lo dice.            */
+  function quandoTx(t){
+    var d = new Date(t), ora = new Date();
+    var min = Math.round((ora - d) / 60000);
+    if(min < 1)  return "adesso";
+    if(min < 60) return min + (min===1 ? " minuto fa" : " minuti fa");
+    var h = Math.round(min/60);
+    if(h < 24)   return h + (h===1 ? " ora fa" : " ore fa");
+    var g = Math.round(h/24);
+    if(g < 8)    return g + (g===1 ? " giorno fa" : " giorni fa");
+    return d.toLocaleDateString("it-IT", {day:"numeric", month:"long", year:"numeric"});
+  }
+
+  function quelloCheAccade(){
+    var box = $("ora-righe"); if(!box) return;
+    db.from("orme")
+      .select("contenuto,tipo,destinazione,momento,accaduto_il,vicinato_id")
+      .eq("visibilita","pubblico")
+      .order("momento", {ascending:false}).limit(5)
+      .then(function(r){
+        var righe = (r && r.data) || [];
+        if(!righe.length){
+          box.innerHTML = '<p class="ora-vuoto">Ancora nessuna orma condivisa. '
+            + 'La prima che qualcuno lascia comparir&agrave; qui.</p>';
+          return;
+        }
+        box.innerHTML = "";
+        righe.forEach(function(o){
+          var q = DOVE.filter(function(x){ return x.tipo === o.tipo; })[0];
+          var luogo = "";
+          if(o.vicinato_id){
+            var v = luoghi.filter(function(x){ return x.id === o.vicinato_id; })[0];
+            if(v) luogo = v.nome;
+          }
+          var d = document.createElement("div");
+          d.className = "ora-r";
+          d.style.setProperty("--rc", q ? "var("+q.c+")" : "var(--oro)");
+          d.innerHTML = '<span class="or-sg"></span>'
+                      + '<span class="or-tx"><b></b><i></i></span>';
+          d.querySelector(".or-sg").innerHTML = q ? bollo(q) : "";
+          d.querySelector("b").textContent = o.contenuto.slice(0,120)
+                                           + (o.contenuto.length>120 ? "\u2026" : "");
+          var quando = quandoTx(o.accaduto_il ? o.accaduto_il+"T12:00:00" : o.momento);
+          d.querySelector("i").textContent =
+            (q ? q.n : "") + (luogo ? " \u00b7 " + luogo : "") + " \u00b7 " + quando;
+          box.appendChild(d);
+        });
+      })
+      .catch(function(){
+        box.innerHTML = '<p class="ora-vuoto">Le orme condivise compariranno qui.</p>';
+      });
+  }
+
+  /* ── il palinsesto: nove fasce, dal Cruscotto ── */
+  var FASCE = [
+    {da:  4.5, a:  8,    n:"Il risveglio",        d:"mangalarati, pratiche di risveglio, musica di meditazione e mantra"},
+    {da:  8,   a: 10,    n:"I piccoli",           d:"fiabe, cartoni evolutivi, canzoni per bambini"},
+    {da: 10,   a: 12,    n:"Il sapere",           d:"astrologia, storia, autoproduzione alimentare ed energetica"},
+    {da: 12,   a: 14,    n:"Le comunit\u00e0",      d:"storie dei vicinati e delle comunit\u00e0"},
+    {da: 14,   a: 17,    n:"La musica",           d:"sperimentale, jazz, funky, classica"},
+    {da: 17,   a: 19,    n:"Le maestrie",         d:"insegnamenti pratici"},
+    {da: 19,   a: 21,    n:"Gli insegnamenti",    d:"insegnamenti spirituali"},
+    {da: 21,   a: 24,    n:"La sera",             d:"creativit\u00e0, musica, interviste, concerti"},
+    {da:  0,   a:  4.5,  n:"L\u2019archivio",       d:"l\u2019archivio storico"}
+  ];
+
+  function oraTx(h){
+    var o = Math.floor(h), m = Math.round((h-o)*60);
+    return (o<10?"0":"")+o + ":" + (m<10?"0":"")+m;
+  }
+  function fasciaOra(){
+    var d = new Date(), h = d.getHours() + d.getMinutes()/60;
+    for(var i=0;i<FASCE.length;i++){
+      var f = FASCE[i];
+      if(f.da < f.a){ if(h >= f.da && h < f.a) return i; }
+      else { if(h >= f.da || h < f.a) return i; }
+    }
+    return 0;
+  }
+  function disegnaPalinsesto(){
+    var box = $("r-palinsesto"); if(!box) return;
+    var i = fasciaOra();
+    var righe = [];
+    for(var k=0;k<3;k++){
+      var f = FASCE[(i+k) % FASCE.length];
+      righe.push({f:f, ora:k===0});
+    }
+    box.innerHTML = "";
+    righe.forEach(function(r){
+      var d = document.createElement("div");
+      d.className = "r-fascia" + (r.ora ? " ora" : "");
+      d.innerHTML = '<span class="r-h"></span><span class="r-t"><b></b><i></i></span>';
+      d.querySelector(".r-h").textContent = r.ora ? "in onda" : oraTx(r.f.da);
+      d.querySelector("b").textContent = r.f.n;
+      d.querySelector("i").textContent = r.f.d;
+      box.appendChild(d);
+    });
+  }
+
+  var DOMANDE = [
+    {
+      "d": "Cos'è la Comunità Eterna?",
+      "r": [
+        "Le persone stanno vivendo un cambiamento epocale. Cambia il mondo lavorativo, legato anche alla tecnologia — ma cambia soprattutto il linguaggio. Ci si relaziona unicamente attraverso il telefono. È tutto così social, tutto così estetico, e spesso manca la profondità dei contenuti.",
+        "E intanto, negli ultimi sei anni, tutto quello che viene detto viene dopo un attimo smentito. Tanti sono lì che non capiscono più nulla. Non c'è più una chiarezza.",
+        "Dietro c'è una grande paura. E c'è, in fondo, una mancanza: la conoscenza e la consapevolezza di essere l'anima.",
+        "Da qui si passa dall'essere dipendenti all'imparare a essere autonomi e interdipendenti: imparare che fuori dai lavori ordinari si può riscoprire la propria tendenza, si può riscoprire una maniera per rimettere ordine nella propria mente, nelle proprie abitudini, nelle proprie dipendenze, per poter poi ritrovare la comunità.",
+        "E quella comunità è basata su dei fare specifici, che sono sempre esistiti, e che sono quelli che guardano all'autosufficienza: la produzione di alimenti naturali, l'attenzione alle relazioni, il fare sacro, la produzione di rimedi naturali, l'educazione che parte dagli insegnamenti tramandati per via orale.",
+        "La Comunità Eterna è sempre esistita, è già attorno a noi. Semplicemente FelicitasMundi cerca di ricreare la connessione e potenziare questa comunità."
+      ]
+    },
+    {
+      "d": "Quanto costa?",
+      "r": [
+        "Entrare e servire la comunità è gratuito, sempre. Leggi, scrivi in bacheca, dichiari un ruolo e ti metti all'opera. Hai gli strumenti per collegare la tua orma: i contatti che incontri, le idee e le note, i racconti, le testimonianze, i bisogni che apri, quello che scambi e quello che doni, le spese, le ore di lavoro, i link e gli obiettivi. Nell'emporio puoi offrire quello che fai in scambio o in dono. Questo non scade e non è una prova: è la porta che resta aperta.",
+        "Il praticantato costa 26 € al mese, e lo compri quando vuoi, un mese alla volta. Non è un abbonamento che si rinnova da solo.",
+        "Cosa apre.",
+        "Il tuo cammino diventa registrabile. Il filo del percorso lo vedono tutti — le pratiche, i passaggi, i momenti del ciclo. Con il praticantato cominci a segnarlo: quello che fai lungo il filo resta scritto, ed è tuo.",
+        "Il tuo progetto prende forma. Qui sei accompagnato nella focalizzazione del tuo talento, e in come seguire direzioni chiare per portare a termine la tua opera. Trovi gli strumenti di scrittura strutturata, utili per i prodotti, le formazioni e i progetti che porti nella comunità — con la stessa cura di una pagina stampata, senza saper programmare.",
+        "Quello che offri diventa vendibile. Nell'emporio si apre la vendita, e la scheda del tuo prodotto si veste: capitoli, porte, stampa. Vale per ciò che produci, per l'assistenza che dai, per il tuo insegnamento, per la gestione del tuo luogo.",
+        "Gli approfondimenti del cammino. Gli esercizi, i materiali, i contatti con chi tiene le classi, gli spazi di confronto.",
+        "Il metodo per usare l'intelligenza artificiale in maniera consapevole, e la formazione per diventare operatore.",
+        "E il team, da tre persone in su. 26 € a persona, minimo tre. Un team può essere il team di un vicinato, il team che organizza un incontro, un evento, un ritiro, un festival, oppure il team degli operatori di un territorio. Quello che cambia è che gli strumenti diventano condivisi: quello che uno segna, gli altri lo vedono."
+      ]
+    },
+    {
+      "d": "Dove siete?",
+      "r": [
+        "FelicitasMundi come piattaforma nasce in Sardegna. L'azienda che ne gestisce l'aspetto amministrativo, commerciale e legale ha sede a Sassari.",
+        "Ma la Comunità vive dove sei tu. La piattaforma è collegata e interconnessa a gruppi, circuiti e comunità dei territori, e in questo modo copre già una buona parte delle regioni italiane.",
+        "Lo sviluppo dei vicinati ha oggi maggiore attenzione in Sardegna, Abruzzo, Emilia-Romagna, Toscana e Lombardia.",
+        "Il gruppo di riferimento della cultura indovedica — gli Hare Krishna — è una parte fondamentale del progetto dal punto di vista filosofico, ed è presente in vari centri in tutta Italia: Firenze, Bergamo, Piacenza, Savona, Bologna, Roma."
+      ]
+    },
+    {
+      "d": "Posso fare volontariato in un vicinato?",
+      "r": [
+        "Il modo in cui la piattaforma fa incontrare le persone è rendere visibili i bisogni: quelli dei singoli, quelli dei team, quelli dei vicinati. Ci sono gruppi che hanno bisogno di qualcuno che dia una mano nelle pulizie, nell'orto, nella gestione della comunicazione, nell'organizzare attività, nel produrre rimedi naturali.",
+        "Si parte da lì: i vicinati raccontano i loro bisogni. Abbiamo bisogno di questo, e diamo in cambio ospitalità, vitto e alloggio, la possibilità di proporre le proprie esperienze e i propri prodotti.",
+        "Chi si iscrive può intanto partecipare a questo scambio e a questo dono — e fra le cose che può fare c'è proprio quella di partecipare come volontario nei luoghi, e dare una mano ai vicinati. Si dichiara un ruolo, e si comincia. Gratuito, sempre. Chi serve appartiene.",
+        "La particolarità però risiede in un'altra cosa. Con la tua orma, con il praticantato, con questa scuola di comunità fatta come un gioco, diamo la possibilità di percorrere un sentiero introspettivo che fa ordine nel caos. E questo aiuta proprio a livello di karma yoga, perché ti purifica nelle attitudini, nella comunicazione, nel modo in cui fai le cose — con attenzione, con buon senso.",
+        "Così lavorare con l'altro permette sia al volontario sia a chi ospita di fare un lavoro introspettivo.",
+        "E questo è il vero karma yoga, che poi si evolve quando questo servizio lo si dà in offerta alla coscienza cosmica, all'esistenza, a Dio."
+      ]
+    },
+    {
+      "d": "Come posso creare un vicinato nella mia zona?",
+      "r": [
+        "Il vicinato è un progetto, e si fa entrando nel praticantato: guardi le cose che potresti fare, e fra quelle c'è lo sviluppo di un vicinato.",
+        "Creare un vicinato significa prendere un gruppo di lavoro — magari già esistente — e formalizzarlo dentro uno strumento che gli dà quello che gli serve.",
+        "Con quegli strumenti puoi ricevere contatti; tenere traccia delle idee e delle note; raccontare le esperienze che si vivono; ricevere le testimonianze di chi ti viene a trovare; mostrare i bisogni di quel vicinato; incentivare lo scambio e il dono fra vicinati e fra le persone che partecipano, anche online; avere una gestione più attenta delle spese e del piano economico; tenere nota delle ore di lavoro; e tenere traccia dei link — quelli che nascono sui social e su YouTube legati al tuo vicinato, e in generale i link di cose che possono essere utili, dalle ricette alimentari alla bioedilizia alle pratiche terapeutiche.",
+        "E poi la cosa più importante: lo strumento ti aiuta a tenere traccia degli obiettivi e delle priorità — le priorità di sviluppo e gli obiettivi settimanali. Grazie a quegli obiettivi capisci anche di che cosa hai bisogno. E così le persone che possono chiedere di venire a darti una mano sanno che cosa ti serve davvero, e sanno cosa tu puoi mettere a disposizione.",
+        "Creare un vicinato è creare un'intesa che tiene conto di tanti aspetti, messi insieme da un'unica piattaforma. E in più ti dà la possibilità di entrare nella programmazione radiofonica."
+      ]
+    },
+    {
+      "d": "Cosa trovo nella piattaforma?",
+      "r": [
+        "FelicitasMundi è un catalizzatore di comunità che integra più aspetti: quello filosofico, legato alla coscienza cosmica e alla cultura indovedica, che si unisce alla metafisica e alle tradizioni tramandate dai popoli — da tutti i popoli. A un certo livello le realtà autoctone, le piccole comunità ancora resilienti, quelle che resistono, sono tutte collegate a modelli di vita che nella quotidianità, nell'uso degli strumenti, nel canto, nel mangiare in una certa maniera, riconducono alla stessa essenza.",
+        "Con questa piattaforma cerchiamo di far vivere qualcosa che è trascendentale, già esistente, eterno: legato a una coscienza e a un senso di beatitudine — quello che in sanscrito si chiama Sat-Cit-Ananda.",
+        "La radio. Sempre in onda: musica popolare, musica sacra, la musica di chi la condivide. Con una programmazione e appuntamenti destinati al racconto dei vicinati, ad approfondimenti sul proprio percorso interiore, ai cicli lunari, alle pratiche legate alla ruota dell'anno, alla diffusione delle conoscenze di chi ha uno strumento e vuole farlo circolare. Non un programma: una stazione radiofonica con più programmi, che si possono anche scaricare.",
+        "La scuola di comunità. Ci si gioca attraverso l'orma: un'orma giornaliera che ti aiuta a vedere, mese dopo mese e ciclo lunare dopo ciclo lunare, la tua evoluzione, gli obiettivi raggiunti, l'interconnessione con tutta la rete.",
+        "E da lì nasce cosa incontri — e incontri qualcosa che in parte partecipi a scrivere.",
+        "L'emporio, con i prodotti che si trovano in dono e in scambio, e con i prodotti negli scaffali che si possono acquistare: alimentazione, libri, abbigliamento, oggettistica sacra, strumenti energetici, rimedi naturali. Anche chi arriva da fuori può comprare — farà il suo account, e da lì entra.",
+        "I calendari dei vicinati. Le formazioni della scuola. E la disponibilità degli assistenti: in ambito spirituale, nel mutuo aiuto, e per consulenze e trattamenti con operatori e dottori abilitati e qualificati. Passiamo il contatto: da lì l'accordo è fra le persone, e ciascun professionista risponde della propria pratica.",
+        "Questo è il macro mondo che richiamiamo, e che poi si vede dentro l'Annale di FelicitasMundi."
+      ]
+    },
+    {
+      "d": "È adatto ai bambini?",
+      "r": [
+        "Tutto questo progetto nasce come progetto educativo: educare l'umanità a una cultura che indirizza verso una civiltà che evolve.",
+        "Questo indirizzo lo si può dare partendo proprio dai bambini, che hanno bisogno di esempi. E gli esempi li si danno con adulti che mostrano il buon senso, che mostrano il reciproco aiuto, che gioiscono con la musica e con il buon cibo — un cibo naturale, raccolto con le mani dopo essersene presi cura.",
+        "Il bambino impara a prendersi cura dell'esistenza grazie ad adulti che hanno imparato a loro volta.",
+        "È questa la Comunità Eterna."
+      ]
+    }
+  ];
+
+  /* ── la home: la struttura del disegno a mano del 29 luglio ── */
+  var PIEDE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">'
+    + '<path d="M9.5 21c-2 0-3-1.3-3-3 0-1.6.9-2.6.9-4.3 0-1.4-.6-2.2-.6-3.7C6.8 6.6 8.7 3 11.6 3c2.4 0 3.6 2 3.6 4.6 0 2.4-1.1 3.7-1.1 5.6 0 1.6.8 2.5.8 4.1 0 2.2-1.6 3.7-5.4 3.7z"/>'
+    + '<circle cx="17.2" cy="7.4" r="1.5"/><circle cx="18.6" cy="11.2" r="1.3"/>'
+    + '<circle cx="18.4" cy="15" r="1.1"/></svg>';
+
+  function home(c){
+    c.innerHTML =
+    /* ① il Nexus, il titolo, la frase-cappello */
+      '<div class="apertura">'
+    +   '<div class="ap-testo">'
+    +     '<img class="t-marchio" src="'+MARCHIO_IMG+'" alt="FelicitasMundi">'
+    +     '<div class="t-sotto">Comunit&agrave; Eterna</div>'
+    +   '</div>'
+    + '</div>'
+
+    /* ② LA MAPPA — in alto */
+    + '<h2 id="blocco-mappa" style="margin-top:1.4rem">Collega le tue orme</h2>'
+    + '<div class="mappa-box" id="mappa-box">'
+    +   '<iframe src="mappa-ferma.html" title="Collega le tue orme" loading="lazy"></iframe>'
+    +   '<div class="mappa-velo" id="mappa-velo"><span>Esplora</span></div>'
+    + '</div>'
+
+    /* ③ COSA INCONTRI — sotto la mappa */
+    + '<h2 id="blocco-incontri" style="margin-top:1.8rem">COSA INCONTRI</h2>'
+
+    /* la legenda: sotto la mappa, e dice cosa si può portare */
+    + '<div class="leg">'
+    +   '<div class="leg-tit">Legenda</div>'
+    +   '<p class="leg-cap"><b>Orme</b> — le impronte: il percorso di chi cammina '
+    +     'verso i propri obiettivi, e verso il filo della propria esistenza.</p>'
+    +   '<div class="leg-voci">'
+    +     '<div class="leg-v"><span class="leg-sg">\u25CF</span>'
+    +       '<b>L\u2019orma nel proprio luogo</b>'
+    +       '<i>si segna dove si &egrave;, anche dove nessun vicinato esiste ancora</i></div>'
+    +     '<div class="leg-v"><span class="leg-sg">\u25CF\u2500\u25CF</span>'
+    +       '<b>La connessione con un\u2019altra persona</b>'
+    +       '<i>il filo che lega due cammini</i></div>'
+    +     '<div class="leg-v"><span class="leg-sg">\u25AC</span>'
+    +       '<b>Gli scambi</b>'
+    +       '<i>quello che passa davvero fra le persone \u2014 e la foto che lo prova</i></div>'
+    +     '<div class="leg-v"><span class="leg-sg">\u2B24</span>'
+    +       '<b>L\u2019attivazione del vicinato</b>'
+    +       '<i>tre persone e un luogo</i></div>'
+    +     '<div class="leg-v"><span class="leg-sg">\u2733</span>'
+    +       '<b>Feste, formazioni, trattamenti, esperienze</b>'
+    +       '<i>il ritmo che il vicinato si d&agrave;</i></div>'
+    +     '<div class="leg-v"><span class="leg-sg">\u2550</span>'
+    +       '<b>Gli incontri fra vicinati</b>'
+    +       '<i>i luoghi che si toccano</i></div>'
+    +     '<div class="leg-v"><span class="leg-sg">\u2739</span>'
+    +       '<b>L\u2019apertura di un tempio</b>'
+    +       '<i>la casa \u2014 un fuoco per ognuno</i></div>'
+    +   '</div>'
+    +   '<p class="leg-coda">Le vie percorse spesso diventano spesse: lo spessore &egrave; il tempo.</p>'
+    + '</div>'
+
+    /* quello che sta accadendo: le orme vere, appena lasciate */
+    + '<div class="ora" id="ora">'
+    +   '<div class="ora-tit">Quello che sta accadendo</div>'
+    +   '<div class="ora-righe" id="ora-righe"><p class="vuoto">Un momento…</p></div>'
+    + '</div>'
+
+    /* ④ LA RADIO */
+    + '<div class="radio" id="blocco-radio">'
+    +   '<div class="r-striscia">'
+    +     '<button class="r-play" id="b-play" title="Ascolta">'
+    +       '<svg id="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+    +       '<svg id="ic-pausa" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6z M14 5h4v14h-4z"/></svg>'
+    +     '</button>'
+    +     '<div class="r-freq">'
+    +       '<div class="r-nome">Come natura crea <b>fm</b></div>'
+    +       '<div class="r-brano" id="r-brano">&nbsp;</div>'
+    +     '</div>'
+    +     '<div class="r-palinsesto" id="r-palinsesto"></div>'
+    +   '</div>'
+    +   '<div class="r-scala" id="r-scala"><span class="r-tacche"></span><span class="r-indice"></span></div>'
+    + '</div>'
+
+    /* ⑤ le domande dei nuovi arrivati */
+    + '<h2 style="margin-top:1.8rem">Le domande dei nuovi arrivati</h2>'
+    + '<div id="domande"></div>'
+
+    /* ⑥ in fondo */
+    + '<div class="fm-piede">'
+    +   '<div class="fp-marchio">FelicitasMundi &middot; Comunit&agrave; Eterna</div>'
+    +   '<div class="fp-riga">Felicitas Omnia S.r.l.s. &middot; P.IVA 03075740906</div>'
+    +   '<div class="fp-riga">&copy; 2026 &middot; Tutti i diritti riservati</div>'
+    +   '<div class="fp-link">'
+    +     '<a href="privacy.html">Informativa privacy</a>'
+    +     '<a href="cookie.html">Cookie</a>'
+    +     '<a href="condizioni.html">Condizioni d\u2019uso</a>'
+    +   '</div>'
+    + '</div>';
+
+    var mv = $("mappa-velo");
+    if(mv) mv.addEventListener("click", function(){
+      var f = $("mappa-piena-f");
+      if(!f.getAttribute("src")) f.setAttribute("src","mappa-ferma.html?vivo=1");
+      $("mappa-piena").classList.add("on");
+      document.body.style.overflow = "hidden";
+    });
+
+
+    disegnaDomande();
+    quelloCheAccade();
+    radio();
+    disegnaPalinsesto();
+    setInterval(disegnaPalinsesto, 60000);
+    scalaOra();
+    setInterval(scalaOra, 60000);
+    contaOrme();
+  }
+
+  /* le sette domande, ripiegate: si apre una per volta */
+  function disegnaDomande(){
+    var box=$("domande"); if(!box) return;
+    box.innerHTML="";
+    DOMANDE.forEach(function(d){
+      var r=document.createElement("div"); r.className="dom-riga";
+      var t=document.createElement("button"); t.className="dom";
+      t.innerHTML='<span class="fre">\u203A</span><span></span>';
+      t.querySelector("span:last-child").textContent=d.d;
+      var risp=document.createElement("div"); risp.className="risp";
+      var dentro=document.createElement("div"); dentro.className="dentro-r";
+      d.r.forEach(function(par){
+        var p=document.createElement("p"); p.textContent=par; dentro.appendChild(p);
+      });
+      risp.appendChild(dentro);
+      r.appendChild(t); r.appendChild(risp);
+      t.addEventListener("click", function(){
+        var era=r.classList.contains("aperta");
+        box.querySelectorAll(".dom-riga").forEach(function(o){
+          o.classList.remove("aperta"); o.querySelector(".risp").style.maxHeight=null;
+        });
+        if(!era){ r.classList.add("aperta"); risp.style.maxHeight=risp.scrollHeight+"px"; }
+      });
+      box.appendChild(r);
+    });
+  }
+
+  /* ── la scala: l'indice sull'ora vera (solo veste, nessun dato inventato) ── */
+  function scalaOra(){
+    var e = $("r-scala"); if(!e) return;
+    var d = new Date(), h = d.getHours() + d.getMinutes()/60;
+    e.style.setProperty("--r-pos", (h/24).toFixed(4));
+  }
+
+  /* ══ LA RADIO — uno strato che non si spegne mai ══
+     L'audio vive fuori dalle viste: cambiando stanza non viene ridisegnato,
+     e il canto continua. Due comandi, un solo suono.                        */
+  var auOn = false, ripiegato = false;
+
+  function segniRadio(on){
+    auOn = on;
+    ["p-play","ic-play"].forEach(function(k){ var e=$(k); if(e) e.style.display = on ? "none" : ""; });
+    ["p-pausa","ic-pausa"].forEach(function(k){ var e=$(k); if(e) e.style.display = on ? "" : "none"; });
+    var t=$("play"); if(t) t.title = on ? "Pausa" : "Ascolta";
+    var b=$("b-play"); if(b) b.title = on ? "Pausa" : "Ascolta";
+  }
+
+  function accendiSpegni(){
+    var au = $("au"); if(!au) return;
+    if(au.paused){
+      if(!au.getAttribute("src")){ au.src = FM_STREAM; au.load(); }
+      var p = au.play();
+      if(p && p.catch) p.catch(function(){ segniRadio(false); });
+    } else {
+      au.pause();
+    }
+  }
+
+  function radioMotore(){
+    var au = $("au"); if(!au) return;
+    au.addEventListener("play",  function(){ segniRadio(true);  });
+    au.addEventListener("pause", function(){ segniRadio(false); });
+    au.addEventListener("ended", function(){ segniRadio(false); });
+
+    /* se lo stream tace, si ripiega sul canto conservato */
+    au.addEventListener("error", function(){
+      if(ripiegato || !au.getAttribute("src")) return;
+      ripiegato = true;
+      au.src = FM_RIPIEGO; au.load();
+      var p = au.play(); if(p && p.catch) p.catch(function(){ segniRadio(false); });
+      scriviBrano("Hare K\u1E5B\u1E63\u1E47a Maha Mantra", "Visnujana Swami");
+    });
+
+    var t = $("play"); if(t) t.addEventListener("click", accendiSpegni);
+    cosaSuona();
+    setInterval(cosaSuona, 15000);
+  }
+
+  /* la striscia della home si aggancia allo stesso suono */
+  function radio(){
+    var b = $("b-play"); if(!b) return;
+    b.addEventListener("click", accendiSpegni);
+    segniRadio(auOn);
+    scriviBrano(null, null, true);
+  }
+
+  /* ── le mie orme ── */
+  function mieOrme(c){
+    c.innerHTML='<div class="occhio">Comunità Eterna FelicitasMundi</div>'
+      +'<h1>Le mie orme</h1><p class="sotto">Gli strumenti, e il filo del percorso.</p>'
+      +'<h2>Il filo</h2><div class="filo"><div class="filo-riga" id="filo-orme"></div></div>'
+      +'<p><span class="segna">i cerchietti aspettano i loro nomi</span></p>'
+      +'<h2 style="margin-top:1.6rem">Le orme di oggi</h2><div id="orme-corpo"></div>';
+    var f=$("filo-orme");
+    for(var i=0;i<9;i++){ var d=document.createElement("span"); d.className="cer"; f.appendChild(d); }
+    caricaOrme();
+  }
+
+  function caricaOrme(){
+    var box=$("orme-corpo"); if(!box) return;
+    if(ospite){ box.innerHTML='<p class="vuoto">Le orme si vedono con l\'accesso.</p>'; return; }
+    var oggi=new Date(); oggi.setHours(0,0,0,0);
+    db.from("orme").select("id,contenuto,tipo,destinazione,momento,accaduto_il")
+      .gte("momento",oggi.toISOString()).order("momento",{ascending:false})
+      .then(function(r){
+        var righe=(r.data)||[];
+        if(!righe.length){ box.innerHTML='<p class="vuoto">Oggi non hai ancora lasciato orme.</p>'; return; }
+        box.innerHTML="";
+        righe.forEach(function(o){
+          var d=document.createElement("div"); d.className="orma";
+          var q=DOVE.filter(function(x){return x.tipo===o.tipo;})[0];
+          if(q) d.style.setProperty("--oc","var("+q.c+")");
+          var ora=new Date(o.momento).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+          d.innerHTML='<div class="meta"></div><p></p>';
+          var quando = o.accaduto_il
+            ? new Date(o.accaduto_il+"T12:00:00").toLocaleDateString("it-IT",
+                {day:"numeric",month:"long",year:"numeric"})
+            : ora;
+          d.querySelector(".meta").textContent=quando+" · "+(q?q.n:o.tipo)+" → "+(o.destinazione||"—");
+
+          /* il tasto che la porta in Edizione */
+          var st = document.createElement("button");
+          st.className = "porta-ed";
+          st.textContent = "Pubblica";
+          st.title = "Portala in Edizione";
+          st.addEventListener("click", function(e){
+            e.stopPropagation();
+            portaInEdizione({
+              titolo: o.contenuto.slice(0,60),
+              contenuto: o.contenuto,
+              orma_id: o.id,
+              da: "un'orma"
+            });
+          });
+          d.appendChild(st);
+          d.querySelector("p").textContent=o.contenuto||"";
+          box.appendChild(d);
+        });
+      });
+  }
+
+
+  /* ══ EDIZIONE — la porta principale di quello che si pubblica ══
+     Ci si arriva anche da altrove: da un'orma, da un articolo, da un vicinato.
+     Il lavoro però è uno solo, e vive qui.                                     */
+  var daPubblicare = null;   /* quello che si porta dentro da un'altra stanza */
+
+
+  /* ⭐ il tasto che porta qui, da qualunque altra stanza */
+  function portaInEdizione(cosa){
+    daPubblicare = cosa;
+    vai("edizione");
+  }
+
+
+  /* ══ LA CHAT — al centro, con le stanze ══ */
+  function chat(c){
+    c.innerHTML='<div class="chat-testa"><h2 id="chat-nome">Chat · sviluppo</h2>'
+      +'<button class="mini" id="copia-tutto">Copia tutto</button></div>'
+      +'<div id="chat-stanze" style="margin-bottom:1rem"></div>'
+      +'<div class="barra-doc">'
+      +  '<h3>Il cantiere</h3>'
+      +  '<p>Qui potete scaricare il cantiere di questa settimana, con le informazioni di base '
+      +  'sullo sviluppo del lavoro da quando abbiamo ricominciato a lavorare sulla piattaforma, '
+      +  'da maggio circa.</p>'
+      +  '<a class="scarica" href="cantiere.pdf" download>&#8595; Scarica il cantiere</a>'
+      +  '<p>Questo file pu&ograve; essere caricato su un\'intelligenza artificiale — consigliamo Claude, '
+      +  'per coerenza con lo strumento che usiamo. Da l&igrave; potete fare domande per sviluppare le parti '
+      +  'che mancano e che secondo voi possono essere incluse: chiedete direttamente quali cose si '
+      +  'possono aggiungere, e se sono coerenti con quello che c\'&egrave; gi&agrave;. '
+      +  '<b>Ci&ograve; che non c\'&egrave; pu&ograve; essere proposto, e lo integriamo.</b></p>'
+      +'</div>'
+      +'<div id="plancia-scadenze"></div>'
+      +'<div id="chat-corpo"></div>'
+      +'<div class="scrivi"><textarea id="chat-campo" rows="1" '
+      +'placeholder="[ la riga d\u2019invito della chat — in attesa ]"></textarea>'
+      +'<button class="s" id="chat-manda" title="Manda">&#8594;</button></div>';
+
+    var st=$("chat-stanze");
+    var lista=[{id:"sviluppo",n:"Sviluppo"}];
+    $("chat-nome").textContent = "Chat · " + (stanza==="plancia" ? "plancia" : "sviluppo");
+    if(io && io.grado==="nucleo") lista.push({id:"plancia",n:"Plancia"});
+    lista.forEach(function(s){
+      var b=document.createElement("button");
+      b.className="mini"; b.textContent=s.n;
+      b.style.marginRight="0.4rem";
+      if(s.id===stanza){ b.style.background="rgba(200,160,85,0.2)"; }
+      b.addEventListener("click", function(){ stanza=s.id; chat(c); });
+      st.appendChild(b);
+    });
+
+    $("copia-tutto").addEventListener("click", function(){
+      copia($("chat-corpo").innerText, this, "Copia tutto");
+    });
+    var cc=$("chat-campo");
+    cc.addEventListener("input", function(){ cc.style.height="auto"; cc.style.height=cc.scrollHeight+"px"; });
+    $("chat-manda").addEventListener("click", function(){
+      var t=cc.value.trim(); if(!t) return;
+      db.from("sviluppo").insert({persona_id:io.id, testo:t, stanza:stanza}).then(function(r){
+        if(r.error){ parla("Non è partito: "+r.error.message); return; }
+        cc.value=""; cc.style.height="auto"; caricaChat();
+      });
+    });
+    if(stanza === "plancia") disegnaScadenze("plancia-scadenze");
+    caricaChat(); ascolta();
+  }
+
+  function copia(testo, tasto, orig){
+    navigator.clipboard.writeText(testo).then(function(){
+      tasto.textContent="Copiato"; setTimeout(function(){ tasto.textContent=orig; },1600);
+    });
+  }
+
+  function caricaChat(){
+    var box=$("chat-corpo"); if(!box) return;
+    db.from("sviluppo").select("id,persona_id,testo,momento,stanza")
+      .eq("stanza",stanza).order("momento",{ascending:true}).limit(500)
+      .then(function(r){
+        var righe=(r.data)||[];
+        var ids={}; righe.forEach(function(m){ ids[m.persona_id]=1; });
+        var lista=Object.keys(ids).filter(function(k){ return !(k in nomi); });
+        if(!lista.length){ disegnaChat(righe); return; }
+        db.from("persone").select("id,nome").in("id",lista).then(function(p){
+          ((p.data)||[]).forEach(function(x){ nomi[x.id]=x.nome||""; });
+          lista.forEach(function(k){ if(!(k in nomi)) nomi[k]=""; });
+          disegnaChat(righe);
+        }).catch(function(){ disegnaChat(righe); });
+      });
+  }
+
+  function disegnaChat(righe){
+    var box=$("chat-corpo"); if(!box) return;
+    if(!righe.length){ box.innerHTML='<p class="vuoto">Ancora nessun messaggio.</p>'; return; }
+    var g={}, ordine=[];
+    righe.forEach(function(m){
+      var k=new Date(m.momento).toLocaleDateString("it-IT",
+            {weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+      if(!g[k]){ g[k]=[]; ordine.push(k); }
+      g[k].push(m);
+    });
+    box.innerHTML="";
+    ordine.forEach(function(k){
+      var d=document.createElement("div"); d.className="giorno";
+      var testa=document.createElement("div"); testa.className="giorno-testa";
+      var data=document.createElement("span"); data.className="giorno-data"; data.textContent=k;
+      var t=document.createElement("button"); t.className="mini"; t.textContent="Copia il giorno";
+      testa.appendChild(data); testa.appendChild(t); d.appendChild(testa);
+      var corpo=document.createElement("div");
+      g[k].forEach(function(m){
+        var r=document.createElement("div"); r.className="msg";
+        var ora=new Date(m.momento).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+        var s=document.createElement("span"); s.className="chi";
+        s.textContent=(nomi[m.persona_id]||"[ senza nome ]")+" · "+ora;
+        r.appendChild(s); r.appendChild(document.createTextNode(m.testo));
+        corpo.appendChild(r);
+      });
+      d.appendChild(corpo);
+      t.addEventListener("click", function(){ copia(k+"\n\n"+corpo.innerText, t, "Copia il giorno"); });
+      box.appendChild(d);
+    });
+  }
+
+  function ascolta(){
+    if(canale) return;
+    canale = db.channel("chat-viva")
+      .on("postgres_changes",{event:"INSERT",schema:"public",table:"sviluppo"},
+          function(){ if(vista==="chat") caricaChat(); })
+      .subscribe();
+  }
+
+  /* ══ IL MEGAFONO ══ */
+  var campo=$("campo");
+  function cresci(){ campo.style.height="auto"; campo.style.height=campo.scrollHeight+"px"; }
+  campo.addEventListener("input", cresci);
+
+  function parla(t){
+    var p=$("parola"); $("parola-tx").textContent=t;
+    p.classList.add("su"); setTimeout(function(){ p.classList.remove("su"); },3400);
+  }
+
+  function bollo(o){
+    if(o.el==="nexus") return '<img src="'+NEXUS_IMG+'" alt="">';
+    return o.el ? sg(o.el) : "";
+  }
+
+  $("s-dove").addEventListener("click", function(){
+    if(veleSu){ $("vele").classList.remove("su"); veleSu=false; return; }
+    var pista=$("pista"); pista.innerHTML="";
+    var t=document.createElement("div"); t.className="dest-griglia";
+    DOVE.forEach(function(o){
+      var ok = o.tipo && permessi.indexOf(o.tipo)>=0;
+      var b=document.createElement("button");
+      b.className="dest" + (ok ? "" : " spenta") + (scelta===o ? " on" : "");
+      b.style.setProperty("--dc","var("+o.c+")");
+      b.innerHTML='<span class="d-sg"></span><b></b><i></i>';
+      b.querySelector(".d-sg").innerHTML = bollo(o);
+      b.querySelector("b").textContent = o.n;
+      b.querySelector("i").textContent = ok ? o.s : "non al tuo grado";
+      if(ok) b.addEventListener("click", function(){
+        scelta=o;
+        $("s-dove").style.setProperty("--tc","var("+o.c+")");
+        $("dove-tx").textContent=o.n;
+        $("dove-sg").innerHTML=bollo(o);
+        document.querySelectorAll(".dest").forEach(function(x){ x.classList.remove("on"); });
+        b.classList.add("on");
+      });
+      t.appendChild(b);
+    });
+    pista.appendChild(t);
+    $("vele").classList.add("su"); veleSu=true;
+  });
+
+  /* ── il luogo dell'orma ── */
+  var luoghi = [], luogoScelto = null;
+
+  function disegnaLuoghi(){
+    var box = $("l-luoghi"); if(!box) return;
+    box.innerHTML = "";
+
+    var mio = document.createElement("button");
+    mio.className = "rigo";
+    mio.style.setProperty("--vc","var(--oro-ch)");
+    mio.style.setProperty("--vf","var(--nexus-f)");
+    mio.innerHTML = '<span class="bollo"></span><span class="tx">Dove sono io'
+                  + '<small>il tuo vicinato — è quello che prende in automatico</small></span>';
+    mio.addEventListener("click", function(){
+      luogoScelto = null;
+      $("s-luogo-v").textContent = "Dove sono io";
+      $("v-luogo").classList.remove("on");
+    });
+    box.appendChild(mio);
+
+    luoghi.slice().sort(function(a,b){
+      return (a.nome||"").localeCompare(b.nome||"");
+    }).forEach(function(v){
+      var b = document.createElement("button");
+      b.className = "rigo";
+      b.style.setProperty("--vc","var(--terra)");
+      b.style.setProperty("--vf","var(--terra-f)");
+      b.innerHTML = '<span class="bollo"></span><span class="tx"></span>';
+      var tx = b.querySelector(".tx");
+      tx.appendChild(document.createTextNode(v.nome));
+      if(v.territorio){
+        var sm=document.createElement("small"); sm.textContent=v.territorio; tx.appendChild(sm);
+      }
+      b.addEventListener("click", function(){ scegliLuogo(v); });
+      box.appendChild(b);
+    });
+  }
+
+  db.from("vicinati").select("id,nome,territorio,lat,lon").order("nome")
+    .then(function(r){ luoghi = (r.data)||[]; disegnaLuoghi(); });
+
+  $("s-luogo").addEventListener("click", function(){ $("v-luogo").classList.add("on"); });
+
+  /* ── un luogo nuovo: lo può far nascere chiunque ──
+     Il vicinato no: quello lo apre chi fa praticantato.                        */
+  function scegliLuogo(v){
+    luogoScelto = v;
+    $("s-luogo-v").textContent = v.nome;
+    $("v-luogo").classList.remove("on");
+  }
+
+  $("nl-crea").addEventListener("click", function(){
+    if(ospite){ chiediAccesso("Per far nascere un luogo serve l'accesso"); return; }
+    var nome = $("nl-nome").value.trim();
+    if(!nome){ return; }
+    var terr = $("nl-terr").value.trim();
+    var b = this;
+    b.disabled = true; b.textContent = "Un momento…";
+
+    /* ⭐ Il nome viene dalla mappa, non da chi scrive.
+       Così «quartu», «Quartu S. Elena» e «QUARTU SANT ELENA» diventano
+       tutti lo stesso luogo, col nome ufficiale e senza refusi.          */
+    function cercaSullaCarta(){
+      var q = encodeURIComponent(nome + (terr ? ", " + terr : "") + ", Italia");
+      return fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1"
+                   + "&addressdetails=1&accept-language=it&q=" + q,
+                   {headers:{"Accept":"application/json"}})
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if(!d || !d.length) return null;
+          var t = d[0], a = t.address || {};
+          /* il nome ufficiale del posto */
+          var uff = a.village || a.town || a.city || a.hamlet
+                  || a.municipality || a.suburb || t.name || nome;
+          /* il territorio: il comune, e la provincia se c'è */
+          var com = a.city || a.town || a.village || a.municipality || "";
+          var pro = a.county || a.state_district || "";
+          var territorio = com && com !== uff
+            ? com + (pro ? " (" + pro + ")" : "")
+            : (pro || null);
+          return {
+            nome: uff,
+            territorio: territorio,
+            lat: parseFloat(t.lat),
+            lon: parseFloat(t.lon)
+          };
+        })
+        .catch(function(){ return null; });
+    }
+
+    cercaSullaCarta().then(function(co){
+      /* il nome ufficiale se la carta lo conosce, altrimenti quello scritto */
+      var nomeVero = co ? co.nome : nome;
+      var terrVero = co ? (co.territorio || terr || null) : (terr || null);
+
+      /* con quel nome, esiste già? allora si sceglie quello */
+      return db.from("vicinati").select("id,nome,territorio,lat,lon")
+        .ilike("nome", nomeVero).maybeSingle()
+        .then(function(g){
+          if(g && g.data){
+            scegliLuogo(g.data);
+            $("nl-nome").value = ""; $("nl-terr").value = "";
+            $("nl-esito").innerHTML =
+              '<p style="color:rgba(245,240,230,0.82);font-family:\'Cormorant Garamond\',serif;'
+              + 'font-style:italic">Questo luogo c\'era gi&agrave;: &egrave; '
+              + esc(g.data.nome) + '.</p>';
+            return null;
+          }
+          var riga = { nome: nomeVero, territorio: terrVero, stato: "proposto" };
+          if(co){ riga.lat = co.lat; riga.lon = co.lon; }
+          return db.from("vicinati")
+            .insert(riga)
+            .select("id,nome,territorio,lat,lon").single()
+          .then(function(r){
+            if(r.error){
+              $("nl-esito").innerHTML =
+                '<p style="color:#f0b0a6">Non &egrave; nato: ' + r.error.message + '</p>';
+              return null;
+            }
+            luoghi.push(r.data);
+            scegliLuogo(r.data);
+            $("nl-nome").value = ""; $("nl-terr").value = "";
+            $("nl-esito").innerHTML = co
+              ? ""
+              : '<p style="color:rgba(245,240,230,0.8);font-family:\'Cormorant Garamond\',serif;'
+                + 'font-style:italic">Il luogo &egrave; nato. Non sono riuscito a trovarlo sulla carta: '
+                + 'comparir&agrave; sulla mappa quando qualcuno ne segna la posizione.</p>';
+            disegnaLuoghi();
+            return null;
+          });
+        });
+      })
+      .catch(function(e){
+        $("nl-esito").innerHTML = '<p style="color:#f0b0a6">' + (e.message||e) + '</p>';
+      })
+      .then(function(){ b.disabled = false; b.textContent = "Fai nascere il luogo"; });
+  });
+
+  /* i tre tasti della visibilità */
+  var visibilita = "solo_me";
+  document.querySelectorAll(".v-t").forEach(function(b){
+    b.addEventListener("click", function(){
+      visibilita = b.dataset.v;
+      document.querySelectorAll(".v-t").forEach(function(x){
+        x.classList.toggle("on", x===b);
+      });
+      campo.focus();
+    });
+  });
+
+  /* l'invito: parte dall'ultima orma scritta */
+  var ultimaOrma = null;
+
+  $("s-invio").addEventListener("click", function(){
+    var t=campo.value.trim(); if(!t) return;
+    if(cerca){ vai("incontro"); return; }
+    if(ospite){ chiediAccesso("Per lasciare un'orma serve l'accesso"); return; }
+    if(!scelta){ parla("Scegli prima dove lo porti."); return; }
+    var riga = {persona_id:io.id, contenuto:t,
+      tipo:scelta.tipo, destinazione:scelta.dest, visibilita:visibilita};
+    if(luogoScelto) riga.vicinato_id = luogoScelto.id;
+    if(quandoScelto) riga.accaduto_il = quandoScelto;
+    db.from("orme").insert(riga)
+      .select("id,contenuto").single().then(function(r){
+      if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
+      ultimaOrma = r.data;
+      campo.value=""; cresci();
+      parla("Conservata · " + (visibilita==="solo_me" ? "solo tu la vedi"
+            : visibilita==="vicinato" ? "la vede il tuo vicinato" : "la vedono tutti")
+            + (luogoScelto ? " · " + luogoScelto.nome : "")
+            + (quandoScelto ? " · " + new Date(quandoScelto+"T12:00:00")
+                 .toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"}) : ""));
+      if(vista==="orme") caricaOrme(); else contaOrme();
+    });
+  });
+
+  $("s-cerca").addEventListener("click", function(){
+    cerca=!cerca; this.classList.toggle("attivo",cerca);
+    campo.placeholder = cerca ? "[ la riga della ricerca — in attesa ]" : "Traccia l'orma di oggi";
+    ["s-dove","s-ediz","s-file","s-aperte","s-chat"].forEach(function(i){
+      $(i).style.display = cerca ? "none" : "";
+    });
+    $("vele").classList.remove("su"); veleSu=false;
+    campo.value=""; cresci(); campo.focus();
+  });
+
+  /* i fogli */
+  function rigo(o, poi){
+    var b=document.createElement("button");
+    b.className="rigo"+(o.sg?" spenta":"");
+    b.style.setProperty("--vc","var("+(o.c||"--oro-ch")+")");
+    b.style.setProperty("--vf","var("+(o.f||"--nexus-f")+")");
+    b.innerHTML='<span class="bollo"><span class="sg">'+(o.el?sg(o.el):"")+'</span></span>'
+               +'<span class="tx"></span>';
+    var tx=b.querySelector(".tx");
+    tx.appendChild(document.createTextNode(o.n));
+    if(o.s){ var s=document.createElement("small"); s.textContent=o.s; tx.appendChild(s); }
+    if(o.sg){ var g=document.createElement("span"); g.className="sgl-i"; g.textContent=o.sg; b.appendChild(g); }
+    else if(poi) b.addEventListener("click", function(){ poi(o); });
+    return b;
+  }
+
+  EDIZIONE.forEach(function(o){
+    $("l-ediz").appendChild(rigo(o, function(x){
+      $("s-ediz").innerHTML=x.n+" \u25BE";
+      $("v-ediz").classList.remove("on"); campo.focus();
+    }));
+  });
+
+  ACCOUNT.forEach(function(o){
+    $("l-acc").appendChild(rigo(o, function(x){
+      if(x.n==="Esci"){
+        try{ db.removeAllChannels(); }catch(e){}
+        db.auth.signOut().then(function(){ location.replace("accesso.html"); });
+        return;
+      }
+      $("v-acc").classList.remove("on");
+      if(ospite){ vaiAdEntrare(""); return; }
+      if(x.n==="Privacy e consensi"){ apriPrivacy();  return; }
+      if(x.n==="Fatturazione")       { apriFatturazione(); return; }
+      if(x.n==="Autorizzazioni")     { apriAutorizzazioni(); return; }
+      if(x.n==="Segnala")            { apriSegnala(); return; }
+      if(x.n==="Colore del sito")    { apriColore(); return; }
+      parla("[ " + x.n + " — questa voce aspetta ]");
+    }));
+  });
+
+  /* ══════════════ L'ACCOUNT ══════════════ */
+
+  function dataIt(t){
+    if(!t) return null;
+    return new Date(t).toLocaleDateString("it-IT",
+      {day:"numeric", month:"long", year:"numeric"});
+  }
+
+
+  function esc(t){
+    return String(t).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
+    });
+  }
+
+
+  $("l-aperte").innerHTML =
+    '<p class="vuoto" style="font-family:\'Cormorant Garamond\',serif;font-style:italic;'
+    +'color:rgba(245,240,230,0.78)">Qui compaiono le cose che hai aperto e non hai ancora chiuso.</p>';
+
+  $("s-ediz").addEventListener("click", function(){ $("v-ediz").classList.add("on"); });
+  $("s-aperte").addEventListener("click", function(){ $("v-aperte").classList.add("on"); });
+  /* ── chiudere la mappa a tutto schermo ── */
+  function chiudiMappa(){
+    var p = $("mappa-piena"); if(!p) return;
+    p.classList.remove("on");
+    document.body.style.overflow = "";
+  }
+  $("mappa-chiudi").addEventListener("click", chiudiMappa);
+  window.addEventListener("message", function(e){
+    if(e && e.data === "fm-chiudi-mappa") chiudiMappa();
+  });
+  window.addEventListener("keydown", function(e){
+    if(e.key === "Escape") chiudiMappa();
+  });
+
+  $("s-chat").addEventListener("click", function(){
+    if(ospite){ vaiAdEntrare("chat"); return; }
+    vai("chat");
+  });
+  $("acc-tasto").addEventListener("click", function(){
+    if(ospite){ location.href = "accesso.html"; return; }
+    $("v-acc").classList.add("on");
+  });
+  document.querySelectorAll("[data-x]").forEach(function(b){
+    b.addEventListener("click", function(){ $(b.dataset.x).classList.remove("on"); });
+  });
+  document.querySelectorAll(".velo").forEach(function(v){
+    v.addEventListener("click", function(e){ if(e.target===v) v.classList.remove("on"); });
+  });
+  $("apri-barra").addEventListener("click", function(){
+    document.body.classList.toggle("barra-aperta");
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key!=="Escape") return;
+    document.querySelectorAll(".velo.on").forEach(function(v){ v.classList.remove("on"); });
+    $("vele").classList.remove("su"); veleSu=false;
+    document.body.classList.remove("barra-aperta");
+  });
+
+  /* ══ AVVIO ══ */
+  /* ── da ospite si guarda; l'account si chiede al momento di agire ── */
+  var ospite = false;
+
+  function daOspite(){
+    ospite = true;
+    io = { id:null, nome:"", grado:"ospite" };
+    permessi = [];
+    $("acc-nome").textContent  = "Entra";
+    $("acc-grado").textContent = "email e sei cifre, nessuna password";
+    $("acc-iniziale").textContent = "·";
+    disegnaBarra(); vai("spazio");
+  }
+
+  function chiediAccesso(perche){
+    parla(perche + " — " + "tocca «Entra» in fondo alla barra.");
+  }
+
+  /* non si annuncia il muro: si apre la porta, e si torna dove si era */
+  function vaiAdEntrare(dove){
+    try{ sessionStorage.setItem("fm_ritorno", dove || ""); }catch(e){}
+    location.href = "accesso.html";
+  }
+
+  /* la radio si accende per tutti, anche da ospite: è lo strato che c'è sempre */
+  radioMotore();
+
+  db.auth.getSession().then(function(r){
+    var sess = r && r.data && r.data.session;
+    if(!sess){ daOspite(); return; }
+    return db.from("persone").select("id,nome,grado,livello_n").eq("id",sess.user.id).maybeSingle()
+      .then(function(p){
+        io = (p && p.data) || {id:sess.user.id, nome:"", grado:"karma_yoga"};
+        return db.rpc("fm_miei_tipi");
+      })
+      .then(function(q){
+        permessi = (q && q.data) || [];
+        $("acc-nome").textContent  = io.nome || "[ nome ]";
+        $("acc-grado").textContent = (io.grado||"").replace(/_/g," ");
+        $("acc-iniziale").textContent = (io.nome||"·").trim().charAt(0).toUpperCase() || "·";
+        disegnaBarra();
+        var torna = "";
+        try{ torna = sessionStorage.getItem("fm_ritorno") || ""; sessionStorage.removeItem("fm_ritorno"); }catch(e){}
+        vai(torna || "spazio");
+        contaNonLetti();
+        setInterval(contaNonLetti, 45000);
+      });
+  }).catch(function(){ daOspite(); });
+
+</script>
+</body>
+</html>

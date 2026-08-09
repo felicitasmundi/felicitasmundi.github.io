@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ══ IL LETTORE DELL'ANNALE ══
+   Legge le stesse orme che legge la mappa: un record, due viste, mai copie.
+   La data che ordina è quella dell'ACCADUTO, non quella in cui si è scritto.   */
+(function(){
+  "use strict";
+  var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
+  var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+
+  window.FM_ORME = [];
+  var giaPartito = false;
+  function parti(){
+    if(giaPartito) return; giaPartito = true;
+    var t = document.createElement("script");
+    t.src = "./support.js";
+    document.head.appendChild(t);
+  }
+  setTimeout(parti, 4000);
+
+  if(!window.supabase){ parti(); return; }
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
+
+  db.from("orme")
+    .select("id,contenuto,tipo,destinazione,momento,accaduto_il,vicinato_id")
+    .order("momento", {ascending:false}).limit(2000)
+    .then(function(r){
+      var righe = (r && r.data) || [];
+      window.FM_ORME = righe.map(function(o){
+        /* ⭐ la data che conta è quella dell'accaduto */
+        var d = new Date((o.accaduto_il ? o.accaduto_il + "T12:00:00" : o.momento));
+        return {
+          id: o.id,
+          anno: d.getFullYear(),
+          mese: d.getMonth(),
+          tipo: o.tipo || "articolo",
+          testo: o.contenuto || "",
+          dove: o.destinazione || ""
+        };
+      });
+      parti();
+    })
+    .catch(function(){ parti(); });
+})();
+</script>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin:0; padding:0; background:#123A6B; color:#FFF6E9; font-family:'DM Sans', sans-serif; }
+  * { box-sizing:border-box; }
+  body::before { content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:radial-gradient(ellipse at 28% 22%, rgba(74,158,234,0.6), transparent 58%),
+               radial-gradient(ellipse at 76% 74%, rgba(96,120,224,0.5), transparent 60%),
+               radial-gradient(ellipse at 50% 42%, #1E5FA8 0%, #17497F 46%, #123A6B 100%); }
+  a { color:#F5CE7E; text-decoration:none; }
+  a:hover { color:#FFF6E9; }
+  ::selection { background:rgba(240,199,120,0.34); }
+</style>
+</helmet>
+<div style="min-height:100vh; padding:0 0 140px;">
+
+  <header style="max-width:1120px; margin:0 auto; padding:76px 32px 26px;">
+    <div style="font-family:'Cinzel', serif; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:#F0C778;">Comunità Eterna FelicitasMundi</div>
+    <h1 style="font-family:'Cinzel', serif; font-weight:500; font-size:28px; letter-spacing:0.06em; color:#FFF6E9; margin:14px 0 0;">L'Annale</h1>
+    <p style="font-family:'Cormorant Garamond', serif; font-size:18px; line-height:1.62; color:rgba(255,246,233,0.82); margin:10px 0 0; max-width:640px; text-wrap:pretty;">La radice. Un contenuto vive una volta sola e da qui gli altri lo collegano: un record, due viste, mai copie.</p>
+  </header>
+
+  <nav style="position:sticky; top:0; z-index:40; display:flex; gap:4px; justify-content:center; flex-wrap:wrap; padding:11px 8px; background:rgba(18,58,107,0.88); backdrop-filter:blur(10px); border-bottom:0.5px solid rgba(240,199,120,0.34);">
+    <sc-for list="{{ quadranti }}" as="q" hint-placeholder-count="4">
+      <button onClick="{{ q.vai }}" style="background:transparent; border:0; border-radius:999px; padding:6px 15px; cursor:pointer; font-family:'DM Sans', sans-serif; font-size:11.5px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,246,233,0.82); transition:.25s;" style-hover="color:#123A6B; background:#F5CE7E">{{ q.tasto }}</button>
+    </sc-for>
+  </nav>
+
+  <section style="max-width:1120px; margin:0 auto; padding:52px 32px 0;">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; gap:24px; border-bottom:0.5px solid rgba(240,199,120,0.34); padding-bottom:12px;">
+      <h2 style="font-family:'Cinzel', serif; font-weight:500; font-size:11.5px; letter-spacing:0.24em; text-transform:uppercase; color:#F0C778; margin:0;">Gli anni</h2>
+      <div style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,246,233,0.6);">2026 — 2021 · un anno alla volta</div>
+    </div>
+
+    <sc-for list="{{ anni }}" as="a" hint-placeholder-count="6">
+      <article style="border-bottom:0.5px solid rgba(240,199,120,0.34);">
+        <button onClick="{{ a.toggle }}" style="width:100%; background:none; border:0; padding:22px 4px; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:26px; cursor:pointer; text-align:left;" style-hover="background:rgba(240,199,120,0.1)">
+          <span style="font-family:'Cinzel', serif; font-weight:500; font-size:28px; letter-spacing:0.08em; color:{{ a.coloreAnno }}; min-width:120px;">{{ a.anno }}</span>
+          <span style="font-family:'DM Sans', sans-serif; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,246,233,0.66);">{{ a.riga }}</span>
+          <span style="font-family:'DM Sans', sans-serif; font-size:18px; line-height:1; color:#F5CE7E;">{{ a.segno }}</span>
+        </button>
+
+        <sc-if value="{{ a.aperto }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 4px 42px;">
+            <div style="border-left:3px solid rgba(240,199,120,0.6); background:rgba(32,86,150,0.55); backdrop-filter:blur(4px); border-radius:10px; padding:18px 22px; margin-bottom:30px;">
+              <div style="font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:#F0C778; margin-bottom:8px;">Momenti salienti</div>
+              <p style="margin:0; font-family:'Cormorant Garamond', serif; font-size:18px; line-height:1.62; font-style:italic; color:rgba(255,246,233,0.82); max-width:720px; text-wrap:pretty;">{{ a.salienti }}</p>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:0 40px;">
+              <sc-for list="{{ a.mesi }}" as="m" hint-placeholder-count="12">
+                <div onMouseLeave="{{ pulisciLeggio }}" style="display:grid; grid-template-columns:100px 1fr; align-items:center; gap:16px; padding:10px 0; border-bottom:0.5px solid rgba(240,199,120,0.18);">
+                  <div style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:{{ m.coloreMese }};">{{ m.nome }}</div>
+                  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:7px; min-height:20px;">
+                    <sc-for list="{{ m.segnali }}" as="s" hint-placeholder-count="0">
+                      <button onClick="{{ s.apri }}" onMouseEnter="{{ s.leggi }}" onFocus="{{ s.leggi }}" style="border:1px solid {{ s.colore }}; background:{{ s.riempimento }}; height:18px; min-width:18px; padding:0 5px; border-radius:{{ s.raggio }}; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:'DM Sans', sans-serif; font-size:9px; letter-spacing:0.08em; color:{{ s.coloreSigla }};" style-hover="transform:translateY(-2px)">{{ s.sigla }}</button>
+                    </sc-for>
+                    <sc-if value="{{ m.vuoto }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,246,233,0.42);">in attesa del CSV</span>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </article>
+    </sc-for>
+  </section>
+
+  <section style="max-width:1120px; margin:0 auto; padding:56px 32px 0;">
+    <div style="font-family:'Cinzel', serif; font-size:11.5px; letter-spacing:0.24em; text-transform:uppercase; color:#F0C778; text-align:center; margin-bottom:22px;">Lo storico</div>
+    <sc-for list="{{ quadranti }}" as="q" hint-placeholder-count="4">
+      <div id="{{ q.id }}" style="scroll-margin-top:64px;">
+        <button onClick="{{ q.toggle }}" style="display:flex; align-items:center; gap:14px; width:100%; text-align:left; cursor:pointer; background:rgba(32,86,150,0.55); border:0.5px solid rgba(240,199,120,0.34); border-radius:16px; padding:20px 22px; margin-top:16px; backdrop-filter:blur(4px); transition:border-color .2s;" style-hover="border-color:#F5CE7E">
+          <span style="flex:1;">
+            <span style="display:block; font-family:'Cinzel', serif; font-size:17px; color:#FFF6E9; letter-spacing:0.02em;">{{ q.titolo }}</span>
+            <span style="display:block; font-family:'Cormorant Garamond', serif; font-style:italic; font-size:16px; color:rgba(255,246,233,0.82); margin-top:3px;">{{ q.occhiello }}</span>
+          </span>
+          <span style="color:#F5CE7E; font-size:16px; display:inline-block; transition:transform .3s; transform:{{ q.rotazione }};">⌄</span>
+        </button>
+        <div style="max-height:{{ q.altezza }}; overflow:hidden; transition:max-height .7s ease;">
+          <div style="padding:16px 24px 8px;">
+            <p style="margin:0; max-width:720px; font-family:'Cormorant Garamond', serif; font-size:17px; line-height:1.74; font-style:italic; color:rgba(255,246,233,0.82); text-wrap:pretty;">{{ q.segnaposto }}</p>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+
+  <footer style="max-width:1120px; margin:72px auto 0; padding:0 32px; display:flex; flex-wrap:wrap; gap:20px 44px; align-items:center; justify-content:space-between; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,246,233,0.58);">
+    <div style="display:flex; gap:24px; flex-wrap:wrap; align-items:center;">
+      <span style="display:flex; align-items:center; gap:8px;"><span style="width:14px; height:11px; border:1px solid #5FC2F5; border-radius:2px; display:inline-block;"></span>Articoli</span>
+      <span style="display:flex; align-items:center; gap:8px;"><span style="width:11px; height:11px; background:#FF8A4C; border-radius:50%; display:inline-block;"></span>Interviste · audio</span>
+      <span style="display:flex; align-items:center; gap:8px; opacity:0.6;"><span style="width:10px; height:10px; border:1px solid #C08CFF; transform:rotate(45deg); display:inline-block;"></span>Memoria · in un secondo tempo</span>
+    </div>
+    <div>Ogni contenuto ha un indirizzo proprio · <span style="text-transform:none;">/annale/&lt;id&gt;</span></div>
+  </footer>
+
+  <div style="position:fixed; left:0; right:0; bottom:0; display:flex; justify-content:center; pointer-events:none; padding:0 20px 18px; z-index:45;">
+    <div style="max-width:840px; width:100%; background:rgba(18,58,107,0.9); border:0.5px solid rgba(240,199,120,0.34); border-radius:12px; backdrop-filter:blur(10px); padding:11px 20px; text-align:center; font-family:'DM Sans', sans-serif; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,246,233,0.82); opacity:{{ opacitaLeggio }}; transition:opacity .18s;">{{ testoLeggio }}</div>
+  </div>
+
+  <sc-if value="{{ apertoVisibile }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ chiudi }}" style="position:fixed; inset:0; z-index:60; background:rgba(12,40,76,0.82); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:40px 20px;">
+      <div onClick="{{ stopPropagazione }}" style="max-width:720px; width:100%; max-height:82vh; overflow:auto; background:rgba(24,70,126,0.96); border:0.5px solid rgba(240,199,120,0.34); border-radius:16px; box-shadow:0 14px 40px rgba(0,0,0,.35); padding:44px 48px 48px; position:relative;">
+        <button onClick="{{ chiudi }}" style="position:absolute; top:16px; right:18px; background:none; border:0; cursor:pointer; font-family:'DM Sans', sans-serif; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,246,233,0.72);" style-hover="color:#F5CE7E">Chiudi</button>
+        <div style="font-family:'Cinzel', serif; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:{{ apertoColore }};">{{ apertoTipo }}</div>
+        <h3 style="font-family:'Cinzel', serif; font-weight:500; font-size:24px; letter-spacing:0.04em; color:#FFF6E9; margin:14px 0 6px; text-wrap:pretty;">{{ apertoTitolo }}</h3>
+        <div style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,246,233,0.66); margin-bottom:24px;">{{ apertoAttribuzione }}</div>
+        <p style="margin:0 0 28px; font-family:'Cormorant Garamond', serif; font-size:18px; line-height:1.62; font-style:italic; color:rgba(255,246,233,0.82);">{{ apertoCorpo }}</p>
+        <div style="border-top:0.5px solid rgba(240,199,120,0.34); padding-top:16px; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(255,246,233,0.58);">
+          <span>Collegamento diretto</span>
+          <a href="{{ apertoUrl }}" style="text-transform:none; letter-spacing:0.06em;">{{ apertoUrl }}</a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mostraEsempio&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Struttura&quot;},&quot;annoIniziale&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;2026&quot;,&quot;2025&quot;,&quot;2024&quot;,&quot;2023&quot;,&quot;2022&quot;,&quot;2021&quot;],&quot;default&quot;:&quot;2026&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Struttura&quot;}}">
+const MESI = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+const ANNI = [2026, 2025, 2024, 2023, 2022, 2021];
+
+const RIGHE = {
+  2026: 'Sviluppo degli ultimi mesi',
+  2025: 'Aplomb · ROL · reti regionali',
+  2024: 'Hare Krishna · Toscana, Sardegna',
+  2023: 'Emilia-Romagna · Abruzzo',
+  2022: 'Tour · interviste dal 2022',
+  2021: 'Primi articoli'
+};
+
+// Il colore vive nel contenuto: acqua, fuoco, etere. La struttura resta oro.
+const TIPI = {
+  articolo:  { sigla: 'A', colore: '#5FC2F5', riempimento: 'transparent', coloreSigla: '#5FC2F5', raggio: '2px', nome: 'Articolo' },
+  intervista:{ sigla: '',  colore: '#FF8A4C', riempimento: '#FF8A4C',     coloreSigla: '#123A6B', raggio: '50%', nome: 'Intervista · audio' },
+  memoria:   { sigla: 'M', colore: '#C08CFF', riempimento: 'transparent', coloreSigla: '#C08CFF', raggio: '2px', nome: 'Memoria' },
+
+  /* ── le orme, coi cinque colori del canone ── */
+  racconto:      { sigla: '',  colore: '#669944', riempimento: '#669944', coloreSigla: '#0A0C1A', raggio: '50%', nome: 'Un racconto' },
+  testimonianza: { sigla: 'T', colore: '#CC6644', riempimento: 'transparent', coloreSigla: '#CC6644', raggio: '2px', nome: 'Una testimonianza' },
+  bisogno:       { sigla: '',  colore: '#AA8844', riempimento: '#AA8844', coloreSigla: '#0A0C1A', raggio: '50%', nome: 'Un bisogno' },
+  scambio_dono:  { sigla: '',  colore: '#4488BB', riempimento: '#4488BB', coloreSigla: '#0A0C1A', raggio: '50%', nome: 'Uno scambio o un dono' },
+  contatto:      { sigla: 'C', colore: '#AA8844', riempimento: 'transparent', coloreSigla: '#AA8844', raggio: '50%', nome: 'Un contatto' },
+  idea_nota:     { sigla: 'N', colore: '#AA8844', riempimento: 'transparent', coloreSigla: '#AA8844', raggio: '2px', nome: 'Un\u2019idea o una nota' },
+  obiettivo:     { sigla: 'O', colore: '#AA8844', riempimento: 'transparent', coloreSigla: '#AA8844', raggio: '2px', nome: 'Un obiettivo' },
+  spesa:         { sigla: '\u20AC', colore: '#AA8844', riempimento: 'transparent', coloreSigla: '#AA8844', raggio: '2px', nome: 'Una spesa' },
+  registro_ore:  { sigla: 'h', colore: '#AA8844', riempimento: 'transparent', coloreSigla: '#AA8844', raggio: '2px', nome: 'Ore di lavoro' },
+  link:          { sigla: 'L', colore: '#9966CC', riempimento: 'transparent', coloreSigla: '#9966CC', raggio: '2px', nome: 'Un link' },
+  prodotto:      { sigla: 'P', colore: '#4488BB', riempimento: 'transparent', coloreSigla: '#4488BB', raggio: '2px', nome: 'Un prodotto' },
+  ricerca:       { sigla: 'R', colore: '#9966CC', riempimento: 'transparent', coloreSigla: '#9966CC', raggio: '2px', nome: 'Una ricerca' },
+  anthakarana:   { sigla: '',  colore: '#C8A055', riempimento: '#F5F0E6', coloreSigla: '#0A0C1A', raggio: '50%', nome: 'Un passo sul filo' }
+};
+
+const QUADRANTI = [
+  { id: 'la-descrizione', tasto: 'La descrizione', occhiello: 'Lo sviluppo', titolo: 'La descrizione', segnaposto: "[Che cos'è FelicitasMundi e come è nata — in attesa.]" },
+  { id: 'il-tour-2022', tasto: 'Il tour 2022', occhiello: '2022', titolo: 'Il tour', segnaposto: '[Il tour del 2022 — in attesa.]' },
+  { id: 'l-inizio', tasto: "L'inizio", occhiello: 'Le origini', titolo: "L'inizio", segnaposto: '[L\u2019inizio — in attesa.]' },
+  { id: 'il-fondatore', tasto: 'Il fondatore', occhiello: 'Chi ha cominciato', titolo: 'La bio del fondatore', segnaposto: '[La bio del fondatore — in attesa.]' }
+];
+
+class Component extends DCLogic {
+  state = { anno: null, leggio: '', aperto: null, quadrante: null };
+
+  componentDidMount() {
+    this.setState({ anno: this.props.annoIniziale ? Number(this.props.annoIniziale) : 2026 });
+    this._h = () => this.daHash();
+    window.addEventListener('hashchange', this._h);
+    this.daHash();
+  }
+  componentWillUnmount() { window.removeEventListener('hashchange', this._h); }
+
+  daHash() {
+    const m = (window.location.hash || '').match(/^#\/annale\/(.+)$/);
+    if (m) {
+      const c = this.contenuti().find(c => c.id === decodeURIComponent(m[1]));
+      if (c) this.setState({ aperto: c, anno: c.anno });
+    }
+  }
+
+  vaiA(id) {
+    this.setState({ quadrante: id });
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 64;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+
+  // Finché il CSV d'archivio non esiste, l'elenco è vuoto.
+  // La modalità dimostrativa mostra la meccanica con segnali dichiaratamente d'esempio.
+  contenuti() {
+    /* ⭐ LE ORME VERE — l'Annale e la mappa leggono lo stesso dato:
+       un record, due viste, mai copie. Il lettore riempie window.FM_ORME. */
+    if (window.FM_ORME && window.FM_ORME.length) return window.FM_ORME;
+    if (!this.props.mostraEsempio) return [];
+    const semi = [
+      [2026, 2, 'articolo'], [2026, 2, 'intervista'], [2026, 4, 'intervista'],
+      [2026, 4, 'articolo'], [2026, 4, 'articolo'], [2026, 5, 'intervista'],
+      [2026, 6, 'articolo'], [2025, 9, 'articolo'], [2025, 9, 'intervista'],
+      [2022, 5, 'articolo'], [2022, 5, 'memoria']
+    ];
+    return semi.map((s, i) => ({
+      id: s[2].slice(0, 3) + '-' + s[0] + '-' + String(s[1] + 1).padStart(2, '0') + '-' + String(i + 1).padStart(3, '0'),
+      anno: s[0], mese: s[1], tipo: s[2]
+    }));
+  }
+
+  apriContenuto(c) {
+    this.setState({ aperto: c });
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', '#/annale/' + c.id);
+    }
+  }
+
+  renderVals() {
+    const annoAperto = this.state.anno;
+    const tutti = this.contenuti();
+    const esempio = !!this.props.mostraEsempio;
+
+    const anni = ANNI.map(anno => {
+      const aperto = anno === annoAperto;
+      const mesi = MESI.map((nome, idx) => {
+        const segnali = tutti.filter(c => c.anno === anno && c.mese === idx).map(c => {
+          const t = TIPI[c.tipo];
+          return {
+            sigla: t.sigla, colore: t.colore, riempimento: t.riempimento, raggio: t.raggio, coloreSigla: t.coloreSigla,
+            apri: () => this.apriContenuto(c),
+            leggi: () => this.setState({ leggio: t.nome + ' · [titolo] · [autore] · ' + c.id })
+          };
+        });
+        return { nome, segnali, vuoto: segnali.length === 0, coloreMese: segnali.length ? '#FFF6E9' : 'rgba(255,246,233,0.45)' };
+      });
+      return {
+        anno: String(anno),
+        aperto,
+        riga: RIGHE[anno],
+        segno: aperto ? '−' : '+',
+        coloreAnno: aperto ? '#FFF6E9' : 'rgba(255,246,233,0.7)',
+        salienti: '[I momenti salienti del ' + anno + ' — in attesa.]',
+        mesi,
+        toggle: () => this.setState({ anno: aperto ? null : anno })
+      };
+    });
+
+    const quadranti = QUADRANTI.map(q => {
+      const ap = this.state.quadrante === q.id;
+      return Object.assign({}, q, {
+        altezza: ap ? '900px' : '0px',
+        rotazione: ap ? 'rotate(180deg)' : 'rotate(0deg)',
+        vai: () => this.vaiA(q.id),
+        toggle: () => this.setState({ quadrante: ap ? null : q.id })
+      });
+    });
+
+    const a = this.state.aperto;
+    const tipoA = a ? TIPI[a.tipo] : null;
+
+    return {
+      anni,
+      quadranti,
+      testoLeggio: this.state.leggio || (esempio ? 'Passa sopra un segnale per vederne il genere' : "In attesa del CSV d'archivio · id, data, titolo, autore, tipo, tema, porta, url"),
+      opacitaLeggio: this.state.leggio ? 1 : 0.55,
+      pulisciLeggio: () => this.setState({ leggio: '' }),
+      apertoVisibile: !!a,
+      apertoTipo: tipoA ? tipoA.nome : '',
+      apertoColore: tipoA ? tipoA.colore : '#F5CE7E',
+      apertoTitolo: a ? '[titolo del contenuto]' : '',
+      apertoAttribuzione: a ? '[autore / operatore intervistato] — attribuzione obbligatoria' : '',
+      apertoCorpo: a ? (a.tipo === 'intervista'
+        ? "[Qui il lettore audio dell'intervista, servita dal server della radio — non da Supabase.]"
+        : '[Il testo del contenuto, dal record unico dell\u2019Annale.]') : '',
+      apertoUrl: a ? '#/annale/' + a.id : '',
+      chiudi: () => this.setState({ aperto: null }),
+      stopPropagazione: (e) => e.stopPropagation()
+    };
+  }
+}
+</script>
+</body>
+</html>

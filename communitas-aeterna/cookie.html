@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Cookie · FelicitasMundi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Caveat:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
+  --accent:#AA8844; --bg:#080604; --crema:#F0EBE0;
+  --c50:rgba(240,235,224,.50); --c38:rgba(240,235,224,.38); --c22:rgba(240,235,224,.22); --c12:rgba(240,235,224,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:40px;position:relative;min-height:100vh}
+
+.fm-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(170,136,68,.10), transparent 60%),
+    radial-gradient(90% 60% at 50% 120%, rgba(153,102,204,.06), transparent 60%);}
+.fm-bg::after{content:"";position:absolute;inset:0;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+
+.top{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:.5px solid var(--c12)}
+.fm-nexus-btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;opacity:.85;transition:opacity .2s}
+.fm-nexus-btn:hover{opacity:1}
+.fm-nexus-btn img{width:55px;height:55px;object-fit:contain}
+.fm-nexus-lbl{font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:.04em;color:var(--c50)}
+.brand{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--c50);margin-left:auto}
+
+.hero{padding:50px 0 8px}
+.occh{font-family:"Cinzel",serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+.titolo{font-family:"Cinzel",serif;font-weight:900;font-size:clamp(28px,5.6vw,46px);line-height:1.08}
+.sotto{font-size:clamp(18px,2.6vw,22px);color:var(--c50);font-weight:400;margin-top:18px;max-width:620px}
+.aggio{font-family:"DM Sans",sans-serif;font-size:12.5px;color:var(--c38);margin-top:14px;letter-spacing:.02em}
+
+.doc{margin-top:30px}
+.doc h2{font-family:"Cinzel",serif;font-weight:700;font-size:clamp(18px,2.6vw,22px);color:var(--accent);margin:40px 0 12px;line-height:1.25}
+.doc p{font-size:17px;color:var(--c50);margin-bottom:14px}
+.doc p.lead{color:var(--crema)}
+.doc strong{color:var(--crema);font-weight:500}
+.doc a.inl{color:var(--accent);text-decoration:none;border-bottom:.5px solid var(--c22)}
+.doc a.inl:hover{border-bottom-color:var(--accent)}
+
+/* nota messa in evidenza (niente banner) */
+.note{border:.5px solid var(--c22);border-left:3px solid var(--aria);border-radius:12px;padding:16px 18px;margin:18px 0;background:rgba(102,153,68,.04)}
+.note p{margin:0;font-size:16px;color:var(--crema)}
+
+/* tabella cookie */
+.tbl{width:100%;border-collapse:collapse;margin:6px 0 10px;font-family:"DM Sans",sans-serif}
+.tbl th,.tbl td{border:.5px solid var(--c22);padding:11px 13px;text-align:left;vertical-align:top;font-size:14px}
+.tbl th{background:rgba(170,136,68,.10);color:var(--crema);font-weight:500;letter-spacing:.03em}
+.tbl td{color:var(--c50)}
+.tbl code{font-family:"DM Sans",sans-serif;color:var(--crema)}
+.tbl .small{display:block;font-size:12px;color:var(--c38);margin-top:8px}
+
+.pie{margin-top:46px;padding-top:18px;border-top:.5px solid var(--c12);font-family:"DM Sans",sans-serif;font-size:12px;color:var(--c38);letter-spacing:.02em;line-height:1.7}
+
+@media(max-width:560px){.fm-nexus-lbl{display:none}}
+
+  /* ══ IL PIEDE — uguale in ogni pagina ══ */
+  .fm-piede{margin-top:2.4rem;padding:1.3rem 1rem 1.4rem;
+    border-top:1px solid rgba(184,150,62,0.2);text-align:center}
+  .fp-marchio{font-family:'Cinzel',serif;font-size:0.8125rem;
+    letter-spacing:0.2em;text-transform:uppercase;color:#D4AF6A;margin-bottom:0.6rem}
+  .fp-riga{font-family:'DM Sans',sans-serif;font-size:0.8125rem;
+    color:rgba(245,240,230,0.78);line-height:1.5}
+  .fp-link{margin-top:0.7rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap}
+  .fp-link a{font-family:'DM Sans',sans-serif;font-size:0.8125rem;color:#D4AF6A;
+    text-decoration:none;border-bottom:1px solid rgba(200,160,85,0.35);padding-bottom:0.1rem}
+  .fp-link a:hover{color:#F5F0E6;border-bottom-color:#F5F0E6}
+</style>
+</head>
+<body>
+
+<div class="fm-bg"></div>
+
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <a class="fm-nexus-btn" href="https://felicitasmundi.com" title="Torna alla Home">
+      <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="Nexus FelicitasMundi"/>
+      <span class="fm-nexus-lbl">← Home</span>
+    </a>
+    <div class="brand">Cookie</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="occh">Felicitas Omnia S.r.l.s.</div>
+    <h1 class="titolo">Cookie Policy</h1>
+    <p class="sotto">Quali strumenti tecnici usa FelicitasMundi, e perch&eacute; non ti chiediamo di accettare nulla.</p>
+    <p class="aggio">Ultimo aggiornamento: 1 agosto 2026</p>
+  </div>
+
+  <div class="doc">
+
+    <h2>Cosa sono i cookie</h2>
+    <p>I cookie sono piccoli file che un sito salva sul tuo dispositivo per ricordare alcune informazioni tra una pagina e l'altra. Possono essere <strong>tecnici</strong> (necessari al funzionamento) oppure di profilazione e statistica (per seguire la navigazione): questi ultimi richiederebbero il tuo consenso.</p>
+
+    <h2>Quali cookie usa FelicitasMundi</h2>
+    <p>La piattaforma utilizza <strong>solo strumenti tecnici, necessari al funzionamento</strong>. Non usiamo cookie di profilazione, n&eacute; strumenti di statistica o di terze parti.</p>
+
+    <table class="tbl">
+      <thead><tr><th>Che cosa</th><th>Finalit&agrave;</th><th>Tipo</th><th>Durata</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>sessione di accesso</code></td>
+          <td>Ti tiene dentro dopo che sei entrato con l'email e il codice, cos&igrave; non devi rifare l'accesso a ogni pagina. Non contiene alcuna password, perch&eacute; non ne esiste nessuna.</td>
+          <td>Tecnico / necessario</td>
+          <td>Fino all'uscita, o alla scadenza della sessione</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:14px;color:var(--c38)">Quando l'Emporio sar&agrave; attivo si aggiungeranno gli strumenti tecnici del carrello, anch'essi necessari al funzionamento; questa pagina verr&agrave; aggiornata di conseguenza.</p>
+
+    <div class="note">
+      <p>Poich&eacute; la piattaforma utilizza esclusivamente strumenti tecnici necessari, <strong>non &egrave; richiesto alcun banner n&eacute; alcun consenso</strong>. Li elenchiamo qui per trasparenza.</p>
+    </div>
+
+    <h2>Come gestire i cookie</h2>
+    <p>Puoi sempre cancellare o bloccare i cookie dalle impostazioni del tuo browser. Bloccando la sessione di accesso la piattaforma resta visitabile, ma dovrai rifare l'accesso ogni volta che cambi pagina.</p>
+
+    <h2>Maggiori informazioni</h2>
+    <p>Per il trattamento dei tuoi dati personali, vedi l'<a class="inl" href="privacy.html">Informativa sulla privacy</a>. Per qualsiasi domanda: <a class="inl" href="mailto:felicitasmundi@protonmail.com">felicitasmundi@protonmail.com</a>.</p>
+
+  </div>
+
+  <div class="pie">
+    FelicitasMundi · Felicitas Omnia S.r.l.s. · Via Tempio 70/A, 07100 Sassari · P.IVA 03075740906 · REA SS-227659<br>
+    <a class="inl" href="privacy.html" style="color:var(--c50)">Informativa privacy</a> &middot;
+    <a class="inl" href="condizioni.html" style="color:var(--c50)">Condizioni d'uso</a>
+  </div>
+
+</div>
+
+<div class="fm-piede">
+  <div class="fp-marchio">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
+  <div class="fp-riga">Felicitas Omnia S.r.l.s. &middot; P.IVA 03075740906</div>
+  <div class="fp-riga">&copy; 2026 &middot; Tutti i diritti riservati</div>
+  <div class="fp-link">
+    <a href="privacy.html">Informativa privacy</a>
+    <a href="cookie.html">Cookie</a>
+    <a href="condizioni.html">Condizioni d&rsquo;uso</a>
+  </div>
+</div>
+</body>
+</html>
