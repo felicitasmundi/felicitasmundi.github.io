@@ -53,7 +53,7 @@
           + 'Il documento vivo si aggiorna quando emergono nuovi riferimenti.</p>'
           + '<div class="idx"><h3>Indice</h3><div id="idx-voci"></div></div>'
           + '<div id="capitoli"></div>';
-    d.innerHTML = h;
+    d.insertAdjacentHTML("beforeend", h);   /* si aggiunge: non cancella il titolo della porta */
 
     var idx = $("idx-voci"), box = $("capitoli");
     RICERCA.forEach(function(c, n){
@@ -97,7 +97,8 @@
 
     d.innerHTML='<h2 style="margin-top:1.4rem"></h2>'
       + (suoi.length ? '<div class="lettura" id="lettura"></div>'
-                     : '<p><span class="segna">questa porta aspetta il suo contenuto</span></p>');
+         : x.id==="scuola" ? ''   /* la Scuola porta le sue tre voci: non aspetta */
+         : '<p><span class="segna">questa porta aspetta il suo contenuto</span></p>');
     d.querySelector("h2").textContent=x.n;
     d.querySelector("h2").style.color="var(--"+x.el+")";
 
@@ -123,7 +124,37 @@
       });
     }
 
-    if(x.id==="scuola"){ ricerca(d); }
+    if(x.id==="scuola"){ porteScuola(d); }
+  }
+
+  /* ── le tre voci della Scuola: la stessa forma delle porte, un livello sotto ── */
+  var SCUOLA = [
+    {id:"formazione", n:"formazione"},
+    {id:"maestri",    n:"maestri autentici"},
+    {id:"ricerca",    n:"ricerca felicitas"}
+  ];
+
+  function porteScuola(d){
+    d.insertAdjacentHTML("beforeend",
+      '<div class="porte" id="porte-scuola"></div><div id="dentro-scuola"></div>');
+    var box = $("porte-scuola");
+    SCUOLA.forEach(function(v){
+      var b = document.createElement("button");
+      b.className = "porta";
+      b.style.setProperty("--pc", "var(--etere)");
+      /* niente segno: il bordo etere e il titolo dicono già dove sei */
+      b.innerHTML = '<span><b></b></span>';
+      b.querySelector("b").textContent = v.n;
+      b.addEventListener("click", function(){ apriVoceScuola(v); });
+      box.appendChild(b);
+    });
+  }
+
+  function apriVoceScuola(v){
+    var d = $("dentro-scuola"); if(!d) return;
+    d.innerHTML = "";
+    if(v.id === "ricerca"){ ricerca(d); return; }
+    d.innerHTML = '<p><span class="segna">[ in attesa ]</span></p>';
   }
 
   /* ── l'articolo si apre nel quadrante centrale: barra e Megafono restano ── */

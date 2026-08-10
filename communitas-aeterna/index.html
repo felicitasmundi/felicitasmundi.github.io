@@ -1101,8 +1101,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     {id:"orme",    n:"Le mie orme",  el:"orme",         s:"gli strumenti, il filo del percorso"},
     {id:"edizione",n:"Edizione", el:"aria", s:"riordina, stampa, pubblica e distribuisci"},
     {id:"incontro",n:"Cosa incontro", el:"ricerca", s:"", sotto:[
-      {id:"vicinati",  n:"Vicinati",   el:"terra", s:"bisogni, calendario, autosufficienza"},
-      {id:"emporio",   n:"Emporio",    el:"acqua", s:"dono e scambio, vendita", sotto:[
+      {id:"vicinati",  n:"Vicinati",   el:"terra", s:"bisogni, calendario, autosufficienza", sotto:[
+        {id:"vic-bisogni",        n:"bisogni",        el:"terra", va:"vicinati"},
+        {id:"vic-calendario",     n:"calendario",     el:"terra", va:"vicinati"},
+        {id:"vic-autosufficienza",n:"autosufficienza",el:"terra", va:"vicinati"}
+      ]},
+      {id:"emporio",   n:"Emporio",    el:"acqua", s:"dono e scambio, vendita", apriGia:"emp-vendita", sotto:[
         {id:"emp-dono",    n:"Dono e scambio", el:"acqua", va:"emporio"},
         {id:"emp-vendita", n:"Vendita",        el:"acqua", va:"emporio", sotto:[
           {id:"sc-abbigliamento", n:"abbigliamento",             el:"acqua", va:"emporio"},
@@ -1118,8 +1122,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
           {id:"sc-musicali",      n:"strumenti musicali",        el:"acqua", va:"emporio"}
         ]}
       ]},
-      {id:"assistenza",n:"Assistenza", el:"fuoco", s:"spirituale, mutuo aiuto, consulenze"},
-      {id:"scuola",    n:"Scuola",     el:"etere", s:"formazioni, maestri di tradizione, ricerca"}
+      {id:"assistenza",n:"Assistenza", el:"fuoco", s:"spirituale, mutuo aiuto, consulenze", sotto:[
+        {id:"ass-spirituale",n:"spirituale", el:"fuoco", va:"assistenza"},
+        {id:"ass-mutuo",     n:"mutuo aiuto",el:"fuoco", va:"assistenza"},
+        {id:"ass-consulenze",n:"consulenze", el:"fuoco", va:"assistenza"}
+      ]},
+      {id:"scuola",    n:"Scuola",     el:"etere", s:"formazione, maestri autentici, ricerca felicitas", sotto:[
+        {id:"scu-formazione",n:"formazione",        el:"etere", va:"scuola"},
+        {id:"scu-maestri",   n:"maestri autentici", el:"etere", va:"scuola"},
+        {id:"scu-ricerca",   n:"ricerca felicitas", el:"etere", va:"scuola"}
+      ]}
     ]},
     {id:"annale",  n:"Annale di FelicitasMundi", el:"annale", s:"storico · tour · fondatore"}
   ];
@@ -1226,9 +1238,22 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      livello e tutto quello che stava sotto */
   var ramo = [];
 
-  function apriRamo(liv, id){
-    if(ramo[liv] === id){ ramo.length = liv; }        /* si tocca di nuovo: si richiude */
-    else { ramo.length = liv; ramo[liv] = id; }       /* si apre, e chiude i fratelli */
+  /* il nome apre e non richiude: apre questo ramo e chiude i fratelli.
+     Se il ramo ne porta già aperto uno sotto, con `apriGia`, si scende */
+  function apriRamo(liv, x){
+    ramo.length = liv; ramo[liv] = x.id;
+    var n = x, l = liv;
+    while(n.apriGia){
+      var g = (n.sotto || []).filter(function(y){ return y.id === n.apriGia; })[0];
+      if(!g) break;
+      l++; ramo[l] = g.id; n = g;
+    }
+  }
+
+  /* il chevron scatta: se il ramo è aperto lo richiude, se è chiuso lo apre */
+  function scattaRamo(liv, x){
+    if(ramo[liv] === x.id){ ramo.length = liv; }
+    else { apriRamo(liv, x); }
   }
 
   /* il chevron sta dentro il tasto, ma \u00E8 un bersaglio a s\u00E9 */
@@ -1255,7 +1280,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       t.querySelector("b").textContent = v.n;
       if(v.s){ var sm=document.createElement("small"); sm.textContent=v.s; t.appendChild(sm); }
       b.addEventListener("click", function(e){
-        if(rami && sulChevron(e)){ apriRamo(0, v.id); disegnaBarra(); return; }
+        if(rami && sulChevron(e)){ scattaRamo(0, v); disegnaBarra(); return; }
+        if(rami){ apriRamo(0, v); }   /* il nome porta alla pagina e apre il ramo */
         vai(v.id);
       });
       c.appendChild(b);
@@ -1294,13 +1320,17 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       var sb=document.createElement("button");
       sb.className="sotto-voce"+((suoi&&ramo[liv]===x.id)?" aperta":"");
       sb.style.setProperty("--sc","var(--"+x.el+")");
-      sb.innerHTML='<span class="tt"><b></b>'+(x.s?'<i></i>':'')+'</span>'
+      /* una voce che ha un ramo non porta riga: le sue parole sono il ramo.
+         `s` resta nei dati perché incontro() la scrive sotto le quattro porte */
+      var riga = x.s && !suoi;
+      sb.innerHTML='<span class="tt"><b></b>'+(riga?'<i></i>':'')+'</span>'
                  + (suoi ? '<span class="chev">›</span>' : '');
       sb.querySelector("b").textContent=x.n;
-      if(x.s){ sb.querySelector("i").textContent=x.s; }
+      if(riga){ sb.querySelector("i").textContent=x.s; }
       sb.addEventListener("click", function(e){
         e.stopPropagation();
-        if(suoi && sulChevron(e)){ apriRamo(liv, x.id); disegnaBarra(); return; }
+        if(suoi && sulChevron(e)){ scattaRamo(liv, x); disegnaBarra(); return; }
+        if(suoi){ apriRamo(liv, x); }   /* il nome porta alla stanza e apre il ramo */
         vai("incontro", x.va || x.id);
       });
       d.appendChild(sb);
