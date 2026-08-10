@@ -62,13 +62,27 @@
   .voce.on{border-left-color:var(--oro);background:rgba(200,160,85,0.1);color:var(--ivory)}
   .voce small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
     color:rgba(245,240,230,0.78);margin-top:0.1rem;line-height:1.35}
-  .voce .sg{width:1.05rem;height:1.05rem;flex:0 0 auto;margin-top:0.15rem;opacity:0.85}
+  /* la colonna del simbolo: la tengono tutte le voci, anche quelle che il segno
+     non ce l'hanno ancora. Così i nomi restano allineati */
+  .voce .sg{width:1.2rem;height:1.2rem;flex:0 0 auto;margin-top:0.15rem;opacity:0.85}
   .voce .sg svg{width:100%;height:100%;display:block}
+  .voce .tt{flex:1 1 auto;min-width:0}
 
+  /* il chevron: bersaglio a sé, apre il ramo. Il nome, accanto, porta alla stanza */
+  .chev{flex:0 0 auto;align-self:center;padding:0.25rem 0.4rem;margin:-0.25rem -0.2rem -0.25rem 0;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-tas);line-height:1;
+    color:var(--oro-ch);opacity:0.65;transition:transform 0.18s ease,opacity 0.18s ease}
+  .chev:hover{opacity:1}
+  .aperta > .chev{transform:rotate(90deg);opacity:1}
+
+  /* il passo del rientro è 1.6rem, uguale a ogni livello */
   .sotto-voci{padding:0.1rem 0 0.4rem 2.6rem}
-  .sotto-voce{display:block;width:100%;background:none;border:0;text-align:left;cursor:pointer;
+  .sotto-voci .sotto-voci{padding-left:1.6rem}
+  .sotto-voce{display:flex;align-items:flex-start;gap:0.4rem;width:100%;background:none;border:0;
+    text-align:left;cursor:pointer;
     padding:0.4rem 0.6rem 0.45rem;border-left:0.15rem solid var(--sc,var(--line));
     margin-bottom:0.25rem}
+  .sotto-voce .tt{flex:1 1 auto;min-width:0}
   .sotto-voce b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
     font-weight:500;color:rgba(245,240,230,0.92)}
   .sotto-voce i{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
@@ -1029,6 +1043,11 @@
 "use strict";
 
 var SIMBOLI = {
+  spaziovivo: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11L15 8L25 12L35 9V30L25 33L15 29L5 32Z"/><path d="M15 8v21M25 12v21"/><circle cx="20" cy="20" r="2.6"/></svg>',
+  praticantato: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4v32"/><path d="M20 8c7 1 7 6 0 7c-7 1-7 6 0 7c7 1 7 6 0 7"/></svg>',
+  orme: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15c4.6 0 6.6 4 5.6 8.6C24.6 28 22 31 20 31s-4.6-3-5.6-7.4C13.4 19 15.4 15 20 15Z"/><circle cx="13.6" cy="12.4" r="1.5"/><circle cx="17" cy="10.4" r="1.6"/><circle cx="20.6" cy="10" r="1.6"/><circle cx="24" cy="10.8" r="1.5"/><circle cx="26.8" cy="12.8" r="1.3"/></svg>',
+  ricerca: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="17" r="9"/><path d="M23.5 23.5L33 33"/></svg>',
+  annale: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 27c-4-3-9-3-14-1v5c5-2 10-2 14 1c4-3 9-3 14-1v-5c-5-2-10-2-14 1Z"/><path d="M20 27v5"/><path d="M30 8L20 20"/><path d="M20 20l-1 3.6l3.2-1.6"/></svg>',
   terra: '<svg viewBox="0 0 40 40" fill="none"> <polygon points="20,4 8,10 8,28 20,34 20,18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,4 32,10 32,28 20,34 20,18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,4 8,10 20,18 32,10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <line x1="20" y1="18" x2="20" y2="34" stroke="currentColor" stroke-width="1.4"/> </svg>',
   acqua: '<svg viewBox="0 0 40 40" fill="none"> <circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="1.3"/> <line x1="20" y1="5" x2="9" y2="12" stroke="currentColor" stroke-width="1.1"/><line x1="20" y1="5" x2="31" y2="12" stroke="currentColor" stroke-width="1.1"/> <line x1="9" y1="12" x2="31" y2="12" stroke="currentColor" stroke-width="1.1"/> <line x1="9" y1="12" x2="5" y2="21" stroke="currentColor" stroke-width="1.1"/><line x1="31" y1="12" x2="35" y2="21" stroke="currentColor" stroke-width="1.1"/> <line x1="5" y1="21" x2="12" y2="31" stroke="currentColor" stroke-width="1.1"/><line x1="35" y1="21" x2="28" y2="31" stroke="currentColor" stroke-width="1.1"/> <line x1="12" y1="31" x2="28" y2="31" stroke="currentColor" stroke-width="1.1"/> <line x1="12" y1="31" x2="20" y2="35" stroke="currentColor" stroke-width="1.1"/><line x1="28" y1="31" x2="20" y2="35" stroke="currentColor" stroke-width="1.1"/> <line x1="9" y1="12" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="31" y1="12" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> <line x1="5" y1="21" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="35" y1="21" x2="20" y2="17" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> <line x1="5" y1="21" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="35" y1="21" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> <line x1="12" y1="31" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/><line x1="28" y1="31" x2="20" y2="26" stroke="currentColor" stroke-width="0.7" opacity="0.45"/> </svg>',
   fuoco: '<svg viewBox="0 0 40 40" fill="none"> <polygon points="20,4 4,34 20,26" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <polygon points="20,4 36,34 20,26" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/> <line x1="4" y1="34" x2="36" y2="34" stroke="currentColor" stroke-width="1.4"/> <line x1="20" y1="26" x2="20" y2="34" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2" opacity="0.5"/> <line x1="4" y1="34" x2="20" y2="26" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2" opacity="0.4"/> <line x1="36" y1="34" x2="20" y2="26" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2" opacity="0.4"/> </svg>',
@@ -1036,6 +1055,9 @@ var SIMBOLI = {
   etere: '<svg viewBox="0 0 40 40" fill="none"> <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="1.3"/> <polygon points="20,10 27,15 25,22 15,22 13,15" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/> <line x1="20" y1="10" x2="20" y2="4" stroke="currentColor" stroke-width="1"/> <line x1="20" y1="4" x2="26" y2="6" stroke="currentColor" stroke-width="1"/> <line x1="20" y1="4" x2="14" y2="6" stroke="currentColor" stroke-width="1"/> <line x1="27" y1="15" x2="35" y2="14" stroke="currentColor" stroke-width="1"/> <line x1="35" y1="14" x2="37" y2="21" stroke="currentColor" stroke-width="1"/> <line x1="25" y1="22" x2="30" y2="31" stroke="currentColor" stroke-width="1"/> <line x1="30" y1="31" x2="24" y2="36" stroke="currentColor" stroke-width="1"/> <line x1="24" y1="36" x2="16" y2="36" stroke="currentColor" stroke-width="1"/> <line x1="16" y1="36" x2="10" y2="31" stroke="currentColor" stroke-width="1"/> <line x1="15" y1="22" x2="10" y2="31" stroke="currentColor" stroke-width="1"/> <line x1="13" y1="15" x2="5" y2="14" stroke="currentColor" stroke-width="1"/> <line x1="5" y1="14" x2="3" y2="21" stroke="currentColor" stroke-width="1"/> </svg>',
   nexus: null   /* il Nexus viene dal disegno a mano: nexus.png, non si ridisegna */
 };
+
+/* solo questi cinque hanno un colore proprio. Gli altri segni stanno a currentColor */
+var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
   var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
@@ -1070,23 +1092,36 @@ var SIMBOLI = {
   }
   onda(); window.addEventListener("resize", onda);
 
-  /* ══ LA BARRA — cinque voci ══ */
+  /* ══ LA BARRA ══
+     `sotto` è il ramo, e si annida quanto serve.
+     `va` dice a quale porta si arriva quando la voce non ne ha una propria. */
   var BARRA = [
-    {id:"spazio",  n:"Spazio Vivo",  s:"home, mappa, radio"},
-    {id:"sentiero",n:"Il sentiero",  s:"come funziona?"},
-    {id:"orme",    n:"Le mie orme",  s:"gli strumenti, il filo del percorso"},
-    {id:"edizione", n:"Edizione", s:"riordina, stampa, pubblica e distribuisci"},
-    {id:"incontro",n:"Cosa incontro", s:"", sotto:[
-      {id:"vicinati",  n:"Vicinati",   el:"terra", v:["bisogni","calendario"]},
-      {id:"emporio",   n:"Emporio",    el:"acqua",
-       v:["dono","scambio","vendita","abbigliamento","accessori","oggettistica",
-          "oggettistica devozionale","strumenti di coscienza","cosmesi","accessori casa",
-          "arredamento","strumenti musicali","libri","alimenti"]},
-      {id:"assistenza",n:"Assistenza", el:"fuoco", v:["spirituale","mutuo aiuto","consulenza"]},
-      {id:"edizione",  n:"Edizione",   el:"aria",  v:["impagina pro","pubblica","stampa","distribuisci"]},
-      {id:"scuola",    n:"Scuola",     el:"etere", v:["formazioni","maestri delle tradizioni","la ricerca"]}
+    {id:"spazio",  n:"Spazio Vivo",  el:"spaziovivo",   s:"home, mappa, radio"},
+    {id:"sentiero",n:"Praticantato", el:"praticantato", s:"come funziona?"},
+    {id:"orme",    n:"Le mie orme",  el:"orme",         s:"gli strumenti, il filo del percorso"},
+    {id:"edizione",n:"Edizione", el:"aria", s:"riordina, stampa, pubblica e distribuisci"},
+    {id:"incontro",n:"Cosa incontro", el:"ricerca", s:"", sotto:[
+      {id:"vicinati",  n:"Vicinati",   el:"terra", s:"bisogni, calendario, autosufficienza"},
+      {id:"emporio",   n:"Emporio",    el:"acqua", s:"dono e scambio, vendita", sotto:[
+        {id:"emp-dono",    n:"Dono e scambio", el:"acqua", va:"emporio"},
+        {id:"emp-vendita", n:"Vendita",        el:"acqua", va:"emporio", sotto:[
+          {id:"sc-abbigliamento", n:"abbigliamento",             el:"acqua", va:"emporio"},
+          {id:"sc-accessori",     n:"accessori",                 el:"acqua", va:"emporio"},
+          {id:"sc-alimenti",      n:"alimenti",                  el:"acqua", va:"emporio"},
+          {id:"sc-bevande",       n:"bevande",                   el:"acqua", va:"emporio"},
+          {id:"sc-casa",          n:"casa",                      el:"acqua", va:"emporio"},
+          {id:"sc-cosmesi",       n:"cosmesi",                   el:"acqua", va:"emporio"},
+          {id:"sc-libri",         n:"libri",                     el:"acqua", va:"emporio"},
+          {id:"sc-oggettistica",  n:"oggettistica",              el:"acqua", va:"emporio"},
+          {id:"sc-devozionale",   n:"oggettistica devozionale",  el:"acqua", va:"emporio"},
+          {id:"sc-coscienza",     n:"strumenti di coscienza",    el:"acqua", va:"emporio"},
+          {id:"sc-musicali",      n:"strumenti musicali",        el:"acqua", va:"emporio"}
+        ]}
+      ]},
+      {id:"assistenza",n:"Assistenza", el:"fuoco", s:"spirituale, mutuo aiuto, consulenze"},
+      {id:"scuola",    n:"Scuola",     el:"etere", s:"formazioni, maestri di tradizione, ricerca"}
     ]},
-    {id:"annale",  n:"Annale di FelicitasMundi", s:"storico · tour · fondatore"}
+    {id:"annale",  n:"Annale di FelicitasMundi", el:"annale", s:"storico · tour · fondatore"}
   ];
 
   /* le destinazioni: colore e simbolo, mai il nome dell'elemento */
@@ -1187,42 +1222,52 @@ var SIMBOLI = {
     {n:"Esci", s:""}
   ];
 
-  var apertoRamo = null;
+  /* il ramo aperto, un posto per livello: aprirne uno chiude gli altri di pari
+     livello e tutto quello che stava sotto */
+  var ramo = [];
+
+  function apriRamo(liv, id){
+    if(ramo[liv] === id){ ramo.length = liv; }        /* si tocca di nuovo: si richiude */
+    else { ramo.length = liv; ramo[liv] = id; }       /* si apre, e chiude i fratelli */
+  }
+
+  /* il chevron sta dentro il tasto, ma \u00E8 un bersaglio a s\u00E9 */
+  function sulChevron(e){
+    return !!(e.target && e.target.closest && e.target.closest(".chev"));
+  }
 
   function disegnaBarra(){
     var c=$("voci"); c.innerHTML="";
     BARRA.forEach(function(v){
+      var rami = v.sotto || v.ancore;
       var b=document.createElement("button");
-      b.className="voce"+(v.id===vista?" on":"");
-      b.innerHTML='<span class="tt"><b></b></span>';
+      b.className="voce"+(v.id===vista?" on":"")+((rami&&ramo[0]===v.id)?" aperta":"");
+      /* la colonna del simbolo c'\u00E8 sempre: vuota finch\u00E9 il segno non arriva */
+      b.innerHTML = '<span class="sg">'+(v.el ? sg(v.el) : '')+'</span>'
+                  + '<span class="tt"><b></b></span>'
+                  + (rami ? '<span class="chev">\u203A</span>' : '');
+      /* il colore dell'elemento entra nel simbolo, mai nel bordo: quello resta l'oro.
+         Gli altri segni non hanno un colore proprio e restano a currentColor */
+      if(v.el && ELEMENTI.indexOf(v.el) >= 0){
+        b.querySelector(".sg").style.color = "var(--"+v.el+")";
+      }
       var t=b.querySelector(".tt");
-      t.querySelector("b").textContent = v.n + ((v.sotto||v.ancore) ? "  \u203A" : "");
+      t.querySelector("b").textContent = v.n;
       if(v.s){ var sm=document.createElement("small"); sm.textContent=v.s; t.appendChild(sm); }
-      b.addEventListener("click", function(){
-        if(v.ancore){
-          apertoRamo = (apertoRamo===v.id) ? null : v.id;
-          disegnaBarra();
-          if(vista!=="spazio") vai("spazio");
-          return;
-        }
-        if(v.sotto){
-          apertoRamo = (apertoRamo===v.id) ? null : v.id;
-          disegnaBarra();
-          if(vista!=="incontro") vai("incontro");
-          return;
-        }
-        apertoRamo=null; vai(v.id);
+      b.addEventListener("click", function(e){
+        if(rami && sulChevron(e)){ apriRamo(0, v.id); disegnaBarra(); return; }
+        vai(v.id);
       });
       c.appendChild(b);
 
       /* i tre affacci della home: portano al blocco, non a un'altra pagina */
-      if(v.ancore && apertoRamo===v.id){
+      if(v.ancore && ramo[0]===v.id){
         var da=document.createElement("div"); da.className="sotto-voci";
         v.ancore.forEach(function(x){
           var ab=document.createElement("button");
           ab.className="sotto-voce";
           ab.style.setProperty("--sc","var(--oro-ch)");
-          ab.innerHTML='<b></b><i></i>';
+          ab.innerHTML='<span class="tt"><b></b><i></i></span>';
           ab.querySelector("b").textContent=x.n;
           ab.querySelector("i").textContent=x.v;
           ab.addEventListener("click", function(e){
@@ -1236,22 +1281,34 @@ var SIMBOLI = {
         c.appendChild(da);
       }
 
-      if(v.sotto && apertoRamo===v.id){
-        var d=document.createElement("div"); d.className="sotto-voci";
-        v.sotto.forEach(function(x){
-          var sb=document.createElement("button");
-          sb.className="sotto-voce";
-          sb.style.setProperty("--sc","var(--"+x.el+")");
-          sb.innerHTML='<b></b><i></i>';
-          sb.querySelector("b").textContent=x.n;
-          sb.querySelector("i").textContent=x.v.join(" · ");
-          sb.addEventListener("click", function(e){ e.stopPropagation(); vai("incontro", x.id); });
-          d.appendChild(sb);
-        });
-        c.appendChild(d);
-      }
+      if(v.sotto && ramo[0]===v.id){ c.appendChild(disegnaRamo(v.sotto, 1)); }
     });
   }
+
+  /* un livello del ramo. Si richiama da sé per quelli più sotto:
+     il rientro lo dà il CSS, 1.6rem a ogni giro */
+  function disegnaRamo(voci, liv){
+    var d=document.createElement("div"); d.className="sotto-voci";
+    voci.forEach(function(x){
+      var suoi = x.sotto;
+      var sb=document.createElement("button");
+      sb.className="sotto-voce"+((suoi&&ramo[liv]===x.id)?" aperta":"");
+      sb.style.setProperty("--sc","var(--"+x.el+")");
+      sb.innerHTML='<span class="tt"><b></b>'+(x.s?'<i></i>':'')+'</span>'
+                 + (suoi ? '<span class="chev">›</span>' : '');
+      sb.querySelector("b").textContent=x.n;
+      if(x.s){ sb.querySelector("i").textContent=x.s; }
+      sb.addEventListener("click", function(e){
+        e.stopPropagation();
+        if(suoi && sulChevron(e)){ apriRamo(liv, x.id); disegnaBarra(); return; }
+        vai("incontro", x.va || x.id);
+      });
+      d.appendChild(sb);
+      if(suoi && ramo[liv]===x.id){ d.appendChild(disegnaRamo(x.sotto, liv+1)); }
+    });
+    return d;
+  }
+
 
   /* porta al blocco della home, o apre la mappa a tutto schermo */
   function vaiAlBlocco(quale){
