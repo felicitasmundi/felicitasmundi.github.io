@@ -86,9 +86,13 @@
     color:rgba(245,240,230,0.86);font-family:'DM Sans',sans-serif;
     font-size:var(--t-tas);line-height:1.3}
   /* la colonna del segno la tengono tutte, anche dove il segno non c'è:
-     così i nomi restano allineati livello per livello */
-  .sotto-voce .sg{width:1.2rem;height:1.2rem;flex:0 0 auto;margin-top:0.15rem;opacity:0.85}
-  .sotto-voce .sg svg{width:100%;height:100%;display:block}
+     così i nomi restano allineati livello per livello.
+     Il segno sta a piena opacità, e qui — solo qui — il tratto va a 2:
+     a 1.2rem su un disegno di 40 il tratto di 1.4 cade sotto il pixel.
+     Il disegno in SIMBOLI resta intatto: sulla mappa, in legenda e nelle
+     porte il tratto è quello di sempre */
+  .sotto-voce .sg{width:1.2rem;height:1.2rem;flex:0 0 auto;margin-top:0.15rem}
+  .sotto-voce .sg svg{width:100%;height:100%;display:block;stroke-width:2}
   .sotto-voce .tt{flex:1 1 auto;min-width:0}
   .sotto-voce b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-tas);
     font-weight:400;color:inherit;line-height:1.3}
