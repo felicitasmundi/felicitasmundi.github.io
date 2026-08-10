@@ -15,6 +15,8 @@
   #cmd button{background:rgba(10,12,26,0.9);border:1px solid rgba(200,160,85,0.5);color:#F5F0E6;
     border-radius:999px;padding:0.5rem 0.9rem;font-size:0.95rem;cursor:pointer;line-height:1}
   #cmd button:hover{border-color:#D4AF6A;color:#D4AF6A}
+  body:not(.vivo) #cmd button[data-z="italia"],
+  body:not(.vivo) #cmd button[data-z="mondo"]{display:none}
 </style>
 </head>
 <body>
@@ -62,7 +64,7 @@ function disegna(){
   W = document.documentElement.clientWidth;
   H = document.documentElement.clientHeight;
   svg.attr("viewBox", "0 0 " + W + " " + H).selectAll("*").remove();
-  if(VIVO){ document.documentElement.style.background = "#0A0C1A"; }
+  if(VIVO){ document.documentElement.style.background = "#0A0C1A"; document.body.classList.add("vivo"); }
 
   var proj = d3.geoNaturalEarth1().fitExtent([[W*0.04, H*0.10],[W*0.96, H*0.90]], {type:"Sphere"});
   var path = d3.geoPath(proj);
@@ -138,9 +140,8 @@ function posaSegni(t){
 }
 
 function attaccaZoom(g){
-  if(!VIVO) return;
   document.getElementById("cmd").classList.add("on");
-  zoom = d3.zoom().scaleExtent([1,24]).on("zoom", function(ev){
+  zoom = d3.zoom().scaleExtent([1,24]).filter(function(){ return VIVO; }).on("zoom", function(ev){
     g.attr("transform", ev.transform);
     posaSegni(ev.transform);
     if(bagliore) bagliore.attr("opacity", Math.max(0, 1 - (ev.transform.k - 1) / (K_SU - 1)));
@@ -166,6 +167,18 @@ document.getElementById("cmd").addEventListener("click", function(e){
 });
 
 window.addEventListener("resize", function(){ clearTimeout(window.__t); window.__t = setTimeout(disegna, 160); });
+
+window.addEventListener("message", function(ev){
+  if(ev.source !== window.parent) return;
+  if(!zoom) return;
+  var m = ev.data;
+  if(m === "piu")  { svg.call(zoom.scaleBy, 1.6); return; }
+  if(m === "meno") { svg.call(zoom.scaleBy, 1/1.6); return; }
+  if(m && m.q === "sposta"){
+    var t = d3.zoomTransform(svg.node());
+    svg.call(zoom.translateBy, m.dx / t.k, m.dy / t.k);
+  }
+});
 </script>
 </body>
 </html>
