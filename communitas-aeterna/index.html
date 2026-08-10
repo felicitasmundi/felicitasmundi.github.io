@@ -77,14 +77,18 @@
 
   /* le voci del ramo sono voci a sé: stesso carattere, stessa altezza di riga,
      stesso modo di accendersi. A distinguerle è il rientro, e basta quello:
-     nessuna linea a sinistra, nessun colore d'elemento. Il passo è 1.1rem,
-     e il primo livello parte da dove parte il nome della voce che lo porta */
-  .sotto-voci{padding:0 0 0.3rem 3.45rem}
+     nessuna linea a sinistra. Il passo è 1.1rem a ogni livello, e la colonna
+     del simbolo è quella delle voci di primo livello, spostata del rientro */
+  .sotto-voci{padding:0 0 0.3rem 1.6rem}
   .sotto-voci .sotto-voci{padding-left:1.1rem}
-  .sotto-voce{display:flex;align-items:flex-start;gap:0.4rem;width:100%;background:none;border:0;
+  .sotto-voce{display:flex;align-items:flex-start;gap:0.65rem;width:100%;background:none;border:0;
     text-align:left;cursor:pointer;padding:0.7rem;
     color:rgba(245,240,230,0.86);font-family:'DM Sans',sans-serif;
     font-size:var(--t-tas);line-height:1.3}
+  /* la colonna del segno la tengono tutte, anche dove il segno non c'è:
+     così i nomi restano allineati livello per livello */
+  .sotto-voce .sg{width:1.2rem;height:1.2rem;flex:0 0 auto;margin-top:0.15rem;opacity:0.85}
+  .sotto-voce .sg svg{width:100%;height:100%;display:block}
   .sotto-voce .tt{flex:1 1 auto;min-width:0}
   .sotto-voce b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-tas);
     font-weight:400;color:inherit;line-height:1.3}
@@ -1305,7 +1309,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         c.appendChild(da);
       }
 
-      if(v.sotto && ramo[0]===v.id){ c.appendChild(disegnaRamo(v.sotto)); }
+      if(v.sotto && ramo[0]===v.id){ c.appendChild(disegnaRamo(v.sotto, 1)); }
     });
   }
 
@@ -1314,12 +1318,17 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      Il rientro lo dà il CSS.
      La riga `s` resta nei dati — la scrive incontro() sotto le quattro porte —
      ma nella barra non compare: qui le parole sono le voci. */
-  function disegnaRamo(voci){
+  function disegnaRamo(voci, liv){
     var d=document.createElement("div"); d.className="sotto-voci";
     voci.forEach(function(x){
+      /* il segno lo portano le quattro sezioni, e nessun altro. È elementale,
+         quindi porta il colore dell'elemento */
+      var segno = (liv===1 && x.el && ELEMENTI.indexOf(x.el) >= 0);
       var sb=document.createElement("button");
       sb.className="sotto-voce"+(sottoVista===x.id?" on":"");
-      sb.innerHTML='<span class="tt"><b></b></span>';
+      sb.innerHTML='<span class="sg">'+(segno ? sg(x.el) : '')+'</span>'
+                 + '<span class="tt"><b></b></span>';
+      if(segno){ sb.querySelector(".sg").style.color = "var(--"+x.el+")"; }
       sb.querySelector("b").textContent=x.n;
       sb.addEventListener("click", function(e){
         e.stopPropagation();
@@ -1327,7 +1336,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         vai("incontro", x.va || x.id);
       });
       d.appendChild(sb);
-      if(x.sotto){ d.appendChild(disegnaRamo(x.sotto)); }
+      if(x.sotto){ d.appendChild(disegnaRamo(x.sotto, liv+1)); }
     });
     return d;
   }
