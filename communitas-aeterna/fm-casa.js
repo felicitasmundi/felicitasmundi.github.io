@@ -284,6 +284,7 @@ var CASA = `<style>
     <div style="height:1px;margin:2.2rem 10% 0;background:linear-gradient(to right,transparent,var(--oro),transparent)"></div>
     <div style="font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.6;margin-top:1.4rem">Felicitas Omnia S.r.l.s. · P.IVA 03075740906</div>
     <div style="font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.6">© 2026 · Tutti i diritti riservati</div>
+    <div class="fp-link"><a href="privacy.html">Informativa privacy</a><a href="cookie.html">Cookie</a><a href="condizioni.html">Condizioni d&rsquo;uso</a></div>
   </section>
 
 
