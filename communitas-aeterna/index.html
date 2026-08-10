@@ -31,7 +31,7 @@
     --t-tit: calc(1.5rem    * var(--scala));
     --t-big: calc(1.9rem    * var(--scala));
 
-    --barra:16rem;
+    --barra:16rem; --plancia:6.6rem;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{-webkit-text-size-adjust:100%}
@@ -88,7 +88,7 @@
     color:rgba(245,240,230,0.78)}
 
   /* ══ IL CENTRO ══ */
-  #centro{margin-left:var(--barra);padding:1.6rem 2.6rem 13rem}
+  #centro{margin-left:var(--barra);padding:calc(1.6rem + var(--plancia)) 2.6rem 13rem}
   #centro > *{max-width:56rem;margin-left:auto;margin-right:auto}
   .occhio{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
     text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.5rem}
@@ -273,6 +273,20 @@
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
   /* la scala: le ore del giorno, con l'indice sull'ora vera */
+  /* ── chiusa, in cima resta la riga in onda: le altre due fasce e la scala
+     si aprono con un tocco sulla striscia. Il palinsesto si disegna tutto
+     lo stesso: cambia solo cosa si vede. ── */
+  #blocco-radio:not(.aperta) #r-palinsesto .r-fascia:not(.ora){display:none}
+  #blocco-radio:not(.aperta) #r-scala{display:none}
+  /* e da chiusa la fascia in onda sta su una riga: il nome accanto all'ora,
+     la descrizione di fianco e troncata. Aperta torna su due righe. */
+  #blocco-radio:not(.aperta) .r-fascia.ora{align-items:baseline}
+  #blocco-radio:not(.aperta) .r-fascia.ora .r-t{display:flex;gap:0.6rem;align-items:baseline}
+  #blocco-radio:not(.aperta) .r-fascia.ora .r-t b{flex:0 0 auto}
+  #blocco-radio:not(.aperta) .r-fascia.ora .r-t i{flex:1 1 auto;min-width:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .r-striscia{cursor:pointer}
+
   .r-scala{position:relative;height:1.15rem;margin:0 0.6rem 0.5rem;
     border-top:1px solid rgba(2,4,12,0.7);
     box-shadow:inset 0 1px 0 rgba(245,240,230,0.07);
@@ -696,18 +710,6 @@
     text-align:center;pointer-events:none;box-shadow:0 0 0 0.12rem var(--scafo)}
   .s-conta[hidden]{display:none}
 
-  /* ══ IL MARGINE DESTRO — il canto ══ */
-  .canto{position:fixed;top:0.9rem;right:1rem;z-index:70;display:flex;gap:0.6rem;
-    align-items:center;max-width:min(22rem,52vw)}
-  .canto .tondo{flex:0 0 auto;display:flex;align-items:center;justify-content:center}
-  .canto .tondo svg{width:1.1rem;height:1.1rem;fill:currentColor}
-  .canto-tx{min-width:0;text-align:right}
-  .canto-tx b{display:block;font-family:'Cinzel',serif;font-weight:500;
-    font-size:var(--t-eti);color:var(--oro-ch);line-height:1.2;letter-spacing:0.05em}
-  .canto-tx small{display:block;font-family:'Cormorant Garamond',serif;
-    font-size:var(--t-eti);color:rgba(245,240,230,0.84);line-height:1.3;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  @media(max-width:44rem){ .canto-tx{display:none} }
   .tondo{background:none;border:1px solid rgba(200,160,85,0.55);color:var(--oro-ch);
     border-radius:50%;width:2.5rem;height:2.5rem;font-size:var(--t-tas);cursor:pointer;
     display:flex;align-items:center;justify-content:center;flex:0 0 auto;transition:background .2s}
@@ -715,6 +717,11 @@
 
   /* ══ IL MEGAFONO ══ */
   #mg{position:fixed;left:var(--barra);right:0;bottom:0;z-index:65}
+  /* la plancia: ancorata in alto, speculare al Megafono.
+     Sta ferma mentre il centro scorre — 18.71, la radio in cima. */
+  #pl{position:fixed;left:var(--barra);right:0;top:0;z-index:65;
+    background:var(--scafo);padding:0.55rem 2.6rem 0.6rem}
+  #pl > *{max-width:56rem;margin:0 auto}
   /* ── dove lo porti: un foglio che sale, con tutto dentro ── */
   .vele{max-height:0;overflow:hidden;transition:max-height .3s ease;
     background:var(--scafo);border-top:1px solid var(--line)}
@@ -826,22 +833,16 @@
     #apri-barra{display:block}
     #barra{transform:translateX(-100%);transition:transform .28s ease;width:17rem}
     body.barra-aperta #barra{transform:none;box-shadow:0 0 3rem rgba(0,0,0,.6)}
-    #centro{margin-left:0;padding-left:1.1rem;padding-right:1.1rem;padding-top:4.2rem}
+    #centro{margin-left:0;padding-left:1.1rem;padding-right:1.1rem;
+      padding-top:calc(4.2rem + var(--plancia))}
     #mg{left:0}
+    #pl{left:0;padding-left:1.1rem;padding-right:1.1rem}
   }
 </style>
 </head>
 <body>
 
 <button id="apri-barra" aria-label="Il menu">&#9776;</button>
-
-<div class="canto">
-  <button class="tondo" id="play" title="Ascolta">
-    <svg id="p-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-    <svg id="p-pausa" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6z M14 5h4v14h-4z"/></svg>
-  </button>
-  <div class="canto-tx"><b>Come natura crea fm</b><small id="canto-brano">&nbsp;</small></div>
-</div>
 
 <audio id="au" preload="none"></audio>
 
@@ -857,6 +858,24 @@
     <span><span id="acc-nome">[ nome ]</span><small id="acc-grado">&nbsp;</small></span>
   </button>
 </nav>
+
+<!-- ══ LA PLANCIA — la radio, ferma in alto ══ -->
+<div id="pl">
+  <div class="radio" id="blocco-radio">
+    <div class="r-striscia">
+      <button class="r-play" id="b-play" title="Ascolta">
+        <svg id="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="ic-pausa" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6z M14 5h4v14h-4z"/></svg>
+      </button>
+      <div class="r-freq">
+        <div class="r-nome">Come natura crea <b>fm</b></div>
+        <div class="r-brano" id="r-brano">&nbsp;</div>
+      </div>
+      <div class="r-palinsesto" id="r-palinsesto"></div>
+    </div>
+    <div class="r-scala" id="r-scala"><span class="r-tacche"></span><span class="r-indice"></span></div>
+  </div>
+</div>
 
 <!-- ══ IL CENTRO ══ -->
 <main id="centro"></main>
@@ -1005,6 +1024,7 @@
 <script src="fm-edizione.js"></script>
 <script src="fm-consolle.js"></script>
 <script src="fm-account.js"></script>
+<script src="fm-casa.js"></script>
 <script>
 "use strict";
 
@@ -1296,8 +1316,6 @@ var SIMBOLI = {
       b.appendChild(document.createTextNode(testo || "\u00a0"));
       if(coda){ var sp=document.createElement("span"); sp.textContent=coda; b.appendChild(sp); }
     }
-    var c = $("canto-brano");
-    if(c) c.textContent = testo ? (testo + coda) : "\u00a0";
   }
 
   /* chiede alla radio cosa sta suonando */
@@ -1394,45 +1412,6 @@ var SIMBOLI = {
     return d.toLocaleDateString("it-IT", {day:"numeric", month:"long", year:"numeric"});
   }
 
-  function quelloCheAccade(){
-    var box = $("ora-righe"); if(!box) return;
-    db.from("orme")
-      .select("contenuto,tipo,destinazione,momento,accaduto_il,vicinato_id")
-      .eq("visibilita","pubblico")
-      .order("momento", {ascending:false}).limit(5)
-      .then(function(r){
-        var righe = (r && r.data) || [];
-        if(!righe.length){
-          box.innerHTML = '<p class="ora-vuoto">Ancora nessuna orma condivisa. '
-            + 'La prima che qualcuno lascia comparir&agrave; qui.</p>';
-          return;
-        }
-        box.innerHTML = "";
-        righe.forEach(function(o){
-          var q = DOVE.filter(function(x){ return x.tipo === o.tipo; })[0];
-          var luogo = "";
-          if(o.vicinato_id){
-            var v = luoghi.filter(function(x){ return x.id === o.vicinato_id; })[0];
-            if(v) luogo = v.nome;
-          }
-          var d = document.createElement("div");
-          d.className = "ora-r";
-          d.style.setProperty("--rc", q ? "var("+q.c+")" : "var(--oro)");
-          d.innerHTML = '<span class="or-sg"></span>'
-                      + '<span class="or-tx"><b></b><i></i></span>';
-          d.querySelector(".or-sg").innerHTML = q ? bollo(q) : "";
-          d.querySelector("b").textContent = o.contenuto.slice(0,120)
-                                           + (o.contenuto.length>120 ? "\u2026" : "");
-          var quando = quandoTx(o.accaduto_il ? o.accaduto_il+"T12:00:00" : o.momento);
-          d.querySelector("i").textContent =
-            (q ? q.n : "") + (luogo ? " \u00b7 " + luogo : "") + " \u00b7 " + quando;
-          box.appendChild(d);
-        });
-      })
-      .catch(function(){
-        box.innerHTML = '<p class="ora-vuoto">Le orme condivise compariranno qui.</p>';
-      });
-  }
 
   /* ── il palinsesto: nove fasce, dal Cruscotto ── */
   var FASCE = [
@@ -1560,146 +1539,8 @@ var SIMBOLI = {
     }
   ];
 
-  /* ── la home: la struttura del disegno a mano del 29 luglio ── */
-  var PIEDE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">'
-    + '<path d="M9.5 21c-2 0-3-1.3-3-3 0-1.6.9-2.6.9-4.3 0-1.4-.6-2.2-.6-3.7C6.8 6.6 8.7 3 11.6 3c2.4 0 3.6 2 3.6 4.6 0 2.4-1.1 3.7-1.1 5.6 0 1.6.8 2.5.8 4.1 0 2.2-1.6 3.7-5.4 3.7z"/>'
-    + '<circle cx="17.2" cy="7.4" r="1.5"/><circle cx="18.6" cy="11.2" r="1.3"/>'
-    + '<circle cx="18.4" cy="15" r="1.1"/></svg>';
-
-  function home(c){
-    c.innerHTML =
-    /* ① il Nexus, il titolo, la frase-cappello */
-      '<div class="apertura">'
-    +   '<div class="ap-testo">'
-    +     '<img class="t-marchio" src="'+MARCHIO_IMG+'" alt="FelicitasMundi">'
-    +     '<div class="t-sotto">Comunit&agrave; Eterna</div>'
-    +   '</div>'
-    + '</div>'
-
-    /* ② LA MAPPA — in alto */
-    + '<h2 id="blocco-mappa" style="margin-top:1.4rem">Collega le tue orme</h2>'
-    + '<div class="mappa-box" id="mappa-box">'
-    +   '<iframe src="mappa-ferma.html" title="Collega le tue orme" loading="lazy"></iframe>'
-    +   '<div class="mappa-velo" id="mappa-velo"><span>Esplora</span></div>'
-    + '</div>'
-
-    /* ③ COSA INCONTRI — sotto la mappa */
-    + '<h2 id="blocco-incontri" style="margin-top:1.8rem">COSA INCONTRI</h2>'
-
-    /* la legenda: sotto la mappa, e dice cosa si può portare */
-    + '<div class="leg">'
-    +   '<div class="leg-tit">Legenda</div>'
-    +   '<p class="leg-cap"><b>Orme</b> — le impronte: il percorso di chi cammina '
-    +     'verso i propri obiettivi, e verso il filo della propria esistenza.</p>'
-    +   '<div class="leg-voci">'
-    +     '<div class="leg-v"><span class="leg-sg">\u25CF</span>'
-    +       '<b>L\u2019orma nel proprio luogo</b>'
-    +       '<i>si segna dove si &egrave;, anche dove nessun vicinato esiste ancora</i></div>'
-    +     '<div class="leg-v"><span class="leg-sg">\u25CF\u2500\u25CF</span>'
-    +       '<b>La connessione con un\u2019altra persona</b>'
-    +       '<i>il filo che lega due cammini</i></div>'
-    +     '<div class="leg-v"><span class="leg-sg">\u25AC</span>'
-    +       '<b>Gli scambi</b>'
-    +       '<i>quello che passa davvero fra le persone \u2014 e la foto che lo prova</i></div>'
-    +     '<div class="leg-v"><span class="leg-sg">\u2B24</span>'
-    +       '<b>L\u2019attivazione del vicinato</b>'
-    +       '<i>tre persone e un luogo</i></div>'
-    +     '<div class="leg-v"><span class="leg-sg">\u2733</span>'
-    +       '<b>Feste, formazioni, trattamenti, esperienze</b>'
-    +       '<i>il ritmo che il vicinato si d&agrave;</i></div>'
-    +     '<div class="leg-v"><span class="leg-sg">\u2550</span>'
-    +       '<b>Gli incontri fra vicinati</b>'
-    +       '<i>i luoghi che si toccano</i></div>'
-    +     '<div class="leg-v"><span class="leg-sg">\u2739</span>'
-    +       '<b>L\u2019apertura di un tempio</b>'
-    +       '<i>la casa \u2014 un fuoco per ognuno</i></div>'
-    +   '</div>'
-    +   '<p class="leg-coda">Le vie percorse spesso diventano spesse: lo spessore &egrave; il tempo.</p>'
-    + '</div>'
-
-    /* quello che sta accadendo: le orme vere, appena lasciate */
-    + '<div class="ora" id="ora">'
-    +   '<div class="ora-tit">Quello che sta accadendo</div>'
-    +   '<div class="ora-righe" id="ora-righe"><p class="vuoto">Un momento…</p></div>'
-    + '</div>'
-
-    /* ④ LA RADIO */
-    + '<div class="radio" id="blocco-radio">'
-    +   '<div class="r-striscia">'
-    +     '<button class="r-play" id="b-play" title="Ascolta">'
-    +       '<svg id="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
-    +       '<svg id="ic-pausa" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6z M14 5h4v14h-4z"/></svg>'
-    +     '</button>'
-    +     '<div class="r-freq">'
-    +       '<div class="r-nome">Come natura crea <b>fm</b></div>'
-    +       '<div class="r-brano" id="r-brano">&nbsp;</div>'
-    +     '</div>'
-    +     '<div class="r-palinsesto" id="r-palinsesto"></div>'
-    +   '</div>'
-    +   '<div class="r-scala" id="r-scala"><span class="r-tacche"></span><span class="r-indice"></span></div>'
-    + '</div>'
-
-    /* ⑤ le domande dei nuovi arrivati */
-    + '<h2 style="margin-top:1.8rem">Le domande dei nuovi arrivati</h2>'
-    + '<div id="domande"></div>'
-
-    /* ⑥ in fondo */
-    + '<div class="fm-piede">'
-    +   '<div class="fp-marchio">FelicitasMundi &middot; Comunit&agrave; Eterna</div>'
-    +   '<div class="fp-riga">Felicitas Omnia S.r.l.s. &middot; P.IVA 03075740906</div>'
-    +   '<div class="fp-riga">&copy; 2026 &middot; Tutti i diritti riservati</div>'
-    +   '<div class="fp-link">'
-    +     '<a href="privacy.html">Informativa privacy</a>'
-    +     '<a href="cookie.html">Cookie</a>'
-    +     '<a href="condizioni.html">Condizioni d\u2019uso</a>'
-    +   '</div>'
-    + '</div>';
-
-    var mv = $("mappa-velo");
-    if(mv) mv.addEventListener("click", function(){
-      var f = $("mappa-piena-f");
-      if(!f.getAttribute("src")) f.setAttribute("src","mappa-ferma.html?vivo=1");
-      $("mappa-piena").classList.add("on");
-      document.body.style.overflow = "hidden";
-    });
 
 
-    disegnaDomande();
-    quelloCheAccade();
-    radio();
-    disegnaPalinsesto();
-    setInterval(disegnaPalinsesto, 60000);
-    scalaOra();
-    setInterval(scalaOra, 60000);
-    contaOrme();
-  }
-
-  /* le sette domande, ripiegate: si apre una per volta */
-  function disegnaDomande(){
-    var box=$("domande"); if(!box) return;
-    box.innerHTML="";
-    DOMANDE.forEach(function(d){
-      var r=document.createElement("div"); r.className="dom-riga";
-      var t=document.createElement("button"); t.className="dom";
-      t.innerHTML='<span class="fre">\u203A</span><span></span>';
-      t.querySelector("span:last-child").textContent=d.d;
-      var risp=document.createElement("div"); risp.className="risp";
-      var dentro=document.createElement("div"); dentro.className="dentro-r";
-      d.r.forEach(function(par){
-        var p=document.createElement("p"); p.textContent=par; dentro.appendChild(p);
-      });
-      risp.appendChild(dentro);
-      r.appendChild(t); r.appendChild(risp);
-      t.addEventListener("click", function(){
-        var era=r.classList.contains("aperta");
-        box.querySelectorAll(".dom-riga").forEach(function(o){
-          o.classList.remove("aperta"); o.querySelector(".risp").style.maxHeight=null;
-        });
-        if(!era){ r.classList.add("aperta"); risp.style.maxHeight=risp.scrollHeight+"px"; }
-      });
-      box.appendChild(r);
-    });
-  }
 
   /* ── la scala: l'indice sull'ora vera (solo veste, nessun dato inventato) ── */
   function scalaOra(){
@@ -1715,9 +1556,9 @@ var SIMBOLI = {
 
   function segniRadio(on){
     auOn = on;
-    ["p-play","ic-play"].forEach(function(k){ var e=$(k); if(e) e.style.display = on ? "none" : ""; });
-    ["p-pausa","ic-pausa"].forEach(function(k){ var e=$(k); if(e) e.style.display = on ? "" : "none"; });
-    var t=$("play"); if(t) t.title = on ? "Pausa" : "Ascolta";
+    var e;
+    e=$("ic-play");  if(e) e.style.display = on ? "none" : "";
+    e=$("ic-pausa"); if(e) e.style.display = on ? "" : "none";
     var b=$("b-play"); if(b) b.title = on ? "Pausa" : "Ascolta";
   }
 
@@ -1758,6 +1599,15 @@ var SIMBOLI = {
     b.addEventListener("click", accendiSpegni);
     segniRadio(auOn);
     scriviBrano(null, null, true);
+
+    /* un tocco sulla striscia apre il palinsesto e la scala, un altro li
+       richiude. Il tasto Ascolta resta un gesto suo. */
+    var s = document.querySelector("#blocco-radio .r-striscia");
+    if(s) s.addEventListener("click", function(e){
+      if(e.target.closest("#b-play")) return;
+      $("blocco-radio").classList.toggle("aperta");
+      misuraPlancia();
+    });
   }
 
   /* ── le mie orme ── */
@@ -2241,6 +2091,15 @@ var SIMBOLI = {
     p.classList.remove("on");
     document.body.style.overflow = "";
   }
+  /* ── aprire la mappa a tutto schermo: un punto solo, e la casa lo chiama ── */
+  function apriMappa(){
+    var f = $("mappa-piena-f"); if(!f) return;
+    if(!f.getAttribute("src")) f.setAttribute("src","mappa-ferma.html?vivo=1");
+    $("mappa-piena").classList.add("on");
+    document.body.style.overflow = "hidden";
+  }
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.apriMappa = apriMappa;
   $("mappa-chiudi").addEventListener("click", chiudiMappa);
   window.addEventListener("message", function(e){
     if(e && e.data === "fm-chiudi-mappa") chiudiMappa();
@@ -2299,6 +2158,24 @@ var SIMBOLI = {
 
   /* la radio si accende per tutti, anche da ospite: è lo strato che c'è sempre */
   radioMotore();
+
+  /* la plancia non è più della home: si accende all'avvio e resta accesa
+     da qualunque stanza, senza ricaricarsi quando si cambia vista */
+  radio();
+  disegnaPalinsesto();
+  setInterval(disegnaPalinsesto, 60000);
+  scalaOra();
+  setInterval(scalaOra, 60000);
+
+  /* il centro non si tocca: la plancia dichiara quanto spazio prende, e il
+     centro glielo lascia. Il palinsesto cambia righe, quindi si rimisura. */
+  function misuraPlancia(){
+    var p = $("pl"); if(!p) return;
+    document.documentElement.style.setProperty("--plancia", p.offsetHeight + "px");
+  }
+  misuraPlancia();
+  window.addEventListener("resize", misuraPlancia);
+  if(window.ResizeObserver) new ResizeObserver(misuraPlancia).observe($("pl"));
 
   db.auth.getSession().then(function(r){
     var sess = r && r.data && r.data.session;
