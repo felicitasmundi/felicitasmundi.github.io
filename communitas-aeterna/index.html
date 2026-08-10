@@ -75,19 +75,21 @@
   .chev:hover{opacity:1}
   .aperta > .chev{transform:rotate(90deg);opacity:1}
 
-  /* il passo del rientro è 1.6rem, uguale a ogni livello */
-  .sotto-voci{padding:0.1rem 0 0.4rem 2.6rem}
-  .sotto-voci .sotto-voci{padding-left:1.6rem}
+  /* le voci del ramo sono voci a sé: stesso carattere, stessa altezza di riga,
+     stesso modo di accendersi. A distinguerle è il rientro, e basta quello:
+     nessuna linea a sinistra, nessun colore d'elemento. Il passo è 1.1rem,
+     e il primo livello parte da dove parte il nome della voce che lo porta */
+  .sotto-voci{padding:0 0 0.3rem 3.45rem}
+  .sotto-voci .sotto-voci{padding-left:1.1rem}
   .sotto-voce{display:flex;align-items:flex-start;gap:0.4rem;width:100%;background:none;border:0;
-    text-align:left;cursor:pointer;
-    padding:0.4rem 0.6rem 0.45rem;border-left:0.15rem solid var(--sc,var(--line));
-    margin-bottom:0.25rem}
+    text-align:left;cursor:pointer;padding:0.7rem;
+    color:rgba(245,240,230,0.86);font-family:'DM Sans',sans-serif;
+    font-size:var(--t-tas);line-height:1.3}
   .sotto-voce .tt{flex:1 1 auto;min-width:0}
-  .sotto-voce b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
-    font-weight:500;color:rgba(245,240,230,0.92)}
-  .sotto-voce i{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
-    font-style:italic;color:rgba(245,240,230,0.78);line-height:1.35;margin-top:0.1rem}
-  .sotto-voce:hover b{color:var(--ivory)}
+  .sotto-voce b{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-tas);
+    font-weight:400;color:inherit;line-height:1.3}
+  .sotto-voce:hover{background:rgba(245,240,230,0.04);color:var(--ivory)}
+  .sotto-voce.on{background:rgba(200,160,85,0.1);color:var(--ivory)}
 
   /* l'account, piantato in fondo */
   #acc-tasto{margin-top:auto;display:flex;align-items:center;gap:0.6rem;width:100%;
@@ -1066,6 +1068,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
 
   var io=null, permessi=[], scelta=null, nomi={}, vista="spazio", stanza="sviluppo";
+  /* quale voce del ramo è accesa: `sottoRichiesta` la porta dentro a vai() */
+  var sottoVista=null, sottoRichiesta=null;
   var cerca=false, veleSu=false, canale=null;
 
   function $(id){ return document.getElementById(id); }
@@ -1106,9 +1110,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         {id:"vic-calendario",     n:"calendario",     el:"terra", va:"vicinati"},
         {id:"vic-autosufficienza",n:"autosufficienza",el:"terra", va:"vicinati"}
       ]},
-      {id:"emporio",   n:"Emporio",    el:"acqua", s:"dono e scambio, vendita", apriGia:"emp-vendita", sotto:[
-        {id:"emp-dono",    n:"Dono e scambio", el:"acqua", va:"emporio"},
-        {id:"emp-vendita", n:"Vendita",        el:"acqua", va:"emporio", sotto:[
+      {id:"emporio",   n:"Emporio",    el:"acqua", s:"dono e scambio, vendita", sotto:[
+        {id:"emp-dono",    n:"dono e scambio", el:"acqua", va:"emporio"},
+        {id:"emp-vendita", n:"vendita",        el:"acqua", va:"emporio", sotto:[
           {id:"sc-abbigliamento", n:"abbigliamento",             el:"acqua", va:"emporio"},
           {id:"sc-accessori",     n:"accessori",                 el:"acqua", va:"emporio"},
           {id:"sc-alimenti",      n:"alimenti",                  el:"acqua", va:"emporio"},
@@ -1239,15 +1243,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var ramo = [];
 
   /* il nome apre e non richiude: apre questo ramo e chiude i fratelli.
-     Se il ramo ne porta già aperto uno sotto, con `apriGia`, si scende */
+     Vale per il primo livello: sotto, il ramo è sempre aperto */
   function apriRamo(liv, x){
     ramo.length = liv; ramo[liv] = x.id;
-    var n = x, l = liv;
-    while(n.apriGia){
-      var g = (n.sotto || []).filter(function(y){ return y.id === n.apriGia; })[0];
-      if(!g) break;
-      l++; ramo[l] = g.id; n = g;
-    }
   }
 
   /* il chevron scatta: se il ramo è aperto lo richiude, se è chiuso lo apre */
@@ -1307,34 +1305,29 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         c.appendChild(da);
       }
 
-      if(v.sotto && ramo[0]===v.id){ c.appendChild(disegnaRamo(v.sotto, 1)); }
+      if(v.sotto && ramo[0]===v.id){ c.appendChild(disegnaRamo(v.sotto)); }
     });
   }
 
-  /* un livello del ramo. Si richiama da sé per quelli più sotto:
-     il rientro lo dà il CSS, 1.6rem a ogni giro */
-  function disegnaRamo(voci, liv){
+  /* un livello del ramo. Si richiama da sé per quelli più sotto: i figli si
+     disegnano sempre, non c'è niente da aprire e quindi niente chevron.
+     Il rientro lo dà il CSS.
+     La riga `s` resta nei dati — la scrive incontro() sotto le quattro porte —
+     ma nella barra non compare: qui le parole sono le voci. */
+  function disegnaRamo(voci){
     var d=document.createElement("div"); d.className="sotto-voci";
     voci.forEach(function(x){
-      var suoi = x.sotto;
       var sb=document.createElement("button");
-      sb.className="sotto-voce"+((suoi&&ramo[liv]===x.id)?" aperta":"");
-      sb.style.setProperty("--sc","var(--"+x.el+")");
-      /* una voce che ha un ramo non porta riga: le sue parole sono il ramo.
-         `s` resta nei dati perché incontro() la scrive sotto le quattro porte */
-      var riga = x.s && !suoi;
-      sb.innerHTML='<span class="tt"><b></b>'+(riga?'<i></i>':'')+'</span>'
-                 + (suoi ? '<span class="chev">›</span>' : '');
+      sb.className="sotto-voce"+(sottoVista===x.id?" on":"");
+      sb.innerHTML='<span class="tt"><b></b></span>';
       sb.querySelector("b").textContent=x.n;
-      if(riga){ sb.querySelector("i").textContent=x.s; }
       sb.addEventListener("click", function(e){
         e.stopPropagation();
-        if(suoi && sulChevron(e)){ scattaRamo(liv, x); disegnaBarra(); return; }
-        if(suoi){ apriRamo(liv, x); }   /* il nome porta alla stanza e apre il ramo */
+        sottoRichiesta = x.id;          /* si accende la voce toccata */
         vai("incontro", x.va || x.id);
       });
       d.appendChild(sb);
-      if(suoi && ramo[liv]===x.id){ d.appendChild(disegnaRamo(x.sotto, liv+1)); }
+      if(x.sotto){ d.appendChild(disegnaRamo(x.sotto)); }
     });
     return d;
   }
@@ -1353,7 +1346,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
 
   function vai(id, sub){
-    vista=id; disegnaBarra();
+    vista=id;
+    sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
+    disegnaBarra();
     document.body.classList.remove("barra-aperta");
     var c=$("centro"); c.innerHTML=""; window.scrollTo(0,0);
     if(id==="spazio")   home(c);
