@@ -63,9 +63,14 @@
   .voce small{display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
     color:rgba(245,240,230,0.78);margin-top:0.1rem;line-height:1.35}
   /* la colonna del simbolo: la tengono tutte le voci, anche quelle che il segno
-     non ce l'hanno ancora. Così i nomi restano allineati */
-  .voce .sg{width:1.2rem;height:1.2rem;flex:0 0 auto;margin-top:0.15rem;opacity:0.85}
-  .voce .sg svg{width:100%;height:100%;display:block}
+     non ce l'hanno ancora. Così i nomi restano allineati.
+     Il segno sta a piena opacità, e il tratto va a 2 — è la stessa cura già
+     scritta più sotto per le voci del ramo: a 1.2rem su un disegno di 40 il
+     tratto di 1.4 vale due terzi di punto e sul telefono sparisce.
+     Il disegno in SIMBOLI resta intatto: sulla mappa, in legenda e nelle
+     porte il tratto è quello di sempre */
+  .voce .sg{width:1.2rem;height:1.2rem;flex:0 0 auto;margin-top:0.15rem}
+  .voce .sg svg{width:100%;height:100%;display:block;stroke-width:2}
   .voce .tt{flex:1 1 auto;min-width:0}
 
   /* il chevron: bersaglio a sé, apre il ramo. Il nome, accanto, porta alla stanza */
@@ -853,14 +858,70 @@
   #apri-barra{display:none;position:fixed;top:0.9rem;left:1rem;z-index:71;
     background:rgba(6,9,22,0.85);border:1px solid rgba(200,160,85,0.5);color:var(--oro-ch);
     border-radius:0.6rem;width:2.5rem;height:2.5rem;font-size:var(--t-cor);cursor:pointer}
+
+  /* il tasto che apre la fascia intera della radio. Vive solo sul telefono:
+     sul PC la fascia è già tutta lì, e questo tasto non ha niente da aprire */
+  #r-apri{display:none;flex:0 0 auto;width:2.2rem;height:2.2rem;border-radius:0.3rem;
+    border:1px solid var(--line);background:linear-gradient(to bottom,rgba(245,240,230,0.1),rgba(2,4,12,0.4));
+    box-shadow:inset 0 1px 0 rgba(245,240,230,0.18),inset 0 -1px 0 rgba(2,4,12,0.7);
+    color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1;
+    cursor:pointer;align-items:center;justify-content:center;transition:transform .22s ease}
+  #r-apri:active{box-shadow:inset 0 2px 3px rgba(2,4,12,0.85)}
+
   @media(max-width:52rem){
-    #apri-barra{display:block}
-    #barra{transform:translateX(-100%);transition:transform .28s ease;width:17rem}
-    body.barra-aperta #barra{transform:none;box-shadow:0 0 3rem rgba(0,0,0,.6)}
+    /* ── il tasto della barra: ancorato in alto a sinistra, e sta fermo
+       mentre la pagina scorre. Sta dentro l'altezza della plancia, così il
+       play della radio gli si mette accanto invece che sotto ── */
+    #apri-barra{display:block;top:0.7rem}
+
+    /* ── la barra non è un pannello che scivola sopra la stanza: è una
+       schermata. Prende tutto lo schermo, ed è opaca ── */
+    #barra{transform:translateX(-100%);transition:transform .28s ease;
+      width:100%;z-index:70;background:var(--scafo);backdrop-filter:none;
+      border-right:0;padding-top:3.6rem}
+    body.barra-aperta #barra{transform:none}
+    /* con la barra aperta restano la barra e il suo tasto: nient'altro.
+       Il Megafono e la fascia della radio tornano quando si richiude */
+    body.barra-aperta #pl,
+    body.barra-aperta #mg{display:none}
+    body.barra-aperta{overflow:hidden}
+
     #centro{margin-left:0;padding-left:1.1rem;padding-right:1.1rem;
-      padding-top:calc(4.2rem + var(--plancia))}
+      padding-top:calc(1.2rem + var(--plancia))}
+
+    /* ⭐ il Megafono resta a tutta larghezza */
     #mg{left:0}
-    #pl{left:0;padding-left:1.1rem;padding-right:1.1rem}
+
+    /* ══ LA RADIO ANCORATA — resta il play piccolo, sempre visibile,
+       col nome del pezzo in onda. E accanto il tasto che apre il resto ══ */
+    #pl{left:0;padding:0.5rem 0.9rem 0.5rem 4rem;min-height:3.9rem;
+      display:flex;align-items:center}
+    #pl > *{width:100%}
+    .r-striscia{flex-wrap:nowrap;gap:0.6rem;padding:0.4rem 0.6rem}
+    .r-play{width:2.3rem;height:2.3rem}
+    .r-play svg{width:0.95rem;height:0.95rem}
+    .r-freq{flex:1 1 auto}
+    .r-nome{display:none}
+    #r-palinsesto{display:none}
+    #r-apri{display:flex}
+
+    /* ══ LA STESSA FASCIA, IN UNA FINESTRA SOPRA LA PAGINA ══
+       Non è un'altra fascia: è questa, e cambia solo il contenitore —
+       una finestra invece che il margine in cima ══ */
+    body.radio-aperta #pl{inset:0;z-index:92;display:block;overflow-y:auto;
+      padding:3.6rem 1.1rem calc(1.4rem + env(safe-area-inset-bottom));
+      background:rgba(10,12,26,0.86);min-height:0}
+    body.radio-aperta #pl > *{width:auto}
+    /* è una finestra, non un velo: sotto non si legge la stanza */
+    body.radio-aperta .radio{border-radius:0.9rem;background-color:var(--scafo)}
+    body.radio-aperta .r-striscia{flex-wrap:wrap;gap:0.9rem;padding:0.7rem 1rem 0.65rem}
+    body.radio-aperta .r-freq{flex:1 1 12rem;min-width:0}
+    body.radio-aperta .r-play{width:3rem;height:3rem}
+    body.radio-aperta .r-play svg{width:1.25rem;height:1.25rem}
+    body.radio-aperta .r-nome{display:block}
+    body.radio-aperta #r-palinsesto{display:flex}
+    body.radio-aperta #r-apri{transform:rotate(180deg)}
+    body.radio-aperta{overflow:hidden}
   }
 </style>
 </head>
@@ -895,6 +956,7 @@
         <div class="r-nome">Come natura crea <b>fm</b></div>
         <div class="r-brano" id="r-brano">&nbsp;</div>
       </div>
+      <button id="r-apri" aria-label="Il palinsesto e le ore">&#9662;</button>
       <div class="r-palinsesto" id="r-palinsesto"></div>
     </div>
     <div class="r-scala" id="r-scala"><span class="r-tacche"></span><span class="r-indice"></span></div>
@@ -1683,6 +1745,21 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     setInterval(cosaSuona, 15000);
   }
 
+  /* ── dove finisce il PC e comincia il telefono: un numero solo, e
+     combacia con la media query del foglio ── */
+  function telefono(){ return window.matchMedia("(max-width:52rem)").matches; }
+
+  /* sul telefono la fascia intera — palinsesto e scala delle ore — si mostra
+     in una finestra sopra la pagina. È la stessa fascia: `blocco-radio` non
+     si sposta e non si copia, cambia solo il contenitore. */
+  function apriFascia(su){
+    su = !!su;
+    document.body.classList.toggle("radio-aperta", su);
+    $("blocco-radio").classList.toggle("aperta", su);
+    if(!su) misuraPlancia();
+  }
+  function fasciaAperta(){ return document.body.classList.contains("radio-aperta"); }
+
   /* la striscia della home si aggancia allo stesso suono */
   function radio(){
     var b = $("b-play"); if(!b) return;
@@ -1691,12 +1768,33 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     scriviBrano(null, null, true);
 
     /* un tocco sulla striscia apre il palinsesto e la scala, un altro li
-       richiude. Il tasto Ascolta resta un gesto suo. */
+       richiude. Il tasto Ascolta resta un gesto suo.
+       Sul telefono quello stesso tocco apre la finestra. */
     var s = document.querySelector("#blocco-radio .r-striscia");
     if(s) s.addEventListener("click", function(e){
       if(e.target.closest("#b-play")) return;
+      if(e.target.closest("#r-apri")) return;   /* ha il gesto suo */
+      if(telefono()){ apriFascia(!fasciaAperta()); return; }
       $("blocco-radio").classList.toggle("aperta");
       misuraPlancia();
+    });
+
+    var a = $("r-apri");
+    if(a) a.addEventListener("click", function(e){
+      e.stopPropagation();
+      apriFascia(!fasciaAperta());
+    });
+
+    /* da finestra, il tocco fuori dalla fascia richiude */
+    var p = $("pl");
+    if(p) p.addEventListener("click", function(e){
+      if(fasciaAperta() && !e.target.closest(".radio")) apriFascia(false);
+    });
+
+    /* girando il telefono si può superare la soglia: la finestra non resta
+       accesa sul PC, dove la fascia è già tutta in vista */
+    window.addEventListener("resize", function(){
+      if(!telefono() && fasciaAperta()) apriFascia(false);
     });
   }
 
@@ -2213,13 +2311,19 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     v.addEventListener("click", function(e){ if(e.target===v) v.classList.remove("on"); });
   });
   $("apri-barra").addEventListener("click", function(){
+    /* una schermata alla volta: se la fascia della radio è una finestra,
+       si richiude prima che la barra prenda lo schermo */
+    if(fasciaAperta()) apriFascia(false);
     document.body.classList.toggle("barra-aperta");
+    misuraPlancia();
   });
   document.addEventListener("keydown", function(e){
     if(e.key!=="Escape") return;
     document.querySelectorAll(".velo.on").forEach(function(v){ v.classList.remove("on"); });
     $("vele").classList.remove("su"); veleSu=false;
+    if(fasciaAperta()) apriFascia(false);
     document.body.classList.remove("barra-aperta");
+    misuraPlancia();
   });
 
   /* ══ AVVIO ══ */
@@ -2259,8 +2363,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* il centro non si tocca: la plancia dichiara quanto spazio prende, e il
      centro glielo lascia. Il palinsesto cambia righe, quindi si rimisura. */
+  /* ⚠️ In due momenti l'altezza della plancia non dice più quanto spazio
+     prende il margine: con la barra aperta la plancia è nascosta e misura
+     zero, e da finestra è alta quanto lo schermo. In tutti e due i casi si
+     tiene l'ultima misura buona, altrimenti il centro salta. */
   function misuraPlancia(){
     var p = $("pl"); if(!p) return;
+    if(document.body.classList.contains("barra-aperta")) return;
+    if(document.body.classList.contains("radio-aperta")) return;
     document.documentElement.style.setProperty("--plancia", p.offsetHeight + "px");
   }
   misuraPlancia();
