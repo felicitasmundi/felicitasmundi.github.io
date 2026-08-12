@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D'amore, morte ed altre cazzate · Comunità Eterna FelicitasMundi</title>
+<meta name="description" content="Un commiato a Francesco Guccini. Testimonianza di Stefano Bentivera.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0A0C1A; --gold:#D4AF6A; --gold-d:#C8A055; --gold-soft:rgba(212,175,106,.16);
+    --ink:#F5F0E6; --ink2:rgba(240,235,224,0.62); --ink3:rgba(212,175,106,0.7);
+    --line:rgba(212,175,106,.20); --aria:#669944;
+    --card:rgba(18,14,9,0.78); --shadow:0 14px 40px rgba(0,0,0,.35);
+    --fm-card-bg:rgba(10,12,26,0.58); --fm-card-blur:blur(4px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{color:var(--ink);font-family:"Cormorant Garamond",Georgia,serif;line-height:1.7;
+    -webkit-font-smoothing:antialiased;background:var(--navy)}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;
+    background:radial-gradient(ellipse at 28% 22%,rgba(38,64,120,0.5),transparent 58%),
+               radial-gradient(ellipse at 76% 74%,rgba(60,44,110,0.4),transparent 60%),
+               radial-gradient(ellipse at 50% 42%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+
+  /* ① NEXUS */
+  .fm-nexus-btn{position:absolute;top:20px;left:20px;display:inline-flex;align-items:center;
+    gap:9px;text-decoration:none;color:var(--gold);font-family:"DM Sans",sans-serif;
+    font-size:.78rem;letter-spacing:.04em;z-index:5}
+  .fm-nexus-btn img{width:34px;height:34px}
+  .fm-nexus-lbl{opacity:.85}
+  @media(max-width:560px){.fm-nexus-lbl{display:none}}
+
+  /* ② TESTA */
+  #hero{position:relative;padding:76px 22px 40px;text-align:center}
+  .hin{max-width:44rem;margin:0 auto}
+  .eyebrow{font-family:"DM Sans",sans-serif;font-size:.72rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  h1{font-family:"Cinzel",serif;font-weight:500;font-size:clamp(1.7rem,4.6vw,2.5rem);
+    line-height:1.22;letter-spacing:.02em}
+  .sub{font-style:italic;font-size:1.05rem;color:var(--ink2);margin-top:11px}
+
+  /* ③ QUADRANTI */
+  #nav{position:sticky;top:0;z-index:10;display:flex;gap:0;justify-content:center;
+    flex-wrap:wrap;padding:11px 14px;background:rgba(10,12,26,.9);
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line)}
+  #nav a{font-family:"DM Sans",sans-serif;font-size:.72rem;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--ink3);text-decoration:none;
+    padding:7px 15px;border-radius:999px;transition:.2s}
+  #nav a:hover,#nav a.on{color:var(--navy);background:var(--gold)}
+
+  /* ④ CONTENUTO */
+  .wrap{max-width:44rem;margin:0 auto;padding:34px 22px 70px}
+  section{scroll-margin-top:64px;margin-bottom:40px}
+  .sec-tit{font-family:"DM Sans",sans-serif;font-size:.68rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:13px}
+  .fm-card{background:var(--fm-card-bg);backdrop-filter:var(--fm-card-blur);
+    border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+    box-shadow:var(--shadow)}
+  p{font-size:1.08rem;margin-bottom:1.05rem}
+  p:last-child{margin-bottom:0}
+  .autore{font-family:"DM Sans",sans-serif;font-size:.78rem;color:var(--ink2);
+    margin-top:16px;padding-top:13px;border-top:1px solid var(--line)}
+  .autore b{color:var(--gold);font-weight:500}
+
+  blockquote{border-left:2px solid var(--gold);padding:4px 0 4px 18px;margin:1.4rem 0;
+    font-style:italic;color:rgba(245,240,230,.9)}
+  blockquote cite{display:block;font-style:normal;font-family:"DM Sans",sans-serif;
+    font-size:.72rem;letter-spacing:.06em;color:var(--ink3);margin-top:8px}
+
+  .vie{display:flex;flex-wrap:wrap;gap:9px;margin-top:8px}
+  .via{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    font-family:"DM Sans",sans-serif;font-size:.8rem;color:var(--ink);
+    border:1px solid var(--line);border-radius:999px;padding:10px 17px;transition:.2s}
+  .via:hover{border-color:var(--gold);color:var(--gold)}
+  .via svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+  .nota{font-family:"DM Sans",sans-serif;font-size:.76rem;color:var(--ink2);
+    line-height:1.65;border:1px dashed var(--line);border-radius:12px;
+    padding:14px 16px;margin-top:8px}
+  .nota b{color:var(--gold);font-weight:500}
+
+  footer{border-top:1px solid var(--line);padding:26px 22px 34px;text-align:center;
+    font-family:"DM Sans",sans-serif;font-size:.74rem;color:var(--ink2);line-height:1.8}
+  footer a{color:var(--ink3);text-decoration:none;margin:0 9px}
+  footer a:hover{color:var(--gold)}
+
+  @media print{
+    #nav,.fm-nexus-btn,.vie{display:none}
+    body{background:#fff;color:#111}
+    body::before{display:none}
+    .fm-card{border-color:#ccc;box-shadow:none;background:none}
+    h1,.sec-tit,.eyebrow{color:#A8823E}
+  }
+</style>
+</head>
+<body>
+
+<section id="hero">
+  <a class="fm-nexus-btn" href="home.html" title="Torna alla Comunità">
+    <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="Nexus FelicitasMundi"/>
+    <span class="fm-nexus-lbl">← Home</span>
+  </a>
+  <div class="hin">
+    <div class="eyebrow">Testimonianza · Aria</div>
+    <h1>D'amore, morte ed altre cazzate</h1>
+    <div class="sub">un commiato a Francesco Guccini · 1940 – 2026</div>
+  </div>
+</section>
+
+<nav id="nav">
+  <a href="#testo">Il commiato</a>
+  <a href="#autore">Chi scrive</a>
+  <a href="#condividi">Condividi</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- IL COMMIATO -->
+  <section id="testo">
+    <div class="sec-tit">Il commiato</div>
+    <div class="fm-card">
+
+      <p>È dura scrivere qualcosa di non banale quando dal mondo esce di scena uno come
+      Guccini. Per prima cosa un auspicio: che in giro ci sia subito un erede di Guccini
+      sarà dura, ma che tanti, si spera nuovi cantanti e cantautori, si ispirino non tanto
+      e solo musicalmente al maestro modenese, ma piuttosto come uomo, come modo di essere
+      artista, con quella umiltà contadina, con quel suo essere antidivo, con quel suo
+      porsi in modo serio ma non pedante, sentendo sempre la responsabilità di essere un
+      personaggio pubblico e onorando tale cosa, senza mai abusarne.</p>
+
+      <p>Raro in questi tempi, dove — come canta il nostro —
+      <em>«venite pure avanti, poeti sgangherati»</em> prevale la prostituzione mediatica:
+      il nulla, la mediocrità, la plastica, rispetto alla sobrietà, all'eleganza, allo
+      stile, alla serietà.</p>
+
+      <p>Francesco Guccini veniva dall'appennino modenese, e così è rimasto: semplice,
+      pur nella sua raffinatezza intellettuale, coraggioso e chiaro nel vedere le parti
+      oscure della società e della decadenza umana nel mondo attuale.</p>
+
+      <blockquote>
+        Voi materialisti col vostro chiodo fisso,<br>
+        che Dio è morto e l'uomo è solo in questo abisso.<br>
+        Le verità cercate per terra da maiali:<br>
+        tenetevi le ghiande, lasciatemi le ali.
+        <cite>[ da verificare — Dio è morto ]</cite>
+      </blockquote>
+
+      <p>Quando i Nomadi, negli anni Settanta, ne hanno reso celebri canzoni come
+      «Dio è morto», oppure la perla delle perle «Noi non ci saremo», o «Auschwitz»,
+      Guccini avrebbe potuto sfruttare commercialmente il fatto. Non lo fece, preferendo
+      spesso la dimensione riservata.</p>
+
+      <p>Non starò a elencare né i suoi album migliori né le sue canzoni più memorabili,
+      perché ogni album di Guccini, ogni canzone, non è mai banale: vale sempre un
+      ascolto, merita un approfondimento.</p>
+
+      <blockquote>
+        Le fedi fatte da abitudine e paura, una politica che è solo far carriera,
+        il perbenismo interessato, la dignità fatta di vuoto, l'ipocrisia di chi sta
+        sempre con la ragione e mai col torto.
+        <cite>[ da verificare — Dio è morto ]</cite>
+      </blockquote>
+
+      <p>Queste parole, scritte più di cinquant'anni fa, risuonano come un megafono nel
+      deserto solidificato della meschina e svenduta patria attuale. La RAI le censurò,
+      Radio Vaticana le trasmise — da lì l'idea chiara dell'ipocrisia mortifera.</p>
+
+      <p>«Ci sono delle morti che pesano come una montagna», perché è la morte che serve
+      la vita, la rende possibile e tollerabile.</p>
+
+      <p style="font-family:'Cinzel',serif;font-size:1.15rem;color:var(--gold);
+         text-align:center;margin-top:2rem">Addio maestro, ci ritroveremo.</p>
+
+      <div class="autore">di <b>Stefano Bentivera</b> · 6 agosto 2026</div>
+    </div>
+  </section>
+
+  <!-- CHI SCRIVE -->
+  <section id="autore">
+    <div class="sec-tit">Chi scrive</div>
+    <div class="fm-card">
+      <p style="margin-bottom:0">[ in attesa ]</p>
+      <div class="autore">Stefano Bentivera · Comunità Eterna FelicitasMundi</div>
+    </div>
+  </section>
+
+  <!-- CONDIVIDI -->
+  <section id="condividi">
+    <div class="sec-tit">Condividi</div>
+    <div class="vie">
+      <a class="via" href="https://www.felicitasmundi.com/communitas-aeterna/spazio-vivo.html">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Entra nel tuo spazio</a>
+      <a class="via" href="https://www.felicitasmundi.com/enciclopedia/aria.html">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Vai al Megafono</a>
+      <a class="via" href="mailto:felicitasmundi@protonmail.com">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z M4 6l8 6 8-6"/></svg>
+        Proponi una testimonianza</a>
+    </div>
+
+    <div class="nota">
+      <b>Da chiudere prima della messa in linea.</b> I versi fra virgolette sono citati a
+      memoria e vanno verificati sul testo originale. Nessuna fotografia: quella proposta
+      proveniva da una testata giornalistica e non è utilizzabile.
+      L'editing finale è dell'autore.
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Felicitas Omnia S.r.l.s. · P.IVA 03075740906<br>
+  © 2026 · Tutti i diritti riservati
+  <div style="margin-top:10px">
+    <a href="privacy.html">Informativa privacy</a>
+    <a href="cookie.html">Cookie</a>
+    <a href="condizioni.html">Condizioni d&rsquo;uso</a>
+  </div>
+</footer>
+
+<script>
+  var sez=[].slice.call(document.querySelectorAll('section[id]'));
+  var voci=[].slice.call(document.querySelectorAll('#nav a'));
+  function spia(){
+    var y=window.scrollY+80,att=null;
+    sez.forEach(function(s){ if(s.offsetTop<=y) att=s.id; });
+    voci.forEach(function(a){
+      a.classList.toggle('on', a.getAttribute('href')==='#'+att);
+    });
+  }
+  window.addEventListener('scroll',spia); spia();
+</script>
+</body>
+</html>
