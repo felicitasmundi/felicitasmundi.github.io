@@ -35,8 +35,18 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{-webkit-text-size-adjust:100%}
+  /* ⭐ LA FORMA PORTANTE — la pagina è alta quanto lo schermo e NON scorre.
+     Dentro, una colonna di tre righe: la radio in cima, il centro, il
+     Megafono in fondo. Scorre solo il centro.
+     Così la radio e il Megafono stanno al loro posto PER COSTRUZIONE:
+     non sono ancorati, sono lì perché la colonna finisce lì. Un elemento
+     che sta in fondo per costruzione non può staccarsi.
+     --schermo è l'altezza vera che il navigatore lascia: quando esce la
+     tastiera del telefono si accorcia, e il Megafono le resta sopra. */
   body{background:#02040c;color:var(--ivory);font-family:'DM Sans',sans-serif;
-       min-height:100dvh;-webkit-font-smoothing:antialiased}
+       -webkit-font-smoothing:antialiased;
+       height:var(--schermo,100dvh);display:flex;flex-direction:column;overflow:hidden}
+  #au{display:none}
   body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
     background:radial-gradient(ellipse at 28% 22%,rgba(38,64,120,0.5),transparent 58%),
                radial-gradient(ellipse at 76% 74%,rgba(60,44,110,0.4),transparent 60%),
@@ -47,7 +57,10 @@
   #barra{position:fixed;left:0;top:0;bottom:0;width:var(--barra);z-index:60;
     background:rgba(6,9,22,0.82);backdrop-filter:blur(0.8rem);
     border-right:1px solid var(--line);display:flex;flex-direction:column;
-    padding:1.1rem 0 calc(0.8rem + env(safe-area-inset-bottom));overflow-y:auto}
+    padding:1.1rem 0 calc(0.8rem + env(safe-area-inset-bottom));overflow:hidden}
+  /* ⭐ scorrono le voci, non la barra: così il marchio resta in cima e il
+     segno dell'account resta in fondo, sempre, per quante voci ci siano */
+  #voci{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain}
   .marchio{display:flex;align-items:center;gap:0.6rem;padding:0 1rem 1rem;
     border-bottom:1px solid var(--line);margin-bottom:0.7rem}
   .marchio img{width:2.1rem;height:2.1rem;object-fit:contain}
@@ -104,8 +117,9 @@
   .sotto-voce:hover{background:rgba(245,240,230,0.04);color:var(--ivory)}
   .sotto-voce.on{background:rgba(200,160,85,0.1);color:var(--ivory)}
 
-  /* l'account, piantato in fondo */
-  #acc-tasto{margin-top:auto;display:flex;align-items:center;gap:0.6rem;width:100%;
+  /* l'account, piantato in fondo — ultima riga della colonna, non un
+     margine automatico: il margine cede appena le voci sono tante */
+  #acc-tasto{flex:0 0 auto;display:flex;align-items:center;gap:0.6rem;width:100%;
     background:none;border:0;border-top:1px solid var(--line);padding:0.85rem 1rem 0.3rem;
     cursor:pointer;color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:var(--t-tas);
     text-align:left}
@@ -117,7 +131,11 @@
     color:rgba(245,240,230,0.78)}
 
   /* ══ IL CENTRO ══ */
-  #centro{margin-left:var(--barra);padding:calc(1.6rem + var(--plancia)) 2.6rem 13rem}
+  /* il centro è la riga che scorre. Non gli serve più il cuscino in cima
+     né quello in fondo: la radio e il Megafono sono righe vere della
+     colonna, e non gli passano sopra */
+  #centro{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;margin-left:var(--barra);padding:1.6rem 2.6rem 3rem}
   #centro > *{max-width:56rem;margin-left:auto;margin-right:auto}
   .occhio{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
     text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.5rem}
@@ -745,12 +763,13 @@
   .tondo:hover{background:rgba(200,160,85,0.14)}
 
   /* ══ IL MEGAFONO ══ */
-  #mg{position:fixed;left:var(--barra);right:0;bottom:0;z-index:65}
-  /* la plancia: ancorata in alto, speculare al Megafono.
+  /* ultima riga della colonna: sta in fondo perché la colonna finisce lì */
+  #mg{flex:0 0 auto;position:relative;margin-left:var(--barra);z-index:65}
+  /* la plancia: prima riga della colonna, speculare al Megafono.
      Sta ferma mentre il centro scorre — 18.71, la radio in cima. */
-  #pl{position:fixed;left:var(--barra);right:0;top:0;z-index:65;
+  #pl{flex:0 0 auto;position:relative;margin-left:var(--barra);z-index:65;
     background:var(--scafo);padding:0.55rem 2.6rem 0.6rem}
-  #pl > *{max-width:56rem;margin:0 auto}
+  #pl > *{max-width:56rem;margin:0 auto;min-width:0}
   /* ── dove lo porti: un foglio che sale, con tutto dentro ── */
   .vele{max-height:0;overflow:hidden;transition:max-height .3s ease;
     background:var(--scafo);border-top:1px solid var(--line)}
@@ -855,6 +874,8 @@
     border:1px solid rgba(200,160,85,0.4);border-radius:999px;padding:0.12rem 0.5rem;white-space:nowrap}
 
   /* ══ QUANDO LO SPAZIO MANCA: i margini si ritirano, il centro non si tocca ══ */
+  /* il decimo scoperto accanto alla barra: vive solo sul telefono */
+  #fuori-barra{display:none}
   #apri-barra{display:none;position:fixed;top:0.9rem;left:1rem;z-index:71;
     background:rgba(6,9,22,0.85);border:1px solid rgba(200,160,85,0.5);color:var(--oro-ch);
     border-radius:0.6rem;width:2.5rem;height:2.5rem;font-size:var(--t-cor);cursor:pointer}
@@ -874,33 +895,43 @@
        play della radio gli si mette accanto invece che sotto ── */
     #apri-barra{display:block;top:0.7rem}
 
-    /* ── la barra non è un pannello che scivola sopra la stanza: è una
-       schermata. Prende tutto lo schermo, ed è opaca ── */
+    /* ── la barra scivola dentro e ne lascia scoperto un decimo a destra,
+       così si vede la pagina dietro e si sa dove si torna. Quel decimo si
+       tocca per richiudere ── */
     #barra{transform:translateX(-100%);transition:transform .28s ease;
-      width:100%;z-index:70;background:var(--scafo);backdrop-filter:none;
-      border-right:0;padding-top:3.6rem}
+      width:90%;z-index:70;background:var(--scafo);backdrop-filter:none;
+      border-right:1px solid var(--line);padding-top:3.6rem;
+      box-shadow:0.4rem 0 1.6rem rgba(2,4,12,0.6)}
     body.barra-aperta #barra{transform:none}
+    #fuori-barra{position:fixed;inset:0;z-index:69;display:none;
+      background:rgba(2,4,12,0.45)}
+    body.barra-aperta #fuori-barra{display:block}
     /* con la barra aperta restano la barra e il suo tasto: nient'altro.
        Il Megafono e la fascia della radio tornano quando si richiude */
     body.barra-aperta #pl,
     body.barra-aperta #mg{display:none}
-    body.barra-aperta{overflow:hidden}
+    body.barra-aperta #centro{overflow:hidden}
 
     #centro{margin-left:0;padding-left:1.1rem;padding-right:1.1rem;
-      padding-top:calc(1.2rem + var(--plancia))}
+      padding-top:1.2rem}
 
     /* ⭐ il Megafono resta a tutta larghezza */
-    #mg{left:0}
+    #mg{margin-left:0}
 
-    /* ══ LA RADIO ANCORATA — resta il play piccolo, sempre visibile,
-       col nome del pezzo in onda. E accanto il tasto che apre il resto ══ */
-    #pl{left:0;padding:0.5rem 0.9rem 0.5rem 4rem;min-height:3.9rem;
+    /* ══ LA RADIO ACCORCIATA — resta il play piccolo col nome del pezzo,
+       e accanto il tasto che apre il resto.
+       ⭐ min-width:0 lungo tutta la catena: senza, la striscia si rifiuta
+          di stringersi sotto la sua misura naturale e spinge la pagina
+          fuori a destra. È da lì che veniva il bordo a 320px. ══ */
+    #pl{margin-left:0;padding:0.5rem 0.9rem 0.5rem 3.7rem;min-height:3.9rem;
       display:flex;align-items:center}
-    #pl > *{width:100%}
-    .r-striscia{flex-wrap:nowrap;gap:0.6rem;padding:0.4rem 0.6rem}
+    #pl > *{width:100%;min-width:0}
+    #blocco-radio{min-width:0}
+    .r-striscia{flex-wrap:nowrap;gap:0.6rem;padding:0.4rem 0.6rem;min-width:0}
     .r-play{width:2.3rem;height:2.3rem}
     .r-play svg{width:0.95rem;height:0.95rem}
-    .r-freq{flex:1 1 auto}
+    .r-freq{flex:1 1 auto;min-width:0}
+    .r-brano{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .r-nome{display:none}
     #r-palinsesto{display:none}
     #r-apri{display:flex}
@@ -908,7 +939,7 @@
     /* ══ LA STESSA FASCIA, IN UNA FINESTRA SOPRA LA PAGINA ══
        Non è un'altra fascia: è questa, e cambia solo il contenitore —
        una finestra invece che il margine in cima ══ */
-    body.radio-aperta #pl{inset:0;z-index:92;display:block;overflow-y:auto;
+    body.radio-aperta #pl{position:fixed;inset:0;z-index:92;display:block;overflow-y:auto;
       padding:3.6rem 1.1rem calc(1.4rem + env(safe-area-inset-bottom));
       background:rgba(10,12,26,0.86);min-height:0}
     body.radio-aperta #pl > *{width:auto}
@@ -921,13 +952,14 @@
     body.radio-aperta .r-nome{display:block}
     body.radio-aperta #r-palinsesto{display:flex}
     body.radio-aperta #r-apri{transform:rotate(180deg)}
-    body.radio-aperta{overflow:hidden}
+    body.radio-aperta #centro{overflow:hidden}
   }
 </style>
 </head>
 <body>
 
 <button id="apri-barra" aria-label="Il menu">&#9776;</button>
+<div id="fuori-barra" aria-hidden="true"></div>
 
 <audio id="au" preload="none"></audio>
 
@@ -1411,7 +1443,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* porta al blocco della home, o apre la mappa a tutto schermo */
   function vaiAlBlocco(quale){
     if(quale === "consolle"){ vai("consolle"); return; }
-    if(quale === "home"){ window.scrollTo({top:0, behavior:"smooth"}); return; }
+    if(quale === "home"){ $("centro").scrollTo({top:0, behavior:"smooth"}); return; }
     if(quale === "mappa"){
       var mv = $("mappa-velo");
       if(mv){ mv.click(); return; }
@@ -1425,7 +1457,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
     disegnaBarra();
     document.body.classList.remove("barra-aperta");
-    var c=$("centro"); c.innerHTML=""; window.scrollTo(0,0);
+    var c=$("centro"); c.innerHTML=""; c.scrollTop=0;
     if(id==="spazio")   home(c);
     else if(id==="orme") mieOrme(c);
     else if(id==="incontro") incontro(c, sub);
@@ -2317,6 +2349,11 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     document.body.classList.toggle("barra-aperta");
     misuraPlancia();
   });
+  /* il decimo scoperto a destra: si tocca e la barra si richiude */
+  $("fuori-barra").addEventListener("click", function(){
+    document.body.classList.remove("barra-aperta");
+    misuraPlancia();
+  });
   document.addEventListener("keydown", function(e){
     if(e.key!=="Escape") return;
     document.querySelectorAll(".velo.on").forEach(function(v){ v.classList.remove("on"); });
@@ -2376,6 +2413,22 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   misuraPlancia();
   window.addEventListener("resize", misuraPlancia);
   if(window.ResizeObserver) new ResizeObserver(misuraPlancia).observe($("pl"));
+
+  /* ⭐ L'ALTEZZA VERA DELLO SCHERMO.
+     100dvh è l'altezza della finestra. Quando sul telefono esce la
+     tastiera, la finestra resta alta uguale e i tasti coprono il fondo:
+     il Megafono finirebbe sotto. visualViewport dà invece lo spazio che
+     resta davvero visibile, e la colonna si accorcia insieme a lui —
+     così l'ultima riga sta sopra la tastiera invece che dietro. */
+  (function(){
+    var vv = window.visualViewport;
+    if(!vv) return;                      /* senza, resta 100dvh: si degrada bene */
+    var misura = function(){
+      document.documentElement.style.setProperty("--schermo", vv.height + "px");
+    };
+    vv.addEventListener("resize", misura);
+    misura();
+  })();
 
   db.auth.getSession().then(function(r){
     var sess = r && r.data && r.data.session;
