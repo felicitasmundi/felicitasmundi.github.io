@@ -1,30 +1,33 @@
-/* ═══════════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════════════
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   41.483 byte · MD5 b448f5b7b7aba4b2dbc2684b83368c8c
+   40.424 byte · MD5 5e3d9fb30ea4fb1df64385484eed15c7
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
    Non contiene: la barra, la plancia della radio, il Megafono, la
-   mappa a tutto schermo. Quelle sono del guscio.
+   mappa a tutto schermo, il piede. Quelle sono del guscio.
 
    ⛔ Niente involucro (function(){ … })(): il guscio mette tutto in
       comune e questo file legge da lì. Rimettendolo, home() non vede
       più le variabili del guscio e la pagina non si apre.
-   ═══════════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════════ */
 
 /* il disegno, come consegnato: lo stile della casa e il suo corpo */
 var CASA = `<style>
   .sv-casa [data-scelta]:hover{border-color:rgba(200,160,85,0.5);color:#F5F0E6}
+  .sv-casa [data-leg]{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .sv-casa [data-leg] > div{min-width:0}
+  .sv-casa [data-leg] b,.sv-casa [data-leg] i{min-width:0;overflow-wrap:anywhere}
   .sv-casa button{font-family:'DM Sans',sans-serif}
-  @media(max-width:62rem){ .sv-casa [data-leg]{grid-template-columns:repeat(2,1fr)} }
+  @media(max-width:62rem){ .sv-casa [data-leg]{grid-template-columns:repeat(2,minmax(0,1fr))} }
   @media(max-width:52rem){
     .sv-casa{padding-left:1.1rem;padding-right:1.1rem}
     .sv-casa [data-libro]{padding:0.3rem;border-width:1px;box-shadow:none}
     .sv-casa [data-piega]{opacity:0.28}
   }
-  @media(max-width:34rem){ .sv-casa [data-leg]{grid-template-columns:1fr} }
+  @media(max-width:34rem){ .sv-casa [data-leg]{grid-template-columns:minmax(0,1fr)} }
 </style>
 
 <div class="sv-casa" style="--scala:1.4;--navy:#0A0C1A;--oro:#C8A055;--oro-ch:#D4AF6A;--ivory:#F5F0E6;--line:rgba(184,150,62,0.2);--t-eti:calc(0.8125rem * var(--scala));--t-tas:calc(0.9375rem * var(--scala));--t-cor:calc(1.0625rem * var(--scala));--t-scr:calc(1.125rem * var(--scala));--t-tit:calc(1.5rem * var(--scala));--t-big:calc(1.9rem * var(--scala));max-width:56rem;margin:0 auto;display:flex;flex-direction:column;color:#F5F0E6;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased">
@@ -132,39 +135,39 @@ var CASA = `<style>
 
   <!-- LA LEGENDA · quattro più tre -->
   <section style="order:2;margin-top:1.1rem">
-    <div data-leg="1" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem 1.6rem">
+    <div data-leg="1" style="display:grid;gap:0.8rem 1.6rem">
 
-        <div style="display:grid;grid-template-columns:2.9rem 1fr;gap:0.8rem;align-items:center">
+        <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
           <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"></path><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"></path></svg></span>
           <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">orma</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">le tracce del sentiero</i></span>
         </div>
 
-        <div style="display:grid;grid-template-columns:2.9rem 1fr;gap:0.8rem;align-items:center">
+        <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
           <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"></path><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"></path><path d="M14 20L26 20"></path></svg></span>
           <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">connessione</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">espandere la rete</i></span>
         </div>
 
-        <div style="display:grid;grid-template-columns:2.9rem 1fr;gap:0.8rem;align-items:center">
+        <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
           <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M12.5 20C12.5 21.97 10.97 23.5 9 23.5C7.03 23.5 5.5 21.97 5.5 20C5.5 18.03 7.03 16.5 9 16.5C10.97 16.5 12.5 18.03 12.5 20Z"></path><path d="M34.5 20C34.5 21.97 32.97 23.5 31 23.5C29.03 23.5 27.5 21.97 27.5 20C27.5 18.03 29.03 16.5 31 16.5C32.97 16.5 34.5 18.03 34.5 20Z"></path><path d="M13 16L27 16M27 16L23.5 12.5M27 24L13 24M13 24L16.5 27.5"></path></svg></span>
           <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">scambio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">nutrire l'esistenza</i></span>
         </div>
 
-        <div style="display:grid;grid-template-columns:2.9rem 1fr;gap:0.8rem;align-items:center">
+        <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
           <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"></path><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"></path><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"></path><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"></path><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"></path></svg></span>
           <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">vicinato</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">la forza comune</i></span>
         </div>
 
-        <div style="display:grid;grid-template-columns:2.9rem 1fr;gap:0.8rem;align-items:center">
+        <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
           <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"></path><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"></path><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"></path><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"></path><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"></path></svg></span>
           <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">ritmo</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">feste, formazioni, esperienze</i></span>
         </div>
 
-        <div style="display:grid;grid-template-columns:2.9rem 1fr;gap:0.8rem;align-items:center">
+        <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
           <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"></path><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"></path><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"></path></svg></span>
           <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">incontro</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">relazione tra vicinati</i></span>
         </div>
 
-        <div style="display:grid;grid-template-columns:2.9rem 1fr;gap:0.8rem;align-items:center">
+        <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
           <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M4 14L20 5L36 14Z"></path><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"></path><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"></path></svg></span>
           <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">tempio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">luoghi sacri custoditi</i></span>
         </div>
@@ -273,18 +276,6 @@ var CASA = `<style>
         <p style="margin:0">È questa la Comunità Eterna.</p>
       </div>
     </details>
-  </section>
-
-  <!-- LA CHIUSURA: il nome, la frase, il filo, i dati -->
-  <section style="order:7;margin:5rem auto 0;max-width:44rem;text-align:center">
-    <div style="font-family:'Cinzel',serif;font-weight:600;font-size:var(--t-big);letter-spacing:0.06em;color:var(--ivory);line-height:1.15">FelicitasMundi</div>
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:var(--oro-ch);margin-top:0.4rem">Comunità Eterna</div>
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-cor);color:var(--oro-ch);margin-top:1.8rem">Catalizzatore di Comunità:</div>
-    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0.5rem 0 0">“incarniamo il senso profondo della Coscienza Cosmica,<br>il percorso per ritrovare il filo dell’esistenza cooperando con l’altro,<br>l’uso consapevole dell’intelligenza artificiale.”</p>
-    <div style="height:1px;margin:2.2rem 10% 0;background:linear-gradient(to right,transparent,var(--oro),transparent)"></div>
-    <div style="font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.6;margin-top:1.4rem">Felicitas Omnia S.r.l.s. · P.IVA 03075740906</div>
-    <div style="font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.6">© 2026 · Tutti i diritti riservati</div>
-    <div class="fp-link"><a href="privacy.html">Informativa privacy</a><a href="cookie.html">Cookie</a><a href="condizioni.html">Condizioni d&rsquo;uso</a></div>
   </section>
 
 
