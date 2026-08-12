@@ -32,6 +32,19 @@
     --t-big: calc(1.9rem    * var(--scala));
 
     --barra:16rem; --plancia:6.6rem;
+
+    /* ⭐ QUANTO PUÒ SALIRE IL FOGLIO DEL MEGAFONO.
+       Il Megafono è l'ultima riga della colonna e non si stringe: se il
+       foglio sale più di quanto lo schermo lascia libero, la colonna
+       sfora e il fondo — il campo e i tasti — esce dall'inquadratura.
+       Qui il foglio si tiene dentro lo spazio che c'è davvero.
+       I 22rem tenuti da parte sono tre cose misurate: la plancia in
+       cima, la parte fissa del Megafono, e il fondo del centro — la
+       sua imbottitura, che non si stringe. Fanno 338px sul PC e 333
+       sul telefono.
+       I 4rem in fondo sono il minimo sotto cui non si scende: col
+       foglio piccolo si scorre dentro, e i tasti non si spostano mai. */
+    --vele-max: min(32rem, max(4rem, calc(var(--schermo, 100dvh) - 22rem)));
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{-webkit-text-size-adjust:100%}
@@ -773,9 +786,14 @@
   /* ── dove lo porti: un foglio che sale, con tutto dentro ── */
   .vele{max-height:0;overflow:hidden;transition:max-height .3s ease;
     background:var(--scafo);border-top:1px solid var(--line)}
-  .vele.su{max-height:32rem;box-shadow:0 -0.6rem 1.6rem rgba(0,0,0,.5)}
-  .vele-dentro{max-width:56rem;margin:0 auto;padding:0 0.9rem 0.9rem;
-    max-height:31rem;overflow-y:auto}
+  .vele.su{max-height:var(--vele-max);box-shadow:0 -0.6rem 1.6rem rgba(0,0,0,.5)}
+  .vele-dentro{position:relative;max-width:56rem;margin:0 auto;padding:0 0.9rem 0.9rem;
+    max-height:calc(var(--vele-max) - 1rem);overflow-y:auto}
+  /* la × chiude il foglio senza scegliere niente */
+  #vele-x{position:absolute;top:0.5rem;right:0.6rem;z-index:2;background:none;border:0;
+    color:rgba(245,240,230,0.8);font-size:var(--t-scr);line-height:1;cursor:pointer;
+    padding:0.2rem 0.4rem}
+  #vele-x:hover{color:var(--ivory)}
   .pista{padding:0.8rem 0 0}
 
   /* le destinazioni, a riquadri affiancati */
@@ -1001,6 +1019,7 @@
 <!-- ══ IL MEGAFONO ══ -->
 <div id="mg">
   <div class="vele" id="vele"><div class="vele-dentro">
+    <button class="x" id="vele-x">&times;</button>
     <div class="pista" id="pista"></div>
 
     <div class="fg-sez">
@@ -1453,8 +1472,21 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(e) e.scrollIntoView({behavior:"smooth", block:"start"});
   }
 
+  /* ── le finestre del Megafono si chiudono tutte insieme ──
+     Il foglio di «dove lo porti» e i dieci veli. Nessuno resta appeso
+     sopra una stanza che non è più quella dove era stato aperto. */
+  function chiudiVele(){
+    var v=$("vele"); if(!v) return;
+    v.classList.remove("su"); veleSu=false;
+  }
+  function chiudiFinestre(){
+    document.querySelectorAll(".velo.on").forEach(function(v){ v.classList.remove("on"); });
+    chiudiVele();
+  }
+
   function vai(id, sub){
     vista=id;
+    chiudiFinestre();
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
     disegnaBarra();
     document.body.classList.remove("barra-aperta");
@@ -2343,6 +2375,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   document.querySelectorAll(".velo").forEach(function(v){
     v.addEventListener("click", function(e){ if(e.target===v) v.classList.remove("on"); });
   });
+  /* ── «dove lo porti»: la × la chiude, e il tocco fuori pure ── */
+  $("vele-x").addEventListener("click", chiudiVele);
+  document.addEventListener("click", function(e){
+    if(!veleSu) return;
+    if(e.target.closest("#vele")) return;     /* dentro il foglio si sceglie */
+    if(e.target.closest("#s-dove")) return;   /* è il tasto che l'ha aperto */
+    chiudiVele();
+  });
   $("apri-barra").addEventListener("click", function(){
     /* una schermata alla volta: se la fascia della radio è una finestra,
        si richiude prima che la barra prenda lo schermo */
@@ -2357,8 +2397,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   });
   document.addEventListener("keydown", function(e){
     if(e.key!=="Escape") return;
-    document.querySelectorAll(".velo.on").forEach(function(v){ v.classList.remove("on"); });
-    $("vele").classList.remove("su"); veleSu=false;
+    chiudiFinestre();
     if(fasciaAperta()) apriFascia(false);
     document.body.classList.remove("barra-aperta");
     misuraPlancia();
