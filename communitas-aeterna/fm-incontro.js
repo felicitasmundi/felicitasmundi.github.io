@@ -196,17 +196,4 @@
       : "Condividi una testimonianza\u2026";
   }
 
-  /* ══ IL SENTIERO — la spiegazione del praticantato ══ */
-  function sentiero(c){
-    c.innerHTML =
-      '<div class="occhio">Comunità Eterna FelicitasMundi</div>'
-    + '<h1>Il sentiero</h1>'
-
-    + '<div class="sent-cita">'
-    +   '<p>Prima che un uomo possa percorrere il sentiero, '
-    +     'deve divenire egli stesso il sentiero.</p>'
-    +   '<div class="sent-fonte">Educazione nella Nuova Era &middot; Bailey</div>'
-    + '</div>'
-
-    + '<p class="sotto">[ in attesa ]</p>';
-  }
+  /* Il praticantato ha un file suo: fm-praticantato.js */
