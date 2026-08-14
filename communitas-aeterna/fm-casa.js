@@ -57,6 +57,16 @@
                      righe: [ { testo, etichetta, valore, foto } ] } ] }
    Da zero a cinque elementi; quello che manca diventa [ in attesa ].
 
+   LE DUE ORME sotto la mappa leggono il database: prodotti, vicinati
+   e orme, le ultime arrivate, la più recente per prima. La forma è
+   quella di Design; qui si dice soltanto da dove arriva ogni parola.
+   Il dettaglio sta in fondo al file, sopra leOrme().
+
+   ⭐ Sette agganci aggiunti al disegno, e nessuno cambia la forma:
+      data-orme · data-orma · data-orma-foto · data-orma-nome ·
+      data-orma-riga · data-orma-quando · data-nulla
+      Stessa convenzione di data-libro, data-piega, data-leg, data-rete.
+
    ⛔ Niente involucro (function(){ … })(): il guscio mette tutto in
       comune e questo file legge da lì. Rimettendolo, home() non vede
       più le variabili del guscio e la pagina non si apre.
@@ -220,19 +230,19 @@ var CASA = `<style>
   </section>
 
   <!-- LE DUE ORME -->
-  <section style="order:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1.1rem;margin-top:1.8rem;align-items:stretch">
+  <section data-orme="1" style="order:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1.1rem;margin-top:1.8rem;align-items:stretch">
 
-    <div style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column">
+    <div data-orma="1" style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column">
         <div>
-          <div style="position:relative;height:15rem;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center">
+          <div data-orma-foto="1" style="position:relative;height:15rem;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center">
             <span style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 1rem">la foto dell'orma<br>[ in attesa ]</span>
           </div>
           <div style="display:flex;gap:0.9rem;align-items:flex-start;padding:0.9rem 1.1rem 0">
             <span style="flex:0 0 auto;width:2.4rem;height:2.4rem;border-radius:50%;border:1px dashed rgba(200,160,85,0.5);display:block;cursor:pointer"></span>
             <div style="min-width:0;display:flex;flex-direction:column;gap:0.15rem">
-              <b style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);color:var(--ivory);line-height:1.3">[ in attesa ]</b>
-              <i style="font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.4">[ in attesa ]</i>
-              <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.4">[ in attesa ]</span>
+              <b data-orma-nome="1" style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);color:var(--ivory);line-height:1.3">[ in attesa ]</b>
+              <i data-orma-riga="1" style="font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.4">[ in attesa ]</i>
+              <span data-orma-quando="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.4">[ in attesa ]</span>
             </div>
           </div>
           <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding:0.8rem 1.1rem 1.1rem 4.4rem">
@@ -243,7 +253,7 @@ var CASA = `<style>
         </div>
     </div>
 
-    <div style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column">
+    <div data-nulla="1" style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column">
         <div style="flex:1;min-height:20rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.9rem;padding:2rem 1.6rem;text-align:center;border:1px dashed rgba(200,160,85,0.35);border-radius:0.9rem;margin:0.6rem">
           <span style="width:2.8rem;height:2.8rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"></path><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"></path></svg></span>
           <div style="font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.5;color:var(--ivory);max-width:22rem">Qui non c'è ancora niente: è la porta d'ingresso. Lascia la tua orma.</div>
@@ -425,6 +435,7 @@ function home(c){
   avviaCasa();
   legaLuoghi();
   contaOrme();          /* il cenno delle orme vive nella barra, non nella casa */
+  leOrme();             /* le due orme sotto la mappa: il dato entra nella forma */
 }
 
 /* ── il codice della casa, come l'ha scritto Design: non si tocca ──
@@ -1009,4 +1020,182 @@ function inTalenti(n){
   var q = Number(n);
   if(n === null || n === undefined || n === "" || !isFinite(q) || q <= 0) return "";
   return q + (q === 1 ? " talento" : " talenti");
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   LE DUE ORME — le ultime cose arrivate
+
+   ⭐ LA LEGGE: se una cosa esce sulla mappa, esce anche qui.
+      Un record, tutte le viste. Tre tabelle, una sola riga di tempo.
+
+   Cosa si legge, e con quale filtro:
+
+     tabella    filtro                    data          nome       riga di testo
+     ─────────────────────────────────────────────────────────────────────────────
+     prodotti   stato = 'pubblico'        creato_il     nome       sottotitolo
+     vicinati   stato = 'confermato'      creato_il     nome       descrizione,
+                                                                   e se manca
+                                                                   territorio
+     orme       visibilita = 'pubblico'   momento       titolo     sottotitolo,
+                                                                   e se manca
+                                                                   contenuto
+
+   ⚠️ `prodotti.stato` — nel database vivo il valore è `pubblico`, non
+      `pubblicato`. Letto il 14 agosto 2026 su gfnveesogkfvkrdudpfg:
+      l'unica riga presente, «Anima Vagabonda», porta `pubblico`.
+      Il giorno che il valore cambia, si cambia PRODOTTI_PUBBLICO.
+
+   ⚠️ `orme` non ha una colonna foto: un'orma non porta mai l'immagine,
+      e la banda resta il segnaposto che ha disegnato Design.
+
+   Toccando una riga:
+     prodotto → ?p=pagina&n=nome-url — la stessa strada che percorre
+                l'indirizzo: si posa il nome e si chiama vai("pagina")
+     vicinato → la mappa si posa sul punto e sale la sua scheda
+     orma     → niente: resta com'è oggi
+
+   Niente record? La forma piena sparisce e resta il riquadro che
+   Design ha già scritto: «Qui non c'è ancora niente…».
+
+   Il testo entra con textContent, mai con innerHTML: quello che arriva
+   dal database non diventa marcatura.
+   ════════════════════════════════════════════════════════════════ */
+
+var ORME_QUANTE = 2;                    /* due orme, due righe */
+var PRODOTTI_PUBBLICO = "pubblico";     /* il valore vivo della colonna `stato` */
+
+function leOrme(){
+  var sez = document.querySelector(".sv-casa [data-orme]");
+  if(!sez) return;
+
+  var modello = sez.querySelector("[data-orma]");
+  var nulla   = sez.querySelector("[data-nulla]");
+  if(!modello || !nulla) return;
+
+  /* la forma di Design si mette da parte: torna in scena solo col dato */
+  var forma = modello.cloneNode(true);
+  modello.style.display = "none";
+  nulla.style.display   = "none";
+
+  ultimeCose(ORME_QUANTE).then(function(cose){
+    if(modello.parentNode) modello.parentNode.removeChild(modello);
+
+    if(!cose.length){ nulla.style.display = ""; return; }
+
+    cose.forEach(function(cosa){
+      var riga = forma.cloneNode(true);
+      riga.style.display = "";
+      riempiOrma(riga, cosa);
+      sez.insertBefore(riga, nulla);
+    });
+  });
+}
+
+/* le tre letture. Se una tace, le altre due si vedono lo stesso:
+   meglio una riga in meno che la casa vuota per un permesso mancato. */
+function ultimeCose(quante){
+  return Promise.all([
+    db.from("prodotti")
+      .select("nome,nome_url,sottotitolo,foto,creato_il")
+      .eq("stato", PRODOTTI_PUBBLICO)
+      .order("creato_il", {ascending:false}).limit(quante),
+
+    db.from("vicinati")
+      .select("id,nome,territorio,descrizione,foto,lat,lon,creato_il")
+      .eq("stato", "confermato")
+      .order("creato_il", {ascending:false}).limit(quante),
+
+    db.from("orme")
+      .select("id,titolo,sottotitolo,contenuto,momento")
+      .eq("visibilita", "pubblico")
+      .order("momento", {ascending:false}).limit(quante)
+  ]).then(function(esiti){
+    var cose = [], p = esiti[0], v = esiti[1], o = esiti[2];
+
+    if(!p.error && p.data) p.data.forEach(function(r){
+      cose.push({ genere:"prodotto", quando:r.creato_il, foto:r.foto,
+                  nome:r.nome, riga:r.sottotitolo, dato:r });
+    });
+
+    if(!v.error && v.data) v.data.forEach(function(r){
+      cose.push({ genere:"vicinato", quando:r.creato_il, foto:r.foto,
+                  nome:r.nome, riga:r.descrizione || r.territorio, dato:r });
+    });
+
+    if(!o.error && o.data) o.data.forEach(function(r){
+      cose.push({ genere:"orma", quando:r.momento, foto:null,
+                  nome:r.titolo, riga:r.sottotitolo || r.contenuto, dato:r });
+    });
+
+    cose.sort(function(a, b){ return istante(b.quando) - istante(a.quando); });
+    return cose.slice(0, quante);
+  }).catch(function(err){
+    if(window.console) console.error("la casa: le ultime cose arrivate —", err);
+    return [];
+  });
+}
+
+function istante(t){
+  var q = t ? Date.parse(t) : NaN;
+  return isFinite(q) ? q : 0;      /* senza data si finisce in fondo */
+}
+
+/* una riga della forma di Design, riempita.
+   Dove la parola manca resta il segnaposto che c'è già. */
+function riempiOrma(riga, cosa){
+  var pieno = function(x){ return x !== null && x !== undefined && String(x).trim() !== ""; };
+
+  var banda  = riga.querySelector("[data-orma-foto]");
+  var nome   = riga.querySelector("[data-orma-nome]");
+  var testo  = riga.querySelector("[data-orma-riga]");
+  var quando = riga.querySelector("[data-orma-quando]");
+
+  if(banda && pieno(cosa.foto)){
+    var im = document.createElement("img");
+    im.src = String(cosa.foto);
+    im.alt = pieno(cosa.nome) ? String(cosa.nome) : "";
+    im.style.cssText = "position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block";
+    while(banda.firstChild) banda.removeChild(banda.firstChild);
+    banda.appendChild(im);
+  }
+
+  if(nome   && pieno(cosa.nome)) nome.textContent   = String(cosa.nome);
+  if(testo  && pieno(cosa.riga)) testo.textContent  = String(cosa.riga);
+  if(quando && typeof dataIt === "function"){
+    var d = dataIt(cosa.quando);
+    if(pieno(d)) quando.textContent = d;
+  }
+
+  if(cosa.genere === "orma") return;     /* un'orma non si apre: resta com'è oggi */
+
+  riga.style.cursor = "pointer";
+  riga.addEventListener("click", function(){ apriCosa(cosa); });
+}
+
+/* dove porta il tocco */
+function apriCosa(cosa){
+  if(cosa.genere === "prodotto"){
+    if(!cosa.dato.nome_url) return;
+    if(typeof pagina !== "function" || typeof vai !== "function") return;
+    window.pagineNomeChiesto = cosa.dato.nome_url;
+    vai("pagina");
+    return;
+  }
+
+  if(cosa.genere === "vicinato"){
+    var v = cosa.dato;
+
+    /* prima si guarda il libro, poi la mappa si posa e la scheda sale:
+       la scheda vive dentro il libro, e il libro sta in cima alla casa */
+    var libro = document.querySelector(".sv-casa [data-libro]");
+    if(libro) libro.scrollIntoView({behavior:"smooth", block:"center"});
+
+    var telaio = document.getElementById("sv-mappa");
+    if(telaio && telaio.contentWindow && isFinite(+v.lat) && isFinite(+v.lon)){
+      telaio.contentWindow.postMessage({q:"posa", lat:+v.lat, lon:+v.lon, k:9}, "*");
+    }
+
+    mostraVicinato(v, true);
+  }
 }
