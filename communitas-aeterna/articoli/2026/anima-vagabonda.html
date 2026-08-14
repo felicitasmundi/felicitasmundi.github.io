@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anima Vagabonda · Comunità Eterna FelicitasMundi</title>
+<meta name="description" content="Anima Vagabonda di Parabhakti dāsa. Pellegrini senza memoria alla ricerca della strada verso casa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0A0C1A; --gold:#D4AF6A; --gold-d:#C8A055;
+    --ink:#F5F0E6; --ink2:rgba(240,235,224,0.64); --ink3:rgba(212,175,106,0.72);
+    --line:rgba(212,175,106,.20);
+    --acqua:#4488BB; --fuoco:#CC6644; --etere:#9966CC;
+    --card:rgba(10,12,26,0.58); --blur:blur(4px);
+    --shadow:0 14px 40px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{color:var(--ink);font-family:"Cormorant Garamond",Georgia,serif;line-height:1.7;
+    -webkit-font-smoothing:antialiased;background:var(--navy)}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;
+    background:radial-gradient(ellipse at 28% 22%,rgba(38,64,120,0.5),transparent 58%),
+               radial-gradient(ellipse at 76% 74%,rgba(60,44,110,0.4),transparent 60%),
+               radial-gradient(ellipse at 50% 42%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+
+  /* testa */
+  #hero{padding:64px 22px 38px;text-align:center}
+  .hin{max-width:44rem;margin:0 auto}
+  .eyebrow{font-family:"DM Sans",sans-serif;font-size:.72rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  h1{font-family:"Cinzel",serif;font-weight:500;font-size:clamp(1.8rem,5vw,2.7rem);
+    line-height:1.18;letter-spacing:.03em}
+  .sub{font-style:italic;font-size:1.14rem;color:var(--ink2);margin-top:12px;line-height:1.5}
+  .autore-h{font-family:"Cinzel",serif;font-size:.78rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ink3);margin-top:16px}
+
+  /* quadranti */
+  #nav{position:sticky;top:0;z-index:40;display:flex;gap:4px;justify-content:center;
+    flex-wrap:wrap;padding:11px 8px;background:rgba(10,12,26,.86);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-top:.5px solid var(--line);border-bottom:.5px solid var(--line)}
+  #nav a{font-family:"DM Sans",sans-serif;font-size:.72rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink2);text-decoration:none;
+    padding:6px 15px;border-radius:999px;transition:.25s}
+  #nav a:hover,#nav a.on{color:var(--navy);background:var(--gold)}
+
+  .wrap{max-width:44rem;margin:0 auto;padding:0 22px 70px}
+  section{padding:48px 0;scroll-margin-top:56px}
+  .sec-tit{font-family:"Cinzel",serif;font-size:.72rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--ink3);text-align:center;margin-bottom:24px}
+
+  .fm-card{background:var(--card);-webkit-backdrop-filter:var(--blur);
+    backdrop-filter:var(--blur);border:.5px solid var(--line);border-radius:16px;
+    padding:26px 26px;box-shadow:var(--shadow)}
+  p{font-size:1.1rem;margin-bottom:1.05rem}
+  p:last-child{margin-bottom:0}
+
+  /* la copertina */
+  .cop{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+  .cop .im{flex:0 0 168px;border-radius:10px;overflow:hidden;
+    border:.5px solid var(--line);box-shadow:var(--shadow);background:#f1eee2;
+    aspect-ratio:15/21;display:grid;place-items:center;
+    font-family:"DM Sans",sans-serif;font-size:.7rem;color:rgba(10,12,26,.42);
+    text-align:center;padding:10px}
+  .cop .tx{flex:1;min-width:210px}
+  .dati{list-style:none;margin-top:16px;padding-top:14px;border-top:.5px solid var(--line)}
+  .dati li{display:flex;justify-content:space-between;gap:14px;
+    font-family:"DM Sans",sans-serif;font-size:.86rem;color:var(--ink2);padding:5px 0}
+  .dati li b{color:var(--ink);font-weight:400}
+
+  .domande{list-style:none;margin-top:6px}
+  .domande li{font-family:"Cinzel",serif;font-size:1.02rem;color:var(--gold);
+    padding:9px 0 9px 22px;position:relative;line-height:1.45;letter-spacing:.02em}
+  .domande li::before{content:'·';position:absolute;left:4px;color:var(--gold-d)}
+
+  /* la bio */
+  .bio{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+  .bio .rit{flex:0 0 108px;height:108px;border-radius:50%;overflow:hidden;
+    border:.5px solid var(--line);background:rgba(245,240,230,.06);display:grid;
+    place-items:center;font-family:"DM Sans",sans-serif;font-size:.62rem;
+    color:var(--ink2);text-align:center;padding:8px}
+  .bio .tx{flex:1;min-width:220px}
+
+  /* i due rimandi */
+  .porte{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  @media(max-width:620px){.porte{grid-template-columns:1fr}}
+  .porta{display:block;text-decoration:none;border:.5px solid var(--line);
+    border-radius:14px;padding:20px 20px;background:var(--card);
+    -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);transition:.22s}
+  .porta:hover{border-color:var(--gold-d)}
+  .porta .k{font-family:"DM Sans",sans-serif;font-size:.66rem;letter-spacing:.18em;
+    text-transform:uppercase;margin-bottom:7px}
+  .porta b{display:block;font-family:"Cinzel",serif;font-size:1.06rem;
+    font-weight:500;color:var(--ink);letter-spacing:.02em}
+  .porta i{display:block;font-style:italic;font-size:.98rem;color:var(--ink2);
+    margin-top:5px;line-height:1.5}
+  .porta .fr{display:inline-block;margin-top:12px;font-family:"DM Sans",sans-serif;
+    font-size:.76rem;color:var(--gold);letter-spacing:.04em}
+
+  /* l'acquisto */
+  .prow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .pn{flex:1;min-width:180px;font-size:1.14rem;color:var(--ink);line-height:1.3}
+  .pn small{display:block;font-family:"DM Sans",sans-serif;font-size:.74rem;
+    color:var(--ink2);margin-top:3px}
+  .pp{font-family:"Cinzel",serif;font-size:1.2rem;color:var(--gold);white-space:nowrap}
+  .compra{font-family:"Cinzel",serif;font-size:.74rem;letter-spacing:.16em;
+    text-transform:uppercase;font-weight:600;color:var(--navy);background:var(--gold);
+    border:1px solid var(--gold);border-radius:999px;padding:12px 24px;
+    text-decoration:none;white-space:nowrap;transition:.2s;cursor:pointer}
+  .compra:hover{background:var(--gold-d);border-color:var(--gold-d)}
+  .tal{display:flex;align-items:center;gap:11px;margin-top:18px;padding-top:15px;
+    border-top:.5px solid var(--line);font-family:"DM Sans",sans-serif;
+    font-size:.86rem;color:var(--ink2)}
+  .tal svg{flex:none;color:var(--gold)}
+
+  /* condividi */
+  .vie{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .via{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    font-family:"DM Sans",sans-serif;font-size:.88rem;color:var(--ink);
+    border:.5px solid var(--line);border-radius:999px;padding:11px 20px;
+    background:rgba(10,12,26,.4);transition:.2s;cursor:pointer}
+  .via:hover{border-color:var(--gold-d);background:rgba(212,175,106,.10)}
+  .via svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+  .nota{font-family:"DM Sans",sans-serif;font-size:.78rem;color:var(--ink2);
+    line-height:1.65;border:1px dashed var(--line);border-radius:12px;
+    padding:15px 17px;margin-top:22px}
+  .nota b{color:var(--gold);font-weight:500}
+
+  footer{border-top:.5px solid var(--line);padding:28px 22px 36px;text-align:center;
+    font-family:"DM Sans",sans-serif;font-size:.74rem;color:var(--ink2);line-height:1.8}
+  footer a{color:var(--ink3);text-decoration:none;margin:0 9px}
+  footer a:hover{color:var(--gold)}
+
+  @media print{
+    #nav,.vie,.compra{display:none}
+    body{background:#fff;color:#111}
+    body::before{display:none}
+    .fm-card,.porta{border-color:#ccc;box-shadow:none;background:none}
+    h1,.sec-tit,.eyebrow,.pp{color:#A8823E}
+  }
+</style>
+</head>
+<body>
+
+<section id="hero">
+  <div class="hin">
+    <div class="eyebrow">Emporio · Acqua &nbsp;·&nbsp; Scuola · Etere</div>
+    <h1>Anima Vagabonda</h1>
+    <div class="sub">Pellegrini senza memoria<br>alla ricerca della strada verso casa</div>
+    <div class="autore-h">Parabhakti dāsa</div>
+  </div>
+</section>
+
+<nav id="nav">
+  <a href="#libro">Il libro</a>
+  <a href="#autore">Chi scrive</a>
+  <a href="#insegnamenti">Insegnamenti</a>
+  <a href="#emporio">Emporio</a>
+  <a href="#condividi">Condividi</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- IL LIBRO -->
+  <section id="libro">
+    <div class="sec-tit">Il libro</div>
+    <div class="fm-card">
+      <div class="cop">
+        <div class="im">[ la copertina — in attesa ]</div>
+        <div class="tx">
+          <p>Il libro nasce da un cammino di ricerca personale, e accompagna chi legge
+          fra saperi antichi e insegnamenti della cultura dei Veda: il karma, la
+          trasmigrazione dell'anima, le energie che governano l'universo.</p>
+
+          <p>Ogni capitolo parte da una storia della tradizione purānica — racconti che
+          sembrano semplici e custodiscono significati profondi. Dopo il racconto,
+          l'autore entra nel cuore dell'insegnamento: nasce un dialogo fra narrazione
+          antica e riflessione contemporanea.</p>
+
+          <ul class="dati">
+            <li><span>editore</span><b>Libreria Editrice Psiche</b></li>
+            <li><span>formato</span><b>15 × 21 cm</b></li>
+            <li><span>ISBN</span><b>979-12-80968-30-2</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-tit" style="margin-top:38px">Le domande che porta</div>
+    <div class="fm-card">
+      <ul class="domande">
+        <li>Chi siamo veramente?</li>
+        <li>Qual è il significato delle nostre esperienze?</li>
+        <li>Che cosa determina le conseguenze delle nostre azioni?</li>
+        <li>Qual è il cammino dell'anima?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CHI SCRIVE -->
+  <section id="autore">
+    <div class="sec-tit">Chi scrive</div>
+    <div class="fm-card">
+      <div class="bio">
+        <div class="rit">[ il ritratto —<br>in attesa ]</div>
+        <div class="tx">
+          <p>Parabhakti dāsa, al secolo Mauro Bombieri, è autore, insegnante e studioso
+          di filosofia spirituale. Da oltre cinquant'anni percorre il sentiero della
+          ricerca interiore: un cammino alimentato dallo studio e dalla meditazione, ma
+          anche dall'incontro diretto con il mondo, le sue culture e le sue tradizioni.</p>
+
+          <p>I suoi viaggi lo hanno condotto in India, in Asia e in molti altri luoghi
+          di antica sapienza, alla ricerca di quella conoscenza universale che accomuna
+          popoli, epoche e visioni del mondo.</p>
+
+          <p>Negli anni ha condiviso il proprio percorso con migliaia di persone
+          attraverso conferenze, incontri culturali e attività educative in diverse
+          parti del mondo, rendendo accessibili insegnamenti millenari con un linguaggio
+          semplice, autentico e universale.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LE DUE PORTE -->
+  <section id="insegnamenti">
+    <div class="sec-tit">Dove porta</div>
+    <div class="porte">
+      <a class="porta" href="#" style="border-left:2px solid var(--fuoco)">
+        <div class="k" style="color:var(--fuoco)">Assistenza · Fuoco</div>
+        <b>Gli insegnamenti</b>
+        <i>[ in attesa ]</i>
+        <span class="fr">vai →</span>
+      </a>
+      <a class="porta" href="#" style="border-left:2px solid var(--etere)">
+        <div class="k" style="color:var(--etere)">Scuola · Etere</div>
+        <b>La ricerca</b>
+        <i>[ in attesa ]</i>
+        <span class="fr">vai →</span>
+      </a>
+    </div>
+    <p class="nota"><b>Chi legge il libro trova chi lo insegna. Chi cerca un
+      insegnamento trova cosa ha scritto.</b> Le due porte si aprono a vicenda.</p>
+  </section>
+
+  <!-- EMPORIO -->
+  <section id="emporio">
+    <div class="sec-tit">Emporio</div>
+    <div class="fm-card">
+      <div class="prow">
+        <div class="pn">Anima Vagabonda
+          <small>Parabhakti dāsa · Libreria Editrice Psiche · 15×21 cm</small></div>
+        <div class="pp">18,00 €</div>
+        <a class="compra" href="#">Ordina</a>
+      </div>
+      <div class="tal">
+        <svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/>
+          <path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/>
+          <path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/>
+        </svg>
+        <span>[ in attesa ] — lo puoi ricevere anche coi talenti</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONDIVIDI -->
+  <section id="condividi">
+    <div class="sec-tit">Condividi</div>
+    <div class="vie">
+      <a class="via" id="wa" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 11-3.2-6.4L20 4l-1 3.4A8 8 0 0120 12z"/><path d="M4 20l1.6-4"/></svg>
+        WhatsApp</a>
+      <a class="via" id="ml" href="#">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z M4 6l8 6 8-6"/></svg>
+        Per email</a>
+      <a class="via" id="cp" href="#">
+        <svg viewBox="0 0 24 24"><path d="M9 9h11v11H9z M4 15V4h11"/></svg>
+        Copia il collegamento</a>
+      <a class="via" href="mailto:felicitasmundi@protonmail.com">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Proponi un'opera</a>
+    </div>
+
+    <p class="nota"><b>[ in attesa ]</b> — la copertina e il ritratto · le righe dei due
+      rimandi · quanti talenti · il collegamento all'ordine.<br>
+      Il testo della quarta di copertina e la biografia sono di Parabhakti dāsa,
+      dal materiale che ha inviato.</p>
+  </section>
+
+</div>
+
+<footer>
+  Felicitas Omnia S.r.l.s. · P.IVA 03075740906<br>
+  © 2026 · Tutti i diritti riservati
+  <div style="margin-top:10px">
+    <a href="privacy.html">Informativa privacy</a>
+    <a href="cookie.html">Cookie</a>
+    <a href="condizioni.html">Condizioni d&rsquo;uso</a>
+  </div>
+</footer>
+
+<script>
+  var url = location.href, tit = "Anima Vagabonda · Parabhakti dāsa";
+  document.getElementById('wa').href =
+    'https://wa.me/?text=' + encodeURIComponent(tit + ' — ' + url);
+  document.getElementById('ml').href =
+    'mailto:?subject=' + encodeURIComponent(tit) + '&body=' + encodeURIComponent(url);
+  document.getElementById('cp').addEventListener('click', function(e){
+    e.preventDefault(); var t = this;
+    if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){
+      var v = t.lastChild.textContent; t.lastChild.textContent = ' copiato';
+      setTimeout(function(){ t.lastChild.textContent = v; }, 1800);
+    });
+  });
+
+  var sez = [].slice.call(document.querySelectorAll('section[id]'));
+  var voci = [].slice.call(document.querySelectorAll('#nav a'));
+  function spia(){
+    var y = window.scrollY + 80, att = null;
+    sez.forEach(function(s){ if(s.offsetTop <= y) att = s.id; });
+    voci.forEach(function(a){
+      a.classList.toggle('on', a.getAttribute('href') === '#' + att);
+    });
+  }
+  window.addEventListener('scroll', spia); spia();
+</script>
+</body>
+</html>
