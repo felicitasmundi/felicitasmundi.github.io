@@ -33,8 +33,8 @@
     text-transform:uppercase;color:var(--gold);margin-bottom:14px}
   h1{font-family:"Cinzel",serif;font-weight:500;font-size:clamp(1.8rem,5vw,2.7rem);
     line-height:1.18;letter-spacing:.03em}
-  .sub{font-style:italic;font-size:1.14rem;color:var(--ink2);margin-top:12px;line-height:1.5}
-  .autore-h{font-family:"Cinzel",serif;font-size:.78rem;letter-spacing:.2em;
+  .sub{font-style:italic;font-size:1.5rem;color:var(--ink2);margin-top:12px;line-height:1.5}
+  .autore-h{font-family:"Cinzel",serif;font-size:.88rem;letter-spacing:.2em;
     text-transform:uppercase;color:var(--ink3);margin-top:16px}
 
   /* quadranti */
@@ -55,33 +55,30 @@
   .fm-card{background:var(--card);-webkit-backdrop-filter:var(--blur);
     backdrop-filter:var(--blur);border:.5px solid var(--line);border-radius:16px;
     padding:26px 26px;box-shadow:var(--shadow)}
-  p{font-size:1.1rem;margin-bottom:1.05rem}
+  p{font-size:1.22rem;margin-bottom:1.15rem}
   p:last-child{margin-bottom:0}
 
   /* la copertina */
   .cop{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
-  .cop .im{flex:0 0 168px;border-radius:10px;overflow:hidden;
-    border:.5px solid var(--line);box-shadow:var(--shadow);background:#f1eee2;
-    aspect-ratio:15/21;display:grid;place-items:center;
-    font-family:"DM Sans",sans-serif;font-size:.7rem;color:rgba(10,12,26,.42);
-    text-align:center;padding:10px}
+  .cop .im{flex:0 0 200px;border-radius:10px;overflow:hidden;
+    border:.5px solid var(--line);box-shadow:var(--shadow)}
+  .cop .im img{display:block;width:100%;height:auto}
   .cop .tx{flex:1;min-width:210px}
   .dati{list-style:none;margin-top:16px;padding-top:14px;border-top:.5px solid var(--line)}
   .dati li{display:flex;justify-content:space-between;gap:14px;
-    font-family:"DM Sans",sans-serif;font-size:.86rem;color:var(--ink2);padding:5px 0}
+    font-family:"DM Sans",sans-serif;font-size:.94rem;color:var(--ink2);padding:5px 0}
   .dati li b{color:var(--ink);font-weight:400}
 
   .domande{list-style:none;margin-top:6px}
-  .domande li{font-family:"Cinzel",serif;font-size:1.02rem;color:var(--gold);
+  .domande li{font-family:"Cinzel",serif;font-size:1.16rem;color:var(--gold);
     padding:9px 0 9px 22px;position:relative;line-height:1.45;letter-spacing:.02em}
   .domande li::before{content:'·';position:absolute;left:4px;color:var(--gold-d)}
 
   /* la bio */
   .bio{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
-  .bio .rit{flex:0 0 108px;height:108px;border-radius:50%;overflow:hidden;
-    border:.5px solid var(--line);background:rgba(245,240,230,.06);display:grid;
-    place-items:center;font-family:"DM Sans",sans-serif;font-size:.62rem;
-    color:var(--ink2);text-align:center;padding:8px}
+  .bio .rit{flex:0 0 124px;height:124px;border-radius:50%;overflow:hidden;
+    border:.5px solid var(--line)}
+  .bio .rit img{display:block;width:100%;height:100%;object-fit:cover}
   .bio .tx{flex:1;min-width:220px}
 
   /* i due rimandi */
@@ -93,16 +90,16 @@
   .porta:hover{border-color:var(--gold-d)}
   .porta .k{font-family:"DM Sans",sans-serif;font-size:.66rem;letter-spacing:.18em;
     text-transform:uppercase;margin-bottom:7px}
-  .porta b{display:block;font-family:"Cinzel",serif;font-size:1.06rem;
+  .porta b{display:block;font-family:"Cinzel",serif;font-size:1.16rem;
     font-weight:500;color:var(--ink);letter-spacing:.02em}
-  .porta i{display:block;font-style:italic;font-size:.98rem;color:var(--ink2);
+  .porta i{display:block;font-style:italic;font-size:1.08rem;color:var(--ink2);
     margin-top:5px;line-height:1.5}
   .porta .fr{display:inline-block;margin-top:12px;font-family:"DM Sans",sans-serif;
     font-size:.76rem;color:var(--gold);letter-spacing:.04em}
 
   /* l'acquisto */
   .prow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-  .pn{flex:1;min-width:180px;font-size:1.14rem;color:var(--ink);line-height:1.3}
+  .pn{flex:1;min-width:180px;font-size:1.24rem;color:var(--ink);line-height:1.3}
   .pn small{display:block;font-family:"DM Sans",sans-serif;font-size:.74rem;
     color:var(--ink2);margin-top:3px}
   .pp{font-family:"Cinzel",serif;font-size:1.2rem;color:var(--gold);white-space:nowrap}
@@ -125,7 +122,7 @@
   .via:hover{border-color:var(--gold-d);background:rgba(212,175,106,.10)}
   .via svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6}
 
-  .nota{font-family:"DM Sans",sans-serif;font-size:.78rem;color:var(--ink2);
+  .nota{font-family:"DM Sans",sans-serif;font-size:.86rem;color:var(--ink2);
     line-height:1.65;border:1px dashed var(--line);border-radius:12px;
     padding:15px 17px;margin-top:22px}
   .nota b{color:var(--gold);font-weight:500}
@@ -148,7 +145,7 @@
 
 <section id="hero">
   <div class="hin">
-    <div class="eyebrow">Emporio · Acqua &nbsp;·&nbsp; Scuola · Etere</div>
+    <div class="eyebrow">Emporio &nbsp;·&nbsp; Scuola</div>
     <h1>Anima Vagabonda</h1>
     <div class="sub">Pellegrini senza memoria<br>alla ricerca della strada verso casa</div>
     <div class="autore-h">Parabhakti dāsa</div>
@@ -170,16 +167,15 @@
     <div class="sec-tit">Il libro</div>
     <div class="fm-card">
       <div class="cop">
-        <div class="im">[ la copertina — in attesa ]</div>
+        <div class="im"><img src="anima-vagabonda-copertina.jpg" alt="Anima Vagabonda, la copertina"></div>
         <div class="tx">
-          <p>Il libro nasce da un cammino di ricerca personale, e accompagna chi legge
-          fra saperi antichi e insegnamenti della cultura dei Veda: il karma, la
-          trasmigrazione dell'anima, le energie che governano l'universo.</p>
+          <p>Nasce da un'esperienza personale, da un cammino di ricerca che ha condotto
+          l'autore a confrontarsi con le domande più profonde sull'esistenza e sul senso
+          del nostro passaggio nel mondo.</p>
 
-          <p>Ogni capitolo parte da una storia della tradizione purānica — racconti che
-          sembrano semplici e custodiscono significati profondi. Dopo il racconto,
-          l'autore entra nel cuore dell'insegnamento: nasce un dialogo fra narrazione
-          antica e riflessione contemporanea.</p>
+          <p>Dopo aver raccontato la propria esperienza, accompagna chi legge in un
+          viaggio attraverso saperi antichi e insegnamenti della cultura dei Veda: il
+          karma, la trasmigrazione dell'anima, le energie che governano l'universo.</p>
 
           <ul class="dati">
             <li><span>editore</span><b>Libreria Editrice Psiche</b></li>
@@ -190,6 +186,23 @@
       </div>
     </div>
 
+    <div class="sec-tit" style="margin-top:38px">Come è fatto</div>
+    <div class="fm-card">
+      <p>Il valore del libro sta anche nel modo in cui questi temi vengono presentati.
+      Ogni capitolo prende avvio da <b style="color:var(--gold)">antiche storie e fiabe
+      della tradizione purānica</b>: racconti che sembrano semplici e affascinanti, ma
+      custodiscono significati profondi.</p>
+
+      <p>La storia diventa così una porta d'ingresso alla riflessione. Dietro personaggi,
+      vicende e simboli emergono interrogativi che riguardano ciascuno di noi, invitandoci
+      a fermarci, a osservare la nostra vita da una prospettiva diversa.</p>
+
+      <p>Dopo il racconto, l'autore entra nel cuore dell'insegnamento, approfondendone il
+      significato spirituale e filosofico. <b style="color:var(--gold)">Nasce così un
+      dialogo tra narrazione antica e riflessione contemporanea, tra esperienza personale
+      e conoscenza tradizionale.</b></p>
+    </div>
+
     <div class="sec-tit" style="margin-top:38px">Le domande che porta</div>
     <div class="fm-card">
       <ul class="domande">
@@ -198,6 +211,11 @@
         <li>Che cosa determina le conseguenze delle nostre azioni?</li>
         <li>Qual è il cammino dell'anima?</li>
       </ul>
+      <p style="margin-top:20px;padding-top:18px;border-top:.5px solid var(--line);
+         font-style:italic;color:var(--ink2)">Un viaggio fatto di racconti, simboli e
+         insegnamenti antichi, per riscoprire una dimensione più profonda della nostra
+         esistenza. Un'anima che vaga, cerca, incontra e, attraverso la conoscenza,
+         prova a comprendere il senso del proprio cammino.</p>
     </div>
   </section>
 
@@ -206,7 +224,7 @@
     <div class="sec-tit">Chi scrive</div>
     <div class="fm-card">
       <div class="bio">
-        <div class="rit">[ il ritratto —<br>in attesa ]</div>
+        <div class="rit"><img src="parabhakti-ritratto.jpg" alt="Parabhakti dāsa"></div>
         <div class="tx">
           <p>Parabhakti dāsa, al secolo Mauro Bombieri, è autore, insegnante e studioso
           di filosofia spirituale. Da oltre cinquant'anni percorre il sentiero della
@@ -217,10 +235,21 @@
           di antica sapienza, alla ricerca di quella conoscenza universale che accomuna
           popoli, epoche e visioni del mondo.</p>
 
+          <p>La natura della coscienza, il mistero dell'anima e il senso del viaggio
+          umano sono i temi che da sempre animano la sua vita, intrecciandosi con
+          l'esperienza viva dell'incontro con l'altro.</p>
+
           <p>Negli anni ha condiviso il proprio percorso con migliaia di persone
           attraverso conferenze, incontri culturali e attività educative in diverse
-          parti del mondo, rendendo accessibili insegnamenti millenari con un linguaggio
-          semplice, autentico e universale.</p>
+          parti del mondo, rendendo accessibili insegnamenti millenari e saggezze
+          pratiche con un linguaggio semplice, autentico e universale.</p>
+
+          <p style="font-style:italic;color:var(--ink2);padding-top:14px;
+             border-top:.5px solid var(--line)">In questo libro accompagna il lettore in
+          una riflessione profonda sul significato dell'esistenza, sul continuo peregrinare
+          che caratterizza la condizione umana e sulla possibilità, sempre presente, di
+          ritrovare una direzione autentica. Un invito a riscoprire quel filo interiore
+          capace di dare senso, orientamento e pienezza al cammino della vita.</p>
         </div>
       </div>
     </div>
@@ -231,13 +260,13 @@
     <div class="sec-tit">Dove porta</div>
     <div class="porte">
       <a class="porta" href="#" style="border-left:2px solid var(--fuoco)">
-        <div class="k" style="color:var(--fuoco)">Assistenza · Fuoco</div>
+        <div class="k" style="color:var(--fuoco)">Assistenza</div>
         <b>Gli insegnamenti</b>
         <i>[ in attesa ]</i>
         <span class="fr">vai →</span>
       </a>
       <a class="porta" href="#" style="border-left:2px solid var(--etere)">
-        <div class="k" style="color:var(--etere)">Scuola · Etere</div>
+        <div class="k" style="color:var(--etere)">Scuola</div>
         <b>La ricerca</b>
         <i>[ in attesa ]</i>
         <span class="fr">vai →</span>
@@ -256,15 +285,6 @@
           <small>Parabhakti dāsa · Libreria Editrice Psiche · 15×21 cm</small></div>
         <div class="pp">18,00 €</div>
         <a class="compra" href="#">Ordina</a>
-      </div>
-      <div class="tal">
-        <svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="currentColor"
-             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/>
-          <path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/>
-          <path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/>
-        </svg>
-        <span>[ in attesa ] — lo puoi ricevere anche coi talenti</span>
       </div>
     </div>
   </section>
@@ -287,10 +307,10 @@
         Proponi un'opera</a>
     </div>
 
-    <p class="nota"><b>[ in attesa ]</b> — la copertina e il ritratto · le righe dei due
-      rimandi · quanti talenti · il collegamento all'ordine.<br>
-      Il testo della quarta di copertina e la biografia sono di Parabhakti dāsa,
-      dal materiale che ha inviato.</p>
+    <p class="nota"><b>[ in attesa ]</b> — le righe dei due rimandi e il collegamento
+      all'ordine.<br>
+      I testi sono di Parabhakti dāsa, dal materiale che ha inviato.
+      Copertina: Libreria Editrice Psiche.</p>
   </section>
 
 </div>

@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   40.525 byte · MD5 6a0600ccc604ee3ba564fbd27e02fdab
+   52.046 byte · MD5 7cf0f317e11dc0df67b679db0e2b6c16
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
@@ -30,6 +30,8 @@ var CASA = `<style>
   .sv-casa [data-leg] > div > span{min-width:0}
   .sv-casa [data-leg] b,.sv-casa [data-leg] i{min-width:0;overflow-wrap:break-word;hyphens:auto}
   .sv-casa button{font-family:'DM Sans',sans-serif}
+  .sv-casa [data-nodi]{grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media(max-width:42rem){ .sv-casa [data-nodi]{grid-template-columns:minmax(0,1fr);gap:1.4rem} }
   @media(max-width:62rem){ .sv-casa [data-leg]{grid-template-columns:repeat(2,minmax(0,1fr))} }
   @media(max-width:52rem){
     .sv-casa{padding-left:1.1rem;padding-right:1.1rem}
@@ -46,7 +48,7 @@ var CASA = `<style>
 
   <!-- IL LIBRO CON LA MAPPA -->
   <section style="order:1;margin-top:1.2rem">
-    <h2 style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);color:var(--ivory);margin:0 0 0.9rem">Collega le tue orme</h2>
+    <h2 style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory);margin:0 0 0.9rem">Collega le tue orme</h2>
     <div data-libro="1" style="position:relative;border:1px solid rgba(200,160,85,0.5);border-radius:0.5rem;padding:0.75rem;background:linear-gradient(160deg,rgba(30,24,16,0.9),rgba(10,12,26,0.95));box-shadow:0 1.2rem 2.6rem rgba(2,4,12,0.55),inset 0 0 0 1px rgba(2,4,12,0.6)">
       <div style="position:relative;border:1px solid rgba(200,160,85,0.32);border-radius:0.25rem;overflow:hidden;background:#070c1a">
         <div style="position:relative;height:26rem">
@@ -62,44 +64,48 @@ var CASA = `<style>
           </div>
         </div>
       </div>
-      <div style="min-width:0;padding:1.1rem 0.4rem 0.2rem">
+      <div data-rete="1" style="position:relative;min-width:0;margin-top:0.75rem;border:1px solid rgba(184,150,62,0.28);border-radius:0.6rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
+      <canvas id="sv-rete3" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.85"></canvas>
+      <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(2,4,12,0.5),rgba(2,4,12,0.14) 70%)"></div>
+      <div style="position:relative;z-index:2;min-width:0;padding:1.2rem 1.1rem 1.1rem">
         <div style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.2em;text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.9rem">Legenda</div>
         <div data-leg="1" style="display:grid;gap:0.8rem 1.6rem">
     
             <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
               <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"></path><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">orma</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">le tracce del sentiero</i></span>
+              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">orma</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">le tracce del sentiero</i></span>
             </div>
     
             <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
               <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"></path><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"></path><path d="M14 20L26 20"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">connessione</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">espandere la rete</i></span>
+              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">connessione</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">espandere la rete</i></span>
             </div>
     
             <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M12.5 20C12.5 21.97 10.97 23.5 9 23.5C7.03 23.5 5.5 21.97 5.5 20C5.5 18.03 7.03 16.5 9 16.5C10.97 16.5 12.5 18.03 12.5 20Z"></path><path d="M34.5 20C34.5 21.97 32.97 23.5 31 23.5C29.03 23.5 27.5 21.97 27.5 20C27.5 18.03 29.03 16.5 31 16.5C32.97 16.5 34.5 18.03 34.5 20Z"></path><path d="M13 16L27 16M27 16L23.5 12.5M27 24L13 24M13 24L16.5 27.5"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">scambio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">nutrire l'esistenza</i></span>
+              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">talenti</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">lo scambio comune</i></span>
             </div>
     
             <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
               <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"></path><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"></path><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"></path><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"></path><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">vicinato</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">la forza comune</i></span>
+              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">vicinato</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">la forza comune</i></span>
             </div>
     
             <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
               <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"></path><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"></path><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"></path><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"></path><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">ritmo</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">feste, formazioni, esperienze</i></span>
+              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">ritmo</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">feste, formazioni, esperienze</i></span>
             </div>
     
             <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
               <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"></path><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"></path><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">incontro</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">relazione tra vicinati</i></span>
+              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">incontro</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">relazione tra vicinati</i></span>
             </div>
     
             <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
               <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M4 14L20 5L36 14Z"></path><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"></path><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25">tempio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.82);line-height:1.35">luoghi sacri custoditi</i></span>
+              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">tempio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">luoghi sacri custoditi</i></span>
             </div>
+      </div>
     
         </div>
       </div>
@@ -184,14 +190,66 @@ var CASA = `<style>
 
 
   <!-- LE SETTE DOMANDE -->
-  <section style="order:6;margin-top:4rem">
-    <h2 style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);margin:0 0 0.9rem">Le domande dei nuovi arrivati</h2>
+  <!-- COSA POSSIAMO FARE · la rete dietro il vetro -->
+  <section style="order:6;margin-top:2.6rem;min-width:0">
+    <div data-rete="1" style="position:relative;border:1px solid rgba(184,150,62,0.28);border-radius:1rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
+      <canvas id="sv-rete" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.85"></canvas>
+      <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(2,4,12,0.5),rgba(2,4,12,0.14) 70%)"></div>
+      <div style="position:relative;z-index:2;padding:2.2rem 1.6rem 1.9rem;min-width:0">
+        <h2 style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);color:var(--oro-ch);text-align:center;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 1.9rem;text-shadow:0 2px 18px rgba(2,4,12,0.9)">Cosa possiamo fare</h2>
+
+        <div data-nodi="1" style="display:grid;gap:1.3rem 2.2rem;min-width:0">
+        <div style="position:relative;padding-left:1.7rem;color:#8C2F39;min-width:0">
+          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
+          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Un praticantato condiviso</b>
+          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">che, unendo coscienza, scienza e tecnologia,<br>ci permetta di divenire un super organismo uomo</i>
+        </div>
+
+        <div style="position:relative;padding-left:1.7rem;color:#AA8844;min-width:0">
+          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
+          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Fissiamo quello di cui c'è bisogno nei vicinati</b>
+          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">ognuno potrà rispondere e dare supporto: produzione alimentare, rimedi naturali, assistenza spirituale, informazione dell'acqua, accompagnamento alla vita in genere</i>
+        </div>
+
+        <div style="position:relative;padding-left:1.7rem;color:#4488BB;min-width:0">
+          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
+          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Scambiamo anche senza usare denaro</b>
+          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">i talenti fanno circolare un'economia comunitaria e centralizzata</i>
+        </div>
+
+        <div style="position:relative;padding-left:1.7rem;color:#669944;min-width:0">
+          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
+          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Facciamo ordine nella memoria</b>
+          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">per pubblicare, stampare e distribuire opere evolutive</i>
+        </div>
+
+        <div style="position:relative;padding-left:1.7rem;color:#9966CC;min-width:0;grid-column:1/-1">
+          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
+          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">La lavagna in comune segna bisogni, obiettivi e task</b>
+          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">chi esegue il compito, le ore e l'avanzamento, il corrispettivo in euro o talenti, in modo da poter essere utile ai vicinati e ai gruppi di lavoro</i>
+        </div>
+        </div>
+
+        <div style="margin-top:2.4rem;padding-top:1.4rem;text-align:center;position:relative">
+          <span style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;max-width:22rem;height:1px;background:linear-gradient(90deg,transparent,rgba(200,160,85,0.45),transparent)"></span>
+          <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/vishnu-cosmic.png" alt="Vishnu cosmico" style="width:100%;height:auto;display:block;margin:0;filter:drop-shadow(0 0 2rem rgba(200,160,85,0.28))">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="order:7;margin-top:2.6rem;min-width:0">
+    <div data-rete="1" style="position:relative;border:1px solid rgba(184,150,62,0.28);border-radius:1rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
+    <canvas id="sv-rete2" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.85"></canvas>
+    <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(2,4,12,0.5),rgba(2,4,12,0.14) 70%)"></div>
+    <div style="position:relative;z-index:2;padding:2.2rem 1.6rem 1.9rem;min-width:0">
+    <h2 style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);color:var(--oro-ch);text-align:center;letter-spacing:0.03em;margin:0 0 1.6rem;text-shadow:0 2px 18px rgba(2,4,12,0.9)">Le domande dei nuovi arrivati</h2>
 
     <details style="border-top:1px solid var(--line)">
       <summary style="display:flex;gap:0.7rem;padding:0.9rem 0.1rem;cursor:pointer;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.4;list-style:none">
         <span style="color:var(--oro)">›</span><span>Cos'è la Comunità Eterna?</span>
       </summary>
-      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.88);display:flex;flex-direction:column;gap:0.7rem">
+      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
         <p style="margin:0">Le persone stanno vivendo un cambiamento epocale. Cambia il mondo lavorativo, legato anche alla tecnologia — ma cambia soprattutto il linguaggio. Ci si relaziona unicamente attraverso il telefono. È tutto così social, tutto così estetico, e spesso manca la profondità dei contenuti.</p>
         <p style="margin:0">E intanto, negli ultimi sei anni, tutto quello che viene detto viene dopo un attimo smentito. Tanti sono lì che non capiscono più nulla. Non c'è più una chiarezza.</p>
         <p style="margin:0">Dietro c'è una grande paura. E c'è, in fondo, una mancanza: la conoscenza e la consapevolezza di essere l'anima.</p>
@@ -205,7 +263,7 @@ var CASA = `<style>
       <summary style="display:flex;gap:0.7rem;padding:0.9rem 0.1rem;cursor:pointer;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.4;list-style:none">
         <span style="color:var(--oro)">›</span><span>Quanto costa?</span>
       </summary>
-      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.88);display:flex;flex-direction:column;gap:0.7rem">
+      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
         <p style="margin:0">Entrare e servire la comunità è gratuito, sempre. Leggi, scrivi in bacheca, dichiari un ruolo e ti metti all'opera. Hai gli strumenti per collegare la tua orma: i contatti che incontri, le idee e le note, i racconti, le testimonianze, i bisogni che apri, quello che scambi e quello che doni, le spese, le ore di lavoro, i link e gli obiettivi. Nell'emporio puoi offrire quello che fai in scambio o in dono. Questo non scade e non è una prova: è la porta che resta aperta.</p>
         <p style="margin:0">Il praticantato costa 26 € al mese, e lo compri quando vuoi, un mese alla volta. Non è un abbonamento che si rinnova da solo.</p>
         <p style="margin:0">Cosa apre.</p>
@@ -222,7 +280,7 @@ var CASA = `<style>
       <summary style="display:flex;gap:0.7rem;padding:0.9rem 0.1rem;cursor:pointer;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.4;list-style:none">
         <span style="color:var(--oro)">›</span><span>Dove siete?</span>
       </summary>
-      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.88);display:flex;flex-direction:column;gap:0.7rem">
+      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
         <p style="margin:0">FelicitasMundi come piattaforma nasce in Sardegna. L'azienda che ne gestisce l'aspetto amministrativo, commerciale e legale ha sede a Sassari.</p>
         <p style="margin:0">Ma la Comunità vive dove sei tu. La piattaforma è collegata e interconnessa a gruppi, circuiti e comunità dei territori, e in questo modo copre già una buona parte delle regioni italiane.</p>
         <p style="margin:0">Lo sviluppo dei vicinati ha oggi maggiore attenzione in Sardegna, Abruzzo, Emilia-Romagna, Toscana e Lombardia.</p>
@@ -234,7 +292,7 @@ var CASA = `<style>
       <summary style="display:flex;gap:0.7rem;padding:0.9rem 0.1rem;cursor:pointer;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.4;list-style:none">
         <span style="color:var(--oro)">›</span><span>Posso fare volontariato in un vicinato?</span>
       </summary>
-      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.88);display:flex;flex-direction:column;gap:0.7rem">
+      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
         <p style="margin:0">Il modo in cui la piattaforma fa incontrare le persone è rendere visibili i bisogni: quelli dei singoli, quelli dei team, quelli dei vicinati. Ci sono gruppi che hanno bisogno di qualcuno che dia una mano nelle pulizie, nell'orto, nella gestione della comunicazione, nell'organizzare attività, nel produrre rimedi naturali.</p>
         <p style="margin:0">Si parte da lì: i vicinati raccontano i loro bisogni. Abbiamo bisogno di questo, e diamo in cambio ospitalità, vitto e alloggio, la possibilità di proporre le proprie esperienze e i propri prodotti.</p>
         <p style="margin:0">Chi si iscrive può intanto partecipare a questo scambio e a questo dono — e fra le cose che può fare c'è proprio quella di partecipare come volontario nei luoghi, e dare una mano ai vicinati. Si dichiara un ruolo, e si comincia. Gratuito, sempre. Chi serve appartiene.</p>
@@ -248,7 +306,7 @@ var CASA = `<style>
       <summary style="display:flex;gap:0.7rem;padding:0.9rem 0.1rem;cursor:pointer;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.4;list-style:none">
         <span style="color:var(--oro)">›</span><span>Come posso creare un vicinato nella mia zona?</span>
       </summary>
-      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.88);display:flex;flex-direction:column;gap:0.7rem">
+      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
         <p style="margin:0">Il vicinato è un progetto, e si fa entrando nel praticantato: guardi le cose che potresti fare, e fra quelle c'è lo sviluppo di un vicinato.</p>
         <p style="margin:0">Creare un vicinato significa prendere un gruppo di lavoro — magari già esistente — e formalizzarlo dentro uno strumento che gli dà quello che gli serve.</p>
         <p style="margin:0">Con quegli strumenti puoi ricevere contatti; tenere traccia delle idee e delle note; raccontare le esperienze che si vivono; ricevere le testimonianze di chi ti viene a trovare; mostrare i bisogni di quel vicinato; incentivare lo scambio e il dono fra vicinati e fra le persone che partecipano, anche online; avere una gestione più attenta delle spese e del piano economico; tenere nota delle ore di lavoro; e tenere traccia dei link — quelli che nascono sui social e su YouTube legati al tuo vicinato, e in generale i link di cose che possono essere utili, dalle ricette alimentari alla bioedilizia alle pratiche terapeutiche.</p>
@@ -261,7 +319,7 @@ var CASA = `<style>
       <summary style="display:flex;gap:0.7rem;padding:0.9rem 0.1rem;cursor:pointer;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.4;list-style:none">
         <span style="color:var(--oro)">›</span><span>Cosa trovo nella piattaforma?</span>
       </summary>
-      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.88);display:flex;flex-direction:column;gap:0.7rem">
+      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
         <p style="margin:0">FelicitasMundi è un catalizzatore di comunità che integra più aspetti: quello filosofico, legato alla coscienza cosmica e alla cultura indovedica, che si unisce alla metafisica e alle tradizioni tramandate dai popoli — da tutti i popoli. A un certo livello le realtà autoctone, le piccole comunità ancora resilienti, quelle che resistono, sono tutte collegate a modelli di vita che nella quotidianità, nell'uso degli strumenti, nel canto, nel mangiare in una certa maniera, riconducono alla stessa essenza.</p>
         <p style="margin:0">Con questa piattaforma cerchiamo di far vivere qualcosa che è trascendentale, già esistente, eterno: legato a una coscienza e a un senso di beatitudine — quello che in sanscrito si chiama Sat-Cit-Ananda.</p>
         <p style="margin:0">La radio. Sempre in onda: musica popolare, musica sacra, la musica di chi la condivide. Con una programmazione e appuntamenti destinati al racconto dei vicinati, ad approfondimenti sul proprio percorso interiore, ai cicli lunari, alle pratiche legate alla ruota dell'anno, alla diffusione delle conoscenze di chi ha uno strumento e vuole farlo circolare. Non un programma: una stazione radiofonica con più programmi, che si possono anche scaricare.</p>
@@ -277,13 +335,15 @@ var CASA = `<style>
       <summary style="display:flex;gap:0.7rem;padding:0.9rem 0.1rem;cursor:pointer;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.4;list-style:none">
         <span style="color:var(--oro)">›</span><span>È adatto ai bambini?</span>
       </summary>
-      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.88);display:flex;flex-direction:column;gap:0.7rem">
+      <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
         <p style="margin:0">Tutto questo progetto nasce come progetto educativo: educare l'umanità a una cultura che indirizza verso una civiltà che evolve.</p>
         <p style="margin:0">Questo indirizzo lo si può dare partendo proprio dai bambini, che hanno bisogno di esempi. E gli esempi li si danno con adulti che mostrano il buon senso, che mostrano il reciproco aiuto, che gioiscono con la musica e con il buon cibo — un cibo naturale, raccolto con le mani dopo essersene presi cura.</p>
         <p style="margin:0">Il bambino impara a prendersi cura dell'esistenza grazie ad adulti che hanno imparato a loro volta.</p>
         <p style="margin:0">È questa la Comunità Eterna.</p>
       </div>
     </details>
+    </div>
+    </div>
   </section>
 
 
@@ -323,7 +383,92 @@ function avviaCasa(){
     "M20 " + (20 - r) + " A " + r + " " + r + " 0 0 " + s1 + " 20 " + (20 + r) +
     " A " + rx.toFixed(2) + " " + r + " 0 0 " + s2 + " 20 " + (20 - r));
 
-  /* ③ il libro: i tasti stringono e allargano, il trascinamento sposta,
+  /* ③ la rete dietro il vetro. Ferma per chi ha il movimento ridotto. */
+  (function () {
+    var fondali = [];
+    var t = 0;
+    var fermo = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    ["sv-rete", "sv-rete2", "sv-rete3"].forEach(function (id) {
+      var cv = document.getElementById(id);
+      if (cv && cv.getContext) fondali.push({ cv: cv, cx: cv.getContext("2d"), W: 0, H: 0, punti: [] });
+    });
+    if (!fondali.length) return;
+
+    function semina(f) {
+      f.punti = [];
+      var quanti = Math.min(90, Math.max(26, Math.round(f.W * f.H / 9000)));
+      for (var i = 0; i < quanti; i++) f.punti.push({
+        x: Math.random() * f.W, y: Math.random() * f.H,
+        vx: (Math.random() - 0.5) * 0.14, vy: (Math.random() - 0.5) * 0.14,
+        r: 0.9 + Math.random() * 1.5,
+        f: 0.4 + Math.random() * 0.9,
+        s: Math.random() * Math.PI * 2
+      });
+    }
+
+    function misura() {
+      var d = window.devicePixelRatio || 1;
+      fondali.forEach(function (f) {
+        var r = f.cv.parentNode.getBoundingClientRect();
+        f.W = r.width; f.H = r.height;
+        f.cv.width = f.W * d; f.cv.height = f.H * d;
+        f.cx.setTransform(d, 0, 0, d, 0, 0);
+        semina(f);
+      });
+      if (fermo) disegna();
+    }
+
+    function disegna() {
+      if (!fermo) t += 0.006;
+      fondali.forEach(function (f) { unFondale(f); });
+      if (!fermo) requestAnimationFrame(disegna);
+    }
+
+    function unFondale(f) {
+      var cx = f.cx, punti = f.punti, W = f.W, H = f.H;
+      cx.clearRect(0, 0, W, H);
+
+      for (var i = 0; i < punti.length; i++) {
+        var a = punti[i];
+        for (var j = i + 1; j < punti.length; j++) {
+          var b = punti[j];
+          var dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+          if (d2 < 20000) {
+            var op = (1 - d2 / 20000) * 0.30;
+            var onda = fermo ? 0.8 : 0.55 + 0.45 * Math.sin(t * 1.6 + (a.x + a.y) * 0.006);
+            cx.strokeStyle = "rgba(200,160,85," + (op * onda).toFixed(3) + ")";
+            cx.lineWidth = 0.6;
+            cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke();
+          }
+        }
+      }
+
+      for (var k = 0; k < punti.length; k++) {
+        var p = punti[k];
+        var battito = fermo ? 0.6 : 0.5 + 0.5 * Math.sin(t * p.f * 2 + p.s);
+        var rr = p.r * (0.8 + battito * 0.5);
+        var g = cx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rr * 5);
+        g.addColorStop(0,   "rgba(212,175,106," + (0.5 + battito * 0.4).toFixed(3) + ")");
+        g.addColorStop(0.4, "rgba(200,160,85,"  + (0.12 + battito * 0.1).toFixed(3) + ")");
+        g.addColorStop(1,   "rgba(200,160,85,0)");
+        cx.fillStyle = g;
+        cx.beginPath(); cx.arc(p.x, p.y, rr * 5, 0, Math.PI * 2); cx.fill();
+        cx.fillStyle = "rgba(245,240,230," + (0.35 + battito * 0.45).toFixed(3) + ")";
+        cx.beginPath(); cx.arc(p.x, p.y, rr, 0, Math.PI * 2); cx.fill();
+        if (!fermo) {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < -20) p.x = W + 20; if (p.x > W + 20) p.x = -20;
+          if (p.y < -20) p.y = H + 20; if (p.y > H + 20) p.y = -20;
+        }
+      }
+    }
+
+    window.addEventListener("resize", misura);
+    misura();
+    if (!fermo) disegna();
+  })();
+
+  /* ④ il libro: i tasti stringono e allargano, il trascinamento sposta,
         il tocco breve chiede al guscio di aprire la mappa.
         Col MOUSE si trascina subito. Col DITO solo dopo un attimo di pressione,
         altrimenti il dito continua a scorrere la pagina. */
