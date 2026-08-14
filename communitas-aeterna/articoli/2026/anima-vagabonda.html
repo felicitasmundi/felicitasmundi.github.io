@@ -82,10 +82,14 @@
   .bio .tx{flex:1;min-width:220px}
 
   /* i due rimandi */
-  .porte{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
-  @media(max-width:620px){.porte{grid-template-columns:1fr}}
+  .sec-nex{display:flex;align-items:center;justify-content:center;gap:12px;
+    color:var(--gold);margin-bottom:24px}
+  .sec-nex span{font-family:"Cinzel",serif;font-size:.86rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--ink3)}
+
+  .porte{display:flex;flex-direction:column;gap:12px;margin-top:6px}
   .porta{display:block;text-decoration:none;border:.5px solid var(--line);
-    border-radius:14px;padding:20px 20px;background:var(--card);
+    border-radius:14px;padding:22px 24px;background:var(--card);
     -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);transition:.22s}
   .porta:hover{border-color:var(--gold-d)}
   .porta .k{font-family:"DM Sans",sans-serif;font-size:.66rem;letter-spacing:.18em;
@@ -122,6 +126,18 @@
   .via:hover{border-color:var(--gold-d);background:rgba(212,175,106,.10)}
   .via svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6}
 
+  .video{display:block;margin-top:14px;border-radius:14px;overflow:hidden;
+    border:.5px solid var(--line);box-shadow:var(--shadow);
+    position:relative;aspect-ratio:16/9;background:#0d0f1e;text-decoration:none}
+  .video img{display:block;width:100%;height:100%;object-fit:cover;
+    transition:transform .4s ease,filter .3s}
+  .video:hover img{transform:scale(1.03);filter:brightness(1.08)}
+  .video .play{position:absolute;inset:0;display:grid;place-items:center;
+    pointer-events:none}
+  .video .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 16px 12px;
+    font-family:"DM Sans",sans-serif;font-size:.8rem;letter-spacing:.06em;
+    color:var(--ink);text-align:center;
+    background:linear-gradient(180deg,transparent,rgba(6,8,18,.82))}
   .nota{font-family:"DM Sans",sans-serif;font-size:.86rem;color:var(--ink2);
     line-height:1.65;border:1px dashed var(--line);border-radius:12px;
     padding:15px 17px;margin-top:22px}
@@ -154,9 +170,9 @@
 
 <nav id="nav">
   <a href="#libro">Il libro</a>
-  <a href="#autore">Chi scrive</a>
-  <a href="#insegnamenti">Insegnamenti</a>
   <a href="#emporio">Emporio</a>
+  <a href="#autore">Chi scrive</a>
+  <a href="#insegnamenti">Collegamenti</a>
   <a href="#condividi">Condividi</a>
 </nav>
 
@@ -219,6 +235,19 @@
     </div>
   </section>
 
+  <!-- EMPORIO -->
+  <section id="emporio">
+    <div class="sec-tit">Emporio</div>
+    <div class="fm-card">
+      <div class="prow">
+        <div class="pn">Anima Vagabonda
+          <small>Parabhakti dāsa · Libreria Editrice Psiche · 15×21 cm</small></div>
+        <div class="pp">18,00 €</div>
+        <a class="compra" href="#">Ordina</a>
+      </div>
+    </div>
+  </section>
+
   <!-- CHI SCRIVE -->
   <section id="autore">
     <div class="sec-tit">Chi scrive</div>
@@ -257,36 +286,76 @@
 
   <!-- LE DUE PORTE -->
   <section id="insegnamenti">
-    <div class="sec-tit">Dove porta</div>
+    <div class="sec-nex">
+      <svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke="currentColor"
+           stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 6.5 L31.7 13.2 L31.7 26.8 L20 33.5 L8.3 26.8 L8.3 13.2 Z"/>
+        <path d="M20 6.5 L20 20 M20 20 L31.7 13.2 M20 20 L8.3 13.2 M20 20 L20 33.5"/>
+      </svg>
+      <span>A cosa è collegato</span>
+    </div>
     <div class="porte">
-      <a class="porta" href="#" style="border-left:2px solid var(--fuoco)">
-        <div class="k" style="color:var(--fuoco)">Assistenza</div>
-        <b>Gli insegnamenti</b>
-        <i>[ in attesa ]</i>
-        <span class="fr">vai →</span>
-      </a>
-      <a class="porta" href="#" style="border-left:2px solid var(--etere)">
-        <div class="k" style="color:var(--etere)">Scuola</div>
-        <b>La ricerca</b>
-        <i>[ in attesa ]</i>
-        <span class="fr">vai →</span>
-      </a>
-    </div>
-    <p class="nota"><b>Chi legge il libro trova chi lo insegna. Chi cerca un
-      insegnamento trova cosa ha scritto.</b> Le due porte si aprono a vicenda.</p>
-  </section>
 
-  <!-- EMPORIO -->
-  <section id="emporio">
-    <div class="sec-tit">Emporio</div>
-    <div class="fm-card">
-      <div class="prow">
-        <div class="pn">Anima Vagabonda
-          <small>Parabhakti dāsa · Libreria Editrice Psiche · 15×21 cm</small></div>
-        <div class="pp">18,00 €</div>
-        <a class="compra" href="#">Ordina</a>
+      <a class="porta" href="#" style="border-left:2px solid var(--terra,#AA8844)">
+        <div class="k" style="color:#AA8844">Vicinati</div>
+        <b>Villa Vrindavana</b>
+        <i>Scopri il calendario insegnamenti, feste e gli orari di apertura della
+           Galleria MOSA, museo di arte indiana a 20 km da Firenze.</i>
+        <i style="margin-top:9px">Possibilità di conoscere l'esperienza del servizio
+           devozionale, vivere le pratiche del tempio, cibo sacralizzato, lezioni
+           quotidiane, ospitalità nella villa storica appartenuta alla famiglia dei
+           Medici, offrendo il proprio servizio nei ruoli legati alle attività
+           quotidiane della comunità Hare Krishna.</i>
+        <span class="fr">vai →</span>
+      </a>
+
+      <a class="porta" href="#" style="border-left:2px solid var(--acqua)">
+        <div class="k" style="color:var(--acqua)">Emporio</div>
+        <b>Dove si trova</b>
+        <i>Acquista online o visita il punto shop Magica India a Villa Vrindavana.</i>
+        <span class="fr">vai →</span>
+      </a>
+
+      <a class="porta" href="#" style="border-left:2px solid var(--fuoco)">
+        <div class="k" style="color:var(--fuoco)">Assistenza spirituale</div>
+        <b>I corsi</b>
+        <i>L'opera di Parabhakti è collegata ai corsi di apprendimento del Bhakti Yoga
+           e della Bhagavad-gītā, che verranno proposti su FelicitasMundi dal mese di
+           settembre, in collaborazione con l'USCI.</i>
+        <span class="fr">vai →</span>
+      </a>
+
+      <a class="porta" href="#" style="border-left:2px solid var(--aria,#669944)">
+        <div class="k" style="color:#669944">Edizione</div>
+        <b>Libreria Editrice Psiche</b>
+        <i>Il catalogo e la storia della casa editrice.</i>
+        <span class="fr">vai →</span>
+      </a>
+
+      <div class="porta" style="border-left:2px solid var(--etere)">
+        <div class="k" style="color:var(--etere)">Scuola</div>
+        <b>Gli insegnamenti</b>
+        <i>Gli insegnamenti condivisi da Parabhakti dāsa possono essere seguiti dal vivo
+           nel tempio a Villa Vrindavana — le date nel calendario — oppure in diretta sul
+           canale YouTube.</i>
+        <a class="video" href="https://www.youtube.com/watch?v=GS-3OGRAOfY"
+           target="_blank" rel="noopener" title="Guarda su YouTube">
+          <img src="https://i.ytimg.com/vi/GS-3OGRAOfY/maxresdefault.jpg"
+               alt="Gli insegnamenti di Parabhakti dāsa" loading="lazy">
+          <span class="play">
+            <svg viewBox="0 0 68 48" width="62" height="44" aria-hidden="true">
+              <path d="M66.5 7.7a8.6 8.6 0 00-6-6.1C55 0 34 0 34 0S13 0 7.5 1.5A8.6 8.6 0 001.5 7.7 90 90 0 000 24a90 90 0 001.5 16.3 8.6 8.6 0 006 6.1C13 48 34 48 34 48s21 0 26.5-1.6a8.6 8.6 0 006-6.1A90 90 0 0068 24a90 90 0 00-1.5-16.3z" fill="rgba(10,12,26,.72)"/>
+              <path d="M27 34.5L45 24 27 13.5z" fill="#F5F0E6"/>
+            </svg>
+          </span>
+          <span class="cap">guarda su YouTube</span>
+        </a>
       </div>
+
     </div>
+
+    <p class="nota"><b>Chi legge il libro trova chi lo insegna, dove si compra, dove
+      si va di persona.</b> Ogni porta si apre sulle altre.</p>
   </section>
 
   <!-- CONDIVIDI -->
@@ -307,8 +376,7 @@
         Proponi un'opera</a>
     </div>
 
-    <p class="nota"><b>[ in attesa ]</b> — le righe dei due rimandi e il collegamento
-      all'ordine.<br>
+    <p class="nota"><b>[ in attesa ]</b> — i collegamenti delle cinque porte e quello all'ordine.<br>
       I testi sono di Parabhakti dāsa, dal materiale che ha inviato.
       Copertina: Libreria Editrice Psiche.</p>
   </section>
