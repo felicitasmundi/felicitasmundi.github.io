@@ -1187,6 +1187,7 @@
 <script src="fm-casa.js"></script>
 <script src="fm-praticantato.js"></script>
 <script src="fm-talenti.js"></script>
+<script src="fm-pagina.js"></script>
 <script>
 "use strict";
 
@@ -1525,6 +1526,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="consolle") consolle(c);
     else if(id==="edizione") edizione(c);
     else if(id==="sentiero") praticantato(c);
+    else if(id==="pagina") pagina(c);
     else attesa(c, id);
   }
 
@@ -2373,6 +2375,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   function chiudiMappa(){
     var p = $("mappa-piena"); if(!p) return;
     p.classList.remove("on");
+    var sk = document.getElementById("sv-scheda"), lib = document.getElementById("sv-mappa"); if(sk && lib) lib.parentNode.appendChild(sk);   /* e torna nel libro */
     document.body.style.overflow = "";
   }
   /* ── aprire la mappa a tutto schermo: un punto solo, e la casa lo chiama ── */
@@ -2380,6 +2383,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var f = $("mappa-piena-f"); if(!f) return;
     if(!f.getAttribute("src")) f.setAttribute("src","mappa-ferma.html?vivo=1");
     $("mappa-piena").classList.add("on");
+    var sk = document.getElementById("sv-scheda"); if(sk) $("mappa-piena").appendChild(sk);   /* la scheda del luogo sale sopra la mappa */
     document.body.style.overflow = "hidden";
   }
   window.SpazioVivo = window.SpazioVivo || {};
@@ -2434,6 +2438,74 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     misuraPlancia();
   });
 
+  /* ══ LA PAGINA CHIESTA DALL'INDIRIZZO ══
+     ?p=nome apre una vista all'avvio, come fa fm-talenti.js con ?t=.
+
+     Il nome è l'id che la voce ha già in BARRA: non c'è un secondo
+     vocabolario da tenere allineato. Un nome che BARRA non conosce si
+     ignora, e si parte da casa.
+
+     ⭐ La regola: fare esattamente quello che fa il dito su quella voce.
+        Non una seconda strada per aprire le stanze — la stessa strada,
+        chiamata da fuori.
+
+     Si legge una volta sola e il parametro sparisce subito: ricaricando
+     si torna a casa, come per il ?t= dei talenti. */
+  var BASE_INDIRIZZO = location.origin + location.pathname;
+
+  /* le viste che vai() gestisce senza avere una voce nella barra */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina"];
+
+  /* la voce con quell'id, e le voci che stanno sopra di lei nel ramo */
+  function vocePerId(id, voci, sopra){
+    voci = voci || BARRA; sopra = sopra || [];
+    for(var i=0; i<voci.length; i++){
+      var v = voci[i];
+      if(v.id === id) return {voce:v, sopra:sopra};
+      if(v.sotto){
+        var t = vocePerId(id, v.sotto, sopra.concat([v]));
+        if(t) return t;
+      }
+    }
+    return null;
+  }
+
+  /* legge il nome e ripulisce l'indirizzo. Su file:// replaceState può
+     sollevare: la pagina si apre lo stesso, col parametro ancora scritto. */
+  function nomeDaIndirizzo(){
+    var m = location.search.match(/[?&]p=([A-Za-z0-9_-]{1,40})/);
+    if(!m) return null;
+    try{ history.replaceState({}, "", BASE_INDIRIZZO); }catch(e){}
+    return m[1];
+  }
+
+  /* apre la pagina chiesta. Torna false se il nome non si riconosce,
+     e allora l'avvio sceglie come ha sempre fatto. */
+  function vaiAPagina(id){
+    if(!id) return false;
+    if(VISTE_SENZA_VOCE.indexOf(id) >= 0){ vai(id); return true; }
+
+    var t = vocePerId(id);
+    if(!t) return false;
+
+    /* una voce di primo livello: il tocco sul nome, righe 1426-1430 */
+    if(!t.sopra.length){
+      if(t.voce.sotto || t.voce.ancore) apriRamo(0, t.voce);
+      vai(t.voce.id);
+      return true;
+    }
+
+    /* una voce del ramo: il tocco della riga 1475-1479. Il ramo di primo
+       livello si apre, altrimenti la voce accesa non si vedrebbe. */
+    apriRamo(0, t.sopra[0]);
+    sottoRichiesta = t.voce.id;
+    vai("incontro", t.voce.va || t.voce.id);
+    return true;
+  }
+
+  /* si legge una volta sola, prima che l'avvio prenda una delle due strade */
+  var paginaChiesta = nomeDaIndirizzo();
+
   /* ══ AVVIO ══ */
   /* ── da ospite si guarda; l'account si chiede al momento di agire ── */
   var ospite = false;
@@ -2445,7 +2517,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     $("acc-nome").textContent  = "Entra";
     $("acc-grado").textContent = "email e sei cifre, nessuna password";
     $("acc-iniziale").textContent = "·";
-    disegnaBarra(); vai("spazio");
+    disegnaBarra();
+    if(!vaiAPagina(paginaChiesta)) vai("spazio");
   }
 
   function chiediAccesso(perche){
@@ -2517,7 +2590,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         disegnaBarra();
         var torna = "";
         try{ torna = sessionStorage.getItem("fm_ritorno") || ""; sessionStorage.removeItem("fm_ritorno"); }catch(e){}
-        vai(torna || "spazio");
+        /* l'indirizzo vince su fm_ritorno: è una richiesta presente,
+           il ritorno è il residuo di un'intenzione vecchia */
+        if(!vaiAPagina(paginaChiesta)) vai(torna || "spazio");
         contaNonLetti();
         setInterval(contaNonLetti, 45000);
       });
