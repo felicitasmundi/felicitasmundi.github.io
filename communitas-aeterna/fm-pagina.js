@@ -6,7 +6,7 @@
       Cinquecento pagine, cinquecento record — un file.
 
    Il disegno è di Design: pagina-modello.html
-   37652 byte · MD5 57c4346f433b617396d4a272282abf45
+   37369 byte · MD5 40a233a5465e9ef26893d2e52b572e59
    ⚠️ Il suo <style> e il suo corpo vanno dentro MODELLO qui sotto,
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
@@ -41,6 +41,14 @@ var MODELLO = `<style>
   .fm-pag [data-via]:hover{border-color:rgba(200,160,85,0.55);background:rgba(200,160,85,0.10)}
   .fm-pag [data-tasto]:hover{background:var(--oro)}
   .fm-pag [data-video]:hover [data-velo]{background:rgba(2,4,12,0.18)}
+
+  /* ⑥ le domande · il pallino d'oro è un segno del foglio: chi riempie
+     la riga scrive il testo e basta, il pallino resta e la riga è larga
+     quanto la scheda. */
+  .fm-pag [data-domanda]{position:relative;display:block;padding:0.45rem 0 0.45rem 1.2rem;
+    font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;
+    color:var(--oro-ch);list-style:none}
+  .fm-pag [data-domanda]::before{content:"·";position:absolute;left:0;top:0.45rem;color:var(--oro)}
 
   /* le schede che si piegano */
   .fm-pag [data-copertina]{grid-template-columns:14rem minmax(0,1fr)}
@@ -125,15 +133,9 @@ var MODELLO = `<style>
     <div data-occhiello-sez="domande" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin:2rem 0 0.9rem">[ in attesa ]</div>
     <div data-scheda="domande" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.2rem">
-        <li data-domanda="1" style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
-          <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
-        </li>
-        <li data-domanda="1" style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
-          <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
-        </li>
-        <li data-domanda="1" style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
-          <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
-        </li>
+        <li data-domanda="1">[ in attesa ]</li>
+        <li data-domanda="1">[ in attesa ]</li>
+        <li data-domanda="1">[ in attesa ]</li>
       </ul>
       <p data-scheda="nota" data-nota="domande" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line)">[ in attesa ]</p>
     </div>
@@ -169,7 +171,7 @@ var MODELLO = `<style>
           <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
         </li>
       </ul>
-      <p data-nota-prezzo="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin:1rem 0 0;padding-top:0.9rem;border-top:1px solid var(--line)">[ in attesa ]</p>
+      <p data-nota-prezzo="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin:1rem 0 0;padding-top:0.9rem;border-top:1px solid var(--line)">Prezzo IVA inclusa · l'acquisto avviene nell'Emporio FelicitasMundi.</p>
     </div>
   </section>
 
@@ -204,7 +206,7 @@ var MODELLO = `<style>
               <path d="M16.5 13.5 L27 20 L16.5 26.5 Z" fill="currentColor" stroke="none"></path>
             </svg>
           </span>
-          <span style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 1rem">la miniatura del video<br>[ in attesa ]</span>
+          <span data-attesa="1" style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 1rem">la miniatura del video<br>[ in attesa ]</span>
         </span>
         <span data-video-dove="1" style="position:absolute;left:0;right:0;bottom:0;padding:1.6rem 1rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.06em;color:var(--ivory);text-align:center;background:linear-gradient(180deg,transparent,rgba(6,8,18,0.82))">[ in attesa ]</span>
       </a>
@@ -232,7 +234,7 @@ var MODELLO = `<style>
         <span data-occhiello="1" style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.18em;text-transform:uppercase;color:#8C2F39;margin-bottom:0.45rem">[ in attesa ]</span>
         <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);letter-spacing:0.02em;color:var(--ivory);line-height:1.35">[ in attesa ]</b>
         <i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.55;margin-top:0.35rem">[ in attesa ]</i>
-        <span data-rimando="1" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);transition:0.2s">[ in attesa ] →</span>
+        <span data-rimando="1" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);transition:0.2s">vai →</span>
       </a>
 
       <!-- porta · testo lungo, anche su più capoversi -->
@@ -241,7 +243,7 @@ var MODELLO = `<style>
         <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);letter-spacing:0.02em;color:var(--ivory);line-height:1.35">[ in attesa ]</b>
         <i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.55;margin-top:0.35rem">[ in attesa ]</i>
         <i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.55;margin-top:0.6rem">[ in attesa ]</i>
-        <span data-rimando="1" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);transition:0.2s">[ in attesa ] →</span>
+        <span data-rimando="1" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);transition:0.2s">vai →</span>
       </a>
 
       <!-- porta · gli altri fili: #4488BB #669944 #9966CC #CC6644 -->
@@ -249,7 +251,7 @@ var MODELLO = `<style>
         <span data-occhiello="1" style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.18em;text-transform:uppercase;color:#4488BB;margin-bottom:0.45rem">[ in attesa ]</span>
         <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);letter-spacing:0.02em;color:var(--ivory);line-height:1.35">[ in attesa ]</b>
         <i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.55;margin-top:0.35rem">[ in attesa ]</i>
-        <span data-rimando="1" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);transition:0.2s">[ in attesa ] →</span>
+        <span data-rimando="1" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);transition:0.2s">vai →</span>
       </a>
 
       <!-- PORTA CON MAPPA — stessa forma della porta semplice: cambia solo
@@ -285,7 +287,7 @@ var MODELLO = `<style>
             </div>
           </div>
         </div>
-        <a data-rimando="1" href="#" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);text-decoration:none;transition:0.2s">[ in attesa ] →</a>
+        <a data-rimando="1" href="#" style="display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--oro-ch);text-decoration:none;transition:0.2s">vai →</a>
       </div>
 
 

@@ -167,6 +167,20 @@ function paginaInPiu(pag, d){
     var qq = function(s){ return [].slice.call(pag.querySelectorAll(s)); };
     var schede = qq("[data-scheda]");
 
+    /* ─ il racconto: fm-pagina.js riempie solo il primo capoverso ─ */
+    var capiRac = qq("[data-racconto]");
+    if(capiRac.length && d.racconto){
+      var capoR = String(d.racconto).split(/\n\s*\n/)
+        .filter(function(r){ return r.trim(); });
+      capiRac.forEach(function(e, i){
+        if(capoR[i]){ e.textContent = capoR[i].trim(); e.removeAttribute("hidden"); }
+        else e.setAttribute("hidden", "");
+      });
+      if(capoR.length > capiRac.length)
+        capiRac[capiRac.length-1].textContent =
+          capoR.slice(capiRac.length-1).join(" ");
+    }
+
     /* ─ il testo lungo e le due note ─────────────────────────── */
     paginaPosa(schede, "testo_lungo", x.testo_lungo);
     paginaScrivi(q("[data-nota='domande']"), x.nota);
@@ -220,9 +234,17 @@ function paginaInPiu(pag, d){
             capi.slice(capiBio.length-1).join(" ");
       } else {
         capiBio.forEach(function(e){ e.setAttribute("hidden", ""); });
-        var sb = paginaCerca(schede, "bio");
-        if(sb) sb.setAttribute("hidden", "");
       }
+    }
+
+    /* ⛔ fm-pagina.js nasconde [data-bio] — la griglia intera, ritratto
+       e testi — perché «biografia» non è fra i campi che chiede.
+       Qui si riapre: il campo c'è, e si nasconde solo il ritratto. */
+    var grigliaBio = q("[data-bio]");
+    if(grigliaBio && x.biografia){
+      grigliaBio.removeAttribute("hidden");
+      var sb2 = paginaCerca(schede, "bio");
+      if(sb2) sb2.removeAttribute("hidden");
     }
 
     /* ─ il nome e i dati sopra il prezzo ─────────────────────── */
@@ -252,6 +274,8 @@ function paginaInPiu(pag, d){
           im.alt = x.video_titolo || "";
         }
         paginaScrivi(q("[data-video-dove]"), x.video_titolo || "guarda su YouTube");
+        var att = vid.querySelector("[data-attesa]");
+        if(att) att.setAttribute("hidden", "");
         vid.removeAttribute("hidden");
       } else {
         vid.setAttribute("hidden", "");
