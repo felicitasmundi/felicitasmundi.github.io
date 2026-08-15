@@ -17,19 +17,130 @@
 
 /* ══ IL DISEGNATORE, ALLARGATO ═════════════════════════════════ */
 
+/* ⭐ La pagina nasce VELATA, non da quando arrivano i dati: il
+   disegnatore posa prima il modello coi segnaposti e legge dopo,
+   e in mezzo la pagina sarebbe già visibile. */
+var paginaPrima = pagina;
+
+pagina = function(c, nome){
+  paginaPrima(c, nome);
+  var pag = c.querySelector(".fm-pag");
+  if(pag){
+    pag.style.opacity = "0";
+    pag.style.transition = "opacity .28s ease";
+    paginaAttesa(c);
+    /* rete lenta o lettura fallita: si vede comunque */
+    setTimeout(function(){ paginaSvela(pag); }, 3000);
+  }
+};
+
+
+/* ══ L'ATTESA — la rete che respira mentre i dati arrivano ═════ */
+
+function paginaAttesa(c){
+  if(c.querySelector("[data-attesa-rete]")) return;
+
+  var v = document.createElement("div");
+  v.setAttribute("data-attesa-rete", "1");
+  v.style.cssText = "position:absolute;inset:0;z-index:5;pointer-events:none;" +
+    "transition:opacity .4s ease";
+  if(getComputedStyle(c).position === "static") c.style.position = "relative";
+
+  var cv = document.createElement("canvas");
+  cv.style.cssText = "width:100%;height:100%;display:block";
+  v.appendChild(cv);
+  c.appendChild(v);
+
+  var cx = cv.getContext("2d"), W = 0, H = 0, punti = [], t = 0, vivo = true;
+  var fermo = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function misura(){
+    var r = c.getBoundingClientRect();
+    var d = window.devicePixelRatio || 1;
+    W = r.width; H = Math.min(r.height, window.innerHeight);
+    cv.width = W * d; cv.height = H * d;
+    cx.setTransform(d, 0, 0, d, 0, 0);
+    punti = [];
+    var quanti = Math.max(18, Math.min(52, Math.round(W * H / 14000)));
+    for(var i = 0; i < quanti; i++){
+      punti.push({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*0.13, vy: (Math.random()-0.5)*0.13,
+        r: 0.9 + Math.random()*1.4,
+        f: 0.4 + Math.random()*0.9,
+        s: Math.random()*Math.PI*2
+      });
+    }
+  }
+
+  function disegna(){
+    if(!vivo) return;
+    t += 0.006;
+    cx.clearRect(0, 0, W, H);
+
+    for(var i = 0; i < punti.length; i++){
+      var a = punti[i];
+      for(var j = i+1; j < punti.length; j++){
+        var b = punti[j];
+        var dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx + dy*dy;
+        if(d2 < 20000){
+          var op = (1 - d2/20000) * 0.26;
+          var onda = 0.55 + 0.45*Math.sin(t*1.6 + (a.x+a.y)*0.006);
+          cx.strokeStyle = "rgba(200,160,85," + (op*onda).toFixed(3) + ")";
+          cx.lineWidth = 0.6;
+          cx.beginPath(); cx.moveTo(a.x,a.y); cx.lineTo(b.x,b.y); cx.stroke();
+        }
+      }
+    }
+
+    for(var k = 0; k < punti.length; k++){
+      var p = punti[k];
+      var battito = 0.5 + 0.5*Math.sin(t*p.f*2 + p.s);
+      var rr = p.r * (0.8 + battito*0.5);
+
+      var g = cx.createRadialGradient(p.x,p.y,0,p.x,p.y,rr*5);
+      g.addColorStop(0,  "rgba(212,175,106," + (0.45 + battito*0.35).toFixed(3) + ")");
+      g.addColorStop(0.4,"rgba(200,160,85,"  + (0.10 + battito*0.08).toFixed(3) + ")");
+      g.addColorStop(1,  "rgba(200,160,85,0)");
+      cx.fillStyle = g;
+      cx.beginPath(); cx.arc(p.x,p.y,rr*5,0,Math.PI*2); cx.fill();
+
+      cx.fillStyle = "rgba(245,240,230," + (0.3 + battito*0.4).toFixed(3) + ")";
+      cx.beginPath(); cx.arc(p.x,p.y,rr,0,Math.PI*2); cx.fill();
+
+      if(!fermo){
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < -20) p.x = W+20; if(p.x > W+20) p.x = -20;
+        if(p.y < -20) p.y = H+20; if(p.y > H+20) p.y = -20;
+      }
+    }
+    requestAnimationFrame(disegna);
+  }
+
+  misura(); disegna();
+
+  v.spegni = function(){
+    v.style.opacity = "0";
+    setTimeout(function(){
+      vivo = false;
+      if(v.parentNode) v.parentNode.removeChild(v);
+    }, 420);
+  };
+}
+
 var paginaRiempiPrima = paginaRiempi;
 
 paginaRiempi = function(pag, d){
-  /* la pagina resta velata finché i dati non sono arrivati: meglio
-     mezzo secondo di vuoto che mezzo secondo di segnaposti */
-  pag.style.opacity = "0";
-  pag.style.transition = "opacity .25s ease";
   paginaRiempiPrima(pag, d);
   paginaInPiu(pag, d);
 };
 
 function paginaSvela(pag){
-  if(pag) pag.style.opacity = "1";
+  if(!pag) return;
+  pag.style.opacity = "1";
+  var madre = pag.parentNode;
+  var v = madre && madre.querySelector("[data-attesa-rete]");
+  if(v && v.spegni) v.spegni();
 }
 
 
@@ -37,7 +148,6 @@ function paginaSvela(pag){
 
 function paginaInPiu(pag, d){
   if(!d || !d.nome_url){ paginaSvela(pag); return; }
-  setTimeout(function(){ paginaSvela(pag); }, 2500);   /* rete lenta: si vede comunque */
 
   db.from("prodotti")
     .select("domande,testo_lungo,nota,biografia,foto_autore," +
