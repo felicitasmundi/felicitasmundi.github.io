@@ -1,0 +1,162 @@
+/* ════════════════════════════════════════════════════════════════
+   Comunità Eterna FelicitasMundi · I CAMPI IN PIÙ DELLA PAGINA
+
+   Si aggiunge a fm-pagina.js senza toccarlo: va caricato DOPO di lui.
+
+   Riempie quello che il disegnatore non legge ancora:
+      le domande · il testo lungo · la nota · la biografia
+      il ritratto dell'autore · la miniatura del video
+
+   ⭐ E tiene l'indirizzo: ?p=pagina&n=... resta scritto, così una
+      pagina si può mandare a qualcuno.
+
+   ⛔ Niente involucro (function(){ … })(): il guscio mette tutto in
+      comune e questo file legge da lì.
+   ════════════════════════════════════════════════════════════════ */
+
+
+/* ══ IL DISEGNATORE, ALLARGATO ═════════════════════════════════ */
+
+var paginaRiempiPrima = paginaRiempi;
+
+paginaRiempi = function(pag, d){
+  paginaRiempiPrima(pag, d);
+  paginaInPiu(pag, d);
+};
+
+
+/* ══ I CAMPI IN PIÙ ════════════════════════════════════════════ */
+
+function paginaInPiu(pag, d){
+  if(!d || !d.nome_url) return;
+
+  db.from("prodotti")
+    .select("domande,testo_lungo,nota,biografia,foto_autore," +
+            "video_url,video_titolo,occhiello_a")
+    .eq("nome_url", d.nome_url).single().then(function(r){
+
+    if(r.error || !r.data) return;
+    var x = r.data;
+
+    var q  = function(s){ return pag.querySelector(s); };
+    var qq = function(s){ return [].slice.call(pag.querySelectorAll(s)); };
+    var schede = qq("[data-scheda]");
+
+    /* ① il testo lungo e la nota */
+    paginaPosa(schede, "testo_lungo", x.testo_lungo);
+    paginaPosa(schede, "nota", x.nota);
+
+    /* ② le domande — una riga per capoverso */
+    if(x.domande){
+      var el = paginaCerca(schede, "domande");
+      if(el){
+        var dove = el.querySelector("ul") || el;
+        dove.innerHTML = String(x.domande).split("\n")
+          .filter(function(r){ return r.trim(); })
+          .map(function(r){
+            return '<li style="font-family:\'Cinzel\',serif;' +
+              'font-size:var(--t-cor);color:var(--oro-ch);' +
+              'padding:0.5rem 0 0.5rem 1.2rem;line-height:1.45;' +
+              'list-style:none">' + paginaSalva(r.trim()) + '</li>';
+          }).join("");
+        el.removeAttribute("hidden");
+      }
+    }
+
+    /* ③ il ritratto e la biografia */
+    var bio = paginaCerca(schede, "bio");
+    if(bio){
+      if(x.foto_autore){
+        var rit = bio.querySelector("[data-im]") ||
+                  bio.querySelector("[data-copertina]");
+        if(rit) rit.innerHTML = '<img src="' + paginaSalva(x.foto_autore) +
+          '" alt="" style="display:block;width:100%;height:100%;' +
+          'object-fit:cover;border-radius:inherit">';
+      }
+      if(x.biografia){
+        var pb = bio.querySelector("[data-bio]") || bio.querySelector("p");
+        if(pb){ pb.textContent = x.biografia; pb.removeAttribute("hidden"); }
+        bio.removeAttribute("hidden");
+      } else {
+        bio.setAttribute("hidden", "");
+      }
+    }
+
+    /* ④ il video */
+    var vid = q("[data-video]") || paginaCerca(schede, "video");
+    if(vid){
+      if(x.video_url){
+        var a = (vid.tagName === "A") ? vid : vid.querySelector("a");
+        if(a) a.setAttribute("href", x.video_url);
+
+        var idv = (String(x.video_url).match(/[?&]v=([A-Za-z0-9_-]{6,})/) || [])[1];
+        if(idv && a){
+          var im = a.querySelector("img");
+          if(!im){
+            im = document.createElement("img");
+            im.style.cssText = "display:block;width:100%;height:100%;" +
+                               "object-fit:cover;border-radius:inherit";
+            a.insertBefore(im, a.firstChild);
+          }
+          im.src = "https://i.ytimg.com/vi/" + idv + "/maxresdefault.jpg";
+          im.alt = x.video_titolo || "";
+        }
+        var sv = (vid.closest ? vid.closest("[data-scheda]") : null);
+        if(sv) sv.removeAttribute("hidden");
+      } else {
+        var sn = (vid.closest ? vid.closest("[data-scheda]") : vid);
+        if(sn) sn.setAttribute("hidden", "");
+      }
+    }
+  });
+}
+
+
+/* ══ MINUZIE ═══════════════════════════════════════════════════ */
+
+function paginaCerca(schede, quale){
+  for(var i = 0; i < schede.length; i++){
+    if(schede[i].getAttribute("data-scheda") === quale) return schede[i];
+  }
+  return null;
+}
+
+function paginaPosa(schede, quale, testo){
+  var el = paginaCerca(schede, quale);
+  if(!el) return;
+  if(testo === null || testo === undefined || testo === ""){
+    el.setAttribute("hidden", ""); return;
+  }
+  var p = el.querySelector("p") || el;
+  p.textContent = testo;
+  p.removeAttribute("hidden");
+  el.removeAttribute("hidden");
+}
+
+function paginaSalva(s){
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+                  .replace(/"/g, "&quot;");
+}
+
+
+/* ══ L'INDIRIZZO RESTA ═════════════════════════════════════════ */
+/* Una pagina di contenuto si manda a qualcuno: l'indirizzo deve
+   restare scritto. Per tornare a casa c'è il tasto nella barra.   */
+
+(function(){
+  var m = location.search.match(/[?&]n=([A-Za-z0-9_-]{1,60})/);
+  if(!m) return;
+  var nome = m[1];
+
+  function riscrivi(){
+    if(location.search.indexOf("n=") >= 0) return;
+    try{
+      history.replaceState({}, "",
+        location.origin + location.pathname + "?p=pagina&n=" + nome);
+    }catch(e){}
+  }
+
+  /* il guscio pulisce l'indirizzo all'avvio: lo si rimette dopo */
+  setTimeout(riscrivi, 400);
+  setTimeout(riscrivi, 1400);
+})();
