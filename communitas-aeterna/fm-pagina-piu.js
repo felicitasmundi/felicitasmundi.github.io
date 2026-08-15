@@ -20,15 +20,24 @@
 var paginaRiempiPrima = paginaRiempi;
 
 paginaRiempi = function(pag, d){
+  /* la pagina resta velata finché i dati non sono arrivati: meglio
+     mezzo secondo di vuoto che mezzo secondo di segnaposti */
+  pag.style.opacity = "0";
+  pag.style.transition = "opacity .25s ease";
   paginaRiempiPrima(pag, d);
   paginaInPiu(pag, d);
 };
+
+function paginaSvela(pag){
+  if(pag) pag.style.opacity = "1";
+}
 
 
 /* ══ I CAMPI IN PIÙ ════════════════════════════════════════════ */
 
 function paginaInPiu(pag, d){
-  if(!d || !d.nome_url) return;
+  if(!d || !d.nome_url){ paginaSvela(pag); return; }
+  setTimeout(function(){ paginaSvela(pag); }, 2500);   /* rete lenta: si vede comunque */
 
   db.from("prodotti")
     .select("domande,testo_lungo,nota,biografia,foto_autore," +
@@ -36,7 +45,7 @@ function paginaInPiu(pag, d){
             "occhiello_corpo,occhiello_come,occhiello_domande")
     .eq("nome_url", d.nome_url).single().then(function(r){
 
-    if(r.error || !r.data) return;
+    if(r.error || !r.data){ paginaSvela(pag); return; }
     var x = r.data;
 
     var q  = function(s){ return pag.querySelector(s); };
@@ -47,15 +56,19 @@ function paginaInPiu(pag, d){
     paginaPosa(schede, "testo_lungo", x.testo_lungo);
     paginaPosa(schede, "nota", x.nota);
 
-    /* ⛔ data-racconto sta sulla scheda del testo lungo: senza testo_lungo
-       il disegnatore ci riscrive il racconto, e si legge due volte. */
+    /* la nota vive dentro la biografia: senza testo, sparisce */
+    var nota = paginaCerca(schede, "nota");
+    if(nota && !x.nota) nota.setAttribute("hidden", "");
+
+    /* ⛔ La scheda «testo_lungo» porta anche data-racconto: senza
+       testo_lungo il disegnatore ci riscrive il racconto, e si legge
+       due volte. Sparisce lei e il suo occhiello. */
     if(!x.testo_lungo){
-      var doppio = pag.querySelector("[data-racconto]");
-      if(doppio){
-        var sd = doppio.closest ? doppio.closest("[data-scheda]") : null;
-        if(sd && sd.getAttribute("data-scheda") !== "racconto")
-          sd.setAttribute("hidden", "");
-        else doppio.setAttribute("hidden", "");
+      var tl = paginaCerca(schede, "testo_lungo");
+      if(tl){
+        tl.setAttribute("hidden", "");
+        var occ = pag.querySelector("[data-occhiello-sez='come']");
+        if(occ) occ.setAttribute("hidden", "");
       }
     }
 
@@ -159,19 +172,20 @@ function paginaInPiu(pag, d){
     /* ⑤ il nome e i dati sopra il prezzo */
     var pz = paginaCerca(schede, "prezzo");
     if(pz){
+      /* il nome sta nel primo <span> che contiene un <small> */
       var nm = null, tutti = [].slice.call(pz.querySelectorAll("span"));
       for(var k = 0; k < tutti.length; k++){
-        if(!tutti[k].hasAttribute("data-prezzo") &&
-           !tutti[k].hasAttribute("data-velo")){ nm = tutti[k]; break; }
+        if(tutti[k].querySelector("small")){ nm = tutti[k]; break; }
       }
       if(nm){
         var pic = nm.querySelector("small");
         var righe = [d.autore, d.editore, d.formato]
           .filter(function(v){ return v; }).join(" · ");
-        nm.insertBefore(document.createTextNode(d.nome + " "), nm.firstChild);
+        /* via ogni testo che c'era, poi il nome e il resto sotto */
         [].slice.call(nm.childNodes).forEach(function(nd){
-          if(nd.nodeType === 3 && nd !== nm.firstChild) nd.nodeValue = "";
+          if(nd.nodeType === 3) nm.removeChild(nd);
         });
+        nm.insertBefore(document.createTextNode(d.nome), nm.firstChild);
         if(pic) pic.textContent = righe;
       }
       var ts = pz.querySelector("[data-tasto]");
@@ -267,7 +281,9 @@ function paginaInPiu(pag, d){
         vid.setAttribute("hidden", "");
       }
     }
-  });
+
+    paginaSvela(pag);
+  }, function(){ paginaSvela(pag); });
 }
 
 
