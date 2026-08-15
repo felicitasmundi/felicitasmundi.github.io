@@ -581,38 +581,11 @@ function pagina(c, nome){
     if(!d){ paginaVuota(pag, "Questa pagina non si trova."); return; }
     paginaRiempi(pag, d);
     if(typeof paginaAccendi === "function") paginaAccendi(pag);
-    paginaQuadrantiInPlancia(pag);
     /* ⭐ ultimo, e dopo paginaAccendi: il modello scrive quei due href
        con location.href, che a quel punto il guscio ha già ripulito.
        Chi condivide deve arrivare al libro, non alla home. */
     paginaCondividi(pag, d);
   });
-}
-
-
-/* ══ LA RIGA IN CIMA È UNA SOLA ═════════════════════════════════
-   Nella pagina di contenuto la barra dei quadranti sale nella striscia
-   della radio e ne prende il posto: a sinistra il tasto di
-   riproduzione, accanto il tasto che fa scendere il riquadro, e il
-   resto della riga sono i quadranti. Prima erano due righe, con in
-   mezzo la plancia mezza vuota.
-
-   ⭐ Il nodo è lo stesso — si sposta, non si ridisegna. Così lo
-      scroll-spy che paginaAccendi() ha appena legato continua a
-      valere: tiene in mano quegli <a>, non il posto dove stanno.
-
-   ⭐ Si entra fra la freccia e il palinsesto, non in fondo: quando la
-      fascia scende, il palinsesto deve restare l'ultimo.
-
-   ⛔ Lo smonta il guscio, in vai(), a ogni cambio di stanza. Senza,
-      i quadranti resterebbero in cima anche nelle altre stanze. */
-function paginaQuadrantiInPlancia(pag){
-  var nav = pag.querySelector("[data-quad]");
-  var striscia = document.querySelector("#blocco-radio .r-striscia");
-  if(!nav || !striscia) return;
-  var pal = striscia.querySelector("#r-palinsesto");
-  if(pal) striscia.insertBefore(nav, pal); else striscia.appendChild(nav);
-  document.body.classList.add("con-quadranti");
 }
 
 
