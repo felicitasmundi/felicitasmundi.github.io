@@ -170,23 +170,20 @@
     padding-top:0.55rem;margin-top:0.5rem;border-top:1px solid var(--line)}
   .riga-strumenti .invia{margin-left:auto}
 
-  /* ⭐ SUL TELEFONO GLI OTTO STRUMENTI STANNO IN DUE RIGHE DA QUATTRO.
-     Le colonne sono a `max-content`: si stringe l'aria — la bordatura dei
-     tasti e lo spazio fra loro — e le parole restano sempre intere. Il
-     simbolo dell'elemento si ritira dalla pastiglia: sono i 21,6px che
-     mancavano. Il carattere resta a --t-eti, non scende mai.
+  /* ⭐ SUL TELEFONO GLI STRUMENTI STANNO SU UNA RIGA SOLA, CHE SI SCORRE
+     DI LATO. Sotto i 40rem non si va più a capo: la riga esce dal bordo e
+     la si trascina col dito. La barra di scorrimento resta nascosta —
+     lo si capisce dai tasti tagliati a destra, non da una barra grigia.
 
-     Serve una larghezza di 314px, e sotto i 360px di schermo non ci sono:
-     ne mancherebbero 29. Per questo la griglia parte da 22.5rem — sotto,
-     torna l'andata a capo di sempre, che fa tre righe invece di due e non
-     spinge mai la pagina fuori a destra. */
-  @media(min-width:22.5rem) and (max-width:38rem){
-    .riga-strumenti{display:grid;grid-template-columns:repeat(4,max-content);
-      justify-content:space-between;gap:0.2rem}
-    .riga-strumenti .invia{margin-left:0;justify-self:end}
-    .riga-strumenti .s-pill{padding:0.42rem 0.3rem;gap:0}
-    .riga-strumenti .s-pill .sg{display:none}
-    .riga-strumenti .s{width:2.1rem;height:2.1rem}
+     È lo stesso modo con cui Design fa scorrere la barra dei quadranti.
+
+     ⛔ Si ritira solo la riga dei tasti. Il campo dove si scrive non è qui
+        dentro: resta largo quanto tutto il Megafono, sempre. */
+  @media(max-width:40rem){
+    .riga-strumenti{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+      scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+    .riga-strumenti::-webkit-scrollbar{display:none}
+    .riga-strumenti > *{flex:0 0 auto;white-space:nowrap}
   }
 
   /* ── l'apertura: il mare sotto, il testo sopra ── */
