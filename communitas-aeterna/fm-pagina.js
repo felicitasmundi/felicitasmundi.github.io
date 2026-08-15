@@ -11,6 +11,15 @@
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
 
+   ⛔ UNA COSA SI CAMBIA A OGNI RIVERSAMENTO, e va rifatta a mano:
+      la barra dei quadranti sta a `top:0`, non a `top:var(--radio)`.
+      Nel guscio la finestra non scorre — scorre #centro — e la plancia
+      della radio gli sta sopra come riga vera, non davanti: quel bordo
+      è già sotto la radio, e --radio la sposterebbe giù una seconda
+      volta. `--radio` resta dichiarata perché la leggono i cinque
+      scroll-margin-top; senza nessuno che scriva --fm-radio-h vale 0px,
+      e calc(0px + 4.5rem) è giusto l'altezza della barra.
+
    Si apre da indirizzo: ?p=pagina&n=nome-url
       esempio: ?p=pagina&n=anima-vagabonda
 
@@ -100,7 +109,7 @@ var MODELLO = `<style>
   <!-- ⑤ QUADRANTI · la barra d'oro, appiccicata in alto mentre si scorre.
        Sono le porte dell'azione, non l'indice: da 2 a 5 voci.
        FACOLTATIVI: se il corpo ha una sola sezione, si toglie il <nav> intero. -->
-  <nav data-quad="1" style="position:sticky;top:var(--radio);z-index:4;margin-top:1.6rem;display:flex;gap:0.35rem;flex-wrap:wrap;padding:0.6rem 0.5rem;background:var(--navy);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
+  <nav data-quad="1" style="position:sticky;top:0;z-index:4;margin-top:1.6rem;display:flex;gap:0.35rem;flex-wrap:wrap;padding:0.6rem 0.5rem;background:var(--navy);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
     <a data-quad-voce="1" href="#sez-1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
     <a data-quad-voce="1" href="#sez-2" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Ordina</a>
     <a data-quad-voce="1" href="#sez-3" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Chi scrive</a>
@@ -360,12 +369,7 @@ function paginaAccendi(pag){
       var scorre = document.getElementById("centro") || window;
       var spia = function () {
         var alto = scorre === window ? window.scrollY : scorre.scrollTop + scorre.offsetTop;
-        /* la soglia scende sotto la plancia della radio: la misura la scrive
-           il guscio su :root come --fm-radio-h; senza, vale zero.
-           ⚠️ Design la chiama `alto`; qui `alto` è già lo scorrimento del
-              quadrante centrale, così questa si chiama `radio`. */
-        var radio = parseFloat(getComputedStyle(pag).getPropertyValue("--radio")) || 0;
-        var y = alto + radio + 90, att = -1;
+        var y = alto + 90, att = -1;
         sezioni.forEach(function (s, i) { if (s && s.offsetTop <= y) att = i; });
         voci.forEach(function (a, i) {
           if (i === att) a.setAttribute("data-on", "1"); else a.removeAttribute("data-on");
