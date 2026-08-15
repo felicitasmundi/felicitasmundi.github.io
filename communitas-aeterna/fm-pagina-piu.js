@@ -47,6 +47,16 @@ function paginaInPiu(pag, d){
     paginaPosa(schede, "testo_lungo", x.testo_lungo);
     paginaPosa(schede, "nota", x.nota);
 
+    /* la nota va letta come gli altri testi, non in corsivo piccolo */
+    var nt = paginaCerca(schede, "nota");
+    if(nt){
+      var pn = nt.querySelector("p") || nt;
+      pn.style.fontStyle = "normal";
+      pn.style.fontSize  = "var(--t-cor)";
+      pn.style.color     = "var(--ivory)";
+      pn.style.lineHeight= "1.62";
+    }
+
     /* ② le domande — una riga per capoverso */
     if(x.domande){
       var el = paginaCerca(schede, "domande");
@@ -119,6 +129,38 @@ function paginaInPiu(pag, d){
       var ts = pz.querySelector("[data-tasto]");
       if(ts && (!ts.textContent || ts.textContent.indexOf("attesa") >= 0))
         ts.textContent = "Ordina";
+    }
+
+    /* i dati tecnici scendono sotto il prezzo */
+    var cop2 = paginaCerca(schede, "racconto");
+    var pz2  = paginaCerca(schede, "prezzo");
+    if(cop2 && pz2){
+      var lista = cop2.querySelector("ul");
+      if(lista){
+        lista.style.marginTop = "0.9rem";
+        lista.style.paddingTop = "0.9rem";
+        lista.style.borderTop = "1px solid var(--line)";
+        pz2.appendChild(lista);
+      }
+    }
+
+    /* la biografia a piena larghezza, non in colonna stretta */
+    var bio2 = paginaCerca(schede, "bio");
+    if(bio2){
+      var tx = bio2.querySelector("[data-bio]");
+      if(tx){
+        var madre = tx.parentNode;
+        if(madre && madre !== bio2){
+          madre.style.minWidth = "0";
+          madre.style.flex = "1 1 100%";
+        }
+        tx.style.maxWidth = "none";
+      }
+      var rit2 = bio2.querySelector("[data-im]");
+      if(rit2){
+        rit2.style.flex = "0 0 7rem";
+        rit2.style.height = "7rem";
+      }
     }
 
     /* ⑥ i cinque quadranti — quattro fissi, il primo dal contenuto */
