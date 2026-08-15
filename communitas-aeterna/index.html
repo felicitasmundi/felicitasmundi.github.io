@@ -1001,9 +1001,21 @@
         sulla freccia. È lo spazio vuoto accanto al tasto a riceverlo.
      ⭐ Solo a fascia chiusa. Quando si apre in finestra, il nome, il
         brano e la freccia per richiudere tornano tutti. ══ */
+  /* ⭐ E LA PLANCIA SI RIMPICCIOLISCE DAVVERO. Svuotarla non bastava:
+        l'altezza non veniva dalle parole ma dall'imbottitura — 1rem in
+        #pl, 0.8rem nella striscia — e il min-height:3.9rem non mordeva
+        nemmeno, perché il contenuto era già più alto di lui.
+        Tolto quello e strette le due imbottiture, la riga scende
+        dall'altezza di quattro tasti e mezzo a quella di uno.
+
+     ⭐ #apri-barra segue: alto come il play e centrato sulla stessa
+        riga. Ai 2.5rem di prima sporgeva sotto la plancia accorciata. */
   @media(max-width:40rem){
     body:not(.radio-aperta) .r-freq{display:none}
     body:not(.radio-aperta) #r-apri{display:none}
+    body:not(.radio-aperta) #pl{padding-top:0.2rem;padding-bottom:0.2rem;min-height:0}
+    body:not(.radio-aperta) .r-striscia{padding-top:0.15rem;padding-bottom:0.15rem}
+    body:not(.radio-aperta) #apri-barra{top:0.4rem;width:2.3rem;height:2.3rem}
   }
 </style>
 </head>
