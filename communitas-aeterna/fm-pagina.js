@@ -11,12 +11,19 @@
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
 
-   ⛔ DUE COSE SI CAMBIANO A OGNI RIVERSAMENTO, e vanno rifatte a mano:
+   ⛔ TRE COSE SI CAMBIANO A OGNI RIVERSAMENTO, e vanno rifatte a mano:
 
       ① sotto i 40rem `flex-wrap:nowrap` vuole `!important`. Il <nav>
       porta `flex-wrap:wrap` scritto in linea, e uno stile in linea batte
       sempre una regola del foglio: senza, le cinque voci vanno a capo
       una per riga invece di stare in fila e scorrere di lato.
+      ⭐ Stessa trappola, stesso `!important`, per il padding laterale
+      del <nav>: anche quello è scritto in linea.
+
+      ③ sotto i 40rem `.fm-pag` non mette padding laterale. Design lo
+      prevede a 1.1rem sotto i 52rem, ma nel guscio `#centro` ne mette
+      già altrettanto: sommati, sul telefono l'aria raddoppiava e il
+      testo restava stretto in mezzo. Sopra i 40rem resta com'è.
 
       ② la barra dei quadranti sta a `top:0`, non a `top:var(--radio)`.
       Nel guscio la finestra non scorre — scorre #centro — e la plancia
@@ -49,6 +56,13 @@ var MODELLO = `<style>
 
   /* ⑤ quadranti — le porte dell'azione */
   .fm-pag [data-quad] a:hover,.fm-pag [data-quad] a[data-on]{background:var(--oro-ch);color:var(--navy)}
+  /* ⭐ LARGA QUANTO IL TESTO, NON DI PIÙ — a ogni larghezza, telefono e
+     computer. Dentro le schede le parole stanno 1.3rem dentro il bordo;
+     qui la voce ha 0.9rem suoi, quindi al <nav> ne restano 0.4rem, e le
+     due colonne di parole cadono sulla stessa riga verticale.
+     ⛔ !important: il padding del <nav> è scritto in linea, e uno stile
+        in linea batte sempre una regola del foglio. */
+  .fm-pag [data-quad]{padding-left:0.4rem !important;padding-right:0.4rem !important}
 
   /* ⑦ porte · ⑧ vie */
   .fm-pag [data-porta]:hover{border-color:rgba(200,160,85,0.55)}
@@ -93,6 +107,11 @@ var MODELLO = `<style>
   }
 
   @media(max-width:52rem){ .fm-pag{padding-left:1.1rem;padding-right:1.1rem} }
+  /* ⛔ CAMBIATO A MANO SULLA CONSEGNA DI DESIGN — vedi ③ in cima al file.
+     Sotto i 40rem l'aria laterale la mette il guscio, con #centro. Qui
+     va a zero, o il telefono ne prende il doppio e il testo si stringe.
+     Sta dopo la riga dei 52rem apposta: stessa forza, vince l'ultima. */
+  @media(max-width:40rem){ .fm-pag{padding-left:0;padding-right:0} }
 
   @media print{
     .fm-pag [data-quad],.fm-pag [data-vie],.fm-pag [data-tasto]{display:none}

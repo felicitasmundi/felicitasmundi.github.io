@@ -917,14 +917,20 @@
     background:rgba(6,9,22,0.85);border:1px solid rgba(200,160,85,0.5);color:var(--oro-ch);
     border-radius:0.6rem;width:2.5rem;height:2.5rem;font-size:var(--t-cor);cursor:pointer}
 
-  /* il tasto che apre la fascia intera della radio. Vive solo sul telefono:
-     sul PC la fascia è già tutta lì, e questo tasto non ha niente da aprire */
-  #r-apri{display:none;flex:0 0 auto;width:2.2rem;height:2.2rem;border-radius:0.3rem;
+  /* il segno che porta giù la radio: la freccia che fa scendere il
+     riquadro intero — il palinsesto e la scala delle ore.
+     ⭐ Sta su tutte le larghezze. Sul telefono fa scendere la finestra,
+        sul computer allunga la striscia. Prima viveva solo sul telefono
+        e sul computer non c'era niente da toccare: si apriva soltanto
+        indovinando che tutta la striscia fosse un tasto. */
+  #r-apri{display:flex;flex:0 0 auto;width:2.2rem;height:2.2rem;border-radius:0.3rem;
     border:1px solid var(--line);background:linear-gradient(to bottom,rgba(245,240,230,0.1),rgba(2,4,12,0.4));
     box-shadow:inset 0 1px 0 rgba(245,240,230,0.18),inset 0 -1px 0 rgba(2,4,12,0.7);
     color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1;
     cursor:pointer;align-items:center;justify-content:center;transition:transform .22s ease}
   #r-apri:active{box-shadow:inset 0 2px 3px rgba(2,4,12,0.85)}
+  /* col riquadro sceso la freccia si volta: ora riporta su */
+  #blocco-radio.aperta #r-apri{transform:rotate(180deg)}
 
   @media(max-width:52rem){
     /* ── il tasto della barra: ancorato in alto a sinistra, e sta fermo
@@ -1905,7 +1911,13 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var a = $("r-apri");
     if(a) a.addEventListener("click", function(e){
       e.stopPropagation();
-      apriFascia(!fasciaAperta());
+      /* ⭐ fa scendere il riquadro come farebbe il tocco sulla striscia:
+         sul telefono la fascia in finestra, sul computer la striscia che
+         si allunga. Prima questa freccia viveva solo sul telefono, e sul
+         computer il gesto della finestra non avrebbe fatto niente. */
+      if(telefono()){ apriFascia(!fasciaAperta()); return; }
+      $("blocco-radio").classList.toggle("aperta");
+      misuraPlancia();
     });
 
     /* da finestra, il tocco fuori dalla fascia richiude */
