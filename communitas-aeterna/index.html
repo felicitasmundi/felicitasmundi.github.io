@@ -2577,6 +2577,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(document.body.classList.contains("barra-aperta")) return;
     if(document.body.classList.contains("radio-aperta")) return;
     document.documentElement.style.setProperty("--plancia", p.offsetHeight + "px");
+    /* ⭐ la stessa misura con l'altro nome: la leggono le pagine di
+       contenuto, dove la barra dei quadranti si appiccica a top:var(--radio).
+       Senza, --radio ricade su 0px. */
+    document.documentElement.style.setProperty("--fm-radio-h", p.offsetHeight + "px");
   }
   misuraPlancia();
   window.addEventListener("resize", misuraPlancia);

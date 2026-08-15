@@ -6,7 +6,7 @@
       Cinquecento pagine, cinquecento record — un file.
 
    Il disegno è di Design: pagina-modello.html
-   38503 byte · MD5 370ddd54f6eb972d9a8675ad7708b724
+   38885 byte · MD5 fdbdb52b84498b5c5df006f7ddd7a910
    ⚠️ Il suo <style> e il suo corpo vanno dentro MODELLO qui sotto,
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
@@ -83,7 +83,7 @@ var MODELLO = `<style>
   }
 </style>
 
-<div class="fm-pag" style="--scala:1.4;--navy:#0A0C1A;--oro:#C8A055;--oro-ch:#D4AF6A;--ivory:#F5F0E6;--line:rgba(184,150,62,0.2);--velina:rgba(10,12,26,0.58);--t-eti:calc(0.8125rem * var(--scala));--t-tas:calc(0.9375rem * var(--scala));--t-cor:calc(1.0625rem * var(--scala));--t-scr:calc(1.125rem * var(--scala));--t-tit:calc(1.5rem * var(--scala));--t-big:calc(1.9rem * var(--scala));max-width:56rem;width:100%;margin:0 auto;display:flex;flex-direction:column;color:#F5F0E6;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased">
+<div class="fm-pag" style="--scala:1.4;--radio:var(--fm-radio-h,0px);--navy:#0A0C1A;--oro:#C8A055;--oro-ch:#D4AF6A;--ivory:#F5F0E6;--line:rgba(184,150,62,0.2);--velina:rgba(10,12,26,0.58);--t-eti:calc(0.8125rem * var(--scala));--t-tas:calc(0.9375rem * var(--scala));--t-cor:calc(1.0625rem * var(--scala));--t-scr:calc(1.125rem * var(--scala));--t-tit:calc(1.5rem * var(--scala));--t-big:calc(1.9rem * var(--scala));max-width:56rem;width:100%;margin:0 auto;display:flex;flex-direction:column;color:#F5F0E6;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased">
 
   <!-- ①②③④ LA TESTA -->
   <header style="margin-top:1.2rem;display:flex;flex-direction:column;gap:0.6rem">
@@ -100,7 +100,7 @@ var MODELLO = `<style>
   <!-- ⑤ QUADRANTI · la barra d'oro, appiccicata in alto mentre si scorre.
        Sono le porte dell'azione, non l'indice: da 2 a 5 voci.
        FACOLTATIVI: se il corpo ha una sola sezione, si toglie il <nav> intero. -->
-  <nav data-quad="1" style="position:sticky;top:0;z-index:4;margin-top:1.6rem;display:flex;gap:0.35rem;flex-wrap:wrap;padding:0.6rem 0.5rem;background:var(--navy);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
+  <nav data-quad="1" style="position:sticky;top:var(--radio);z-index:4;margin-top:1.6rem;display:flex;gap:0.35rem;flex-wrap:wrap;padding:0.6rem 0.5rem;background:var(--navy);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
     <a data-quad-voce="1" href="#sez-1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
     <a data-quad-voce="1" href="#sez-2" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Ordina</a>
     <a data-quad-voce="1" href="#sez-3" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Chi scrive</a>
@@ -111,7 +111,7 @@ var MODELLO = `<style>
   <!-- ⑥ IL CORPO ═══════════════════════════════════════════════ -->
 
   <!-- SEZIONE · scheda A (immagine grande a fianco del testo + elenco di righe) -->
-  <section id="sez-1" style="margin-top:2.4rem;scroll-margin-top:4.5rem">
+  <section id="sez-1" style="margin-top:2.4rem;scroll-margin-top:calc(var(--radio) + 4.5rem)">
     <!-- fondale cosmico/neuronale — come nella casa -->
     <div data-rete="1" style="position:relative;border:1px solid rgba(184,150,62,0.28);border-radius:1rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
       <canvas data-tela="1" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.85"></canvas>
@@ -158,7 +158,7 @@ var MODELLO = `<style>
 
   <!-- SEZIONE · scheda E (riga con prezzo e tasto)
        FACOLTATIVA. Senza prezzo: si toglie il <span> del prezzo, il tasto regge da solo. -->
-  <section id="sez-2" style="margin-top:2.6rem;scroll-margin-top:4.5rem">
+  <section id="sez-2" style="margin-top:2.6rem;scroll-margin-top:calc(var(--radio) + 4.5rem)">
     <div data-occhiello-sez="prezzo" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
     <div data-scheda="prezzo" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <div style="display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;padding:0.2rem 0">
@@ -189,7 +189,7 @@ var MODELLO = `<style>
 
   <!-- SEZIONE · scheda D (ritratto tondo col testo) + scheda F (miniatura di video)
        Entrambe FACOLTATIVE. Senza ritratto: si toglie la prima colonna. -->
-  <section id="sez-3" style="margin-top:2.6rem;scroll-margin-top:4.5rem">
+  <section id="sez-3" style="margin-top:2.6rem;scroll-margin-top:calc(var(--radio) + 4.5rem)">
     <!-- fondale cosmico/neuronale — come nella casa -->
     <div data-rete="1" style="position:relative;border:1px solid rgba(184,150,62,0.28);border-radius:1rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
       <canvas data-tela="1" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.85"></canvas>
@@ -233,7 +233,7 @@ var MODELLO = `<style>
        la forma regge una riga e regge dieci.
        Il filo a sinistra prende il colore della sezione a cui porta.
        FACOLTATIVA: senza porte si toglie la <section> intera. -->
-  <section id="collegato" style="margin-top:3rem;scroll-margin-top:4.5rem">
+  <section id="collegato" style="margin-top:3rem;scroll-margin-top:calc(var(--radio) + 4.5rem)">
     <div data-segno="1" style="display:flex;flex-direction:column;align-items:center;gap:0.8rem;margin-bottom:1.6rem;padding:1.1rem 1.2rem;background:rgba(10,12,26,0.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
       <img src="nexus.png" alt="Il segno del Nexus" width="512" height="512" style="width:4.2rem;height:auto;display:block;border-radius:0.35rem;border:1px solid #1E5B3A;box-shadow:0 0 0.55rem rgba(46,170,105,0.55),0 0 1.6rem rgba(46,170,105,0.26)">
       <span data-occhiello-sez="collegato" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);text-align:center">A cosa è collegato</span>
@@ -307,7 +307,7 @@ var MODELLO = `<style>
   </section>
 
   <!-- ⑧ CONDIVIDI ═════════════════════════════════════════════ -->
-  <section id="condividi" style="margin-top:3rem;margin-bottom:1.2rem;scroll-margin-top:4.5rem">
+  <section id="condividi" style="margin-top:3rem;margin-bottom:1.2rem;scroll-margin-top:calc(var(--radio) + 4.5rem)">
     <div data-occhiello-sez="condividi" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">Condividi</div>
     <div data-vie="1" style="display:flex;gap:0.6rem;flex-wrap:wrap">
       <a data-via="1" data-wa="1" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:var(--ivory);border:1px solid var(--line);border-radius:999px;padding:0.65rem 1.2rem;background:rgba(10,12,26,0.4);transition:0.2s">WhatsApp</a>
@@ -360,7 +360,12 @@ function paginaAccendi(pag){
       var scorre = document.getElementById("centro") || window;
       var spia = function () {
         var alto = scorre === window ? window.scrollY : scorre.scrollTop + scorre.offsetTop;
-        var y = alto + 90, att = -1;
+        /* la soglia scende sotto la plancia della radio: la misura la scrive
+           il guscio su :root come --fm-radio-h; senza, vale zero.
+           ⚠️ Design la chiama `alto`; qui `alto` è già lo scorrimento del
+              quadrante centrale, così questa si chiama `radio`. */
+        var radio = parseFloat(getComputedStyle(pag).getPropertyValue("--radio")) || 0;
+        var y = alto + radio + 90, att = -1;
         sezioni.forEach(function (s, i) { if (s && s.offsetTop <= y) att = i; });
         voci.forEach(function (a, i) {
           if (i === att) a.setAttribute("data-on", "1"); else a.removeAttribute("data-on");
