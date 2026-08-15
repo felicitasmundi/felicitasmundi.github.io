@@ -991,6 +991,20 @@
     body.radio-aperta #r-apri{transform:rotate(180deg)}
     body.radio-aperta #centro{overflow:hidden}
   }
+
+  /* ══ SOTTO I 40rem DELLA RADIO RESTA IL SOLO TASTO ══
+     Il titolo del brano e la freccia si ritirano: in cima al telefono
+     basta poter accendere. È la legge dei margini — si ritira il
+     margine, il centro non si tocca.
+
+     ⭐ La fascia non si perde: il tocco è su tutta la striscia, non
+        sulla freccia. È lo spazio vuoto accanto al tasto a riceverlo.
+     ⭐ Solo a fascia chiusa. Quando si apre in finestra, il nome, il
+        brano e la freccia per richiudere tornano tutti. ══ */
+  @media(max-width:40rem){
+    body:not(.radio-aperta) .r-freq{display:none}
+    body:not(.radio-aperta) #r-apri{display:none}
+  }
 </style>
 </head>
 <body>
