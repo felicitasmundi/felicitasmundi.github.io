@@ -6,7 +6,7 @@
       Cinquecento pagine, cinquecento record — un file.
 
    Il disegno è di Design: pagina-modello.html
-   36932 byte · MD5 36cd2ed7e97247d98964f5896c588138
+   37652 byte · MD5 57c4346f433b617396d4a272282abf45
    ⚠️ Il suo <style> e il suo corpo vanno dentro MODELLO qui sotto,
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
@@ -29,6 +29,8 @@ var MODELLO = `<style>
   .fm-pag,.fm-pag *,.fm-pag *::before,.fm-pag *::after{box-sizing:border-box}
   .fm-pag > *{min-width:0;max-width:100%}
   .fm-pag img{max-width:100%;display:block}
+  /* nascondere deve vincere sul display scritto in linea */
+  .fm-pag [hidden]{display:none !important}
 
   /* ⑤ quadranti — le porte dell'azione */
   .fm-pag [data-quad] a:hover,.fm-pag [data-quad] a[data-on]{background:var(--oro-ch);color:var(--navy)}
@@ -42,7 +44,7 @@ var MODELLO = `<style>
 
   /* le schede che si piegano */
   .fm-pag [data-copertina]{grid-template-columns:14rem minmax(0,1fr)}
-  .fm-pag [data-bio]{grid-template-columns:8.5rem minmax(0,1fr)}
+  .fm-pag [data-bio]{grid-template-columns:auto minmax(0,1fr)}
   @media(max-width:44rem){
     .fm-pag [data-copertina]{grid-template-columns:minmax(0,1fr)}
     .fm-pag [data-copertina] [data-im]{max-width:16rem}
@@ -79,11 +81,11 @@ var MODELLO = `<style>
        Sono le porte dell'azione, non l'indice: da 2 a 5 voci.
        FACOLTATIVI: se il corpo ha una sola sezione, si toglie il <nav> intero. -->
   <nav data-quad="1" style="position:sticky;top:0;z-index:40;margin-top:1.6rem;display:flex;gap:0.35rem;flex-wrap:wrap;padding:0.6rem 0.5rem;background:rgba(10,12,26,0.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
-    <a href="#sez-1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a href="#sez-2" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a href="#sez-3" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a href="#collegato" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a href="#condividi" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
+    <a data-quad-voce="1" href="#sez-1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
+    <a data-quad-voce="1" href="#sez-2" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
+    <a data-quad-voce="1" href="#sez-3" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
+    <a data-quad-voce="1" href="#collegato" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
+    <a data-quad-voce="1" href="#condividi" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
   </nav>
 
   <!-- ⑥ IL CORPO ═══════════════════════════════════════════════ -->
@@ -105,31 +107,16 @@ var MODELLO = `<style>
           <span style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 0.8rem">l'immagine grande<br>[ in attesa ]</span>
         </div>
         <div style="min-width:0">
-          <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0 0 0.9rem">[ in attesa ]</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
+          <p data-racconto="1" style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0 0 0.9rem">[ in attesa ]</p>
+          <p data-racconto="1" style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
 
-          <!-- elenco di righe · i dati. Da 1 a molte righe. Si può togliere. -->
-          <ul style="list-style:none;margin:1.2rem 0 0;padding:0.9rem 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:0.15rem">
-            <li data-riga="1" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:0.35rem 0">
-              <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.08em;color:rgba(245,240,230,0.62)">[ in attesa ]</span>
-              <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
-            </li>
-            <li data-riga="1" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:0.35rem 0">
-              <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.08em;color:rgba(245,240,230,0.62)">[ in attesa ]</span>
-              <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
-            </li>
-            <li data-riga="1" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:0.35rem 0">
-              <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.08em;color:rgba(245,240,230,0.62)">[ in attesa ]</span>
-              <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
 
     <!-- scheda C · solo testo lungo. Sotto lo stesso occhiello o con uno nuovo. -->
     <div data-occhiello-sez="come" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin:2rem 0 0.9rem">[ in attesa ]</div>
-    <div data-scheda="testo_lungo" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem;display:flex;flex-direction:column;gap:0.9rem" data-racconto="1">
+    <div data-scheda="testo_lungo" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem;display:flex;flex-direction:column;gap:0.9rem">
       <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
       <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
     </div>
@@ -138,17 +125,17 @@ var MODELLO = `<style>
     <div data-occhiello-sez="domande" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin:2rem 0 0.9rem">[ in attesa ]</div>
     <div data-scheda="domande" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.2rem">
-        <li style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
+        <li data-domanda="1" style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
           <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
         </li>
-        <li style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
+        <li data-domanda="1" style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
           <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
         </li>
-        <li style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
+        <li data-domanda="1" style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
           <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
         </li>
       </ul>
-      <p data-scheda="nota" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line)">[ in attesa ]</p>
+      <p data-scheda="nota" data-nota="domande" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line)">[ in attesa ]</p>
     </div>
       </div>
     </div>
@@ -161,12 +148,28 @@ var MODELLO = `<style>
     <div data-occhiello-sez="prezzo" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
     <div data-scheda="prezzo" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <div style="display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;padding:0.2rem 0">
-        <span style="flex:1 1 12rem;min-width:0;font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.3;color:var(--ivory)">[ in attesa ]
-          <small style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin-top:0.2rem">[ in attesa ]</small></span>
+        <span data-nome-prod="1" style="flex:1 1 12rem;min-width:0;font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.3;color:var(--ivory)">[ in attesa ]
+          <small data-dati-prod="1" style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin-top:0.2rem">[ in attesa ]</small></span>
         <span data-prezzo="1" style="font-family:'Cinzel',serif;font-size:var(--t-scr);color:var(--oro-ch);white-space:nowrap">[ in attesa ]</span>
         <a data-tasto="1" href="#" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;font-weight:600;color:var(--navy);background:var(--oro-ch);border:1px solid var(--oro-ch);border-radius:999px;padding:0.7rem 1.5rem;text-decoration:none;white-space:nowrap;transition:0.2s">[ in attesa ]</a>
       </div>
-      <p style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin:1rem 0 0;padding-top:0.9rem;border-top:1px solid var(--line)">[ in attesa ]</p>
+      <!-- elenco di righe · i dati: editore, formato, ISBN. Sotto il prezzo.
+           Da 1 a molte righe. Si può togliere. -->
+      <ul style="list-style:none;margin:1rem 0 0;padding:0.9rem 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:0.15rem">
+        <li data-riga="1" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:0.35rem 0">
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.08em;color:rgba(245,240,230,0.62)">[ in attesa ]</span>
+          <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
+        </li>
+        <li data-riga="1" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:0.35rem 0">
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.08em;color:rgba(245,240,230,0.62)">[ in attesa ]</span>
+          <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
+        </li>
+        <li data-riga="1" style="display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:0.35rem 0">
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.08em;color:rgba(245,240,230,0.62)">[ in attesa ]</span>
+          <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
+        </li>
+      </ul>
+      <p data-nota-prezzo="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin:1rem 0 0;padding-top:0.9rem;border-top:1px solid var(--line)">[ in attesa ]</p>
     </div>
   </section>
 
@@ -182,13 +185,13 @@ var MODELLO = `<style>
     <div data-occhiello-sez="chi" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
     <div data-scheda="bio" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <div data-bio="1" style="display:grid;gap:1.2rem;align-items:start">
-        <div style="width:8.5rem;height:8.5rem;border-radius:50%;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center">
+        <div data-ritratto="1" style="width:8.5rem;height:8.5rem;border-radius:50%;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center">
           <span style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 0.6rem">il ritratto</span>
         </div>
         <div style="min-width:0;display:flex;flex-direction:column;gap:0.9rem">
-          <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
-          <p data-scheda="nota" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:0;padding-top:0.9rem;border-top:1px solid var(--line)">[ in attesa ]</p>
+          <p data-bio-testo="1" style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
+          <p data-bio-testo="1" style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
+          <p data-scheda="nota" data-nota="bio" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:0;padding-top:0.9rem;border-top:1px solid var(--line)">[ in attesa ]</p>
         </div>
       </div>
 
@@ -203,6 +206,7 @@ var MODELLO = `<style>
           </span>
           <span style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 1rem">la miniatura del video<br>[ in attesa ]</span>
         </span>
+        <span data-video-dove="1" style="position:absolute;left:0;right:0;bottom:0;padding:1.6rem 1rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.06em;color:var(--ivory);text-align:center;background:linear-gradient(180deg,transparent,rgba(6,8,18,0.82))">[ in attesa ]</span>
       </a>
     </div>
       </div>
