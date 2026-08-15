@@ -11,7 +11,10 @@
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
 
-   ⛔ TRE COSE SI CAMBIANO A OGNI RIVERSAMENTO, e vanno rifatte a mano:
+   ⛔ QUATTRO COSE SI CAMBIANO A OGNI RIVERSAMENTO, e vanno rifatte a
+      mano. Le ultime tre hanno tutte la stessa causa: Design scrive
+      quei valori IN LINEA sul tag, e uno stile in linea batte sempre
+      una regola del foglio. Serve `!important`, ogni volta.
 
       ① sotto i 40rem `flex-wrap:nowrap` vuole `!important`. Il <nav>
       porta `flex-wrap:wrap` scritto in linea, e uno stile in linea batte
@@ -24,6 +27,12 @@
       prevede a 1.1rem sotto i 52rem, ma nel guscio `#centro` ne mette
       già altrettanto: sommati, sul telefono l'aria raddoppiava e il
       testo restava stretto in mezzo. Sopra i 40rem resta com'è.
+
+      ④ `.fm-pag` non è più fermata a 56rem: la pagina prende tutta la
+      larghezza, e l'aria ai lati la dà `#centro`. ⚠️ Il cappio è
+      doppio — l'altro sta nel guscio, `#centro > *{max-width:56rem}`,
+      e là è sciolto per la sola `.fm-pag`: se un giorno tornasse
+      stretta senza motivo, è quella riga del guscio che è saltata.
 
       ② la barra dei quadranti sta a `top:0`, non a `top:var(--radio)`.
       Nel guscio la finestra non scorre — scorre #centro — e la plancia
@@ -49,6 +58,14 @@
    ⛔ Non riscriverlo: si incolla verbatim, come per il Praticantato. */
 var MODELLO = `<style>
   .fm-pag,.fm-pag *,.fm-pag *::before,.fm-pag *::after{box-sizing:border-box}
+  /* ⛔ CAMBIATO A MANO SULLA CONSEGNA DI DESIGN — vedi ④ in cima al file.
+     Design fissa la pagina a 56rem, scritto IN LINEA sul <div>. Qui il
+     cappio si scioglie: la pagina prende tutta la larghezza che trova, e
+     l'aria ai lati la dà il guscio con #centro — 2.6rem sul computer,
+     1.1rem sul telefono. Il secondo cappio sta nel guscio (#centro > *)
+     e si scioglie là, per la sola pagina di contenuto.
+     ⛔ !important, o lo stile in linea vince. */
+  .fm-pag{max-width:none !important}
   .fm-pag > *{min-width:0;max-width:100%}
   .fm-pag img{max-width:100%;display:block}
   /* nascondere deve vincere sul display scritto in linea */
@@ -57,12 +74,15 @@ var MODELLO = `<style>
   /* ⑤ quadranti — le porte dell'azione */
   .fm-pag [data-quad] a:hover,.fm-pag [data-quad] a[data-on]{background:var(--oro-ch);color:var(--navy)}
   /* ⭐ LARGA QUANTO IL TESTO, NON DI PIÙ — a ogni larghezza, telefono e
-     computer. Dentro le schede le parole stanno 1.3rem dentro il bordo;
-     qui la voce ha 0.9rem suoi, quindi al <nav> ne restano 0.4rem, e le
-     due colonne di parole cadono sulla stessa riga verticale.
+     computer. Non basta spostare le parole delle voci: è il FONDO della
+     barra, coi suoi due bordi, che sporgeva — restava largo quanto la
+     colonna intera mentre il testo, dentro le schede, sta 1.3rem più
+     dentro. Quindi rientra il fondo, di quegli stessi 1.3rem per lato,
+     e il padding laterale va a zero perché niente lo spinga fuori.
      ⛔ !important: il padding del <nav> è scritto in linea, e uno stile
         in linea batte sempre una regola del foglio. */
-  .fm-pag [data-quad]{padding-left:0.4rem !important;padding-right:0.4rem !important}
+  .fm-pag [data-quad]{margin-left:1.3rem;margin-right:1.3rem;
+    padding-left:0 !important;padding-right:0 !important}
 
   /* ⑦ porte · ⑧ vie */
   .fm-pag [data-porta]:hover{border-color:rgba(200,160,85,0.55)}

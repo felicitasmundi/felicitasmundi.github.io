@@ -150,6 +150,11 @@
   #centro{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
     -webkit-overflow-scrolling:touch;margin-left:var(--barra);padding:1.6rem 2.6rem 3rem}
   #centro > *{max-width:56rem;margin-left:auto;margin-right:auto}
+  /* ⭐ TOCCATO NEL GUSCIO — una riga sola. La pagina di contenuto non si
+     ferma a 56rem: prende tutta la larghezza, e l'aria gliela lascia il
+     padding di #centro qui sopra. Vale per lei sola: le altre stanze
+     restano alla misura di lettura. L'altro cappio è in fm-pagina.js. */
+  #centro > .fm-pag{max-width:none}
   .occhio{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
     text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.5rem}
   h1{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-big);line-height:1.2;
