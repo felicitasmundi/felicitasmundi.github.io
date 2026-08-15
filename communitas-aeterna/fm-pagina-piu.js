@@ -47,6 +47,18 @@ function paginaInPiu(pag, d){
     paginaPosa(schede, "testo_lungo", x.testo_lungo);
     paginaPosa(schede, "nota", x.nota);
 
+    /* ⛔ data-racconto sta sulla scheda del testo lungo: senza testo_lungo
+       il disegnatore ci riscrive il racconto, e si legge due volte. */
+    if(!x.testo_lungo){
+      var doppio = pag.querySelector("[data-racconto]");
+      if(doppio){
+        var sd = doppio.closest ? doppio.closest("[data-scheda]") : null;
+        if(sd && sd.getAttribute("data-scheda") !== "racconto")
+          sd.setAttribute("hidden", "");
+        else doppio.setAttribute("hidden", "");
+      }
+    }
+
     /* la nota va letta come gli altri testi, non in corsivo piccolo */
     var nt = paginaCerca(schede, "nota");
     if(nt){
@@ -74,23 +86,54 @@ function paginaInPiu(pag, d){
       }
     }
 
-    /* ③ il ritratto e la biografia */
+    /* ③ il ritratto e la biografia
+       La scheda «bio» è fatta così:
+         [data-bio] > div (il ritratto) + div (i testi: due <p> più la nota) */
     var bio = paginaCerca(schede, "bio");
-    if(bio){
-      if(x.foto_autore){
-        var rit = bio.querySelector("[data-im]") ||
-                  bio.querySelector("[data-copertina]");
-        if(rit) rit.innerHTML = '<img src="' + paginaSalva(x.foto_autore) +
-          '" alt="" style="display:block;width:100%;height:100%;' +
-          'object-fit:cover;border-radius:inherit">';
+    var dentroBio = bio && bio.querySelector("[data-bio]");
+    if(dentroBio){
+      var colonne = [].slice.call(dentroBio.children);
+      var quadro  = colonne[0];
+      var testi   = colonne[1];
+
+      /* il ritratto */
+      if(quadro){
+        if(x.foto_autore){
+          quadro.innerHTML = '<img src="' + paginaSalva(x.foto_autore) +
+            '" alt="" style="display:block;width:100%;height:100%;' +
+            'object-fit:cover;border-radius:inherit">';
+          quadro.style.flex = "0 0 8rem";
+          quadro.style.width = "8rem";
+          quadro.style.height = "8rem";
+          quadro.style.overflow = "hidden";
+        } else {
+          quadro.setAttribute("hidden", "");
+        }
       }
-      if(x.biografia){
-        var pb = bio.querySelector("[data-bio]") || bio.querySelector("p");
-        if(pb){ pb.textContent = x.biografia; pb.removeAttribute("hidden"); }
-        bio.removeAttribute("hidden");
-      } else {
-        bio.setAttribute("hidden", "");
+
+      /* la biografia, a piena larghezza: un capoverso per <p> */
+      if(testi){
+        testi.style.flex = "1 1 auto";
+        testi.style.minWidth = "0";
+        testi.style.maxWidth = "none";
+        var pp = [].slice.call(testi.querySelectorAll("p"))
+          .filter(function(e){ return e.getAttribute("data-scheda") !== "nota"; });
+        if(x.biografia && pp.length){
+          var capiB = String(x.biografia).split(/\n\s*\n/)
+            .filter(function(r){ return r.trim(); });
+          if(capiB.length === 1) capiB = [x.biografia];
+          pp.forEach(function(e, i){
+            if(capiB[i]){ e.textContent = capiB[i].trim(); e.removeAttribute("hidden"); }
+            else e.setAttribute("hidden", "");
+          });
+          if(capiB.length > pp.length)
+            pp[pp.length-1].textContent = capiB.slice(pp.length-1).join(" ");
+        } else if(pp.length){
+          pp.forEach(function(e){ e.setAttribute("hidden", ""); });
+        }
       }
+
+      if(dentroBio.style) dentroBio.style.alignItems = "flex-start";
     }
 
     /* ④ il racconto, accanto alla copertina */
@@ -116,15 +159,20 @@ function paginaInPiu(pag, d){
     /* ⑤ il nome e i dati sopra il prezzo */
     var pz = paginaCerca(schede, "prezzo");
     if(pz){
-      var nm = pz.querySelector("span");
+      var nm = null, tutti = [].slice.call(pz.querySelectorAll("span"));
+      for(var k = 0; k < tutti.length; k++){
+        if(!tutti[k].hasAttribute("data-prezzo") &&
+           !tutti[k].hasAttribute("data-velo")){ nm = tutti[k]; break; }
+      }
       if(nm){
         var pic = nm.querySelector("small");
         var righe = [d.autore, d.editore, d.formato]
-          .filter(function(x){ return x; }).join(" · ");
-        if(pic){
-          nm.childNodes[0] && (nm.childNodes[0].nodeValue = d.nome + " ");
-          pic.textContent = righe;
-        }
+          .filter(function(v){ return v; }).join(" · ");
+        nm.insertBefore(document.createTextNode(d.nome + " "), nm.firstChild);
+        [].slice.call(nm.childNodes).forEach(function(nd){
+          if(nd.nodeType === 3 && nd !== nm.firstChild) nd.nodeValue = "";
+        });
+        if(pic) pic.textContent = righe;
       }
       var ts = pz.querySelector("[data-tasto]");
       if(ts && (!ts.textContent || ts.textContent.indexOf("attesa") >= 0))
@@ -212,11 +260,11 @@ function paginaInPiu(pag, d){
           im.src = "https://i.ytimg.com/vi/" + idv + "/maxresdefault.jpg";
           im.alt = x.video_titolo || "";
         }
-        var sv = (vid.closest ? vid.closest("[data-scheda]") : null);
-        if(sv) sv.removeAttribute("hidden");
+        var velo = vid.querySelector("[data-velo]");
+        if(velo) velo.parentNode.removeChild(velo);
+        vid.removeAttribute("hidden");
       } else {
-        var sn = (vid.closest ? vid.closest("[data-scheda]") : vid);
-        if(sn) sn.setAttribute("hidden", "");
+        vid.setAttribute("hidden", "");
       }
     }
   });
