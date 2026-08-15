@@ -992,15 +992,20 @@
     body.radio-aperta #centro{overflow:hidden}
   }
 
-  /* ══ SOTTO I 40rem DELLA RADIO RESTA IL SOLO TASTO ══
-     Il titolo del brano e la freccia si ritirano: in cima al telefono
-     basta poter accendere. È la legge dei margini — si ritira il
-     margine, il centro non si tocca.
+  /* ══ SOTTO I 40rem LA RADIO SI STRINGE, MA RESTA UN APPARECCHIO ══
+     ⭐ Tre cose in riga, e tutte e tre restano: il tasto per accendere,
+        il titolo del brano, il tasto che fa scendere il riquadro.
+        Prima qui restava il solo tasto — il brano e la freccia
+        sparivano, e la riga non diceva più cosa stesse suonando.
 
-     ⭐ La fascia non si perde: il tocco è su tutta la striscia, non
-        sulla freccia. È lo spazio vuoto accanto al tasto a riceverlo.
-     ⭐ Solo a fascia chiusa. Quando si apre in finestra, il nome, il
-        brano e la freccia per richiudere tornano tutti. ══ */
+     ⛔ Il brano si accorcia, non si toglie: `flex:1 1 0` gli lascia
+        prendere quel che avanza e `min-width:0` gli permette di
+        stringersi sotto la sua misura naturale. I puntini li mette già
+        `.r-brano`. Senza quel `min-width:0` la striscia si rifiuta di
+        rimpicciolire e spinge la pagina fuori a destra — è da lì che
+        veniva il bordo a 320px.
+     ⛔ La barra dei capitoli sotto non c'entra e non si tocca: resta
+        una riga sola che scorre, come la mette fm-pagina.js. ══ */
   /* ⭐ E LA PLANCIA SI RIMPICCIOLISCE DAVVERO. Svuotarla non bastava:
         l'altezza non veniva dalle parole ma dall'imbottitura — 1rem in
         #pl, 0.8rem nella striscia — e il min-height:3.9rem non mordeva
@@ -1011,10 +1016,11 @@
      ⭐ #apri-barra segue: alto come il play e centrato sulla stessa
         riga. Ai 2.5rem di prima sporgeva sotto la plancia accorciata. */
   @media(max-width:40rem){
-    body:not(.radio-aperta) .r-freq{display:none}
-    body:not(.radio-aperta) #r-apri{display:none}
+    body:not(.radio-aperta) .r-freq{display:block;flex:1 1 0;min-width:0}
+    body:not(.radio-aperta) .r-brano{margin-top:0;line-height:1.2}
+    body:not(.radio-aperta) #r-apri{display:flex;width:2rem;height:2rem}
     body:not(.radio-aperta) #pl{padding-top:0.2rem;padding-bottom:0.2rem;min-height:0}
-    body:not(.radio-aperta) .r-striscia{padding-top:0.15rem;padding-bottom:0.15rem}
+    body:not(.radio-aperta) .r-striscia{padding-top:0.15rem;padding-bottom:0.15rem;gap:0.5rem}
     body:not(.radio-aperta) #apri-barra{top:0.4rem;width:2.3rem;height:2.3rem}
   }
 </style>
