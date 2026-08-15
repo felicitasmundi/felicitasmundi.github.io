@@ -32,7 +32,8 @@ function paginaInPiu(pag, d){
 
   db.from("prodotti")
     .select("domande,testo_lungo,nota,biografia,foto_autore," +
-            "video_url,video_titolo,occhiello_a")
+            "video_url,video_titolo,quadrante_uno," +
+            "occhiello_corpo,occhiello_come,occhiello_domande")
     .eq("nome_url", d.nome_url).single().then(function(r){
 
     if(r.error || !r.data) return;
@@ -82,7 +83,75 @@ function paginaInPiu(pag, d){
       }
     }
 
-    /* ④ il video */
+    /* ④ il racconto, accanto alla copertina */
+    var cop = paginaCerca(schede, "racconto");
+    if(cop && d.racconto){
+      var testi = [].slice.call(cop.querySelectorAll("p"))
+        .filter(function(e){ return !e.closest("ul, ol"); });
+      if(testi.length){
+        var capo = String(d.racconto).split(/\n\s*\n/)
+          .filter(function(r){ return r.trim(); });
+        testi.forEach(function(e, i){
+          if(capo[i]){ e.textContent = capo[i].trim(); e.removeAttribute("hidden"); }
+          else if(i > 0){ e.setAttribute("hidden", ""); }
+        });
+        /* se i capoversi sono più dei paragrafi, il resto va nell'ultimo */
+        if(capo.length > testi.length){
+          var ult = testi[testi.length - 1];
+          ult.textContent = capo.slice(testi.length - 1).join("\n\n");
+        }
+      }
+    }
+
+    /* ⑤ il nome e i dati sopra il prezzo */
+    var pz = paginaCerca(schede, "prezzo");
+    if(pz){
+      var nm = pz.querySelector("span");
+      if(nm){
+        var pic = nm.querySelector("small");
+        var righe = [d.autore, d.editore, d.formato]
+          .filter(function(x){ return x; }).join(" · ");
+        if(pic){
+          nm.childNodes[0] && (nm.childNodes[0].nodeValue = d.nome + " ");
+          pic.textContent = righe;
+        }
+      }
+      var ts = pz.querySelector("[data-tasto]");
+      if(ts && (!ts.textContent || ts.textContent.indexOf("attesa") >= 0))
+        ts.textContent = "Ordina";
+    }
+
+    /* ⑥ i cinque quadranti — quattro fissi, il primo dal contenuto */
+    var barra = pag.querySelector("[data-quad]");
+    if(barra){
+      var voci = [].slice.call(barra.querySelectorAll("a"));
+      var nomi = [ x.quadrante_uno || d.nome, "Ordina", "Chi scrive",
+                   "Collegamenti", "Condividi" ];
+      voci.forEach(function(a, i){
+        if(nomi[i]) a.textContent = nomi[i];
+      });
+      /* niente prezzo, niente «Ordina» */
+      if(!(d.si_compra && d.prezzo) && voci[1]) voci[1].setAttribute("hidden", "");
+    }
+
+    /* ⑦ gli occhielli delle sezioni — ognuno cercato per nome */
+    var occhielli = {
+      corpo:     x.occhiello_corpo,
+      come:      x.occhiello_come,
+      domande:   x.occhiello_domande,
+      prezzo:    "Emporio",
+      chi:       "Chi scrive",
+      collegato: "A cosa è collegato",
+      condividi: "Condividi"
+    };
+    Object.keys(occhielli).forEach(function(k){
+      var e = pag.querySelector("[data-occhiello-sez='" + k + "']");
+      if(!e) return;
+      if(occhielli[k]){ e.textContent = occhielli[k]; e.removeAttribute("hidden"); }
+      else e.setAttribute("hidden", "");
+    });
+
+    /* ⑧ il video */
     var vid = q("[data-video]") || paginaCerca(schede, "video");
     if(vid){
       if(x.video_url){

@@ -6,7 +6,7 @@
       Cinquecento pagine, cinquecento record — un file.
 
    Il disegno è di Design: pagina-modello.html
-   40101 byte · MD5 9a75902e9bf1582ee906869c842e265e
+   36938 byte · MD5 d548a70c7c20ed11b55e29c6d500197e
    ⚠️ Il suo <style> e il suo corpo vanno dentro MODELLO qui sotto,
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
@@ -29,13 +29,6 @@ var MODELLO = `<style>
   .fm-pag,.fm-pag *,.fm-pag *::before,.fm-pag *::after{box-sizing:border-box}
   .fm-pag > *{min-width:0;max-width:100%}
   .fm-pag img{max-width:100%;display:block}
-
-  /* ⛔ QUESTA RIGA NON SI TOGLIE.
-     Chi disegna la pagina toglie di mezzo le parti senza dato marcandole
-     hidden. Qui gli stili stanno dentro l'attributo style, e lo stile
-     scritto sull'elemento batte il display:none del navigatore: senza
-     questa riga 24 elementi marcati hidden resterebbero sotto gli occhi. */
-  .fm-pag [hidden]{display:none !important}
 
   /* ⑤ quadranti — le porte dell'azione */
   .fm-pag [data-quad] a:hover,.fm-pag [data-quad] a[data-on]{background:var(--oro-ch);color:var(--navy)}
@@ -103,9 +96,9 @@ var MODELLO = `<style>
       <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(2,4,12,0.5),rgba(2,4,12,0.14) 70%)"></div>
       <div style="position:relative;z-index:2;padding:1.5rem 1.3rem 1.7rem;min-width:0">
 
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
+    <div data-occhiello-sez="corpo" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
 
-    <div data-scheda="1" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
+    <div data-scheda="racconto" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <div data-copertina="1" style="display:grid;gap:1.4rem;align-items:start">
         <!-- l'immagine grande. Se manca, il riquadro a righe resta e si legge. -->
         <div data-im="1" style="border:1px solid var(--line);border-radius:0.5rem;overflow:hidden;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);aspect-ratio:2/3;display:flex;align-items:center;justify-content:center">
@@ -135,15 +128,15 @@ var MODELLO = `<style>
     </div>
 
     <!-- scheda C · solo testo lungo. Sotto lo stesso occhiello o con uno nuovo. -->
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin:2rem 0 0.9rem">[ in attesa ]</div>
-    <div data-scheda="1" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem;display:flex;flex-direction:column;gap:0.9rem">
-      <p data-racconto="1" style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
+    <div data-occhiello-sez="come" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin:2rem 0 0.9rem">[ in attesa ]</div>
+    <div data-scheda="testo_lungo" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem;display:flex;flex-direction:column;gap:0.9rem" data-racconto="1">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
       <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
     </div>
 
     <!-- scheda B · elenco in evidenza (le domande) -->
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin:2rem 0 0.9rem">[ in attesa ]</div>
-    <div data-scheda="1" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
+    <div data-occhiello-sez="domande" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin:2rem 0 0.9rem">[ in attesa ]</div>
+    <div data-scheda="domande" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.2rem">
         <li style="display:grid;grid-template-columns:1rem minmax(0,1fr);gap:0.6rem;font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.45;letter-spacing:0.02em;color:var(--oro-ch);padding:0.45rem 0">
           <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
@@ -155,7 +148,7 @@ var MODELLO = `<style>
           <span style="color:var(--oro)">·</span><span>[ in attesa ]</span>
         </li>
       </ul>
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line)">[ in attesa ]</p>
+      <p data-scheda="nota" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line)">[ in attesa ]</p>
     </div>
       </div>
     </div>
@@ -165,8 +158,8 @@ var MODELLO = `<style>
   <!-- SEZIONE · scheda E (riga con prezzo e tasto)
        FACOLTATIVA. Senza prezzo: si toglie il <span> del prezzo, il tasto regge da solo. -->
   <section id="sez-2" style="margin-top:2.6rem;scroll-margin-top:4.5rem">
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
-    <div data-scheda="1" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
+    <div data-occhiello-sez="prezzo" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
+    <div data-scheda="prezzo" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <div style="display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;padding:0.2rem 0">
         <span style="flex:1 1 12rem;min-width:0;font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.3;color:var(--ivory)">[ in attesa ]
           <small style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin-top:0.2rem">[ in attesa ]</small></span>
@@ -186,8 +179,8 @@ var MODELLO = `<style>
       <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(2,4,12,0.5),rgba(2,4,12,0.14) 70%)"></div>
       <div style="position:relative;z-index:2;padding:1.5rem 1.3rem 1.7rem;min-width:0">
 
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
-    <div data-scheda="1" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
+    <div data-occhiello-sez="chi" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">[ in attesa ]</div>
+    <div data-scheda="bio" style="border:1px solid var(--line);border-radius:1rem;background:var(--velina);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0.9rem 2.4rem rgba(2,4,12,0.35);padding:1.4rem">
       <div data-bio="1" style="display:grid;gap:1.2rem;align-items:start">
         <div style="width:8.5rem;height:8.5rem;border-radius:50%;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center">
           <span style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 0.6rem">il ritratto</span>
@@ -195,12 +188,12 @@ var MODELLO = `<style>
         <div style="min-width:0;display:flex;flex-direction:column;gap:0.9rem">
           <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
           <p style="font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:var(--ivory);margin:0">[ in attesa ]</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:0;padding-top:0.9rem;border-top:1px solid var(--line)">[ in attesa ]</p>
+          <p data-scheda="nota" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,0.86);margin:0;padding-top:0.9rem;border-top:1px solid var(--line)">[ in attesa ]</p>
         </div>
       </div>
 
       <!-- scheda F · miniatura di video -->
-      <a data-video="1" href="#" style="display:block;position:relative;margin-top:1.4rem;border:1px solid var(--line);border-radius:0.8rem;overflow:hidden;aspect-ratio:16/9;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);text-decoration:none">
+      <a data-scheda="video" data-video="1" href="#" style="display:block;position:relative;margin-top:1.4rem;border:1px solid var(--line);border-radius:0.8rem;overflow:hidden;aspect-ratio:16/9;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);text-decoration:none">
         <span data-velo="1" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.7rem;transition:0.25s">
           <span style="width:3.4rem;height:3.4rem;color:var(--oro-ch)">
             <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" style="width:100%;height:100%;display:block">
@@ -225,7 +218,7 @@ var MODELLO = `<style>
   <section id="collegato" style="margin-top:3rem;scroll-margin-top:4.5rem">
     <div data-segno="1" style="display:flex;flex-direction:column;align-items:center;gap:0.8rem;margin-bottom:1.6rem;padding:1.1rem 1.2rem;background:rgba(10,12,26,0.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
       <img src="nexus-segno.png" alt="Il segno del Nexus" width="512" height="512" style="width:4.2rem;height:auto;display:block;border-radius:0.35rem;border:1px solid #1E5B3A;box-shadow:0 0 0.55rem rgba(46,170,105,0.55),0 0 1.6rem rgba(46,170,105,0.26)">
-      <span style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);text-align:center">A cosa è collegato</span>
+      <span data-occhiello-sez="collegato" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);text-align:center">A cosa è collegato</span>
     </div>
 
     <div style="display:flex;flex-direction:column;gap:0.8rem">
@@ -297,7 +290,7 @@ var MODELLO = `<style>
 
   <!-- ⑧ CONDIVIDI ═════════════════════════════════════════════ -->
   <section id="condividi" style="margin-top:3rem;margin-bottom:1.2rem;scroll-margin-top:4.5rem">
-    <div style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">Condividi</div>
+    <div data-occhiello-sez="condividi" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);margin-bottom:0.9rem">Condividi</div>
     <div data-vie="1" style="display:flex;gap:0.6rem;flex-wrap:wrap">
       <a data-via="1" data-wa="1" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:var(--ivory);border:1px solid var(--line);border-radius:999px;padding:0.65rem 1.2rem;background:rgba(10,12,26,0.4);transition:0.2s">WhatsApp</a>
       <a data-via="1" data-ml="1" href="#" style="display:inline-flex;align-items:center;gap:0.5rem;text-decoration:none;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:var(--ivory);border:1px solid var(--line);border-radius:999px;padding:0.65rem 1.2rem;background:rgba(10,12,26,0.4);transition:0.2s">Per email</a>
@@ -308,7 +301,8 @@ var MODELLO = `<style>
 
   <!-- ⑨ IL PIEDE lo mette il guscio: non va qui. -->
 
-</div>`;
+</div>
+`;
 
 
 /* ══ COME SI ACCENDE ════════════════════════════════════════════
