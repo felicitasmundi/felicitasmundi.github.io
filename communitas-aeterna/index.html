@@ -150,11 +150,18 @@
   #centro{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
     -webkit-overflow-scrolling:touch;margin-left:var(--barra);padding:1.6rem 2.6rem 3rem}
   #centro > *{max-width:56rem;margin-left:auto;margin-right:auto}
-  /* ⭐ TOCCATO NEL GUSCIO — una riga sola. La pagina di contenuto non si
-     ferma a 56rem: prende tutta la larghezza, e l'aria gliela lascia il
-     padding di #centro qui sopra. Vale per lei sola: le altre stanze
-     restano alla misura di lettura. L'altro cappio è in fm-pagina.js. */
-  #centro > .fm-pag{max-width:none}
+  /* ⭐ TOCCATO NEL GUSCIO — una riga sola, per la sola pagina di
+     contenuto. Le altre stanze restano alla misura di lettura.
+
+     ⚠️ Il cappio dei 56rem non era quello che stringeva: su una finestra
+        normale #centro è già più stretto di 56rem, e quel limite non
+        mordeva mai. A stringere è #centro stesso — la barra gli prende
+        16rem a sinistra e il suo padding altri 2.6rem per lato.
+        La barra non si tocca: è la legge dei margini. Il padding sì, ma
+        solo qui: la pagina si riprende 1.4rem per lato rientrando nel
+        cuscino, e resta 1.2rem d'aria — quanto ne ha sul telefono.
+        Non sborda: 1.4 sta dentro i 2.6 del cuscino. */
+  #centro > .fm-pag{max-width:none;margin-left:-1.4rem;margin-right:-1.4rem}
   .occhio{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
     text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.5rem}
   h1{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-big);line-height:1.2;
@@ -962,6 +969,11 @@
 
     #centro{margin-left:0;padding-left:1.1rem;padding-right:1.1rem;
       padding-top:1.2rem}
+    /* ⛔ qui il cuscino è 1.1rem: il rientro di 1.4rem che la pagina di
+       contenuto si prende sul computer sborderebbe di 0.3rem per lato e
+       farebbe scorrere la pagina di lato. Sul telefono non serve — la
+       larghezza piena ce l'ha già. */
+    #centro > .fm-pag{margin-left:0;margin-right:0}
 
     /* ⭐ il Megafono resta a tutta larghezza */
     #mg{margin-left:0}
