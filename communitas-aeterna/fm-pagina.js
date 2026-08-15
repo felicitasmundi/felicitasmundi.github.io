@@ -6,7 +6,7 @@
       Cinquecento pagine, cinquecento record — un file.
 
    Il disegno è di Design: pagina-modello.html
-   36938 byte · MD5 d548a70c7c20ed11b55e29c6d500197e
+   36932 byte · MD5 36cd2ed7e97247d98964f5896c588138
    ⚠️ Il suo <style> e il suo corpo vanno dentro MODELLO qui sotto,
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
@@ -217,7 +217,7 @@ var MODELLO = `<style>
        FACOLTATIVA: senza porte si toglie la <section> intera. -->
   <section id="collegato" style="margin-top:3rem;scroll-margin-top:4.5rem">
     <div data-segno="1" style="display:flex;flex-direction:column;align-items:center;gap:0.8rem;margin-bottom:1.6rem;padding:1.1rem 1.2rem;background:rgba(10,12,26,0.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
-      <img src="nexus-segno.png" alt="Il segno del Nexus" width="512" height="512" style="width:4.2rem;height:auto;display:block;border-radius:0.35rem;border:1px solid #1E5B3A;box-shadow:0 0 0.55rem rgba(46,170,105,0.55),0 0 1.6rem rgba(46,170,105,0.26)">
+      <img src="nexus.png" alt="Il segno del Nexus" width="512" height="512" style="width:4.2rem;height:auto;display:block;border-radius:0.35rem;border:1px solid #1E5B3A;box-shadow:0 0 0.55rem rgba(46,170,105,0.55),0 0 1.6rem rgba(46,170,105,0.26)">
       <span data-occhiello-sez="collegato" style="font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:rgba(212,175,106,0.72);text-align:center">A cosa è collegato</span>
     </div>
 
