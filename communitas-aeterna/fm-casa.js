@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   68.032 byte · MD5 150c7d6afe1803c439436ffe8a783354
+   78.595 byte · MD5 328e855a8434a3dd4468eb96ce26026a
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
@@ -28,6 +28,11 @@
    perché chi legge merita che il tocco fuori chiuda la finestra. Se è
    già giù, apre la mappa a tutto schermo.
 
+   ⚠️ Questo strato del velo — il ⭐ dentro il punto ⑦ — la consegna del
+      15 agosto 2026 non lo porta: nel disegno il tocco apre e basta.
+      È rimesso qui parola per parola come stava. Il giorno che Design
+      lo scrive nel disegno, questa nota cade.
+
    LA SCHEDA DEL LUOGO è una forma vuota: nel disegno non è scritto
    nessun dato. Design la fa salire e scendere, questo file la riempie.
 
@@ -51,21 +56,37 @@
      · senza 'torna' il tasto lancia 'spazio-vivo:torna'
      · dalla mappa in iframe: postMessage({q:"porta", porta:{nome}})
 
-   Il record:
+   Il record della scheda del luogo:
      { segno, occhiello, nome, luogo, descrizione, foto,
        elementi: [ { chiave, nome, colore, quante,
                      righe: [ { testo, etichetta, valore, foto } ] } ] }
    Da zero a cinque elementi; quello che manca diventa [ in attesa ].
 
-   LE DUE ORME sotto la mappa leggono il database: prodotti, vicinati
-   e orme, le ultime arrivate, la più recente per prima. La forma è
-   quella di Design; qui si dice soltanto da dove arriva ogni parola.
-   Il dettaglio sta in fondo al file, sopra leOrme().
+   ⭐ LE DUE SCHEDE DEL CONTENUTO, sotto la mappa. Nuove col disegno del
+      15 agosto 2026, e anch'esse forma vuota:
+     · window.SpazioVivo.mostraContenuto(record, 1|2)
+     · record: { radice, radiceNome, foto, cosa:[prima, seconda],
+                 titolo, sottotitolo, chi, quando, collegatoDa,
+                 stanze:[{segno, nome}] }   — da una a cinque stanze
+     · i segni li disegna Design leggendo window.SpazioVivo.segni
+     · quello che manca diventa [ in attesa ]: la forma se ne occupa
+       da sé, e a vuoto si legge lo stesso
 
-   ⭐ Sette agganci aggiunti al disegno, e nessuno cambia la forma:
-      data-orme · data-orma · data-orma-foto · data-orma-nome ·
-      data-orma-riga · data-orma-quando · data-nulla
-      Stessa convenzione di data-libro, data-piega, data-leg, data-rete.
+   ⭐ IL DATO ENTRA NELLE DUE SCHEDE. leOrme() legge le tre tabelle
+      come prima, costruisce il record nella forma di Design e lo
+      passa a mostraContenuto(). Nessun aggancio nuovo nel disegno:
+      la scheda si trova da sé con `data-cont`. Il dettaglio — campo
+      per campo, tabella per tabella — sta in fondo al file.
+
+   ⛔ DUE FAMIGLIE DI SEGNI, e non si mescolano.
+      I sette della legenda — orma, connessione, talenti, vicinato,
+      ritmo, incontro, tempio — sono le FASI DI CRESCITA sulla mappa,
+      e nella scheda del contenuto non entrano.
+      Le STANZE sono le voci della barra a sinistra, e portano i
+      simboli della barra: SIMBOLI del guscio, uno per elemento.
+      Quelli vanno nel cerchio grande in cima e nella riga in fondo.
+      segniDelleStanze() li aggiunge a window.SpazioVivo.segni sotto
+      la chiave dell'elemento, e la funzione di Design non si tocca.
 
    ⛔ Niente involucro (function(){ … })(): il guscio mette tutto in
       comune e questo file legge da lì. Rimettendolo, home() non vede
@@ -229,41 +250,73 @@ var CASA = `<style>
     </div>
   </section>
 
-  <!-- LE DUE ORME -->
-  <section data-orme="1" style="order:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1.1rem;margin-top:1.8rem;align-items:stretch">
+  <!-- LE SCHEDE DEI CONTENUTI — forma vuota: le riempie il dato -->
+  <section style="order:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1.1rem;margin-top:1.8rem;align-items:stretch">
 
-    <div data-orma="1" style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column">
-        <div>
-          <div data-orma-foto="1" style="position:relative;height:15rem;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center">
-            <span style="font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 1rem">la foto dell'orma<br>[ in attesa ]</span>
-          </div>
-          <div style="display:flex;gap:0.9rem;align-items:flex-start;padding:0.9rem 1.1rem 0">
-            <span style="flex:0 0 auto;width:2.4rem;height:2.4rem;border-radius:50%;border:1px dashed rgba(200,160,85,0.5);display:block;cursor:pointer"></span>
-            <div style="min-width:0;display:flex;flex-direction:column;gap:0.15rem">
-              <b data-orma-nome="1" style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);color:var(--ivory);line-height:1.3">[ in attesa ]</b>
-              <i data-orma-riga="1" style="font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.4">[ in attesa ]</i>
-              <span data-orma-quando="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.4">[ in attesa ]</span>
-            </div>
-          </div>
-          <div style="display:flex;gap:0.4rem;flex-wrap:wrap;padding:0.8rem 1.1rem 1.1rem 4.4rem">
-            <span style="border:1px solid var(--line);border-radius:999px;padding:0.3rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.86);cursor:pointer">[ in attesa ]</span>
-            <span style="border:1px solid var(--line);border-radius:999px;padding:0.3rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.86);cursor:pointer">[ in attesa ]</span>
-            <span style="border:1px solid var(--line);border-radius:999px;padding:0.3rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.86);cursor:pointer">[ in attesa ]</span>
-          </div>
-        </div>
-    </div>
+    <article data-cont="1" style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column;min-width:0">
 
-    <div data-nulla="1" style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column">
-        <div style="flex:1;min-height:20rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.9rem;padding:2rem 1.6rem;text-align:center;border:1px dashed rgba(200,160,85,0.35);border-radius:0.9rem;margin:0.6rem">
-          <span style="width:2.8rem;height:2.8rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"></path><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"></path></svg></span>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.5;color:var(--ivory);max-width:22rem">Qui non c'è ancora niente: è la porta d'ingresso. Lascia la tua orma.</div>
-          <button style="border:1px solid var(--oro);background:rgba(200,160,85,0.14);color:var(--ivory);border-radius:999px;padding:0.55rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:var(--t-tas);cursor:pointer">[ in attesa ]</button>
+      <!-- ② l'immagine — se manca, il riquadro resta -->
+      <div data-c-foto="1" style="position:relative;height:15rem;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 1rem"></div>
+
+      <div style="display:flex;gap:0.9rem;align-items:flex-start;padding:1rem 1.1rem 0;min-width:0">
+
+        <!-- ① il cerchio della radice: il segno dell'elemento da cui il contenuto nasce -->
+        <span data-c-radice="1" title="" style="flex:0 0 auto;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid rgba(200,160,85,0.45);background:rgba(200,160,85,0.08);color:var(--oro-ch);display:grid;place-items:center;padding:0.45rem"></span>
+
+        <div style="min-width:0;display:flex;flex-direction:column;gap:0.2rem">
+          <!-- ③ che cosa è — due parole, la seconda può mancare -->
+          <span data-c-cosa="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.14em;text-transform:uppercase;color:var(--oro-ch);line-height:1.4"></span>
+          <!-- ④ il titolo -->
+          <b data-c-titolo="1" style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);color:var(--ivory);line-height:1.3"></b>
+          <!-- ⑤ il sottotitolo -->
+          <i data-c-sotto="1" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.88);line-height:1.45"></i>
+          <!-- ⑥ chi è · ⑦ quando -->
+          <span data-c-chi="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.86);line-height:1.45;margin-top:0.25rem"></span>
+          <span data-c-quando="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.7);line-height:1.45"></span>
         </div>
-    </div>
+      </div>
+
+      <div style="margin-top:auto;padding:1rem 1.1rem 1.1rem 4.6rem;min-width:0">
+        <!-- ⑧ collegato da -->
+        <div data-c-collegato="1" style="display:flex;align-items:center;gap:0.5rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.4;min-width:0"></div>
+        <!-- ⑨ a quali stanze è collegato — da uno a cinque -->
+        <div data-c-stanze="1" style="display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;margin-top:0.7rem;padding-top:0.7rem;border-top:1px solid rgba(184,150,62,0.16)"></div>
+      </div>
+    </article>
+
+    <article data-cont="2" style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column;min-width:0">
+
+      <!-- ② l'immagine — se manca, il riquadro resta -->
+      <div data-c-foto="1" style="position:relative;height:15rem;background:repeating-linear-gradient(135deg,rgba(245,240,230,0.05) 0 8px,rgba(245,240,230,0.02) 8px 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:var(--t-eti);color:rgba(245,240,230,0.55);text-align:center;padding:0 1rem"></div>
+
+      <div style="display:flex;gap:0.9rem;align-items:flex-start;padding:1rem 1.1rem 0;min-width:0">
+
+        <!-- ① il cerchio della radice: il segno dell'elemento da cui il contenuto nasce -->
+        <span data-c-radice="1" title="" style="flex:0 0 auto;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid rgba(200,160,85,0.45);background:rgba(200,160,85,0.08);color:var(--oro-ch);display:grid;place-items:center;padding:0.45rem"></span>
+
+        <div style="min-width:0;display:flex;flex-direction:column;gap:0.2rem">
+          <!-- ③ che cosa è — due parole, la seconda può mancare -->
+          <span data-c-cosa="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.14em;text-transform:uppercase;color:var(--oro-ch);line-height:1.4"></span>
+          <!-- ④ il titolo -->
+          <b data-c-titolo="1" style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);color:var(--ivory);line-height:1.3"></b>
+          <!-- ⑤ il sottotitolo -->
+          <i data-c-sotto="1" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.88);line-height:1.45"></i>
+          <!-- ⑥ chi è · ⑦ quando -->
+          <span data-c-chi="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.86);line-height:1.45;margin-top:0.25rem"></span>
+          <span data-c-quando="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.7);line-height:1.45"></span>
+        </div>
+      </div>
+
+      <div style="margin-top:auto;padding:1rem 1.1rem 1.1rem 4.6rem;min-width:0">
+        <!-- ⑧ collegato da -->
+        <div data-c-collegato="1" style="display:flex;align-items:center;gap:0.5rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.78);line-height:1.4;min-width:0"></div>
+        <!-- ⑨ a quali stanze è collegato — da uno a cinque -->
+        <div data-c-stanze="1" style="display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;margin-top:0.7rem;padding-top:0.7rem;border-top:1px solid rgba(184,150,62,0.16)"></div>
+      </div>
+    </article>
+
   </section>
 
-
-  <!-- LE SETTE DOMANDE -->
   <!-- COSA POSSIAMO FARE · la rete dietro il vetro -->
   <section style="order:6;margin-top:2.6rem;min-width:0">
     <div data-rete="1" style="position:relative;border:1px solid rgba(184,150,62,0.28);border-radius:1rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
@@ -433,16 +486,19 @@ var CASA = `<style>
 function home(c){
   c.innerHTML = CASA;
   avviaCasa();
+  segniDelleStanze();   /* i simboli della barra entrano fra quelli di Design */
   legaLuoghi();
   contaOrme();          /* il cenno delle orme vive nella barra, non nella casa */
-  leOrme();             /* le due orme sotto la mappa: il dato entra nella forma */
+  leOrme();             /* le due schede sotto la mappa: il dato entra nella forma */
 }
 
 /* ── il codice della casa, come l'ha scritto Design: non si tocca ──
    Chiede al guscio window.SpazioVivo.apriMappa(), e se non la trova
-   lancia 'spazio-vivo:apri-mappa' sul documento. Il guscio espone la
-   prima. Qui dentro nasce anche la scheda del luogo: sale, scende, e
-   si riempie con quello che le viene passato. */
+   lancia 'spazio-vivo:apri-mappa' sul documento. Qui dentro nascono
+   la scheda del luogo e le due schede del contenuto: salgono, scendono,
+   e si riempiono con quello che viene passato loro.
+   L'unica mano su questo blocco è lo strato ⭐ del velo, dentro il
+   punto ⑦: sta scritto in testa al file. */
 function avviaCasa(){
 (function () {
   "use strict";
@@ -552,13 +608,144 @@ function avviaCasa(){
     if (!fermo) disegna();
   })();
 
-  /* ④ la scheda del luogo. NESSUN DATO QUI: la forma si riempie da sé.
+  /* ④ LA SCHEDA DEL CONTENUTO. Nessun dato scritto qui: la forma si riempie.
+        window.SpazioVivo.mostraContenuto(record, quale)  — quale: 1 o 2
+        record = {
+          radice,                  // ① uno dei sette: orma connessione talenti
+                                   //    vicinato ritmo incontro tempio
+          radiceNome,              //    come si chiama la stanza radice
+          foto,                    // ②
+          cosa: [prima, seconda],  // ③ la seconda può mancare
+          titolo,                  // ④
+          sottotitolo,             // ⑤
+          chi,                     // ⑥ l'autore
+          quando,                  // ⑦
+          collegatoDa,             // ⑧
+          stanze: [ {segno, nome} ]// ⑨ da uno a cinque
+        }
+        Quello che manca diventa [ in attesa ]; il posto resta. */
+  (function () {
+    var SEGNI = {
+      orma:'<path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"/><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"/>',
+      connessione:'<path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"/><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"/><path d="M14 20L26 20"/>',
+      talenti:'<circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/>',
+      vicinato:'<path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"/><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"/><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"/><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"/><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"/>',
+      ritmo:'<path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"/><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"/><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"/><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"/><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"/>',
+      incontro:'<path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"/><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"/><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"/>',
+      tempio:'<path d="M4 14L20 5L36 14Z"/><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"/><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"/>'
+    };
+    var ATTESA = "[ in attesa ]";
+    var vuoto = function (v) { return v === undefined || v === null || v === ""; };
+    var testo = function (v) { return vuoto(v) ? ATTESA : String(v); };
+    function svuota(n) { while (n && n.firstChild) n.removeChild(n.firstChild); }
+
+    function disegnaSegno(chiave, lato) {
+      var d = SEGNI[chiave];
+      if (!d) return null;
+      var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      s.setAttribute("viewBox", "0 0 40 40");
+      s.setAttribute("fill", "none");
+      s.setAttribute("stroke", "currentColor");
+      s.setAttribute("stroke-width", "1.4");
+      s.setAttribute("stroke-linecap", "round");
+      s.setAttribute("stroke-linejoin", "round");
+      s.style.cssText = "width:" + lato + ";height:" + lato + ";display:block";
+      s.innerHTML = d;
+      return s;
+    }
+
+    function riempi(rec, quale) {
+      rec = rec || {};
+      var card = document.querySelector('[data-cont="' + (quale || 1) + '"]');
+      if (!card) return;
+      var q = function (n) { return card.querySelector('[data-c-' + n + ']'); };
+
+      /* ① la radice */
+      var rad = q("radice");
+      svuota(rad);
+      var segno = disegnaSegno(rec.radice, "100%");
+      if (segno) { rad.appendChild(segno); rad.title = testo(rec.radiceNome); }
+      else {
+        rad.style.border = "1px dashed rgba(200,160,85,0.45)";
+        rad.title = ATTESA;
+      }
+
+      /* ② l'immagine */
+      var f = q("foto");
+      svuota(f);
+      if (rec.foto) {
+        var g = document.createElement("img");
+        g.src = rec.foto; g.alt = "";
+        g.style.cssText = "position:absolute;inset:0;width:100%;height:100%;object-fit:cover";
+        f.appendChild(g);
+      } else {
+        f.appendChild(document.createTextNode(ATTESA));
+      }
+
+      /* ③ che cosa è — due parole, la seconda può mancare */
+      var cosa = rec.cosa || [];
+      var prima = vuoto(cosa[0]) ? ATTESA : cosa[0];
+      q("cosa").textContent = vuoto(cosa[1]) ? prima : prima + " · " + cosa[1];
+
+      q("titolo").textContent  = testo(rec.titolo);
+      q("sotto").textContent   = testo(rec.sottotitolo);
+      q("chi").textContent     = testo(rec.chi);
+      q("quando").textContent  = testo(rec.quando);
+
+      /* ⑧ collegato da */
+      var col = q("collegato");
+      svuota(col);
+      var pall = document.createElement("span");
+      pall.style.cssText = "flex:0 0 auto;width:1.5rem;height:1.5rem;border-radius:50%;border:1px dashed rgba(200,160,85,0.45)";
+      col.appendChild(pall);
+      col.appendChild(document.createTextNode("Collegato da " + testo(rec.collegatoDa)));
+
+      /* ⑨ le stanze — da uno a cinque */
+      var st = q("stanze");
+      svuota(st);
+      var stanze = rec.stanze || [];
+      if (!stanze.length) {
+        var v = document.createElement("span");
+        v.style.cssText = "font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.5)";
+        v.textContent = ATTESA;
+        st.appendChild(v);
+      } else stanze.forEach(function (s) {
+        var p = document.createElement("span");
+        p.title = testo(s.nome);
+        p.style.cssText = "display:inline-flex;align-items:center;gap:0.35rem;border:1px solid var(--line);border-radius:999px;padding:0.28rem 0.7rem 0.28rem 0.5rem;color:var(--oro-ch)";
+        var ic = disegnaSegno(s.segno, "1.15rem");
+        if (ic) p.appendChild(ic);
+        var et = document.createElement("span");
+        et.style.cssText = "font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.86);line-height:1";
+        et.textContent = testo(s.nome);
+        p.appendChild(et);
+        st.appendChild(p);
+      });
+    }
+
+    /* a vuoto la forma si legge lo stesso */
+    riempi({}, 1); riempi({}, 2);
+
+    window.SpazioVivo = window.SpazioVivo || {};
+    window.SpazioVivo.mostraContenuto = riempi;
+    window.SpazioVivo.segni = SEGNI;
+  })();
+
+  /* ⑤ la scheda del luogo. NESSUN DATO QUI: la forma si riempie da sé.
         Il guscio (o la mappa) chiama window.SpazioVivo.mostraLuogo(record).
         LA VIA DI RITORNO, quando si entra nella mappa da una porta:
        · window.SpazioVivo.porta({nome, torna})  — mostra il tasto discreto
        · window.SpazioVivo.chiudiPorta()         — lo toglie
        · senza 'torna' il tasto lancia l'evento 'spazio-vivo:torna'
        · dalla mappa in iframe: postMessage({q:"porta", porta:{nome}})
+
+     LA SCHEDA DEL CONTENUTO, sotto la mappa — anch'essa forma vuota:
+       · window.SpazioVivo.mostraContenuto(record, 1|2)
+       · record: { radice, radiceNome, foto, cosa:[prima,seconda], titolo,
+                   sottotitolo, chi, quando, collegatoDa,
+                   stanze:[{segno,nome}] }   — da una a cinque stanze
+       · radice e segno sono i sette della legenda: orma, connessione,
+         talenti, vicinato, ritmo, incontro, tempio
 
      Il record: { segno, occhiello, nome, luogo, descrizione, foto,
                      elementi: [ { chiave, nome, colore, quante,
@@ -740,7 +927,7 @@ function avviaCasa(){
     };
   })();
 
-  /* ⑤ la via di ritorno. Chi entra nella mappa da una porta può tornare
+  /* ⑥ la via di ritorno. Chi entra nella mappa da una porta può tornare
         al contenuto da cui è arrivato: il tasto riporta, non trattiene.
         Il guscio la dichiara con window.SpazioVivo.porta({nome, torna}),
         e la toglie con window.SpazioVivo.chiudiPorta(). */
@@ -777,7 +964,7 @@ function avviaCasa(){
     window.SpazioVivo.chiudiPorta = chiudiPorta;
   })();
 
-  /* ⑥ il libro: i tasti stringono e allargano, il trascinamento sposta,
+  /* ⑦ il libro: i tasti stringono e allargano, il trascinamento sposta,
         il tocco breve chiede prima alla mappa se sotto c'è un segno —
         se c'è sale la scheda; se è vuoto chiude la scheda aperta, e solo
         col tocco dopo apre la mappa a tutto schermo.
@@ -1024,10 +1211,36 @@ function inTalenti(n){
 
 
 /* ════════════════════════════════════════════════════════════════
-   LE DUE ORME — le ultime cose arrivate
+   LE DUE SCHEDE — le ultime cose arrivate
 
    ⭐ LA LEGGE: se una cosa esce sulla mappa, esce anche qui.
       Un record, tutte le viste. Tre tabelle, una sola riga di tempo.
+
+   Le letture sono quelle di sempre: cambia dove si posano. Design ha
+   scritto la forma e il modo di riempirla — mostraContenuto(record,
+   1|2) — e questo file costruisce il record, campo per campo:
+
+     campo         prodotto            vicinato          orma
+     ─────────────────────────────────────────────────────────────────
+     radice        il simbolo di       il simbolo di     il simbolo
+                   Emporio             Vicinati          della sua stanza
+     radiceNome    Emporio             Vicinati          il nome della
+                                                         sua stanza
+     foto          prodotti.foto       vicinati.foto     —
+     cosa[0]       scaffale            «vicinato»        —
+     cosa[1]       sottoscaffale       territorio        —
+     titolo        nome                nome              titolo
+     sottotitolo   sottotitolo         descrizione, e se sottotitolo, e
+                                       manca territorio  se manca il
+                                                         contenuto
+     chi           autore              —                 —
+     quando        creato_il           creato_il         momento
+     collegatoDa   il nome dalla       il nome dalla     —
+                   vista               vista
+                   persone_pubbliche   persone_pubbliche
+                   da persona_id       da creato_da
+     stanze        i valori distinti di collegamenti.elemento dove
+                   da_tipo è il genere e da_id è l'id di quel contenuto
 
    Cosa si legge, e con quale filtro:
 
@@ -1047,67 +1260,103 @@ function inTalenti(n){
       Il giorno che il valore cambia, si cambia PRODOTTI_PUBBLICO.
 
    ⚠️ `orme` non ha una colonna foto: un'orma non porta mai l'immagine,
-      e la banda resta il segnaposto che ha disegnato Design.
+      e il riquadro resta il segnaposto che ha disegnato Design.
 
-   Toccando una riga:
+   L'elemento di un'orma non sta nella sua riga: si ricava da `tipo`
+   passando per DOVE, la tavola del guscio — `tipo` dice lo strumento,
+   DOVE dice in quale elemento quello strumento vive.
+
+   Toccando una scheda:
      prodotto → ?p=pagina&n=nome-url — la stessa strada che percorre
                 l'indirizzo: si posa il nome e si chiama vai("pagina")
      vicinato → la mappa si posa sul punto e sale la sua scheda
      orma     → niente: resta com'è oggi
 
-   Niente record? La forma piena sparisce e resta il riquadro che
-   Design ha già scritto: «Qui non c'è ancora niente…».
+   Niente record? Le due schede restano come Design le lascia: la forma
+   a vuoto, tutta [ in attesa ], che si legge lo stesso.
 
-   Il testo entra con textContent, mai con innerHTML: quello che arriva
-   dal database non diventa marcatura.
+   Il testo entra sempre per mano di Design, che usa textContent: quello
+   che arriva dal database non diventa mai marcatura.
    ════════════════════════════════════════════════════════════════ */
 
-var ORME_QUANTE = 2;                    /* due orme, due righe */
+var ORME_QUANTE = 2;                    /* due schede, due cose */
 var PRODOTTI_PUBBLICO = "pubblico";     /* il valore vivo della colonna `stato` */
 
+/* ⛔ DUE FAMIGLIE DI SEGNI, e non si mescolano.
+
+   I sette della legenda — orma · connessione · talenti · vicinato ·
+   ritmo · incontro · tempio — sono le FASI DI CRESCITA sulla mappa.
+   Nella scheda del contenuto non entrano.
+
+   Le STANZE sono le voci della barra a sinistra, e portano i simboli
+   della barra: quelli di SIMBOLI nel guscio, uno per elemento. Sono
+   quelli che vanno nel cerchio grande in cima e nella riga in fondo.
+
+   Il nome della stanza è quello della barra. ⛔ Il nome dell'elemento
+   non compare mai: la chiave è interna, in pagina si legge «Emporio». */
+var STANZA = {
+  terra: "Vicinati",
+  acqua: "Emporio",
+  fuoco: "Assistenza",
+  aria:  "Edizione",
+  etere: "Scuola",
+  nexus: "Nexus"
+};
+
+/* un prodotto nasce in Emporio, un vicinato nei Vicinati */
+var ELEMENTO_DEL_GENERE = { prodotto: "acqua", vicinato: "terra" };
+
+/* i simboli della barra entrano fra quelli che Design sa disegnare,
+   sotto la chiave dell'elemento. La sua funzione non si tocca: lei
+   scrive il contenuto dentro un <svg> suo, quindi qui si passa solo
+   quello che sta dentro, senza l'involucro di SIMBOLI.
+
+   ⚠️ SIMBOLI.nexus è nullo — il Nexus viene dal disegno a mano — e
+      resta fuori: quel cerchio Design lo lascia tratteggiato. */
+function segniDelleStanze(){
+  if(!window.SpazioVivo || !window.SpazioVivo.segni) return;
+  if(typeof SIMBOLI === "undefined" || !SIMBOLI) return;
+
+  Object.keys(STANZA).forEach(function(el){
+    var s = SIMBOLI[el];
+    if(!s) return;
+    window.SpazioVivo.segni[el] = String(s)
+      .replace(/^[\s\S]*?<svg[^>]*>/, "")
+      .replace(/<\/svg>\s*$/, "");
+  });
+}
+
 function leOrme(){
-  var sez = document.querySelector(".sv-casa [data-orme]");
-  if(!sez) return;
-
-  var modello = sez.querySelector("[data-orma]");
-  var nulla   = sez.querySelector("[data-nulla]");
-  if(!modello || !nulla) return;
-
-  /* la forma di Design si mette da parte: torna in scena solo col dato */
-  var forma = modello.cloneNode(true);
-  modello.style.display = "none";
-  nulla.style.display   = "none";
+  if(!window.SpazioVivo || typeof window.SpazioVivo.mostraContenuto !== "function") return;
 
   ultimeCose(ORME_QUANTE).then(function(cose){
-    if(modello.parentNode) modello.parentNode.removeChild(modello);
+    if(!cose.length) return;      /* le due schede restano come Design le lascia */
 
-    if(!cose.length){ nulla.style.display = ""; return; }
-
-    cose.forEach(function(cosa){
-      var riga = forma.cloneNode(true);
-      riga.style.display = "";
-      riempiOrma(riga, cosa);
-      sez.insertBefore(riga, nulla);
+    return Promise.all([chiHaCollegato(cose), leStanze(cose)]).then(function(due){
+      cose.forEach(function(cosa, i){
+        window.SpazioVivo.mostraContenuto(schedaDi(cosa, due[0], due[1]), i + 1);
+        apriColTocco(cosa, i + 1);
+      });
     });
   });
 }
 
 /* le tre letture. Se una tace, le altre due si vedono lo stesso:
-   meglio una riga in meno che la casa vuota per un permesso mancato. */
+   meglio una scheda in meno che la casa vuota per un permesso mancato. */
 function ultimeCose(quante){
   return Promise.all([
     db.from("prodotti")
-      .select("nome,nome_url,sottotitolo,foto,creato_il")
+      .select("id,nome,nome_url,sottotitolo,scaffale,sottoscaffale,autore,persona_id,foto,creato_il")
       .eq("stato", PRODOTTI_PUBBLICO)
       .order("creato_il", {ascending:false}).limit(quante),
 
     db.from("vicinati")
-      .select("id,nome,territorio,descrizione,foto,lat,lon,creato_il")
+      .select("id,nome,territorio,descrizione,foto,creato_da,lat,lon,creato_il")
       .eq("stato", "confermato")
       .order("creato_il", {ascending:false}).limit(quante),
 
     db.from("orme")
-      .select("id,titolo,sottotitolo,contenuto,momento")
+      .select("id,titolo,sottotitolo,contenuto,tipo,momento")
       .eq("visibilita", "pubblico")
       .order("momento", {ascending:false}).limit(quante)
   ]).then(function(esiti){
@@ -1141,36 +1390,102 @@ function istante(t){
   return isFinite(q) ? q : 0;      /* senza data si finisce in fondo */
 }
 
-/* una riga della forma di Design, riempita.
-   Dove la parola manca resta il segnaposto che c'è già. */
-function riempiOrma(riga, cosa){
-  var pieno = function(x){ return x !== null && x !== undefined && String(x).trim() !== ""; };
+/* chi ha collegato: una lettura sola per tutte le schede.
 
-  var banda  = riga.querySelector("[data-orma-foto]");
-  var nome   = riga.querySelector("[data-orma-nome]");
-  var testo  = riga.querySelector("[data-orma-riga]");
-  var quando = riga.querySelector("[data-orma-quando]");
+   ⛔ `persone` resta chiusa — dentro ci sono il telefono, i recapiti
+      e i talenti. Il nome si prende da `persone_pubbliche`, la vista
+      che espone soltanto id, nome e foto_url.
 
-  if(banda && pieno(cosa.foto)){
-    var im = document.createElement("img");
-    im.src = String(cosa.foto);
-    im.alt = pieno(cosa.nome) ? String(cosa.nome) : "";
-    im.style.cssText = "position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block";
-    while(banda.firstChild) banda.removeChild(banda.firstChild);
-    banda.appendChild(im);
+   Se la vista tace, la riga resta [ in attesa ] e il resto si vede. */
+function chiHaCollegato(cose){
+  var ids = [];
+  cose.forEach(function(c){
+    var id = personaDi(c);
+    if(id && ids.indexOf(id) < 0) ids.push(id);
+  });
+  if(!ids.length) return Promise.resolve({});
+
+  return db.from("persone_pubbliche").select("id,nome").in("id", ids).then(function(r){
+    var per = {};
+    if(!r.error && r.data) r.data.forEach(function(p){ per[p.id] = p.nome; });
+    return per;
+  }).catch(function(){ return {}; });
+}
+
+function personaDi(cosa){
+  if(cosa.genere === "prodotto") return cosa.dato.persona_id;
+  if(cosa.genere === "vicinato") return cosa.dato.creato_da;
+  return null;
+}
+
+/* le stanze: i valori distinti di `elemento` nei collegamenti che
+   partono da quel contenuto. Una lettura sola per tutte le schede,
+   e la chiave che tiene insieme le due colonne è `da_tipo:da_id`. */
+function leStanze(cose){
+  var ids = cose.map(function(c){ return c.dato.id; }).filter(Boolean);
+  if(!ids.length) return Promise.resolve({});
+
+  return db.from("collegamenti").select("da_tipo,da_id,elemento")
+    .in("da_id", ids).then(function(r){
+    var per = {};
+    if(!r.error && r.data) r.data.forEach(function(c){
+      if(!c.elemento) return;
+      var k = c.da_tipo + ":" + c.da_id;
+      if(!per[k]) per[k] = [];
+      if(per[k].indexOf(c.elemento) < 0) per[k].push(c.elemento);
+    });
+    return per;
+  }).catch(function(){ return {}; });
+}
+
+/* l'elemento da cui il contenuto nasce. Un'orma lo dice per via
+   indiretta: il suo `tipo` sta in DOVE, e DOVE porta l'elemento. */
+function elementoDi(cosa){
+  if(ELEMENTO_DEL_GENERE[cosa.genere]) return ELEMENTO_DEL_GENERE[cosa.genere];
+  if(typeof DOVE === "undefined" || !DOVE) return null;
+  for(var i = 0; i < DOVE.length; i++){
+    if(DOVE[i].tipo === cosa.dato.tipo) return DOVE[i].el;
   }
+  return null;
+}
 
-  if(nome   && pieno(cosa.nome)) nome.textContent   = String(cosa.nome);
-  if(testo  && pieno(cosa.riga)) testo.textContent  = String(cosa.riga);
-  if(quando && typeof dataIt === "function"){
-    var d = dataIt(cosa.quando);
-    if(pieno(d)) quando.textContent = d;
-  }
+/* una cosa diventa il record che Design si aspetta.
+   Nessun controllo sul vuoto: quello che manca lo tratta la forma. */
+function schedaDi(cosa, chi, stanzePer){
+  var d   = cosa.dato;
+  var el  = elementoDi(cosa);
+  var elementi = stanzePer[cosa.genere + ":" + d.id] || [];
 
+  return {
+    radice:      el,
+    radiceNome:  STANZA[el],
+    foto:        cosa.foto,
+    cosa:        cosa.genere === "prodotto" ? [d.scaffale, d.sottoscaffale]
+               : cosa.genere === "vicinato" ? ["vicinato", d.territorio]
+               : [],
+    titolo:      cosa.nome,
+    sottotitolo: cosa.riga,
+    chi:         d.autore,
+    quando:      quandoScritto(cosa.quando),
+    collegatoDa: chi[personaDi(cosa)],
+    stanze:      elementi.map(function(e){
+                   return { segno: e, nome: STANZA[e] };
+                 })
+  };
+}
+
+/* la data come si legge in italiano, con la mano del guscio */
+function quandoScritto(t){
+  return typeof dataIt === "function" ? dataIt(t) : t;
+}
+
+/* il tocco sulla scheda. La forma non cambia: cambia solo che si apre. */
+function apriColTocco(cosa, quale){
   if(cosa.genere === "orma") return;     /* un'orma non si apre: resta com'è oggi */
-
-  riga.style.cursor = "pointer";
-  riga.addEventListener("click", function(){ apriCosa(cosa); });
+  var card = document.querySelector('.sv-casa [data-cont="' + quale + '"]');
+  if(!card) return;
+  card.style.cursor = "pointer";
+  card.addEventListener("click", function(){ apriCosa(cosa); });
 }
 
 /* dove porta il tocco */

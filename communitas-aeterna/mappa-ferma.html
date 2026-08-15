@@ -59,12 +59,16 @@
 "use strict";
 var SEGNI = {
   orma:'<path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"/><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"/>',
+  connessione:'<path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"/><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"/><path d="M14 20L26 20"/>',
+  talenti:'<circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/>',
   vicinato:'<path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"/><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"/><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"/><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"/><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"/>',
+  ritmo:'<path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"/><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"/><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"/><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"/><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"/>',
   tempio:'<path d="M4 14L20 5L36 14Z"/><path d="M5 16.5L35 16.5M8.5 19L8.5 31M31.5 19L31.5 31M5 33.5L35 33.5"/><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"/>',
   incontro:'<path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"/><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"/><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"/>'
 };
 
 /* i vicinati veri, letti da Supabase: quelli che hanno lat e lon.
+   Il campo segno dice quale dei sette disegnare; vuoto resta "vicinato".
    Un punto per riga: due righe sulle stesse coordinate danno due segni
    sovrapposti, e sopra resta quello disegnato per ultimo. */
 var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
@@ -73,13 +77,14 @@ var PUNTI = [];
 
 function leggiVicinati(){
   var q = FM_URL + "/rest/v1/vicinati"
-        + "?select=id,nome,territorio,descrizione,lat,lon"
+        + "?select=id,nome,territorio,descrizione,lat,lon,segno"
         + "&lat=not.is.null&lon=not.is.null&order=nome";
   return fetch(q, {headers:{apikey:FM_CHIAVE, Authorization:"Bearer " + FM_CHIAVE}})
     .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(function(righe){
       PUNTI = (righe || []).map(function(v){
-        return {ll:[+v.lon, +v.lat], s:"vicinato", k:1.0, v:v};
+        var s = (v.segno || "").trim();
+        return {ll:[+v.lon, +v.lat], s:(SEGNI[s] ? s : "vicinato"), k:1.0, v:v};
       });
     })
     .catch(function(err){
