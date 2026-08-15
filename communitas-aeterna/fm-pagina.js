@@ -11,8 +11,14 @@
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
 
-   ⛔ UNA COSA SI CAMBIA A OGNI RIVERSAMENTO, e va rifatta a mano:
-      la barra dei quadranti sta a `top:0`, non a `top:var(--radio)`.
+   ⛔ DUE COSE SI CAMBIANO A OGNI RIVERSAMENTO, e vanno rifatte a mano:
+
+      ① sotto i 40rem `flex-wrap:nowrap` vuole `!important`. Il <nav>
+      porta `flex-wrap:wrap` scritto in linea, e uno stile in linea batte
+      sempre una regola del foglio: senza, le cinque voci vanno a capo
+      una per riga invece di stare in fila e scorrere di lato.
+
+      ② la barra dei quadranti sta a `top:0`, non a `top:var(--radio)`.
       Nel guscio la finestra non scorre — scorre #centro — e la plancia
       della radio gli sta sopra come riga vera, non davanti: quel bordo
       è già sotto la radio, e --radio la sposterebbe giù una seconda
@@ -77,7 +83,10 @@ var MODELLO = `<style>
   @media(max-width:40rem){
     /* sul telefono non resta appiccicata: scorre via col resto della pagina,
        così non copre nulla. E finché si vede, sta su una riga sola. */
-    .fm-pag [data-quad]{position:static;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+    /* ⛔ !important, e serve: flex-wrap:wrap sta scritto IN LINEA sul <nav>,
+       e uno stile in linea batte sempre una regola del foglio. Senza, le
+       cinque voci vanno a capo una per riga invece di stare in fila. */
+    .fm-pag [data-quad]{position:static;flex-wrap:nowrap !important;overflow-x:auto;overflow-y:hidden;
       scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
     .fm-pag [data-quad]::-webkit-scrollbar{display:none}
     .fm-pag [data-quad] a{flex:0 0 auto;white-space:nowrap}
