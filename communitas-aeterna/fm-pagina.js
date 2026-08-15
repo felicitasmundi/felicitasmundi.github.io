@@ -6,7 +6,7 @@
       Cinquecento pagine, cinquecento record — un file.
 
    Il disegno è di Design: pagina-modello.html
-   37369 byte · MD5 40a233a5465e9ef26893d2e52b572e59
+   37889 byte · MD5 6884831af3f8346bd18304d314674d27
    ⚠️ Il suo <style> e il suo corpo vanno dentro MODELLO qui sotto,
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
@@ -62,6 +62,16 @@ var MODELLO = `<style>
     .fm-pag [data-riga]{flex-direction:column;align-items:flex-start;gap:0.5rem}
     .fm-pag [data-riga] [data-dato]{text-align:left}
   }
+  /* ⑤ sul telefono la barra dei quadranti non si spezza su quattro righe:
+     resta appiccicata ma su UNA riga sola, che si scorre di lato.
+     Il centro non si tocca: si ritira la barra, non il testo. */
+  @media(max-width:40rem){
+    .fm-pag [data-quad]{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+      scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+    .fm-pag [data-quad]::-webkit-scrollbar{display:none}
+    .fm-pag [data-quad] a{flex:0 0 auto;white-space:nowrap}
+  }
+
   @media(max-width:52rem){ .fm-pag{padding-left:1.1rem;padding-right:1.1rem} }
 
   @media print{
