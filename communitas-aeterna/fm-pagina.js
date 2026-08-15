@@ -6,7 +6,7 @@
       Cinquecento pagine, cinquecento record — un file.
 
    Il disegno è di Design: pagina-modello.html
-   37889 byte · MD5 6884831af3f8346bd18304d314674d27
+   38342 byte · MD5 7d7638ed3a41aad43a63491ad516eca4
    ⚠️ Il suo <style> e il suo corpo vanno dentro MODELLO qui sotto,
       esattamente come fm-praticantato.js fa con PRATICANTATO.
       Il suo <script> sta più sotto, in paginaAccendi().
@@ -98,12 +98,12 @@ var MODELLO = `<style>
   <!-- ⑤ QUADRANTI · la barra d'oro, appiccicata in alto mentre si scorre.
        Sono le porte dell'azione, non l'indice: da 2 a 5 voci.
        FACOLTATIVI: se il corpo ha una sola sezione, si toglie il <nav> intero. -->
-  <nav data-quad="1" style="position:sticky;top:0;z-index:40;margin-top:1.6rem;display:flex;gap:0.35rem;flex-wrap:wrap;padding:0.6rem 0.5rem;background:rgba(10,12,26,0.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
+  <nav data-quad="1" style="position:sticky;top:0;z-index:4;margin-top:1.6rem;display:flex;gap:0.35rem;flex-wrap:wrap;padding:0.6rem 0.5rem;background:rgba(10,12,26,0.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0.2rem">
     <a data-quad-voce="1" href="#sez-1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a data-quad-voce="1" href="#sez-2" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a data-quad-voce="1" href="#sez-3" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a data-quad-voce="1" href="#collegato" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
-    <a data-quad-voce="1" href="#condividi" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">[ in attesa ]</a>
+    <a data-quad-voce="1" href="#sez-2" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Ordina</a>
+    <a data-quad-voce="1" href="#sez-3" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Chi scrive</a>
+    <a data-quad-voce="1" href="#collegato" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Collegamenti</a>
+    <a data-quad-voce="1" href="#condividi" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.82);text-decoration:none;padding:0.4rem 0.9rem;border-radius:999px;transition:0.2s">Condividi</a>
   </nav>
 
   <!-- ⑥ IL CORPO ═══════════════════════════════════════════════ -->
@@ -181,7 +181,7 @@ var MODELLO = `<style>
           <b data-dato="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);font-weight:400;color:var(--ivory);text-align:right">[ in attesa ]</b>
         </li>
       </ul>
-      <p data-nota-prezzo="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin:1rem 0 0;padding-top:0.9rem;border-top:1px solid var(--line)">Prezzo IVA inclusa · l'acquisto avviene nell'Emporio FelicitasMundi.</p>
+      <p data-nota-prezzo="1" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);margin:1rem 0 0;padding-top:0.9rem;border-top:1px solid var(--line)">Prezzo IVA inclusa · l'acquisto avviene nell'Emporio FelicitasMundi</p>
     </div>
   </section>
 
@@ -288,7 +288,7 @@ var MODELLO = `<style>
                 <iframe data-telaio="1" title="La mappa" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
                 <div data-piega="1" style="position:absolute;top:0;bottom:0;left:50%;width:3.4rem;transform:translateX(-50%);pointer-events:none;background:linear-gradient(to right,rgba(2,4,12,0) 0%,rgba(2,4,12,0.45) 42%,rgba(245,240,230,0.07) 50%,rgba(2,4,12,0.45) 58%,rgba(2,4,12,0) 100%)"></div>
                 <!-- LA VIA DI RITORNO — discreta, sempre visibile sopra la mappa -->
-                <div data-ritorno="1" style="position:absolute;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;padding:0.5rem 0.8rem;background:rgba(10,12,26,0.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(200,160,85,0.32)">
+                <div data-ritorno="1" style="position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;padding:0.5rem 0.8rem;background:rgba(10,12,26,0.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(200,160,85,0.32)">
                   <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.72)">sei arrivato da <b data-donde="1" style="font-weight:400;color:var(--oro-ch)">[ in attesa ]</b></span>
                   <button type="button" data-indietro="1" style="margin-left:auto;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.04em;color:var(--ivory);background:rgba(10,12,26,0.5);border:1px solid rgba(200,160,85,0.5);border-radius:999px;padding:0.3rem 0.9rem;cursor:pointer">torna indietro</button>
                 </div>
@@ -403,8 +403,15 @@ function paginaAccendi(pag){
      [data-rete]. Ferma per chi ha il movimento ridotto. */
   (function () {
     "use strict";
-    var fondali = [], t = 0;
-    var fermo = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var fondali = [], t = 0, girando = false;
+    /* ferma sul telefono e per chi ha il movimento ridotto: la rete si disegna
+       una volta e resta. Non sparisce — si vede uguale, non si muove. */
+    var calmo = function () {
+      if (!window.matchMedia) return false;
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+             window.matchMedia("(max-width: 40rem)").matches;
+    };
+    var fermo = calmo();
     [].slice.call(pag.querySelectorAll("canvas[data-tela]")).forEach(function (cv) {
       if (cv.getContext) fondali.push({ cv: cv, cx: cv.getContext("2d"), W: 0, H: 0, punti: [] });
     });
@@ -431,13 +438,22 @@ function paginaAccendi(pag){
         f.cx.setTransform(d, 0, 0, d, 0, 0);
         semina(f);
       });
-      if (fermo) disegna();
+      fermo = calmo();
+      avvia();
     }
 
-    function disegna() {
-      if (!fermo) t += 0.006;
+    function avvia() {
+      if (fermo) { fondali.forEach(unFondale); return; }
+      if (girando) return;
+      girando = true;
+      ciclo();
+    }
+
+    function ciclo() {
+      if (fermo) { girando = false; fondali.forEach(unFondale); return; }
+      t += 0.006;
       fondali.forEach(unFondale);
-      if (!fermo) requestAnimationFrame(disegna);
+      requestAnimationFrame(ciclo);
     }
 
     function unFondale(f) {
@@ -482,7 +498,6 @@ function paginaAccendi(pag){
       new ResizeObserver(function(){ misura(); }).observe(f.cv.parentNode);
     });
     misura();
-    if (!fermo) disegna();
   })();
 
   /* LA MAPPA DENTRO LA PORTA — è la mappa della casa (mappa-ferma.html),
