@@ -12,11 +12,10 @@
   --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
   --accent:#AA8844; --bg:#080604; --crema:#F0EBE0;
   --c50:rgba(240,235,224,.50); --c38:rgba(240,235,224,.38); --c22:rgba(240,235,224,.22); --c12:rgba(240,235,224,.12);
-  --dock-h:clamp(86px,11vh,116px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock-h) + 24px);position:relative;min-height:100vh}
+body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;min-height:100vh}
 
 .fm-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
@@ -73,7 +72,6 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 
 .pie{margin-top:46px;padding-top:18px;border-top:.5px solid var(--c12);font-family:"DM Sans",sans-serif;font-size:12px;color:var(--c38);letter-spacing:.02em;line-height:1.7}
 
-/* DOCK — condiviso: fm-dock.js + fm-livelli.json */
 @media(max-width:560px){.fm-nexus-lbl{display:none}}
 
   /* ══ IL PIEDE — uguale in ogni pagina ══ */
@@ -109,7 +107,7 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
     <div class="occh">Felicitas Omnia S.r.l.s.</div>
     <h1 class="titolo">Informativa sul trattamento dei dati personali</h1>
     <p class="sotto">Come FelicitasMundi raccoglie, usa e protegge i dati delle persone che incontra lungo il cammino.</p>
-    <p class="aggio">Ultimo aggiornamento: 17 agosto 2026/679 (GDPR) · D.Lgs. 196/2003 come modificato dal D.Lgs. 101/2018 · Regolamento (UE) 2024/1689 (AI Act)</p>
+    <p class="aggio">Ultimo aggiornamento: 17 agosto 2026 · Regolamento (UE) 2016/679 (GDPR) · D.Lgs. 196/2003 come modificato dal D.Lgs. 101/2018 · Regolamento (UE) 2024/1689 (AI Act)</p>
   </div>
 
   <!-- INDICE ANALITICO -->
@@ -331,10 +329,6 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 
 </div>
 
-<!-- DOCK — porta laterale: stato dal JSON, la sessione apre -->
-<div id="fm-dock" data-attiva="" data-soglia="chiusa"></div>
-
-<script src="fm-dock.js" defer></script>
 
 
 <div class="fm-piede">
