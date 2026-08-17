@@ -12,10 +12,11 @@
   --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
   --accent:#AA8844; --bg:#080604; --crema:#F0EBE0;
   --c50:rgba(240,235,224,.50); --c38:rgba(240,235,224,.38); --c22:rgba(240,235,224,.22); --c12:rgba(240,235,224,.12);
+  --dock-h:clamp(86px,11vh,116px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;min-height:100vh}
+body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock-h) + 24px);position:relative;min-height:100vh}
 
 .fm-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
@@ -72,6 +73,7 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 
 .pie{margin-top:46px;padding-top:18px;border-top:.5px solid var(--c12);font-family:"DM Sans",sans-serif;font-size:12px;color:var(--c38);letter-spacing:.02em;line-height:1.7}
 
+/* DOCK — condiviso: fm-dock.js + fm-livelli.json */
 @media(max-width:560px){.fm-nexus-lbl{display:none}}
 
   /* ══ IL PIEDE — uguale in ogni pagina ══ */
@@ -107,7 +109,7 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
     <div class="occh">Felicitas Omnia S.r.l.s.</div>
     <h1 class="titolo">Condizioni d&rsquo;uso</h1>
     <p class="sotto">Il patto fra chi entra e la Comunit&agrave;: che cosa &egrave; questo posto, che cosa vi si fa, e chi risponde di che cosa.</p>
-    <p class="aggio">Ultimo aggiornamento: 31 luglio 2026 &middot; Si accettano una volta sola, all&rsquo;attivazione dell&rsquo;account &middot; Per il trattamento dei dati personali vedi l&rsquo;<a class="inl" href="privacy.html">Informativa privacy</a></p>
+    <p class="aggio">Ultimo aggiornamento: 17 agosto 2026na volta sola, all&rsquo;attivazione dell&rsquo;account &middot; Per il trattamento dei dati personali vedi l&rsquo;<a class="inl" href="privacy.html">Informativa privacy</a></p>
   </div>
 
   <!-- INDICE ANALITICO -->
@@ -118,6 +120,9 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
       <li><a href="#s2"><span class="n">2</span> Chi pu&ograve; entrare</a></li>
       <li><a href="#s3"><span class="n">3</span> Che cosa &egrave; gratuito e che cosa si paga</a></li>
       <li><a href="#s4"><span class="n">4</span> Di chi &egrave; quello che scrivi</a></li>
+      <li><a href="#s4b"><span class="n">4b</span> Integrator</a></li>
+      <li><a href="#s4c"><span class="n">4c</span> I talenti</a></li>
+      <li><a href="#s4d"><span class="n">4d</span> Lezioni, corsi e libri</a></li>
       <li><a href="#s5"><span class="n">5</span> Che cosa non si fa qui</a></li>
       <li><a href="#s6"><span class="n">6</span> La chat e i contenuti degli altri</a></li>
       <li><a href="#s7"><span class="n">7</span> L&rsquo;Emporio</a></li>
@@ -147,6 +152,55 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
     <p>Se un tuo contenuto viene preso da un&rsquo;orma, una ricerca o altro, eventuali vendite di riviste o libri vanno all&rsquo;autore dell&rsquo;opera e a Felicitas, che spartiscono il ricavato con margini definiti di volta in volta.</p>
     <p>L&rsquo;autore dell&rsquo;opera deve per&ograve; richiedere il permesso di utilizzare quel testo, perch&eacute; poi pu&ograve; essere ceduto gratuitamente o a pagamento: quello &egrave; un accordo dell&rsquo;autore dell&rsquo;opera con l&rsquo;utente che ha creato una parte del contenuto inserito nell&rsquo;opera.</p>
     <p><strong>La licenza concessa sopravvive alla chiusura dell&rsquo;account.</strong> Un&rsquo;opera gi&agrave; pubblicata o stampata resta legittima anche se chi ha scritto quella parte lascia la piattaforma.</p>
+
+    <h2 id="s4b"><span class="hn">4b.</span>Integrator</h2>
+    <p><strong>Integrator è lo strumento con cui organizzi il tuo lavoro:</strong> quello
+       che c’è da fare, chi se ne occupa, entro quando. Vale per una persona sola, per un
+       team, o per un’organizzazione con più sedi.</p>
+    <p><strong>Quello che metti dentro resta tuo.</strong> Le attività, le note, le
+       conversazioni interne, i contatti e i costi del tuo team sono dati privati: non li
+       leggiamo. Vediamo soltanto che il tuo spazio esiste, quante persone lo usano, e
+       ciò che scegli di pubblicare.</p>
+    <p><strong>Se smetti, i dati restano tuoi:</strong> puoi esportarli e chiederne la
+       cancellazione. Non li usiamo per altro e non li cediamo a nessuno.</p>
+    <p><strong>Chi guida un team decide chi vede che cosa</strong> al suo interno, e
+       risponde di ciò che il suo gruppo pubblica.</p>
+
+    <h2 id="s4c"><span class="hn">4c.</span>I talenti</h2>
+    <p><strong>I talenti sono il riconoscimento interno di ciò che passa fra le persone
+       della comunità.</strong> Non sono denaro, non si convertono in denaro, e non
+       possono essere ceduti fuori dalla piattaforma.</p>
+    <ul>
+      <li><strong>Nascono da un lavoro concluso.</strong> Chi apre un bisogno dichiara
+        quanto vale; chi lo prende lo porta a termine; chi l’ha aperto conferma. Solo
+        allora i talenti passano.</li>
+      <li><strong>Nessuno si attribuisce talenti da solo.</strong> Ogni movimento ha due
+        gesti, di due persone diverse.</li>
+      <li><strong>Un movimento confermato non si modifica e non si cancella.</strong> Un
+        errore si corregge con un movimento contrario, così la storia resta leggibile.</li>
+      <li><strong>Non si va sotto zero.</strong></li>
+      <li>Il saldo non è un credito verso Felicitas Omnia S.r.l.s. e non dà diritto ad
+        alcun rimborso in denaro.</li>
+    </ul>
+
+    <h2 id="s4d"><span class="hn">4d.</span>Lezioni, corsi e libri</h2>
+    <p><strong>Chi tiene una lezione o un corso ne resta l’autore.</strong> La piattaforma
+       dà lo spazio dove tenerla, il modo per farla trovare e lo strumento per venderla.</p>
+    <ul>
+      <li><strong>Su ciò che entra da una lezione a pagamento o da una registrazione
+        venduta, il 70% va all’autore e il 30% a Felicitas Omnia S.r.l.s.</strong> La
+        stessa proporzione vale per la diretta e per la registrazione.</li>
+      <li><strong>La registrazione appartiene a chi ha tenuto la lezione.</strong> Se
+        lascia la piattaforma, se la porta via.</li>
+      <li><strong>La trascrizione, la revisione, l’impaginazione e la stampa sono servizi
+        a parte</strong>, con un costo proprio calcolato sul lavoro: non rientrano nella
+        percentuale.</li>
+      <li><strong>Un libro nato da lezioni resta dell’autore.</strong> Il lavoro
+        editoriale che facciamo non ce ne dà la proprietà: le condizioni di pubblicazione
+        e distribuzione si concordano per iscritto prima di cominciare.</li>
+      <li>Se un’opera contiene parti scritte da altri, chi la pubblica deve averne il
+        permesso (vedi sez. 4).</li>
+    </ul>
 
     <h2 id="s5"><span class="hn">5.</span>Che cosa non si fa qui</h2>
     <p>Non si considera la piattaforma come un marketplace dedicato alla visibilit&agrave; e alla pubblicit&agrave;, vista soprattutto dal vendere qualcosa che poi non &egrave; coerente.</p>
@@ -190,7 +244,10 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 </div>
 
 
+<!-- DOCK -->
+<div id="fm-dock" data-attiva="" data-soglia="chiusa"></div>
 
+<script src="fm-dock.js" defer></script>
 
 
 <div class="fm-piede">

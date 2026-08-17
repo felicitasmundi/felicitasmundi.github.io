@@ -12,10 +12,11 @@
   --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
   --accent:#AA8844; --bg:#080604; --crema:#F0EBE0;
   --c50:rgba(240,235,224,.50); --c38:rgba(240,235,224,.38); --c22:rgba(240,235,224,.22); --c12:rgba(240,235,224,.12);
+  --dock-h:clamp(86px,11vh,116px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;min-height:100vh}
+body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock-h) + 24px);position:relative;min-height:100vh}
 
 .fm-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
@@ -72,6 +73,7 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 
 .pie{margin-top:46px;padding-top:18px;border-top:.5px solid var(--c12);font-family:"DM Sans",sans-serif;font-size:12px;color:var(--c38);letter-spacing:.02em;line-height:1.7}
 
+/* DOCK — condiviso: fm-dock.js + fm-livelli.json */
 @media(max-width:560px){.fm-nexus-lbl{display:none}}
 
   /* ══ IL PIEDE — uguale in ogni pagina ══ */
@@ -107,7 +109,7 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
     <div class="occh">Felicitas Omnia S.r.l.s.</div>
     <h1 class="titolo">Informativa sul trattamento dei dati personali</h1>
     <p class="sotto">Come FelicitasMundi raccoglie, usa e protegge i dati delle persone che incontra lungo il cammino.</p>
-    <p class="aggio">Ultimo aggiornamento: 31 luglio 2026 · Regolamento (UE) 2016/679 (GDPR) · D.Lgs. 196/2003 come modificato dal D.Lgs. 101/2018 · Regolamento (UE) 2024/1689 (AI Act)</p>
+    <p class="aggio">Ultimo aggiornamento: 17 agosto 2026/679 (GDPR) · D.Lgs. 196/2003 come modificato dal D.Lgs. 101/2018 · Regolamento (UE) 2024/1689 (AI Act)</p>
   </div>
 
   <!-- INDICE ANALITICO -->
@@ -120,6 +122,9 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
       <li><a href="#s4"><span class="n">4</span> Newsletter e comunicazioni</a></li>
       <li><a href="#s5"><span class="n">5</span> Account e Spazio Vivo</a></li>
       <li><a href="#s6"><span class="n">6</span> Orme, foto e contenuti</a></li>
+      <li><a href="#s6b"><span class="n">6b</span> Chi vede cosa</a></li>
+      <li><a href="#s6c"><span class="n">6c</span> Integrator e i team</a></li>
+      <li><a href="#s6d"><span class="n">6d</span> I talenti</a></li>
       <li><a href="#s7"><span class="n">7</span> Acquisti nell'Emporio</a></li>
       <li><a href="#s8"><span class="n">8</span> Cookie</a></li>
       <li><a href="#s9"><span class="n">9</span> Con chi condividiamo i dati</a></li>
@@ -193,9 +198,65 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
     <ul>
       <li>I contenuti passano da una revisione (cancello editoriale del Nucleo); lo stato predefinito è “bozza”.</li>
       <li><strong>Le fotografie che ritraggono persone riconoscibili o minori non vengono pubblicate senza una liberatoria firmata.</strong> È una regola ferma della piattaforma: per queste foto è prevista una liberatoria dedicata, da firmare prima della pubblicazione.</li>
+      <li><strong>Le orme e i luoghi sulla mappa.</strong> Un’orma può essere collegata a un
+        luogo, e un luogo ha delle coordinate. Quando scegli di rendere pubblica un’orma
+        collegata a un luogo, <strong>quel luogo diventa visibile sulla mappa</strong>.
+        È una scelta tua, e va fatta sapendo che una serie di orme nel tempo racconta
+        dove sei stato e quando. Le orme private non compaiono sulla mappa di nessuno.</li>
       <li>Non vanno inseriti dati di altre persone senza il loro consenso.</li>
     </ul>
     <p>Caricando un contenuto, dichiari di averne il diritto e di aver raccolto le eventuali autorizzazioni necessarie.</p>
+
+    <h2 id="s6b"><span class="hn">6b.</span>Chi vede cosa</h2>
+    <p>Chi tiene la piattaforma — il Nucleo — vede <strong>che una cosa esiste</strong>,
+       non <strong>che cosa dice</strong>.</p>
+    <ul>
+      <li><strong>Il Nucleo vede:</strong> che una squadra o un vicinato esiste, quante
+        persone ne fanno parte, quanto lavoro si muove, e <strong>tutto ciò che viene
+        pubblicato</strong>.</li>
+      <li><strong>Il Nucleo non vede:</strong> le note dentro i tuoi lavori, i messaggi
+        delle conversazioni private, i contatti dei tuoi clienti, i numeri che riguardano
+        solo te.</li>
+    </ul>
+    <p><strong>L’accesso tecnico, e l’impegno che ne discende.</strong> Chi amministra la
+       banca dati ha, per ragioni tecniche, la possibilità materiale di leggere tutto:
+       vale per qualunque piattaforma esistente, e sarebbe disonesto dire il contrario.
+       Ci impegniamo a <strong>non farlo</strong>, e a intervenire sui dati soltanto per
+       ripararli, per adempiere a un obbligo di legge, o su tua richiesta. Ogni accesso
+       amministrativo lascia traccia di chi e quando.</p>
+    <p><strong>Il vaglio delle immagini.</strong> Guardiamo <strong>solo le fotografie
+       destinate a essere pubbliche</strong>, e solo per verificare che siano leggibili
+       e che non contengano materiale vietato dalla legge. <strong>Le immagini private
+       non vengono guardate</strong>, se non nel caso in cui qualcuno le segnali e la
+       legge lo imponga.</p>
+
+    <h2 id="s6c"><span class="hn">6c.</span>Integrator, i team e le aziende</h2>
+    <p>Integrator è lo strumento con cui una persona, un gruppo o un’azienda organizza il
+       proprio lavoro: cosa c’è da fare, chi se ne occupa, entro quando.</p>
+    <ul>
+      <li><strong>I dati interni di un team o di un’azienda sono privati</strong> e
+        appartengono a chi li ha inseriti. Comprendono le attività, le note, le
+        conversazioni interne, i contatti e i costi.</li>
+      <li>Chi guida un team decide chi, all’interno, vede che cosa.</li>
+      <li>Noi vediamo soltanto i dati di funzionamento — quante persone, quanta
+        attività — e ciò che il team sceglie di pubblicare.</li>
+      <li>Se il rapporto finisce, i dati restano di chi li ha inseriti: possono essere
+        esportati e cancellati.</li>
+    </ul>
+
+    <h2 id="s6d"><span class="hn">6d.</span>I talenti</h2>
+    <p>I talenti sono il riconoscimento interno di ciò che passa fra le persone della
+       comunità. <strong>Non sono denaro e non si convertono in denaro.</strong></p>
+    <ul>
+      <li>Registriamo <strong>chi ha dato, chi ha ricevuto, quando e per cosa</strong>:
+        senza questo, uno scambio differito non può esistere.</li>
+      <li>Un movimento riguarda due persone, e <strong>lo vedono quelle due</strong> —
+        più il Nucleo, per la verifica e per gli obblighi di legge.</li>
+      <li><strong>Un movimento confermato non si modifica e non si cancella:</strong> un
+        errore si corregge con un movimento contrario. È una garanzia per tutti.</li>
+      <li>I movimenti restano finché l’account è attivo, e per il tempo previsto dagli
+        obblighi contabili.</li>
+    </ul>
 
     <h2 id="s7"><span class="hn">7.</span>Acquisti nell'Emporio dell'Anima</h2>
     <p>Per gli acquisti raccogliamo i dati necessari a evadere l'ordine, spedirlo ed emettere la fattura. I pagamenti sono gestiti da un fornitore esterno specializzato: non conserviamo i dati completi della carta di pagamento.</p>
@@ -211,6 +272,10 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
       <li><strong>Supabase Inc.</strong> — banca dati, autenticazione e archivio dei file. La banca dati è situata a <strong>Francoforte, in Germania</strong>; la società fornitrice ha sede negli <strong>Stati Uniti</strong> (vedi sez. 10).</li>
       <li><strong>Hetzner Online GmbH</strong> — server della radio, situato a <strong>Helsinki, in Finlandia</strong>; società con sede in Germania.</li>
       <li><strong>Brevo</strong> — invio della newsletter.</li>
+      <li><strong>Fornitori di intelligenza artificiale</strong> — usati per la
+        trascrizione di file audio, per la revisione di testi e per l’impaginazione,
+        quando l’utente richiede questi servizi. I contenuti inviati sono soltanto
+        quelli necessari al servizio richiesto (vedi sez. 14).</li>
       <li>Eventuali professionisti (commercialista, consulente legale) per gli obblighi di legge.</li>
     </ul>
     <p>Il fornitore di pagamento e il corriere saranno aggiunti quando l'Emporio sarà attivo (vedi sez. 7). Questo elenco viene aggiornato ogni volta che un fornitore cambia.</p>
@@ -228,6 +293,12 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
       <li>Dati della newsletter: fino alla revoca del consenso.</li>
       <li>Messaggi ricevuti dai moduli di contatto: per il tempo necessario a rispondere e a coltivare la relazione che hai avviato. Puoi chiederne la cancellazione in ogni momento.</li>
     </ul>
+
+    <p><strong>Le copie di sicurezza.</strong> Conserviamo una copia della banca dati per
+       poterla ripristinare in caso di guasto o di cancellazione accidentale. Le copie
+       sono tenute su supporti sotto il nostro controllo diretto, non sono pubblicate né
+       condivise, e vengono sostituite periodicamente. Una richiesta di cancellazione
+       viene applicata anche alle copie alla prima sostituzione utile.</p>
 
     <h2 id="s12"><span class="hn">12.</span>I tuoi diritti</h2>
     <p>In qualsiasi momento puoi esercitare i diritti previsti dagli artt. 15–22 del GDPR: accesso, rettifica, cancellazione, limitazione, portabilità, opposizione e revoca del consenso (senza pregiudizio dei trattamenti già svolti). Per esercitarli scrivi a <a class="inl" href="mailto:felicitasmundi@protonmail.com">felicitasmundi@protonmail.com</a>.</p>
@@ -260,7 +331,10 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 
 </div>
 
+<!-- DOCK — porta laterale: stato dal JSON, la sessione apre -->
+<div id="fm-dock" data-attiva="" data-soglia="chiusa"></div>
 
+<script src="fm-dock.js" defer></script>
 
 
 <div class="fm-piede">
