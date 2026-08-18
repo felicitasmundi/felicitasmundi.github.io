@@ -1055,18 +1055,289 @@
 
 <audio id="au" preload="none"></audio>
 
-<!-- ══ IL MARGINE SINISTRO ══ -->
-<nav id="barra">
-  <div class="marchio">
-    <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="">
-    <span>Comunità Eterna<br>FelicitasMundi</span>
+<!-- ══ IL MARGINE SINISTRO — la barra di Design ══ -->
+<!-- ═══════════════════════════════════════════════════════════════
+     LA BARRA — Spazio Vivo. HTML normale, da incollare nel guscio.
+
+     NON contiene: il Megafono, che resta in fondo a ogni pagina.
+
+     NESSUN DATO SCRITTO A MANO. Nomi, righe, numeri e codice arrivano
+     dal database:
+       · window.SpazioVivo.barra(dati)   riempie tutto
+       · window.SpazioVivo.barraQui(id)  segna la pagina in cui si è
+       · window.SpazioVivo.apriBarra() / chiudiBarra()
+
+     dati = {
+       pagine:   [ {id, nome, riga, quante, colore, rotta, chiusa, perche} ],
+       incontri: [ {id, nome, riga, quante, colore, rotta} ],
+       annale:   {nome, riga, rotta},
+       chi:      {nome, ruolo, iniziale},
+       nexus:    "codice"
+     }
+     Le cinque pagine e i cinque elementi sono quanti ne arrivano; quello
+     che manca diventa [ in attesa ]. Una pagina chiusa resta visibile e
+     spenta, con la riga che dice perché.
+     ═══════════════════════════════════════════════════════════════ -->
+
+<style>
+  .sv-barra,.sv-barra *,.sv-barra *::before,.sv-barra *::after{box-sizing:border-box}
+  .sv-barra{--scala:1.4;--pannello:#101736;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+    --riga:rgba(245,240,230,0.12);--line:rgba(184,150,62,0.2);
+    --t-eti:calc(0.8125rem * var(--scala));--t-tas:calc(0.9375rem * var(--scala));
+    --t-cor:calc(1.0625rem * var(--scala));
+    position:sticky;top:0;height:100vh;overflow-y:auto;flex:0 0 17.5rem;width:17.5rem;
+    background:var(--pannello);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;padding:1.1rem 0 0.9rem;
+    color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;font-size:var(--t-eti);
+    -webkit-font-smoothing:antialiased}
+
+  .sv-barra a{text-decoration:none;color:inherit}
+
+  /* il capo: il Nexus non è un collegamento */
+  .sv-barra .capo{display:flex;gap:0.75rem;align-items:center;padding:0 1.05rem 1rem;
+    border-bottom:1px solid var(--riga);margin-bottom:0.4rem}
+  .sv-barra .capo .segno{flex:none;width:3rem;height:3rem;border-radius:0.75rem;
+    background:rgba(245,240,230,0.09);border:1px solid rgba(184,150,62,0.36);
+    display:grid;place-items:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  .sv-barra .capo .segno img{width:1.9rem;height:1.9rem;object-fit:contain}
+  .sv-barra .capo b{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-tas);line-height:1.2;letter-spacing:0.02em}
+  .sv-barra .capo span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-eti);color:rgba(212,175,106,0.75);margin-top:0.1rem}
+
+  /* le cinque pagine */
+  .sv-barra .pagine{padding:0.5rem 0}
+  .sv-barra .pg{display:block;padding:0.7rem 1.05rem;border-left:2px solid transparent;
+    cursor:pointer;transition:background 0.15s;min-width:0}
+  .sv-barra .pg:hover{background:rgba(245,240,230,0.07)}
+  .sv-barra .pg.on{background:rgba(200,160,85,0.2);border-left-color:var(--oro)}
+  .sv-barra .pg .alto{display:flex;align-items:baseline;gap:0.55rem;min-width:0}
+  .sv-barra .pg .n{flex:none;width:1.1rem;font-family:'Cinzel',serif;font-size:var(--t-tas);
+    color:var(--c,var(--oro-ch));line-height:1}
+  .sv-barra .pg b{flex:1;min-width:0;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-tas);color:rgba(245,240,230,0.95);line-height:1.25}
+  .sv-barra .pg.on b{color:var(--ivory)}
+  /* il numero a destra: quanto è pieno quel posto */
+  .sv-barra .pg .vn{flex:none;font-family:'Cinzel',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.34)}
+  .sv-barra .pg .desc{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);line-height:1.45;color:rgba(245,240,230,0.6);
+    margin-top:0.3rem;padding-left:calc(1.1rem + 0.55rem)}
+
+  /* una pagina chiusa: visibile e spenta, con la riga che dice perché */
+  .sv-barra .pg.chiusa{opacity:0.46;cursor:default}
+  .sv-barra .pg.chiusa:hover{background:none}
+  .sv-barra .pg.chiusa .perche{display:block;margin-top:0.3rem;
+    padding-left:calc(1.1rem + 0.55rem);font-size:var(--t-eti);
+    color:rgba(200,160,85,0.62);line-height:1.4}
+
+  /* il titolo del gruppo */
+  .sv-barra .gruppo{padding:1rem 1.05rem 0.35rem;font-size:var(--t-eti);
+    letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.45);
+    margin-top:0.4rem;border-top:1px solid rgba(245,240,230,0.05)}
+
+  /* cosa incontri: quadranti semitrasparenti, ognuno col suo colore */
+  .sv-barra .sotto{padding:0 0.75rem 0.4rem;display:flex;flex-direction:column;gap:0.45rem}
+  .sv-barra .sotto.solo{border-top:1px solid rgba(245,240,230,0.09);
+    margin-top:0.65rem;padding-top:0.75rem}
+  .sv-barra .pg.pic{padding:0.75rem 0.9rem;border-radius:0.7rem;border-left:0;
+    background:rgba(245,240,230,0.05);border:1px solid var(--line);
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  .sv-barra .pg.pic b{font-family:'Cinzel',serif;letter-spacing:0.03em;
+    color:var(--c,var(--oro-ch));filter:brightness(1.25)}
+  .sv-barra .pg.pic .pt{flex:none;width:0.6rem;height:0.6rem;border-radius:50%;
+    background:var(--c,var(--oro-ch));align-self:center}
+  .sv-barra .pg.pic .vn{color:rgba(245,240,230,0.5)}
+  .sv-barra .pg.pic .desc{padding-left:1.15rem;margin-top:0.25rem;color:rgba(245,240,230,0.66)}
+
+  /* il piede: chi sei e il codice Nexus */
+  .sv-barra .piede{margin-top:auto;padding:0.9rem 1.05rem 0.2rem;border-top:1px solid var(--riga)}
+  .sv-barra .chi{display:flex;gap:0.65rem;align-items:center;margin-bottom:0.7rem;min-width:0}
+  .sv-barra .chi .es{flex:none;width:2.1rem;height:2.4rem;
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    background:linear-gradient(145deg,rgba(200,160,85,0.5),rgba(200,160,85,0.16));
+    display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-eti)}
+  .sv-barra .chi b{display:block;font-size:var(--t-eti);font-weight:500;line-height:1.25}
+  .sv-barra .chi span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.45);margin-top:0.1rem}
+  .sv-barra .codice{font-family:ui-monospace,monospace;font-size:var(--t-eti);
+    letter-spacing:0.1em;color:rgba(245,240,230,0.3)}
+  .sv-barra .codice em{font-style:normal;color:rgba(212,175,106,0.62)}
+
+  /* sotto 52rem la barra si chiude e si apre dall'hamburger */
+  #sv-apri-barra{display:none;position:fixed;top:0.9rem;left:0.9rem;z-index:70;
+    width:2.7rem;height:2.7rem;border-radius:0.7rem;background:rgba(12,16,32,0.9);
+    border:1px solid rgba(184,150,62,0.28);color:#D4AF6A;font-size:1.25rem;cursor:pointer;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  #sv-velo-barra{display:none;position:fixed;inset:0;z-index:64;
+    background:rgba(2,4,12,0.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  #sv-velo-barra.on{display:block}
+  @media(max-width:52rem){
+    #sv-apri-barra{display:block}
+    .sv-barra{position:fixed;top:0;left:0;z-index:66;width:19rem;flex:none;
+      transform:translateX(-100%);transition:transform 0.22s ease}
+    .sv-barra.aperta{transform:none}
+  }
+</style>
+
+<button id="sv-apri-barra" type="button" aria-label="Apri la barra">&#9776;</button>
+<div id="sv-velo-barra"></div>
+
+<nav class="sv-barra" id="sv-barra" aria-label="Le pagine">
+
+  <div class="capo">
+    <span class="segno"><img src="nexus.png" alt=""></span>
+    <div>
+      <b>FelicitasMundi</b>
+      <span>Comunità Eterna</span>
+    </div>
   </div>
-  <div id="voci"></div>
-  <button id="acc-tasto">
-    <span class="pallino" id="acc-iniziale">·</span>
-    <span><span id="acc-nome">[ nome ]</span><small id="acc-grado">&nbsp;</small></span>
-  </button>
+
+  <div class="pagine" id="sv-pagine"></div>
+
+  <div class="gruppo">Cosa incontri</div>
+  <div class="sotto" id="sv-incontri"></div>
+
+  <div class="sotto solo" id="sv-annale"></div>
+
+  <div class="piede">
+    <div class="chi">
+      <span class="es" id="sv-chi-es"></span>
+      <div>
+        <b id="sv-chi-nome"></b>
+        <span id="sv-chi-ruolo"></span>
+      </div>
+    </div>
+    <div class="codice">nexus <em id="sv-nexus"></em></div>
+  </div>
+
 </nav>
+
+<script>
+(function () {
+  "use strict";
+
+  var ATTESA = "[ in attesa ]";
+  var NUM = ["\u2460", "\u2461", "\u2462", "\u2463", "\u2464", "\u2465", "\u2466"];
+  var barra = document.getElementById("sv-barra");
+  var velo  = document.getElementById("sv-velo-barra");
+  var apri  = document.getElementById("sv-apri-barra");
+
+  var vuoto = function (v) { return v === undefined || v === null || v === ""; };
+  var testo = function (v) { return vuoto(v) ? ATTESA : String(v); };
+  function svuota(n) { while (n && n.firstChild) n.removeChild(n.firstChild); }
+
+  function riga(cl, dentro) {
+    var e = document.createElement("span");
+    e.className = cl;
+    if (dentro !== undefined) e.textContent = dentro;
+    return e;
+  }
+
+  /* una pagina: numero, nome, quanto è pieno, la riga che dice cosa contiene */
+  function unaPagina(p, i, piccola) {
+    var chiusa = !!p.chiusa;
+    var e = document.createElement(chiusa ? "div" : "a");
+    e.className = "pg" + (piccola ? " pic" : "") + (chiusa ? " chiusa" : "");
+    if (p.colore) e.style.setProperty("--c", p.colore);
+    if (!chiusa) {
+      e.setAttribute("href", vuoto(p.rotta) ? "#" : p.rotta);
+      if (p.id) e.setAttribute("data-pg", p.id);
+    }
+
+    var alto = riga("alto");
+    if (piccola) alto.appendChild(riga("pt"));
+    else alto.appendChild(riga("n", NUM[i] || String(i + 1)));
+
+    var b = document.createElement("b");
+    b.textContent = testo(p.nome);
+    alto.appendChild(b);
+
+    if (!vuoto(p.quante)) alto.appendChild(riga("vn", String(p.quante)));
+    e.appendChild(alto);
+
+    e.appendChild(riga("desc", testo(p.riga)));
+    if (chiusa) e.appendChild(riga("perche", testo(p.perche)));
+    return e;
+  }
+
+  function riempi(dati) {
+    dati = dati || {};
+
+    var pg = document.getElementById("sv-pagine");
+    svuota(pg);
+    (dati.pagine || []).forEach(function (p, i) { pg.appendChild(unaPagina(p, i, false)); });
+
+    var inc = document.getElementById("sv-incontri");
+    svuota(inc);
+    (dati.incontri || []).forEach(function (p, i) { inc.appendChild(unaPagina(p, i, true)); });
+
+    var an = document.getElementById("sv-annale");
+    svuota(an);
+    var a = dati.annale || {};
+    an.appendChild(unaPagina({
+      id: a.id || "annale", nome: a.nome, riga: a.riga, rotta: a.rotta,
+      colore: "rgba(245,240,230,0.4)"
+    }, 0, true));
+
+    var chi = dati.chi || {};
+    document.getElementById("sv-chi-es").textContent =
+      vuoto(chi.iniziale) ? (vuoto(chi.nome) ? "\u00B7" : String(chi.nome).charAt(0)) : chi.iniziale;
+    document.getElementById("sv-chi-nome").textContent  = testo(chi.nome);
+    document.getElementById("sv-chi-ruolo").textContent = testo(chi.ruolo);
+    document.getElementById("sv-nexus").textContent     = testo(dati.nexus);
+
+    collega();
+  }
+
+  /* la pagina in cui si è */
+  function qui(id) {
+    [].forEach.call(barra.querySelectorAll(".pg"), function (x) { x.classList.remove("on"); });
+    if (vuoto(id)) return;
+    var e = barra.querySelector('[data-pg="' + id + '"]');
+    if (e) e.classList.add("on");
+  }
+
+  function apriBarra()   { barra.classList.add("aperta"); velo.classList.add("on"); }
+  function chiudiBarra() { barra.classList.remove("aperta"); velo.classList.remove("on"); }
+
+  function collega() {
+    [].forEach.call(barra.querySelectorAll(".pg:not(.chiusa)"), function (a) {
+      a.addEventListener("click", function () { chiudiBarra(); });
+    });
+  }
+
+  apri.addEventListener("click", apriBarra);
+  velo.addEventListener("click", chiudiBarra);
+
+  /* a vuoto la forma si legge lo stesso */
+  riempi({ pagine: [], incontri: [], annale: {}, chi: {}, nexus: "" });
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.barra       = riempi;
+  window.SpazioVivo.barraQui    = qui;
+  window.SpazioVivo.apriBarra   = apriBarra;
+  window.SpazioVivo.chiudiBarra = chiudiBarra;
+})();
+</script>
+
+<!-- ⭐ L'UNICA MANO SULLA BARRA DI DESIGN, e sta tutta qui.
+     Il file di Design resta com'è: Design la fa colonna di un flex,
+     il guscio la tiene fissa a sinistra e sposta il resto di --barra.
+     E l'hamburger resta quello del guscio, perché è legato alla radio
+     e a misuraPlancia(): quello di Design si nasconde. -->
+<style>
+  :root{ --barra:17.5rem; }
+  .sv-barra{position:fixed;left:0;top:0;bottom:0;height:auto;
+    flex:none;width:var(--barra);z-index:60;transition:transform .28s ease}
+  #sv-apri-barra,#sv-velo-barra{display:none !important}
+  .sv-barra .chi{cursor:pointer;border-radius:0.5rem;padding:0.2rem;margin-left:-0.2rem}
+  .sv-barra .chi:hover{background:rgba(245,240,230,0.06)}
+  @media(max-width:52rem){
+    .sv-barra{width:19rem;transform:translateX(-100%)}
+    body.barra-aperta .sv-barra{transform:none}
+  }
+</style>
 
 <!-- ══ LA PLANCIA — la radio, ferma in alto ══ -->
 <div id="pl">
@@ -1125,11 +1396,11 @@
         <button class="s-pill" id="s-dove" style="--tc:var(--oro-ch)">
           <span class="sg" id="dove-sg"></span><span id="dove-tx">Dove lo porti</span>
         </button>
-        <button class="s-pill" id="s-ediz">Edizione &#9662;</button>
+        <!-- al posto di «Edizione»: la scelta del modello non serve più -->
+        <button class="s-pill" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt=""></span>INTEGRATOR</button>
         <button class="s" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
         <button class="s" id="s-file" title="Allegato">&#128206;&#xFE0E;</button>
         <button class="s" id="s-aperte" title="Le cose aperte">&#9673;</button>
-        <button class="s-pill" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt=""></span>INTEGRATOR</button>
         <button class="s" id="s-talenti" title="talenti"><span class="sg-t"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/></svg></span></button>
         <button class="s invia" id="s-invio" title="Manda">&#8594;</button>
       </div>
@@ -1138,13 +1409,6 @@
 </div>
 
 <!-- fogli -->
-<div class="velo" id="v-ediz"><div class="foglio">
-  <button class="x" data-x="v-ediz">&times;</button>
-  <h3>Edizione</h3>
-  <div class="fs">Dove la tua opera prende forma: impagina pro, pubblica, stampa, distribuisci.</div>
-  <div id="l-ediz"></div>
-</div></div>
-
 <div class="velo" id="v-aperte"><div class="foglio">
   <button class="x" data-x="v-aperte">&times;</button>
   <h3>Le cose che hai aperto</h3>
@@ -1300,46 +1564,36 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* ══ LA BARRA ══
      `sotto` è il ramo, e si annida quanto serve.
      `va` dice a quale porta si arriva quando la voce non ne ha una propria. */
-  var BARRA = [
-    {id:"spazio",  n:"Spazio Vivo",  el:"spaziovivo",   s:"home, mappa, radio"},
-    {id:"sentiero",n:"Praticantato", el:"praticantato", s:"come funziona?"},
-    {id:"orme",    n:"Le mie orme",  el:"orme",         s:"gli strumenti, il filo del percorso"},
-    {id:"edizione",n:"Edizione", el:"aria", s:"riordina, stampa, pubblica e distribuisci"},
-    {id:"incontro",n:"Cosa incontro", el:"ricerca", s:"", sotto:[
-      {id:"vicinati",  n:"Vicinati",   el:"terra", s:"bisogni, calendario, autosufficienza", sotto:[
-        {id:"vic-bisogni",        n:"bisogni",        el:"terra", va:"vicinati"},
-        {id:"vic-calendario",     n:"calendario",     el:"terra", va:"vicinati"},
-        {id:"vic-autosufficienza",n:"autosufficienza",el:"terra", va:"vicinati"}
-      ]},
-      {id:"emporio",   n:"Emporio",    el:"acqua", s:"dono e scambio, vendita", sotto:[
-        {id:"emp-dono",    n:"dono e scambio", el:"acqua", va:"emporio"},
-        {id:"emp-vendita", n:"vendita",        el:"acqua", va:"emporio", sotto:[
-          {id:"sc-abbigliamento", n:"abbigliamento",             el:"acqua", va:"emporio"},
-          {id:"sc-accessori",     n:"accessori",                 el:"acqua", va:"emporio"},
-          {id:"sc-alimenti",      n:"alimenti",                  el:"acqua", va:"emporio"},
-          {id:"sc-bevande",       n:"bevande",                   el:"acqua", va:"emporio"},
-          {id:"sc-casa",          n:"casa",                      el:"acqua", va:"emporio"},
-          {id:"sc-cosmesi",       n:"cosmesi",                   el:"acqua", va:"emporio"},
-          {id:"sc-libri",         n:"libri",                     el:"acqua", va:"emporio"},
-          {id:"sc-oggettistica",  n:"oggettistica",              el:"acqua", va:"emporio"},
-          {id:"sc-devozionale",   n:"oggettistica devozionale",  el:"acqua", va:"emporio"},
-          {id:"sc-coscienza",     n:"strumenti di coscienza",    el:"acqua", va:"emporio"},
-          {id:"sc-musicali",      n:"strumenti musicali",        el:"acqua", va:"emporio"}
-        ]}
-      ]},
-      {id:"assistenza",n:"Assistenza", el:"fuoco", s:"spirituale, mutuo aiuto, consulenze", sotto:[
-        {id:"ass-spirituale",n:"spirituale", el:"fuoco", va:"assistenza"},
-        {id:"ass-mutuo",     n:"mutuo aiuto",el:"fuoco", va:"assistenza"},
-        {id:"ass-consulenze",n:"consulenze", el:"fuoco", va:"assistenza"}
-      ]},
-      {id:"scuola",    n:"Scuola",     el:"etere", s:"formazione, maestri autentici, ricerca felicitas", sotto:[
-        {id:"scu-formazione",n:"formazione",        el:"etere", va:"scuola"},
-        {id:"scu-maestri",   n:"maestri autentici", el:"etere", va:"scuola"},
-        {id:"scu-ricerca",   n:"ricerca felicitas", el:"etere", va:"scuola"}
-      ]}
-    ]},
-    {id:"annale",  n:"Annale di FelicitasMundi", el:"annale", s:"storico · tour · fondatore"}
-  ];
+  /* ⭐ LE VOCI NON STANNO PIÙ QUI: escono dalla tabella `stanze`.
+     BARRA resta il vocabolario piatto — id, nome, riga — che attesa()
+     e l'indirizzo ?p= interrogano. Si riempie a ogni avvio. */
+  var BARRA  = [];
+  var ROTTE  = {};
+  var STANZE = { pagine:[], incontri:[], annale:{} };
+
+  function leggiLeStanze(){
+    return db.from("stanze")
+      .select("id,gruppo,ordine,nome,riga,elemento,rotta,chiusa,perche")
+      .order("ordine")
+      .then(function(r){
+        var righe = (r && r.data) || [];
+        var delGruppo = function(g){
+          return righe.filter(function(x){ return x.gruppo === g; }).map(forma);
+        };
+        function forma(x){
+          return { id:x.id, nome:x.nome, riga:x.riga,
+                   colore: x.elemento ? "var(--"+x.elemento+")" : "",
+                   rotta: "#"+x.id, chiusa: !!x.chiusa, perche: x.perche };
+        }
+        STANZE.pagine   = delGruppo("pagina");
+        STANZE.incontri = delGruppo("incontro");
+        STANZE.annale   = delGruppo("annale")[0] || {};
+        BARRA = righe.map(function(x){ return {id:x.id, n:x.nome, s:x.riga}; });
+        ROTTE = {};
+        righe.forEach(function(x){ ROTTE[x.id] = x.rotta || ""; });
+      })
+      .catch(function(){ /* senza tabella la barra resta [ in attesa ] */ });
+  }
 
   /* le destinazioni: colore e simbolo, mai il nome dell'elemento */
   /* ══ i messaggi non letti · le orme di oggi ══ */
@@ -1409,14 +1663,6 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      c:"--etere", f:"--etere-f", el:"etere", tipo:"ricerca", dest:"scuola"}
   ];
 
-  var EDIZIONE = [
-    {n:"Basic 1", s:"per tenere traccia", c:"--oro-ch", f:"--nexus-f"},
-    {n:"Pro",   s:"capitoli, bussola, quadranti, la veste · e la stampa", c:"--oro-ch", f:"--nexus-f", sg:"praticantato"},
-    {n:"Radio", s:"solo voce: una puntata della tua rubrica", c:"--aria", f:"--aria-f", el:"aria", sg:"praticantato"},
-    {n:"La stampa", s:"volantino, opuscolo, rivista, libro", c:"--oro-ch", f:"--nexus-f", sg:"praticantato"},
-    {n:"La consolle radio", s:"il tuo format, con assistente umano iniziale", c:"--aria", f:"--aria-f", el:"aria", sg:"praticantato"}
-  ];
-
   /* ── gli articoli, per stanza. Il file vive accanto; qui la copertina. ── */
   var ARTICOLI = [
     { stanza: "assistenza",
@@ -1460,54 +1706,59 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     return !!(e.target && e.target.closest && e.target.closest(".chev"));
   }
 
+  /* ══ LA BARRA LA DISEGNA DESIGN ══
+     Il guscio le passa i dati e le dice dove si è. Il disegno è suo,
+     i dati sono del database: qui non si scrive nessuna parola. */
   function disegnaBarra(){
-    var c=$("voci"); c.innerHTML="";
-    BARRA.forEach(function(v){
-      var rami = v.sotto || v.ancore;
-      var b=document.createElement("button");
-      b.className="voce"+(v.id===vista?" on":"")+((rami&&ramo[0]===v.id)?" aperta":"");
-      /* la colonna del simbolo c'\u00E8 sempre: vuota finch\u00E9 il segno non arriva */
-      b.innerHTML = '<span class="sg">'+(v.el ? sg(v.el) : '')+'</span>'
-                  + '<span class="tt"><b></b></span>'
-                  + (rami ? '<span class="chev">\u203A</span>' : '');
-      /* il colore dell'elemento entra nel simbolo, mai nel bordo: quello resta l'oro.
-         Gli altri segni non hanno un colore proprio e restano a currentColor */
-      if(v.el && ELEMENTI.indexOf(v.el) >= 0){
-        b.querySelector(".sg").style.color = "var(--"+v.el+")";
-      }
-      var t=b.querySelector(".tt");
-      t.querySelector("b").textContent = v.n;
-      if(v.s){ var sm=document.createElement("small"); sm.textContent=v.s; t.appendChild(sm); }
-      b.addEventListener("click", function(e){
-        if(rami && sulChevron(e)){ scattaRamo(0, v); disegnaBarra(); return; }
-        if(rami){ apriRamo(0, v); }   /* il nome porta alla pagina e apre il ramo */
-        vai(v.id);
-      });
-      c.appendChild(b);
-
-      /* i tre affacci della home: portano al blocco, non a un'altra pagina */
-      if(v.ancore && ramo[0]===v.id){
-        var da=document.createElement("div"); da.className="sotto-voci";
-        v.ancore.forEach(function(x){
-          var ab=document.createElement("button");
-          ab.className="sotto-voce";
-          ab.style.setProperty("--sc","var(--oro-ch)");
-          ab.innerHTML='<span class="tt"><b></b><i></i></span>';
-          ab.querySelector("b").textContent=x.n;
-          ab.querySelector("i").textContent=x.v;
-          ab.addEventListener("click", function(e){
-            e.stopPropagation();
-            document.body.classList.remove("barra-aperta");
-            if(vista!=="spazio"){ vai("spazio"); }
-            setTimeout(function(){ vaiAlBlocco(x.id); }, 60);
-          });
-          da.appendChild(ab);
-        });
-        c.appendChild(da);
-      }
-
-      if(v.sotto && ramo[0]===v.id){ c.appendChild(disegnaRamo(v.sotto, 1)); }
+    if(!window.SpazioVivo || !window.SpazioVivo.barra) return;
+    var nome = (io && io.nome) || "";
+    window.SpazioVivo.barra({
+      pagine:   STANZE.pagine,
+      incontri: STANZE.incontri,
+      annale:   STANZE.annale,
+      chi: {
+        nome:     ospite ? "Entra" : nome,
+        ruolo:    ospite ? "email e sei cifre, nessuna password"
+                         : ((io && io.grado) || "").replace(/_/g," "),
+        iniziale: ospite ? "\u00b7"
+                         : (nome || "\u00b7").trim().charAt(0).toUpperCase() || "\u00b7"
+      },
+      nexus: (io && io.anthakarana) || ""
     });
+    window.SpazioVivo.barraQui(vista);
+    collegaLeVoci();
+  }
+
+  /* ⭐ le voci portano DENTRO il guscio, non a un indirizzo: Design mette
+     un href, il guscio lo intercetta e chiama vai() — la stessa strada
+     che faceva il vecchio tasto. La rotta viene dal database:
+     «incontro:emporio» vuol dire vai("incontro","emporio"). */
+  function collegaLeVoci(){
+    var n = document.getElementById("sv-barra");
+    if(!n) return;
+
+    [].forEach.call(n.querySelectorAll("[data-pg]"), function(a){
+      a.addEventListener("click", function(e){
+        e.preventDefault();
+        var r = ROTTE[a.getAttribute("data-pg")] || "";
+        if(!r) return;                 /* una stanza senza rotta non porta da nessuna parte */
+        document.body.classList.remove("barra-aperta");
+        misuraPlancia();
+        var due = r.split(":");
+        if(due.length > 1){ sottoRichiesta = due[1]; vai(due[0], due[1]); }
+        else vai(r);
+      });
+    });
+
+    /* il piede apre l'account: Design lo mostra, il guscio lo apre */
+    var chi = n.querySelector(".chi");
+    if(chi && !chi.getAttribute("data-legato")){
+      chi.setAttribute("data-legato","1");
+      chi.addEventListener("click", function(){
+        if(ospite){ location.href = "accesso.html"; return; }
+        $("v-acc").classList.add("on");
+      });
+    }
   }
 
   /* un livello del ramo. Si richiama da sé per quelli più sotto: i figli si
@@ -1572,7 +1823,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     disegnaBarra();
     document.body.classList.remove("barra-aperta");
     var c=$("centro"); c.innerHTML=""; c.scrollTop=0;
-    if(id==="spazio")   home(c);
+    if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); }
     else if(id==="orme") mieOrme(c);
     else if(id==="incontro") incontro(c, sub);
     else if(id==="chat"){ chat(c); segnaLetto(); }
@@ -1584,6 +1835,25 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else attesa(c, id);
   }
 
+
+  /* ⭐ I DUE TASTI SOTTO LA MAPPA — «Come funziona» e «Il tuo spazio».
+     Design li lascia su come-funziona.html, che è un indirizzo fuori dallo
+     Spazio Vivo: il guscio li intercetta e li porta dentro, con vai().
+     «Il tuo spazio» da ospite resta su «Come funziona», da dentro va alla
+     propria orma — è la strada che Design dichiara con SpazioVivo.dentro(). */
+  function collegaLePorteDellaCasa(){
+    var sv = window.SpazioVivo || {};
+    if(ospite){ if(sv.fuori)  sv.fuori();  }
+    else      { if(sv.dentro) sv.dentro("#orme"); }
+
+    [ ["sv-come",   "come-funziona"],
+      ["sv-spazio", ospite ? "come-funziona" : "orme"] ].forEach(function(p){
+      var a = document.getElementById(p[0]);
+      if(!a || a.getAttribute("data-legato")) return;
+      a.setAttribute("data-legato","1");
+      a.addEventListener("click", function(e){ e.preventDefault(); vai(p[1]); });
+    });
+  }
 
   function attesa(c, id){
     var v = BARRA.filter(function(x){return x.id===id;})[0] || {n:id};
@@ -2356,7 +2626,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   $("s-cerca").addEventListener("click", function(){
     cerca=!cerca; this.classList.toggle("attivo",cerca);
     campo.placeholder = cerca ? "[ la riga della ricerca — in attesa ]" : "Traccia l'orma di oggi";
-    ["s-dove","s-ediz","s-file","s-aperte","s-integrator","s-talenti"].forEach(function(i){
+    ["s-dove","s-file","s-aperte","s-integrator","s-talenti"].forEach(function(i){
       $(i).style.display = cerca ? "none" : "";
     });
     $("vele").classList.remove("su"); veleSu=false;
@@ -2378,13 +2648,6 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(poi) b.addEventListener("click", function(){ poi(o); });
     return b;
   }
-
-  EDIZIONE.forEach(function(o){
-    $("l-ediz").appendChild(rigo(o, function(x){
-      $("s-ediz").innerHTML=x.n+" \u25BE";
-      $("v-ediz").classList.remove("on"); campo.focus();
-    }));
-  });
 
   ACCOUNT.forEach(function(o){
     $("l-acc").appendChild(rigo(o, function(x){
@@ -2424,7 +2687,6 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     '<p class="vuoto" style="font-family:\'Cormorant Garamond\',serif;font-style:italic;'
     +'color:rgba(245,240,230,0.78)">Qui compaiono le cose che hai aperto e non hai ancora chiuso.</p>';
 
-  $("s-ediz").addEventListener("click", function(){ $("v-ediz").classList.add("on"); });
   $("s-aperte").addEventListener("click", function(){ $("v-aperte").classList.add("on"); });
   /* ⭐ i talenti non aprono il campo di scrittura: aprono la loro finestra,
      e se la disegna fm-talenti.js */
@@ -2458,10 +2720,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* Integrator: finestra a sé, senza la barra ordinaria.
      La pagina la sta facendo Design — per ora il tasto non porta a nulla. */
-  $("acc-tasto").addEventListener("click", function(){
-    if(ospite){ location.href = "accesso.html"; return; }
-    $("v-acc").classList.add("on");
-  });
+  /* ⭐ il tasto dell'account ora è il piede della barra: lo lega collegaLeVoci() */
   document.querySelectorAll("[data-x]").forEach(function(b){
     b.addEventListener("click", function(){ $(b.dataset.x).classList.remove("on"); });
   });
@@ -2572,11 +2831,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     ospite = true;
     io = { id:null, nome:"", grado:"ospite" };
     permessi = [];
-    $("acc-nome").textContent  = "Entra";
-    $("acc-grado").textContent = "email e sei cifre, nessuna password";
-    $("acc-iniziale").textContent = "·";
-    disegnaBarra();
-    if(!vaiAPagina(paginaChiesta)) vai("spazio");
+    leggiLeStanze().then(function(){
+      disegnaBarra();
+      if(!vaiAPagina(paginaChiesta)) vai("spazio");
+    });
   }
 
   function chiediAccesso(perche){
@@ -2635,16 +2893,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   db.auth.getSession().then(function(r){
     var sess = r && r.data && r.data.session;
     if(!sess){ daOspite(); return; }
-    return db.from("persone").select("id,nome,grado,livello_n").eq("id",sess.user.id).maybeSingle()
+    return db.from("persone").select("id,nome,grado,livello_n,anthakarana").eq("id",sess.user.id).maybeSingle()
       .then(function(p){
         io = (p && p.data) || {id:sess.user.id, nome:"", grado:"karma_yoga"};
         return db.rpc("fm_miei_tipi");
       })
       .then(function(q){
         permessi = (q && q.data) || [];
-        $("acc-nome").textContent  = io.nome || "[ nome ]";
-        $("acc-grado").textContent = (io.grado||"").replace(/_/g," ");
-        $("acc-iniziale").textContent = (io.nome||"·").trim().charAt(0).toUpperCase() || "·";
+        return leggiLeStanze();
+      })
+      .then(function(){
         disegnaBarra();
         var torna = "";
         try{ torna = sessionStorage.getItem("fm_ritorno") || ""; sessionStorage.removeItem("fm_ritorno"); }catch(e){}

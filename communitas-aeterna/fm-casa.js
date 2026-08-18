@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   78.595 byte · MD5 328e855a8434a3dd4468eb96ce26026a
+   84.176 byte · MD5 2391918fa57bc82d4f3c41df3ef92663
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
@@ -94,6 +94,7 @@
    ════════════════════════════════════════════════════════════════ */
 
 /* il disegno, come consegnato: lo stile della casa e il suo corpo */
+
 var CASA = `<style>
   .sv-casa,.sv-casa *,.sv-casa *::before,.sv-casa *::after{box-sizing:border-box}
   .sv-casa > section{min-width:0;max-width:100%}
@@ -103,10 +104,15 @@ var CASA = `<style>
   .sv-casa [data-leg] > div > span{min-width:0}
   .sv-casa [data-leg] b,.sv-casa [data-leg] i{min-width:0;overflow-wrap:break-word;hyphens:auto}
   .sv-casa button{font-family:'DM Sans',sans-serif}
+  @media(max-width:40rem){
+    .sv-casa [data-cappello] p{padding:0.9rem 1rem;font-size:var(--t-eti);line-height:1.5}
+    .sv-casa [data-cappello] [data-luna-cap]{width:7rem;height:7rem;right:-2.2rem;top:-1.8rem;box-shadow:none}
+    .sv-casa [data-cappello] canvas{opacity:0.3}
+  }
+  @media(max-width:34rem){ .sv-casa [data-antah] iframe{height:50rem} }
+  @media(max-width:34rem){ .sv-casa [data-porte]{gap:1rem} .sv-casa #sv-come{flex:1 1 100%} }
   @keyframes sv-respira{0%,100%{transform:scale(1);opacity:0.75}50%{transform:scale(1.28);opacity:1}}
   @media(prefers-reduced-motion:reduce){ .sv-casa [style*="sv-respira"]{animation:none !important} }
-  .sv-casa [data-nodi]{grid-template-columns:repeat(2,minmax(0,1fr))}
-  @media(max-width:42rem){ .sv-casa [data-nodi]{grid-template-columns:minmax(0,1fr);gap:1.4rem} }
   @media(max-width:62rem){ .sv-casa [data-leg]{grid-template-columns:repeat(2,minmax(0,1fr))} }
   @media(max-width:52rem){
     .sv-casa{padding-left:1.1rem;padding-right:1.1rem}
@@ -120,6 +126,19 @@ var CASA = `<style>
 </style>
 
 <div class="sv-casa" style="--scala:1.4;--navy:#0A0C1A;--oro:#C8A055;--oro-ch:#D4AF6A;--ivory:#F5F0E6;--line:rgba(184,150,62,0.2);--t-eti:calc(0.8125rem * var(--scala));--t-tas:calc(0.9375rem * var(--scala));--t-cor:calc(1.0625rem * var(--scala));--t-scr:calc(1.125rem * var(--scala));--t-tit:calc(1.5rem * var(--scala));--t-big:calc(1.9rem * var(--scala));max-width:56rem;width:100%;margin:0 auto;display:flex;flex-direction:column;color:#F5F0E6;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased">
+
+  <!-- IL CAPPELLO SOPRA LA MAPPA -->
+  <section style="order:0;margin-top:1.2rem;min-width:0">
+    <div data-cappello="1" style="position:relative;overflow:hidden;border:1px solid rgba(184,150,62,0.24);border-radius:0.8rem;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
+      <!-- ③ la rete, dietro -->
+      <canvas id="sv-rete0" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.5"></canvas>
+      <!-- ② la luna, tagliata dal bordo -->
+      <span data-luna-cap="1" style="position:absolute;z-index:1;right:-3.4rem;top:-2.6rem;width:11rem;height:11rem;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 38% 34%,rgba(245,240,230,0.14),rgba(245,240,230,0.05) 58%,transparent 72%);box-shadow:inset -0.6rem -0.4rem 2.4rem rgba(2,4,12,0.55)"></span>
+      <div style="position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,rgba(2,4,12,0.62),rgba(2,4,12,0.24))"></div>
+      <!-- ① la scritta, davanti -->
+      <p style="position:relative;z-index:3;margin:0;padding:1.1rem 1.3rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.55;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95);max-width:36rem">Persone reali che condividono da luoghi connessi.</p>
+    </div>
+  </section>
 
   <!-- IL LIBRO CON LA MAPPA -->
   <section style="order:1;margin-top:1.2rem">
@@ -204,11 +223,21 @@ var CASA = `<style>
     
         </div>
       </div>
+
     </div>
   </section>
 
+  <!-- LE DUE PORTE — la prima è la porta, la seconda una soglia di servizio -->
+  <section data-porte="1" style="order:3;margin:2rem 0 0.4rem;min-width:0;display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap">
+    <a id="sv-come" href="come-funziona.html" style="flex:0 1 auto;display:flex;align-items:center;justify-content:space-between;gap:1.4rem;min-width:0;text-decoration:none;border:1px solid var(--oro);border-radius:0.8rem;background:linear-gradient(135deg,rgba(200,160,85,0.26),rgba(200,160,85,0.1));box-shadow:0 0.6rem 1.6rem rgba(2,4,12,0.5),inset 0 1px 0 rgba(245,240,230,0.16);padding:1.15rem 1.6rem">
+      <span style="min-width:0;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);letter-spacing:0.04em;color:var(--ivory);line-height:1.25">Come funziona</span>
+      <span style="flex:none;font-size:var(--t-cor);color:var(--oro-ch);line-height:1">→</span>
+    </a>
+    <a id="sv-spazio" href="come-funziona.html" style="flex:none;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.7);text-decoration:none;border-bottom:1px solid rgba(200,160,85,0.28);padding-bottom:0.15rem;white-space:nowrap">Il tuo spazio →</a>
+  </section>
+
   <!-- COSA INCONTRI · le due pastiglie -->
-  <section style="order:3;margin-top:2.6rem">
+  <section style="order:4;margin-top:2.6rem">
     <div style="display:flex;gap:0.9rem;flex-wrap:wrap;align-items:center">
       <h2 style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory);margin:0">Cosa incontri</h2>
       <div style="display:flex;align-items:center;gap:0.55rem;border:1px solid var(--line);border-radius:999px;padding:0.34rem 0.7rem;background:rgba(245,240,230,0.03)">
@@ -228,7 +257,7 @@ var CASA = `<style>
   </section>
 
   <!-- LA RIGA CHE SCEGLIE -->
-  <section style="order:4;margin-top:1.6rem;display:flex;flex-direction:column;gap:0.7rem">
+  <section style="order:5;margin-top:1.6rem;display:flex;flex-direction:column;gap:0.7rem">
     <div style="display:flex;align-items:center;gap:0.9rem;flex-wrap:wrap">
       <span style="flex:0 0 4.5rem;font-size:var(--t-eti);letter-spacing:0.2em;text-transform:uppercase;color:var(--oro-ch)">cosa</span>
       <div style="display:flex;gap:0.45rem;flex-wrap:wrap">
@@ -251,7 +280,7 @@ var CASA = `<style>
   </section>
 
   <!-- LE SCHEDE DEI CONTENUTI — forma vuota: le riempie il dato -->
-  <section style="order:5;display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1.1rem;margin-top:1.8rem;align-items:stretch">
+  <section style="order:6;display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));gap:1.1rem;margin-top:1.8rem;align-items:stretch">
 
     <article data-cont="1" style="border:1px solid var(--line);border-radius:0.9rem;overflow:hidden;background:rgba(245,240,230,0.03);display:flex;flex-direction:column;min-width:0">
 
@@ -318,61 +347,77 @@ var CASA = `<style>
   </section>
 
   <!-- COSA POSSIAMO FARE · la rete dietro il vetro -->
-  <section style="order:6;margin-top:2.6rem;min-width:0">
+  <section style="order:7;margin-top:2.6rem;min-width:0">
     <div data-rete="1" style="position:relative;border:1px solid rgba(184,150,62,0.28);border-radius:1rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
       <canvas id="sv-rete" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.85"></canvas>
       <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(2,4,12,0.5),rgba(2,4,12,0.14) 70%)"></div>
       <div style="position:relative;z-index:2;padding:2.2rem 1.6rem 1.9rem;min-width:0">
         <h2 style="font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);color:var(--oro-ch);text-align:center;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 1.9rem;text-shadow:0 2px 18px rgba(2,4,12,0.9)">Cosa possiamo fare</h2>
 
-        <div data-nodi="1" style="display:grid;gap:1.3rem 2.2rem;min-width:0">
-        <div style="position:relative;padding-left:1.7rem;color:#8C2F39;min-width:0">
-          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
-          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Un praticantato che unisce i punti</b>
-          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">la coscienza, scienza e tecnologia connettono risorse, territori ed il principio attivo di ognuno di noi</i>
+        <div data-nodi="1" style="display:flex;flex-direction:column;gap:1px;margin-top:0.25rem;min-width:0">
+          <div style="display:flex;gap:0.95rem;align-items:flex-start;padding:0.95rem 0.15rem;min-width:0;color:#8C2F39;border-bottom:1px solid rgba(184,150,62,0.12)">
+            <span style="flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1.5px solid currentColor;color:currentColor;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-tas);line-height:1;background:rgba(245,240,230,0.05)">1</span>
+            <span style="min-width:0;display:block">
+              <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tas);color:var(--ivory);line-height:1.35;margin-bottom:0.25rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Un praticantato che unisce i punti</b>
+              <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.55;color:rgba(245,240,230,0.72);text-shadow:0 2px 14px rgba(2,4,12,0.95)">la coscienza, scienza e tecnologia connettono risorse, territori ed il principio attivo di ognuno di noi</i>
+            </span>
+          </div>
+
+          <div style="display:flex;gap:0.95rem;align-items:flex-start;padding:0.95rem 0.15rem;min-width:0;color:#AA8844;border-bottom:1px solid rgba(184,150,62,0.12)">
+            <span style="flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1.5px solid currentColor;color:currentColor;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-tas);line-height:1;background:rgba(245,240,230,0.05)">2</span>
+            <span style="min-width:0;display:block">
+              <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tas);color:var(--ivory);line-height:1.35;margin-bottom:0.25rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Fissiamo quello di cui c’è bisogno nei vicinati</b>
+              <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.55;color:rgba(245,240,230,0.72);text-shadow:0 2px 14px rgba(2,4,12,0.95)">ognuno potrà rispondere e dare supporto: produzione alimentare, rimedi naturali, assistenza spirituale, informazione dell’acqua, accompagnamento alla vita in genere</i>
+            </span>
+          </div>
+
+          <div style="display:flex;gap:0.95rem;align-items:flex-start;padding:0.95rem 0.15rem;min-width:0;color:#4488BB;border-bottom:1px solid rgba(184,150,62,0.12)">
+            <span style="flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1.5px solid currentColor;color:currentColor;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-tas);line-height:1;background:rgba(245,240,230,0.05)">3</span>
+            <span style="min-width:0;display:block">
+              <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tas);color:var(--ivory);line-height:1.35;margin-bottom:0.25rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Scambiamo anche senza usare denaro</b>
+              <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.55;color:rgba(245,240,230,0.72);text-shadow:0 2px 14px rgba(2,4,12,0.95)">i talenti fanno circolare un’economia comunitaria e centralizzata</i>
+            </span>
+          </div>
+
+          <div style="display:flex;gap:0.95rem;align-items:flex-start;padding:0.95rem 0.15rem;min-width:0;color:#669944;border-bottom:1px solid rgba(184,150,62,0.12)">
+            <span style="flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1.5px solid currentColor;color:currentColor;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-tas);line-height:1;background:rgba(245,240,230,0.05)">4</span>
+            <span style="min-width:0;display:block">
+              <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tas);color:var(--ivory);line-height:1.35;margin-bottom:0.25rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Facciamo ordine nella memoria</b>
+              <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.55;color:rgba(245,240,230,0.72);text-shadow:0 2px 14px rgba(2,4,12,0.95)">per pubblicare, stampare e distribuire opere evolutive</i>
+            </span>
+          </div>
+
+          <div style="display:flex;gap:0.95rem;align-items:flex-start;padding:0.95rem 0.15rem;min-width:0;color:#D4AF6A;border-bottom:1px solid rgba(184,150,62,0.12)">
+            <span style="flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1.5px solid currentColor;color:currentColor;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-tas);line-height:1;background:rgba(245,240,230,0.05)">5</span>
+            <span style="min-width:0;display:block">
+              <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tas);color:var(--ivory);line-height:1.35;margin-bottom:0.25rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Integrator accompagna il lavoro di chi partecipa</b>
+              <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.55;color:rgba(245,240,230,0.72);text-shadow:0 2px 14px rgba(2,4,12,0.95)">obiettivi, scadenze e attività — dal percorso del singolo ai gruppi connessi, fino alle aziende che partecipano: chi se ne occupa, le ore, l’avanzamento, e il corrispettivo in euro o talenti</i>
+            </span>
+          </div>
+
+          <div style="display:flex;gap:0.95rem;align-items:flex-start;padding:0.95rem 0.15rem;min-width:0;color:#9966CC">
+            <span style="flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1.5px solid currentColor;color:currentColor;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-tas);line-height:1;background:rgba(245,240,230,0.05)">6</span>
+            <span style="min-width:0;display:block">
+              <b style="display:block;font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tas);color:var(--ivory);line-height:1.35;margin-bottom:0.25rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Navighiamo nella mappa</b>
+              <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);line-height:1.55;color:rgba(245,240,230,0.72);text-shadow:0 2px 14px rgba(2,4,12,0.95)">per ritrovare la comunità, i luoghi di ospitalità, gli alimenti, i rimedi naturali, le feste e le lezioni, la vita nel tempio</i>
+            </span>
+          </div>
         </div>
 
-        <div style="position:relative;padding-left:1.7rem;color:#AA8844;min-width:0">
-          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
-          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Fissiamo quello di cui c'è bisogno nei vicinati</b>
-          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">ognuno potrà rispondere e dare supporto: produzione alimentare, rimedi naturali, assistenza spirituale, informazione dell'acqua, accompagnamento alla vita in genere</i>
         </div>
 
-        <div style="position:relative;padding-left:1.7rem;color:#4488BB;min-width:0">
-          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
-          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Scambiamo anche senza usare denaro</b>
-          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">i talenti fanno circolare un'economia comunitaria e centralizzata</i>
-        </div>
-
-        <div style="position:relative;padding-left:1.7rem;color:#669944;min-width:0">
-          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
-          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Facciamo ordine nella memoria</b>
-          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">per pubblicare, stampare e distribuire opere evolutive</i>
-        </div>
-
-        <div style="position:relative;padding-left:1.7rem;color:#9966CC;min-width:0">
-          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
-          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">La lavagna in comune segna bisogni, obiettivi e task</b>
-          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">chi esegue il compito, le ore e l'avanzamento, il corrispettivo in euro o talenti, in modo da poter essere utile ai vicinati e ai gruppi di lavoro</i>
-        </div>
-
-        <div style="position:relative;padding-left:1.7rem;color:#B87333;min-width:0">
-          <span style="position:absolute;left:0;top:0.35rem;width:0.7rem;height:0.7rem;border-radius:50%;background:currentColor;box-shadow:0 0 0 0.25rem rgba(200,160,85,0.12),0 0 1rem 0.12rem currentColor"></span>
-          <b style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;line-height:1.4;color:var(--ivory);text-shadow:0 2px 14px rgba(2,4,12,0.95)">Navighiamo nella mappa</b>
-          <i style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,0.86);margin-top:0.4rem;line-height:1.58;text-shadow:0 2px 14px rgba(2,4,12,0.95)">per ritrovare la comunità, i luoghi di ospitalità, gli alimenti, i rimedi naturali, le feste e le lezioni, la vita nel tempio</i>
-        </div>
-
-        </div>
-
-        <div style="margin-top:2.4rem;padding-top:1.4rem;text-align:center;position:relative">
-          <span style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;max-width:22rem;height:1px;background:linear-gradient(90deg,transparent,rgba(200,160,85,0.45),transparent)"></span>
-          <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/vishnu-cosmic.png" alt="Vishnu cosmico" style="width:100%;height:auto;display:block;margin:0;filter:drop-shadow(0 0 2rem rgba(200,160,85,0.28))">
-        </div>
       </div>
     </div>
   </section>
 
-  <section style="order:7;margin-top:2.6rem;min-width:0">
+  <!-- IL PERCORSO ANTAḤKARAṆA — il contenuto sta in antahkarana.html, accanto -->
+  <section data-antah="1" style="order:8;margin-top:2.6rem;min-width:0">
+    <div style="border:1px solid rgba(184,150,62,0.16);border-radius:0.85rem;overflow:hidden;background:#02040c">
+      <iframe src="antahkarana.html" title="Il percorso Antaḥkaraṇa" loading="lazy" scrolling="no" style="width:100%;height:56rem;border:0;display:block"></iframe>
+    </div>
+  </section>
+
+  <section style="order:9;margin-top:2.6rem;min-width:0">
     <div data-rete="1" style="position:relative;border:1px solid rgba(184,150,62,0.28);border-radius:1rem;overflow:hidden;background:rgba(10,12,26,0.34);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)">
     <canvas id="sv-rete2" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0.85"></canvas>
     <div style="position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(2,4,12,0.5),rgba(2,4,12,0.14) 70%)"></div>
@@ -480,7 +525,6 @@ var CASA = `<style>
     </div>
   </section>
 
-
 </div>`;
 
 function home(c){
@@ -527,8 +571,9 @@ function avviaCasa(){
   (function () {
     var fondali = [];
     var t = 0;
-    var fermo = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    ["sv-rete", "sv-rete2", "sv-rete3"].forEach(function (id) {
+    var stretto = window.matchMedia && window.matchMedia("(max-width: 40rem)").matches;
+    var fermo = stretto || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    ["sv-rete0", "sv-rete", "sv-rete2", "sv-rete3"].forEach(function (id) {
       var cv = document.getElementById(id);
       if (cv && cv.getContext) fondali.push({ cv: cv, cx: cv.getContext("2d"), W: 0, H: 0, punti: [] });
     });
@@ -733,7 +778,12 @@ function avviaCasa(){
 
   /* ⑤ la scheda del luogo. NESSUN DATO QUI: la forma si riempie da sé.
         Il guscio (o la mappa) chiama window.SpazioVivo.mostraLuogo(record).
-        LA VIA DI RITORNO, quando si entra nella mappa da una porta:
+        I DUE TASTI sotto la mappa: «Come funziona» porta sempre a
+     come-funziona.html; «Il tuo spazio» pure, finché il guscio non dice
+     che si è dentro — window.SpazioVivo.dentro(rottaDellOrma), e
+     window.SpazioVivo.fuori() lo riporta alla prima volta.
+
+     LA VIA DI RITORNO, quando si entra nella mappa da una porta:
        · window.SpazioVivo.porta({nome, torna})  — mostra il tasto discreto
        · window.SpazioVivo.chiudiPorta()         — lo toglie
        · senza 'torna' il tasto lancia l'evento 'spazio-vivo:torna'
@@ -964,10 +1014,26 @@ function avviaCasa(){
     window.SpazioVivo.chiudiPorta = chiudiPorta;
   })();
 
-  /* ⑦ il libro: i tasti stringono e allargano, il trascinamento sposta,
-        il tocco breve chiede prima alla mappa se sotto c'è un segno —
-        se c'è sale la scheda; se è vuoto chiude la scheda aperta, e solo
-        col tocco dopo apre la mappa a tutto schermo.
+  /* ⑦ i due tasti sotto la mappa. Chi non è ancora entrato finisce sempre
+        in «Come funziona»; chi è dentro va diretto alla propria orma.
+        Il guscio lo dichiara con window.SpazioVivo.dentro(rottaDellOrma). */
+  (function () {
+    var b = document.getElementById("sv-spazio");
+    if (!b) return;
+    var PRIMA = "come-funziona.html";
+
+    function dentro(rotta) {
+      b.setAttribute("href", (rotta === undefined || rotta === null || rotta === "") ? PRIMA : String(rotta));
+    }
+    function fuori() { b.setAttribute("href", PRIMA); }
+
+    window.SpazioVivo = window.SpazioVivo || {};
+    window.SpazioVivo.dentro = dentro;
+    window.SpazioVivo.fuori  = fuori;
+  })();
+
+  /* ⑧ il libro: i tasti stringono e allargano, il trascinamento sposta,
+        il tocco breve chiede al guscio di aprire la mappa.
         Col MOUSE si trascina subito. Col DITO solo dopo un attimo di pressione,
         altrimenti il dito continua a scorrere la pagina. */
   var telaio = document.getElementById("sv-mappa");
