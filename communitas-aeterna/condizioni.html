@@ -12,10 +12,11 @@
   --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
   --accent:#AA8844; --bg:#080604; --crema:#F0EBE0;
   --c50:rgba(240,235,224,.50); --c38:rgba(240,235,224,.38); --c22:rgba(240,235,224,.22); --c12:rgba(240,235,224,.12);
+  --dock-h:clamp(86px,11vh,116px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;min-height:100vh}
+body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock-h) + 24px);position:relative;min-height:100vh}
 
 .fm-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
@@ -72,6 +73,7 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 
 .pie{margin-top:46px;padding-top:18px;border-top:.5px solid var(--c12);font-family:"DM Sans",sans-serif;font-size:12px;color:var(--c38);letter-spacing:.02em;line-height:1.7}
 
+/* DOCK — condiviso: fm-dock.js + fm-livelli.json */
 @media(max-width:560px){.fm-nexus-lbl{display:none}}
 
   /* ══ IL PIEDE — uguale in ogni pagina ══ */
@@ -107,7 +109,7 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
     <div class="occh">Felicitas Omnia S.r.l.s.</div>
     <h1 class="titolo">Condizioni d&rsquo;uso</h1>
     <p class="sotto">Il patto fra chi entra e la Comunit&agrave;: che cosa &egrave; questo posto, che cosa vi si fa, e chi risponde di che cosa.</p>
-    <p class="aggio">Ultimo aggiornamento: 17 agosto 2026 &middot; Si accettano una volta sola, all&rsquo;attivazione dell&rsquo;account &middot; Per il trattamento dei dati personali vedi l&rsquo;<a class="inl" href="privacy.html">Informativa privacy</a></p>
+    <p class="aggio">Ultimo aggiornamento: 17 agosto 2026na volta sola, all&rsquo;attivazione dell&rsquo;account &middot; Per il trattamento dei dati personali vedi l&rsquo;<a class="inl" href="privacy.html">Informativa privacy</a></p>
   </div>
 
   <!-- INDICE ANALITICO -->
@@ -121,6 +123,8 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
       <li><a href="#s4b"><span class="n">4b</span> Integrator</a></li>
       <li><a href="#s4c"><span class="n">4c</span> I talenti</a></li>
       <li><a href="#s4d"><span class="n">4d</span> Lezioni, corsi e libri</a></li>
+      <li><a href="#s4e"><span class="n">4e</span> Il praticantato</a></li>
+      <li><a href="#s4f"><span class="n">4f</span> Il vaglio</a></li>
       <li><a href="#s5"><span class="n">5</span> Che cosa non si fa qui</a></li>
       <li><a href="#s6"><span class="n">6</span> La chat e i contenuti degli altri</a></li>
       <li><a href="#s7"><span class="n">7</span> L&rsquo;Emporio</a></li>
@@ -180,6 +184,46 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
       <li>Il saldo non è un credito verso Felicitas Omnia S.r.l.s. e non dà diritto ad
         alcun rimborso in denaro.</li>
     </ul>
+
+    <h2 id="s4f"><span class="hn">4f.</span>Il vaglio, e che cosa non è</h2>
+    <p><strong>Il vaglio è un riconoscimento di coerenza, non una certificazione.</strong>
+       FelicitasMundi <strong>non è un ente di certificazione</strong> e non rilascia
+       certificazioni, attestati di conformità né marchi di qualità.</p>
+    <p>Quello che il vaglio guarda è <strong>se un prodotto e chi lo fa sono coerenti
+       con la filosofia della comunità</strong>: attraverso un colloquio, la conoscenza
+       di chi produce e del luogo dove lavora, e — quando serve — un’analisi di
+       laboratorio.</p>
+    <p><strong>L’analisi non è la prova: è uno degli sguardi.</strong> Il suo esito
+       non costituisce garanzia di conformità a norme di legge, a standard di
+       certificazione biologica, né di alcuna proprietà salutistica o nutrizionale.</p>
+    <p>Restano interamente in capo al produttore le certificazioni obbligatorie, le
+       autorizzazioni sanitarie e ogni altro adempimento previsto dalla legge per la
+       vendita dei propri prodotti.</p>
+
+    <h2 id="s4e"><span class="hn">4e.</span>Il praticantato, e che cosa non è</h2>
+    <p><strong>Il praticantato è un percorso alla cooperazione</strong>, articolato
+       in tre fasi: l’uso pieno della piattaforma; gli incontri di ogni fase lunare;
+       i ritiri e i viaggi.</p>
+    <ul>
+      <li><strong>26 € al mese</strong> danno l’accesso pieno allo strumento: creare
+        team, partecipare alle classi, scambiare, collegare, fare le orme. Si possono
+        pagare anche con <strong>quattro ore al mese di servizio alla comunità</strong>.</li>
+      <li><strong>Gli incontri di ogni fase lunare si pagano a parte</strong>, in denaro.
+        <strong>Le ore di servizio non li coprono</strong>: pagano la piattaforma, non
+        il tempo di chi accompagna.</li>
+      <li>Chi partecipa al percorso online <strong>paga solo i costi vivi</strong> per
+        ritiri e viaggi.</li>
+    </ul>
+    <p><strong>Che cosa non è.</strong> Chi conduce gli incontri <strong>non è un
+       counselor, un terapeuta, un medico né un professionista sanitario</strong>, e
+       non esercita alcuna professione regolamentata. Quello che viene proposto è
+       <strong>l’uso di strumenti propri</strong> — la scrittura, il metodo di lavoro
+       e l’impianto di FelicitasMundi, che sono <strong>opera dell’autore</strong> —
+       e non costituisce in alcun modo una prestazione sanitaria, psicologica,
+       diagnostica o terapeutica.</p>
+    <p>Il percorso <strong>non sostituisce</strong> il parere di un medico o di un
+       professionista qualificato, e non va inteso come cura di alcuna condizione.
+       Chi vi partecipa lo fa in autonomia e responsabilità proprie.</p>
 
     <h2 id="s4d"><span class="hn">4d.</span>Lezioni, corsi e libri</h2>
     <p><strong>Chi tiene una lezione o un corso ne resta l’autore.</strong> La piattaforma
@@ -242,6 +286,10 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 </div>
 
 
+<!-- DOCK -->
+<div id="fm-dock" data-attiva="" data-soglia="chiusa"></div>
+
+<script src="fm-dock.js" defer></script>
 
 
 <div class="fm-piede">
