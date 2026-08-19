@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La mappa — ferma</title>
+<script src="mappa-dati/d3.min.js"></script>
+<script src="mappa-dati/topojson-client.min.js"></script>
+<style>
+  html,body{margin:0;height:100%;background:transparent;overflow:hidden}
+  #m{display:block;width:100%;height:100%;touch-action:none}
+  #cmd{position:fixed;right:0.9rem;bottom:0.9rem;display:none;gap:0.4rem;align-items:center;
+    font-family:'DM Sans',system-ui,sans-serif}
+  #cmd.on{display:flex}
+  #cmd button{background:rgba(10,12,26,0.9);border:1px solid rgba(200,160,85,0.5);color:#F5F0E6;
+    border-radius:999px;padding:0.5rem 0.9rem;font-size:0.95rem;cursor:pointer;line-height:1}
+  #cmd button:hover{border-color:#D4AF6A;color:#D4AF6A}
+  body:not(.vivo) #cmd button[data-z="italia"],
+  body:not(.vivo) #cmd button[data-z="mondo"]{display:none}
+
+  /* la scheda del vicinato: si apre toccando un segno */
+  #scheda{position:fixed;left:0.9rem;bottom:0.9rem;z-index:50;display:none;
+    max-width:22rem;width:calc(100% - 1.8rem);
+    background:rgba(10,12,26,0.94);border:1px solid rgba(200,160,85,0.5);
+    border-radius:0.7rem;padding:1rem 1.1rem 1.1rem;
+    box-shadow:0 1rem 2.4rem rgba(2,4,12,0.6);color:#F5F0E6}
+  #scheda.on{display:block}
+  #scheda-chiudi{position:absolute;top:0.35rem;right:0.5rem;background:none;border:0;
+    color:rgba(245,240,230,0.7);font-size:1.3rem;line-height:1;cursor:pointer;
+    padding:0.2rem 0.4rem}
+  #scheda-chiudi:hover{color:#D4AF6A}
+  #scheda-nome{font-family:'Cinzel',Georgia,serif;font-size:1.05rem;letter-spacing:0.06em;
+    padding-right:1.4rem}
+  #scheda-terr{font-family:'DM Sans',system-ui,sans-serif;font-size:0.78rem;
+    letter-spacing:0.14em;text-transform:uppercase;color:#D4AF6A;margin-top:0.3rem}
+  #scheda-desc{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.05rem;
+    line-height:1.6;color:rgba(245,240,230,0.86);margin:0.7rem 0 0;
+    max-height:11rem;overflow-y:auto}
+  @media(max-width:34rem){ #scheda{bottom:4.2rem} }
+</style>
+</head>
+<body>
+<svg id="m"></svg>
+<div id="cmd">
+  <button data-z="italia">Italia</button>
+  <button data-z="mondo">Mondo</button>
+  <button data-z="meno">&minus;</button>
+  <button data-z="piu">+</button>
+</div>
+
+<div id="scheda" role="dialog" aria-label="Il vicinato">
+  <button id="scheda-chiudi" aria-label="Chiudi la scheda">&times;</button>
+  <div id="scheda-nome"></div>
+  <div id="scheda-terr"></div>
+  <p id="scheda-desc"></p>
+</div>
+
+<script>
+"use strict";
+var SEGNI = {
+  orma:'<path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"/><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"/>',
+  connessione:'<path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"/><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"/><path d="M14 20L26 20"/>',
+  talenti:'<circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/>',
+  vicinato:'<path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"/><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"/><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"/><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"/><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"/>',
+  ritmo:'<path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"/><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"/><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"/><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"/><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"/>',
+  tempio:'<path d="M4 14L20 5L36 14Z"/><path d="M5 16.5L35 16.5M8.5 19L8.5 31M31.5 19L31.5 31M5 33.5L35 33.5"/><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"/>',
+  incontro:'<path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"/><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"/><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"/>'
+};
+
+/* i vicinati veri, letti da Supabase: quelli che hanno lat e lon.
+   Il campo segno dice quale dei sette disegnare; vuoto resta "vicinato".
+   Un punto per riga: due righe sulle stesse coordinate danno due segni
+   sovrapposti, e sopra resta quello disegnato per ultimo. */
+var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
+var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+var PUNTI = [];
+
+function leggiVicinati(){
+  var q = FM_URL + "/rest/v1/vicinati"
+        + "?select=id,nome,territorio,descrizione,lat,lon,segno"
+        + "&lat=not.is.null&lon=not.is.null&order=nome";
+  return fetch(q, {headers:{apikey:FM_CHIAVE, Authorization:"Bearer " + FM_CHIAVE}})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(righe){
+      PUNTI = (righe || []).map(function(v){
+        var s = (v.segno || "").trim();
+        return {ll:[+v.lon, +v.lat], s:(SEGNI[s] ? s : "vicinato"), k:1.0, v:v};
+      });
+    })
+    .catch(function(err){
+      PUNTI = [];
+      if(window.console) console.error("mappa: vicinati non letti —", err);
+    });
+}
+
+var svg = d3.select("#m"), W = 0, H = 0, world = null;
+var VIVO = /vivo=1/.test(location.search);
+
+/* il disegno aspetta due cose: la terra e i vicinati. leggiVicinati()
+   non fallisce mai — se Supabase tace la mappa si apre senza segni. */
+Promise.all([
+  d3.json("mappa-dati/countries-110m.json"),
+  leggiVicinati()
+]).then(function(esiti){
+  var topo = esiti[0];
+  world = topojson.feature(topo, topo.objects.countries);
+  disegna();
+}).catch(function(err){
+  var s = document.getElementById("m");
+  s.setAttribute("viewBox", "0 0 400 200");
+  s.innerHTML = '<text x="200" y="100" text-anchor="middle" fill="#D4AF6A"'
+              + ' font-family="DM Sans, system-ui, sans-serif" font-size="11">'
+              + '[ in attesa ]</text>';
+  if(window.console) console.error("mappa: dato geografico non caricato —", err);
+});
+
+function disegna(){
+  if(!world) return;
+  W = document.documentElement.clientWidth;
+  H = document.documentElement.clientHeight;
+  svg.attr("viewBox", "0 0 " + W + " " + H).selectAll("*").remove();
+  chiudiScheda();   /* ridisegnando, i segni cambiano posto: la scheda si chiude */
+  if(VIVO){ document.documentElement.style.background = "#0A0C1A"; document.body.classList.add("vivo"); }
+
+  var proj = d3.geoNaturalEarth1().fitExtent([[W*0.04, H*0.10],[W*0.96, H*0.90]], {type:"Sphere"});
+  var path = d3.geoPath(proj);
+  proiezione = proj;
+
+  var gz = svg.append("g");
+  var defs = svg.append("defs");
+  var g = defs.append("radialGradient").attr("id","bagliore");
+  g.append("stop").attr("offset","0%").attr("stop-color","#D4AF6A").attr("stop-opacity","0.55");
+  g.append("stop").attr("offset","45%").attr("stop-color","#D4AF6A").attr("stop-opacity","0.20");
+  g.append("stop").attr("offset","100%").attr("stop-color","#D4AF6A").attr("stop-opacity","0");
+
+  gz.append("path").attr("d", path({type:"Sphere"}))
+     .attr("fill","rgba(10,20,40,0.55)").attr("stroke","rgba(184,150,62,0.22)").attr("stroke-width",1).attr("vector-effect","non-scaling-stroke");
+
+  gz.append("path").attr("d", path(d3.geoGraticule10()))
+     .attr("fill","none").attr("stroke","rgba(184,150,62,0.10)").attr("stroke-width",0.5).attr("vector-effect","non-scaling-stroke");
+
+  gz.append("path").attr("d", path(world))
+     .attr("fill","rgba(245,240,230,0.07)")
+     .attr("stroke","rgba(200,160,85,0.30)").attr("stroke-width",0.6).attr("vector-effect","non-scaling-stroke")
+     .attr("stroke-linejoin","round");
+
+  /* lo spessore visto da lontano: la zona si accende, non il puntino */
+  var c = proj([9.6,41.4]);
+  var r = Math.max(W, H) * 0.085;
+  bagliore = gz.append("circle").attr("cx",c[0]).attr("cy",c[1]).attr("r",r)
+     .attr("fill","url(#bagliore)");
+
+  /* l'Italia riletta sopra il bagliore, più chiara */
+  var italia = world.features.filter(function(f){ return f.id === "380"; });
+  gz.append("path").attr("d", path({type:"FeatureCollection", features:italia}))
+     .attr("fill","rgba(245,240,230,0.16)")
+     .attr("stroke","rgba(212,175,106,0.75)").attr("stroke-width",0.9).attr("vector-effect","non-scaling-stroke");
+
+  var gs = svg.append("g");
+  var scala = Math.max(0.42, Math.min(1, W/900));
+  segni = [];
+  PUNTI.forEach(function(p){
+    var xy = proj(p.ll); if(!xy) return;
+    var lato = 17 * scala * p.k;
+    /* il rettangolo trasparente è la presa: il segno è fatto di sole linee,
+       e sulle linee il dito non prende. */
+    var nodo = gs.append("g")
+      .attr("transform","translate("+(xy[0]-lato/2)+","+(xy[1]-lato/2)+") scale("+(lato/40)+")")
+      .attr("color","#D4AF6A")
+      .attr("opacity",OPACITA_SEGNO)
+      .style("cursor","pointer")
+      .html('<rect x="-7" y="-7" width="54" height="54" fill="transparent"/>'
+          + '<g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+SEGNI[p.s]+'</g>');
+    nodo.on("click", function(ev){ ev.stopPropagation(); apriScheda(p.v); });
+    segni.push({nodo:nodo, xy:xy, lato:lato});
+  });
+  attaccaZoom(gz);
+  posaSegni(d3.zoomIdentity);
+  apriDaIndirizzo();
+}
+
+/* ── aprirla ristretta su un luogo ──
+   nell'indirizzo: mappa-ferma.html#lat,lon,k  (k = 1…24, come lo zoom)
+   oppure dal telaio: postMessage({q:"posa", lat, lon, k}) */
+function leggiIndirizzo(){
+  var h = (location.hash || "").replace(/^#/, "");
+  if(!h) return null;
+  var p = h.split(",").map(parseFloat);
+  if(p.length < 2 || !isFinite(p[0]) || !isFinite(p[1])) return null;
+  var k = isFinite(p[2]) ? p[2] : 12;
+  return {ll:[p[1], p[0]], k:Math.max(1, Math.min(24, k))};
+}
+function apriDaIndirizzo(){
+  var q = leggiIndirizzo();
+  if(q) vaiA(q.ll, q.k);
+}
+window.addEventListener("hashchange", apriDaIndirizzo);
+
+var zoom = null, proiezione = null, segni = [], bagliore = null;
+
+/* da lontano si vede il bagliore, da vicino i segni: la zona che si accende
+   è lo spessore visto da lontano, il segno è la vista ravvicinata.
+   Sotto K_GIU i segni sono spenti; a K_SU sono pieni; in mezzo salgono
+   mentre il bagliore scende. Alla vista mondiale coprirebbero l'Italia. */
+var K_GIU = 3, K_SU = 4, OPACITA_SEGNO = 0.92;
+
+function veloSegni(k){
+  var q = (k - K_GIU) / (K_SU - K_GIU);
+  return Math.max(0, Math.min(1, q)) * OPACITA_SEGNO;
+}
+
+function posaSegni(t){
+  var op = VIVO ? veloSegni(t.k) : OPACITA_SEGNO;
+  /* un segno spento non si tocca: altrimenti si aprirebbe la scheda di
+     qualcosa che non si vede */
+  var presa = op > 0.05 ? "auto" : "none";
+  segni.forEach(function(s){
+    var x = t.applyX(s.xy[0]), y = t.applyY(s.xy[1]);
+    s.nodo.attr("transform","translate("+(x-s.lato/2)+","+(y-s.lato/2)+") scale("+(s.lato/40)+")")
+          .attr("opacity", op)
+          .style("pointer-events", presa);
+  });
+  if(presa === "none") chiudiScheda();
+}
+
+/* ── la scheda del vicinato ──
+   Il testo si mette con textContent, mai con innerHTML: quello che
+   arriva dal database non diventa marcatura. Dove manca una parola
+   resta il segnaposto visibile. */
+var scheda     = document.getElementById("scheda");
+var schedaNome = document.getElementById("scheda-nome");
+var schedaTerr = document.getElementById("scheda-terr");
+var schedaDesc = document.getElementById("scheda-desc");
+
+function pieno(x){ return x !== null && x !== undefined && String(x).trim() !== ""; }
+
+function apriScheda(v){
+  if(!v) return;
+  schedaNome.textContent = pieno(v.nome)        ? v.nome        : "[ in attesa ]";
+  schedaTerr.textContent = pieno(v.territorio)  ? v.territorio  : "[ in attesa ]";
+  schedaDesc.textContent = pieno(v.descrizione) ? v.descrizione : "[ in attesa ]";
+  scheda.classList.add("on");
+}
+
+function chiudiScheda(){ if(scheda) scheda.classList.remove("on"); }
+
+document.getElementById("scheda-chiudi").addEventListener("click", chiudiScheda);
+svg.on("click", chiudiScheda);
+document.addEventListener("keydown", function(e){ if(e.key === "Escape") chiudiScheda(); });
+
+function attaccaZoom(g){
+  document.getElementById("cmd").classList.add("on");
+  zoom = d3.zoom().scaleExtent([1,24]).filter(function(){ return VIVO; }).on("zoom", function(ev){
+    g.attr("transform", ev.transform);
+    posaSegni(ev.transform);
+    if(bagliore) bagliore.attr("opacity", Math.max(0, 1 - (ev.transform.k - 1) / (K_SU - 1)));
+  });
+  svg.style("cursor","grab").call(zoom);
+}
+
+function vaiA(ll, k){
+  if(!zoom || !proiezione) return;
+  var xy = proiezione(ll);
+  svg.transition().duration(900).call(
+    zoom.transform,
+    d3.zoomIdentity.translate(W/2, H/2).scale(k).translate(-xy[0], -xy[1])
+  );
+}
+
+document.getElementById("cmd").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if(!b || !zoom) return;
+  var q = b.getAttribute("data-z");
+  if(q === "italia") vaiA([12.5, 42.0], 7);
+  else if(q === "mondo") svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity);
+  else svg.transition().duration(300).call(zoom.scaleBy, q === "piu" ? 1.6 : 1/1.6);
+});
+
+window.addEventListener("resize", function(){ clearTimeout(window.__t); window.__t = setTimeout(disegna, 160); });
+
+window.addEventListener("message", function(ev){
+  if(ev.source !== window.parent) return;
+  if(!zoom) return;
+  var m = ev.data;
+  if(m === "piu")  { svg.call(zoom.scaleBy, 1.6); return; }
+  if(m === "meno") { svg.call(zoom.scaleBy, 1/1.6); return; }
+  if(m && m.q === "posa" && isFinite(m.lat) && isFinite(m.lon)){
+    vaiA([+m.lon, +m.lat], Math.max(1, Math.min(24, isFinite(m.k) ? +m.k : 12)));
+    return;
+  }
+  if(m && m.q === "sposta"){
+    var t = d3.zoomTransform(svg.node());
+    svg.call(zoom.translateBy, m.dx / t.k, m.dy / t.k);
+  }
+});
+</script>
+<!-- ══ stanza di prova · si accende solo a questo indirizzo ══ --><script>if(location.pathname.indexOf("communitas-aeterna-prova")>-1){var s=document.createElement("script");s.src="/communitas-aeterna-prova/fm-prova.js";document.body.appendChild(s);}</script>
+</body>
+</html>
