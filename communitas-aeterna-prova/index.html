@@ -1127,6 +1127,7 @@
   /* una pagina chiusa: visibile e spenta, con la riga che dice perché */
   .sv-barra .pg.chiusa{opacity:0.46;cursor:default}
   .sv-barra .pg.chiusa:hover{background:none}
+  .sv-barra .pg.chiusa .perche a{color:var(--oro-ch)}
   .sv-barra .pg.chiusa .perche{display:block;margin-top:0.3rem;
     padding-left:calc(1.1rem + 0.55rem);font-size:var(--t-eti);
     color:rgba(200,160,85,0.62);line-height:1.4}
@@ -1141,12 +1142,18 @@
   .sv-barra .sotto.solo{border-top:1px solid rgba(245,240,230,0.09);
     margin-top:0.65rem;padding-top:0.75rem}
   .sv-barra .pg.pic{padding:0.75rem 0.9rem;border-radius:0.7rem;border-left:0;
-    background:rgba(245,240,230,0.05);border:1px solid var(--line);
+    background:color-mix(in srgb,var(--c,var(--oro-ch)) 13%,rgba(245,240,230,0.05));
+    border:1px solid color-mix(in srgb,var(--c,var(--oro-ch)) 34%,transparent);
     backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  .sv-barra .pg.pic:hover{background:color-mix(in srgb,var(--c,var(--oro-ch)) 24%,rgba(245,240,230,0.07));
+    border-color:color-mix(in srgb,var(--c,var(--oro-ch)) 58%,transparent)}
+  .sv-barra .pg.pic.on{background:color-mix(in srgb,var(--c,var(--oro-ch)) 30%,rgba(245,240,230,0.08));
+    border-color:var(--c,var(--oro-ch))}
   .sv-barra .pg.pic b{font-family:'Cinzel',serif;letter-spacing:0.03em;
     color:var(--c,var(--oro-ch));filter:brightness(1.25)}
   .sv-barra .pg.pic .pt{flex:none;width:0.6rem;height:0.6rem;border-radius:50%;
-    background:var(--c,var(--oro-ch));align-self:center}
+    background:var(--c,var(--oro-ch));align-self:center;
+    box-shadow:0 0 0.5rem color-mix(in srgb,var(--c,var(--oro-ch)) 70%,transparent)}
   .sv-barra .pg.pic .vn{color:rgba(245,240,230,0.5)}
   .sv-barra .pg.pic .desc{padding-left:1.15rem;margin-top:0.25rem;color:rgba(245,240,230,0.66)}
 
@@ -1186,7 +1193,7 @@
 <nav class="sv-barra" id="sv-barra" aria-label="Le pagine">
 
   <div class="capo">
-    <span class="segno"><img src="nexus.png" alt=""></span>
+    <span class="segno"><img src="nexus-piccolo.png" alt=""></span><!-- ⭐ la copia piccola, il file accanto -->
     <div>
       <b>FelicitasMundi</b>
       <span>Comunità Eterna</span>
@@ -1397,7 +1404,7 @@
           <span class="sg" id="dove-sg"></span><span id="dove-tx">Dove lo porti</span>
         </button>
         <!-- al posto di «Edizione»: la scelta del modello non serve più -->
-        <button class="s-pill" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt=""></span>INTEGRATOR</button>
+        <button class="s-pill" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="nexus-piccolo.png" alt=""></span>INTEGRATOR</button>
         <button class="s" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
         <button class="s" id="s-file" title="Allegato">&#128206;&#xFE0E;</button>
         <button class="s" id="s-aperte" title="Le cose aperte">&#9673;</button>
@@ -1528,7 +1535,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
   var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
-  var NEXUS_IMG   = "https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png";
+  var NEXUS_IMG   = "nexus-piccolo.png";   /* ⭐ la copia piccola, accanto: 14 KB invece di 1 MB */
   var MARCHIO_IMG = "FM_sigillo_corniceoro_HR.png";
   var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
 
