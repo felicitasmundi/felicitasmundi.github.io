@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Un'orma · FelicitasMundi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap">
+<style>
+  .sv-orma,.sv-orma *,.sv-orma *::before,.sv-orma *::after{box-sizing:border-box}
+  .sv-orma{--scala:1.4;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+    --verde:#6E9E5A;--nexus:#8C2F39;
+    --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;
+    --aria:#669944;--etere:#9966CC;--svil:#B87333;
+    --riga:rgba(245,240,230,0.09);
+    --t-eti:calc(0.8125rem * var(--scala));
+    --t-tas:calc(0.9375rem * var(--scala));
+    --t-cor:calc(1.0625rem * var(--scala));
+    --t-tit:calc(1.5rem * var(--scala));
+    max-width:50rem;margin:0 auto;padding:2rem 1rem 5rem;
+    color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;
+    font-size:var(--t-eti);-webkit-font-smoothing:antialiased}
+  .sv-orma a{text-decoration:none;color:inherit}
+
+  /* ── il segno privato ── */
+  .priv{display:inline-flex;align-items:center;gap:.45rem;
+    border:1px solid rgba(184,150,62,.4);border-radius:999px;
+    padding:.3rem .85rem;font-size:var(--t-eti);color:var(--oro-ch);
+    letter-spacing:.08em;margin-bottom:1.1rem}
+  .priv .lu{width:.75rem;height:.9rem;flex:none}
+
+  /* ── la testa dell'orma ── */
+  .testa{display:flex;gap:1.4rem;align-items:flex-start;flex-wrap:wrap;
+    padding-bottom:1.4rem;margin-bottom:1.4rem;
+    border-bottom:1px solid rgba(184,150,62,.22)}
+  .testa .sg{flex:none;width:5rem;height:5rem;color:var(--terra);
+    filter:brightness(1.35) drop-shadow(0 0 14px rgba(170,136,68,.5))}
+  .testa .sg svg{width:100%;height:100%;display:block}
+  .testa .tx{flex:1;min-width:15rem}
+  .occ{font-size:var(--t-eti);letter-spacing:.24em;text-transform:uppercase;
+    color:var(--oro-ch);margin-bottom:.4rem}
+  h1{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);
+    line-height:1.2;margin-bottom:.5rem}
+  .da{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-tas);color:rgba(245,240,230,.55);line-height:1.5}
+
+  /* ── il testo dell'orma ── */
+  .corpo{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);
+    line-height:1.6;color:rgba(245,240,230,.88);margin-bottom:1.4rem;
+    max-width:36rem}
+  .corpo b{color:var(--ivory);font-weight:400}
+
+  /* ── la chiamata ── */
+  .chiamata{border:1px solid rgba(140,47,57,.5);border-radius:1rem;
+    background:rgba(140,47,57,.1);padding:1.4rem 1.5rem;margin-bottom:1.6rem;
+    display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap}
+  .chiamata .qu{flex:1;min-width:12rem}
+  .chiamata .et{display:block;font-size:var(--t-eti);letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(245,240,230,.4);margin-bottom:.3rem}
+  .chiamata .dt{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-cor);color:var(--oro-ch);line-height:1.2}
+  .chiamata .cn{display:block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:var(--t-eti);color:rgba(245,240,230,.6);
+    margin-top:.25rem}
+  .chiamata .va{flex:none;border-radius:999px;background:var(--oro);
+    color:#0A0C1A;padding:.85rem 2rem;font-family:'Cinzel',serif;
+    font-size:var(--t-eti);letter-spacing:.07em;border:0;cursor:pointer;
+    display:inline-block}
+  .chiamata .va:hover{background:var(--oro-ch)}
+  .chiamata .ent{flex:none;display:flex;flex-direction:column;
+    align-items:center;gap:.45rem}
+  .chiamata .dopo{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:calc(var(--t-eti)*.92);color:rgba(245,240,230,.4);
+    text-align:center;line-height:1.35}
+
+  /* ── le sezioni ── */
+  .sh{display:flex;align-items:center;gap:.6rem;
+    margin:1.8rem 0 .8rem;padding-bottom:.5rem;
+    border-bottom:1px solid var(--riga)}
+  .sh .pt{width:.55rem;height:.55rem;border-radius:.12rem;background:var(--c);
+    flex:none}
+  .sh b{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tas);
+    letter-spacing:.06em;color:var(--c)}
+  .sh i{margin-left:auto;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,.32)}
+
+  /* ── la mappa ── */
+  .mappa{position:relative;border:1px solid var(--riga);border-radius:1rem;
+    background:rgba(2,4,12,.4);padding:1rem;margin-bottom:.7rem;
+    overflow:hidden}
+  .mappa svg{width:100%;height:auto;display:block;max-height:26rem}
+  .co{fill:none;stroke:rgba(200,160,85,.28);stroke-width:.9;
+    stroke-linejoin:round}
+  .ln{stroke:rgba(200,160,85,.4);stroke-width:.9;fill:none;
+    stroke-dasharray:3 3}
+  .pu{fill:var(--oro-ch)}
+  .al{fill:none;stroke:rgba(212,175,106,.35);stroke-width:.8}
+  .nm{fill:rgba(245,240,230,.82);font-family:'Cinzel',serif;font-size:6.5px}
+  .lg{fill:rgba(245,240,230,.42);font-family:'Cormorant Garamond',serif;
+    font-size:5.6px;font-style:italic}
+
+  /* ── il quadrante di chi c'è ── */
+  .chi{display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+    gap:.6rem}
+  .pe{display:flex;align-items:center;gap:.7rem;
+    border-left:2px solid var(--c);border-radius:0 .7rem .7rem 0;
+    background:rgba(10,12,26,.5);padding:.85rem 1rem}
+  .pe .es{flex:none;width:2rem;height:2.3rem;
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    background:linear-gradient(145deg,
+      color-mix(in srgb,var(--c) 55%,transparent),
+      color-mix(in srgb,var(--c) 18%,transparent));
+    display:grid;place-items:center;font-family:'Cinzel',serif;
+    font-size:var(--t-eti);color:var(--ivory)}
+  .pe .tx b{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-eti);color:var(--ivory);line-height:1.25}
+  .pe .tx span{display:block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:var(--t-eti);color:rgba(245,240,230,.5)}
+  .pe{flex-wrap:wrap}
+  .pe{flex-wrap:wrap}
+  .pe .tx{flex:1;min-width:0}
+  .pe .ru{flex:none;font-size:calc(var(--t-eti)*.88);letter-spacing:.07em;
+    border:1px solid color-mix(in srgb,var(--c) 45%,transparent);
+    border-radius:999px;padding:.15rem .6rem;color:var(--c);
+    filter:brightness(1.3)}
+
+  /* ── i punti focali ── */
+
+  /* ══ LA FORMULA ══ */
+  .form{border:1px solid rgba(184,150,62,.32);border-radius:1rem;
+    background:rgba(2,4,12,.35);padding:1.3rem 1rem;margin-bottom:1rem;
+    display:flex;flex-direction:column;align-items:center;gap:.55rem}
+  .fr{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;
+    justify-content:center}
+  .form .par{font-family:'Cinzel',serif;font-size:calc(var(--t-cor)*1.4);
+    color:rgba(200,160,85,.55);line-height:1}
+  .elem{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;
+    justify-content:center}
+  .elem .e{display:inline-flex;align-items:center;gap:.3rem;
+    font-family:'Cinzel',serif;font-size:var(--t-eti);color:var(--c);
+    filter:brightness(1.3)}
+  .elem .e i{width:.45rem;height:.45rem;border-radius:50%;background:var(--c);
+    box-shadow:0 0 .4rem color-mix(in srgb,var(--c) 65%,transparent)}
+  .elem .pl{color:rgba(245,240,230,.3);font-size:var(--t-eti)}
+  .form .sg2{font-family:'Cinzel',serif;font-size:var(--t-tas);
+    color:rgba(245,240,230,.45)}
+  .form .nm2{font-family:'Cinzel',serif;font-size:var(--t-tas);
+    color:var(--nexus);filter:brightness(1.5)}
+  .form .gl{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-eti);color:rgba(245,240,230,.4)}
+  .form .e5{font-family:'Cinzel',serif;font-size:var(--t-cor);
+    color:var(--oro-ch)}
+  .form .fraz{display:flex;flex-direction:column;align-items:center;
+    gap:.4rem;margin-top:.5rem}
+  .form .lin2{display:block;width:10rem;height:2px;
+    background:rgba(200,160,85,.75);border-radius:2px}
+  .form .den{font-family:'Cinzel',serif;font-size:var(--t-tas);
+    color:rgba(245,240,230,.62)}
+  .form .par{font-size:calc(var(--t-cor)*1.5)}
+  .form .sg2,.form .nm2{font-size:var(--t-tas)}
+
+  /* ══ I SEI QUADRANTI ══ */
+  .qd{border:1px solid color-mix(in srgb,var(--c) 30%,transparent);
+    border-radius:.9rem;overflow:hidden;margin-bottom:.5rem;
+    background:color-mix(in srgb,var(--c) 8%,rgba(245,240,230,.03))}
+  .qh{display:flex;align-items:center;gap:.7rem;padding:1rem 1.1rem;
+    cursor:pointer;user-select:none}
+  .qh .sg3{flex:none;width:2rem;height:2rem;color:var(--c);
+    filter:brightness(1.35)}
+  .qh .sg3 svg{width:100%;height:100%;display:block}
+  .qh .tx2{flex:1;min-width:0}
+  .qh .tx2 b{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-tas);color:var(--ivory);line-height:1.25}
+  .qh .tx2 span{display:block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:var(--t-eti);color:rgba(245,240,230,.5)}
+  .qh .fr2{flex:none;color:rgba(245,240,230,.3);font-size:var(--t-tas);
+    transition:.2s}
+  .qd.on .qh .fr2{transform:rotate(90deg)}
+  .qc{display:none;padding:0 1.1rem 1.1rem;
+    border-top:1px solid color-mix(in srgb,var(--c) 18%,transparent)}
+  .qd.on .qc{display:block}
+  .qc p{font-family:'Cormorant Garamond',serif;font-size:var(--t-tas);
+    line-height:1.6;color:rgba(245,240,230,.78);margin:.9rem 0 .7rem;
+    max-width:36rem}
+  .qc p b{color:var(--ivory);font-weight:400}
+  .qc ul{list-style:none}
+  .qc li{font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    line-height:1.55;color:rgba(245,240,230,.7);padding-left:.95rem;
+    position:relative;margin-bottom:.35rem}
+  .qc li::before{content:'\2022';position:absolute;left:.12rem;color:var(--c);
+    opacity:.8}
+  .qc li b{color:var(--ivory);font-weight:400}
+  .pr{display:inline-block;margin-top:.6rem;font-family:'Cinzel',serif;
+    font-size:var(--t-eti);color:var(--oro-ch);
+    border:1px solid rgba(184,150,62,.35);border-radius:999px;
+    padding:.25rem .8rem}
+
+  /* le card dentro un quadrante */
+  .cds{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
+    gap:.5rem;margin-top:.9rem}
+  .cd2{border:1px solid color-mix(in srgb,var(--c) 26%,transparent);
+    border-radius:.7rem;background:rgba(2,4,12,.4);padding:.85rem .9rem}
+  .cd2 .ic{width:1.7rem;height:1.7rem;color:var(--c);filter:brightness(1.35);
+    margin-bottom:.5rem}
+  .cd2 .ic svg{width:100%;height:100%;display:block}
+  .cd2 b{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-eti);color:var(--ivory);line-height:1.25;
+    margin-bottom:.25rem}
+  .cd2 span{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);line-height:1.45;color:rgba(245,240,230,.6)}
+
+  /* la lavagna */
+  .lav{margin-top:.9rem;border:1px solid var(--riga);border-radius:.7rem;
+    background:rgba(2,4,12,.45);padding:.9rem}
+  .gg{display:grid;grid-template-columns:7rem repeat(5,1fr);gap:.25rem;
+    align-items:center;font-size:calc(var(--t-eti)*.9)}
+  .gg .th{color:rgba(245,240,230,.35);text-align:center;
+    font-family:'Cinzel',serif;padding-bottom:.3rem}
+  .gg .nt{color:rgba(245,240,230,.7);
+    font-family:'Cormorant Garamond',serif;padding:.25rem .4rem .25rem 0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ba{height:1.35rem;border-radius:.3rem;
+    background:color-mix(in srgb,var(--b) 40%,transparent);
+    border:1px solid color-mix(in srgb,var(--b) 60%,transparent);
+    display:flex;align-items:center;justify-content:flex-end;
+    padding-right:.35rem;font-size:calc(var(--t-eti)*.82);
+    color:rgba(245,240,230,.85);font-family:'Cinzel',serif}
+  .tal{display:flex;align-items:center;gap:.5rem;margin-top:.8rem;
+    padding-top:.7rem;border-top:1px solid var(--riga);
+    font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,.6)}
+  .tal b{font-family:'Cinzel',serif;color:var(--oro-ch);font-weight:500}
+
+  /* la domanda */
+  .dom{border:1px solid rgba(110,158,90,.5);border-radius:1rem;
+    background:rgba(110,158,90,.07);padding:1.5rem 1.6rem;margin-top:1.6rem;
+    text-align:center}
+  .dom .et2{display:block;font-size:var(--t-eti);letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(245,240,230,.4);margin-bottom:.6rem}
+  .dom .dd{display:block;font-family:'Cinzel',serif;font-weight:500;
+    font-size:var(--t-cor);color:var(--verde);filter:brightness(1.3);
+    margin-bottom:.7rem}
+  .dom p{font-family:'Cormorant Garamond',serif;font-size:var(--t-tas);
+    line-height:1.6;color:rgba(245,240,230,.75);max-width:32rem;
+    margin:0 auto}
+  .dom p b{color:var(--ivory);font-weight:400}
+  @media(max-width:34rem){
+    .gg{grid-template-columns:5.5rem repeat(5,1fr);font-size:.65rem}
+  }
+
+  .punti{border:1px dashed rgba(184,150,62,.4);border-radius:1rem;
+    background:rgba(200,160,85,.04);padding:1.4rem 1.5rem}
+  .punti p{font-family:'Cormorant Garamond',serif;font-size:var(--t-tas);
+    line-height:1.6;color:rgba(245,240,230,.6);max-width:34rem}
+  .punti .att{display:block;margin-top:.9rem;font-style:italic;
+    color:rgba(245,240,230,.28)}
+
+  .pie{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--riga);
+    font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,.32);line-height:1.7}
+</style>
+</head>
+<body style="background:#070a16;margin:0">
+<div style="position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse at 26% 14%,rgba(38,64,120,.42),transparent 58%),
+             radial-gradient(ellipse at 82% 80%,rgba(60,44,110,.34),transparent 60%)"></div>
+
+<div class="sv-orma">
+
+  <span class="priv">
+    <svg class="lu" viewBox="0 0 12 14" fill="none" stroke="currentColor"
+         stroke-width="1.1" stroke-linecap="round">
+      <rect x="1.5" y="6" width="9" height="7" rx="1.2"/>
+      <path d="M3.6 6 V3.8 C3.6 2 4.7 1 6 1 C7.3 1 8.4 2 8.4 3.8 V6"/>
+    </svg>
+    Un&rsquo;orma privata
+  </span>
+
+  <!-- ══ LA TESTA ══ -->
+  <div class="testa">
+    <span class="sg"><svg viewBox="0 0 60 60" fill="none"
+      stroke="currentColor" stroke-width="1.35" stroke-linecap="round"
+      stroke-linejoin="round">
+        <!-- il terreno -->
+        <path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/>
+        <path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/>
+        <!-- l'impronta in primo piano -->
+        <g transform="translate(-4,4) scale(0.9)">
+          <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34
+                   C26 29 21 27 21 24 C21 20 25 18 30 18
+                   C35 18 39 20 39 24 C39 29 36 33 36 38
+                   C36 44 34 51 28 51Z"/>
+          <circle cx="22" cy="12" r="3.2"/>
+          <circle cx="28.5" cy="9.6" r="2.4"/>
+          <circle cx="33.5" cy="10" r="2.1"/>
+          <circle cx="37.5" cy="11.6" r="1.8"/>
+          <circle cx="40.5" cy="14.2" r="1.5"/>
+        </g>
+        <!-- il passo prima -->
+        <g transform="translate(33,3) scale(0.5)" opacity=".45">
+          <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34
+                   C26 29 21 27 21 24 C21 20 25 18 30 18
+                   C35 18 39 20 39 24 C39 29 36 33 36 38
+                   C36 44 34 51 28 51Z"/>
+          <circle cx="22" cy="12" r="3.2"/>
+          <circle cx="28.5" cy="9.6" r="2.4"/>
+          <circle cx="33.5" cy="10" r="2.1"/>
+          <circle cx="37.5" cy="11.6" r="1.8"/>
+          <circle cx="40.5" cy="14.2" r="1.5"/>
+        </g>
+        <!-- e quello ancora prima -->
+        <g transform="translate(20,-2) scale(0.3)" opacity=".2">
+          <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34
+                   C26 29 21 27 21 24 C21 20 25 18 30 18
+                   C35 18 39 20 39 24 C39 29 36 33 36 38
+                   C36 44 34 51 28 51Z"/>
+          <circle cx="22" cy="12" r="3.2"/>
+          <circle cx="28.5" cy="9.6" r="2.4"/>
+          <circle cx="33.5" cy="10" r="2.1"/>
+        </g>
+    </svg></span>
+    <div class="tx">
+      <div class="occ">Comunità Eterna FelicitasMundi</div>
+      <h1>Un&rsquo;orma</h1>
+      <p class="da">Segnata da <b>Gabriele Dettori</b> &middot; oggi</p>
+    </div>
+  </div>
+
+  <p class="corpo">Sei stato collegato a quest&rsquo;orma da <b>Gabriele</b>
+     per la chiamata di stasera, <b>ore 21</b>, con <b>Guido Grossi</b> di
+     Energie in Comune.</p>
+
+  <!-- ══ LA CHIAMATA ══ -->
+  <div class="chiamata">
+    <div class="qu">
+      <span class="et">l&rsquo;incontro</span>
+      <b class="dt">Stasera, ore 21</b>
+      <span class="cn">con Guido Grossi &mdash; Energie in Comune</span>
+    </div>
+    <div class="ent">
+      <a class="va" href="https://us06web.zoom.us/j/85895969880?pwd=9DmmsalZwDiR9JTu7NaL8954TrNzxQ.1"
+         target="_blank" rel="noopener">Entra</a>
+      <span class="dopo">in autunno: dirette radio<br>e video chat per i team</span>
+    </div>
+  </div>
+
+  <!-- ══ LA MAPPA ══ -->
+  <div class="sh" style="--c:var(--terra)"><span class="pt"></span>
+    <b>Dove siamo</b><i>quattro punti, e le linee che li tengono</i></div>
+
+  <div class="mappa">
+    <svg viewBox="0 0 280 250" role="img"
+         aria-label="La mappa dei quattro collegati">
+
+      <!-- l'Italia, appena accennata -->
+      <path class="co" d="M33 74.8 L63.8 68.2 L94.6 79.2 L112.2 112.2
+        L138.6 127.6 L176 147.4 L211.2 165 L220 189.2 L211.2 209
+        L233.2 198 L246.4 169.4 L272.8 162.8 L242 140.8 L220 123.2
+        L189.2 114.4 L165 85.8 L140.8 66 L143 46.2 L167.2 39.6
+        L140.8 19.8 L99 13.2 L57.2 33 L22 44 Z"/>
+      <path class="co" d="M145.2 213.4 L200.2 204.6 L204.6 228.8
+        L187 237.6 Z"/>
+      <path class="co" d="M48.4 140.8 L79.2 138.6 L81.4 182.6
+        L66 189.2 L52.8 165 Z"/>
+
+      <!-- le linee fra i quattro -->
+      <g class="ln">
+        <path d="M77 145 L57 167"/>
+        <path d="M77 145 L117.5 66"/>
+        <path d="M77 145 L143 123"/>
+        <path d="M57 167 L143 123"/>
+        <path d="M117.5 66 L143 123"/>
+        <path d="M57 167 L117.5 66"/>
+      </g>
+
+      <!-- i quattro punti -->
+      <g>
+        <circle class="al" cx="77" cy="145" r="7"/>
+        <circle class="al" cx="77" cy="145" r="11" opacity=".18"/>
+        <circle class="pu" cx="77" cy="145" r="3.2"/>
+        <text class="nm" x="86" y="143">Gabriele Dettori</text>
+        <text class="lg" x="86" y="150">Olbia</text>
+      </g>
+      <g>
+        <circle class="al" cx="57" cy="167" r="6"/>
+        <circle class="pu" cx="57" cy="167" r="2.8"/>
+        <text class="nm" x="20" y="178">Marco Caddeo</text>
+        <text class="lg" x="20" y="185">Oristano</text>
+      </g>
+      <g>
+        <circle class="al" cx="117.5" cy="66" r="6"/>
+        <circle class="pu" cx="117.5" cy="66" r="2.8"/>
+        <text class="nm" x="126" y="64">Giovanni Greco</text>
+        <text class="lg" x="126" y="71">Bologna</text>
+      </g>
+      <g>
+        <circle class="al" cx="143" cy="123" r="6"/>
+        <circle class="pu" cx="143" cy="123" r="2.8"/>
+        <text class="nm" x="152" y="121">Guido Grossi</text>
+        <text class="lg" x="152" y="128">Roma</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ══ CHI C'È ══ -->
+  <div class="chi">
+    <div class="pe" style="--c:var(--nexus)"><span class="es">G</span>
+      <span class="tx"><b>Gabriele Dettori</b><span>Olbia</span></span>
+      <span class="ru">nucleo</span></div>
+    <div class="pe" style="--c:var(--nexus)"><span class="es">M</span>
+      <span class="tx"><b>Marco Caddeo</b><span>Oristano</span></span>
+      <span class="ru">nucleo</span></div>
+    <div class="pe" style="--c:var(--nexus)"><span class="es">G</span>
+      <span class="tx"><b>Giovanni Greco</b><span>Bologna</span></span>
+      <span class="ru">nucleo</span></div>
+    <div class="pe" style="--c:var(--acqua)"><span class="es">G</span>
+      <span class="tx"><b>Guido Grossi</b><span>Roma</span></span>
+      <span class="ru">ospite</span></div>
+  </div>
+
+
+  <div class="sh" style="--c:var(--oro)"><span class="pt"></span>
+    <b>La formula</b><i>e dove ci incontriamo</i></div>
+
+  <div class="form">
+    <div class="fr">
+      <span class="par">(</span>
+      <div class="elem">
+        <span class="e" style="--c:var(--terra)"><i></i>Terra</span>
+        <span class="pl">+</span>
+        <span class="e" style="--c:var(--acqua)"><i></i>Acqua</span>
+        <span class="pl">+</span>
+        <span class="e" style="--c:var(--fuoco)"><i></i>Fuoco</span>
+        <span class="pl">+</span>
+        <span class="e" style="--c:var(--aria)"><i></i>Aria</span>
+        <span class="pl">+</span>
+        <span class="e" style="--c:var(--etere)"><i></i>Etere</span>
+        <span class="pl">+</span>
+        <span class="e" style="--c:var(--svil)"><i></i>Sviluppo</span>
+      </div>
+      <span class="par">)</span>
+      <span class="sg2">&times;</span>
+      <span class="nm2">Nexus</span>
+    </div>
+    <div class="fr"><span class="lin2"></span></div>
+    <div class="fr"><span class="den">falso ego</span></div>
+  </div>
+
+  <p class="corpo" style="font-size:var(--t-tas)">Ogni orma si dispone dentro
+     uno di questi. <b>Tocca un elemento per vedere cosa possiamo fare
+     insieme.</b></p>
+
+  <!-- TERRA -->
+  <div class="qd" style="--c:var(--terra)">
+    <div class="qh" onclick="this.parentNode.classList.toggle('on')">
+      <span class="sg3"><svg viewBox="0 0 48 48" fill="none"
+        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M24 42 L24 20"/>
+        <path d="M24 28 C16 28 10 22 10 14 C18 14 24 20 24 28Z"/>
+        <path d="M24 24 C32 24 38 18 38 10 C30 10 24 16 24 24Z" opacity=".8"/>
+        <path d="M12 42 L36 42" opacity=".45"/>
+      </svg></span>
+      <div class="tx2"><b>Terra &middot; i Vicinati</b>
+        <span>i luoghi, le persone vicine, quello che si coltiva</span></div>
+      <span class="fr2">&rsaquo;</span>
+    </div>
+    <div class="qc">
+      <p><b>La Vostra squadra entra nel gioco delle orme.</b> Ognuno segna dove
+         si trova, cosa fa, chi conosce &mdash; e da l&igrave; nasce una mappa
+         dei Vostri distretti che si costruisce da s&eacute;.</p>
+      <div class="cds">
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21 C7 16 4 13 4 9.5 A4.5 4.5 0 0 1 12 6.5 A4.5 4.5 0 0 1 20 9.5 C20 13 17 16 12 21Z"/><circle cx="12" cy="9.5" r="2"/></svg></span><b>I luoghi</b><span>sedi, terreni, case, spazi di lavoro</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="7" r="2"/><circle cx="12" cy="18" r="2.4"/><circle cx="18" cy="16" r="1.6"/><path d="M7 7 L17 7 M6.5 8 L11 16 M14 17 L16.5 16.5 M18 9 L13 16" opacity=".65"/></svg></span><b>Le connessioni</b><span>chi conosce chi, e per cosa</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10 L21 10" opacity=".8"/><path d="M8 3 L8 7 M16 3 L16 7"/><path d="M7 14 L9 14 M11 14 L13 14 M7 18 L9 18" opacity=".5"/></svg></span><b>I calendari</b><span>quello che accade, e dove</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L12 21" opacity=".5"/><circle cx="12" cy="12" r="8"/><path d="M9 12 L15 12 M12 9 L12 15"/></svg></span><b>I bisogni aperti</b><span>si dice cosa serve, e qualcuno lo prende</span></div>
+      </div>
+      <span class="pr">per chi partecipa al praticantato, o fa karma yoga</span>
+    </div>
+  </div>
+
+  <!-- ACQUA -->
+  <div class="qd" style="--c:var(--acqua)">
+    <div class="qh" onclick="this.parentNode.classList.toggle('on')">
+      <span class="sg3"><svg viewBox="0 0 48 48" fill="none"
+        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M6 28 C10 24 14 30 18 26 C22 22 26 28 30 24 C34 20 38 26 42 22"/>
+        <path d="M6 35 C10 31 14 37 18 33 C22 29 26 35 30 31 C34 27 38 33 42 29"
+              opacity=".5"/>
+        <path d="M24 18 L24 6"/><path d="M18 12 L24 6 L30 12"/>
+      </svg></span>
+      <div class="tx2"><b>Acqua &middot; l&rsquo;Emporio</b>
+        <span>vendita, dono e scambio</span></div>
+      <span class="fr2">&rsaquo;</span>
+    </div>
+    <div class="qc">
+      <p><b>Il Vostro marketplace pu&ograve; integrarsi con
+         l&rsquo;Emporio.</b> I prodotti si donano, si scambiano o si vendono
+         &mdash; e ognuno porta la storia di chi lo fa.</p>
+      <div class="cds">
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8 L12 4 L20 8 L20 17 L12 21 L4 17Z"/><path d="M4 8 L12 12 L20 8" opacity=".7"/><path d="M12 12 L12 21" opacity=".7"/></svg></span><b>I Vostri prodotti</b><span>schede, immagini, racconto — dentro l’Emporio</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20 C5 14 8 11 12 11 C16 11 19 14 21 20"/><path d="M12 11 C12 7 10 5 7 4 C7 8 9 10 12 11Z"/><path d="M12 11 C12 6 14 4 18 3 C18 7 16 10 12 11Z" opacity=".7"/></svg></span><b>I nostri produttori</b><span>aziende agricole biologiche e biodinamiche, artigiani, laboratori — nel Vostro mercato interno</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><path d="M14.5 14.5 L21 21"/><path d="M7.5 10 L9.5 12 L13 8"/></svg></span><b>Il vaglio</b><span>un’analisi di laboratorio che dice cosa c’è davvero dentro</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="12" height="9" rx="1"/><path d="M14 10 L18 10 L21 13 L21 16 L14 16Z"/><circle cx="6.5" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M12 21 L3 21" opacity=".35"/></svg></span><b>La spedizione</b><span>parte dal produttore, non da un magazzino</span></div>
+      </div>
+      <span class="pr">scambio coi talenti, o 15&ndash;25% sul venduto</span>
+    </div>
+  </div>
+
+  <!-- FUOCO -->
+  <div class="qd" style="--c:var(--fuoco)">
+    <div class="qh" onclick="this.parentNode.classList.toggle('on')">
+      <span class="sg3"><svg viewBox="0 0 48 48" fill="none"
+        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M24 40 C17 36 15 28 20 22 C22 25 23 26 24 26
+                 C26 21 24 16 21 13 C29 16 34 24 32 31 C31 36 28 39 24 40Z"/>
+        <path d="M14 44 C18 41 30 41 34 44" opacity=".45"/>
+      </svg></span>
+      <div class="tx2"><b>Fuoco &middot; l&rsquo;Assistenza</b>
+        <span>chi accompagna, e il mutuo aiuto</span></div>
+      <span class="fr2">&rsaquo;</span>
+    </div>
+    <div class="qc">
+      <p><b>Chi nel Vostro circuito si prende cura, trova un posto dove essere
+         trovato.</b> Con parole che non promettono guarigioni: ricerca e
+         testimonianza.</p>
+      <div class="cds">
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 C10 6 7 8 7 12 C7 15 9 17 12 17 C15 17 17 15 17 12 C17 8 14 6 12 3Z"/><path d="M12 17 L12 21" opacity=".6"/><path d="M9 20 L15 20" opacity=".4"/><circle cx="12" cy="11" r="1.6" fill="currentColor" stroke="none"/></svg></span><b>Supporto spirituale</b><span>chi accompagna una ricerca, e chi la conduce</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="4" ry="7"/><ellipse cx="12" cy="12" rx="7.5" ry="9.5" opacity=".45"/><circle cx="12" cy="8" r="1.6"/><path d="M2 12 C3 11 4.5 10.6 5 11" opacity=".7"/><path d="M22 12 C21 11 19.5 10.6 19 11" opacity=".7"/></svg></span><b>Operatori del benessere integrato</b><span>distinti dai medici: due mestieri, due responsabilità</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17 C5 15 8 19 11 17 C14 15 17 19 22 16" opacity=".7"/><path d="M8 13 C7 10 8 7 10 6 C11 7 11 9 10 11 L11 13"/><path d="M11 13 L10 6.5 C10 5 12 5 12.5 6.5 L14 12"/><path d="M14 12 L15 8 C15.5 6.5 17 7 17 8.5 L17 15 C17 18 14 19 11 19 L9 19 C6.5 19 6 16 7 13Z"/></svg></span><b>Il mutuo aiuto</b><span>chi dà una mano riceve crediti di lavoro. E chi assiste l’ambiente, gli anziani, i ragazzi</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><path d="M3 19 C3 15 5 13 8 13 C11 13 13 15 13 19" opacity=".8"/><path d="M15 6 L21 6 M15 10 L21 10 M15 14 L19 14" opacity=".55"/><path d="M16 18 L20 18 L20 21" opacity=".4"/></svg></span><b>Chi fa consulenza</b><span>chi mette il proprio mestiere al servizio di un altro</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARIA -->
+  <div class="qd" style="--c:var(--aria)">
+    <div class="qh" onclick="this.parentNode.classList.toggle('on')">
+      <span class="sg3"><svg viewBox="0 0 48 48" fill="none"
+        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M24 42 L24 16"/>
+        <path d="M18 42 L24 28 L30 42" opacity=".7"/>
+        <circle cx="24" cy="13" r="2.4" fill="currentColor" stroke="none"/>
+        <path d="M18 9 C20 5 28 5 30 9" opacity=".85"/>
+        <path d="M14 5 C18 -1 30 -1 34 5" opacity=".5"/>
+      </svg></span>
+      <div class="tx2"><b>Aria &middot; il Megafono</b>
+        <span>la radio, la stampa, quello che si racconta</span></div>
+      <span class="fr2">&rsaquo;</span>
+    </div>
+    <div class="qc">
+      <p><b>Non stampiamo soltanto: aiutiamo a fare l&rsquo;opera, poi la
+         stampiamo, poi la distribuiamo.</b> Un nostro articolo recente ha fatto settemila
+         visualizzazioni in due giorni.</p>
+      <div class="cds">
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 13 C17.5 9 18.5 5 18 2 C16.5 4.5 15 8.5 14.5 12.5"/><path d="M14.5 12.5 L12.5 15.5"/><path d="M3 17 C5 15.5 9 15.5 11 17"/><path d="M3 17 L3 20 C5 18.5 9 18.5 11 20 L11 17" opacity=".8"/><path d="M5 19 C6.5 18.4 8 18.4 9 19" opacity=".4"/></svg></span><b>Crea la tua opera</b><span>dall’orma all’opera: trascrizione, editing, correzione, traduzione, impaginazione, copertina</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="13" height="10" rx="1"/><path d="M6 7 L13 7 M6 10 L11 10" opacity=".6"/><path d="M16 8 L20 8 C21 8 21.5 9 21.5 10 L21.5 14 L16 14Z" opacity=".8"/><path d="M8 17 L8 21 M14 17 L14 21" opacity=".55"/><path d="M5 21 L19 21" opacity=".4"/></svg></span><b>Stampala</b><span>libri, magazine, brochure, manifesti, agende, impianti fieristici, gadget — carta riciclata o naturale</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 L4 8 L12 4 L20 8 L20 20Z"/><path d="M9 20 L9 14 L15 14 L15 20" opacity=".7"/><path d="M12 4 L12 1" opacity=".4"/><path d="M2 20 L22 20" opacity=".45"/><circle cx="12" cy="10" r="1.4" fill="currentColor" stroke="none" opacity=".6"/></svg></span><b>Distribuiscila</b><span>nell’Emporio, e nelle librerie che si uniscono ai vicinati</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21 L12 8"/><path d="M9 21 L12 14 L15 21" opacity=".7"/><circle cx="12" cy="6.5" r="1.4" fill="currentColor" stroke="none"/><path d="M9 4.5 C10 2.5 14 2.5 15 4.5" opacity=".85"/><path d="M6.5 2.5 C8.5 -0.5 15.5 -0.5 17.5 2.5" opacity=".5"/></svg></span><b>Le rubriche radiofoniche</b><span>per raccontare il progetto e chi lo fa</span></div>
+      </div>
+      <span class="pr">70% a chi scrive</span>
+    </div>
+  </div>
+
+  <!-- ETERE -->
+  <div class="qd" style="--c:var(--etere)">
+    <div class="qh" onclick="this.parentNode.classList.toggle('on')">
+      <span class="sg3"><svg viewBox="0 0 48 48" fill="none"
+        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <circle cx="24" cy="24" r="17" opacity=".35"/>
+        <circle cx="24" cy="24" r="9" opacity=".6"/>
+        <circle cx="24" cy="24" r="2.6" fill="currentColor" stroke="none"/>
+        <path d="M24 7 L24 15 M24 33 L24 41 M7 24 L15 24 M33 24 L41 24"
+              opacity=".45"/>
+      </svg></span>
+      <div class="tx2"><b>Etere &middot; la Scuola</b>
+        <span>le lezioni, le formazioni, la ricerca</span></div>
+      <span class="fr2">&rsaquo;</span>
+    </div>
+    <div class="qc">
+      <p><b>Formare i Vostri soci, e dare ai Vostri formatori uno strumento per
+         insegnare.</b> Ogni lezione vive quattro volte.</p>
+      <div class="cds">
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M7 7 C4.5 9.5 4.5 14.5 7 17" opacity=".7"/><path d="M17 7 C19.5 9.5 19.5 14.5 17 17" opacity=".7"/><path d="M4 4 C0.5 8 0.5 16 4 20" opacity=".4"/><path d="M20 4 C23.5 8 23.5 16 20 20" opacity=".4"/></svg></span><b>Lezioni in diretta</b><span>con codice d’ingresso</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14 L4 10 C4 5.5 7.5 3 12 3 C16.5 3 20 5.5 20 10 L20 14"/><path d="M4 12 L7 12 L7 18 L4 18 C3 18 2.5 17 2.5 15.5 L2.5 14.5 C2.5 13 3 12 4 12Z"/><path d="M20 12 L17 12 L17 18 L20 18 C21 18 21.5 17 21.5 15.5 L21.5 14.5 C21.5 13 21 12 20 12Z"/></svg></span><b>Audio-lezioni</b><span>la stessa lezione, venduta nell’Emporio</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="2.4"/><circle cx="17" cy="8" r="2.4"/><circle cx="12" cy="15" r="2.4"/><path d="M9 9 L15 9 M8 10 L11 13 M16 10 L13 13" opacity=".6"/><path d="M4 20 C6 18.5 18 18.5 20 20" opacity=".35"/></svg></span><b>La classe resta un team</b><span>chi ti segue non si perde dopo il corso</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 L4 11 L12 5 L20 11 L20 20Z"/><path d="M9 20 L9 14 C9 12.5 15 12.5 15 14 L15 20" opacity=".7"/><path d="M2 12 L12 4 L22 12" opacity=".5"/></svg></span><b>Esperienze ospitate</b><span>ritiri, laboratori, incontri nei Vostri luoghi</span></div>
+      </div>
+      <span class="pr">20 &middot; 30 &middot; 50 &euro; &middot; 70% all&rsquo;autore</span>
+    </div>
+  </div>
+
+  <!-- SVILUPPO -->
+  <div class="qd on" style="--c:var(--svil)">
+    <div class="qh" onclick="this.parentNode.classList.toggle('on')">
+      <span class="sg3"><svg viewBox="0 0 48 48" fill="none"
+        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <rect x="6" y="9" width="36" height="30" rx="2"/>
+        <path d="M18 9 L18 39 M30 9 L30 39" opacity=".5"/>
+        <path d="M9 15 L15 15 M9 21 L15 21" opacity=".75"/>
+        <path d="M21 15 L27 15" opacity=".75"/>
+        <path d="M33 15 L39 15 M33 21 L39 21" opacity=".45"/>
+      </svg></span>
+      <div class="tx2"><b>Sviluppo &middot; Integrator</b>
+        <span>lo strumento di lavoro, e i crediti che ne nascono</span></div>
+      <span class="fr2">&rsaquo;</span>
+    </div>
+    <div class="qc">
+      <p><b>Questo &egrave; il motivo per cui Vi cerchiamo.</b> Integrator
+         &egrave; un gestionale per il singolo, per il team e per
+         un&rsquo;organizzazione con pi&ugrave; sedi. Ma fa una cosa in
+         pi&ugrave;: <b>marca il tempo di lavoro effettivo e lo trasforma in
+         credito.</b></p>
+
+      <div class="lav">
+        <div class="gg">
+          <span></span>
+          <span class="th">lun</span><span class="th">mar</span>
+          <span class="th">mer</span><span class="th">gio</span>
+          <span class="th">ven</span>
+
+          <span class="nt">Riunione distretto</span>
+          <span class="ba" style="--b:var(--terra);grid-column:span 2">4 h</span>
+          <span></span><span></span><span></span>
+
+          <span class="nt">Schede prodotti</span>
+          <span></span>
+          <span class="ba" style="--b:var(--acqua);grid-column:span 3">9 h</span>
+          <span></span>
+
+          <span class="nt">Puntata radio</span>
+          <span></span><span></span><span></span>
+          <span class="ba" style="--b:var(--aria);grid-column:span 2">3 h</span>
+
+          <span class="nt">Corso ai soci</span>
+          <span class="ba" style="--b:var(--etere);grid-column:span 5">12 h</span>
+        </div>
+        <div class="tal">
+          <span>Le quattro cose fatte questa settimana</span>
+          <b style="margin-left:auto">28 h &rarr; 28 talenti</b>
+        </div>
+      </div>
+
+      <div class="cds">
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4 L9 20 M15 4 L15 20" opacity=".5"/><path d="M5 8 L7 8 M5 11 L7 11" opacity=".75"/><path d="M11 8 L13 8" opacity=".75"/><path d="M17 8 L19 8 M17 11 L19 11" opacity=".45"/></svg></span><b>Le colonne cambiano nome</b><span>per il contadino <i>da seminare, in campo, raccolto, consegnato</i>; per l’elettricista <i>da chiamare, preventivo, in corso, finito</i></span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="2.6"/><circle cx="16" cy="8" r="2.2"/><path d="M3 18 C3 14 5 12 8 12 C11 12 13 14 13 18" opacity=".8"/><path d="M14 17 C14.5 14 16 13 18 13 C20 13 21 15 21 17" opacity=".55"/></svg></span><b>Chi fa cosa, e le ore</b><span>e la chat dentro la pagina del team, non a lato</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 7 L12 12 L15.5 14" /><path d="M19 5 L21 3 M5 19 L3 21" opacity=".4"/></svg></span><b>Il tempo diventa credito</b><span>quando un lavoro si chiude e qualcuno lo conferma, i talenti passano</span></div>
+        <div class="cd2"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L12 8" opacity=".6"/><circle cx="12" cy="10" r="2.4"/><path d="M5 21 L5 17 M12 21 L12 15 M19 21 L19 17"/><path d="M5 17 L19 17" opacity=".55"/><circle cx="5" cy="15.5" r="1.5" opacity=".7"/><circle cx="19" cy="15.5" r="1.5" opacity=".7"/></svg></span><b>Per i distretti</b><span>più sedi, la gerarchia di visione, i responsabili a livelli</span></div>
+      </div>
+      <span class="pr">26 &euro; al mese &middot; o quattro ore di servizio</span>
+    </div>
+  </div>
+
+  <!-- ══ LA DOMANDA ══ -->
+  <div class="dom">
+    <span class="et2">e qui ci servite Voi</span>
+    <span class="dd">Quanto vale un talento?</span>
+    <p>Come si trasforma il tempo di lavoro in un credito che regge, e come
+       quel credito incontra l&rsquo;euro senza uscire dalla legge.<br><br>
+       <b>&Egrave; il pezzo che Voi state costruendo</b> &mdash;
+       l&rsquo;istituto di pagamento, i metodi alternativi, la banca del tempo.
+       Ed &egrave; il pezzo che a noi manca: abbiamo lo strumento che misura il
+       lavoro, non la struttura che lo rende spendibile.</p>
+  </div>
+
+  <!-- ══ I PUNTI FOCALI ══ -->
+  <div class="sh" style="--c:var(--oro)"><span class="pt"></span>
+    <b>Quello che resta</b><i>dopo l&rsquo;incontro</i></div>
+
+  <div class="punti">
+    <p>Qui verranno descritti i punti focali dell&rsquo;incontro, per
+       rimanerne la traccia.
+       <span class="att">[ in attesa ]</span></p>
+  </div>
+
+  <div class="pie">
+    Comunità Eterna FelicitasMundi &middot; Felicitas Omnia S.r.l.s. &middot;
+    P.IVA 03075740906
+  </div>
+
+</div>
+<!-- ══ stanza di prova · si accende solo a questo indirizzo ══ --><script>if(location.pathname.indexOf("communitas-aeterna-prova")>-1){var s=document.createElement("script");s.src="/communitas-aeterna-prova/fm-prova.js";document.body.appendChild(s);}</script>
+</body>
+</html>
