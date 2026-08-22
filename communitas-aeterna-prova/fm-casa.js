@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   84.176 byte · MD5 2391918fa57bc82d4f3c41df3ef92663
+   103.808 byte · MD5 f6a7521e703915a27101e4c19dcfd56a
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
@@ -28,10 +28,20 @@
    perché chi legge merita che il tocco fuori chiuda la finestra. Se è
    già giù, apre la mappa a tutto schermo.
 
-   ⚠️ Questo strato del velo — il ⭐ dentro il punto ⑦ — la consegna del
-      15 agosto 2026 non lo porta: nel disegno il tocco apre e basta.
-      È rimesso qui parola per parola come stava. Il giorno che Design
-      lo scrive nel disegno, questa nota cade.
+   ⚠️ Questo strato del velo — il ⭐ dentro il punto ⑦ — nessuna consegna
+      di Design lo porta, nemmeno quella del 22 agosto 2026: nel
+      disegno il tocco apre e basta. È rimesso qui parola per parola
+      come stava. Il giorno che Design lo scrive nel disegno, questa
+      nota cade.
+
+   IL QUADRANTE DELLA MAPPA — legenda, formula, pratica. Arriva con la
+   consegna del 22 agosto 2026, dentro il secondo foglio di Design:
+     · window.SpazioVivo.mappaLegenda({simboli:[{segno,nome,cosa}],
+                                       pratica:[{nome,riga} ×3]})
+     · la formula è fissa e sta nel disegno: non cambia, non arriva
+       da fuori
+     · i sette nomi entrano dentro [data-leg], la legenda disegnata
+       sopra la formula: senza dato quella resta com'è
 
    LA SCHEDA DEL LUOGO è una forma vuota: nel disegno non è scritto
    nessun dato. Design la fa salire e scendere, questo file la riempie.
@@ -114,6 +124,19 @@ var CASA = `<style>
   @keyframes sv-respira{0%,100%{transform:scale(1);opacity:0.75}50%{transform:scale(1.28);opacity:1}}
   @media(prefers-reduced-motion:reduce){ .sv-casa [style*="sv-respira"]{animation:none !important} }
   @media(max-width:62rem){ .sv-casa [data-leg]{grid-template-columns:repeat(2,minmax(0,1fr))} }
+  @media(max-width:34rem){
+    /* sotto i 34rem le schede a due colonne passano a una */
+    .sv-casa [style*="minmax(19rem"]{grid-template-columns:minmax(0,1fr) !important}
+  }
+  @media(max-width:40rem){
+    /* dal telefono il titolo sta al centro sopra la mappa */
+    .sv-casa [data-libro]{margin-top:0}
+    .sv-casa section[style*="order:1"] > h2{text-align:center}
+    /* e la porta prende la stessa larghezza del quadrante della mappa */
+    .sv-casa [data-porte]{display:block}
+    .sv-casa [data-porte] > a{width:100%;margin-bottom:0.8rem}
+    .sv-casa [data-porte] > a:last-child{margin-bottom:0}
+  }
   @media(max-width:52rem){
     .sv-casa{padding-left:1.1rem;padding-right:1.1rem}
     .sv-casa [data-libro]{padding:0.3rem;border-width:1px;box-shadow:none}
@@ -122,6 +145,109 @@ var CASA = `<style>
   @media(max-width:34rem){
     .sv-casa [data-leg]{grid-template-columns:minmax(0,1fr);gap:0.9rem}
     .sv-casa [data-leg] > div{grid-template-columns:2.2rem minmax(0,1fr);gap:0.7rem}
+  }
+
+  .sv-mleg,.sv-mleg *,.sv-mleg *::before,.sv-mleg *::after{box-sizing:border-box}
+  .sv-mleg,.sv-casa .liv{min-width:0}
+  .sv-mleg{--scala:1.4;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+    --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;
+    --svil:#B87333;--nexus:#8C2F39;
+    --line:rgba(184,150,62,0.2);--riga:rgba(245,240,230,0.09);
+    --t-eti:calc(0.8125rem * var(--scala));--t-tas:calc(0.9375rem * var(--scala));
+    --t-cor:calc(1.0625rem * var(--scala));--t-scr:calc(1.125rem * var(--scala));
+    --t-tit:calc(1.5rem * var(--scala));--t-big:calc(1.9rem * var(--scala));
+    max-width:46rem;width:100%;margin:0 auto;min-width:0;
+    color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;font-size:var(--t-eti);
+    -webkit-font-smoothing:antialiased}
+
+  .sv-mleg .occhio{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:0.2em;text-transform:uppercase;color:var(--oro-ch);
+    margin-bottom:0.9rem}
+  .sv-mleg .liv{margin-bottom:1.6rem;min-width:0}
+  .sv-mleg .liv:last-child{margin-bottom:0}
+  .sv-casa .liv{margin-top:1.6rem;min-width:0;
+    --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;
+    --etere:#9966CC;--svil:#B87333;--nexus:#8C2F39}
+  .sv-mleg .lh{display:flex;align-items:baseline;gap:0.7rem;flex-wrap:wrap;
+    margin-bottom:0.9rem;padding-bottom:0.5rem;border-bottom:1px solid var(--riga)}
+  .sv-mleg .lh .n{flex:none;width:1.9rem;height:1.9rem;border-radius:50%;
+    border:1px solid var(--oro);color:var(--oro-ch);display:grid;place-items:center;
+    font-family:'Cinzel',serif;font-size:var(--t-eti);align-self:center}
+  .sv-mleg .lh b{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
+    color:var(--ivory)}
+  .sv-mleg .lh i{margin-left:auto;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.4)}
+
+  /* ① i simboli */
+  .sv-mleg .simboli{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:0.85rem 1.6rem}
+  .sv-mleg .sb{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:0.8rem;
+    align-items:center;min-width:0}
+  .sv-mleg .sb .sg{width:2.2rem;height:2.2rem;color:var(--oro-ch)}
+  .sv-mleg .sb .sg svg{width:100%;height:100%;display:block}
+  .sv-mleg .sb b{display:block;font-family:'DM Sans',sans-serif;font-weight:500;
+    font-size:var(--t-eti);line-height:1.3;min-width:0;overflow-wrap:break-word}
+  .sv-mleg .sb i{display:block;font-family:'Cormorant Garamond',serif;
+    font-size:var(--t-eti);line-height:1.45;color:rgba(245,240,230,0.78);min-width:0;
+    overflow-wrap:break-word}
+  .sv-mleg .attesa{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.5);padding:0.5rem 0}
+
+  /* ② la formula */
+  .sv-mleg .form{border:1px solid var(--line);border-radius:1rem;
+    background:rgba(10,12,26,0.42);padding:2rem 1.4rem;text-align:center;
+    display:flex;flex-direction:column;align-items:center;gap:0.55rem}
+  .sv-mleg .sopra{display:flex;align-items:center;justify-content:center;
+    gap:0.4rem;flex-wrap:wrap;max-width:100%}
+  .sv-mleg .par{font-family:'Cinzel',serif;font-size:var(--t-tit);
+    color:rgba(245,240,230,0.55);line-height:1}
+  .sv-mleg .gruppo{display:inline-flex;align-items:center;gap:0.4rem;min-width:0;
+    flex:0 1 auto}
+  .sv-mleg .volte{display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap;
+    flex:none}
+  .sv-mleg .cinque{display:flex;align-items:center;justify-content:center;
+    gap:0.35rem 0.55rem;flex-wrap:wrap;min-width:0}
+  .sv-mleg .el{font-family:'Cinzel',serif;font-size:var(--t-cor);line-height:1.2;
+    color:var(--c);filter:brightness(1.35);white-space:nowrap}
+  .sv-mleg .piu{font-family:'Cinzel',serif;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.45);line-height:1}
+  .sv-mleg .per{font-family:'Cinzel',serif;font-size:var(--t-tit);
+    color:rgba(245,240,230,0.6);line-height:1;padding:0 0.15rem}
+  .sv-mleg .nexus{font-family:'Cinzel',serif;font-size:var(--t-tit);
+    color:var(--nexus);filter:brightness(1.6);line-height:1.15;white-space:nowrap}
+  .sv-mleg .barra{width:min(26rem,100%);height:0.2rem;border-radius:0.1rem;
+    background:linear-gradient(90deg,rgba(200,160,85,0.35),var(--oro) 18%,
+      var(--oro) 82%,rgba(200,160,85,0.35));margin:0.35rem 0}
+  .sv-mleg .sotto{font-family:'Cinzel',serif;font-size:var(--t-cor);
+    letter-spacing:0.1em;color:rgba(245,240,230,0.42);line-height:1.2}
+
+  /* ③ in pratica */
+  .sv-mleg .pratica{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.7rem}
+  .sv-mleg .pr{position:relative;min-width:0;border:1px solid var(--line);
+    border-radius:1rem;overflow:hidden;background:rgba(245,240,230,0.035);
+    padding:1.4rem 1.05rem 1.15rem;text-align:center;transition:0.2s}
+  .sv-mleg .pr .sg{position:relative;width:4.2rem;height:4.2rem;margin:0 auto 0.85rem;
+    color:var(--oro-ch);transition:0.2s}
+  .sv-mleg .pr .sg svg{width:100%;height:100%;display:block}
+  .sv-mleg .pr:hover{border-color:rgba(200,160,85,0.5)}
+  .sv-mleg .pr:hover .sg{filter:brightness(1.2)
+    drop-shadow(0 0 0.85rem rgba(200,160,85,0.55))}
+  .sv-mleg .pr b{position:relative;display:block;font-family:'Cinzel',serif;
+    font-weight:500;font-size:var(--t-eti);color:var(--ivory);line-height:1.35;
+    margin-bottom:0.4rem;min-width:0;overflow-wrap:break-word}
+  /* il posto per la riga resta anche quando è vuota */
+  .sv-mleg .pr span{position:relative;display:block;min-height:2.6rem;
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-eti);
+    line-height:1.5;color:rgba(245,240,230,0.62);min-width:0;overflow-wrap:break-word}
+
+  @media(max-width:46rem){
+    .sv-mleg .pratica{grid-template-columns:minmax(0,1fr)}
+    .sv-mleg .pr span{min-height:0}
+  }
+  @media(max-width:34rem){
+    .sv-mleg .simboli{grid-template-columns:minmax(0,1fr)}
+    .sv-mleg .form{padding:1.5rem 1rem}
+    .sv-mleg .barra{height:0.16rem}
   }
 </style>
 
@@ -219,7 +345,115 @@ var CASA = `<style>
               <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M4 14L20 5L36 14Z"></path><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"></path><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"></path></svg></span>
               <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">tempio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">luoghi sacri custoditi</i></span>
             </div>
-      </div>
+        </div>
+
+          <div class="sv-mleg" style="max-width:none;margin:0">
+            <!-- LA FORMULA -->
+          <div class="liv">
+            <div class="occhio">La formula</div>
+            <div class="form">
+              <div class="sopra">
+                <span class="gruppo"><span class="par">(</span><span class="cinque">
+                  <span class="el" style="--c:var(--terra)">Terra</span>
+                  <span class="piu">+</span>
+                  <span class="el" style="--c:var(--acqua)">Acqua</span>
+                  <span class="piu">+</span>
+                  <span class="el" style="--c:var(--fuoco)">Fuoco</span>
+                  <span class="piu">+</span>
+                  <span class="el" style="--c:var(--aria)">Aria</span>
+                  <span class="piu">+</span>
+                  <span class="el" style="--c:var(--etere)">Etere</span>
+                  <span class="piu">+</span>
+                  <span class="el" style="--c:var(--svil)">Sviluppo</span>
+                </span><span class="par">)</span></span>
+                <span class="volte"><span class="per">&times;</span><span class="nexus">Nexus</span></span>
+              </div>
+              <div class="barra"></div>
+              <div class="sotto">falso ego</div>
+            </div>
+          </div>
+
+            <!-- IN PRATICA -->
+          <div class="liv">
+            <div class="occhio">In pratica</div>
+            <div class="pratica">
+
+              <div class="pr" data-pr="0">
+                <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
+                  stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".65"/>
+                  <path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".25"/>
+                  <g transform="translate(-4,4) scale(0.9)">
+                    <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/>
+                    <circle cx="22" cy="12" r="3.2"/>
+                    <circle cx="28.5" cy="9.6" r="2.4"/>
+                    <circle cx="33.5" cy="10" r="2.1"/>
+                    <circle cx="37.5" cy="11.6" r="1.8"/>
+                    <circle cx="40.5" cy="14.2" r="1.5"/>
+                  </g>
+                  <g transform="translate(33,3) scale(0.5)" opacity=".45">
+                    <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/>
+                    <circle cx="22" cy="12" r="3.2"/>
+                    <circle cx="28.5" cy="9.6" r="2.4"/>
+                    <circle cx="33.5" cy="10" r="2.1"/>
+                    <circle cx="37.5" cy="11.6" r="1.8"/>
+                    <circle cx="40.5" cy="14.2" r="1.5"/>
+                  </g>
+                  <g transform="translate(20,-2) scale(0.3)" opacity=".2">
+                    <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/>
+                    <circle cx="22" cy="12" r="3.2"/>
+                    <circle cx="28.5" cy="9.6" r="2.4"/>
+                    <circle cx="33.5" cy="10" r="2.1"/>
+                  </g>
+                </svg></span>
+                <b>L&rsquo;intreccio di orme</b>
+                <span data-riga="0"></span>
+              </div>
+
+              <div class="pr" data-pr="1">
+                <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 10 L55 10 L55 44 L5 44Z"/>
+                  <path d="M21.7 10 L21.7 44 M38.3 10 L38.3 44" opacity=".45"/>
+                  <path d="M5 19 L55 19" opacity=".45"/>
+                  <path d="M10 27 L17 27 M26 27 L34 27 M43 27 L50 27" opacity=".28"/>
+                  <path d="M10 35 L17 35 M26 35 L34 35" opacity=".28"/>
+                  <path d="M3 51 L11 43 C13 41 16 43 14 45 L19 40 C21 38 24 40 22 42 L18 46 C15 50 9 52 5 52Z"/>
+                  <path d="M57 51 L49 43 C47 41 44 43 46 45 L41 40 C39 38 36 40 38 42 L42 46 C45 50 51 52 55 52Z" opacity=".65"/>
+                </svg></span>
+                <b>Gestionale condiviso, per cooperare</b>
+                <span data-riga="1"></span>
+              </div>
+
+              <div class="pr" data-pr="2">
+                <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 22 C19 19 24 24 26 31"/>
+                  <path d="M26 31 C33 26 41 27 45 33" opacity=".9"/>
+                  <path d="M45 33 C50 28 52 22 50 15" opacity=".75"/>
+                  <path d="M26 31 C24 39 27 45 34 48" opacity=".85"/>
+                  <path d="M11 22 C7 28 8 35 13 40" opacity=".7"/>
+                  <path d="M13 40 C19 43 24 43 27 40" opacity=".55"/>
+                  <path d="M45 33 C46 40 43 45 38 47" opacity=".6"/>
+                  <path d="M11 22 C13 16 18 12 24 11" opacity=".55"/>
+                  <path d="M50 15 C52 11 55 9 58 9" opacity=".35"/>
+                  <path d="M34 48 C36 52 40 54 44 54" opacity=".35"/>
+                  <path d="M13 40 C10 45 6 47 2 47" opacity=".3"/>
+                  <circle cx="11" cy="22" r="2.6" fill="currentColor" stroke="none"/>
+                  <circle cx="26" cy="31" r="3" fill="currentColor" stroke="none"/>
+                  <circle cx="45" cy="33" r="2.6" fill="currentColor" stroke="none" opacity=".9"/>
+                  <circle cx="50" cy="15" r="2.2" fill="currentColor" stroke="none" opacity=".8"/>
+                  <circle cx="34" cy="48" r="2.4" fill="currentColor" stroke="none" opacity=".85"/>
+                  <circle cx="13" cy="40" r="2.2" fill="currentColor" stroke="none" opacity=".8"/>
+                  <circle cx="24" cy="11" r="1.9" fill="currentColor" stroke="none" opacity=".6"/>
+                </svg></span>
+                <b>Contenuti interconnessi</b>
+                <span data-riga="2"></span>
+              </div>
+
+            </div>
+          </div>
+          </div>
     
         </div>
       </div>
@@ -525,11 +759,13 @@ var CASA = `<style>
     </div>
   </section>
 
-</div>`;
+</div>
+`;
 
 function home(c){
   c.innerHTML = CASA;
   avviaCasa();
+  avviaLegenda();       /* il quadrante della mappa: legenda, formula, pratica */
   segniDelleStanze();   /* i simboli della barra entrano fra quelli di Design */
   legaLuoghi();
   contaOrme();          /* il cenno delle orme vive nella barra, non nella casa */
@@ -782,6 +1018,11 @@ function avviaCasa(){
      come-funziona.html; «Il tuo spazio» pure, finché il guscio non dice
      che si è dentro — window.SpazioVivo.dentro(rottaDellOrma), e
      window.SpazioVivo.fuori() lo riporta alla prima volta.
+
+     IL QUADRANTE DELLA MAPPA — legenda, formula, pratica:
+       · window.SpazioVivo.mappaLegenda({simboli:[{segno,nome,cosa}],
+                                         pratica:[{nome,riga} ×3]})
+       · la formula è fissa e sta nel disegno: non cambia, non arriva da fuori
 
      LA VIA DI RITORNO, quando si entra nella mappa da una porta:
        · window.SpazioVivo.porta({nome, torna})  — mostra il tasto discreto
@@ -1152,6 +1393,106 @@ function avviaCasa(){
       apri();
     });
   }
+})();
+}
+
+/* ⭐ il secondo foglio di Design — il quadrante della mappa: legenda,
+   formula, pratica. Nel disegno gira da sé appena la pagina è letta;
+   qui la casa nasce dentro home(), quindi lo si chiama lì. Il codice
+   dentro è quello consegnato, parola per parola. */
+function avviaLegenda(){
+(function () {
+  "use strict";
+
+  var ATTESA = "[ in attesa ]";
+  var vuoto = function (v) { return v === undefined || v === null || v === ""; };
+  var testo = function (v) { return vuoto(v) ? ATTESA : String(v); };
+  function svuota(n) { while (n && n.firstChild) n.removeChild(n.firstChild); }
+
+  var SEGNI = {
+    orma:'<path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"/><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"/>',
+    connessione:'<path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"/><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"/><path d="M14 20L26 20"/>',
+    talenti:'<circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/>',
+    vicinato:'<path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"/><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"/><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"/><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"/><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"/>',
+    ritmo:'<path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"/><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"/><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"/><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"/><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"/>',
+    incontro:'<path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"/><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"/><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"/>',
+    tempio:'<path d="M4 14L20 5L36 14Z"/><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"/><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"/>'
+  };
+
+  /* i tre segni della pratica, per chi li vuole anche in legenda */
+  [].forEach.call(document.querySelectorAll(".sv-mleg .pr"), function (p) {
+    var chiavi = ["intreccio", "lavagna", "micelio"];
+    SEGNI[chiavi[+p.getAttribute("data-pr")]] = p.querySelector("svg").innerHTML;
+  });
+
+  function disegna(chiave) {
+    var d = SEGNI[chiave];
+    if (!d) return null;
+    var vb = ["intreccio", "lavagna", "micelio"].indexOf(chiave) >= 0
+      ? "0 0 60 60" : "0 0 40 40";
+    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("viewBox", vb);
+    s.setAttribute("fill", "none");
+    s.setAttribute("stroke", "currentColor");
+    s.setAttribute("stroke-width", "1.4");
+    s.setAttribute("stroke-linecap", "round");
+    s.setAttribute("stroke-linejoin", "round");
+    s.innerHTML = d;
+    return s;
+  }
+
+  function riempi(dati) {
+    dati = dati || {};
+
+    /* i simboli: la legenda disegnata resta al suo posto finché non arriva un dato */
+    var box = document.querySelector(".sv-casa [data-leg]")
+           || document.getElementById("sv-mleg-simboli");
+    var simboli = dati.simboli || [];
+    if (box && simboli.length) {
+      svuota(box);
+      simboli.forEach(function (s) {
+        var e = document.createElement("div");
+        e.style.cssText = "display:grid;grid-template-columns:2.9rem minmax(0,1fr);" +
+          "gap:0.8rem;align-items:center;min-width:0";
+        var sg = document.createElement("span");
+        sg.style.cssText = "width:2.4rem;height:2.4rem;color:var(--oro-ch)";
+        var ic = disegna(s.segno);
+        if (ic) { ic.style.cssText = "width:100%;height:100%;display:block"; sg.appendChild(ic); }
+        e.appendChild(sg);
+        var tx = document.createElement("span");
+        tx.style.minWidth = "0";
+        var n = document.createElement("b");
+        n.style.cssText = "display:block;font-size:var(--t-tas);font-weight:500;" +
+          "line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)";
+        n.textContent = testo(s.nome);
+        tx.appendChild(n);
+        var q = document.createElement("i");
+        q.style.cssText = "display:block;font-family:'Cormorant Garamond',serif;" +
+          "font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;" +
+          "text-shadow:0 2px 14px rgba(2,4,12,0.95)";
+        q.textContent = testo(s.cosa);
+        tx.appendChild(q);
+        e.appendChild(tx);
+        box.appendChild(e);
+      });
+    }
+
+    /* ③ le tre righe — il posto resta anche quando sono vuote */
+    var pratica = dati.pratica || [];
+    [].forEach.call(document.querySelectorAll("[data-riga]"), function (n, k) {
+      var p = pratica[k] || {};
+      n.textContent = vuoto(p.riga) ? "" : String(p.riga);
+      if (!vuoto(p.nome)) {
+        n.parentNode.querySelector("b").textContent = String(p.nome);
+      }
+    });
+  }
+
+  /* a vuoto il quadrante si legge intero */
+  riempi({});
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.mappaLegenda = riempi;
 })();
 }
 
