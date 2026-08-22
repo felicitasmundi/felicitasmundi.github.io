@@ -72,7 +72,10 @@
   .spunta span{font-size:var(--t-eti);font-family:'DM Sans',sans-serif;color:rgba(245,240,230,.86)}
   .spunta a{color:var(--oro,#C8A055);text-decoration:underline;text-underline-offset:2px}
 
-  .esca{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .esca{display:none}   /* ⛔ display:none, non left:-9999px: un campo
+                         spostato fuori schermo i gestori di password
+                         lo riempiono lo stesso, e la pagina finiva
+                         per rifiutare persone vere. */
 
   .msg{margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.5;min-height:22px}
   .msg.ok{color:var(--oro-ch)}
@@ -130,7 +133,8 @@
       <input type="text" id="nome" autocomplete="name" placeholder="Come ti chiami">
     </div>
     <!-- campo-esca anti-automatismi: un umano lo lascia vuoto -->
-    <input class="esca" type="text" id="dolce" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <input class="esca" type="text" id="dolce" tabindex="-1" autocomplete="off"
+           aria-hidden="true" data-lpignore="true" data-1p-ignore data-form-type="other">
 
     <button id="b-chiedi">Mandami il Nexus</button>
     <div class="msg" id="msg1"></div>
@@ -289,8 +293,18 @@
   function chiedi(){
     var email = ($("email").value || "").trim();
     var nome  = ($("nome").value || "").trim();
-    var esca  = ($("dolce").value || "").trim();
-    if(esca){ return; }                       // il campo esca resta muto: se &egrave; pieno non accade nulla
+    var campoEsca = $("dolce");
+    var esca  = (campoEsca.value || "").trim();
+    if(esca){
+      /* ⛔ Non si tace mai: un rifiuto muto è indistinguibile da un guasto,
+         e chi lo riceve se ne va senza sapere perché.
+         ⭐ Il campo si svuota, così il tentativo dopo passa da solo: un
+            automatismo riempie una volta e se ne va, una persona schiaccia
+            di nuovo ed entra. */
+      campoEsca.value = "";
+      dice($("msg1"), "Un campo nascosto &egrave; stato riempito da solo &mdash; di solito &egrave; il gestore delle password. Schiaccia di nuovo: adesso passa.", "err");
+      return;
+    }
     if(!email || email.indexOf("@") < 1){ dice($("msg1"), "Scrivi una email valida.", "err"); return; }
 
     var b = $("b-chiedi"); b.disabled = true;
