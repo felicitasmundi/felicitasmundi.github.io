@@ -44,12 +44,33 @@
       il tasto senza rotta resta href="#" e senza `data-viva`. Si accende
       da sé il giorno che il dato porta la rotta.
 
-   ⚠️ QUELLO CHE LA PAGINA VECCHIA FACEVA — comporre un'opera dalle
-      proprie orme, l'elenco delle proprie opere, i tre pannelli
-      ordina · stampa · distribuisci — questo disegno non lo porta.
-      Il guscio chiama ancora portaInEdizione(cosa) da un articolo e
-      dalle orme: la variabile si riempie e qui nessuno la legge.
-      La copia sta in PRECEDENTI/fm-edizione_2026-08-22_prima-del-disegno-nuovo.js
+   ⭐ LA PAGINA È LA SOGLIA, IL LAVORO STA DIETRO. Le due porte del
+      capitolo ① — `raccogli` e `cura` — sono due stanze del guscio, e
+      non due indirizzi:
+
+        raccogli   le proprie orme si spuntano e diventano un'opera
+                   — `opere`, `opera_pezzi`, e `opera_permessi` per le
+                   orme che non sono proprie: il permesso si chiede
+        cura       si comincia un'opera in un formato, e si guarda
+                   quello che si sta facendo
+
+      Il guscio le apre con vai("raccogli") e vai("cura"): due righe
+      dentro vai(), segnate lì.
+
+   ⭐ PORTAINEDIZIONE() TORNA A FUNZIONARE. Il guscio lo chiama da
+      un'orma («Pubblica») e da un articolo («Pubblica o stampa»).
+      Quello che si porta non si ferma più sulla soglia: edizione()
+      devia a `raccogli`, la riga «Stai portando qui» resta quella di
+      prima, e in più — se è un'orma — arriva già spuntata nell'elenco.
+      Da `cura` lo stesso oggetto arriva a nuovaOpera(genere, venuto),
+      che sapeva già riceverlo e non lo riceveva mai.
+      Si consuma quando l'opera nasce, o quando si torna alla soglia.
+
+   ⛔ IL PANNELLO «PUBBLICA E DISTRIBUISCI» NON TORNA. Quello che
+      diceva lo dice adesso il capitolo ③ del disegno, e le sue cifre
+      — «26 € al mese» — erano scritte nel codice.
+      La copia intera del file di prima sta in
+      PRECEDENTI/fm-edizione_2026-08-22_prima-del-disegno-nuovo.js
 
    ⛔ Niente involucro (function(){ … })() attorno al file: il guscio
       mette tutto in comune e questo file legge da lì. L'involucro di
@@ -479,9 +500,36 @@ var EDIZIONE = `<style>
 `;
 
 function edizione(c){
+  /* ⭐ quello che si porta qui da un'orma o da un articolo non si ferma
+     sulla soglia: va dritto dove si lavora. */
+  if(daPubblicare){ vai("raccogli"); return; }
+
   c.innerHTML = EDIZIONE;
   avviaEdizione();
-  prezziEdizione();
+  collegaLePorteDellEdizione();
+}
+
+/* ⭐ LE DUE PORTE DEL DISEGNO portano DENTRO il guscio, non a un
+   indirizzo: Design mette un href, il guscio lo intercetta e chiama
+   vai() — la stessa strada dei due tasti sotto la mappa.
+   Le rotte passano da riempi() perché è lì che il disegno accende il
+   quadrante con `data-viva`; e passano nella STESSA chiamata dei
+   prezzi, perché riempi() riscrive tutte le rotte ogni volta. */
+function collegaLePorteDellEdizione(){
+  var sv = window.SpazioVivo || {};
+
+  var dati = prezziEdizione() || {};
+  dati.rotte = dati.rotte || {};
+  dati.rotte.raccogli = "#raccogli";
+  dati.rotte.cura     = "#cura";
+  if(typeof sv.edizione === "function") sv.edizione(dati);
+
+  ["raccogli", "cura"].forEach(function(q){
+    var a = document.querySelector('[data-rotta="' + q + '"]');
+    if(!a || a.getAttribute("data-legato")) return;
+    a.setAttribute("data-legato", "1");
+    a.addEventListener("click", function(e){ e.preventDefault(); vai(q); });
+  });
 }
 
 /* ── il codice della pagina, come l'ha scritto Design: non si tocca ──
@@ -542,11 +590,357 @@ function avviaEdizione(){
 })();
 }
 
-/* ── i prezzi, le rotte e il campionario ──
-   ⚠️ In attesa della tabella. Finché non c'è, non si chiama niente:
-      la pagina resta com'è, le righe dei prezzi non compaiono e i
-      quadranti restano fermi.
+/* ── i prezzi, le famiglie e il campionario ──
+   ⚠️ In attesa della tabella. Finché non c'è restituisce niente: le
+      righe dei prezzi non compaiono, gli otto quadranti delle famiglie
+      restano fermi, il campionario resta [ in attesa ].
+   ⭐ Il giorno che la tabella c'è, qui si restituisce
+      { prezzi:{…}, rotte:{ famiglie:{…} }, campionario:"…" }
+      e collegaLePorteDellEdizione() lo porta al disegno in una volta
+      sola, insieme alle due porte del lavoro.
    ⛔ Non si inventano né tabella né colonne: si chiede. */
 function prezziEdizione(){
-  return;
+  return null;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   IL LAVORO SULLE ORME — le due stanze dietro `raccogli` e `cura`
+
+   La pagina di Design è la soglia. Il lavoro vive qui, in due stanze
+   proprie, e le parole sono quelle che c'erano: il codice viene dal
+   file di prima, riga per riga. Le cinque mani nuove sono segnate ⭐.
+
+   ⛔ Il pannello «Pubblica e distribuisci» non torna: quello che
+      diceva lo dice adesso il capitolo ③ del disegno, e le sue cifre
+      erano scritte nel codice.
+
+   La copia intera di quel file sta in
+   PRECEDENTI/fm-edizione_2026-08-22_prima-del-disegno-nuovo.js
+   ══════════════════════════════════════════════════════════════ */
+
+/* la riga che dice cosa si sta portando qui, quando si arriva da
+   un'orma o da un articolo. È la stessa del file di prima. */
+function rigaDiQuelloCheSiPorta(venuto){
+  if(!venuto) return "";
+  return '<div class="ed-venuto"><span class="ev-et">Stai portando qui</span>'
+       + '<b>' + esc(venuto.titolo) + '</b><small>' + esc(venuto.da) + '</small></div>';
+}
+
+/* il tasto che riporta alla soglia, e lascia andare quello che si portava */
+function tornaAllaSoglia(){
+  var t = $("ed-torna"); if(!t) return;
+  t.addEventListener("click", function(){ daPubblicare = null; vai("edizione"); });
+}
+
+
+/* ══ RACCOGLI — le proprie orme diventano un'opera ══ */
+function raccogli(c){
+  var venuto = daPubblicare;
+
+  c.innerHTML =
+    '<button class="torna" id="ed-torna">&#8592; Torna</button>'
+  + '<div class="occhio">Comunità Eterna FelicitasMundi</div>'
+  + '<h1>Metti insieme le tue opere</h1>'
+  + rigaDiQuelloCheSiPorta(venuto)
+  + '<div id="d-ordina"></div>'
+  + '<h2 style="margin-top:1.8rem">Quello che stai facendo</h2>'
+  + '<div id="ed-opere"><p class="vuoto">Un momento…</p></div>';
+
+  tornaAllaSoglia();
+  pannelloOrdina();
+  mieOpere();
+}
+
+/* ⭐ l'orma che si sta portando qui arriva già spuntata: chi l'ha
+   mandata da «Pubblica» non deve ritrovarla a mano nell'elenco. */
+function spuntaLOrmaPortata(){
+  var v = daPubblicare;
+  if(!v || !v.orma_id) return;
+  var q = document.querySelector('#ord-mie input[data-orma="' + v.orma_id + '"]');
+  if(q){ q.checked = true; contaScelte(); }
+}
+
+
+/* ══ CURA — si comincia un'opera, e si guarda quello che si sta facendo ══ */
+function cura(c){
+  var venuto = daPubblicare;
+
+  c.innerHTML =
+    '<button class="torna" id="ed-torna">&#8592; Torna</button>'
+  + '<div class="occhio">Comunità Eterna FelicitasMundi</div>'
+  + '<h1>Cura e grafica dell’opera</h1>'
+  + rigaDiQuelloCheSiPorta(venuto)
+  + '<div id="d-stampa"></div>'
+  + '<h2 style="margin-top:1.8rem">Quello che stai facendo</h2>'
+  + '<div id="ed-opere"><p class="vuoto">Un momento…</p></div>';
+
+  tornaAllaSoglia();
+  pannelloStampa();
+  mieOpere();
+}
+
+
+/* ══ IL LAVORO, COM'ERA ══ */
+
+function pannelloOrdina(){
+  var d = $("d-ordina");
+  d.innerHTML =
+    '<p class="ed-riga">[ in attesa: cosa significa ordinare ]</p>'
+  + '<div class="ord-due">'
+  +   '<div class="ord-c">'
+  +     '<b>Le tue orme</b>'
+  +     '<div id="ord-mie"><p class="vuoto">Un momento…</p></div>'
+  +   '</div>'
+  +   '<div class="ord-c">'
+  +     '<b>Cerca altre orme</b>'
+  +     '<small>Anche di altre persone. Se scegli qualcosa di qualcun altro, '
+  +       'gli si chiede il permesso.</small>'
+  +     '<input id="ord-cerca" placeholder="erbe spontanee, pane, un luogo…">'
+  +     '<div id="ord-trovate"></div>'
+  +   '</div>'
+  + '</div>'
+
+  + '<div class="ord-fai">'
+  +   '<button class="mini" id="ord-crea">Raccogli le orme scelte in un\u2019opera</button>'
+  +   '<span class="ord-conto" id="ord-conto">nessuna scelta</span>'
+  +   '<div class="mod-esito" id="ord-esito"></div>'
+  + '</div>'
+
+  + '<div class="ord-agg">'
+  +   '<b>Oppure aggiungi qualcosa di nuovo</b>'
+  +   '<small>Quello che aggiungi qui diventa anche una tua orma.</small>'
+  +   '<div class="mod">'
+  +     '<div><label>La descrizione</label><textarea id="ag-testo"></textarea></div>'
+  +     '<div class="due">'
+  +       '<div><label>Il luogo</label><input id="ag-luogo"></div>'
+  +       '<div><label>L\u2019anno</label><input id="ag-anno" inputmode="numeric"></div>'
+  +     '</div>'
+  +     '<button class="mini" id="ag-metti">Aggiungi</button>'
+  +     '<div class="mod-esito" id="ag-esito"></div>'
+  +   '</div>'
+  + '</div>';
+
+  if(ospite){ $("ord-mie").innerHTML = '<p class="vuoto">Le tue orme si vedono con l\'accesso.</p>'; }
+  else mieOrmeScelta(spuntaLOrmaPortata);   /* ⭐ e l'orma portata arriva spuntata */
+
+  $("ord-cerca").addEventListener("input", function(){
+    var q = this.value.trim();
+    if(q.length < 3){ $("ord-trovate").innerHTML = ""; return; }
+    cercaOrme(q);
+  });
+
+  $("ag-metti").addEventListener("click", aggiungiPezzo);
+
+  /* il conto delle scelte si aggiorna a ogni spunta */
+  d.addEventListener("change", function(e){
+    if(e.target.type !== "checkbox") return;
+    contaScelte();
+  });
+
+  $("ord-crea").addEventListener("click", creaDaOrme);
+}
+
+function ormeScelte(){
+  var out = [];
+  document.querySelectorAll("#d-ordina input[type=checkbox]:checked").forEach(function(c){
+    out.push({
+      id: c.dataset.orma,
+      di: c.dataset.di,
+      testo: c.dataset.testo || ""
+    });
+  });
+  return out;
+}
+
+function contaScelte(){
+  var n = ormeScelte().length, e = $("ord-conto");
+  if(!e) return;
+  e.textContent = n === 0 ? "nessuna scelta"
+                : n === 1 ? "una orma scelta"
+                : n + " orme scelte";
+}
+
+/* ⭐ le orme scelte diventano un'opera, coi pezzi collegati alle orme vere */
+function creaDaOrme(){
+  var e = $("ord-esito"); e.className = "mod-esito";
+  if(ospite){ vaiAdEntrare("edizione"); return; }
+  var scelte = ormeScelte();
+  if(!scelte.length){ e.className="mod-esito err"; e.textContent="Scegli almeno un'orma."; return; }
+
+  e.textContent = "Raccolgo…";
+  db.from("opere").insert({
+    persona_id: io.id,
+    titolo: "Senza titolo",
+    genere: "libro",
+    nata_da: "le orme"
+  }).select("id").single().then(function(r){
+    if(r.error){ e.className="mod-esito err"; e.textContent=r.error.message; return; }
+    var opera = r.data.id;
+    daPubblicare = null;   /* ⭐ quello che si portava qui è entrato */
+
+    var pezzi = scelte.map(function(x, i){
+      return { opera_id: opera, ordine: i, tipo: "testo",
+               orma_id: x.id, autore_id: x.di, contenuto: x.testo };
+    });
+
+    db.from("opera_pezzi").insert(pezzi).then(function(rr){
+      if(rr.error){ e.className="mod-esito err"; e.textContent=rr.error.message; return; }
+
+      /* per le orme di altri, si chiede il permesso */
+      var altrui = scelte.filter(function(x){ return x.di && x.di !== io.id; });
+      if(altrui.length){
+        var chieste = {};
+        var permessi = [];
+        altrui.forEach(function(x){
+          if(chieste[x.di]) return;
+          chieste[x.di] = 1;
+          permessi.push({ opera_id: opera, a_chi: x.di, chiesto_da: io.id });
+        });
+        db.from("opera_permessi").insert(permessi).then(function(){
+          e.textContent = "Raccolte. Il permesso &egrave; stato chiesto a chi ha lasciato "
+                        + "le orme che non sono tue.";
+          mieOpere();
+        });
+      } else {
+        e.textContent = "Raccolte in un'opera.";
+        mieOpere();
+      }
+
+      document.querySelectorAll("#d-ordina input[type=checkbox]").forEach(function(c){
+        c.checked = false;
+      });
+      contaScelte();
+    });
+  });
+}
+
+function rigaOrma(o, altrui){
+  var d = document.createElement("label");
+  d.className = "orm-s";
+  d.innerHTML = '<input type="checkbox"><span class="tx"><b></b><i></i></span>';
+  d.querySelector("b").textContent = o.contenuto.slice(0,90) + (o.contenuto.length>90?"…":"");
+  var q = DOVE.filter(function(x){ return x.tipo === o.tipo; })[0];
+  d.querySelector("i").textContent = (q ? q.n : o.tipo)
+    + (altrui ? " · di un\u2019altra persona — servir&agrave; il permesso" : "");
+  var c = d.querySelector("input");
+  c.dataset.orma  = o.id;
+  c.dataset.di    = o.persona_id || (io && io.id) || "";
+  c.dataset.testo = o.contenuto;
+  return d;
+}
+
+/* ⭐ `poi` è l'unica aggiunta: serve a spuntare l'orma che si sta
+   portando qui, quando l'elenco è arrivato. Il resto è com'era. */
+function mieOrmeScelta(poi){
+  db.from("orme").select("id,contenuto,tipo,persona_id").eq("persona_id", io.id)
+    .order("momento", {ascending:false}).limit(30)
+    .then(function(r){
+      var o = (r && r.data) || [], box = $("ord-mie");
+      if(!o.length){ box.innerHTML = '<p class="vuoto">Non hai ancora orme.</p>';
+                     if(typeof poi === "function") poi(); return; }
+      box.innerHTML = "";
+      o.forEach(function(x){ box.appendChild(rigaOrma(x, false)); });
+      if(typeof poi === "function") poi();
+    });
+}
+
+function cercaOrme(q){
+  db.from("orme").select("id,contenuto,tipo,persona_id")
+    .eq("visibilita","pubblico").ilike("contenuto", "%"+q+"%").limit(20)
+    .then(function(r){
+      var o = (r && r.data) || [], box = $("ord-trovate");
+      if(!o.length){ box.innerHTML = '<p class="vuoto">Nulla con queste parole.</p>'; return; }
+      box.innerHTML = "";
+      o.forEach(function(x){ box.appendChild(rigaOrma(x, x.persona_id !== (io && io.id))); });
+    });
+}
+
+function aggiungiPezzo(){
+  var e = $("ag-esito"); e.className = "mod-esito";
+  if(ospite){ vaiAdEntrare("edizione"); return; }
+  var t = $("ag-testo").value.trim();
+  if(!t){ e.className="mod-esito err"; e.textContent="Scrivi qualcosa."; return; }
+  var anno = $("ag-anno").value.trim();
+  e.textContent = "Aggiungo…";
+  db.from("orme").insert({
+    persona_id: io.id, contenuto: t, tipo: "racconto",
+    destinazione: "Edizione", visibilita: "solo_me",
+    accaduto_il: anno && anno.length === 4 ? anno + "-01-01" : null
+  }).then(function(r){
+    if(r.error){ e.className="mod-esito err"; e.textContent=r.error.message; return; }
+    e.textContent = "Aggiunto, ed &egrave; anche una tua orma.";
+    $("ag-testo").value=""; $("ag-luogo").value=""; $("ag-anno").value="";
+    mieOrmeScelta();
+  });
+}
+
+/* ══ STAMPA ══ */
+function pannelloStampa(){
+  $("d-stampa").innerHTML =
+    '<p class="ed-riga"><b>Stampare &egrave; ci&ograve; che tiene traccia:</b> ci permette di '
+  + 'toccare con mano quelle parole, quelle foto, quelle grafiche, quei ricordi e quelle '
+  + 'intuizioni. Non sono pi&ugrave; codici binari dentro un\u2019interfaccia visiva, '
+  + 'ma <b>testi e linguaggi che rimangono</b>.</p>'
+
+  + '<div class="ed-tre">'
+  +   '<button class="ed-c" data-e="libro" style="--ec:var(--terra)"><b>Un libro</b></button>'
+  +   '<button class="ed-c" data-e="magazine" style="--ec:var(--aria)"><b>Un magazine</b></button>'
+  +   '<button class="ed-c" data-e="opuscolo" style="--ec:var(--fuoco)"><b>Un opuscolo</b></button>'
+  +   '<button class="ed-c" data-e="foto" style="--ec:var(--acqua)"><b>Le tue fotografie</b></button>'
+  +   '<button class="ed-c" data-e="agenda" style="--ec:var(--terra)"><b>Un\u2019agenda</b></button>'
+  +   '<button class="ed-c" data-e="calendario" style="--ec:var(--aria)"><b>Un calendario</b></button>'
+  +   '<button class="ed-c" data-e="esposizione" style="--ec:var(--etere)"><b>Materiali per esporre</b></button>'
+  + '</div>'
+
+  + '<div class="ed-nat">Fra tutto quello che si potrebbe stampare, '
+  +   '<b>proponiamo solo ci&ograve; che &egrave; fatto di materiali naturali</b>. '
+  +   '&Egrave; una scelta di coerenza.</div>'
+
+  + '<p class="ed-riga" style="margin-top:0.9rem">I formati e le carte disponibili '
+  +   'arrivano dallo stampatore. [ in attesa del collegamento ]</p>';
+
+  document.querySelectorAll("#d-stampa .ed-c").forEach(function(b){
+    b.addEventListener("click", function(){ nuovaOpera(b.dataset.e, daPubblicare);   /* ⭐ nuovaOpera sapeva già riceverlo */ });
+  });
+}
+
+function mieOpere(){
+  var box = $("ed-opere"); if(!box) return;
+  if(ospite){ box.innerHTML = '<p class="vuoto">Le tue opere si vedono con l\'accesso.</p>'; return; }
+  db.from("opere").select("id,titolo,genere,stato,creata_il")
+    .order("creata_il", {ascending:false}).limit(20)
+    .then(function(r){
+      var o = (r && r.data) || [];
+      if(!o.length){ box.innerHTML = '<p class="vuoto">Non hai ancora cominciato nulla.</p>'; return; }
+      box.innerHTML = "";
+      o.forEach(function(x){
+        var d = document.createElement("div");
+        d.className = "stato-riga";
+        d.innerHTML = "<b></b><i></i>";
+        d.querySelector("b").textContent = x.titolo;
+        d.querySelector("i").textContent = x.genere + " · " + x.stato;
+        box.appendChild(d);
+      });
+    }).catch(function(){ box.innerHTML = '<p class="vuoto">—</p>'; });
+}
+
+/* si comincia un'opera, con dentro quello che si è portato */
+function nuovaOpera(genere, venuto){
+  if(ospite){ vaiAdEntrare("edizione"); return; }
+  var titolo = venuto ? venuto.titolo : "Senza titolo";
+  db.from("opere").insert({
+    persona_id: io.id, titolo: titolo, genere: genere,
+    nata_da: venuto ? venuto.da : "edizione"
+  }).select("id").single().then(function(r){
+    if(r.error){ parla(r.error.message); return; }
+    if(venuto) daPubblicare = null;   /* ⭐ consumato */
+    if(venuto && venuto.orma_id){
+      db.from("opera_pezzi").insert({
+        opera_id: r.data.id, tipo: "testo",
+        orma_id: venuto.orma_id, autore_id: io.id,
+        contenuto: venuto.contenuto || null
+      }).then(function(){ mieOpere(); });
+    } else { mieOpere(); }
+    parla("Cominciata.");
+  });
 }
