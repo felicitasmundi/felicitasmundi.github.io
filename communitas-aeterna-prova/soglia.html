@@ -1,0 +1,1746 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FelicitasMundi · Comunità Eterna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0A0C1A; --gold:#D4AF6A; --gold-d:#C8A055; --cream:#F5F0E6;
+  --cream5:rgba(240,235,224,0.5); --cream7:rgba(240,235,224,0.72);
+  --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
+  --line:rgba(184,150,62,0.18);
+  --dock-h:0px; /* dock rimosso dalla home (soglia pura): nessuno spazio riservato in fondo */
+}
+html,body{height:100%}
+body{margin:0;color:var(--cream);font-family:"Cormorant Garamond",Georgia,serif;background:#0A0C1A}
+body::before{content:'';position:fixed;inset:0;z-index:-2;background:url("https://www.felicitasmundi.com/wp-content/uploads/2026/06/comunita-eterna-verticale.png") center 60%/cover no-repeat}
+body::after{content:'';position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,12,26,0.55) 0%,rgba(10,12,26,0.74) 45%,rgba(10,12,26,0.93) 100%)}
+
+#home-scroll{position:fixed;inset:0;bottom:var(--dock-h);overflow-y:auto;-webkit-overflow-scrolling:touch;z-index:10}
+#home-scroll::-webkit-scrollbar{width:5px}
+#home-scroll::-webkit-scrollbar-thumb{background:rgba(184,150,62,0.25);border-radius:3px}
+
+/* ── HERO ── */
+.fm-hero{display:flex;justify-content:center;padding:clamp(28px,6vh,60px) 18px clamp(20px,3.5vh,34px)}
+.fm-pannello{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  max-width:440px;width:100%;
+  padding:clamp(26px,4.5vh,40px) clamp(24px,5vw,42px);
+  background:rgba(12,14,26,0.42);
+  -webkit-backdrop-filter:blur(13px);backdrop-filter:blur(13px);
+  border:1px solid rgba(212,175,106,0.55);
+  border-radius:20px;
+  box-shadow:0 10px 44px rgba(0,0,0,0.42),inset 0 1px 0 rgba(212,175,106,0.18);
+}
+.fm-pannello img{width:clamp(150px,40vw,230px);height:auto;display:block;filter:drop-shadow(0 6px 24px rgba(0,0,0,0.45));cursor:pointer;transition:transform .3s}
+.fm-pannello img:hover{transform:scale(1.03)}
+.fm-pannello .ce{margin-top:14px;font-family:"Cinzel",serif;font-weight:600;font-size:clamp(13px,2vw,16px);letter-spacing:0.34em;text-transform:uppercase;color:var(--gold-d)}
+.fm-pannello .motto{
+  margin-top:16px;padding-top:15px;
+  border-top:1px solid rgba(212,175,106,0.28);
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:500;
+  font-size:clamp(17px,2.6vw,20px);line-height:1.5;color:var(--cream7);
+  max-width:360px;
+}
+
+/* ── PULSANTE ACCEDI (in alto a destra) ── */
+.fm-accedi{
+  position:fixed;top:13px;right:13px;z-index:40;
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 15px;
+  background:rgba(12,14,26,0.55);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(212,175,106,0.55);border-radius:999px;
+  color:var(--gold);text-decoration:none;
+  font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;
+  box-shadow:0 4px 18px rgba(0,0,0,0.35);
+  transition:filter .2s,background .2s;cursor:pointer;
+}
+.fm-accedi:hover{background:rgba(20,22,38,0.78);filter:brightness(1.12)}
+.fm-accedi svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:380px){.fm-accedi{padding:7px 12px;font-size:10px;letter-spacing:0.1em}}
+
+/* ── FOOTER (dati azienda + privacy/cookie) ── */
+.fm-footer{
+  text-align:center;
+  padding:6px 18px calc(var(--dock-h) + 22px);
+  font-family:"DM Sans",sans-serif;font-size:10.5px;letter-spacing:0.03em;
+  color:rgba(240,235,224,0.48);line-height:1.7;
+}
+.fm-footer{font-size:11.5px}
+.fm-footer a{color:rgba(240,235,224,0.62);text-decoration:underline}
+.fm-footer a:hover{color:var(--gold)}
+
+/* ── ACCORDION ── */
+.fm-indici{max-width:600px;margin:0 auto;padding:0 16px 36px;display:flex;flex-direction:column;gap:11px}
+.idx{
+  background:rgba(12,14,26,0.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:0.5px solid var(--line);border-left:3px solid var(--c,#AA8844);border-radius:14px;overflow:hidden;
+  transition:background .2s;
+}
+.idx-head{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.idx-head:hover{background:rgba(20,22,38,0.5)}
+.idx-ico{flex:0 0 auto;width:40px;height:40px;display:flex;align-items:center;justify-content:center}
+.idx-ico svg{width:38px;height:38px}
+.idx-tit{flex:1}
+.idx-nome{font-family:"Cinzel",serif;font-size:18px;letter-spacing:0.1em;color:var(--cream);text-transform:uppercase}
+.idx-sub{font-size:14px;font-style:italic;color:var(--cream5);margin-top:2px}
+.idx-frec{flex:0 0 auto;font-size:18px;color:var(--c,#AA8844);transition:transform .3s}
+.idx.aperto .idx-frec{transform:rotate(90deg)}
+
+/* corpo a scomparsa */
+.idx-body{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.22,.61,.36,1)}
+.idx.aperto .idx-body{max-height:600px}
+.idx-inner{padding:4px 18px 18px}
+.idx-dom{font-size:15.5px;color:var(--cream7);margin-bottom:12px;line-height:1.55}
+
+/* azioni */
+.idx-azioni{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.idx-btn{
+  flex:1 1 auto;min-width:140px;text-align:center;padding:12px 16px;cursor:pointer;
+  background:var(--c,#AA8844);color:#0A0C1A;border:none;border-radius:9px;
+  font-family:"DM Sans",sans-serif;font-size:12.5px;letter-spacing:0.06em;text-transform:uppercase;font-weight:500;
+  text-decoration:none;transition:filter .2s;display:inline-block;
+}
+.idx-btn:hover{filter:brightness(1.12)}
+.idx-btn.ghost{background:transparent;border:0.5px solid var(--c,#AA8844);color:var(--c,#AA8844)}
+.idx-btn.ghost:hover{background:rgba(255,255,255,0.04)}
+
+/* lista ultimi 3 */
+.idx-lista{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.idx-item{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  padding:9px 12px;background:rgba(10,12,26,0.5);border-radius:8px;border-left:2px solid var(--c,#AA8844);
+}
+.idx-item .it-txt{font-size:15px;color:var(--cream);line-height:1.35}
+.idx-item .it-meta{font-family:"DM Sans",sans-serif;font-size:10px;color:var(--cream5);white-space:nowrap}
+.idx-nota{
+  font-size:13px;font-style:italic;color:rgba(240,235,224,0.4);
+  padding:10px 12px;margin-bottom:12px;border-left:2px dashed var(--c,#AA8844);
+  background:rgba(10,12,26,0.4);border-radius:0 8px 8px 0;line-height:1.45;
+}
+.idx-vedi{
+  display:inline-block;font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--c,#AA8844);text-decoration:none;
+}
+.idx-vedi:hover{text-decoration:underline}
+
+/* ── MODALE FORM ── */
+.fm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.62);z-index:80;opacity:0;pointer-events:none;transition:opacity .28s;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.fm-overlay.aperto{opacity:1;pointer-events:auto}
+.fm-modal{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.96);width:min(500px,92vw);
+  max-height:84vh;overflow-y:auto;z-index:90;background:linear-gradient(180deg,rgba(16,18,32,.98),rgba(10,12,22,.99));
+  border:0.5px solid var(--line);border-top:3px solid var(--c,#AA8844);border-radius:16px;padding:24px 24px 28px;
+  opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.22,.61,.36,1);
+}
+.fm-modal.aperto{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.fm-modal h2{font-family:"Cinzel",serif;font-size:18px;letter-spacing:0.06em;color:var(--cream);margin-bottom:14px}
+.fm-modal .m-chiudi{position:absolute;top:13px;right:15px;font-size:22px;color:var(--cream5);cursor:pointer;background:none;border:none;line-height:1}
+.fm-modal .m-chiudi:hover{color:var(--cream)}
+.fm-field{margin-bottom:13px}
+.fm-field label{display:block;font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:var(--c,#AA8844);margin-bottom:5px}
+.fm-field input,.fm-field textarea,.fm-field select{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid var(--line);border-radius:8px;color:var(--cream);font-family:"Cormorant Garamond",serif;font-size:16px;padding:9px 12px;outline:none;resize:none;transition:border-color .2s}
+.fm-field input:focus,.fm-field textarea:focus,.fm-field select:focus{border-color:var(--c,#AA8844)}
+.fm-field select option{background:#10121e}
+.fm-cta{width:100%;padding:13px;margin-top:6px;background:var(--c,#AA8844);color:#0A0C1A;border:none;border-radius:10px;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:filter .2s}
+.fm-cta:hover{filter:brightness(1.12)}
+.fm-login-nota{margin-top:10px;font-size:13px;color:var(--cream5);text-align:center}
+.fm-login-nota a{color:var(--c,#AA8844);text-decoration:none}
+
+/* toast */
+.fm-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);background:rgba(10,12,26,0.96);border:0.5px solid var(--gold);border-radius:12px;padding:14px 22px;text-align:center;font-family:"Cinzel",serif;font-size:12px;letter-spacing:0.1em;color:var(--gold);z-index:200;opacity:0;pointer-events:none;transition:all .28s}
+.fm-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+
+/* ── VETRINA ESPLORATORE ── */
+/* ░░ QUADRANTE MANIFESTO — due colonne ░░ */
+.manifesto{max-width:1180px;margin:0 auto;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(30px,6vw,90px);padding:clamp(40px,8vh,90px) clamp(24px,5vw,64px)}
+.m-sx{display:flex;flex-direction:column;align-items:center;text-align:center}
+.m-sx img{width:clamp(180px,30vw,300px);height:auto;display:block;filter:drop-shadow(0 8px 34px rgba(0,0,0,0.5))}
+.m-marchio-nome-wrap{position:relative;display:inline-block;margin-top:26px}
+.m-marchio-nome{font-family:"Cinzel",serif;font-weight:600;font-size:clamp(20px,3.4vw,30px);letter-spacing:0.22em;text-transform:uppercase;
+  background:linear-gradient(100deg,#C8A055 0%,#C8A055 38%,#FFF6DF 48%,#FFFFFF 50%,#FFF6DF 52%,#C8A055 62%,#C8A055 100%);
+  background-size:280% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  animation:brilla 5.5s ease-in-out infinite}
+@keyframes brilla{0%{background-position:180% 0}100%{background-position:-80% 0}}
+.scintilla{position:absolute;width:3px;height:3px;border-radius:50%;background:#FFF6DF;box-shadow:0 0 6px 2px rgba(255,246,223,0.7);opacity:0;animation:sc 5.5s ease-in-out infinite}
+.scintilla.s1{top:-6px;left:12%;animation-delay:0.4s}
+.scintilla.s2{top:40%;right:6%;animation-delay:2.1s}
+.scintilla.s3{bottom:-4px;left:44%;animation-delay:3.6s}
+@keyframes sc{0%,100%{opacity:0;transform:scale(0.5)}12%{opacity:1;transform:scale(1)}24%{opacity:0}}
+.m-frase{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(24px,3.4vw,40px);line-height:1.32;letter-spacing:-0.01em;color:var(--cream)}
+.m-frase .apri{font-weight:500;color:var(--gold-d)}
+.m-frase em{font-style:italic;color:var(--gold-d);font-weight:400}
+@media (max-width:820px){.manifesto{grid-template-columns:1fr;gap:34px;text-align:center;min-height:100vh;min-height:100svh;align-content:center;padding-top:66px;padding-bottom:44px}.m-frase{font-size:clamp(22px,6.4vw,30px)}.m-dx{text-align:center}}
+.vetrina{max-width:560px;margin:6px auto 26px;padding:22px 22px 24px;border-radius:18px;
+  background:rgba(12,14,26,0.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid rgba(212,175,106,0.4);box-shadow:0 10px 40px rgba(0,0,0,0.38)}
+.vetrina-intro{text-align:center;margin-bottom:2px}
+.vi-fisso{display:block;font-family:"Cinzel",serif;font-weight:600;
+  font-size:clamp(15px,2.6vw,18px);letter-spacing:0.06em;color:var(--cream)}
+.vi-rot{display:inline-block;margin-top:7px;min-height:1.5em;
+  font-family:"Cormorant Garamond",serif;font-style:italic;
+  font-size:clamp(16px,2.5vw,19px);line-height:1.45;color:rgba(240,235,224,0.82);
+  transition:opacity .55s ease}
+.vi-lista{list-style:none;margin-top:7px;padding:0;display:flex;flex-direction:column;gap:3px}
+.vi-lista li{font-family:"Cormorant Garamond",serif;font-style:italic;
+  font-size:clamp(15px,2.4vw,18px);line-height:1.4;color:rgba(240,235,224,0.82)}
+.vetrina-griglia{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0 20px}
+@media(max-width:600px){.vetrina-griglia{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:380px){.vetrina-griglia{grid-template-columns:repeat(2,1fr)}}
+.v-col{display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;
+  padding:6px 4px;border-radius:12px;transition:background .2s}
+.v-col:hover{background:rgba(212,175,106,0.06)}
+.v-ico{filter:drop-shadow(0 3px 10px rgba(0,0,0,0.4))}
+.v-ico svg{width:44px;height:44px;stroke:var(--gold);fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+.v-col:hover .v-ico svg{stroke:#EBD9A8}
+.v-lab{font-family:"DM Sans",sans-serif;font-size:12px;line-height:1.35;
+  letter-spacing:0.02em;color:rgba(240,235,224,0.85)}
+.vetrina-cta{display:block;max-width:280px;margin:0 auto;text-align:center;text-decoration:none;
+  padding:14px 18px;border-radius:10px;background:var(--gold);color:#0A0C1A;
+  font-family:"DM Sans",sans-serif;font-size:13.5px;letter-spacing:0.06em;text-transform:uppercase;
+  font-weight:500;transition:transform .2s,filter .2s}
+.vetrina-cta:hover{transform:translateY(-1px);filter:brightness(1.08)}
+
+/* ── IL SENTIERO — COPERTINA full-bleed · da bordo a bordo · statico ── */
+.sen-cornice{position:relative;width:100%;margin:0 0 24px;
+  border-top:2px solid var(--gold);border-bottom:2px solid var(--gold)}
+.sen-quad{position:relative;overflow:hidden;background:var(--navy);
+  min-height:100vh}
+/* foto che riempie tutto lo schermo, taglio cinema sopra/sotto; quasi limpida */
+.sen-quad>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 32%;
+  filter:blur(1.2px) brightness(0.82);transform:scale(1.04);z-index:0;transition:transform .55s ease}
+.sen-quad:hover>img{transform:scale(1.08)}
+/* contenuto: cluster centrato · Entra e frase pinnati in basso */
+.sen-corpo{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;padding:40px 22px 44px;
+  background:linear-gradient(180deg,rgba(8,10,20,0.30) 0%,rgba(8,10,20,0.10) 42%,rgba(8,10,20,0.46) 100%)}
+.sen-zone{display:flex;flex-direction:column;align-items:center;width:100%}
+.sen-mid{gap:14px}
+.sen-fondo{gap:16px;margin-top:auto}
+.sen-nota{font-family:"DM Sans",sans-serif;font-size:13.5px;letter-spacing:0.01em;line-height:1.5;
+  color:var(--cream);background:rgba(8,10,20,0.55);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid rgba(212,175,106,0.35);border-radius:14px;padding:11px 20px;margin:-2px auto 8px;max-width:400px}
+.sen-nota b{color:var(--gold-d);font-weight:500}
+.sen-nota .sep{display:block;height:1px;background:rgba(212,175,106,0.2);margin:7px auto;max-width:80%}
+.sen-occhiello{font-family:"Cinzel",serif;font-weight:600;text-transform:uppercase;
+  font-size:clamp(15px,4.4vw,24px);letter-spacing:0.34em;color:var(--gold);
+  padding-left:0.34em;line-height:1.2;text-shadow:0 1px 8px rgba(0,0,0,0.7)}
+.sen-titolo{font-family:"Cinzel",serif;font-weight:700;font-size:clamp(44px,12vw,76px);letter-spacing:0.03em;
+  color:#fff;line-height:1.02;margin:2px 0;text-shadow:0 3px 20px rgba(0,0,0,0.85)}
+.sen-intro{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(22px,6vw,34px);
+  line-height:1.3;color:rgba(245,240,230,0.96);max-width:100%;margin:0 auto;text-shadow:0 1px 10px rgba(0,0,0,0.8);
+  position:relative;padding:4px 0 4px 20px;border-left:2px solid rgba(212,175,106,0.55);max-width:440px;text-align:left}
+.sen-intro::before{content:'\201C';font-family:"Cormorant Garamond",serif;color:var(--gold-d);
+  font-size:1.4em;line-height:0;position:absolute;left:6px;top:0.5em;opacity:0.7}
+.sen-tematiche{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.sen-tema{font-family:"DM Sans",sans-serif;font-size:15px;letter-spacing:0.03em;color:rgba(245,240,230,0.97);
+  padding:7px 15px;border-radius:999px;border:1px solid;background:rgba(8,10,20,0.5)}
+.sen-tema.t-terra{border-color:rgba(190,152,80,0.8)}
+.sen-tema.t-acqua{border-color:rgba(90,158,209,0.8)}
+.sen-tema.t-fuoco{border-color:rgba(224,124,90,0.8)}
+.sen-tema.t-aria{border-color:rgba(124,180,90,0.8)}
+.sen-tema.t-etere{border-color:rgba(178,124,220,0.8)}
+.sen-entra{display:inline-block;text-align:center;text-decoration:none;
+  padding:17px 56px;border-radius:11px;background:var(--gold);color:#0A0C1A;
+  font-family:"DM Sans",sans-serif;font-size:16px;letter-spacing:0.08em;font-weight:600;
+  box-shadow:0 6px 22px rgba(0,0,0,0.4)}
+.segnaposto{font-style:italic;color:rgba(240,235,224,0.4)}
+/* resa desktop: su mobile alleggeriamo (in attesa di un modello mobile dedicato) */
+@media(max-width:600px){
+  .sen-quad{min-height:100vh}
+  .sen-titolo{font-size:clamp(40px,15vw,58px)}
+  .sen-intro{font-size:clamp(20px,6.6vw,28px)}
+  .sen-occhiello{font-size:clamp(13px,4.4vw,18px);letter-spacing:0.3em;padding-left:0.3em}
+  .sen-tema{font-size:13.5px;padding:6px 13px}
+  .sen-fondo{gap:14px}
+  .sen-nota{font-size:12.5px;padding:10px 16px;border-radius:14px;max-width:320px}
+}
+
+/* ── BANNER INVITO (stili conservati, non più usati in home) ── */
+.banner-invito{background:linear-gradient(135deg,rgba(212,175,106,0.14),rgba(200,160,85,0.06));
+  border:1px solid rgba(212,175,106,0.5);border-radius:16px;padding:22px 20px;text-align:center;margin-bottom:14px}
+.bi-testo{font-family:"Cormorant Garamond",serif;font-size:clamp(17px,2.7vw,20px);line-height:1.5;color:var(--cream);margin-bottom:16px}
+.bi-azioni{display:flex;flex-direction:column;align-items:center;gap:8px}
+.bi-btn{display:inline-block;text-decoration:none;padding:14px 26px;border-radius:10px;
+  font-family:"DM Sans",sans-serif;font-size:13.5px;letter-spacing:0.04em;font-weight:500;background:var(--gold);color:#0A0C1A;
+  transition:transform .2s,filter .2s}
+.bi-btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.bi-nota{font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-d)}
+@media(prefers-reduced-motion:reduce){.vi-rot{transition:none}}
+
+/* ── CITAZIONE VIOLA (a fianco della frase-guida) ── */
+.fm-cit-viola{max-width:460px;margin:0 auto 28px;padding:12px 22px 12px 20px;
+  border-left:2px solid #9966CC;border-radius:0 10px 10px 0;
+  background:rgba(153,102,204,0.07);
+  font-family:"Cormorant Garamond",serif;font-style:italic;
+  font-size:clamp(16px,2.5vw,19px);line-height:1.55;color:rgba(216,200,236,0.92);text-align:left}
+.fm-cit-viola .firma{display:block;margin-top:6px;font-style:normal;font-family:"DM Sans",sans-serif;
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(153,102,204,0.85)}
+
+/* ── PORTE ── */
+.porta{max-width:560px;margin:0 auto 20px;padding:24px 22px 26px;border-radius:18px;
+  background:rgba(12,14,26,0.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid rgba(212,175,106,0.4);box-shadow:0 10px 40px rgba(0,0,0,0.38)}
+.doppio-quad{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1140px;margin:0 auto 20px;align-items:stretch;padding:0 20px}
+.doppio-quad .porta{max-width:none;margin:0;display:flex;flex-direction:column}
+.doppio-quad .porta-azioni{margin-top:auto}
+.doppio-quad .porta-foto{margin-top:18px}
+@media(max-width:820px){.doppio-quad{grid-template-columns:1fr;padding:0;gap:20px}.doppio-quad .porta{max-width:560px;margin:0 auto}}
+.porta-fuoco{border-color:rgba(204,102,68,0.5)}
+.porta-etere{border-color:rgba(153,102,204,0.45)}
+.porta-livello{font-family:"DM Sans",sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:7px}
+.porta-fuoco .porta-livello{color:#CC6644}
+.porta-etere .porta-livello{color:#9966CC}
+.porta-tit{font-family:"Cinzel",serif;font-size:clamp(22px,5vw,28px);font-weight:600;letter-spacing:0.03em;color:var(--cream);line-height:1.1}
+.porta-desc{font-family:"Cormorant Garamond",serif;font-size:clamp(17px,2.5vw,19px);line-height:1.55;color:rgba(240,235,224,0.78);margin-top:11px}
+.porta-desc strong{font-weight:700;color:var(--cream)}
+.porta-azioni{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.porta-foto{width:calc(100% + 44px);margin:18px -22px 0;height:clamp(150px,26vw,210px);object-fit:cover;object-position:center 55%;display:block}
+.porta-foto-link{display:block;overflow:hidden}
+.porta-foto-link .porta-foto{transition:transform .35s}
+.porta-foto-link:hover .porta-foto{transform:scale(1.03)}
+.porta-foto-cap{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:14px;color:rgba(240,235,224,0.6);text-align:center;margin-top:10px}
+.p-btn{display:block;text-align:center;text-decoration:none;padding:14px 18px;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:13.5px;letter-spacing:0.04em;font-weight:500;background:#CC6644;color:#0A0C1A;transition:transform .2s,filter .2s}
+.p-btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.p-btn.ghost{background:transparent;color:rgba(240,235,224,0.85);border:1px solid rgba(212,175,106,0.5)}
+.p-btn.ghost:hover{border-color:rgba(212,175,106,0.9)}
+
+/* ── PORTA MEGAFONO (aria) ── */
+.porta-aria{border-color:rgba(102,153,68,0.5)}
+.porta-acqua{border-color:rgba(90,158,209,0.5)}
+.porta-acqua .porta-livello{color:#5A9ED1}
+.porta-acqua .p-btn{background:#5A9ED1}
+.porta-acqua .porta-foto{border-color:rgba(90,158,209,0.35)}
+.porta-aria .porta-livello{color:#669944}
+.porta-riga{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(16px,2.4vw,18px);line-height:1.5;color:rgba(240,235,224,0.7);margin-top:7px}
+.mega-foto{display:block;margin-top:16px;border-radius:14px;overflow:hidden;border:0.5px solid rgba(102,153,68,0.35);box-shadow:0 8px 30px rgba(0,0,0,0.35)}
+.mega-foto img{width:100%;height:auto;max-height:260px;object-fit:cover;object-position:center 30%;display:block;transition:transform .35s}
+.mega-foto:hover img{transform:scale(1.02)}
+.mega-arg{text-align:center;margin-top:14px}
+.mega-arg-tit{font-family:"Cinzel",serif;font-size:clamp(18px,3.4vw,22px);font-weight:600;letter-spacing:0.02em;color:var(--cream);line-height:1.2}
+.mega-arg-sub{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(15px,2.4vw,17px);color:rgba(240,235,224,0.68);margin-top:5px}
+.mega-ancore{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.mega-ancore a{font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(240,235,224,0.75);text-decoration:none;padding:7px 15px;border:0.5px solid rgba(102,153,68,0.45);border-radius:999px;transition:.25s}
+.mega-ancore a:hover{background:#669944;color:#0A0C1A;border-color:#669944}
+.mega-indice{font-family:"DM Sans",sans-serif;font-size:13px;letter-spacing:0.05em;color:rgba(240,235,224,0.55);text-align:center;margin-top:14px}
+.porta-aria .p-btn{background:#669944}
+.porta-aria .p-btn.ghost{background:transparent;color:rgba(240,235,224,0.85);border:1px solid rgba(102,153,68,0.55)}
+.porta-aria .p-btn.ghost:hover{border-color:rgba(102,153,68,0.95)}
+.cfo-indice{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.cfo-voce{font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:0.09em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:0.5px solid rgba(102,153,68,0.4);color:rgba(240,235,224,0.6)}
+a.cfo-voce{color:#8FBF6A;text-decoration:none;border-color:rgba(102,153,68,0.7)}
+a.cfo-voce:hover{background:rgba(102,153,68,0.14)}
+
+/* ── LETTURE (ciclo lunare) ── */
+.letture{display:flex;flex-direction:column;gap:13px;margin-top:18px}
+/* Ricerca a tutta larghezza: le tre letture in griglia, immagine grande in alto */
+.porta-larga{max-width:1140px}
+.porta-larga .letture{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+.porta-larga .lettura{flex-direction:column;gap:0}
+.porta-larga .lettura .cover{width:100%;height:180px;border-right:none;border-bottom:0.5px solid rgba(184,150,62,0.15)}
+.porta-larga .lettura .l-tit{font-size:18px}
+.porta-larga .lettura .l-desc{font-size:16px}
+@media(max-width:820px){.porta-larga .letture{grid-template-columns:1fr}.porta-larga .lettura{flex-direction:row}.porta-larga .lettura .cover{width:84px;height:auto;border-bottom:none;border-right:0.5px solid rgba(184,150,62,0.15)}}
+.lettura{display:flex;gap:14px;align-items:stretch;text-decoration:none;
+  background:rgba(10,12,26,0.5);border:0.5px solid rgba(184,150,62,0.18);border-radius:13px;overflow:hidden;transition:border-color .2s}
+.lettura:hover{border-color:rgba(153,102,204,0.6)}
+.lettura .cover{flex:0 0 auto;width:84px;background:rgba(153,102,204,0.1);display:flex;align-items:center;justify-content:center;color:rgba(212,175,106,0.45);border-right:0.5px solid rgba(184,150,62,0.15);overflow:hidden}
+.lettura .cover svg{width:30px;height:30px}
+.lettura .cover img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.lettura:hover .cover img{transform:scale(1.06)}
+.lettura .testo{flex:1;min-width:0;padding:13px 14px}
+.lettura .l-tit{font-family:"Cinzel",serif;font-size:16px;letter-spacing:0.01em;color:var(--cream);line-height:1.25}
+.lettura .l-desc{font-family:"Cormorant Garamond",serif;font-size:15.5px;line-height:1.45;color:rgba(240,235,224,0.66);margin-top:6px}
+.lettura.ph{opacity:0.88}
+.lettura.ph .l-desc{font-style:italic;color:rgba(240,235,224,0.5)}
+
+/* ── i comandi del ciclo: tre alla volta, la freccia va indietro ── */
+.caro-piede{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:18px}
+.caro-frec{width:34px;height:34px;border-radius:50%;background:transparent;border:0.5px solid rgba(184,150,62,0.35);
+  color:var(--cream);font-size:17px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:border-color .2s,opacity .2s}
+.caro-frec:hover{border-color:rgba(212,175,106,0.85)}
+.caro-frec:disabled{opacity:.22;pointer-events:none}
+.caro-tutti{background:transparent;border:0.5px solid rgba(212,175,106,0.45);color:var(--cream);border-radius:9px;
+  padding:9px 16px;font-family:"DM Sans",sans-serif;font-size:12.5px;letter-spacing:0.05em;cursor:pointer;transition:border-color .2s,background .2s}
+.caro-tutti:hover{border-color:rgba(212,175,106,0.9);background:rgba(212,175,106,0.06)}
+body.tutti .caro-frec{display:none}
+
+.ciclo-vuoto{flex:1;border:1px dashed rgba(184,150,62,0.28);border-radius:14px;padding:34px 20px;text-align:center;
+  font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;color:rgba(240,235,224,0.42)}
+
+/* ── LE DOMANDE DEI NUOVI ARRIVATI ── */
+.faq{max-width:820px;margin:0 auto;padding:0 0 10px}
+.faq-t{font-family:"Cinzel",serif;font-weight:400;font-size:clamp(20px,3vw,26px);color:var(--cream);
+  text-align:center;letter-spacing:0.5px;margin-bottom:22px}
+.d{border-bottom:0.5px solid rgba(184,150,62,0.16)}
+.d:first-of-type{border-top:0.5px solid rgba(184,150,62,0.16)}
+.d-q{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;text-align:left;cursor:pointer;
+  background:none;border:none;padding:19px 4px;color:var(--cream);
+  font-family:"Cormorant Garamond",serif;font-size:clamp(18px,2.2vw,21px);line-height:1.35;transition:color .2s}
+.d-q:hover{color:var(--gold)}
+.d-piu{flex:0 0 auto;width:22px;height:22px;position:relative;transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.d-piu::before,.d-piu::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:var(--gold);border-radius:1px}
+.d-piu::before{width:15px;height:1.5px}
+.d-piu::after{width:1.5px;height:15px;transition:opacity .3s}
+.d.su .d-piu{transform:rotate(90deg)}
+.d.su .d-piu::after{opacity:0}
+.d-r{max-height:0;overflow:hidden;transition:max-height .34s cubic-bezier(.22,.61,.36,1)}
+.d.su .d-r{max-height:640px}
+.d-r-in{padding:0 4px 22px}
+.d-r p{font-family:"Cormorant Garamond",serif;font-size:clamp(16px,1.9vw,18px);line-height:1.68;
+  color:rgba(240,235,224,0.68);margin-bottom:11px}
+.d-r p:last-child{margin-bottom:0}
+.d-r strong{color:var(--cream);font-weight:500}
+.d-r .stanze{margin-top:4px}
+.d-r .stanze .r{display:flex;gap:12px;padding:8px 0;border-bottom:0.5px solid rgba(184,150,62,0.09)}
+.d-r .stanze .r:last-child{border-bottom:none}
+.d-r .stanze .r b{flex:0 0 130px;font-family:"DM Sans",sans-serif;font-size:11.5px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--gold);font-weight:400;padding-top:3px}
+.d-r .stanze .r span{flex:1;font-family:"Cormorant Garamond",serif;font-size:16.5px;line-height:1.45;color:rgba(240,235,224,0.68)}
+@media(max-width:640px){.d-r .stanze .r{flex-direction:column;gap:2px}.d-r .stanze .r b{flex:none}}
+
+/* ── SBLOCCO ── */
+.sblocco{max-width:560px;margin:4px auto 8px;padding:20px 22px;border-radius:16px;
+  background:rgba(12,14,26,0.4);border:0.5px solid rgba(184,150,62,0.16);text-align:center}
+.mappa-banner{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;padding:13px 18px;border-radius:12px;text-decoration:none;
+  background:linear-gradient(135deg,rgba(212,175,106,0.14),rgba(200,160,85,0.07));
+  border:1px solid rgba(212,175,106,0.42);transition:all .2s;-webkit-tap-highlight-color:transparent}
+.mappa-banner:hover{background:linear-gradient(135deg,rgba(212,175,106,0.22),rgba(200,160,85,0.12));border-color:rgba(212,175,106,0.7)}
+.mappa-banner .mb-t{font-family:"Cinzel",serif;font-size:15px;font-weight:600;letter-spacing:0.04em;color:#D4AF6A}
+.mappa-banner svg{width:19px;height:19px;flex:none}
+.sblocco-azioni{display:flex;flex-direction:column;gap:10px}
+.s-btn{padding:13px 18px;border-radius:10px;border:1px solid rgba(212,175,106,0.45);background:transparent;color:var(--cream);font-family:"DM Sans",sans-serif;font-size:13px;letter-spacing:0.05em;cursor:pointer;transition:border-color .2s,background .2s}
+.s-btn:hover{border-color:rgba(212,175,106,0.9);background:rgba(212,175,106,0.06)}
+
+/* ── SOGLIA SIGILLATA ── */
+.idx.sigillata{opacity:0.6}
+.idx.sigillata .idx-head{cursor:default}
+.idx.sigillata .idx-ico svg{filter:grayscale(0.4) opacity(0.7)}
+.idx.sigillata .idx-frec{display:none}
+.idx-sigillo{font-family:"DM Sans",sans-serif;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(212,175,106,0.6);display:flex;align-items:center;gap:5px}
+.idx-sigillo svg{width:12px;height:12px}
+
+/* ── IL VOLTO · LA STORIA ── */
+.fm-volto{display:block;max-width:520px;margin:6px auto 16px;padding:18px 22px;text-decoration:none;
+  background:rgba(12,14,26,0.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(212,175,106,0.4);border-radius:14px;text-align:center;transition:border-color .25s,transform .25s}
+.fm-volto:hover{border-color:rgba(212,175,106,0.8);transform:translateY(-1px)}
+.fm-volto-tit{font-family:"Cinzel",serif;font-size:clamp(15px,2.6vw,18px);font-weight:600;letter-spacing:0.03em;color:var(--cream)}
+.fm-volto-sub{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:14px;color:rgba(240,235,224,0.6);margin-top:5px}
+
+/* ── VELO SOGLIA — la veste di index, posata sopra la home (primo ingresso) ── */
+#fm-soglia-velo{position:fixed;inset:0;z-index:9999;background:#03050a;display:flex;align-items:center;justify-content:center;overflow:hidden;font-family:'Cormorant Garamond',serif;opacity:1;transition:opacity .6s ease}
+#fm-soglia-velo.via{opacity:0;pointer-events:none}
+#fm-soglia-velo .stars-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0;transition:opacity .6s ease;background:radial-gradient(ellipse at 28% 22%,rgba(38,64,120,0.42),transparent 58%),radial-gradient(ellipse at 76% 74%,rgba(60,44,110,0.34),transparent 60%),radial-gradient(ellipse at 50% 48%,rgba(14,30,64,0.55),transparent 72%),radial-gradient(ellipse at 50% 42%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+#fm-soglia-velo.mostra .stars-bg{opacity:1}
+#fm-soglia-velo .stars-bg::before{content:'';position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 24%,#fff,transparent),radial-gradient(1px 1px at 32% 68%,rgba(200,220,255,0.9),transparent),radial-gradient(1.4px 1.4px at 58% 18%,#ffe9c4,transparent),radial-gradient(1px 1px at 82% 52%,#fff,transparent),radial-gradient(1px 1px at 68% 82%,rgba(170,200,255,0.9),transparent),radial-gradient(1.2px 1.2px at 44% 88%,#fff,transparent),radial-gradient(1px 1px at 90% 30%,rgba(255,221,170,0.85),transparent),radial-gradient(1px 1px at 22% 90%,#fff,transparent);background-size:260px 260px,320px 320px,240px 240px,300px 300px,280px 280px,340px 340px,300px 300px,260px 260px;background-repeat:repeat;opacity:.6;animation:fm-drift 90s linear infinite}
+#fm-soglia-velo .lucci{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(2.6px 2.6px at 20% 34%,rgba(255,236,190,0.95),transparent 60%),radial-gradient(2px 2px at 78% 40%,rgba(190,215,255,0.95),transparent 60%),radial-gradient(2.6px 2.6px at 62% 72%,rgba(255,255,255,0.95),transparent 60%),radial-gradient(2px 2px at 36% 78%,rgba(230,184,122,0.9),transparent 60%),radial-gradient(2.2px 2.2px at 86% 66%,rgba(255,255,255,0.9),transparent 60%);background-repeat:no-repeat;animation:fm-lucci 5.5s ease-in-out infinite}
+@keyframes fm-lucci{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fm-drift{0%{background-position:0 0,0 0,0 0}100%{background-position:300px 300px,-200px 200px,150px -150px}}
+#fm-soglia-velo .soglia{position:relative;z-index:10;width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;cursor:pointer;opacity:0;transition:opacity .5s ease}
+#fm-soglia-velo.mostra .soglia{opacity:1}
+#fm-soglia-velo .logo-fm{width:clamp(180px,30vw,360px);height:auto;margin-bottom:24px;filter:drop-shadow(0 0 30px rgba(230,184,122,0.3));transition:transform .3s ease}
+#fm-soglia-velo .logo-fm:hover{transform:scale(1.02)}
+#fm-soglia-velo .vishnu-frame{position:relative;width:80%;max-width:500px;aspect-ratio:1/1;border-radius:50%;background:rgba(10,12,16,0.3);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:12px;display:flex;align-items:center;justify-content:center}
+#fm-soglia-velo .vishnu-frame::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1.5px solid rgba(230,184,122,0.6);animation:fm-breath 4s ease-in-out infinite;pointer-events:none}
+#fm-soglia-velo .vishnu-frame::before{content:'';position:absolute;inset:2px;border-radius:50%;border:2px solid rgba(230,184,122,0.3);pointer-events:none}
+@keyframes fm-breath{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.02);border-color:rgba(230,184,122,0.9)}}
+#fm-soglia-velo .vishnu-img{width:100%;height:100%;object-fit:cover;border-radius:50%;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.5))}
+#fm-soglia-velo .subtitle-section{text-align:center;margin-top:24px}
+#fm-soglia-velo .flame-effect{display:inline-block;font-family:'Cinzel',serif;font-size:clamp(1rem,2vw,1.8rem);font-weight:400;letter-spacing:6px;color:#e6b87a;text-shadow:0 0 20px rgba(230,184,122,0.3);animation:fm-flameWave 2.5s ease-in-out infinite;opacity:.9}
+@keyframes fm-flameWave{0%,100%{transform:scale(1) translateY(0);text-shadow:0 0 20px rgba(230,184,122,0.3),0 0 40px rgba(230,184,122,0.1);opacity:.8}25%{transform:scale(1.02) translateY(-3px);text-shadow:0 0 30px rgba(230,184,122,0.6),0 0 60px rgba(230,184,122,0.3);opacity:1}50%{transform:scale(1) translateY(0);text-shadow:0 0 20px rgba(230,184,122,0.3),0 0 40px rgba(230,184,122,0.1);opacity:.85}75%{transform:scale(1.01) translateY(-2px);text-shadow:0 0 30px rgba(230,184,122,0.5),0 0 50px rgba(230,184,122,0.2);opacity:.95}}
+#fm-soglia-velo .touch-hint{position:relative;margin-top:24px;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(230,184,122,0.5);animation:fm-pulse 2.5s ease-in-out infinite;box-shadow:0 0 20px rgba(230,184,122,0.1)}
+#fm-soglia-velo .touch-hint::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:7px;height:7px;background:rgba(230,184,122,0.4);border-radius:50%}
+@keyframes fm-pulse{0%,100%{transform:scale(0.9);opacity:.3}50%{transform:scale(1.1);opacity:.9}}
+@media(max-width:600px){#fm-soglia-velo .logo-fm{width:clamp(120px,40vw,200px)}#fm-soglia-velo .vishnu-frame{width:90%;max-width:340px;padding:8px}#fm-soglia-velo .flame-effect{letter-spacing:4px}#fm-soglia-velo .touch-hint{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){#fm-soglia-velo,#fm-soglia-velo .soglia{transition:none}#fm-soglia-velo .stars-bg::before,#fm-soglia-velo .lucci,#fm-soglia-velo .vishnu-frame::after,#fm-soglia-velo .flame-effect,#fm-soglia-velo .touch-hint{animation:none}}
+
+/* ══ PANNELLO BLU semitrasparente sotto Il sentiero + titoli dorati ══ */
+.eh-scope #cammino, .eh-scope section#cammino{
+  position:relative;
+  padding:36px 26px 32px !important;
+  border-radius:22px;
+  background:linear-gradient(165deg, rgba(30,42,82,.55), rgba(16,24,54,.62)) !important;
+  border:1px solid rgba(120,150,220,.28);
+  box-shadow: 0 8px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(150,180,240,.14);
+  backdrop-filter: blur(2px);
+}
+/* i quadranti dentro: fondo blu più chiaro + ombra */
+.eh-scope .eh-tappa, .eh-scope .tappa{
+  background:linear-gradient(180deg, rgba(40,55,100,.45), rgba(24,34,70,.40)) !important;
+  border:1px solid rgba(130,160,230,.22) !important;
+  border-top:3px solid #C8A055 !important;
+  box-shadow:0 6px 20px rgba(0,0,0,.30) !important;
+}
+/* TITOLI DORATI */
+.eh-scope #cammino h2, .eh-scope section#cammino h2{ color:#D4AF6A !important; }
+.eh-scope .eh-tappa h3, .eh-scope .tappa h3{ color:#D4AF6A !important; }
+.eh-scope .eh-occhio, .eh-scope .occhio{ color:#D4AF6A !important; }
+.eh-scope .eh-tappa .eh-cap, .eh-scope .tappa .cap{ color:#E0C48A !important; }
+
+/* ══ I gesti: pannello verde semitrasparente + respiro 2cm ══ */
+.eh-scope .eh-gesti-pannello{
+  margin-top:76px !important;
+  padding:34px 26px 30px !important;
+  border-radius:22px;
+  background:linear-gradient(165deg, rgba(102,153,68,.28), rgba(45,72,38,.32)) !important;
+  border:1px solid rgba(140,190,110,.30) !important;
+  box-shadow:0 8px 30px rgba(0,0,0,.30) !important;
+}
+.eh-gesti-pannello .occhio{ color:#C8E0A8 !important; }
+.eh-gesti-pannello h2{ color:#D4AF6A !important; }
+</style>
+<style>
+/* ══ quadranti esempio_home, blindati sotto .eh-scope ══ */
+.eh-scope{max-width:960px;margin:60px auto;padding:0 22px}
+.eh-scope .q7{max-width:960px;margin:0 auto;padding:0 22px}
+.eh-scope .occhio{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--oro-ch);margin-bottom:10px}
+.eh-scope .dice{font-family:'Cormorant Garamond',serif;font-size:17.5px;color:rgba(245,240,230,0.6);margin-bottom:26px;max-width:620px}
+.eh-scope .tasto{display:inline-block;font-family:'Cinzel',serif;font-size:13.5px;letter-spacing:0.08em;color:var(--navy);
+    background:var(--oro);border:none;border-radius:999px;padding:13px 34px;text-decoration:none;cursor:pointer}
+.eh-scope .tasto:hover{background:var(--oro-ch)}
+.eh-scope .tasto.quieto{background:none;color:var(--oro-ch);border:1px solid rgba(200,160,85,0.4)}
+.eh-scope .tasto.quieto:hover{background:rgba(200,160,85,0.1)}
+.eh-scope .tappa{border:1px solid var(--line);border-top:3px solid var(--oro);border-radius:14px 14px 14px 14px;
+    background:rgba(245,240,230,0.025);padding:16px 17px;position:relative}
+.eh-scope .tappa::before{counter-increment:tappa;content:counter(tappa);position:absolute;top:-14px;left:14px;
+    width:26px;height:26px;border-radius:50%;background:var(--oro);color:var(--navy);
+    font-family:'Cinzel',serif;font-size:13px;display:grid;place-items:center}
+.eh-scope .tappa .cap{font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--oro-ch);margin:6px 0 6px}
+.eh-scope .tappa h3{font-family:'Cinzel',serif;font-weight:500;font-size:15px;margin-bottom:6px}
+.eh-scope .tappa p{font-family:'Cormorant Garamond',serif;font-size:14.5px;line-height:1.45;color:rgba(245,240,230,0.62)}
+.eh-scope .porta-riga{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--oro-ch);text-align:center;
+    font-size:18px;margin:26px 0 14px}
+.eh-scope .gesto{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:rgba(245,240,230,0.02);
+    text-decoration:none;color:var(--ivory);transition:border-color .2s,transform .2s}
+.eh-scope .gesto:hover{border-color:var(--gc);transform:translateY(-3px)}
+.eh-scope .gesto .foto{height:110px;background:
+    radial-gradient(ellipse at 30% 30%, color-mix(in srgb,var(--gc) 34%, transparent), transparent 70%),
+    linear-gradient(140deg, color-mix(in srgb,var(--gc) 22%, #0a1024), #060c1c);
+    display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:12.5px;color:rgba(245,240,230,0.4)}
+.eh-scope .gesto .tx{padding:13px 15px}
+.eh-scope .gesto h3{font-family:'Cinzel',serif;font-weight:500;font-size:14.5px;margin-bottom:4px}
+.eh-scope .gesto p{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(245,240,230,0.58)}
+</style>
+<style>
+/* ══ RINFORZO quadranti: vince sulle regole generali della Soglia ══ */
+.eh-scope .cammino{display:grid !important;grid-template-columns:repeat(4,1fr) !important;gap:12px !important}
+.eh-scope .gesti{display:grid !important;grid-template-columns:repeat(4,1fr) !important;gap:12px !important}
+.eh-scope .tappa{border:1px solid var(--line) !important;border-top:3px solid var(--oro) !important;border-radius:14px !important;background:rgba(245,240,230,0.025) !important;position:relative !important;padding:16px 17px !important}
+.eh-scope .tappa::before{counter-increment:tappa;content:counter(tappa) !important;position:absolute !important;top:-14px !important;left:14px !important;width:26px !important;height:26px !important;border-radius:50% !important;background:var(--oro) !important;color:var(--navy) !important;display:flex !important;align-items:center !important;justify-content:center !important;font-family:'Cinzel',serif !important;font-size:13px !important}
+.eh-scope .cammino{counter-reset:tappa}
+.eh-scope a.tasto{display:inline-block !important;background:var(--oro) !important;color:var(--navy) !important;border-radius:999px !important;padding:13px 34px !important;font-family:'Cinzel',serif !important;text-decoration:none !important}
+.eh-scope .gesto{border:1px solid var(--line) !important;border-radius:15px !important;overflow:hidden !important;display:block !important}
+.eh-scope .gesto .foto{height:110px !important}
+@media(max-width:820px){.eh-scope .cammino,.eh-scope .gesti{grid-template-columns:repeat(2,1fr) !important}}
+</style>
+<style>
+.eh-scope a.eh-cta{display:inline-block !important;background:#C8A055 !important;color:#0A0C1A !important;border-radius:999px !important;padding:13px 34px !important;font-family:'Cinzel',serif !important;font-size:13.5px !important;text-decoration:none !important;border:none !important}
+.eh-scope a.eh-cta:hover{background:#D4AF6A !important}
+</style><style>
+</style><style>
+/* ══ card 4-5: il telefono riempie la card (Gab 21/7) ══ */
+.card.tel{padding:14px 0 0 !important}
+.card.tel .tel-disegno{width:calc(100% - 20px) !important;max-width:none !important;border-radius:26px 26px 0 0 !important;padding:8px 7px 0 !important}
+.card.tel .tel-vetro{border-radius:21px 21px 0 0 !important;padding:24px 13px 0 !important}
+.card.tel .card-eti{padding:14px 20px 18px !important}
+</style><style>
+/* ══ card 4: foto proporzionata al telefono più largo + teste non tagliate (Gab 21/7) ══ */
+.card.tel .art-foto{
+  height:100px !important;                 /* era 46px: fascia troppo bassa col telefono largo */
+  background-position:center 30% !important; /* alza l'inquadratura: le teste non si tagliano */
+  background-size:cover !important;
+}
+</style><style>
+/* ══ card 5: player radio visibile + quadrante storia (Gab 21/7) ══ */
+.rd-testa{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.rd-testa .rd-onda{height:34px !important;gap:3px;margin:0 !important;flex:1}
+.rd-testa .rd-onda i{width:4px !important;background:linear-gradient(180deg,#E08860,#CC6644) !important}
+.rd-play{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(150deg,#D4AF6A,#C8A055);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 12px rgba(200,160,85,.4)}
+.rd-play svg{width:15px;height:15px;fill:#0A0C1A;margin-left:2px}
+.rd-barra{height:3px;border-radius:3px;background:rgba(245,240,230,.14);margin:0 0 4px;overflow:hidden}
+.rd-barra i{display:block;height:100%;width:38%;border-radius:3px;background:#CC6644}
+.rd-tempi{display:flex;justify-content:space-between;font-family:'DM Sans',sans-serif;font-size:8px;
+  color:rgba(245,240,230,.4);margin-bottom:13px;letter-spacing:.04em}
+.rd-storia{display:flex;gap:11px;align-items:center;padding:9px;border-radius:10px;
+  background:rgba(153,102,204,.13);border:1px solid rgba(153,102,204,.3)}
+.rd-storia img{width:44px;border-radius:6px;border:1px solid rgba(245,240,230,.12);flex:0 0 auto}
+.rd-storia b{display:block;font-family:'Cinzel',serif;font-size:11px;color:#F5F0E6;font-weight:500;margin-bottom:3px}
+.rd-storia span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10px;
+  line-height:1.35;color:rgba(245,240,230,.62)}
+</style><style>
+/* ══ card 5: respiro per riempire la card (Gab 21/7) ══ */
+.tel-vetro.radio .rd-app{padding:8px 0 !important;font-size:13px !important}
+.tel-vetro.radio .rd-sez{margin-bottom:10px !important;margin-top:6px !important;padding-bottom:7px !important}
+.tel-vetro.radio .rd-titolo{font-size:17px !important;margin-bottom:2px}
+.tel-vetro.radio .rd-sub{margin-bottom:16px !important}
+.rd-nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10.5px;
+  color:rgba(245,240,230,.42);line-height:1.4;padding:2px 0 8px}
+.rd-storia{padding:11px !important}
+.rd-storia img{width:52px !important}
+</style><style>
+/* ══ sotto le 5 card: i tasti account + i tipi possibili (Gab 21/7) ══ */
+.pf-azioni{max-width:640px;margin:26px auto 0;padding:0 20px;text-align:center}
+.pf-tasti{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.pf-crea,.pf-entra{font-family:'Cinzel',serif;font-size:13.5px;letter-spacing:.06em;
+  padding:14px 30px;border-radius:999px;text-decoration:none;transition:.25s;display:inline-block}
+.pf-crea{background:linear-gradient(150deg,#D4AF6A,#C8A055);color:#0A0C1A;
+  box-shadow:0 4px 18px rgba(200,160,85,.32)}
+.pf-crea:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.pf-entra{border:1px solid rgba(200,160,85,.45);color:#D4AF6A;background:rgba(200,160,85,.06)}
+.pf-entra:hover{background:rgba(200,160,85,.14);border-color:#D4AF6A}
+.pf-tipi-occhio{display:block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.26em;
+  text-transform:uppercase;color:rgba(212,175,106,.75);margin-bottom:13px}
+.pf-lista{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+.pf-tipo{border:1px solid rgba(184,150,62,.28);border-radius:12px;padding:9px 15px;
+  background:rgba(10,12,26,.5);min-width:132px}
+.pf-tipo b{display:block;font-family:'Cinzel',serif;font-size:12px;font-weight:500;color:#F5F0E6;margin-bottom:3px}
+.pf-tipo span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11.5px;
+  color:rgba(245,240,230,.55)}
+@media(max-width:560px){.pf-tipo{min-width:calc(50% - 6px)}}
+</style><style>
+/* ══ quadrante due colonne: crea / accedi (Gab 21/7) ══ */
+.pf-azioni{max-width:820px;margin:28px auto 0;padding:0 20px}
+.pf-due{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pf-col{display:flex;flex-direction:column;gap:9px;padding:26px 24px;border-radius:18px;
+  text-decoration:none;transition:.25s;border:1px solid rgba(184,150,62,.3);
+  background:rgba(10,12,26,.55)}
+.pf-col:hover{transform:translateY(-2px);border-color:#D4AF6A}
+.pf-col-crea{background:linear-gradient(160deg,rgba(200,160,85,.16),rgba(10,12,26,.6))}
+.pf-col-entra{background:linear-gradient(160deg,rgba(60,80,150,.18),rgba(10,12,26,.6));
+  border-color:rgba(130,160,230,.32)}
+.pf-col-entra:hover{border-color:rgba(160,190,255,.7)}
+.pf-col-tit{font-family:'Cinzel',serif;font-size:17px;font-weight:500;color:#D4AF6A;letter-spacing:.02em}
+.pf-col-entra .pf-col-tit{color:#A8C0E8}
+.pf-col-tx{font-family:'Cormorant Garamond',serif;font-size:15.5px;line-height:1.5;
+  color:rgba(245,240,230,.72)}
+.pf-col-tx b{color:#F5F0E6;font-weight:500;font-style:normal}
+.pf-col-freccia{font-family:'DM Sans',sans-serif;font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(212,175,106,.8);margin-top:4px}
+.pf-col-entra .pf-col-freccia{color:rgba(168,192,232,.8)}
+@media(max-width:620px){.pf-due{grid-template-columns:1fr}}
+</style><style>
+/* ══ insegna Radio FelicitasMundi dentro il telefono, sopra le onde (Gab 21/7) ══ */
+.rd-marchio{font-family:'Cinzel',serif;font-size:11.5px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:#D4AF6A;text-align:center;margin-bottom:12px;
+  padding-bottom:9px;border-bottom:1px solid rgba(212,175,106,.22)}
+</style><style>
+/* ══ card allineate ai pannelli, niente tagli ai lati (Gab 21/7) ══ */
+.pf-sez{max-width:956px !important}          /* stessa fascia dei pannelli blu/verde */
+.cardscroll{margin:0 !important;padding:0 !important}
+.cs-pista{width:auto !important}
+/* due card esatte nella fascia: nessuna mozzata ai bordi */
+.cardscroll .card{width:calc((100% - 16px)/2) !important;max-width:none !important}
+@media(max-width:820px){ .cardscroll .card{width:calc(100% - 24px) !important} }
+@media(max-width:560px){ .cardscroll .card{width:86vw !important;max-width:360px !important} }
+</style><style>
+/* ══ desktop: la card successiva sbircia, e le frecce dicono che si scorre (Gab 23/7) ══ */
+@media(min-width:821px){
+  /* due card piene + lo spicchio della terza: l'invito a scorrere */
+  .cardscroll .card{width:calc((100% - 16px)/2 - 34px) !important}
+  .pf-caro{position:relative}
+  /* la sfumatura sul bordo destro: il segno che continua */
+  .pf-caro::after{content:'';position:absolute;top:0;right:-2px;width:56px;height:100%;
+    pointer-events:none;z-index:2;
+    background:linear-gradient(90deg,transparent,rgba(6,9,20,.82));
+    opacity:1;transition:opacity .3s}
+  .pf-caro.a-fondo::after{opacity:0}
+  .pf-caro::before{content:'';position:absolute;top:0;left:-2px;width:44px;height:100%;
+    pointer-events:none;z-index:2;
+    background:linear-gradient(270deg,transparent,rgba(6,9,20,.7));
+    opacity:0;transition:opacity .3s}
+  .pf-caro.a-capo::before{opacity:1}
+  /* le frecce */
+  .cs-fre{position:absolute;top:50%;transform:translateY(-50%);z-index:4;
+    width:46px;height:46px;border-radius:50%;cursor:pointer;
+    background:rgba(6,9,20,.72);border:1px solid rgba(212,175,106,.45);
+    color:#D4AF6A;font-size:20px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(6px);transition:.22s}
+  .cs-fre:hover{background:#D4AF6A;color:#0a0e1c;border-color:#D4AF6A}
+  .cs-fre[disabled]{opacity:0;pointer-events:none}
+  .cs-fre.pre{left:-14px}
+  .cs-fre.suc{right:-14px}
+  /* i puntini anche su schermo grande */
+  .cs-punti{display:flex !important;justify-content:center;gap:7px;margin:16px 0 0}
+}
+</style><style>
+/* ══ mobile: far capire che le card scorrono (Gab 21/7) ══ */
+@media(max-width:560px){
+  /* 1 · si intravede molto di più la card successiva */
+  .cardscroll .card{width:78vw !important;max-width:330px !important}
+  /* 2 · sfumatura sul bordo destro: segnala che continua */
+  .pf-sez{position:relative}
+  .pf-sez::after{content:'';position:absolute;top:0;right:0;width:34px;height:100%;
+    pointer-events:none;z-index:2;
+    background:linear-gradient(90deg,transparent,rgba(6,9,20,.75));
+    opacity:1;transition:opacity .3s}
+  .pf-sez.a-fondo::after{opacity:0}
+}
+/* 3 · puntini indicatori (solo mobile) */
+.cs-punti{display:none}
+@media(max-width:560px){
+  .cs-punti{display:flex;justify-content:center;gap:7px;margin:14px 0 0}
+  .cs-punti i{width:6px;height:6px;border-radius:50%;background:rgba(212,175,106,.28);
+    transition:.25s}
+  .cs-punti i.on{background:#D4AF6A;width:20px;border-radius:3px}
+  .cs-suggerisci{margin-top:8px !important;font-size:13px !important}
+}
+</style></head>
+<body>
+
+<!-- ░░ VELO SOGLIA ░░  la veste di index, posata sopra la home
+     loggato → dritto al sentiero · non iscritto 1ª volta → Vishnu, clic e si dissolve · già entrato → home diretta
+     ?soglia=1 tiene fermo il velo (agli eventi) · una soglia si attraversa una volta per visita (sessionStorage) -->
+<div id="fm-soglia-velo">
+  <div class="stars-bg"><span class="lucci"></span></div>
+  <div class="soglia" id="fm-soglia-clic">
+    <img class="logo-fm" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/FM_sigillo_corniceoro_HR-scaled.png" alt="FelicitasMundi">
+    <div class="vishnu-frame"><img class="vishnu-img" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/vishnu-soglia.png" alt="Vishnu"></div>
+    <div class="subtitle-section"><span class="flame-effect">&#10022; UN FUOCO SEMPRE ACCESO &#10022;</span></div>
+  </div>
+</div>
+<script>
+(function(){
+  var velo=document.getElementById('fm-soglia-velo');
+  var clic=document.getElementById('fm-soglia-clic');
+  var andato=false;
+  function via(){ if(andato||!velo)return; andato=true; velo.classList.add('via'); setTimeout(function(){ if(velo){velo.style.display='none';} },650); }
+
+  var resta=/[?&](soglia|rivedi)=1/.test(location.search);   /* la home a richiesta: il velo aspetta, e nessuno ti sposta */
+
+  /* chi arriva DA DENTRO il sito (il Nexus, un link) vuole la home: non lo si sposta.
+     L'index alla radice non conta: è il passaggio di chi sta entrando ora. */
+  var daDentro=false;
+  try{
+    if(document.referrer){
+      var r=new URL(document.referrer);
+      var radice = (r.pathname==='/' || r.pathname==='/index.html');
+      daDentro = (r.origin===location.origin) && !radice;
+    }
+  }catch(e){}
+  var ferma = resta || daDentro;
+
+  /* una soglia si attraversa UNA volta per visita: se l'hai già passata, non torna */
+  var passata=false; try{ passata=!!sessionStorage.getItem('fm_soglia_ora'); }catch(e){}
+  function passa(){ try{ sessionStorage.setItem('fm_soglia_ora','1'); }catch(e){} }
+
+  /* nessuna attesa dura per sempre: se il server tace, si tira dritto */
+  function entro(p, ms){
+    return Promise.race([ p, new Promise(function(ok){ setTimeout(function(){ ok(null); }, ms); }) ]);
+  }
+  var chiSei = ferma ? Promise.resolve(null) : entro(
+      fetch(location.origin+'/wp-json/fm/v1/sessione',{credentials:'same-origin'})
+        .then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }),
+      1500);
+
+  if(passata && !resta){                       /* già attraversata: niente velo, solo la strada */
+    velo.style.display='none'; andato=true;
+    chiSei.then(function(s){ if(s && s.loggato){ /* redirect automatico disattivato: la Soglia resta ferma per tutti */ void 0; } });
+    return;
+  }
+
+  /* Vishnu si mostra quando è arrivato: prima l'immagine, poi il respiro */
+  passa();
+  var img = velo.querySelector('.vishnu-img');
+  var arrivato = new Promise(function(ok){
+    if(!img || (img.complete && img.naturalWidth)){ ok(); return; }
+    img.addEventListener('load', ok);
+    img.addEventListener('error', ok);
+    setTimeout(ok, 1200);                    /* se tarda troppo, si mostra lo stesso */
+  });
+  var visibile = arrivato.then(function(){ velo.classList.add('mostra'); });
+
+  /* il respiro parte quando Vishnu si vede, e dura 4 secondi pieni */
+  var attesa = visibile.then(function(){ return new Promise(function(ok){ setTimeout(ok, 4000); }); });
+
+  /* si può toccare per passare subito: il tocco apre, e non aspetta nessuno */
+  if(clic){ clic.addEventListener('click', function(){
+    if(ferma){ via(); return; }
+    entro(chiSei, 400).then(function(s){
+      if(s && s.loggato){ /* redirect automatico disattivato: la Soglia resta ferma per tutti */ void 0; } else { via(); }
+    });
+  }); }
+
+  if(resta){ return; }   /* il velo resta finché non lo si tocca */
+
+  setTimeout(via, 7000);   /* comunque vada, la soglia si apre */
+
+  Promise.all([attesa, chiSei]).then(function(r){
+    var s=r[1];
+    if(s && s.loggato){ /* redirect automatico disattivato: la Soglia resta ferma per tutti */ void 0; return; }   /* dentro → il sentiero */
+    via();                                                                    /* fuori → la home */
+  }).catch(function(){ via(); });
+})();
+</script>
+
+<!-- ACCEDI -->
+<a class="fm-accedi" href="index.html" aria-label="Accedi o iscriviti alla Comunità">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.4-5.5 7-5.5s7 1.9 7 5.5"/></svg>
+  Accedi
+</a>
+
+<div id="home-scroll">
+
+  <!-- ░░ QUADRANTE MANIFESTO — due colonne ░░ -->
+  <section class="manifesto" aria-label="Comunità Eterna FelicitasMundi">
+    <div class="m-sx">
+      <a href="home.html" aria-label="Ricarica la home">
+        <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/FM_sigillo_corniceoro_HR-scaled.png" alt="FelicitasMundi">
+      </a>
+      <span class="m-marchio-nome-wrap">
+        <span class="m-marchio-nome">Comunità Eterna</span>
+        <span class="scintilla s1"></span>
+        <span class="scintilla s2"></span>
+        <span class="scintilla s3"></span>
+      </span>
+    </div>
+    <div class="m-dx">
+      <p class="m-frase">
+        <span class="apri">Catalizzatore di comunità.</span><br>
+        Incarniamo il senso profondo della <em>Coscienza Cosmica</em>,
+        il percorso per <em>ritrovare il filo</em> della propria esistenza,
+        l'uso consapevole dell'<em>AI</em>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ░░ DUE QUADRANTI · ENTRA + COME FUNZIONA ░░ -->
+<style>
+.duo-cta{max-width:760px;margin:26px auto 0;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.duo-cta{grid-template-columns:1fr}}
+.duo-q{display:block;text-align:center;border-radius:16px;padding:20px 16px;text-decoration:none;
+  font-family:'Cinzel',serif;font-size:15px;letter-spacing:.05em;transition:transform .2s}
+.duo-q:hover{transform:translateY(-2px)}
+.duo-q.pieno{background:#C8A055;color:#0A0C1A}
+.duo-q.pieno:hover{background:#D4AF6A}
+.duo-q.scuro{background:rgba(10,12,26,.78);backdrop-filter:blur(8px);color:#D4AF6A;border:1px solid rgba(200,160,85,.4)}
+.duo-q small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;letter-spacing:0;margin-top:5px;opacity:.75}
+
+/* ── LO SPAZIO VIVO · Quello che puoi fare ── */
+.pf-sez{max-width:1020px;margin:0 auto;padding:60px 20px 30px}
+.pf-occhio{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#D4AF6A;text-align:center;margin-bottom:8px}
+.cardscroll{margin:0 -20px;padding:0 20px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.cardscroll::-webkit-scrollbar{display:none}
+.cs-pista{display:flex;gap:16px;padding-bottom:6px;width:max-content}
+.card{position:relative;flex:0 0 auto;width:400px;height:720px;border-radius:26px;overflow:hidden;
+  scroll-snap-align:center;border:1px solid rgba(184,150,62,.28);background:#0a0e1c;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-4px);border-color:var(--cc)}
+@media(max-width:560px){.card{width:86vw;max-width:360px;height:min(82vh,660px)}}
+/* card-foto: immagine a tutta card, testo in basso su velo */
+.card.foto{background:var(--img,linear-gradient(150deg,#182038,#0a1024)) center/cover no-repeat}
+/* velo natura: scurisce e unifica, niente volto protagonista */
+.card.natura::before{content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(4,6,14,.5) 0%,rgba(4,6,14,.32) 40%,rgba(4,6,14,.96) 100%),
+             radial-gradient(ellipse at 50% 28%,rgba(200,160,85,.22),transparent 62%)}
+/* la parola-chiave dorata in forma circolare, in alto */
+.pill-oro{position:absolute;top:22px;left:50%;transform:translateX(-50%);z-index:3;
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--oro-ch);
+  border:1px solid rgba(200,160,85,.5);border-radius:999px;padding:7px 20px;background:rgba(4,6,14,.45);backdrop-filter:blur(6px)}
+.tag-oro{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px}
+.tag-oro span{font-family:'DM Sans';font-size:10px;letter-spacing:.04em;color:var(--oro-ch);
+  border:1px solid rgba(200,160,85,.4);border-radius:999px;padding:3px 11px}
+.card.foto::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 38%,rgba(4,6,14,.5) 62%,rgba(4,6,14,.94) 100%)}
+.card.foto::after{content:attr(style);display:none}
+.card-vetro{position:absolute;left:0;right:0;bottom:0;padding:26px 26px 32px;z-index:2}
+.card-occhio{display:inline-block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cc);margin-bottom:8px;background:rgba(4,6,14,.5);padding:3px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+.card h3{font-family:'Cinzel',serif;font-weight:500;font-size:26px;color:#F5F0E6;margin:0 0 7px;line-height:1.15}
+.card p{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.45;color:rgba(245,240,230,.82);margin:0}
+/* card-foto senza foto vera: mostra il segnaposto */
+.card.foto:not([style*="http"]) .card-vetro::after{content:attr(data-ph)}
+.foto-ph{position:absolute;top:0;left:0;right:0;height:62%;display:grid;place-items:center;z-index:1;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(245,240,230,.4);text-align:center;padding:0 24px}
+/* card-telefono */
+.card.tel{background:linear-gradient(155deg,#141a2e,#080c18);display:flex;flex-direction:column;align-items:center;padding:22px 0 0}
+.tel-disegno{width:250px;flex:1;min-height:0;border-radius:30px 30px 0 0;border:2px solid rgba(200,160,85,.4);border-bottom:none;
+  background:#04060e;padding:8px 8px 0;position:relative;box-shadow:inset 0 0 30px rgba(0,0,0,.7)}
+.tel-tacca{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:64px;height:15px;background:#04060e;border-radius:0 0 11px 11px;z-index:3}
+.tel-vetro{height:100%;border-radius:24px 24px 0 0;overflow:hidden;background:radial-gradient(ellipse at 50% 20%,#0c1530,#060c1c);padding:26px 12px 0;display:flex;flex-direction:column}
+.tel-top{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,240,230,.4);text-align:center;margin-bottom:12px}
+.tel-bolla{align-self:flex-start;max-width:82%;background:rgba(245,240,230,.09);border-radius:12px 12px 12px 3px;
+  padding:9px 12px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(245,240,230,.8);margin-bottom:7px}
+.tel-bolla.mia{align-self:flex-end;background:rgba(200,160,85,.2);color:#F5F0E6;border-radius:12px 12px 3px 12px}
+.tel-barra{margin-top:auto;display:flex;align-items:center;gap:7px;background:rgba(6,9,22,.9);border:1px solid rgba(184,150,62,.3);
+  border-radius:999px;padding:6px 8px;margin-bottom:8px}
+.tel-piu{width:18px;height:18px;border-radius:50%;border:1px solid var(--cc);color:var(--cc);display:grid;place-items:center;font-size:13px;flex:0 0 auto}
+.tel-campo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12.5px;color:rgba(245,240,230,.4)}
+.tel-due{display:flex;justify-content:space-around;padding-bottom:11px;font-size:10.5px;letter-spacing:.08em;color:var(--cc)}
+.card.tel .card-eti{padding:16px 20px 22px;text-align:center;background:rgba(4,6,14,.6)}
+.tel-vetro.art{padding:24px 9px 0;overflow:hidden;position:relative}
+.art-modo{display:flex;align-items:center;gap:5px;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:#CC6644;margin-bottom:7px}
+.art-pallino{width:5px;height:5px;border-radius:50%;background:#CC6644;box-shadow:0 0 5px #CC6644}
+.art-quadri{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
+.art-quadri span{font-size:6px;letter-spacing:.04em;text-transform:uppercase;color:#CC6644;
+  border:1px solid rgba(204,102,68,.5);border-radius:999px;padding:2px 5px}
+.art-h1{font-family:'Cinzel',serif;font-size:12px;color:#F5F0E6;line-height:1.2;margin-bottom:6px}
+.art-foto{height:46px;border-radius:6px;background:url('https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg') center/cover no-repeat,linear-gradient(135deg,#3a2f22,#1a140c);border:1px solid rgba(200,160,85,.3)}
+.art-cap{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:7.5px;color:rgba(245,240,230,.45);margin:3px 0 6px}
+.art-h2{font-family:'Cinzel',serif;font-size:9px;color:#CC6644;margin:6px 0 3px}
+.art-testo{font-family:'Cormorant Garamond',serif;font-size:8.5px;line-height:1.5;color:rgba(245,240,230,.6);margin-bottom:5px}
+.art-riga{height:3.5px;border-radius:2px;background:rgba(245,240,230,.12);margin-bottom:4px}
+.art-riga.corta{width:58%}
+/* il foglio "dove lo porti" aperto */
+.mg-foglio{position:absolute;left:9px;right:9px;bottom:46px;background:rgba(18,22,42,.97);border:1px solid rgba(200,160,85,.4);border-radius:11px;padding:8px;box-shadow:0 -8px 24px rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+.art-velo{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,rgba(6,9,22,.85) 60%);pointer-events:none}
+  .mg-ft{font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,240,230,.45);margin-bottom:4px;padding:0 3px}
+.mg-opt{display:flex;align-items:center;gap:5px;font-family:'Cormorant Garamond',serif;font-size:10px;color:rgba(245,240,230,.55);padding:3px 6px;border-radius:5px;margin-bottom:1px}
+.mg-opt.on{background:rgba(204,102,68,.2);color:#F5F0E6}
+.mg-b{width:5px;height:5px;border-radius:50%;background:#CC6644;box-shadow:0 0 5px #CC6644}
+/* la barra reale */
+.mg-barra{position:absolute;left:9px;right:9px;bottom:8px;display:flex;align-items:center;gap:3px;background:rgba(6,9,22,.96);border:1px solid rgba(184,150,62,.3);border-radius:999px;padding:4px 5px}
+.mg-piu{display:flex;align-items:center;gap:3px;border:1px solid #CC6644;background:rgba(204,102,68,.15);border-radius:999px;padding:3px 7px;flex:0 0 auto}
+.mg-piu .mg-cr{color:#CC6644;font-size:11px;transform:rotate(45deg)}
+.mg-piu .mg-bollo{width:4px;height:4px;border-radius:50%;background:#CC6644}
+.mg-piu b{font-family:'DM Sans';font-size:8px;color:#F5F0E6}
+.mg-ta{flex:1;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:9px;color:rgba(245,240,230,.35);padding:0 4px;white-space:nowrap;overflow:hidden}
+.mg-mod{border:1px solid var(--oro-ch);color:var(--oro-ch);background:none;border-radius:999px;padding:3px 6px;font-family:'DM Sans';font-size:8px;flex:0 0 auto}
+.mg-tondo{width:19px;height:19px;border-radius:50%;border:1px solid rgba(245,240,230,.25);background:none;color:rgba(245,240,230,.6);font-size:9px;flex:0 0 auto;display:grid;place-items:center}
+.mg-tondo.oro{border-color:var(--oro);background:var(--oro);color:var(--navy)}
+.tel-vetro.radio{padding:30px 15px 0;display:flex;flex-direction:column;position:relative}
+.rd-onda{display:flex;align-items:flex-end;gap:3px;height:22px;margin-bottom:9px}
+.rd-onda i{width:4px;background:#CC6644;border-radius:3px;animation:rdo 1.1s ease-in-out infinite}
+.rd-onda i:nth-child(2){animation-delay:.15s}.rd-onda i:nth-child(3){animation-delay:.3s}.rd-onda i:nth-child(4){animation-delay:.45s}.rd-onda i:nth-child(5){animation-delay:.6s}
+@keyframes rdo{0%,100%{height:5px}50%{height:22px}}
+.rd-live{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#CC6644;margin-bottom:6px}
+.rd-titolo{font-family:'Cinzel',serif;font-size:15px;color:#F5F0E6;line-height:1.2}
+.rd-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(245,240,230,.5);margin-bottom:16px}
+.rd-sez{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,240,230,.45);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid rgba(184,150,62,.18)}
+.rd-app{display:flex;gap:9px;font-family:'Cormorant Garamond',serif;font-size:12.5px;color:rgba(245,240,230,.72);padding:5px 0}
+.rd-app b{color:#CC6644;font-weight:500;flex:0 0 26px}
+.rd-mega{margin-top:auto;display:flex;align-items:center;gap:7px;background:rgba(6,9,22,.92);border:1px solid rgba(184,150,62,.3);border-radius:999px;padding:6px 10px;margin-bottom:9px}
+.rd-piu{width:18px;height:18px;border-radius:50%;border:1px solid #CC6644;color:#CC6644;display:grid;place-items:center;font-size:12px;flex:0 0 auto}
+.rd-mega span:last-child{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(245,240,230,.4)}
+.cs-suggerisci{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;
+  color:rgba(245,240,230,.4);margin:16px 0 0;letter-spacing:.05em}
+.pf-tit{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(22px,3.4vw,30px);color:#F5F0E6;text-align:center;margin:0 0 34px}
+.vis{display:grid;grid-template-columns:1fr;gap:22px;align-items:center;
+  background:rgba(10,12,26,.78);backdrop-filter:blur(10px);border:1px solid rgba(184,150,62,.22);
+  border-radius:18px;padding:22px;margin-bottom:18px}
+@media(min-width:760px){.vis{grid-template-columns:1.05fr 1fr}.vis.giro .schermo{order:2}}
+.schermo{border:1px solid rgba(200,160,85,.3);border-radius:14px;background:#05070f;overflow:hidden;
+  box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.sch-testa{display:flex;align-items:center;gap:5px;padding:8px 12px;border-bottom:1px solid rgba(184,150,62,.14)}
+.sch-testa i{width:7px;height:7px;border-radius:50%;background:rgba(245,240,230,.14)}
+.sch-testa span{margin-left:6px;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,230,.38)}
+.sch-corpo{padding:16px 18px;min-height:172px}
+.sch-cap{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--vc,#D4AF6A);margin-bottom:7px}
+.sch-corpo h4{font-family:'Cinzel',serif;font-weight:500;font-size:15px;color:#F5F0E6;margin:0 0 6px;line-height:1.3}
+.sch-riga{font-family:'Cormorant Garamond',serif;font-size:13.5px;line-height:1.55;color:rgba(245,240,230,.68);margin:0 0 4px}
+.sch-riga b{color:#F5F0E6;font-weight:500}
+.onda3{display:inline-flex;align-items:flex-end;gap:2px;height:10px;margin-right:6px}
+.onda3 i{width:2.5px;background:#D4AF6A;border-radius:2px;animation:o3 1.1s ease-in-out infinite}
+.onda3 i:nth-child(2){animation-delay:.16s}.onda3 i:nth-child(3){animation-delay:.32s}
+@keyframes o3{0%,100%{height:3px}50%{height:10px}}
+.mini-mega{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.mm-col{border:1px solid rgba(184,150,62,.18);border-radius:9px;padding:8px 10px}
+.mm-col b{display:block;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--vc);margin-bottom:5px;font-weight:500}
+.mm-col span{display:block;font-family:'Cormorant Garamond',serif;font-size:12.5px;color:rgba(245,240,230,.65);padding:1.5px 0}
+.mm-campo{grid-column:1/-1;border:1px solid rgba(184,150,62,.25);border-radius:999px;padding:6px 12px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(245,240,230,.4)}
+.vis-tx h3{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(16px,2.2vw,19px);color:#F5F0E6;margin:0 0 12px}
+.vis-tx h3 em{font-style:normal;color:var(--vc,#D4AF6A)}
+.az{list-style:none;margin:0;padding:0}
+.az li{font-family:'Cormorant Garamond',serif;font-size:15.5px;line-height:1.5;color:rgba(245,240,230,.75);
+  padding:7px 0 7px 20px;border-bottom:1px solid rgba(184,150,62,.1);position:relative}
+.az li:last-child{border-bottom:none}
+.az li::before{content:'·';position:absolute;left:4px;color:var(--vc,#D4AF6A);font-size:22px;line-height:.9}
+.az b{color:#F5F0E6;font-weight:500}
+.vis.v1{background:linear-gradient(115deg,rgba(20,17,8,.82),rgba(10,12,26,.78) 55%);border-top:3px solid #D4AF6A}
+.vive-p{margin-left:auto;width:7px;height:7px;border-radius:50%;background:#CC6644;animation:vp 1.6s ease-in-out infinite}
+@keyframes vp{0%,100%{opacity:.35}50%{opacity:1;box-shadow:0 0 8px #CC6644}}
+.vis.v2{background:linear-gradient(115deg,rgba(12,20,10,.8),rgba(10,12,26,.78) 55%);border-left:3px solid #669944;grid-template-columns:1.25fr 1fr}
+@media(max-width:759px){.vis.v2{grid-template-columns:1fr}}
+.vis.v3{background:radial-gradient(ellipse at 82% 10%,rgba(200,160,85,.13),transparent 55%),rgba(10,12,26,.8);border:1px solid rgba(200,160,85,.4)}
+.vis.v4{background:linear-gradient(115deg,rgba(24,18,8,.8),rgba(10,12,26,.78) 55%);border-bottom:3px solid #AA8844;border-radius:18px 18px 8px 8px}
+.vis.v5{background:rgba(10,12,26,.88);border:1px dashed rgba(200,160,85,.45);text-align:left}
+.av5{display:inline-block;width:18px;height:18px;border-radius:50%;margin-right:8px;vertical-align:-3px;
+  background:radial-gradient(circle at 38% 34%,#EAD49A,#C8A055 62%,#8f6f34)}
+.adesso-tit{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(20px,3vw,26px);color:#F5F0E6;text-align:center;margin:54px 0 6px}
+.adesso-so{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(245,240,230,.5);text-align:center;margin:0 0 26px}
+</style>
+
+<div class="duo-cta">
+  <a class="duo-q pieno" href="index.html">Entra nello Spazio Vivo</a>
+  <a class="duo-q scuro" href="#puoifare">Come funziona<small>ti mostro cosa puoi fare, qui sotto</small></a>
+</div>
+
+<section class="pf-sez" id="puoifare" aria-label="Quello che puoi fare">
+  <div class="pf-occhio">Lo Spazio Vivo</div>
+  <h2 class="pf-tit">Quello che puoi fare</h2>
+  <div class="pf-caro">
+  <button class="cs-fre pre" id="cs-pre" aria-label="Card precedenti">&#8249;</button>
+  <button class="cs-fre suc" id="cs-suc" aria-label="Card successive">&#8250;</button>
+  <div class="cardscroll">
+    <div class="cs-pista">
+
+      <!-- 1 · ACCOUNT -->
+      <article class="card foto natura" style="--cc:#D4AF6A;--img:url('https://www.felicitasmundi.com/wp-content/uploads/2026/01/6032737182117727078.jpg')">
+        <span class="pill-oro">Crea il tuo account</span>
+        <div class="card-vetro">
+          <h3>Fai una scelta</h3>
+          <p>Cambia la tua vita e avvicinati a persone che l'hanno gi&agrave; fatto.</p>
+          <div class="tag-oro"><span>prodotti</span><span>formazioni</span><span>assistenza</span></div>
+        </div>
+      </article>
+
+      <!-- 2 · VICINATI -->
+      <article class="card foto natura" style="--cc:#AA8844;--img:url('https://www.felicitasmundi.com/wp-content/uploads/2025/10/sardegna-.jpeg')">
+        <span class="pill-oro">Attiva il vicinato</span>
+        <div class="card-vetro">
+          <h3>Le persone attorno a te,<br>unite nella rete</h3>
+          <div class="tag-oro"><span>bisogni</span><span>scambi</span><span>eventi</span><span>ruoli</span></div>
+        </div>
+      </article>
+
+      <!-- 3 · SENTIERO -->
+      <article class="card foto natura" style="--cc:#C8A055;--img:url('https://www.felicitasmundi.com/wp-content/uploads/2022/06/img_20220621_213403-scaled.jpg')">
+        <span class="pill-oro">Il sentiero</span>
+        <div class="card-vetro">
+          <h3>Un cammino<br>che cambia la vita</h3>
+          <p>Un'avventura di pratiche, incontri e tecniche di centratura che fanno evolvere il tuo talento. Il primo mese &egrave; in dono.</p>
+          <div class="tag-oro"><span>centratura</span><span>strumenti</span><span>avventura</span></div>
+        </div>
+      </article>
+
+      <!-- 4 · MEGAFONO — dentro il telefono: creazione articolo Di Bella + scelta destinazione -->
+      <article class="card tel" style="--cc:#669944">
+        <div class="tel-disegno">
+          <div class="tel-tacca"></div>
+          <div class="tel-vetro art">
+            <!-- vista MODIFICA articolo dall'account -->
+            <div class="art-modo"><span class="art-pallino"></span>Stai modificando</div>
+            <div class="art-quadri"><span>Voci ricerca</span><span>Assistenza</span><span>Farmacie</span></div>
+            <div class="art-h1">Metodo Di Bella: un ponte</div>
+            <div class="art-foto"></div>
+            <div class="art-cap">Dott. Giuseppe di Bella e Giovanni Carlo Greco</div>
+            <div class="art-h2">Il contesto: verit&agrave; e propaganda</div>
+            <div class="art-testo">Gli studi scientifici e le teorie indipendenti, che non appartengono a un certo gruppo, vengono messe in discussione o messe da parte a scapito di nuove teorie o di vigile attesa. Chiediamo al Dottor Giuseppe Di Bella a che punto &egrave; lo studio sulla sperimentazione del Metodo.</div>
+            <div class="art-h2">L'eredit&agrave; del Prof Luigi Di Bella</div>
+            <div class="art-testo">Mio padre &egrave; quello che ha scoperto la funzione dell'epifisi relativamente alla melatonina, la regolazione del numero delle piastrine e la funzione della melatonina. Fu candidato al Premio Nobel.</div>
+            <div class="art-testo">Non era solo un medico: laureato in Medicina, Chimica e Farmacia, una mente che ha attraversato discipline diverse per comprendere il funzionamento profondo del vivente.</div>
+            <div class="art-velo"></div>
+            <!-- IL FOGLIO "Dove lo porti?" APERTO, galleggia sul testo -->
+            <div class="mg-foglio">
+              <div class="mg-ft">Dove lo porti?</div>
+              <div class="mg-opt">Vicinati</div>
+              <div class="mg-opt">Dono e scambio</div>
+              <div class="mg-opt">Ricerca</div>
+              <div class="mg-opt">Emporio</div>
+              <div class="mg-opt on"><span class="mg-b"></span>Assistenza</div>
+              <div class="mg-opt">Formazione</div>
+            </div>
+            <!-- LA BARRA REALE -->
+            <div class="mg-barra">
+              <button class="mg-piu on"><span class="mg-cr">+</span><span class="mg-bollo"></span><b>Assistenza</b></button>
+              <div class="mg-ta">Unisci la tua voce&hellip;</div>
+              <button class="mg-mod">Pro <span>&#9662;</span></button>
+              <button class="mg-tondo oro">&#8594;</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-eti"><span class="card-occhio">Il Megafono</span>
+          <h3>Fai sentire la voce</h3>
+          <p>Scrivi, pubblica, stampa e diffondi: una ricerca, un prodotto, un incontro.</p></div>
+      </article>
+
+      <!-- 5 · RADIO -->
+      <article class="card tel" style="--cc:#CC6644">
+        <div class="tel-disegno">
+          <div class="tel-tacca"></div>
+          <div class="tel-vetro radio">
+            <div class="rd-marchio">Radio FelicitasMundi</div>
+            <div class="rd-testa">
+              <div class="rd-onda"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <button class="rd-play" title="Ascolta"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            </div>
+            <div class="rd-barra"><i></i></div>
+            <div class="rd-tempi"><span>4:12</span><span>11:02</span></div>
+            <div class="rd-live">In onda ora</div>
+            <div class="rd-titolo">Hare Kṛṣṇa Maha Mantra</div>
+            <div class="rd-sub">Visnujana Swami &middot; Kirtan</div>
+            <div class="rd-sez">Le feste</div>
+            <div class="rd-app"><b>24&ndash;26 lug</b> European Summer Sankirtan Festival</div>
+            <div class="rd-nota">Dopo il lancio, i vicinati potranno aggiungere il calendario delle feste.</div>
+            <div class="rd-sez">Gli appuntamenti</div>
+            <div class="rd-app"><b>23 ago</b> Aplomb e Yoga &mdash; Seminario Internazionale</div>
+            <div class="rd-sez">La storia</div>
+            <div class="rd-storia">
+              <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/comunita-eterna-verticale-572x1024.png" alt="La storia di FelicitasMundi">
+              <div><b>La storia di FelicitasMundi</b><span>&laquo;Un catalizzatore di comunit&agrave; spirituali, contadine e rurali che scelgono di fare assieme.&raquo;</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-eti"><span class="card-occhio">Lo Spazio Vivo</span>
+          <h3>Il canto, le feste, gli appuntamenti</h3>
+          <p>Il canto che non si spegne, e cosa accade nella comunit&agrave;.</p></div>
+      </article>
+
+    </div>
+  </div>
+  </div>
+  <div class="cs-punti" id="cs-punti"></div>
+  <p class="cs-suggerisci">scorri &rarr;</p>
+  <div class="pf-azioni">
+    <div class="pf-due">
+      <a class="pf-col pf-col-crea" href="accesso.html?crea=1&amp;torna=soglia.html">
+        <span class="pf-col-tit">Crea il tuo account</span>
+        <span class="pf-col-tx">Parti dal <b>Karma Yoga</b>, il servizio di purificazione.</span>
+        <span class="pf-col-freccia">Comincia &rarr;</span>
+      </a>
+      <a class="pf-col pf-col-entra" href="accesso.html?torna=soglia.html">
+        <span class="pf-col-tit">Accedi al tuo account</span>
+        <span class="pf-col-tx">Le esperienze del <b>Praticantato</b>, <b>Studente</b> ed <b>Operatore</b>.</span>
+        <span class="pf-col-freccia">Entra &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+.vb-sez{max-width:1020px;margin:0 auto;padding:20px 20px 8px}
+.vb-quad{background:rgba(10,12,26,.8);backdrop-filter:blur(10px);border:1px solid rgba(184,150,62,.25);border-radius:18px;padding:24px 22px 18px}
+.vb-tit{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(20px,3vw,26px);color:#F5F0E6;margin:0 0 4px}
+.vb-so{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(245,240,230,.5);margin:0 0 18px}
+.vb-caro{display:flex;gap:13px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;scrollbar-width:thin}
+.vb-caro::-webkit-scrollbar{height:4px}
+.vb-caro::-webkit-scrollbar-thumb{background:rgba(200,160,85,.3);border-radius:4px}
+.vb-c{flex:0 0 232px;scroll-snap-align:start;border:1px solid rgba(184,150,62,.2);border-radius:14px;overflow:hidden;
+  background:rgba(6,9,22,.6);text-decoration:none;transition:border-color .2s,transform .2s}
+.vb-c:hover{border-color:rgba(200,160,85,.5);transform:translateY(-3px)}
+.vb-c .foto{height:118px;background:var(--fbg,linear-gradient(140deg,#182038,#0a1024)) center/cover no-repeat;
+  display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(245,240,230,.4)}
+.vb-c .tx{padding:11px 14px 13px}
+.vb-c .cap{font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--cc7,#D4AF6A);margin-bottom:5px}
+.vb-c h3{font-family:'Cinzel',serif;font-weight:500;font-size:14px;color:#F5F0E6;line-height:1.35;margin:0}
+</style>
+<div class="eh-scope">
+<section id="cammino"><div class="q7">
+  <div class="occhio">Il sentiero</div>
+  <h2>Entra, racconta, pubblica, cresci</h2>
+  <p class="dice">Una comunit&agrave; dove ci&ograve; che sai fare diventa servizio per gli altri &mdash; e, se vuoi, lavoro.</p>
+  <div class="cammino">
+    <div class="tappa"><div class="cap">gratis, sempre</div><h3>Servi la comunit&agrave;</h3>
+      <p>Scrivi in bacheca, leggi, dichiara un ruolo e dai una mano. Il Karma Yoga resta gratuito, sempre.</p></div>
+    <div class="tappa"><div class="cap">26 &euro; / mese &middot; 1&ordm; mese in dono</div><h3>Il praticantato</h3>
+      <p>Centrarti, sviluppare il tuo progetto-sogno, partire all'avventura tra i vicinati.</p></div>
+    <div class="tappa"><div class="cap">col praticantato</div><h3>Pubblica e diffondi</h3>
+      <p>La scrittura, l'AI che d&agrave; forma, il compositore di stampa: il libro, l'opuscolo, la rivista.</p></div>
+    <div class="tappa"><div class="cap">quando c'&egrave;</div><h3>L'esperienza dal vivo</h3>
+      <p>Tour, ritiri, camp, formazioni. Il banner porta all'esperienza in corso.</p></div>
+  </div>
+  <div class="porta-riga">&laquo;Una scuola di vita, fatta come un gioco.&raquo; &middot; &laquo;Praticare la gioia.&raquo;</div>
+  <div style="text-align:center"><a class="eh-cta" href="index.html" style="display:inline-block;background:#C8A055;color:#0A0C1A;border-radius:999px;padding:13px 34px;font-family:'Cinzel',serif;font-size:13.5px;letter-spacing:.08em;text-decoration:none">Inizia &middot; il mese in dono</a></div>
+</div></section>
+<section><div class="q7 eh-gesti-pannello">
+  <div class="occhio">I gesti</div>
+  <h2>Quello che le persone ci fanno</h2>
+  <div class="gesti">
+    <a class="gesto" href="#" style="--gc:var(--fuoco)"><div class="foto" style="background-image:linear-gradient(140deg, color-mix(in srgb,var(--gc) 30%, transparent), rgba(10,12,26,.35)),url('https://www.felicitasmundi.com/wp-content/uploads/2026/03/5893044384427609567.jpg');background-size:cover;background-position:center 30%"></div>
+      <div class="tx"><h3>Trova chi ti serve</h3><p>I bisogni aperti, adesso: si apre, e chi pu&ograve; risponde.</p></div></a>
+    <a class="gesto" href="#" style="--gc:var(--terra)"><div class="foto" style="background-image:linear-gradient(140deg, color-mix(in srgb,var(--gc) 30%, transparent), rgba(10,12,26,.35)),url('https://www.felicitasmundi.com/wp-content/uploads/2026/03/cibo-guarigione.jpg');background-size:cover;background-position:center"></div>
+      <div class="tx"><h3>Porta quello che sai fare</h3><p>Ruoli, doni, prodotti: chi serve appartiene.</p></div></a>
+    <a class="gesto" href="#" style="--gc:var(--etere)"><div class="foto" style="background-image:linear-gradient(140deg, color-mix(in srgb,var(--gc) 30%, transparent), rgba(10,12,26,.35)),url('https://www.felicitasmundi.com/wp-content/uploads/2026/03/aplomb.jpeg');background-size:cover;background-position:center"></div>
+      <div class="tx"><h3>Impara</h3><p>Formazioni, ricerca, maestri di tradizioni antiche.</p></div></a>
+    <a class="gesto" href="#" style="--gc:var(--aria)"><div class="foto" style="background-image:linear-gradient(140deg, color-mix(in srgb,var(--gc) 30%, transparent), rgba(10,12,26,.35)),url('https://www.felicitasmundi.com/wp-content/uploads/2026/05/20260305_160421-scaled.jpg');background-size:cover;background-position:center"></div>
+      <div class="tx"><h3>Stampa e diffondi</h3><p>I contenuti che diventano cartacei: l&igrave; &egrave; la vera forza.</p></div></a>
+  </div>
+</div></section>
+</div>
+<section class="vb-sez" aria-label="Il vivo che batte">
+  <div class="vb-quad">
+    <h2 class="vb-tit">Il vivo che batte</h2>
+    <p class="vb-so">Cosa fa la Comunit&agrave;, adesso.</p>
+    <div class="vb-caro">
+      <a class="vb-c" href="/communitas-aeterna/articoli/2026/metodo-di-bella.html" style="--cc7:#9966CC;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg')"><div class="foto"></div>
+        <div class="tx"><div class="cap">Etere &middot; ricerca</div><h3>Il metodo Di Bella</h3></div></a>
+      <a class="vb-c" href="/enciclopedia/gioia-radix.html" style="--cc7:#CC6644;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/06/regno-toscana-panoramica.jpg')"><div class="foto"></div>
+        <div class="tx"><div class="cap">20 giugno &ndash; 4 ottobre &middot; Toscana</div><h3>Gioia Radix</h3></div></a>
+      <a class="vb-c" href="/communitas-aeterna/articoli/2026/60-anni-hare-krishna.html" style="--cc7:#CC6644;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/06/hk14.jpeg')"><div class="foto"></div>
+        <div class="tx"><div class="cap">La festa &middot; dalla bacheca</div><h3>60 anni di Hare Krishna</h3></div></a>
+      <a class="vb-c" href="/communitas-aeterna/articoli/2026/emporio-sapone-lanascrub.html" style="--cc7:#4488BB;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/07/WhatsApp-Image-2026-07-15-at-11.13.44.jpeg')"><div class="foto"></div>
+        <div class="tx"><div class="cap">Emporio &middot; lo scambi o lo compri</div><h3>Il sapone Lanascrub di Daniele</h3></div></a>
+      <a class="vb-c" href="/communitas-aeterna/articoli/2026/bacheca-sa-pirighedda.html" style="--cc7:#AA8844;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/07/IMG_20230222_093616-scaled.jpg')"><div class="foto"></div>
+        <div class="tx"><div class="cap">Terra &middot; racconto</div><h3>Sa Pirighedda &mdash; la terra di Marco</h3></div></a>
+      <a class="vb-c" href="/communitas-aeterna/articoli/2026/bacheca-idea-economica-vicinati.html" style="--cc7:#AA8844;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/07/foto-bacheca-roberta.jpeg')"><div class="foto"></div>
+        <div class="tx"><div class="cap">Dalla bacheca</div><h3>Idea economica per i vicinati</h3></div></a>
+    </div>
+  </div>
+</section>
+<div style="display:none" aria-hidden="true"><div id="letture"></div><button id="caro-prev"></button><button id="caro-next"></button><button id="caro-tutti"></button></div>
+
+<!-- ░░ NEWSLETTER ░░ -->
+  <section class="sblocco">
+    <div class="sblocco-azioni">
+      <button class="s-btn" onclick="apriForm('newsletter','#D4AF6A','Newsletter')">Iscriviti alla newsletter</button>
+    </div>
+  </section>
+
+  <!-- ░░ LE DOMANDE DEI NUOVI ARRIVATI ░░ -->
+  <section class="faq" id="faq">
+    <h2 class="faq-t">Le domande dei nuovi arrivati</h2>
+
+    <div class="d">
+      <button class="d-q">Cos'è FelicitasMundi? <span class="d-piu"></span></button>
+      <div class="d-r"><div class="d-r-in">
+        <p>Una comunità di persone che mettono ciò che sanno fare al servizio degli altri — e, se vogliono, ne fanno un lavoro. Si vive attraverso cinque elementi: <strong>i vicinati</strong>, <strong>l'emporio</strong>, <strong>l'assistenza comunitaria integrata</strong>, <strong>il megafono</strong>, <strong>la scuola itinerante</strong>. Ognuno è un modo diverso in cui un bisogno trova risposta.</p>
+      </div></div>
+    </div>
+
+    <div class="d">
+      <button class="d-q">Quanto costa? <span class="d-piu"></span></button>
+      <div class="d-r"><div class="d-r-in">
+        <p>Entrare e servire la comunità è <strong>gratuito, sempre</strong>: leggi, scrivi in bacheca, condividi prodotti, dichiari un ruolo e ti metti all'opera.</p>
+        <p>Il <strong>praticantato</strong> costa <strong>26 € al mese</strong> — lo compri quando vuoi, e il primo mese lo provi gratis.</p>
+        <p>Qui sei accompagnato nel <strong>recuperare il filo della tua esistenza</strong>, nel focalizzare il tuo talento e in come seguire delle direzioni chiare per portare a termine la tua opera — che diventa <strong>un frammento del meccanismo che muove la Comunità Eterna</strong>.</p>
+        <p>Trovi gli strumenti di scrittura strutturata, utili per i prodotti, le formazioni e i progetti che porti nella comunità, che possono prendere la forma di <strong>un libro da distribuire nell'emporio</strong>; il metodo per usare l'intelligenza artificiale in maniera consapevole; e la formazione per diventare operatore.</p>
+      </div></div>
+    </div>
+
+    <div class="d">
+      <button class="d-q">Dove siete? <span class="d-piu"></span></button>
+      <div class="d-r"><div class="d-r-in">
+        <p>La Comunità vive <strong>dove sei tu</strong>: i vicinati sono locali, e nascono dalle persone che ci stanno dentro.</p>
+        <p>I luoghi dal vivo esistono già: tutto è partito in <strong>Sardegna</strong> e si è espanso in <strong>Toscana, Emilia, Romagna e Abruzzo</strong>. Ora ci stiamo espandendo, con l'intento di avere <strong>un vicinato in ogni regione italiana</strong>.</p>
+        <p>Quest'estate proponiamo l'esperienza <strong>Gioia Radix</strong>, in Toscana. E in Italia ci sono già luoghi dove si pratica — centri, monasteri, case che aprono le porte.</p>
+      </div></div>
+    </div>
+
+    <div class="d">
+      <button class="d-q">Posso fare volontariato in un vicinato? <span class="d-piu"></span></button>
+      <div class="d-r"><div class="d-r-in">
+        <p>Lo chiamiamo <strong>Karma Yoga</strong>, ed è la cosa che conta di più. È un <strong>percorso di purificazione</strong>: metti a disposizione ciò che sai fare, e nel farlo ti integri nella comunità. <strong>Chi serve appartiene.</strong></p>
+        <p>Si dichiara un ruolo, e si comincia. Gratuito, sempre.</p>
+      </div></div>
+    </div>
+
+    <div class="d">
+      <button class="d-q">Come posso creare un vicinato nella mia zona? <span class="d-piu"></span></button>
+      <div class="d-r"><div class="d-r-in">
+        <p>Il vicinato <strong>nasce da te</strong>. <strong>Bastano tre persone</strong> per iniziare a dichiarare una visione e disegnare il vicinato che parte dalle persone accanto a te — persone che possono ricevere interviste, avere spazi per raccontare i propri prodotti e diffondere conoscenze, organizzare e comunicare le feste.</p>
+        <p>Esistono già tanti vicinati <strong>non attivati</strong> in FelicitasMundi: piccoli centri rurali, contadini, che hanno bisogno di rendere visibile il proprio talento, di sentirsi appartenenti a una rete che sa riconoscerli, e di condividere uno spazio vivo.</p>
+      </div></div>
+    </div>
+
+    <div class="d">
+      <button class="d-q">Cosa trovo nella piattaforma? <span class="d-piu"></span></button>
+      <div class="d-r"><div class="d-r-in">
+        <p>Cinque stanze, e in ognuna una cosa viva.</p>
+        <div class="stanze">
+          <div class="r"><b>I vicinati</b><span>Chi c'è vicino a te, e cosa è aperto ora: i bisogni, i ruoli, le bacheche, i calendari.</span></div>
+          <div class="r"><b>L'emporio</b><span>Ciò che la comunità produce: lo compri, lo scambi, o te lo dona chi lo fa.</span></div>
+          <div class="r"><b>L'assistenza</b><span>Mutuo aiuto, cammino spirituale, e chi dà il proprio servizio terapeutico e di consulenza.</span></div>
+          <div class="r"><b>Il megafono</b><span>Dove componi e pubblichi: la redazione, senza saper programmare. E il canto sacro, che suona sempre.</span></div>
+          <div class="r"><b>La scuola itinerante</b><span>Ricerca, insegnamenti, formazioni e maestri di tradizioni antiche.</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="d">
+      <button class="d-q">È adatto ai bambini? <span class="d-piu"></span></button>
+      <div class="d-r"><div class="d-r-in">
+        <p>La Comunità si vive <strong>in famiglia</strong>: nel sentiero educativo i bambini vengono visti come <strong>perno per la creazione di una società evoluta e consapevole</strong>.</p>
+        <p>Così come gli anziani sono centrali per l'insegnamento di antichi mestieri e saperi, <strong>i bambini sono ambasciatori di un mondo puro, fatto di sintesi e intuizione</strong>.</p>
+        <p>La piattaforma è adatta a tutti, soprattutto ai bambini e ai ragazzi neurodivergenti — è lo strumento di chi costruisce.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="fm-footer">
+    &copy; 2026 Felicitas Omnia Srls &middot; P.IVA 03075740906 &middot;
+    <a href="privacy.html">Privacy</a> &middot;
+    <a href="cookie.html">Cookie</a>
+  </footer>
+
+</div>
+
+<!-- MODALE FORM -->
+<div class="fm-overlay" id="overlay" onclick="chiudiModal()"></div>
+<div class="fm-modal" id="modal">
+  <button class="m-chiudi" onclick="chiudiModal()" aria-label="Chiudi">&times;</button>
+  <div id="modal-contenuto"></div>
+</div>
+
+<!-- TOAST -->
+<div class="fm-toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   STATO UTENTE — placeholder; connettere a WordPress
+══════════════════════════════════════════════════════════ */
+const IS_LOGGED_IN = false;   // ← sostituire con check sessione WP
+const LOGIN_URL = 'spazio-vivo.html';
+const REGISTER_URL = 'spazio-vivo.html';
+
+/* SVG icone (riuso dock) */
+const ICONE = {
+  terra:'<svg viewBox="0 0 40 40"><polygon points="20,4 8,10 8,28 20,34 20,18" fill="rgba(170,136,68,0.12)" stroke="#AA8844" stroke-width="1.4" stroke-linejoin="round"/><polygon points="20,4 32,10 32,28 20,34 20,18" fill="rgba(170,136,68,0.08)" stroke="#AA8844" stroke-width="1.4" stroke-linejoin="round"/><polygon points="20,4 8,10 20,18 32,10" fill="rgba(170,136,68,0.18)" stroke="#AA8844" stroke-width="1.4" stroke-linejoin="round"/><line x1="20" y1="18" x2="20" y2="34" stroke="#AA8844" stroke-width="1.4"/></svg>',
+  acqua:'<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="rgba(68,136,187,0.08)" stroke="#4488BB" stroke-width="1.3"/><line x1="20" y1="5" x2="9" y2="12" stroke="#4488BB" stroke-width="1.1"/><line x1="20" y1="5" x2="31" y2="12" stroke="#4488BB" stroke-width="1.1"/><line x1="9" y1="12" x2="31" y2="12" stroke="#4488BB" stroke-width="1.1"/><line x1="9" y1="12" x2="5" y2="21" stroke="#4488BB" stroke-width="1.1"/><line x1="31" y1="12" x2="35" y2="21" stroke="#4488BB" stroke-width="1.1"/><line x1="5" y1="21" x2="12" y2="31" stroke="#4488BB" stroke-width="1.1"/><line x1="35" y1="21" x2="28" y2="31" stroke="#4488BB" stroke-width="1.1"/><line x1="12" y1="31" x2="28" y2="31" stroke="#4488BB" stroke-width="1.1"/></svg>',
+  fuoco:'<svg viewBox="0 0 40 40"><polygon points="20,4 4,34 20,26" fill="rgba(204,102,68,0.14)" stroke="#CC6644" stroke-width="1.4" stroke-linejoin="round"/><polygon points="20,4 36,34 20,26" fill="rgba(204,102,68,0.09)" stroke="#CC6644" stroke-width="1.4" stroke-linejoin="round"/><line x1="4" y1="34" x2="36" y2="34" stroke="#CC6644" stroke-width="1.4"/></svg>',
+  aria:'<svg viewBox="0 0 40 40"><polygon points="20,4 8,20 20,20" fill="rgba(102,153,68,0.14)" stroke="#669944" stroke-width="1.4" stroke-linejoin="round"/><polygon points="20,4 32,20 20,20" fill="rgba(102,153,68,0.08)" stroke="#669944" stroke-width="1.4" stroke-linejoin="round"/><polygon points="20,36 8,20 20,20" fill="rgba(102,153,68,0.1)" stroke="#669944" stroke-width="1.4" stroke-linejoin="round"/><polygon points="20,36 32,20 20,20" fill="rgba(102,153,68,0.06)" stroke="#669944" stroke-width="1.4" stroke-linejoin="round"/><line x1="8" y1="20" x2="32" y2="20" stroke="#669944" stroke-width="1.4"/></svg>',
+  etere:'<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="rgba(153,102,204,0.07)" stroke="#9966CC" stroke-width="1.3"/><polygon points="20,10 27,15 25,22 15,22 13,15" fill="rgba(153,102,204,0.12)" stroke="#9966CC" stroke-width="1.1" stroke-linejoin="round"/><line x1="20" y1="10" x2="20" y2="4" stroke="#9966CC" stroke-width="1"/><line x1="27" y1="15" x2="35" y2="14" stroke="#9966CC" stroke-width="1"/><line x1="25" y1="22" x2="30" y2="31" stroke="#9966CC" stroke-width="1"/><line x1="15" y1="22" x2="10" y2="31" stroke="#9966CC" stroke-width="1"/><line x1="13" y1="15" x2="5" y2="14" stroke="#9966CC" stroke-width="1"/></svg>',
+};
+
+/* ══════════════════════════════════════════════════════════
+   DEFINIZIONE INDICI — contenuti e azioni placeholder
+══════════════════════════════════════════════════════════ */
+const INDICI = [
+  {
+    el:'terra', colore:'#AA8844', nome:'Vicinati', pagina:'terra.html', aperta:false,
+    sub:'Una soglia che si aprirà',
+    domanda:'Il Vicinato è dove la Comunità si incontra: si offre un talento, si chiede una mano, ci si riconosce. Sta nascendo ora \u2014 i primi vicinati si stanno formando. Puoi essere tra i primi a mettere qualcosa in circolo.',
+    azioni:[
+      {label:'Offri un talento', tipo:'form', form:'offri'},
+      {label:'Entra in Vicinato', tipo:'link', url:'terra.html', ghost:true},
+    ],
+    nota:'I primi gesti del vicinato appariranno qui.',
+  },
+  {
+    el:'acqua', colore:'#4488BB', nome:'Emporio', pagina:'acqua.html', aperta:false,
+    sub:'Una soglia che si aprirà',
+    domanda:'L\u2019Emporio \u00e8 il luogo dove i frutti e i talenti della Comunit\u00e0 passano di mano: in dono, in scambio o in vendita. Stiamo aprendo le prime botteghe. Se hai qualcosa da offrire, puoi proporlo da subito.',
+    azioni:[
+      {label:'Inserisci in scambio', tipo:'form', form:'prodotto'},
+      {label:'Richiedi vendita', tipo:'form', form:'vendita', ghost:true},
+    ],
+    nota:'I primi prodotti della Comunità appariranno qui.',
+  },
+  {
+    el:'fuoco', colore:'#CC6644', nome:'Gioia Radix', pagina:'gioia-radix.html', aperta:true,
+    sub:'Il fuoco che \u00e8 gi\u00e0 acceso',
+    domanda:'Gioia Radix \u00e8 il cuore vivo della Comunit\u00e0, ed \u00e8 gi\u00e0 attivo: formazioni, ritiri e trattamenti in Toscana, dal 20 giugno al 4 ottobre. Qui puoi entrare subito.',
+    azioni:[
+      {label:'Scopri Gioia Radix', tipo:'link', url:'gioia-radix.html'},
+    ],
+    nota:'Il programma 2026 \u00e8 gi\u00e0 online.',
+  },
+  {
+    el:'aria', colore:'#669944', nome:'Megafono', pagina:'aria.html', aperta:false,
+    sub:'Una soglia che si aprirà',
+    domanda:'Il Megafono \u00e8 la voce della Comunit\u00e0: messaggi in bacheca, diari di bordo, articoli che seguono il ciclo lunare. La bacheca \u00e8 aperta \u2014 la tua voce pu\u00f2 essere una delle prime.',
+    azioni:[
+      {label:'Lascia un messaggio', tipo:'form', form:'messaggio'},
+      {label:'Entra nel Megafono', tipo:'link', url:'aria.html', ghost:true},
+    ],
+    nota:'I primi messaggi e articoli appariranno qui.',
+  },
+  {
+    el:'etere', colore:'#9966CC', nome:'Scuola Itinerante', pagina:'etere.html', aperta:false,
+    sub:'Una soglia che si aprirà',
+    domanda:'La Scuola Itinerante custodisce e trasmette la conoscenza: ricerche, studi, saperi condivisi. Sta muovendo i primi passi \u2014 operatori e studenti potranno presto portare i propri contributi.',
+    azioni:[
+      {label:'Proponi un contenuto', tipo:'form', form:'ricerca'},
+      {label:'Entra nella Scuola', tipo:'link', url:'etere.html', ghost:true},
+    ],
+    nota:'I primi contributi di ricerca appariranno qui.',
+  },
+];
+
+/* ══════════════════════════════════════════════════════════
+   RENDER INDICI
+══════════════════════════════════════════════════════════ */
+function renderIndici(){
+  const cont = document.getElementById('indici');
+  INDICI.forEach(function(ix, i){
+    const div = document.createElement('div');
+    div.className = 'idx' + (ix.aperta ? '' : ' sigillata');
+    div.style.setProperty('--c', ix.colore);
+
+    // ── SOGLIA SIGILLATA: solo testata, niente espansione ──
+    if(!ix.aperta){
+      div.innerHTML =
+          '<div class="idx-head">'
+        +   '<div class="idx-ico">' + ICONE[ix.el] + '</div>'
+        +   '<div class="idx-tit"><div class="idx-nome">' + ix.nome + '</div><div class="idx-sub">' + ix.sub + '</div></div>'
+        +   '<div class="idx-sigillo"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6"/></svg>nel tempo</div>'
+        + '</div>';
+      cont.appendChild(div);
+      return;
+    }
+
+    // ── PORTA APERTA: espandibile e attiva ──
+    let azioniHtml = '<div class="idx-azioni">';
+    ix.azioni.forEach(function(a){
+      const cls = 'idx-btn' + (a.ghost ? ' ghost' : '');
+      if(a.tipo === 'link'){
+        azioniHtml += '<a class="' + cls + '" href="' + a.url + '">' + a.label + '</a>';
+      } else {
+        azioniHtml += '<button class="' + cls + '" onclick="apriForm(\'' + a.form + '\',\'' + ix.colore + '\',\'' + ix.nome + '\')">' + a.label + '</button>';
+      }
+    });
+    azioniHtml += '</div>';
+
+    let listaHtml = '<div class="idx-nota">' + (ix.nota || '') + '</div>'
+      + '<a class="idx-vedi" href="' + ix.pagina + '">Vedi tutto &rarr;</a>';
+
+    div.innerHTML =
+        '<div class="idx-head" onclick="toggleIdx(' + i + ')">'
+      +   '<div class="idx-ico">' + ICONE[ix.el] + '</div>'
+      +   '<div class="idx-tit"><div class="idx-nome">' + ix.nome + '</div><div class="idx-sub">' + ix.sub + '</div></div>'
+      +   '<div class="idx-frec">&rsaquo;</div>'
+      + '</div>'
+      + '<div class="idx-body"><div class="idx-inner">'
+      +   '<div class="idx-dom">' + ix.domanda + '</div>'
+      +   azioniHtml
+      +   listaHtml
+      + '</div></div>';
+    // porta aperta: gi\u00e0 espansa di default per dare evidenza
+    div.classList.add('aperto');
+    cont.appendChild(div);
+  });
+}
+
+function toggleIdx(i){
+  const tutti = document.querySelectorAll('.idx');
+  const corrente = tutti[i];
+  const giaAperto = corrente.classList.contains('aperto');
+  // chiudi tutti (accordion esclusivo)
+  tutti.forEach(function(x){ x.classList.remove('aperto'); });
+  if(!giaAperto) corrente.classList.add('aperto');
+}
+
+/* ══════════════════════════════════════════════════════════
+   FORM MODALI
+══════════════════════════════════════════════════════════ */
+const FORMS = {
+  offri:{ titolo:'Offri un talento', campi:[
+    {label:'Cosa offri?', tipo:'textarea', ph:'es. aiuto per l\'orto, lezioni di chitarra…'},
+    {label:'Per quanto tempo?', tipo:'select', opt:['Questa settimana','Questo mese','Fino a quando serve']},
+  ], cta:'Metti in circolo', azione:'POST /wp-json/fm/v1/scambi' },
+  prodotto:{ titolo:'Inserisci un prodotto in scambio', campi:[
+    {label:'Cosa metti in scambio?', tipo:'textarea', ph:'es. ceramiche, miele, ortaggi…'},
+    {label:'Cosa cerchi in cambio?', tipo:'text', ph:'opzionale'},
+  ], cta:'Pubblica in scambio', azione:'POST /wp-json/fm/v1/emporio' },
+  vendita:{ titolo:'Richiedi vendita', campi:[
+    {label:'Prodotto', tipo:'text', ph:'nome del prodotto'},
+    {label:'Descrizione', tipo:'textarea', ph:'descrivi il prodotto…'},
+    {label:'Prezzo proposto (€)', tipo:'text', ph:'es. 15'},
+  ], cta:'Invia richiesta', azione:'POST /wp-json/fm/v1/vendita' },
+  messaggio:{ titolo:'Lascia un messaggio in bacheca', campi:[
+    {label:'Il tuo messaggio', tipo:'textarea', ph:'scrivi alla Comunità…'},
+  ], cta:'Pubblica in bacheca', azione:'POST /wp-json/fm/v1/bacheca' },
+  ricerca:{ titolo:'Proponi la tua ricerca', campi:[
+    {label:'Titolo', tipo:'text', ph:'titolo della ricerca'},
+    {label:'Di cosa tratta', tipo:'textarea', ph:'descrivi la tua ricerca, o incolla un link…'},
+    {label:'Come ti chiami', tipo:'text', ph:'nome'},
+    {label:'La tua email', tipo:'text', ph:'per ricontattarti'},
+  ], cta:'Invia la proposta', azione:'POST /wp-json/fm/v1/ricerca', pubblico:true },
+  praticantato:{ titolo:'Entra nel Praticantato', testoIntro:'Il Praticantato è il percorso per camminare dentro la Comunità, non accanto. Lasciaci un contatto: ti spieghiamo come si entra e cosa comprende.', campi:[
+    {label:'Come ti chiami', tipo:'text', ph:'nome'},
+    {label:'La tua email', tipo:'text', ph:'per ricontattarti'},
+    {label:'Cosa ti chiama qui', tipo:'textarea', ph:'due righe su di te, se vuoi…'},
+  ], cta:'Invia la richiesta', azione:'POST /wp-json/fm/v1/praticantato', pubblico:true },
+  newsletter:{ titolo:'Iscriviti alla newsletter', testoIntro:'Ricevi le nuove ricerche e i passaggi della Comunità, al ritmo della luna.', campi:[
+    {label:'La tua email', tipo:'text', ph:'nome@esempio.it'},
+    {label:'Come ti chiami', tipo:'text', ph:'opzionale'},
+  ], cta:'Iscrivimi', azione:'POST /wp-json/fm/v1/newsletter', pubblico:true },
+};
+
+function apriForm(nome, colore, area){
+  const f = FORMS[nome];
+  if(!f) return;
+  document.getElementById('modal').style.setProperty('--c', colore);
+
+  // NEWSLETTER → modulo Brevo (pagina intera) incorporato, con frequenza e privacy attorno
+  if(nome === 'newsletter'){
+    document.getElementById('modal-contenuto').innerHTML =
+        '<h2>Iscriviti alla newsletter</h2>'
+      + '<p style="font-size:15px;color:var(--cream7);line-height:1.55;margin-bottom:14px">Ogni tanto, al ritmo della luna: le nuove ricerche e i passaggi della Comunita. Niente spam, e puoi disiscriverti quando vuoi.</p>'
+      + '<iframe src="https://b49671e2.sibforms.com/serve/MUIFAKynUSKrkN_pXrfAtsEdGQlBg8hJhf3q3G-fwNZmah3fvOZhK4zUXCGgy6lDR4hx7FXN5j3pIduIyaqr2xefUtVZIMCzuVQnLawEEF74L-MZJLkh2xolYxAG-2RlPsrkPFeKcU8kMZWHsEIkJJNY-Q0mFyaKZtIfFNKJtWCOXmsZtgF3-tgz_iBdJBsebpvA_yUYEpWaJk_xVQ==" style="width:100%;height:620px;border:0;background:transparent;display:block" scrolling="auto" allowfullscreen></iframe>'
+      + '<p style="font-size:13px;color:var(--cream7);opacity:.85;line-height:1.5;margin-top:12px">Iscrivendoti acconsenti all\'uso della tua email per ricevere la newsletter e gli aggiornamenti sugli argomenti che indichi. Leggi l\'<a href="https://www.felicitasmundi.com/enciclopedia/privacy.html" target="_blank" rel="noopener" style="color:var(--c,#D4AF6A)">informativa privacy</a>.</p>';
+    apriModal();
+    return;
+  }
+
+  // se richiede login e non loggato → invito a registrarsi (salvo i form pubblici)
+  if(!IS_LOGGED_IN && !f.pubblico){
+    document.getElementById('modal-contenuto').innerHTML =
+        '<h2>' + f.titolo + '</h2>'
+      + '<p style="font-size:15px;color:var(--cream7);line-height:1.55;margin-bottom:6px">Per partecipare agli scambi della Comunità serve essere registrati.</p>'
+      + '<div class="fm-login-nota" style="text-align:left;margin-top:16px">'
+      +   '<a class="fm-cta" style="display:block;text-decoration:none;text-align:center" href="' + LOGIN_URL + '">Accedi</a>'
+      +   '<p style="margin-top:12px">Non hai un account? <a href="' + REGISTER_URL + '">Registrati</a></p>'
+      + '</div>';
+    apriModal();
+    return;
+  }
+
+  // costruisci form
+  let html = '<h2>' + f.titolo + '</h2>';
+  if(f.testoIntro){ html += '<p style="font-size:15px;color:var(--cream7);line-height:1.5;margin-bottom:14px">' + f.testoIntro + '</p>'; }
+  f.campi.forEach(function(c, idx){
+    html += '<div class="fm-field"><label>' + c.label + '</label>';
+    if(c.tipo === 'textarea'){
+      html += '<textarea id="ff-' + idx + '" rows="3" placeholder="' + (c.ph||'') + '"></textarea>';
+    } else if(c.tipo === 'select'){
+      html += '<select id="ff-' + idx + '">' + c.opt.map(function(o){ return '<option>' + o + '</option>'; }).join('') + '</select>';
+    } else {
+      html += '<input type="text" id="ff-' + idx + '" placeholder="' + (c.ph||'') + '">';
+    }
+    html += '</div>';
+  });
+  html += '<button class="fm-cta" onclick="inviaForm(\'' + nome + '\')">' + f.cta + '</button>';
+  document.getElementById('modal-contenuto').innerHTML = html;
+  apriModal();
+}
+
+function inviaForm(nome){
+  const f = FORMS[nome];
+  const primo = document.getElementById('ff-0');
+  if(primo && !primo.value.trim()){ primo.focus(); return; }
+  // → qui la POST reale verso f.azione
+  chiudiModal();
+  mostraToast('✓ Inviato alla Comunità');
+}
+
+/* ══════════════════════════════════════════════════════════
+   COSA FAI OGGI? — finestra Megafono
+   In alto l'indice delle 4 pagine di partecipazione (Fase 2:
+   per ora solo Praticantato è cliccabile). Invio via FormSubmit su Proton.
+══════════════════════════════════════════════════════════ */
+var CFO_ENDPOINT = 'https://formsubmit.co/ajax/felicitasmundi@protonmail.com';
+
+function apriCosaFaiOggi(){
+  document.getElementById('modal').style.setProperty('--c', '#669944');
+  document.getElementById('modal-contenuto').innerHTML =
+      '<h2>Cosa fai oggi?</h2>'
+    + '<div class="cfo-indice">'
+    +   '<span class="cfo-voce">Gi\u00e0 operativo / frequenti</span>'
+    +   '<span class="cfo-voce">Nuovo arrivato</span>'
+    +   '<a class="cfo-voce" href="praticantato.html">Praticantato</a>'
+    +   '<span class="cfo-voce">Spiritualit\u00e0</span>'
+    + '</div>'
+    + '<div id="cfo-form">'
+    +   '<div class="fm-field"><label>Cosa fai oggi?</label><textarea id="cfo-testo" rows="4" placeholder="racconta alla Comunit\u00e0 cosa stai facendo\u2026"></textarea></div>'
+    +   '<div class="fm-field"><label>Come ti chiami</label><input type="text" id="cfo-nome" placeholder="nome"></div>'
+    +   '<div class="fm-field"><label>La tua email</label><input type="text" id="cfo-email" placeholder="per ricontattarti"></div>'
+    +   '<input type="text" id="cfo-hp" style="display:none" tabindex="-1" autocomplete="off">'
+    +   '<div id="cfo-msg" style="font-family:\'DM Sans\',sans-serif;font-size:13px;color:#e08a8a;margin-bottom:4px"></div>'
+    +   '<button class="fm-cta" id="cfo-invia" onclick="inviaCosaFaiOggi()">Invia alla Comunit\u00e0</button>'
+    + '</div>';
+  apriModal();
+}
+
+function inviaCosaFaiOggi(){
+  var g=function(id){return document.getElementById(id);};
+  if(g('cfo-hp').value){ return; }
+  var msg=g('cfo-msg'); msg.textContent='';
+  var testo=g('cfo-testo').value.trim(), nome=g('cfo-nome').value.trim(), email=g('cfo-email').value.trim();
+  if(!testo){ msg.textContent='Racconta cosa fai oggi.'; g('cfo-testo').focus(); return; }
+  if(!nome||!email){ msg.textContent='Compila nome ed email.'; return; }
+  if(email.indexOf('@')<1 || email.lastIndexOf('.')<email.indexOf('@')){ msg.textContent='Controlla l\u2019email.'; return; }
+  var btn=g('cfo-invia'); btn.disabled=true; btn.textContent='Invio\u2026';
+  fetch(CFO_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({'Cosa fai oggi':testo,Nome:nome,Email:email,
+      _subject:'Cosa fai oggi? - Megafono',_template:'table',_captcha:'false'})})
+  .then(function(r){return r.json();})
+  .then(function(){ chiudiModal(); mostraToast('\u2713 Inviato alla Comunit\u00e0'); })
+  .catch(function(){ btn.disabled=false; btn.textContent='Invia alla Comunit\u00e0';
+    msg.textContent='Invio non riuscito. Riprova, o scrivi a felicitasmundi@protonmail.com.'; });
+}
+
+function apriModal(){
+  document.getElementById('overlay').classList.add('aperto');
+  document.getElementById('modal').classList.add('aperto');
+}
+function chiudiModal(){
+  document.getElementById('overlay').classList.remove('aperto');
+  document.getElementById('modal').classList.remove('aperto');
+}
+function mostraToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },2200);
+}
+
+/* ══════════════════════════════════════════════════════════
+   LETTURE · Ricerca del Ciclo Lunare
+   Riempire cover (URL immagine) e desc man mano che gli articoli sono pronti.
+══════════════════════════════════════════════════════════ */
+/* ── L'INDICE COMANDA ──
+   Le letture non stanno più qui: si leggono da articoli.json.
+   Chi pubblica scrive il file e aggiunge la riga all'indice: la home si riempie da sé. */
+var LETTURE = [];
+
+function leggiIndice(){
+  /* la coda ?v= scavalca la cache di Aruba senza chiedere niente al server */
+  return fetch('/communitas-aeterna/articoli.json?v=' + Date.now())
+    .then(function(r){
+      if(!r.ok){ console.warn('[FM] l\'indice risponde', r.status); return null; }
+      return r.json();
+    })
+    .then(function(d){
+      if(!d || !d.articoli){ console.warn('[FM] l\'indice non ha articoli'); INDICE_MUTO = true; return []; }
+      return d.articoli
+        .filter(function(a){ return a.stato === 'publish'; })
+        .sort(function(a,b){ return (b.ts||'').localeCompare(a.ts||''); })
+        .map(function(a){
+          return { titolo:a.titolo, desc:a.estratto, url:a.url, cover:a.img, pos:a.pos||'', pronto:true };
+        });
+    })
+    .catch(function(e){ console.warn('[FM] l\'indice non si raggiunge:', e); INDICE_MUTO = true; return []; });
+}
+
+const ICONA_LUNA = '<svg viewBox="0 0 40 40" fill="none"><path d="M26 6a14 14 0 1 0 8 25A11 11 0 0 1 26 6Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+
+var INDICE_MUTO = false;
+var PAG = 0;                 /* la pagina del ciclo: 0 = i più recenti */
+var TUTTI = false;           /* aperto: si vedono tutti */
+
+function renderLetture(){
+  const cont = document.getElementById('letture');
+  if(!cont) return;
+  cont.innerHTML = '';
+  if(!LETTURE.length){
+    cont.innerHTML = '<div class="ciclo-vuoto">' + (INDICE_MUTO ? 'Il ciclo torna fra poco.' : 'Il ciclo sta per cominciare.') + '</div>';
+    comandi(); return;
+  }
+  const quali = TUTTI ? LETTURE : LETTURE.slice(PAG*3, PAG*3+3);
+  quali.forEach(function(l){
+    const el = document.createElement(l.pronto ? 'a' : 'div');
+    el.className = 'lettura' + (l.pronto ? '' : ' ph');
+    if(l.pronto) el.href = l.url;
+    const cover = l.cover
+      ? '<div class="cover"><img src="' + l.cover + '" alt=""' + (l.pos ? ' style="object-position:' + l.pos + '"' : '') + '></div>'
+      : '<div class="cover">' + ICONA_LUNA + '</div>';
+    el.innerHTML = cover
+      + '<div class="testo"><div class="l-tit">' + l.titolo + '</div>'
+      + '<div class="l-desc">' + l.desc + '</div></div>';
+    cont.appendChild(el);
+  });
+  comandi();
+}
+
+/* tre alla volta: la freccia porta ai precedenti, «leggi tutti» apre il quadrante */
+function comandi(){
+  var p=document.getElementById('caro-prev'), n=document.getElementById('caro-next'), t=document.getElementById('caro-tutti');
+  if(!p||!n||!t) return;
+  var pagine = Math.ceil(LETTURE.length/3);
+  p.disabled = TUTTI || PAG >= pagine-1;      /* indietro = più vecchi */
+  n.disabled = TUTTI || PAG <= 0;
+  t.textContent = TUTTI ? 'Richiudi' : 'Leggi tutti';
+  document.body.classList.toggle('tutti', TUTTI);
+  if(pagine<=1 && !TUTTI){ p.style.display='none'; n.style.display='none'; }
+}
+
+/* le domande si aprono a fisarmonica: una alla volta */
+window.addEventListener('load', function(){
+  document.querySelectorAll('.faq .d-q').forEach(function(b){
+    b.addEventListener('click', function(){
+      var d=b.parentNode, gia=d.classList.contains('su');
+      document.querySelectorAll('.faq .d').forEach(function(x){ x.classList.remove('su'); });
+      if(!gia) d.classList.add('su');
+    });
+  });
+});
+
+window.addEventListener('load', function(){
+  var p=document.getElementById('caro-prev'), n=document.getElementById('caro-next'), t=document.getElementById('caro-tutti');
+  if(p) p.addEventListener('click', function(){ PAG++; renderLetture(); });
+  if(n) n.addEventListener('click', function(){ PAG--; renderLetture(); });
+  if(t) t.addEventListener('click', function(){ TUTTI=!TUTTI; PAG=0; renderLetture(); });
+
+  /* il ciclo si riempie dall'indice */
+  leggiIndice().then(function(lista){
+    LETTURE = lista;
+    renderLetture();
+  });
+});
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') chiudiModal(); });
+
+/* ── VETRINA · intro a variabili che ruotano ── */
+(function(){
+  var FRASI = [
+    'il fare pratico cucito su misura',
+    'ciò che porti, reso visibile',
+    'il proprio talento al servizio dei bisogni della comunità',
+    'un ecosistema di persone che si supportano a vicenda'
+  ];
+  var rot = document.getElementById('vi-rot');
+  if(!rot) return;
+  var ridotto = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(ridotto){
+    var ul = document.createElement('ul');
+    ul.className = 'vi-lista';
+    for(var k=0;k<FRASI.length;k++){ var li=document.createElement('li'); li.textContent=FRASI[k]; ul.appendChild(li); }
+    rot.parentNode.replaceChild(ul, rot);
+    return;
+  }
+  var i = 0;
+  setInterval(function(){
+    rot.style.opacity = '0';
+    setTimeout(function(){
+      i = (i + 1) % FRASI.length;
+      rot.textContent = FRASI[i];
+      rot.style.opacity = '1';
+    }, 560);
+  }, 4000);
+})();
+</script>
+
+<script>
+/* puntini + sfumatura: rendono evidente che le card scorrono (mobile) — Gab 21/7 */
+(function(){
+  function avvia(){
+    var scroll=document.querySelector('.cardscroll');
+    var punti=document.getElementById('cs-punti');
+    var sez=document.querySelector('.pf-sez');
+    var caro=document.querySelector('.pf-caro');
+    var pre=document.getElementById('cs-pre');
+    var suc=document.getElementById('cs-suc');
+    if(!scroll||!punti) return;
+    var cards=scroll.querySelectorAll('.card');
+    if(!cards.length) return;
+    for(var i=0;i<cards.length;i++){ punti.appendChild(document.createElement('i')); }
+    var pallini=punti.querySelectorAll('i');
+    function aggiorna(){
+      var largh=cards[0].getBoundingClientRect().width+16;
+      var idx=Math.round(scroll.scrollLeft/largh);
+      if(idx<0) idx=0; if(idx>pallini.length-1) idx=pallini.length-1;
+      for(var i=0;i<pallini.length;i++){ pallini[i].className = (i===idx?'on':''); }
+      var fine = scroll.scrollLeft + scroll.clientWidth >= scroll.scrollWidth - 12;
+      var capo = scroll.scrollLeft <= 12;
+      if(sez){ sez.classList.toggle('a-fondo', fine); }
+      if(caro){ caro.classList.toggle('a-fondo', fine); caro.classList.toggle('a-capo', !capo); }
+      if(pre){ pre.disabled = capo; }
+      if(suc){ suc.disabled = fine; }
+    }
+    function passo(verso){
+      var largh=cards[0].getBoundingClientRect().width+16;
+      scroll.scrollBy({left:verso*largh, behavior:'smooth'});
+    }
+    if(pre) pre.addEventListener('click', function(){ passo(-1); });
+    if(suc) suc.addEventListener('click', function(){ passo(1); });
+    window.addEventListener('resize', aggiorna);
+    aggiorna();
+    scroll.addEventListener('scroll', function(){
+      window.requestAnimationFrame(aggiorna);
+    }, {passive:true});
+    window.addEventListener('resize', aggiorna);
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', avvia); }
+  else { avvia(); }
+})();
+</script>
+<!-- ══ stanza di prova · si accende solo a questo indirizzo ══ --><script>if(location.pathname.indexOf("communitas-aeterna-prova")>-1){var s=document.createElement("script");s.src="/communitas-aeterna-prova/fm-prova.js";document.body.appendChild(s);}</script>
+</body>
+</html>
