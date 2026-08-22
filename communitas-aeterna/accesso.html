@@ -72,7 +72,10 @@
   .spunta span{font-size:var(--t-eti);font-family:'DM Sans',sans-serif;color:rgba(245,240,230,.86)}
   .spunta a{color:var(--oro,#C8A055);text-decoration:underline;text-underline-offset:2px}
 
-  .esca{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  .esca{display:none}   /* ⛔ display:none, non left:-9999px: un campo
+                         spostato fuori schermo i gestori di password
+                         lo riempiono lo stesso, e la pagina finiva
+                         per rifiutare persone vere. */
 
   .msg{margin-top:18px;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.5;min-height:22px}
   .msg.ok{color:var(--oro-ch)}
@@ -130,7 +133,8 @@
       <input type="text" id="nome" autocomplete="name" placeholder="Come ti chiami">
     </div>
     <!-- campo-esca anti-automatismi: un umano lo lascia vuoto -->
-    <input class="esca" type="text" id="dolce" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <input class="esca" type="text" id="dolce" tabindex="-1" autocomplete="off"
+           aria-hidden="true" data-lpignore="true" data-1p-ignore data-form-type="other">
 
     <button id="b-chiedi">Mandami il Nexus</button>
     <div class="msg" id="msg1"></div>
@@ -184,6 +188,55 @@
   // ── la destinazione dello Spazio Vivo vive QUI, in un punto solo ──
   var SPAZIO_VIVO = "index.html";
 
+  /* ══ DA DOVE SI VENIVA ═══════════════════════════════════════════
+     Chi arriva da un'orma, da un articolo o da un invito deve tornare
+     LÌ dopo il Nexus, non sulla home: altrimenti ha perso il filo.
+     ⭐ Chi invece arriva qui da solo torna alla home, e va bene così.
+
+     ⛔ IL RITORNO ACCETTA SOLO PAGINE NOSTRE. Un collegamento che dopo
+        l'ingresso porta fuori dal sito è una porta aperta a chi vuole
+        imitarci: si entra sul sito vero e ci si ritrova altrove, con
+        l'accesso appena fatto ancora caldo.
+     ⭐ Non si scarta con un elenco di nomi ammessi, che invecchia: si
+        costruisce l'indirizzo e si chiede tre cose. Chi non le passa
+        non riceve un errore, riceve la home — un ritorno storto non
+        deve mai diventare un muro.                                   */
+
+  var CHIAVE_TORNA = "fm_torna";
+
+  /* Si conserva appena la pagina si apre: quando si torna col Nexus di
+     sei cifre l'indirizzo è cambiato — dentro c'è token_hash e il
+     resto — e senza conservarlo il filo si perderebbe proprio nel
+     momento in cui serve.                                            */
+  function ricordaDaDoveSiViene(){
+    var q = "";
+    try{ q = new URLSearchParams(location.search).get("torna") || ""; }catch(e){}
+    if(!q && document.referrer){ q = document.referrer; }
+    if(!q) return;
+    var buono = soloPagineNostre(q);
+    if(!buono) return;
+    try{ sessionStorage.setItem(CHIAVE_TORNA, buono); }catch(e){}
+  }
+
+  function soloPagineNostre(scelto){
+    try{
+      var cartella = new URL(".", location.href);       // la cartella dello Spazio Vivo
+      var u = new URL(scelto, cartella);
+      if(u.origin !== location.origin) return "";                       // ⛔ fuori dal sito
+      if(u.pathname.indexOf(cartella.pathname) !== 0) return "";        // ⛔ fuori dalla cartella
+      if(!/\.html$/i.test(u.pathname)) return "";                       // ⛔ non è una pagina
+      var dentro = u.pathname.slice(cartella.pathname.length) + u.search + u.hash;
+      if(!dentro || dentro.indexOf("accesso.html") === 0) return "";    // ⛔ non si torna qui
+      return dentro;
+    }catch(e){ return ""; }
+  }
+
+  function dove(){
+    var g = "";
+    try{ g = sessionStorage.getItem(CHIAVE_TORNA) || ""; }catch(e){}
+    return soloPagineNostre(g) || SPAZIO_VIVO;
+  }
+
   // ── la casa nuova: indirizzo e chiave pubblicabile (pubblici per natura) ──
   var FM_URL   = "https://gfnveesogkfvkrdudpfg.supabase.co";
   var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
@@ -216,7 +269,7 @@
         .then(function(p){
           var d = p && p.data;
           if(d && d.condizioni_accettate && d.condizioni_versione === PATTO_VERSIONE){
-            location.replace(SPAZIO_VIVO); return;
+            location.replace(dove()); return;
           }
           mostra("s-patto");
         });
@@ -237,11 +290,11 @@
         condizioni_versione:  PATTO_VERSIONE
       }).eq("id", sess.user.id).then(function(u){
         if(u.error) throw u.error;
-        location.replace(SPAZIO_VIVO);
+        location.replace(dove());
       });
     }).catch(function(){
       b.disabled = false; b.textContent = testoOrig;
-      dice($("msg3"), "Non &egrave; stato possibile registrare l'accettazione. Riprova.", "err");
+      dice($("msg3"), "Non è stato possibile registrare l'accettazione. Riprova.", "err");
     });
   }
   function dice(box, testo, tipo){ box.textContent = testo || ""; box.className = "msg" + (tipo? " "+tipo : ""); }
@@ -254,6 +307,7 @@
 
   // ── 2 · all'apertura ──
   function avvio(){
+    ricordaDaDoveSiViene();     /* ⭐ per primo: l'indirizzo cambia dopo */
     var t = tokenDaUrl();
 
     // il Nexus di promozione si conserva per dopo
@@ -272,7 +326,7 @@
         .then(function(r){ if(r.error) throw r.error; dentro(); })
         .catch(function(){
           mostra("s-chiedi");
-          dice($("msg1"), "Il Nexus non &egrave; pi&ugrave; valido. Chiedine uno nuovo qui sotto.", "err");
+          dice($("msg1"), "Il Nexus non è più valido. Chiedine uno nuovo qui sotto.", "err");
         });
       return;
     }
@@ -289,8 +343,18 @@
   function chiedi(){
     var email = ($("email").value || "").trim();
     var nome  = ($("nome").value || "").trim();
-    var esca  = ($("dolce").value || "").trim();
-    if(esca){ return; }                       // il campo esca resta muto: se &egrave; pieno non accade nulla
+    var campoEsca = $("dolce");
+    var esca  = (campoEsca.value || "").trim();
+    if(esca){
+      /* ⛔ Non si tace mai: un rifiuto muto è indistinguibile da un guasto,
+         e chi lo riceve se ne va senza sapere perché.
+         ⭐ Il campo si svuota, così il tentativo dopo passa da solo: un
+            automatismo riempie una volta e se ne va, una persona schiaccia
+            di nuovo ed entra. */
+      campoEsca.value = "";
+      dice($("msg1"), "Un campo nascosto è stato riempito da solo — di solito è il gestore delle password. Schiaccia di nuovo: adesso passa.", "err");
+      return;
+    }
     if(!email || email.indexOf("@") < 1){ dice($("msg1"), "Scrivi una email valida.", "err"); return; }
 
     var b = $("b-chiedi"); b.disabled = true;
@@ -316,7 +380,7 @@
       b.disabled = false; b.textContent = testoOrig;
       var m = (err && err.message) || "";
       if(/rate|seconds|limit/i.test(m)){
-        dice($("msg1"), "Un Nexus &egrave; gi&agrave; partito da poco: aspetta un minuto e riprova.", "err");
+        dice($("msg1"), "Un Nexus è già partito da poco: aspetta un minuto e riprova.", "err");
       } else {
         dice($("msg1"), "Qualcosa non ha funzionato. Riprova tra poco.", "err");
       }
@@ -326,7 +390,7 @@
   // ── 4 · entra col Nexus ──
   function entra(){
     var codice = ($("codice").value || "").replace(/\s/g,"");
-    if(codice.length !== 6){ dice($("msg2"), "Il Nexus &egrave; di sei cifre.", "err"); return; }
+    if(codice.length !== 6){ dice($("msg2"), "Il Nexus è di sei cifre.", "err"); return; }
     if(!emailRicordata){ mostra("s-chiedi"); dice($("msg1"), "Scrivi di nuovo la tua mail.", ""); return; }
 
     var b = $("b-entra"); b.disabled = true;
@@ -336,7 +400,7 @@
     db.auth.verifyOtp({ email: emailRicordata, token: codice, type: "email" })
     .then(function(r){
       if(r.error) throw r.error;
-      dice($("msg2"), "Benvenuto. Ti stiamo facendo entrare&hellip;", "ok");
+      dice($("msg2"), "Benvenuto. Ti stiamo facendo entrare…", "ok");
       dentro();
     })
     .catch(function(){
