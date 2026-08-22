@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · EDIZIONE — raccogli · cura · distribuisci
 
    Il disegno è di Design: edizione-spazio-vivo.html
-   25.647 byte · MD5 7ae08ebd90f53b245f24a657d948cfb1
+   26.132 byte · MD5 a83300374f3c0bd21b573313df0f7413
 
    ⭐ Aggiornare la pagina vuol dire sostituire questo file, e basta.
 
@@ -27,10 +27,14 @@
 
    ⚠️ OGGI QUELLA CHIAMATA NON PARTE, ed è giusto così: la tabella dei
       prezzi dell'Edizione non esiste. La pagina si disegna vuota e
-      regge il vuoto — senza prezzi le righe non compaiono, senza rotte
-      i quadranti restano fermi e leggibili, senza campionario resta
-      [ in attesa ]. Il giorno che la tabella c'è, si accende
-      `prezziEdizione()` qui sotto — e nient'altro.
+      regge il vuoto — senza prezzi le righe non compaiono, senza
+      campionario resta [ in attesa ]. Il giorno che la tabella c'è, si
+      accende `prezziEdizione()` qui sotto — e nient'altro.
+
+   ⚠️ DALLA CONSEGNA DEL 22 AGOSTO una rotta assente non riporta più il
+      quadrante a href="#": resta la destinazione scritta nel disegno.
+      Per i quadranti che nel disegno hanno già "#" — «Chiedi
+      informazioni» e le otto famiglie — non cambia niente: restano lì.
 
    ⚠️ IL RIPARTO. Nel disegno la riga del riparto è scritta nel corpo:
       «tolto il costo di stampa: 70% all'autore, 30% a FelicitasMundi».
@@ -41,12 +45,18 @@
 
    ⚠️ «CHIEDI INFORMAZIONI» è spento. La rotta `informazioni` non ha
       destinazione: nessuna riga di `stanze` la dichiara, e nel disegno
-      il tasto senza rotta resta href="#" e senza `data-viva`. Si accende
-      da sé il giorno che il dato porta la rotta.
+      quel tasto ha href="#". Si accende da sé il giorno che il dato
+      porta la rotta.
 
    ⭐ LA PAGINA È LA SOGLIA, IL LAVORO STA DIETRO. Le due porte del
-      capitolo ① — `raccogli` e `cura` — sono due stanze del guscio, e
-      non due indirizzi:
+      capitolo ① — `raccogli` e `cura` — sono due stanze del guscio.
+      ⚠️ Nel disegno la destinazione è scritta a mano e sono due file:
+         edizione-raccogli.html e edizione-cura.html. Quei file non
+         esistono, e non devono esistere: il lavoro vive dentro lo
+         Spazio Vivo, non in due pagine a parte. Design lo prevede —
+         «il dato può cambiarla passando rotte.raccogli e rotte.cura» —
+         ed è quello che fa collegaLePorteDellEdizione() qui sotto.
+      I nomi delle rotte combaciano con le due stanze:
 
         raccogli   le proprie orme si spuntano e diventano un'opera
                    — `opere`, `opera_pezzi`, e `opera_permessi` per le
@@ -256,7 +266,7 @@ var EDIZIONE = `<style>
 
     <div class="due-q">
 
-      <a class="q spicca" style="--c:var(--aria)" data-rotta="raccogli" href="#">
+      <a class="q spicca" style="--c:var(--aria)" data-rotta="raccogli" href="edizione-raccogli.html">
         <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
           stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
           <path d="M9 40 C14 37 26 37 31 40 C36 37 48 37 53 40"/>
@@ -280,7 +290,7 @@ var EDIZIONE = `<style>
         <span class="va">Comincia</span>
       </a>
 
-      <a class="q" style="--c:var(--etere)" data-rotta="cura" href="#">
+      <a class="q" style="--c:var(--etere)" data-rotta="cura" href="edizione-cura.html">
         <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
           stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
           <path d="M13 47 L20 45 L45 20 C47 18 47 15 45 13 L43 11 C41 9 38 9 36 11 L11 36 L9 43 Z" opacity=".9"/>
@@ -510,11 +520,14 @@ function edizione(c){
 }
 
 /* ⭐ LE DUE PORTE DEL DISEGNO portano DENTRO il guscio, non a un
-   indirizzo: Design mette un href, il guscio lo intercetta e chiama
-   vai() — la stessa strada dei due tasti sotto la mappa.
-   Le rotte passano da riempi() perché è lì che il disegno accende il
-   quadrante con `data-viva`; e passano nella STESSA chiamata dei
-   prezzi, perché riempi() riscrive tutte le rotte ogni volta. */
+   indirizzo. Design scrive edizione-raccogli.html e edizione-cura.html:
+   due file che non esistono. Qui si passano le rotte vere — «#raccogli»
+   e «#cura» — così l'href non punta più al vuoto nemmeno se il tocco
+   scappa (tasto centrale, apri in una scheda nuova); e si intercetta il
+   clic, che chiama vai(). È la stessa strada dei due tasti sotto la
+   mappa.
+   Le rotte passano nella STESSA chiamata dei prezzi, perché riempi()
+   riscrive tutte le rotte ogni volta. */
 function collegaLePorteDellEdizione(){
   var sv = window.SpazioVivo || {};
 
@@ -560,8 +573,9 @@ function avviaEdizione(){
 
     [].forEach.call(document.querySelectorAll("[data-rotta]"), function (a) {
       var r = tutte[a.getAttribute("data-rotta")];
-      if (vuoto(r)) { a.setAttribute("href", "#"); a.removeAttribute("data-viva"); }
-      else { a.setAttribute("href", r); a.setAttribute("data-viva", "1"); }
+      if (vuoto(r)) return;                 /* resta la destinazione scritta nel disegno */
+      a.setAttribute("href", r);
+      a.setAttribute("data-viva", "1");
     });
 
     /* i prezzi dei servizi: senza, la riga non compare */
