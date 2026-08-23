@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- ⭐ la sala: la diretta audio della consolle. Ferma su 2.22.0 apposta, così non cambia da sé sotto una diretta -->
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js"></script>
 <style>
   /* ══ DUE INTERRUTTORI SOLI ══
      --scala  : la leggibilità di tutto il sito. Tutto in rem: comanda il telefono.
@@ -1509,6 +1511,7 @@
 <script src="fm-account.js"></script>
 <script src="fm-casa.js"></script>
 <script src="fm-praticantato.js"></script>
+<script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
 <script src="fm-talenti.js"></script>
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
@@ -1824,6 +1827,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
 
   function vai(id, sub){
+    /* ⭐ uscendo dalla consolle si esce anche dalla sala: il microfono non
+       resta aperto in una stanza che non si vede più */
+    if(id !== "consolle" && typeof salaEsci === "function") salaEsci();
     vista=id;
     chiudiFinestre();
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
@@ -1841,6 +1847,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="raccogli") raccogli(c);
     else if(id==="cura") cura(c);
     else if(id==="sentiero") praticantato(c);
+    else if(id==="gruppi") gruppi(c);   /* ⭐ la terza voce della barra */
     else if(id==="pagina") pagina(c);
     else attesa(c, id);
   }

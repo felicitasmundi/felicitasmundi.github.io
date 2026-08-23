@@ -39,7 +39,33 @@
     +   'allow="microphone" src="' + FM_WEBDJ + '"></iframe></div>'
     + '<p class="cn-nota">Se questo riquadro resta vuoto, la consolle non si lascia '
     +   'ancora aprire da qui: <a href="' + FM_WEBDJ + '" target="_blank" rel="noopener">'
-    +   'si apre a parte</a> mentre si sistema.</p>';
+    +   'si apre a parte</a> mentre si sistema.</p>'
+
+    /* ⭐ LA SALA — la diretta audio, che non passa dalla radio.
+       Sentire e' libero: chi non e' entrato entra lo stesso. Il microfono
+       lo apre solo chi ha una voce viva in `sala_voci`, e lo dice il
+       gettone, non questa pagina. */
+    + '<h2 style="margin-top:1.6rem">La sala</h2>'
+    + '<p class="sotto">[ in attesa ]</p>'
+    + '<div class="cn-stato">'
+    +   '<div class="cn-riq"><span class="cn-et">La sala</span>'
+    +     '<b id="sa-stato">fuori</b><small id="sa-riga">&nbsp;</small></div>'
+    +   '<div class="cn-riq"><span class="cn-et">Chi ascolta</span>'
+    +     '<b id="sa-quanti">&mdash;</b><small>persone nella sala adesso</small></div>'
+    +   '<div class="cn-riq"><span class="cn-et">Chi parla</span>'
+    +     '<b id="sa-voci">&mdash;</b><small id="sa-voci-s">&nbsp;</small></div>'
+    + '</div>'
+    + '<div class="ord-fai" style="margin-top:0.9rem">'
+    +   '<button class="mini" id="sa-entra">Entra e ascolta</button>'
+    +   '<button class="mini" id="sa-microfono" hidden>Apri il microfono</button>'
+    +   '<button class="mini" id="sa-esci" hidden>Esci dalla sala</button>'
+    +   '<div class="mod-esito" id="sa-esito"></div>'
+    + '</div>'
+    + '<div id="sa-suoni" aria-hidden="true"></div>';
+
+    $("sa-entra").addEventListener("click", salaEntra);
+    $("sa-microfono").addEventListener("click", salaMicrofono);
+    $("sa-esci").addEventListener("click", salaEsci);
 
     leggiConsolle();
     if(window.fmConsolle) clearInterval(window.fmConsolle);
@@ -85,4 +111,138 @@
         var box = $("cn-coda");
         if(box) box.innerHTML = '<p class="vuoto">La radio non risponde in questo momento.</p>';
       });
+  }
+
+
+  /* ══════════════════════════════════════════════════════════════
+     LA SALA — la diretta audio
+
+     Il gettone lo firma la funzione `sala-gettone` di Supabase, che
+     guarda chi sei e decide:
+       chi non e' entrato   -> sente
+       chi e' entrato       -> sente
+       chi ha una voce      -> puo' andare in onda
+
+     ⛔ Qui dentro non si decide niente: il permesso viaggia dentro il
+        gettone, e il server lo fa rispettare. Nascondere il tasto del
+        microfono e' cortesia, non sicurezza.
+
+     ⚠️ Il suono parte solo dopo un tocco: i navigatori non lasciano
+        suonare una pagina che nessuno ha toccato. Per questo si entra
+        con un tasto, e non da soli.
+     ══════════════════════════════════════════════════════════════ */
+
+  var salaStanza = null;      /* la stanza LiveKit, quando si e' dentro */
+
+  function salaDice(testo, male){
+    var e = $("sa-esito"); if(!e) return;
+    e.className = "mod-esito" + (male ? " err" : "");
+    e.textContent = testo || "";
+  }
+
+  function salaConta(){
+    if(!salaStanza) return;
+    var q = $("sa-quanti"), v = $("sa-voci"), vs = $("sa-voci-s");
+    /* ⚠️ numParticipants e' il numero del SERVER, e conta gia' tutti —
+       se stessi compresi. Sommarci uno faceva vedere una persona in piu'
+       di quante ce n'erano davvero. Il ripiego serve solo nell'istante
+       prima che il server abbia detto la sua. */
+    var tutti = salaStanza.numParticipants || (salaStanza.remoteParticipants.size + 1);
+    if(q) q.textContent = String(tutti);
+
+    var nomi = [];
+    salaStanza.remoteParticipants.forEach(function(p){
+      if(p.audioTrackPublications.size > 0) nomi.push(p.name || p.identity);
+    });
+    if(salaStanza.localParticipant.isMicrophoneEnabled){
+      nomi.push(salaStanza.localParticipant.name || "tu");
+    }
+    if(v)  v.textContent = nomi.length ? String(nomi.length) : "—";
+    if(vs) vs.textContent = nomi.length ? nomi.join(" · ") : "nessuno sta parlando";
+  }
+
+  function salaEntra(){
+    if(typeof LivekitClient === "undefined"){
+      salaDice("La sala non si e’ caricata. Ricarica la pagina.", true);
+      return;
+    }
+    salaDice("Un momento…");
+    $("sa-entra").disabled = true;
+
+    /* invoke porta da se' il gettone di chi e' entrato, o la chiave
+       pubblica di chi non lo e': la funzione riconosce tutti e due */
+    db.functions.invoke("sala-gettone").then(function(r){
+      if(r.error) throw r.error;
+      var d = r.data || {};
+      if(!d.gettone) throw new Error("nessun gettone");
+
+      salaStanza = new LivekitClient.Room({ adaptiveStream: true });
+
+      salaStanza.on(LivekitClient.RoomEvent.TrackSubscribed, function(track){
+        if(track.kind !== "audio") return;
+        var e = track.attach();
+        e.autoplay = true;
+        $("sa-suoni").appendChild(e);
+        salaConta();
+      });
+      salaStanza.on(LivekitClient.RoomEvent.TrackUnsubscribed, function(track){
+        track.detach().forEach(function(e){ e.remove(); });
+        salaConta();
+      });
+      ["ParticipantConnected","ParticipantDisconnected","TrackPublished","TrackUnpublished"]
+        .forEach(function(q){ salaStanza.on(LivekitClient.RoomEvent[q], salaConta); });
+      salaStanza.on(LivekitClient.RoomEvent.Disconnected, function(){ salaFuori(); });
+
+      return salaStanza.connect(d.dove, d.gettone).then(function(){
+        /* il tocco di poco fa e' il permesso che il navigatore aspetta */
+        return salaStanza.startAudio().catch(function(){});
+      }).then(function(){
+        $("sa-stato").textContent = "dentro";
+        $("sa-riga").textContent  = d.entrato ? " " : "senza account";
+        $("sa-entra").hidden = true;
+        $("sa-esci").hidden  = false;
+        $("sa-microfono").hidden = !d.parla;   /* cortesia, non sicurezza */
+        salaDice("");
+        salaConta();
+      });
+    }).catch(function(e){
+      $("sa-entra").disabled = false;
+      salaDice("La sala non si apre: " + (e && e.message ? e.message : "—"), true);
+    });
+  }
+
+  function salaMicrofono(){
+    if(!salaStanza) return;
+    var acceso = salaStanza.localParticipant.isMicrophoneEnabled;
+    salaDice(acceso ? "Chiudo…" : "Apro…");
+    salaStanza.localParticipant.setMicrophoneEnabled(!acceso).then(function(){
+      $("sa-microfono").textContent = acceso ? "Apri il microfono" : "Chiudi il microfono";
+      $("sa-stato").textContent = acceso ? "dentro" : "in onda";
+      salaDice("");
+      salaConta();
+    }).catch(function(e){
+      /* il no del navigatore al microfono e' la ragione piu' comune */
+      salaDice("Il microfono non si apre: " + (e && e.message ? e.message : "—"), true);
+    });
+  }
+
+  function salaEsci(){
+    if(salaStanza) salaStanza.disconnect();
+    salaFuori();
+  }
+
+  function salaFuori(){
+    salaStanza = null;
+    var s = $("sa-suoni"); if(s) s.innerHTML = "";
+    if(!$("sa-stato")) return;      /* si e' gia' cambiata stanza */
+    $("sa-stato").textContent = "fuori";
+    $("sa-riga").textContent  = " ";
+    $("sa-quanti").textContent = "—";
+    $("sa-voci").textContent   = "—";
+    $("sa-voci-s").textContent = " ";
+    $("sa-entra").hidden = false;
+    $("sa-entra").disabled = false;
+    $("sa-esci").hidden = true;
+    $("sa-microfono").hidden = true;
+    $("sa-microfono").textContent = "Apri il microfono";
   }
