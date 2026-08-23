@@ -143,8 +143,11 @@
   function salaConta(){
     if(!salaStanza) return;
     var q = $("sa-quanti"), v = $("sa-voci"), vs = $("sa-voci-s");
-    /* se stessi compresi: chi c'e' e' chi ascolta */
-    var tutti = salaStanza.numParticipants + 1;
+    /* ⚠️ numParticipants e' il numero del SERVER, e conta gia' tutti —
+       se stessi compresi. Sommarci uno faceva vedere una persona in piu'
+       di quante ce n'erano davvero. Il ripiego serve solo nell'istante
+       prima che il server abbia detto la sua. */
+    var tutti = salaStanza.numParticipants || (salaStanza.remoteParticipants.size + 1);
     if(q) q.textContent = String(tutti);
 
     var nomi = [];
