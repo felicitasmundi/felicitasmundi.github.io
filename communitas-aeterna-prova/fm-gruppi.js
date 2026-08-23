@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · GRUPPI COOPERATIVI — chi tiene cosa
 
    Il disegno è di Design: gruppi-spazio-vivo.html
-   154.729 byte · MD5 ab2149ca8d6ee01966df1f2c82281c8f
+   155.047 byte · MD5 df0d00ea82746233d42c3215e27fb3c0
 
    ⭐ Aggiornare la pagina vuol dire sostituire questo file, e basta.
 
@@ -54,20 +54,16 @@
       niente. Non è rotto — è in attesa di sapere dove deve portare.
       Le cinque destinazioni esistono già in `stanze`.
 
-   ⚠️ L'ASCOLTO SI SOMMA A OGNI VISITA, e questo è dell'innesto, non
-      del disegno. Design attacca il tocco una volta sola sul documento,
-      e nel suo mondo è giusto: la pagina si legge una volta. Qui invece
-      la stanza rinasce a ogni vai("gruppi"), e con lei tutto
-      l'involucro — quindi un ascolto in più ogni volta. Finché nessuno
-      ascolta 'spazio-vivo:area' non si vede niente; il giorno che il
-      guscio lo ascoltasse, un tocco varrebbe per quante volte si è
-      passati di qui.
-      Non si aggiusta da questa parte: il rimedio è una riga nel
-      disegno, che non riattacchi l'ascolto se c'è già.
+   ⭐ L'ASCOLTO NON SI SOMMA PIÙ. La stanza rinasce a ogni vai("gruppi")
+      e con lei tutto l'involucro, quindi l'ascolto sul documento si
+      sarebbe riattaccato ogni volta. Dalla consegna del 23 agosto il
+      disegno lascia un segno — window.SpazioVivo.__ascoltoAree — e se
+      lo trova non riattacca niente. Chi torna dieci volte manda un
+      evento solo.
 
-   ⛔ UNA MANO SUL DISEGNO, chiesta esplicitamente: nel titolo Design
-      scrive «Gruppi Cooperativi» con la C maiuscola. Il nome è
-      «Gruppi cooperativi». È l'unica lettera cambiata.
+   ⭐ NESSUNA MANO SUL DISEGNO: è dentro parola per parola, com'è stato
+      consegnato. Il titolo è «Gruppi Cooperativi» con la C maiuscola,
+      e così si chiama anche la voce nella barra.
 
    ⛔ Niente involucro (function(){ … })() attorno al file: il guscio
       mette tutto in comune e questo file legge da lì. L'involucro di
@@ -265,7 +261,7 @@ var GRUPPI = `<style>
 
   <div class="testa">
     <div class="occ">Comunità Eterna FelicitasMundi</div>
-    <h1>Gruppi cooperativi</h1>
+    <h1>Gruppi Cooperativi</h1>
   </div>
 
   <!-- IL PERCORSO ANTAḤKARAṆA, e sotto i cinque elementi che lavorano allo stesso organismo -->
@@ -559,8 +555,10 @@ function avviaGruppi(){
     return g;
   }
 
-  /* l'ascolto del tocco si attacca una volta sola: chiamare gerarchia()
-     più volte non lo raddoppia */
+  /* L'ascolto del tocco vive sul documento, che nel guscio non muore mai:
+     la stanza rinasce a ogni visita, il segno resta, e l'ascolto non si
+     riattacca. Chi torna dieci volte manda un evento solo. */
+  if (!window.SpazioVivo || !window.SpazioVivo.__ascoltoAree) {
   document.addEventListener("click", function (e) {
     var a = e.target.closest ? e.target.closest(".sv-ger .card") : null;
     if (!a) return;
@@ -569,6 +567,9 @@ function avviaGruppi(){
     document.dispatchEvent(new CustomEvent("spazio-vivo:area", {
       detail: { area: a.getAttribute("data-area") } }));
   });
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.__ascoltoAree = true;
+  }
 
   /* la guida del Nexus è già in carica; il resto arriva dal dato */
   riempi({ chi: { "svil.guida": "Gabriele Dettori" } });
