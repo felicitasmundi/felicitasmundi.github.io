@@ -2772,6 +2772,21 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     misuraPlancia();
   });
 
+  /* ⭐ «VEDI TUTTO» — la casa lo lancia, il guscio lo raccoglie.
+     Due casi, e si distinguono da `elemento`:
+       · elemento vuoto → la scheda breve chiede di aprirsi per intero.
+         La destinazione è dentro la casa stessa, e non serve nessuna
+         rotta: non si esce dalla casa.
+       · elemento valorizzato → «portami nella stanza di questo elemento,
+         per questo luogo». ⛔ Dove porti non è deciso: qui non si fa
+         niente, e il tasto resta fermo come prima. */
+  document.addEventListener("spazio-vivo:vedi-tutto", function(e){
+    var d = (e && e.detail) || {};
+    if(d.elemento) return;                 /* il caso della stanza: non deciso */
+    var sv = window.SpazioVivo || {};
+    if(typeof sv.mostraLuogo === "function") sv.mostraLuogo(d.luogo, {piena:true});
+  });
+
   /* ══ LA PAGINA CHIESTA DALL'INDIRIZZO ══
      ?p=nome apre una vista all'avvio, come fa fm-talenti.js con ?t=.
 
