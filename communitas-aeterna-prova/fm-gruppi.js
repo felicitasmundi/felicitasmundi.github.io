@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · GRUPPI COOPERATIVI — chi tiene cosa
 
    Il disegno è di Design: gruppi-spazio-vivo.html
-   154.224 byte · MD5 9aa6288273b93e637a76cb48f073d47f
+   154.729 byte · MD5 ab2149ca8d6ee01966df1f2c82281c8f
 
    ⭐ Aggiornare la pagina vuol dire sostituire questo file, e basta.
 
@@ -39,15 +39,31 @@
       dice [ in attesa ]. Il giorno che i nomi ci sono, si accende
       `nomiDeiGruppi()` qui sotto — e nient'altro.
 
-   ⚠️ I VICINATI RESTANO FUORI. Il disegno li dichiara nella chiamata,
-      ma nel corpo non c'è il contenitore che li ospiti: `data-vicinati`
-      compare solo dentro il codice. Passandoli non comparirebbe nulla.
-      È noto, e per ora va bene così.
+   ⭐ IL POSTO DEI VICINATI C'È, dalla consegna del 23 agosto: sta
+      dentro la card di Terra, nascosto finché non ne arriva nessuno,
+      e si apre con le tre colonne quando il dato li porta.
 
-   ⚠️ LE CARD SONO PORTE, e oggi non portano. Senza `rotte` il tocco
-      lancia l'evento 'spazio-vivo:area' con {area}, e il guscio non lo
-      ascolta: la card si tocca e non succede niente. Non è rotto —
-      è in attesa di sapere dove deve portare.
+   ⚠️ LE CARD SONO PORTE, e oggi non portano. Design dichiara due
+      strade e il guscio ne sceglie UNA:
+        · le rotte — si passa `rotte` e le card navigano da sole.
+          È la strada normale.
+        · l'evento — non si passano rotte, e si ascolta
+          'spazio-vivo:area' sul documento.
+      Oggi non si fa né l'una né l'altra: nessuna rotta, e il guscio
+      quell'evento non lo ascolta. La card si tocca e non succede
+      niente. Non è rotto — è in attesa di sapere dove deve portare.
+      Le cinque destinazioni esistono già in `stanze`.
+
+   ⚠️ L'ASCOLTO SI SOMMA A OGNI VISITA, e questo è dell'innesto, non
+      del disegno. Design attacca il tocco una volta sola sul documento,
+      e nel suo mondo è giusto: la pagina si legge una volta. Qui invece
+      la stanza rinasce a ogni vai("gruppi"), e con lei tutto
+      l'involucro — quindi un ascolto in più ogni volta. Finché nessuno
+      ascolta 'spazio-vivo:area' non si vede niente; il giorno che il
+      guscio lo ascoltasse, un tocco varrebbe per quante volte si è
+      passati di qui.
+      Non si aggiusta da questa parte: il rimedio è una riga nel
+      disegno, che non riattacchi l'ascolto se c'è già.
 
    ⛔ UNA MANO SUL DISEGNO, chiesta esplicitamente: nel titolo Design
       scrive «Gruppi Cooperativi» con la C maiuscola. Il nome è
@@ -308,6 +324,7 @@ var GRUPPI = `<style>
           gli ospiti e i praticanti karma yoga.</span>
         <span class="fa">In questo spazio si coordinano bisogni, calendari, richieste
           e vaglio di nuovi vicinati.</span>
+        <span class="vic" data-vicinati="1" hidden></span>
         <span class="entra">Entra nell&rsquo;area di lavoro &rarr;</span>
       </span>
     </a>
@@ -488,16 +505,10 @@ function avviaGruppi(){
     var chi = dati.chi || {};
     var rotte = dati.rotte || {};
 
-    /* ogni card è una porta: senza rotta non naviga, lo dice il guscio */
+    /* le porte: la rotta è la strada, l'evento è la scorciatoia di chi non ne ha */
     [].forEach.call(document.querySelectorAll(".sv-ger .card"), function (a) {
       var r = rotte[a.getAttribute("data-area")];
       if (!vuoto(r)) a.setAttribute("href", r);
-      a.addEventListener("click", function (e) {
-        if (a.getAttribute("href") !== "#") return;
-        e.preventDefault();
-        document.dispatchEvent(new CustomEvent("spazio-vivo:area", {
-          detail: { area: a.getAttribute("data-area") } }));
-      });
     });
 
     /* le persone nei ruoli: la struttura è nel disegno, i nomi arrivano da fuori */
@@ -510,18 +521,14 @@ function avviaGruppi(){
     if (!box) return;
     svuota(box);
     var vicinati = dati.vicinati || [];
+    box.hidden = !vicinati.length;
 
-    if (!vicinati.length) {
-      var e = document.createElement("div");
-      e.className = "vv";
-      var b = document.createElement("b");
-      b.appendChild(document.createTextNode(""));
-      scrivi(b, null);
-      e.appendChild(b);
-      e.appendChild(tre({}));
-      box.appendChild(e);
-      return;
-    }
+    if (!vicinati.length) return;
+
+    var cap = document.createElement("div");
+    cap.className = "cap";
+    cap.textContent = "I vicinati";
+    box.appendChild(cap);
 
     vicinati.forEach(function (v) {
       var e = document.createElement("div");
@@ -551,6 +558,17 @@ function avviaGruppi(){
     });
     return g;
   }
+
+  /* l'ascolto del tocco si attacca una volta sola: chiamare gerarchia()
+     più volte non lo raddoppia */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest(".sv-ger .card") : null;
+    if (!a) return;
+    if (a.getAttribute("href") !== "#") return;   /* ha una rotta: lasciala andare */
+    e.preventDefault();
+    document.dispatchEvent(new CustomEvent("spazio-vivo:area", {
+      detail: { area: a.getAttribute("data-area") } }));
+  });
 
   /* la guida del Nexus è già in carica; il resto arriva dal dato */
   riempi({ chi: { "svil.guida": "Gabriele Dettori" } });
