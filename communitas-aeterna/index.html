@@ -1512,6 +1512,7 @@
 <script src="fm-casa.js"></script>
 <script src="fm-praticantato.js"></script>
 <script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
+<script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script>
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
@@ -1848,6 +1849,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="cura") cura(c);
     else if(id==="sentiero") praticantato(c);
     else if(id==="gruppi") gruppi(c);   /* ⭐ la terza voce della barra */
+    else if(id==="nucleo") nucleo(c);   /* ⭐ la quinta: si difende da sé, dentro */
     else if(id==="pagina") pagina(c);
     else attesa(c, id);
   }
@@ -2770,6 +2772,21 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(fasciaAperta()) apriFascia(false);
     document.body.classList.remove("barra-aperta");
     misuraPlancia();
+  });
+
+  /* ⭐ «VEDI TUTTO» — la casa lo lancia, il guscio lo raccoglie.
+     Due casi, e si distinguono da `elemento`:
+       · elemento vuoto → la scheda breve chiede di aprirsi per intero.
+         La destinazione è dentro la casa stessa, e non serve nessuna
+         rotta: non si esce dalla casa.
+       · elemento valorizzato → «portami nella stanza di questo elemento,
+         per questo luogo». ⛔ Dove porti non è deciso: qui non si fa
+         niente, e il tasto resta fermo come prima. */
+  document.addEventListener("spazio-vivo:vedi-tutto", function(e){
+    var d = (e && e.detail) || {};
+    if(d.elemento) return;                 /* il caso della stanza: non deciso */
+    var sv = window.SpazioVivo || {};
+    if(typeof sv.mostraLuogo === "function") sv.mostraLuogo(d.luogo, {piena:true});
   });
 
   /* ══ LA PAGINA CHIESTA DALL'INDIRIZZO ══
