@@ -2,7 +2,7 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   115.104 byte · MD5 b96a69a04995b04273c3c3a05fc82539
+   116.986 byte · MD5 abaf4a67c7c8bb31cf0f7b23372891eb
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
@@ -400,8 +400,6 @@ var CASA = `<style>
                   <span class="el" style="--c:var(--aria)">Aria</span>
                   <span class="piu">+</span>
                   <span class="el" style="--c:var(--etere)">Etere</span>
-                  <span class="piu">+</span>
-                  <span class="el" style="--c:var(--svil)">Sviluppo</span>
                 </span><span class="par">)</span></span>
                 <span class="volte"><span class="per">&times;</span><span class="nexus">Nexus</span></span>
               </div>
@@ -1176,6 +1174,14 @@ function avviaCasa(){
                                          pratica:[{nome,riga} ×3]})
        · la formula è fissa e sta nel disegno: non cambia, non arriva da fuori
 
+     I DUE TEMPI DEL VELO — dentro il libro la mappa si sposta, ma non sempre:
+       · col MOUSE il trascinamento prende subito, senza attesa
+       · col DITO prende solo dopo 320 ms di pressione, e un filo d'oro attorno
+         al riquadro lo dice; prima di quell'attimo il dito scorre la pagina
+       · un trascinamento non apre la mappa: il tocco breve sì
+     Serve perché sul telefono, senza i due tempi, la pagina sotto smette di
+     scorrere e la persona resta incastrata sulla mappa.
+
      LA VIA DI RITORNO, quando si entra nella mappa da una porta:
        · window.SpazioVivo.porta({nome, torna})  — mostra il tasto discreto
        · window.SpazioVivo.chiudiPorta()         — lo toglie
@@ -1262,13 +1268,27 @@ function avviaCasa(){
       return d;
     }
 
+    /* La stanza c'è solo se il guscio l'ha dichiarata: senza, il tasto
+       non si offre. Un tasto che non porta da nessuna parte fa pensare
+       che sia rotta la piattaforma, non il tasto. */
+    function stanzaAperta() {
+      return !!(window.SpazioVivo &&
+        (typeof window.SpazioVivo.vediTutto === "function" ||
+         window.SpazioVivo.stanzeAperte === true));
+    }
+
     function tastoVedi(el, rec) {
+      if (!stanzaAperta()) return null;
       var b = document.createElement("button");
       b.type = "button";
       b.style.cssText = "display:inline-block;margin-top:0.8rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);" +
         "color:var(--oro-ch);border:1px solid rgba(200,160,85,0.4);border-radius:999px;padding:0.45rem 1rem;cursor:pointer;background:none";
       b.textContent = "vedi tutto →";
       b.addEventListener("click", function () {   /* l'unica cosa che esce */
+        if (window.SpazioVivo && typeof window.SpazioVivo.vediTutto === "function") {
+          window.SpazioVivo.vediTutto({ luogo: rec, elemento: el });
+          return;
+        }
         document.dispatchEvent(new CustomEvent("spazio-vivo:vedi-tutto", { detail: { luogo: rec, elemento: el } }));
       });
       return b;
@@ -1311,7 +1331,7 @@ function avviaCasa(){
 
       if (corta) {                      /* dalla home: lo stesso record, mostrato meno */
         simb.style.display = "none";
-        dentro.appendChild(tastoVedi(null, rec));
+        var v0 = tastoVedi(null, rec); if (v0) dentro.appendChild(v0);
       } else {
         simb.style.display = elementi.length ? "flex" : "none";
         elementi.forEach(function (el) {
@@ -1330,7 +1350,8 @@ function avviaCasa(){
             var righe = el.righe || [];
             if (!righe.length) { dentro.appendChild(invito(ATTESA)); }
             else righe.forEach(function (r) { dentro.appendChild(unaRiga(r)); });
-            dentro.appendChild(tastoVedi(el, rec));   /* i simboli non portano via */
+            var v1 = tastoVedi(el, rec);   /* i simboli non portano via */
+            if (v1) dentro.appendChild(v1);
           });
           simb.appendChild(b);
         });
