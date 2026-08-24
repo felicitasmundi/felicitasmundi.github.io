@@ -182,7 +182,18 @@
     padding-top:0.55rem;margin-top:0.5rem;border-top:1px solid var(--line)}
   .riga-strumenti{display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;
     padding-top:0.55rem;margin-top:0.5rem;border-top:1px solid var(--line)}
-  .riga-strumenti .invia{margin-left:auto}
+  /* ⭐ TOCCATO NEL GUSCIO ① — il tasto che manda, sempre visibile.
+     Sotto i 55rem la riga degli strumenti smette di andare a capo e si
+     scorre di lato: da lì in poi `margin-left:auto` non spinge più
+     niente a destra, e il tasto che manda scorreva fuori dal bordo —
+     c'era, ma bisognava cercarlo.
+     `position:sticky; right:0` lo tiene incollato al bordo destro
+     mentre gli altri tasti gli passano dietro. Sopra i 55rem non morde:
+     lì non c'è scorrimento, e `margin-left:auto` fa già tutto.
+     Il fondo e lo z-index non sono un'aggiunta di gusto: senza, i tasti
+     che scorrono si vedrebbero attraverso. */
+  .riga-strumenti .invia{margin-left:auto;position:sticky;right:0;z-index:1;
+    background:var(--scafo);box-shadow:-0.5rem 0 0.5rem var(--scafo)}
 
   /* ⭐ SUL TELEFONO GLI STRUMENTI STANNO SU UNA RIGA SOLA, CHE SI SCORRE
      DI LATO. Sotto i 40rem non si va più a capo: la riga esce dal bordo e
@@ -1589,6 +1600,7 @@
 <script src="fm-casa.js"></script>
 <script src="fm-praticantato.js"></script>
 <script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
+<script src="fm-annale.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑤ — l'Annale: la sesta finestra del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script>
 <script src="fm-pagina.js"></script>
@@ -1700,16 +1712,31 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      riga:"le lezioni, le formazioni, e la ricerca che le accompagna",
      elemento:"etere", rotta:"incontro:scuola", chiusa:false, perche:null},
 
+    /* ⭐ TOCCATO NEL GUSCIO ⑥ — il seme segue `stanze`, come dice la nota
+       qui sopra. L'Annale non è più una stanza: la rotta è vuota, e la
+       voce non si accende. Le parole restano, intere, dove sono sempre
+       state: il giorno che l'Annale torna a essere una stanza si rimette
+       «annale» qui e nella tavola, e la voce riappare.
+       ⚠️ Questa riga e l'SQL vanno insieme. Finché la tavola dice ancora
+          «annale», la voce si spegne per un istante e poi torna. */
     {id:"annale",     gruppo:"annale",   ordine:1, nome:"L’Annale",
      riga:"la memoria: tutto quello che è stato scritto, in ordine di tempo",
-     elemento:null, rotta:"annale", chiusa:false, perche:null}
+     elemento:null, rotta:"", chiusa:false, perche:null}
   ];
 
   /* le righe — del seme o del database, è la stessa forma — diventano
      quello che la barra, l’indirizzo e attesa() sanno leggere */
   function versa(righe){
     function forma(x){
-      return { id:x.id, nome:x.nome, riga:x.riga,
+      /* ⭐ TOCCATO NEL GUSCIO ② — `elemento` passa intero, non solo cotto
+         dentro `colore`. Le porte di «Cosa incontro» hanno bisogno del
+         nome dell'elemento per due cose: il colore E il segno. Il colore
+         si potrebbe ricavare da `colore`; il segno no — sg() vuole il
+         nome nudo. La colonna `stanze.elemento` esiste già ed è quella
+         da cui `colore` viene calcolato: qui non si aggiunge un dato, si
+         smette di buttarlo via. La barra di Design ignora i campi che
+         non conosce, quindi non cambia niente di quello che disegna. */
+      return { id:x.id, nome:x.nome, riga:x.riga, elemento: x.elemento || "",
                colore: x.elemento ? "var(--"+x.elemento+")" : "",
                rotta: "#"+x.id, chiusa: !!x.chiusa, perche: x.perche };
     }
@@ -1899,6 +1926,20 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       nexus: (io && io.anthakarana) || ""
     });
     window.SpazioVivo.barraQui(vista);
+    /* ⭐ TOCCATO NEL GUSCIO ③ — la voce dell'Annale si spegne quando la
+       sua riga non porta più da nessuna parte.
+       La barra di Design disegna quella riga SEMPRE, anche a mani vuote:
+       senza dati scrive «[ in attesa ]», che è giusto quando una parola
+       manca e sbagliato quando la voce è stata tolta apposta. Design non
+       si corregge: si spegne il contenitore da qui.
+       ⭐ Il segno è la ROTTA, non la presenza della riga. Così per
+          togliere la voce basta svuotare `stanze.rotta`: la riga resta
+          dov'è con le sue parole, e il giorno che l'Annale torna a essere
+          una stanza si rimette la rotta e la voce riappare. Una `delete`
+          si porterebbe via le parole di Gab, e non torna indietro. */
+    var vAnnale = document.getElementById("sv-annale");
+    var idAnnale = STANZE.annale && STANZE.annale.id;
+    if(vAnnale) vAnnale.style.display = (idAnnale && ROTTE[idAnnale]) ? "" : "none";
     collegaLeVoci();
   }
 
@@ -2023,7 +2064,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="orme") mieOrme(c);
     else if(id==="incontro") incontro(c, sub);
     else if(id==="chat"){ chat(c); segnaLetto(); }
-    else if(id==="annale") annale(c);
+    /* ⭐ TOCCATO NEL GUSCIO ④ — tolta la riga «annale».
+       L'Annale non è più una stanza: è la sesta finestra del nucleo, e
+       ci si arriva da lì. Con la riga fuori da `stanze`, `?p=annale`
+       non è più una rotta conosciuta e apriRotta() la rifiuta da sé.
+       Il disegno sta in fm-annale.js; fm-incontro.js non ha più una
+       funzione annale(), e questa riga la nominava. */
     else if(id==="consolle") consolle(c);
     else if(id==="edizione") edizione(c);
     /* ⭐ le due stanze del lavoro dell'Edizione, dietro le porte del disegno */

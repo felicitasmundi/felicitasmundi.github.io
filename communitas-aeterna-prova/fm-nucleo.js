@@ -49,8 +49,17 @@
       passa dati: il giorno che ci sono, si accende `datiDelNucleo()`
       qui sotto — e nient'altro.
 
-   ⚠️ I CINQUE TASTI aprono finestre dentro la pagina, non indirizzi.
+   ⚠️ I SEI TASTI aprono finestre dentro la pagina, non indirizzi.
       Niente da aggiungere al magazzino.
+
+   ⭐ IL SESTO È L'ANNALE, ed è aggiunto qui — non sta nella consegna
+      di Design. Il 24 agosto 2026 l'Annale è uscito dalla barra ed è
+      entrato nel nucleo. Le mani sul codice di Design sono quattro,
+      tutte segnate sul posto col commento «⭐ TOCCATO»: la carta nel
+      corpo, la riga in FIN, il ramo in apri(), la voce in conta().
+      Il disegno dell'Annale non è qui: sta in fm-annale.js, e questo
+      file lo chiama per nome — annaleDentro(dentro).
+      ⛔ fm-annale.js va caricato PRIMA di questo file nel guscio.
 
    ⚠️ `sv-velo` è anche l'id del velo sopra la mappa, nella casa. Non si
       pestano i piedi: le due stanze non stanno mai nel centro insieme.
@@ -306,6 +315,25 @@ var NUCLEO = `<style>
         <span class="de">quello che è stato deciso, e dove vive</span>
       </button>
 
+      <!-- ⭐ AGGIUNTO — LA SESTA FINESTRA: L'ANNALE.
+           Era la voce in fondo alla barra; ora vive qui dentro, dietro
+           il controllo del nucleo. Il disegno lo porta fm-annale.js.
+           ⛔ Il colore è «--oro», non un elemento: l'Annale non è una
+              delle cinque stanze, è la memoria di tutte. La struttura
+              resta oro, come vuole la veste.
+           ⛔ Il segno non è disegnato qui: lo mette avviaNucleo() con
+              sg("annale"), lo stesso che la barra portava. Non si
+              ridisegna un segno che esiste già.
+           ⭐ Il nome e la riga sono le parole che stavano nella riga
+              «annale» di «stanze» — quella che esce dalla barra. Sono
+              di Gab, e si spostano intere: non se ne scrivono altre. -->
+      <button class="cd" type="button" style="--c:var(--oro)" data-fin="annale">
+        <span class="vn" id="v-annale"></span>
+        <span class="sg" id="sg-annale"></span>
+        <b>L&rsquo;Annale</b>
+        <span class="de">la memoria: tutto quello che &egrave; stato scritto, in ordine di tempo</span>
+      </button>
+
     </div>
   </div>
 
@@ -376,9 +404,12 @@ function nucleo(c){
     .catch(function(){ /* nel dubbio non si disegna */ });
 }
 
-/* ── il codice della pagina, come l'ha scritto Design: non si tocca ──
+/* ── il codice della pagina, come l'ha scritto Design ──
    Nel disegno l'involucro gira da sé appena la pagina è letta; qui la
-   pagina nasce dentro nucleo(), quindi lo si chiama lì. */
+   pagina nasce dentro nucleo(), quindi lo si chiama lì.
+   ⚠️ Qui dentro ci sono TRE mani, e sono le sole: la riga di FIN, il
+      ramo in apri() e la voce in conta(), tutte per la sesta finestra.
+      Ognuna è segnata col commento «⭐ TOCCATO». Nient'altro si tocca. */
 function avviaNucleo(){
 (function () {
   "use strict";
@@ -404,8 +435,17 @@ function avviaNucleo(){
     regole: ["Le regole","quello che è stato deciso, e dove vive",
              "var(--terra)"],
     lavagna:["Integrator","le task, e a che punto sono","var(--svil)"],
-    chat:   ["La chat","quello che ci si dice qui dentro","var(--etere)"]
+    chat:   ["La chat","quello che ci si dice qui dentro","var(--etere)"],
+    /* ⭐ TOCCATO — la sesta finestra */
+    annale: ["L\u2019Annale",
+             "la memoria: tutto quello che \u00e8 stato scritto, in ordine di tempo",
+             "var(--oro)"]
   };
+
+  /* ⭐ TOCCATO — il segno dell'Annale, quello che portava la barra.
+     Sta nei SIMBOLI del guscio e non si ridisegna. */
+  var sgAnnale = document.getElementById("sg-annale");
+  if (sgAnnale && typeof sg === "function") sgAnnale.innerHTML = sg("annale");
 
   function el(tag, cls, testo){
     var n = document.createElement(tag);
@@ -496,7 +536,14 @@ function avviaNucleo(){
     var dentro = document.getElementById("f-dentro");
     vuota(dentro);
 
-    if (id === "flussi") {
+    /* ⭐ TOCCATO — l'Annale non è una lista di righe: porta una pagina
+       intera, e se la disegna da sé. fm-annale.js legge le orme vere.
+       Se quel file non c'è, la finestra si apre e dice che aspetta —
+       non resta muta e non solleva. */
+    if (id === "annale") {
+      if (typeof annaleDentro === "function") annaleDentro(dentro);
+      else dentro.appendChild(attesa());
+    } else if (id === "flussi") {
       dentro.appendChild(flussi(dati));
     } else if (id === "economia" || id === "regole") {
       dentro.appendChild(elementi(dati));
@@ -547,7 +594,8 @@ function avviaNucleo(){
 
   /* il numero in alto a destra: quanto è pieno quel posto */
   function conta(d){
-    ["economia","regole","flussi","lavagna","chat"].forEach(function (k) {
+    /* ⭐ TOCCATO — «annale» in coda: senza un numero resta vuoto, come gli altri */
+    ["economia","regole","flussi","lavagna","chat","annale"].forEach(function (k) {
       var e = document.getElementById("v-" + k);
       if (!e) return;
       var q = d && d[k] ? d[k].quante : undefined;
