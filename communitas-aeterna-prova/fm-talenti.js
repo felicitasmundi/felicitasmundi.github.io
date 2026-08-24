@@ -468,7 +468,18 @@
   function daIndirizzo(){
     var m = location.search.match(/[?&]t=([A-Za-z0-9]{6})/);
     if(!m) return;
-    history.replaceState({}, "", BASE);
+    /* ⛔ IL GETTONE SPARISCE APPENA LETTO — si consuma una volta, e non
+       deve restare in un indirizzo che si manda in giro.
+       ⚠️ Ma sparisce SOLO LUI. Prima si azzerava l'indirizzo intero, e
+       così un sigillo si portava via anche `?p=`, la stanza in cui si è.
+       `p` e `n` sono del guscio: qui non si toccano. */
+    var coda = "";
+    try{
+      var q = new URLSearchParams(location.search);
+      q.delete("t");
+      coda = q.toString();
+    }catch(e){ coda = ""; }
+    history.replaceState({}, "", BASE + (coda ? "?" + coda : ""));
     setTimeout(function(){
       if(typeof ospite !== "undefined" && ospite) return;
       apri(); schermo("leggi"); cerca(m[1]);

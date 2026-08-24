@@ -1342,6 +1342,9 @@
   #sv-apri-barra,#sv-velo-barra{display:none !important}
   .sv-barra .chi{cursor:pointer;border-radius:0.5rem;padding:0.2rem;margin-left:-0.2rem}
   .sv-barra .chi:hover{background:rgba(245,240,230,0.06)}
+  /* ⭐ il nome in alto a sinistra riporta a casa */
+  .sv-barra .capo{cursor:pointer}
+  .sv-barra .capo:hover b{color:var(--oro-ch)}
   @media(max-width:52rem){
     .sv-barra{width:19rem;transform:translateX(-100%)}
     body.barra-aperta .sv-barra{transform:none}
@@ -1582,28 +1585,113 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var ROTTE  = {};
   var STANZE = { pagine:[], incontri:[], annale:{} };
 
+  /* ⭐ IL SEME — le stesse righe che stanno in `stanze`, nello stesso
+     ordine e con le stesse parole. `database/stanze.sql` ne è lo specchio.
+     Serve a un solo scopo: la barra si disegna al primo istante, senza
+     aspettare la risposta del database. Chi apre non vede mai una barra
+     vuota. Appena la risposta arriva, versa() ridisegna sopra e da lì in
+     poi comanda il database — il seme non ha più voce in capitolo.
+     ⚠️ Se una parola cambia là, va cambiata anche qui: per un istante
+        si vedrebbe quella vecchia. */
+  var SEME = [
+    {id:"orme",       gruppo:"pagina",   ordine:1, nome:"La mia orma",
+     riga:"orme, flussi economici, progetti, impegni, contatti, idee",
+     elemento:null, rotta:"orme", chiusa:false, perche:null},
+    {id:"sentiero",   gruppo:"pagina",   ordine:2, nome:"Praticantato",
+     riga:"servizio e pratica, settimana per settimana · due dirette al mese · accompagnamento",
+     elemento:null, rotta:"sentiero", chiusa:false, perche:null},
+    {id:"gruppi",     gruppo:"pagina",   ordine:3, nome:"Gruppi Cooperativi",
+     riga:"chi segue Emporio, Assistenza, Scuola, Edizione, Vicinati",
+     elemento:null, rotta:"gruppi", chiusa:false, perche:null},
+    {id:"aziende",    gruppo:"pagina",   ordine:4, nome:"Aziende, team e classi",
+     riga:"compiti, calendari, bisogni, costi, progetti · e le audio-lezioni che vanno nell’Emporio",
+     elemento:null, rotta:"aziende", chiusa:false, perche:null},
+    {id:"nucleo",     gruppo:"pagina",   ordine:5, nome:"Il nucleo",
+     riga:"i flussi economici e l’avanzamento della piattaforma",
+     elemento:null, rotta:"nucleo", chiusa:true, perche:"Ci entra chi fa parte del nucleo."},
+
+    {id:"vicinati",   gruppo:"incontro", ordine:1, nome:"Vicinati",
+     riga:"i luoghi e le persone vicine a te, e quello di cui c’è bisogno",
+     elemento:"terra", rotta:"incontro:vicinati", chiusa:false, perche:null},
+    {id:"emporio",    gruppo:"incontro", ordine:2, nome:"Emporio",
+     riga:"quello che si compra, si scambia e si dona, e chi lo porta",
+     elemento:"acqua", rotta:"incontro:emporio", chiusa:false, perche:null},
+    {id:"assistenza", gruppo:"incontro", ordine:3, nome:"Assistenza",
+     riga:"chi risponde a un bisogno: spiritualità, trattamenti, consulenze, mutuo aiuto",
+     elemento:"fuoco", rotta:"incontro:assistenza", chiusa:false, perche:null},
+    {id:"edizione",   gruppo:"incontro", ordine:4, nome:"Edizione",
+     riga:"le opere, la radio, e quello che si stampa e si distribuisce",
+     elemento:"aria", rotta:"edizione", chiusa:false, perche:null},
+    {id:"scuola",     gruppo:"incontro", ordine:5, nome:"Scuola",
+     riga:"le lezioni, le formazioni, e la ricerca che le accompagna",
+     elemento:"etere", rotta:"incontro:scuola", chiusa:false, perche:null},
+
+    {id:"annale",     gruppo:"annale",   ordine:1, nome:"L’Annale",
+     riga:"la memoria: tutto quello che è stato scritto, in ordine di tempo",
+     elemento:null, rotta:"annale", chiusa:false, perche:null}
+  ];
+
+  /* le righe — del seme o del database, è la stessa forma — diventano
+     quello che la barra, l’indirizzo e attesa() sanno leggere */
+  function versa(righe){
+    function forma(x){
+      return { id:x.id, nome:x.nome, riga:x.riga,
+               colore: x.elemento ? "var(--"+x.elemento+")" : "",
+               rotta: "#"+x.id, chiusa: !!x.chiusa, perche: x.perche };
+    }
+    var delGruppo = function(g){
+      return righe.filter(function(x){ return x.gruppo === g; }).map(forma);
+    };
+    STANZE.pagine   = delGruppo("pagina");
+    STANZE.incontri = delGruppo("incontro");
+    STANZE.annale   = delGruppo("annale")[0] || {};
+    BARRA = righe.map(function(x){ return {id:x.id, n:x.nome, s:x.riga}; });
+    ROTTE = {};
+    righe.forEach(function(x){ ROTTE[x.id] = x.rotta || ""; });
+  }
+
+  versa(SEME);   /* ⭐ la barra ha già le sue voci prima di ogni domanda */
+
+  /* ⭐ IL SEME DICE QUANDO NON COMBACIA PIÙ.
+     Il seme è una copia, e una copia invecchia in silenzio. Qui non può:
+     appena `stanze` risponde, i nomi si confrontano e ogni scarto finisce
+     in console. Chi apre la consolle lo trova scritto, invece di scoprirlo
+     mesi dopo davanti a una barra che per un istante dice la parola vecchia.
+     ⛔ Solo in console. In pagina non cambia niente, e nessuno vede un avviso.
+     `[ manca ]` sta per una riga che c'è di qua e non di là. */
+  function confrontaColSeme(righe){
+    if(!window.console || !console.warn) return;
+    var MANCA = "[ manca ]";
+    var daDb = {}, daSeme = {}, id;
+    righe.forEach(function(x){ daDb[x.id] = x.nome; });
+    SEME.forEach(function(x){ daSeme[x.id] = x.nome; });
+    for(id in daSeme){
+      if(!daSeme.hasOwnProperty(id)) continue;
+      var db_ = daDb.hasOwnProperty(id) ? daDb[id] : MANCA;
+      if(db_ !== daSeme[id]){
+        console.warn("seme disallineato: \u00ab" + daSeme[id] + "\u00bb \u2192 \u00ab" + db_ + "\u00bb");
+      }
+    }
+    for(id in daDb){
+      if(!daDb.hasOwnProperty(id)) continue;
+      if(!daSeme.hasOwnProperty(id)){
+        console.warn("seme disallineato: \u00ab" + MANCA + "\u00bb \u2192 \u00ab" + daDb[id] + "\u00bb");
+      }
+    }
+  }
+
   function leggiLeStanze(){
     return db.from("stanze")
       .select("id,gruppo,ordine,nome,riga,elemento,rotta,chiusa,perche")
       .order("ordine")
       .then(function(r){
         var righe = (r && r.data) || [];
-        var delGruppo = function(g){
-          return righe.filter(function(x){ return x.gruppo === g; }).map(forma);
-        };
-        function forma(x){
-          return { id:x.id, nome:x.nome, riga:x.riga,
-                   colore: x.elemento ? "var(--"+x.elemento+")" : "",
-                   rotta: "#"+x.id, chiusa: !!x.chiusa, perche: x.perche };
-        }
-        STANZE.pagine   = delGruppo("pagina");
-        STANZE.incontri = delGruppo("incontro");
-        STANZE.annale   = delGruppo("annale")[0] || {};
-        BARRA = righe.map(function(x){ return {id:x.id, n:x.nome, s:x.riga}; });
-        ROTTE = {};
-        righe.forEach(function(x){ ROTTE[x.id] = x.rotta || ""; });
+        /* nessuna riga o database muto: resta il seme, che è meglio del vuoto */
+        if(!righe.length) return;
+        confrontaColSeme(righe);
+        versa(righe);
       })
-      .catch(function(){ /* senza tabella la barra resta [ in attesa ] */ });
+      .catch(function(){ /* senza tabella la barra resta quella del seme */ });
   }
 
   /* le destinazioni: colore e simbolo, mai il nome dell'elemento */
@@ -1761,6 +1849,26 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       });
     });
 
+    /* ⭐ IL NOME IN ALTO A SINISTRA RIPORTA A CASA.
+       È il gesto che tutti si aspettano da un nome in cima a sinistra.
+       Il segno resta di Design: il guscio gli mette solo la mano sopra. */
+    var capo = n.querySelector(".capo");
+    if(capo && !capo.getAttribute("data-legato")){
+      capo.setAttribute("data-legato","1");
+      capo.setAttribute("role","link");
+      capo.setAttribute("tabindex","0");
+      capo.setAttribute("aria-label","Torna a casa");
+      var aCasa = function(){
+        document.body.classList.remove("barra-aperta");
+        misuraPlancia();
+        vai("spazio");
+      };
+      capo.addEventListener("click", aCasa);
+      capo.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); aCasa(); }
+      });
+    }
+
     /* il piede apre l'account: Design lo mostra, il guscio lo apre */
     var chi = n.querySelector(".chi");
     if(chi && !chi.getAttribute("data-legato")){
@@ -1852,6 +1960,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="nucleo") nucleo(c);   /* ⭐ la quinta: si difende da sé, dentro */
     else if(id==="pagina") pagina(c);
     else attesa(c, id);
+    /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
+    scriviIndirizzo();
   }
 
 
@@ -2789,73 +2899,146 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(typeof sv.mostraLuogo === "function") sv.mostraLuogo(d.luogo, {piena:true});
   });
 
-  /* ══ LA PAGINA CHIESTA DALL'INDIRIZZO ══
-     ?p=nome apre una vista all'avvio, come fa fm-talenti.js con ?t=.
+  /* ══ L'INDIRIZZO DELLE STANZE ══
+     Una stanza ha un posto, e un posto ha un indirizzo. Si manda a
+     qualcuno, si mette fra i preferiti, e il tasto indietro del telefono
+     riporta alla stanza di prima invece di uscire dal sito.
 
-     Il nome è l'id che la voce ha già in BARRA: non c'è un secondo
-     vocabolario da tenere allineato. Un nome che BARRA non conosce si
-     ignora, e si parte da casa.
+     ⭐ L'INDIRIZZO PORTA LA ROTTA, quella scritta in `stanze.rotta` —
+        `?p=gruppi`, `?p=incontro:emporio`, `?p=pagina&n=nome-url`.
+        Sono gli stessi due pezzi che vai(id, sub) riceve, quindi il giro
+        si chiude su sé stesso: niente secondo vocabolario da allineare.
 
-     ⭐ La regola: fare esattamente quello che fa il dito su quella voce.
-        Non una seconda strada per aprire le stanze — la stessa strada,
-        chiamata da fuori.
+     ⚠️ PRIMA L'INDIRIZZO SPARIVA APPENA LETTO, e la ragione era scritta
+        qui: «come per il ?t= dei talenti». Quella ragione vale ancora,
+        ma per il ?t= soltanto — un gettone si consuma una volta e non
+        deve restare in un indirizzo che si manda in giro. Una rotta di
+        stanza è un posto, non un gettone: resta scritta.
 
-     Si legge una volta sola e il parametro sparisce subito: ricaricando
-     si torna a casa, come per il ?t= dei talenti. */
+     ══ CHI POSSIEDE QUALE PARAMETRO ══
+     `p` e `n` sono del guscio: la stanza, e per un libro il suo nome.
+     `t` è di fm-talenti.js: il gettone di un sigillo inquadrato.
+     ⛔ Ognuno cancella SOLO il proprio. Nessuno azzera l'indirizzo
+        intero: un giro fra le stanze non deve mangiare un gettone non
+        ancora consumato, e il gettone consumato non deve portarsi via
+        la stanza in cui si è. */
   var BASE_INDIRIZZO = location.origin + location.pathname;
+
+  /* i soli parametri che il guscio scrive e cancella */
+  var MIEI_PARAMETRI = ["p", "n"];
 
   /* le viste che vai() gestisce senza avere una voce nella barra */
   var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina"];
 
-  /* la voce con quell'id, e le voci che stanno sopra di lei nel ramo */
-  function vocePerId(id, voci, sopra){
-    voci = voci || BARRA; sopra = sopra || [];
-    for(var i=0; i<voci.length; i++){
-      var v = voci[i];
-      if(v.id === id) return {voce:v, sopra:sopra};
-      if(v.sotto){
-        var t = vocePerId(id, v.sotto, sopra.concat([v]));
-        if(t) return t;
-      }
-    }
-    return null;
+  /* alzata mentre si legge la storia: allora l'indirizzo non si riscrive */
+  var tornando = false;
+  /* il primo giro sostituisce invece di impilare, o il tasto indietro
+     alla prima pressione non farebbe niente */
+  var primoIndirizzo = true;
+
+  function parametri(){
+    try{ return new URLSearchParams(location.search); }catch(e){ return null; }
   }
 
-  /* legge il nome e ripulisce l'indirizzo. Su file:// replaceState può
-     sollevare: la pagina si apre lo stesso, col parametro ancora scritto. */
-  function nomeDaIndirizzo(){
-    var m = location.search.match(/[?&]p=([A-Za-z0-9_-]{1,40})/);
-    if(!m) return null;
-    try{ history.replaceState({}, "", BASE_INDIRIZZO); }catch(e){}
-    return m[1];
+  /* la rotta che riporta a questa vista: gli stessi due pezzi di vai() */
+  function rottaCorrente(){
+    return vista + (sottoVista ? ":" + sottoVista : "");
   }
 
-  /* apre la pagina chiesta. Torna false se il nome non si riconosce,
-     e allora l'avvio sceglie come ha sempre fatto. */
-  function vaiAPagina(id){
-    if(!id) return false;
-    if(VISTE_SENZA_VOCE.indexOf(id) >= 0){ vai(id); return true; }
-
-    var t = vocePerId(id);
-    if(!t) return false;
-
-    /* una voce di primo livello: il tocco sul nome, righe 1426-1430 */
-    if(!t.sopra.length){
-      if(t.voce.sotto || t.voce.ancore) apriRamo(0, t.voce);
-      vai(t.voce.id);
-      return true;
+  /* ⭐ una rotta è buona se sta in `stanze` o è una vista senza voce.
+     `incontro` da solo passa perché è il capo di `incontro:emporio`:
+     non è una rotta inventata, è la stessa senza la porta scelta.
+     Un nome che non si riconosce non apre niente e si parte da casa —
+     `spazio` compreso, che finisce a casa comunque perché la casa è
+     l'indirizzo nudo. */
+  function conosciuta(rotta){
+    if(!rotta) return false;
+    if(VISTE_SENZA_VOCE.indexOf(rotta) >= 0) return true;
+    for(var id in ROTTE){
+      if(!ROTTE.hasOwnProperty(id) || !ROTTE[id]) continue;
+      if(ROTTE[id] === rotta) return true;
+      if(ROTTE[id].split(":")[0] === rotta) return true;
     }
+    return false;
+  }
 
-    /* una voce del ramo: il tocco della riga 1475-1479. Il ramo di primo
-       livello si apre, altrimenti la voce accesa non si vedrebbe. */
-    apriRamo(0, t.sopra[0]);
-    sottoRichiesta = t.voce.id;
-    vai("incontro", t.voce.va || t.voce.id);
+  /* l'indirizzo di una rotta. Gli altri parametri restano dove sono. */
+  function indirizzoDi(rotta){
+    var q = parametri();
+    if(!q) return null;
+    MIEI_PARAMETRI.forEach(function(k){ q.delete(k); });
+    if(rotta !== "spazio"){          /* la casa è l'indirizzo nudo */
+      q.set("p", rotta);
+      if(rotta === "pagina" && window.pagineNomeChiesto)
+        q.set("n", window.pagineNomeChiesto);
+    }
+    var coda = q.toString();
+    return BASE_INDIRIZZO + (coda ? "?" + coda : "");
+  }
+
+  /* ⛔ SI SCRIVE SOLO UNA ROTTA CHE L'INDIRIZZO SAPREBBE RIAPRIRE.
+     Raccogli e Cura sono stanze di lavoro dentro l'Edizione, non posti
+     dove si arriva da fuori: entrandoci l'indirizzo resta quello di
+     prima, invece di diventare un link che non riporta da nessuna parte.
+     Su file:// pushState solleva: la stanza si apre lo stesso. */
+  function scriviIndirizzo(){
+    if(tornando) return;
+    var r = rottaCorrente();
+    if(r !== "spazio" && !conosciuta(r)) return;
+    var ind = indirizzoDi(r);
+    if(ind === null) return;
+    /* ⚠️ il primo giro si consuma qui, ANCHE quando non c'è niente da
+       scrivere. Se aspettasse la prima scrittura, chi apre la casa e tocca
+       una stanza si vedrebbe sostituire la casa invece che impilarla, e il
+       tasto indietro non lo riporterebbe a casa. */
+    var primo = primoIndirizzo;
+    primoIndirizzo = false;
+    if(ind === BASE_INDIRIZZO + location.search) return;
+    try{
+      if(primo) history.replaceState({p:r}, "", ind);
+      else      history.pushState({p:r}, "", ind);
+    }catch(e){}
+  }
+
+  /* legge la rotta chiesta. ⛔ Non tocca l'indirizzo: da qui in poi
+     l'indirizzo è un posto, e resta scritto.
+     I due punti arrivano nudi se qualcuno li ha digitati, e in %3A se
+     li ha scritti URLSearchParams: si legge in tutti e due i modi. */
+  function rottaDaIndirizzo(){
+    var q = parametri(), v = q ? q.get("p") : null;
+    if(!v){
+      var m = location.search.match(/[?&]p=([^&]{1,80})/);
+      if(m){ try{ v = decodeURIComponent(m[1]); }catch(e){ v = m[1]; } }
+    }
+    return (v && /^[A-Za-z0-9_:-]{1,40}$/.test(v)) ? v : null;
+  }
+
+  /* ⭐ apre la rotta chiesta facendo esattamente quello che fa il dito
+     sulla voce: la stessa vai(), chiamata da fuori. Torna false se non
+     si riconosce, e allora chi chiama sceglie come ha sempre fatto.
+     È l'unica porta d'ingresso: la usano l'avvio e il tasto indietro. */
+  function apriRotta(rotta){
+    if(!conosciuta(rotta)) return false;
+    var due = String(rotta).split(":");
+    var id = due[0], sub = due.length > 1 ? due[1] : null;
+    if(id === "pagina"){
+      var q = parametri(), n = q ? q.get("n") : null;
+      if(n) window.pagineNomeChiesto = n;
+    }
+    if(sub) sottoRichiesta = sub;
+    vai(id, sub);
     return true;
   }
 
+  /* il tasto indietro del telefono e del navigatore */
+  window.addEventListener("popstate", function(){
+    tornando = true;
+    try{ if(!apriRotta(rottaDaIndirizzo())) vai("spazio"); }
+    finally{ tornando = false; }
+  });
+
   /* si legge una volta sola, prima che l'avvio prenda una delle due strade */
-  var paginaChiesta = nomeDaIndirizzo();
+  var rottaChiesta = rottaDaIndirizzo();
 
   /* ══ AVVIO ══ */
   /* ── da ospite si guarda; l'account si chiede al momento di agire ── */
@@ -2867,7 +3050,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     permessi = [];
     leggiLeStanze().then(function(){
       disegnaBarra();
-      if(!vaiAPagina(paginaChiesta)) vai("spazio");
+      if(!apriRotta(rottaChiesta)) vai("spazio");
     });
   }
 
@@ -2880,6 +3063,11 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     try{ sessionStorage.setItem("fm_ritorno", dove || ""); }catch(e){}
     location.href = "accesso.html";
   }
+
+  /* ⭐ LA BARRA SI DISEGNA SUBITO, col seme. Non aspetta né la sessione né
+     `stanze`: chi apre trova le voci già lì. Quando la risposta arriva,
+     disegnaBarra() torna a passare e aggiorna nomi e stati sopra queste. */
+  disegnaBarra();
 
   /* la radio si accende per tutti, anche da ospite: è lo strato che c'è sempre */
   radioMotore();
@@ -2942,7 +3130,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         try{ torna = sessionStorage.getItem("fm_ritorno") || ""; sessionStorage.removeItem("fm_ritorno"); }catch(e){}
         /* l'indirizzo vince su fm_ritorno: è una richiesta presente,
            il ritorno è il residuo di un'intenzione vecchia */
-        if(!vaiAPagina(paginaChiesta)) vai(torna || "spazio");
+        if(!apriRotta(rottaChiesta)) vai(torna || "spazio");
         contaNonLetti();
         setInterval(contaNonLetti, 45000);
       });
