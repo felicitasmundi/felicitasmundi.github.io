@@ -1048,6 +1048,80 @@
     body:not(.radio-aperta) .r-striscia{padding-top:0.15rem;padding-bottom:0.15rem;gap:0.5rem}
     body:not(.radio-aperta) #apri-barra{top:0.4rem;width:2.3rem;height:2.3rem}
   }
+
+  /* ══ IL TELAIO CEDE SPAZIO QUANDO LO SPAZIO MANCA ═══════════════════
+     Alzando lo zoom di pagina, il telaio non cresceva soltanto: ANDAVA A
+     CAPO. E ogni ritorno a capo lo toglieva al centro, la finestra dove
+     si legge. Misurato su 1280×800, con la barra aperta:
+
+         zoom   finestra   plancia  Megafono   il centro
+         100%   1280×800    130px     153px       65%
+         125%   1024×640    159px     153px       51%   ← il palinsesto va a capo
+         150%    853×533    185px     198px       28%   ← e vanno a capo anche i tasti
+         200%    640×400     50px     153px       49%   ← qui il telaio si ritira, e si respira
+
+     ⭐ A 200% si stava MEGLIO che a 125%, perché sotto i 52rem il telaio
+        si ritira da sé. Le ritirate erano già scritte: partivano tardi.
+        Il palinsesto si ritirava a 52rem ma va a capo a 64rem; i tasti si
+        ritiravano a 40rem ma vanno a capo a 55rem. Qui partono dove
+        servono davvero. Non è una forma nuova — è la stessa, al momento
+        giusto.
+
+     ⛔ Niente si congela e niente si blocca: il contenuto cresce con lo
+        zoom come ha sempre fatto, e chi ingrandisce per leggere legge.
+        È il telaio che si stringe.
+     ⛔ La soglia dei 52rem NON si tocca: è quella della barra, e la
+        usano anche le stanze. Queste sono soglie del solo telaio. */
+
+  /* ① IL PALINSESTO SI RITIRA a 64rem — misurato: è lì che la striscia
+        della radio smette di stare su una riga sola. Non sparisce: resta
+        la freccia, che lo apre nella sua finestra. */
+  @media(max-width:64rem){
+    body:not(.radio-aperta) #blocco-radio:not(.aperta) #r-palinsesto{display:none}
+  }
+
+  /* ② I TASTI DEL MEGAFONO SU UNA RIGA SOLA a 55rem, che si scorre di
+        lato: la stessa ritirata che il telefono fa a 40rem, portata dove
+        la riga comincia davvero ad andare a capo.
+     ⛔ Si ritira solo la riga dei tasti. Il campo dove si scrive non è
+        qui dentro: resta largo quanto tutto il Megafono, sempre. */
+  @media(max-width:55rem){
+    .riga-strumenti{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+      scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+    .riga-strumenti::-webkit-scrollbar{display:none}
+    .riga-strumenti > *{flex:0 0 auto;white-space:nowrap}
+  }
+
+  /* ③ SCHERMO BASSO: la plancia si accorcia da sé. La stessa forma
+        stretta del telefono, chiamata dall'altezza invece che dalla
+        larghezza — una finestra bassa e larga soffre uguale.
+        40rem è l'altezza che lo schermo di prova ha al 125%: la stessa
+        piega in cui i 64rem prendono la larghezza. */
+  @media(max-height:40rem){
+    body:not(.radio-aperta) #blocco-radio:not(.aperta) #r-palinsesto{display:none}
+    body:not(.radio-aperta) #pl:not(:has(#blocco-radio.aperta)){
+      padding-top:0.2rem;padding-bottom:0.2rem;min-height:0}
+    body:not(.radio-aperta) #blocco-radio:not(.aperta) .r-striscia{
+      padding-top:0.15rem;padding-bottom:0.15rem;gap:0.5rem}
+  }
+
+  /* ④ IL TETTO — la plancia non prende mai più di tre decimi dello
+        schermo, comunque vada. È l'ultima rete: se un domani la striscia
+        trovasse un altro modo di crescere, il centro non se ne
+        accorgerebbe. Nelle misure di oggi non morde mai.
+     ⛔ Solo sulla plancia. Sul Megafono un tetto taglierebbe il tasto che
+        manda, e quello non si taglia: lì il foglio che sale ha già il suo
+        tetto, --vele-max.
+     ⚠️ NON QUANDO LA FASCIA È APERTA, e sono due cose diverse.
+        Sul telefono la fascia diventa una finestra e il corpo prende
+        `radio-aperta`. Sul computer no: si allarga sul posto, e l'unico
+        segno è `.aperta` su #blocco-radio, che è DENTRO la plancia — da
+        cui il :has(). Un tetto che scattasse anche lì taglierebbe il
+        palinsesto proprio a chi l'ha appena aperto.
+        Dove :has() non c'è, la riga cade tutta e non c'è tetto: la rete
+        salta, ma niente si rompe. */
+  body:not(.radio-aperta) #pl:not(:has(#blocco-radio.aperta)){
+    max-height:30dvh;overflow:hidden}
 </style>
 </head>
 <body>
