@@ -40,13 +40,28 @@
        foglio sale più di quanto lo schermo lascia libero, la colonna
        sfora e il fondo — il campo e i tasti — esce dall'inquadratura.
        Qui il foglio si tiene dentro lo spazio che c'è davvero.
-       I 22rem tenuti da parte sono tre cose misurate: la plancia in
-       cima, la parte fissa del Megafono, e il fondo del centro — la
-       sua imbottitura, che non si stringe. Fanno 338px sul PC e 333
-       sul telefono.
+       Lo spazio tenuto da parte è tre cose: la plancia in cima, la parte
+       fissa del Megafono, e il fondo del centro — la sua imbottitura,
+       che non si stringe.
+
+     ⭐ TOCCATO NEL GUSCIO ⑨ — la plancia non è più un numero fisso.
+        Prima le tre cose stavano dentro un solo 22rem scritto a mano,
+        mentre la plancia si misura da sé e finisce in --plancia. Le due
+        non si parlavano: se la plancia cresceva — il palinsesto che va a
+        capo, la fascia della radio che si apre sul computer — il tetto
+        restava quello di prima e il foglio sforava lo stesso.
+        Ora la plancia la legge, e restano fissi solo i 15.4rem che sono
+        davvero fissi: il Megafono e il fondo del centro.
+     ⭐ 6.6rem + 15.4rem = i 22rem di prima. Se il JS non gira, o se
+        misuraPlancia() non ha ancora misurato, --plancia vale 6.6rem e
+        la formula ridà esattamente il numero di ieri: la ricaduta è
+        quella che c'era.
+     ⚠️ Con la barra aperta o la fascia a finestra, misuraPlancia() non
+        scrive: --plancia tiene l'ultima misura buona, e il tetto con lei.
        I 4rem in fondo sono il minimo sotto cui non si scende: col
        foglio piccolo si scorre dentro, e i tasti non si spostano mai. */
-    --vele-max: min(32rem, max(4rem, calc(var(--schermo, 100dvh) - 22rem)));
+    --vele-max: min(32rem, max(4rem,
+      calc(var(--schermo, 100dvh) - var(--plancia, 6.6rem) - 15.4rem)));
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html{-webkit-text-size-adjust:100%}
@@ -888,10 +903,19 @@
     position:relative;z-index:2;pointer-events:none}
   .ponte{background:var(--scafo);padding:0.35rem 1.1rem calc(0.75rem + env(safe-area-inset-bottom))}
   .dentro{max-width:56rem;margin:0 auto}
+  /* ⭐ TOCCATO NEL GUSCIO ⑩ — il campo misura sullo schermo vero.
+     Il tetto era 26vh. I vh sono l'altezza della finestra e con la
+     tastiera fuori non si accorciano: il campo restava alto come a
+     tastiera chiusa e si mangiava la colonna già accorciata.
+     --schermo è l'altezza che resta davvero visibile — la scrive il
+     guscio da visualViewport — e si accorcia insieme alla tastiera.
+     La proporzione è la stessa di prima: ventisei centesimi.
+     Dove --schermo non c'è, la ricaduta è 26dvh: il numero di ieri. */
   #campo{display:block;width:100%;resize:none;overflow-y:auto;background:rgba(245,240,230,0.05);
     border:1px solid var(--line);border-radius:1rem;color:var(--ivory);
     font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.5;
-    padding:0.7rem 1rem;outline:none;min-height:2.9rem;max-height:26vh}
+    padding:0.7rem 1rem;outline:none;min-height:2.9rem;
+    max-height:calc(var(--schermo, 100dvh) * 0.26)}
   #campo::placeholder{color:rgba(245,240,230,0.5);font-style:italic}
   #campo:focus{border-color:rgba(200,160,85,0.45)}
   .simboli{display:flex;align-items:center;gap:0.45rem;margin-top:0.55rem;overflow-x:auto;
