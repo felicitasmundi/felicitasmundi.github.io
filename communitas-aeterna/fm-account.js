@@ -19,8 +19,17 @@
       .then(function(r){
         var p = (r && r.data) || {};
         var quando = dataIt(p.condizioni_accettate);
+        /* ⭐ LE CONDIZIONI SI LEGGONO DA QUI.
+           Questa riga è il solo posto dentro lo Spazio Vivo in cui le
+           Condizioni d'uso si mostrano — e mostrava soltanto la data in
+           cui erano state accettate, senza un modo per leggerle.
+           Ora il nome della riga è la porta. Si apre in una scheda a
+           parte, come fa già accesso.html: chi sta guardando i propri
+           consensi non perde il posto in cui era.
+           ⛔ Nessuna parola nuova: «Condizioni d'uso» era già lì. */
         c.innerHTML =
-          '<div class="stato-riga"><b>Condizioni d\u2019uso</b><i>'
+          '<div class="stato-riga"><b><a href="condizioni.html" target="_blank" '
+        +   'rel="noopener">Condizioni d\u2019uso</a></b><i>'
         +   (quando ? "accettate il " + quando : "[ non risulta ]") + '</i></div>'
         + '<div class="stato-riga"><b>Versione accettata</b><i>'
         +   (p.condizioni_versione || "[ non risulta ]") + '</i></div>'

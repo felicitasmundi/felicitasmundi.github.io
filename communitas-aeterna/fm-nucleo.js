@@ -49,8 +49,24 @@
       passa dati: il giorno che ci sono, si accende `datiDelNucleo()`
       qui sotto — e nient'altro.
 
-   ⚠️ I CINQUE TASTI aprono finestre dentro la pagina, non indirizzi.
+   ⚠️ I SEI TASTI aprono finestre dentro la pagina, non indirizzi.
       Niente da aggiungere al magazzino.
+
+   ⭐ IL SESTO È L'ANNALE, ed è aggiunto qui — non sta nella consegna
+      di Design. Il 24 agosto 2026 l'Annale è uscito dalla barra ed è
+      entrato nel nucleo. Le mani sul codice di Design sono quattro,
+      tutte segnate sul posto col commento «⭐ TOCCATO»: la carta nel
+      corpo, la riga in FIN, il ramo in apri(), la voce in conta().
+      Il disegno dell'Annale non è qui: sta in fm-annale.js, e questo
+      file lo chiama per nome — annaleDentro(dentro).
+      ⛔ fm-annale.js va caricato PRIMA di questo file nel guscio.
+
+   ⭐ E LA FINESTRA «REGOLE» PORTA LA SUA PAGINA. Dal 24 agosto 2026 il
+      quadrante delle regole non mostra più la griglia dei cinque
+      elementi: mostra le regole, una per una, col perché e con
+      l'etichetta di dove ciascuna vive già. Il disegno sta in
+      fm-regole.js — regoleDentro(dentro).
+      ⛔ Anche fm-regole.js va caricato PRIMA di questo file.
 
    ⚠️ `sv-velo` è anche l'id del velo sopra la mappa, nella casa. Non si
       pestano i piedi: le due stanze non stanno mai nel centro insieme.
@@ -306,6 +322,25 @@ var NUCLEO = `<style>
         <span class="de">quello che è stato deciso, e dove vive</span>
       </button>
 
+      <!-- ⭐ AGGIUNTO — LA SESTA FINESTRA: L'ANNALE.
+           Era la voce in fondo alla barra; ora vive qui dentro, dietro
+           il controllo del nucleo. Il disegno lo porta fm-annale.js.
+           ⛔ Il colore è «--oro», non un elemento: l'Annale non è una
+              delle cinque stanze, è la memoria di tutte. La struttura
+              resta oro, come vuole la veste.
+           ⛔ Il segno non è disegnato qui: lo mette avviaNucleo() con
+              sg("annale"), lo stesso che la barra portava. Non si
+              ridisegna un segno che esiste già.
+           ⭐ Il nome e la riga sono le parole che stavano nella riga
+              «annale» di «stanze» — quella che esce dalla barra. Sono
+              di Gab, e si spostano intere: non se ne scrivono altre. -->
+      <button class="cd" type="button" style="--c:var(--oro)" data-fin="annale">
+        <span class="vn" id="v-annale"></span>
+        <span class="sg" id="sg-annale"></span>
+        <b>L&rsquo;Annale</b>
+        <span class="de">la memoria: tutto quello che &egrave; stato scritto, in ordine di tempo</span>
+      </button>
+
     </div>
   </div>
 
@@ -343,6 +378,17 @@ var NUCLEO = `<style>
         <span class="de">quello che ci si dice qui dentro</span>
       </button>
 
+      <!-- ⭐ TOCCATO — la settima finestra: l'orma in lavorazione.
+           Il segno è quello scelto — orma-simbolo-scelto.html,
+           77158e33c54f50acea03893800b805ff — preso verbatim, non
+           ridisegnato: è il passo che continua. -->
+      <button class="cd" type="button" style="--c:var(--terra)" data-fin="lavorazione">
+        <span class="vn" id="v-lavorazione"></span>
+        <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/><path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/><g transform="translate(-4,4) scale(0.9)"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(33,3) scale(0.5)" opacity=".45"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(20,-2) scale(0.3)" opacity=".2"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g></svg></span>
+        <b>In lavorazione</b>
+        <span class="de">l&rsquo;orma mentre si scrive</span>
+      </button>
+
     </div>
   </div>
 
@@ -376,9 +422,14 @@ function nucleo(c){
     .catch(function(){ /* nel dubbio non si disegna */ });
 }
 
-/* ── il codice della pagina, come l'ha scritto Design: non si tocca ──
+/* ── il codice della pagina, come l'ha scritto Design ──
    Nel disegno l'involucro gira da sé appena la pagina è letta; qui la
-   pagina nasce dentro nucleo(), quindi lo si chiama lì. */
+   pagina nasce dentro nucleo(), quindi lo si chiama lì.
+   ⚠️ Qui dentro ci sono QUATTRO mani, e sono le sole: la riga di FIN,
+      il ramo in apri() e la voce in conta() — tutte e tre per la sesta
+      finestra, l'Annale — e il ramo «regole» in apri(), che ora porta
+      la pagina delle regole invece dei cinque elementi.
+      Ognuna è segnata col commento «⭐ TOCCATO». Nient'altro si tocca. */
 function avviaNucleo(){
 (function () {
   "use strict";
@@ -404,8 +455,20 @@ function avviaNucleo(){
     regole: ["Le regole","quello che è stato deciso, e dove vive",
              "var(--terra)"],
     lavagna:["Integrator","le task, e a che punto sono","var(--svil)"],
-    chat:   ["La chat","quello che ci si dice qui dentro","var(--etere)"]
+    chat:   ["La chat","quello che ci si dice qui dentro","var(--etere)"],
+    /* ⭐ TOCCATO — la sesta finestra */
+    annale: ["L\u2019Annale",
+             "la memoria: tutto quello che \u00e8 stato scritto, in ordine di tempo",
+             "var(--oro)"],
+    /* ⭐ TOCCATO — la settima */
+    lavorazione: ["In lavorazione", "l\u2019orma mentre si scrive",
+             "var(--terra)"]
   };
+
+  /* ⭐ TOCCATO — il segno dell'Annale, quello che portava la barra.
+     Sta nei SIMBOLI del guscio e non si ridisegna. */
+  var sgAnnale = document.getElementById("sg-annale");
+  if (sgAnnale && typeof sg === "function") sgAnnale.innerHTML = sg("annale");
 
   function el(tag, cls, testo){
     var n = document.createElement(tag);
@@ -486,6 +549,23 @@ function avviaNucleo(){
     return d;
   }
 
+  /* ⭐ TOCCATO — I PEZZI TORNANO AL PARCHEGGIO, INTERI.
+     «Dinamiche» e «In lavorazione» non sono liste di righe: sono due
+     consegne che si reggono da sé, con la loro veste e il loro codice, e
+     vivono in #sv-parcheggio dentro il guscio. Qui si spostano dentro la
+     finestra; a finestra chiusa tornano a casa.
+     ⛔ Questo va chiamato PRIMA di vuota(): vuota() svuota #f-dentro, e un
+        pezzo rimasto lì se ne andrebbe per sempre — la volta dopo la
+        finestra sarebbe muta e non ci sarebbe modo di accorgersene. */
+  function riponi(){
+    var casa = document.getElementById("sv-parcheggio");
+    if (!casa) return;
+    ["svDin","svOrma"].forEach(function (q) {
+      var e = document.getElementById(q);
+      if (e && e.parentNode !== casa) casa.appendChild(e);
+    });
+  }
+
   function apri(id, dati){
     var f = FIN[id];
     if (!f) return;
@@ -494,11 +574,45 @@ function avviaNucleo(){
     document.getElementById("f-tit").textContent = f[0];
     document.getElementById("f-sot").textContent = f[1];
     var dentro = document.getElementById("f-dentro");
+    riponi();
     vuota(dentro);
 
-    if (id === "flussi") {
+    /* ⭐ TOCCATO — l'Annale non è una lista di righe: porta una pagina
+       intera, e se la disegna da sé. fm-annale.js legge le orme vere.
+       Se quel file non c'è, la finestra si apre e dice che aspetta —
+       non resta muta e non solleva. */
+    /* ⭐ TOCCATO — ⑤ «Dinamiche»: il pezzo di Design prende il posto della
+       lista di righe che c'era. Se il pezzo non c'è si torna a quella:
+       la finestra non resta mai vuota. */
+    var SV = window.SpazioVivo || {};
+    var pezzoDin  = document.getElementById("svDin");
+    var pezzoOrma = document.getElementById("svOrma");
+
+    if (id === "flussi" && pezzoDin) {
+      dentro.appendChild(pezzoDin);
+      if (typeof SV.dinamiche === "function") SV.dinamiche();
+    /* ⭐ TOCCATO — ④ «In lavorazione», la settima finestra. Il pezzo porta
+       dentro la sua fotografia e non va a prendere niente da fuori. */
+    } else if (id === "lavorazione") {
+      if (pezzoOrma) {
+        dentro.appendChild(pezzoOrma);
+        if (typeof SV.orma === "function") SV.orma();
+      } else dentro.appendChild(attesa());
+    } else if (id === "annale") {
+      if (typeof annaleDentro === "function") annaleDentro(dentro);
+      else dentro.appendChild(attesa());
+    /* ⭐ TOCCATO — «le regole» portano la loro pagina, non i cinque
+       elementi. Il disegno sta in fm-regole.js. Prima questa finestra
+       divideva con «economia» la griglia dei cinque elementi, e su una
+       regola quella griglia non aveva niente da dire.
+       Se quel file non c'è, la finestra si apre e dice che aspetta —
+       non resta muta e non solleva. */
+    } else if (id === "regole") {
+      if (typeof regoleDentro === "function") regoleDentro(dentro);
+      else dentro.appendChild(attesa());
+    } else if (id === "flussi") {
       dentro.appendChild(flussi(dati));
-    } else if (id === "economia" || id === "regole") {
+    } else if (id === "economia") {
       dentro.appendChild(elementi(dati));
     } else {
       dentro.appendChild(righe(dati, id === "lavagna" ? "punto" : "quando"));
@@ -509,6 +623,7 @@ function avviaNucleo(){
   }
 
   function chiudi(){
+    riponi();                       /* ⭐ TOCCATO — i pezzi tornano a casa */
     velo.classList.remove("on");
     document.body.style.overflow = "";
     if (apert && apert.focus) apert.focus();
@@ -547,7 +662,8 @@ function avviaNucleo(){
 
   /* il numero in alto a destra: quanto è pieno quel posto */
   function conta(d){
-    ["economia","regole","flussi","lavagna","chat"].forEach(function (k) {
+    /* ⭐ TOCCATO — «annale» in coda: senza un numero resta vuoto, come gli altri */
+    ["economia","regole","flussi","lavagna","chat","annale"].forEach(function (k) {
       var e = document.getElementById("v-" + k);
       if (!e) return;
       var q = d && d[k] ? d[k].quante : undefined;

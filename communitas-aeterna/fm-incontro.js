@@ -7,27 +7,26 @@
    ═══════════════════════════════════════════════════════════════ */
 "use strict";
 
-  /* ── l'Annale: la stessa cosa della mappa, vista per tempo invece che per luogo ── */
-  function annale(c){
-    c.innerHTML =
-      '<div class="occhio">Comunità Eterna FelicitasMundi</div>'
-    + '<h1>L\'Annale di FelicitasMundi</h1>'
-    + '<p class="sotto">Il registro di quello che accade, giorno per giorno. '
-    + '<b>&Egrave; la stessa cosa della mappa, vista per tempo invece che per luogo:</b> '
-    + 'quello che compare in un giorno dell\u2019Annale &egrave; un deposito sulla mappa. '
-    + 'Un record, due viste, mai copie.<br><br>'
-    + 'Stiamo ricostruendo qui tutto lo storico della comunit&agrave;, un\u2019orma alla volta: '
-    + 'ogni cosa che segni, col luogo e la data in cui &egrave; accaduta, prende il suo posto '
-    + 'in entrambe.</p>'
-    + '<div class="mappa-box" style="margin-top:1.2rem">'
-    +   '<iframe src="Annale_FelicitasMundi_dc.html" title="L\'Annale" '
-    +   'style="height:44rem" loading="lazy"></iframe>'
-    + '</div>';
-  }
+  /* ⭐ L'ANNALE NON ABITA PIÙ QUI, e non c'è più nessun iframe.
+     Era una stanza col telaio di Annale_FelicitasMundi_dc.html dentro.
+     Ora è la SESTA FINESTRA DEL NUCLEO: il disegno sta in fm-annale.js
+     e ci si arriva da lì, dietro il controllo del nucleo.
+     Con la voce fuori da `stanze`, `?p=annale` non è più una rotta
+     conosciuta — apriRotta() la rifiuta e si parte da casa — e il guscio
+     non nomina più questa funzione in vai(). Non resta niente da tenere.
+     ⛔ Annale_FelicitasMundi_dc.html non si usa più. */
 
   /* ── cosa incontro: cinque porte, una aperta per volta ── */
+  /* ⭐ LE PORTE VENGONO DA `STANZE.incontri`, cioè dalla tavola `stanze`.
+     Prima venivano da `BARRA[incontro].sotto`: la vecchia barra annidata,
+     che non esiste più. BARRA oggi è un vocabolario piatto — id, nome,
+     riga — e quel `.sotto` era `undefined`: `vai("incontro", …)` sollevava
+     prima ancora di scrivere una riga, e la stanza non si apriva.
+     `elemento` porta il colore E il segno, e arriva dal database: la
+     colonna `stanze.elemento` c'è già, ed è la stessa che il seme dichiara.
+     ⛔ Nessun nome, nessuna riga e nessun colore scritti qui. */
   function incontro(c, sub){
-    var p=BARRA.filter(function(x){return x.id==="incontro";})[0].sotto;
+    var p = (typeof STANZE !== "undefined" && STANZE.incontri) || [];
     c.innerHTML='<div class="occhio">Comunità Eterna FelicitasMundi</div>'
       +'<h1>Cosa incontro</h1>'
       +'<p class="sotto">[ la riga di questa stanza — in attesa ]</p>'
@@ -36,10 +35,14 @@
     var box=$("porte");
     p.forEach(function(x){
       var b=document.createElement("button");
-      b.className="porta"; b.style.setProperty("--pc","var(--"+x.el+")");
-      b.innerHTML='<span class="sg">'+sg(x.el)+'</span><span><b></b><small></small></span>';
-      b.querySelector("b").textContent=x.n;
-      b.querySelector("small").textContent=x.s;
+      b.className="porta";
+      /* il segno e il colore li tiene chi ha un elemento. Chi non ce l'ha
+         resta una porta a sé: bordo d'oro, e nessun segno inventato */
+      if(x.elemento) b.style.setProperty("--pc","var(--"+x.elemento+")");
+      b.innerHTML='<span class="sg">'+(x.elemento ? sg(x.elemento) : '')+'</span>'
+                 +'<span><b></b><small></small></span>';
+      b.querySelector("b").textContent=x.nome;
+      b.querySelector("small").textContent=x.riga;
       b.addEventListener("click", function(){ apriPorta(x); });
       box.appendChild(b);
     });
@@ -99,8 +102,9 @@
       + (suoi.length ? '<div class="lettura" id="lettura"></div>'
          : x.id==="scuola" ? ''   /* la Scuola porta le sue tre voci: non aspetta */
          : '<p><span class="segna">questa porta aspetta il suo contenuto</span></p>');
-    d.querySelector("h2").textContent=x.n;
-    d.querySelector("h2").style.color="var(--"+x.el+")";
+    /* ⭐ `nome` e `elemento`: la forma che STANZE dà a una riga di `stanze` */
+    d.querySelector("h2").textContent=x.nome;
+    if(x.elemento) d.querySelector("h2").style.color="var(--"+x.elemento+")";
 
     if(suoi.length){
       var box = $("lettura");

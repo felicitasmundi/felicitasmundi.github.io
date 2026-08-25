@@ -630,8 +630,11 @@ function pagina(c, nome){
     paginaRiempi(pag, d);
     if(typeof paginaAccendi === "function") paginaAccendi(pag);
     /* ⭐ ultimo, e dopo paginaAccendi: il modello scrive quei due href
-       con location.href, che a quel punto il guscio ha già ripulito.
-       Chi condivide deve arrivare al libro, non alla home. */
+       con location.href, e il guscio non ripulisce più — l'indirizzo di
+       una stanza adesso resta scritto. paginaCondividi() li rifà comunque
+       da BASE_INDIRIZZO e dal nome_url del libro, non da location: così
+       il link è giusto in tutti e due i casi, e chi condivide arriva al
+       libro anche se ci si è entrati dalla casa invece che da fuori. */
     paginaCondividi(pag, d);
   });
 }

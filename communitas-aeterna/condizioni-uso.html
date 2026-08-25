@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Condizioni d’uso · FelicitasMundi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Caveat:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
+  --accent:#AA8844; --bg:#080604; --crema:#F0EBE0;
+  --c50:rgba(240,235,224,.50); --c38:rgba(240,235,224,.38); --c22:rgba(240,235,224,.22); --c12:rgba(240,235,224,.12);
+  --dock-h:clamp(86px,11vh,116px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock-h) + 24px);position:relative;min-height:100vh}
+
+.fm-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(170,136,68,.10), transparent 60%),
+    radial-gradient(90% 60% at 50% 120%, rgba(153,102,204,.06), transparent 60%);}
+.fm-bg::after{content:"";position:absolute;inset:0;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+
+/* TOP BAR */
+.top{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:.5px solid var(--c12)}
+.fm-nexus-btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;opacity:.85;transition:opacity .2s}
+.fm-nexus-btn:hover{opacity:1}
+.fm-nexus-btn img{width:55px;height:55px;object-fit:contain}
+.fm-nexus-lbl{font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:.04em;color:var(--c50)}
+.brand{font-family:"Cinzel",serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--c50);margin-left:auto}
+
+/* HERO */
+.hero{padding:50px 0 8px}
+.occh{font-family:"Cinzel",serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+.titolo{font-family:"Cinzel",serif;font-weight:900;font-size:clamp(28px,5.6vw,46px);line-height:1.08}
+.sotto{font-size:clamp(18px,2.6vw,22px);color:var(--c50);font-weight:400;margin-top:18px;max-width:620px}
+.aggio{font-family:"DM Sans",sans-serif;font-size:12.5px;color:var(--c38);margin-top:14px;letter-spacing:.02em}
+
+/* INDICE ANALITICO */
+.idx{border:.5px solid var(--c22);border-radius:14px;padding:20px 22px;margin:38px 0 10px}
+.idx-tit{font-family:"Cinzel",serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.idx ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:9px 24px}
+.idx a{font-family:"DM Sans",sans-serif;font-size:14px;color:var(--c50);text-decoration:none;display:flex;gap:9px;transition:color .2s}
+.idx a:hover{color:var(--crema)}
+.idx a .n{color:var(--accent);min-width:18px}
+@media(max-width:560px){.idx ol{grid-template-columns:1fr}}
+
+/* DOCUMENTO */
+.doc{margin-top:10px}
+.doc h2{font-family:"Cinzel",serif;font-weight:700;font-size:clamp(18px,2.6vw,22px);color:var(--accent);margin:40px 0 12px;scroll-margin-top:16px;line-height:1.25}
+.doc h2 .hn{color:var(--c38);font-weight:400;margin-right:8px}
+.doc p{font-size:17px;color:var(--c50);margin-bottom:14px}
+.doc p.lead{color:var(--crema)}
+.doc strong{color:var(--crema);font-weight:500}
+.doc ul{list-style:none;margin:0 0 14px}
+.doc li{font-size:16.5px;color:var(--c50);padding:7px 0 7px 22px;position:relative;border-top:.5px solid var(--c12)}
+.doc li:first-child{border-top:none}
+.doc li::before{content:"·";position:absolute;left:6px;top:7px;color:var(--accent);font-size:18px;line-height:1}
+.doc a.inl{color:var(--accent);text-decoration:none;border-bottom:.5px solid var(--c22)}
+.doc a.inl:hover{border-bottom-color:var(--accent)}
+
+/* TABELLA basi giuridiche */
+.tbl{width:100%;border-collapse:collapse;margin:6px 0 16px;font-family:"DM Sans",sans-serif}
+.tbl th,.tbl td{border:.5px solid var(--c22);padding:11px 13px;text-align:left;vertical-align:top;font-size:14px}
+.tbl th{background:rgba(170,136,68,.10);color:var(--crema);font-weight:500;letter-spacing:.03em}
+.tbl td{color:var(--c50)}
+
+.pie{margin-top:46px;padding-top:18px;border-top:.5px solid var(--c12);font-family:"DM Sans",sans-serif;font-size:12px;color:var(--c38);letter-spacing:.02em;line-height:1.7}
+
+/* DOCK — condiviso: fm-dock.js + fm-livelli.json */
+@media(max-width:560px){.fm-nexus-lbl{display:none}}
+
+  /* ══ IL PIEDE — uguale in ogni pagina ══ */
+  .fm-piede{margin-top:2.4rem;padding:1.3rem 1rem 1.4rem;
+    border-top:1px solid rgba(184,150,62,0.2);text-align:center}
+  .fp-marchio{font-family:'Cinzel',serif;font-size:0.8125rem;
+    letter-spacing:0.2em;text-transform:uppercase;color:#D4AF6A;margin-bottom:0.6rem}
+  .fp-riga{font-family:'DM Sans',sans-serif;font-size:0.8125rem;
+    color:rgba(245,240,230,0.78);line-height:1.5}
+  .fp-link{margin-top:0.7rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap}
+  .fp-link a{font-family:'DM Sans',sans-serif;font-size:0.8125rem;color:#D4AF6A;
+    text-decoration:none;border-bottom:1px solid rgba(200,160,85,0.35);padding-bottom:0.1rem}
+  .fp-link a:hover{color:#F5F0E6;border-bottom-color:#F5F0E6}
+</style>
+</head>
+<body>
+
+<div class="fm-bg"></div>
+
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <a class="fm-nexus-btn" href="https://felicitasmundi.com" title="Torna alla Home">
+      <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="Nexus FelicitasMundi"/>
+      <span class="fm-nexus-lbl">← Home</span>
+    </a>
+    <div class="brand">Condizioni d’uso</div>
+  </div>
+
+    <!-- HERO -->
+  <div class="hero">
+    <div class="occh">Felicitas Omnia S.r.l.s.</div>
+    <h1 class="titolo">Condizioni d&rsquo;uso</h1>
+    <p class="sotto">Il patto fra chi entra e la Comunit&agrave;: che cosa &egrave; questo posto, che cosa vi si fa, e chi risponde di che cosa.</p>
+    <p class="aggio">Ultimo aggiornamento: 17 agosto 2026na volta sola, all&rsquo;attivazione dell&rsquo;account &middot; Per il trattamento dei dati personali vedi l&rsquo;<a class="inl" href="privacy.html">Informativa privacy</a></p>
+  </div>
+
+  <!-- INDICE ANALITICO -->
+  <nav class="idx">
+    <div class="idx-tit">Indice</div>
+    <ol>
+      <li><a href="#s1"><span class="n">1</span> Che cos&rsquo;&egrave; questo posto</a></li>
+      <li><a href="#s2"><span class="n">2</span> Chi pu&ograve; entrare</a></li>
+      <li><a href="#s3"><span class="n">3</span> Che cosa &egrave; gratuito e che cosa si paga</a></li>
+      <li><a href="#s4"><span class="n">4</span> Di chi &egrave; quello che scrivi</a></li>
+      <li><a href="#s4b"><span class="n">4b</span> Integrator</a></li>
+      <li><a href="#s4c"><span class="n">4c</span> I talenti</a></li>
+      <li><a href="#s4d"><span class="n">4d</span> Lezioni, corsi e libri</a></li>
+      <li><a href="#s4e"><span class="n">4e</span> Il praticantato</a></li>
+      <li><a href="#s4f"><span class="n">4f</span> Il vaglio</a></li>
+      <li><a href="#s5"><span class="n">5</span> Che cosa non si fa qui</a></li>
+      <li><a href="#s6"><span class="n">6</span> La chat e i contenuti degli altri</a></li>
+      <li><a href="#s7"><span class="n">7</span> L&rsquo;Emporio</a></li>
+      <li><a href="#s8"><span class="n">8</span> Se qualcosa va storto</a></li>
+      <li><a href="#s9"><span class="n">9</span> Chiudere l&rsquo;account</a></li>
+      <li><a href="#s10"><span class="n">10</span> Chi risponde, e quale legge</a></li>
+    </ol>
+  </nav>
+
+  <div class="testo">
+
+    <h2 id="s1"><span class="hn">1.</span>Che cos&rsquo;&egrave; questo posto</h2>
+    <p>FelicitasMundi &egrave; una piattaforma catalizzatrice di comunit&agrave;: facilita la connessione territoriale di mutuo aiuto, assistenza spirituale e terapeutica, doni, scambi e prodotti acquistabili e provenienti da realt&agrave; con coerenza filosofica.</p>
+    <p>L&rsquo;educazione proposta nella scuola &egrave; allineata con i precetti filosofici della scuola vedica e metafisica. Con questi sosteniamo individui, team e vicinati all&rsquo;autosufficienza e alla cooperazione, dando poi strumenti di pubblicazione, stampa e distribuzione.</p>
+
+    <h2 id="s2"><span class="hn">2.</span>Chi pu&ograve; entrare</h2>
+    <p>La registrazione autonoma &egrave; consentita a partire dai 14 anni. Al di sotto di questa et&agrave; serve il consenso di chi esercita la responsabilit&agrave; genitoriale.</p>
+    <p>L&rsquo;accesso avviene con la tua email e un codice temporaneo: non esiste alcuna password. Le presenti condizioni si accettano <strong>una volta sola, all&rsquo;attivazione dell&rsquo;account</strong>.</p>
+
+    <h2 id="s3"><span class="hn">3.</span>Che cosa &egrave; gratuito e che cosa si paga</h2>
+    <p><strong>Entrare e servire la comunit&agrave; &egrave; gratuito, sempre.</strong> Leggi, scrivi in bacheca, dichiari un ruolo e ti metti all&rsquo;opera. Questo non scade e non &egrave; una prova: &egrave; la porta che resta aperta.</p>
+    <p><strong>Il praticantato costa 26 &euro; al mese, e lo compri quando vuoi</strong>, un mese alla volta. Non &egrave; un abbonamento che si rinnova da solo.</p>
+    <p><strong>Il team parte da tre persone in su:</strong> 26 &euro; a persona, minimo tre.</p>
+
+    <h2 id="s4"><span class="hn">4.</span>Di chi &egrave; quello che scrivi</h2>
+    <p><strong>Quello che scrivi resta tuo.</strong> La propriet&agrave; &egrave; e rimane del creatore del contenuto.</p>
+    <p>Se un tuo contenuto viene preso da un&rsquo;orma, una ricerca o altro, eventuali vendite di riviste o libri vanno all&rsquo;autore dell&rsquo;opera e a Felicitas, che spartiscono il ricavato con margini definiti di volta in volta.</p>
+    <p>L&rsquo;autore dell&rsquo;opera deve per&ograve; richiedere il permesso di utilizzare quel testo, perch&eacute; poi pu&ograve; essere ceduto gratuitamente o a pagamento: quello &egrave; un accordo dell&rsquo;autore dell&rsquo;opera con l&rsquo;utente che ha creato una parte del contenuto inserito nell&rsquo;opera.</p>
+    <p><strong>La licenza concessa sopravvive alla chiusura dell&rsquo;account.</strong> Un&rsquo;opera gi&agrave; pubblicata o stampata resta legittima anche se chi ha scritto quella parte lascia la piattaforma.</p>
+
+    <h2 id="s4b"><span class="hn">4b.</span>Integrator</h2>
+    <p><strong>Integrator è lo strumento con cui organizzi il tuo lavoro:</strong> quello
+       che c’è da fare, chi se ne occupa, entro quando. Vale per una persona sola, per un
+       team, o per un’organizzazione con più sedi.</p>
+    <p><strong>Quello che metti dentro resta tuo.</strong> Le attività, le note, le
+       conversazioni interne, i contatti e i costi del tuo team sono dati privati: non li
+       leggiamo. Vediamo soltanto che il tuo spazio esiste, quante persone lo usano, e
+       ciò che scegli di pubblicare.</p>
+    <p><strong>Se smetti, i dati restano tuoi:</strong> puoi esportarli e chiederne la
+       cancellazione. Non li usiamo per altro e non li cediamo a nessuno.</p>
+    <p><strong>Chi guida un team decide chi vede che cosa</strong> al suo interno, e
+       risponde di ciò che il suo gruppo pubblica.</p>
+
+    <h2 id="s4c"><span class="hn">4c.</span>I talenti</h2>
+    <p><strong>I talenti sono il riconoscimento interno di ciò che passa fra le persone
+       della comunità.</strong> Non sono denaro, non si convertono in denaro, e non
+       possono essere ceduti fuori dalla piattaforma.</p>
+    <ul>
+      <li><strong>Nascono da un lavoro concluso.</strong> Chi apre un bisogno dichiara
+        quanto vale; chi lo prende lo porta a termine; chi l’ha aperto conferma. Solo
+        allora i talenti passano.</li>
+      <li><strong>Nessuno si attribuisce talenti da solo.</strong> Ogni movimento ha due
+        gesti, di due persone diverse.</li>
+      <li><strong>Un movimento confermato non si modifica e non si cancella.</strong> Un
+        errore si corregge con un movimento contrario, così la storia resta leggibile.</li>
+      <li><strong>Non si va sotto zero.</strong></li>
+      <li>Il saldo non è un credito verso Felicitas Omnia S.r.l.s. e non dà diritto ad
+        alcun rimborso in denaro.</li>
+    </ul>
+
+    <h2 id="s4f"><span class="hn">4f.</span>Il vaglio, e che cosa non è</h2>
+    <p><strong>Il vaglio è un riconoscimento di coerenza, non una certificazione.</strong>
+       FelicitasMundi <strong>non è un ente di certificazione</strong> e non rilascia
+       certificazioni, attestati di conformità né marchi di qualità.</p>
+    <p>Quello che il vaglio guarda è <strong>se un prodotto e chi lo fa sono coerenti
+       con la filosofia della comunità</strong>: attraverso un colloquio, la conoscenza
+       di chi produce e del luogo dove lavora, e — quando serve — un’analisi di
+       laboratorio.</p>
+    <p><strong>L’analisi non è la prova: è uno degli sguardi.</strong> Il suo esito
+       non costituisce garanzia di conformità a norme di legge, a standard di
+       certificazione biologica, né di alcuna proprietà salutistica o nutrizionale.</p>
+    <p>Restano interamente in capo al produttore le certificazioni obbligatorie, le
+       autorizzazioni sanitarie e ogni altro adempimento previsto dalla legge per la
+       vendita dei propri prodotti.</p>
+
+    <h2 id="s4e"><span class="hn">4e.</span>Il praticantato, e che cosa non è</h2>
+    <p><strong>Il praticantato è un percorso alla cooperazione</strong>, articolato
+       in tre fasi: l’uso pieno della piattaforma; gli incontri di ogni fase lunare;
+       i ritiri e i viaggi.</p>
+    <ul>
+      <li><strong>26 € al mese</strong> danno l’accesso pieno allo strumento: creare
+        team, partecipare alle classi, scambiare, collegare, fare le orme. Si possono
+        pagare anche con <strong>quattro ore al mese di servizio alla comunità</strong>.</li>
+      <li><strong>Gli incontri di ogni fase lunare si pagano a parte</strong>, in denaro.
+        <strong>Le ore di servizio non li coprono</strong>: pagano la piattaforma, non
+        il tempo di chi accompagna.</li>
+      <li>Chi partecipa al percorso online <strong>paga solo i costi vivi</strong> per
+        ritiri e viaggi.</li>
+    </ul>
+    <p><strong>Che cosa non è.</strong> Chi conduce gli incontri <strong>non è un
+       counselor, un terapeuta, un medico né un professionista sanitario</strong>, e
+       non esercita alcuna professione regolamentata. Quello che viene proposto è
+       <strong>l’uso di strumenti propri</strong> — la scrittura, il metodo di lavoro
+       e l’impianto di FelicitasMundi, che sono <strong>opera dell’autore</strong> —
+       e non costituisce in alcun modo una prestazione sanitaria, psicologica,
+       diagnostica o terapeutica.</p>
+    <p>Il percorso <strong>non sostituisce</strong> il parere di un medico o di un
+       professionista qualificato, e non va inteso come cura di alcuna condizione.
+       Chi vi partecipa lo fa in autonomia e responsabilità proprie.</p>
+
+    <h2 id="s4d"><span class="hn">4d.</span>Lezioni, corsi e libri</h2>
+    <p><strong>Chi tiene una lezione o un corso ne resta l’autore.</strong> La piattaforma
+       dà lo spazio dove tenerla, il modo per farla trovare e lo strumento per venderla.</p>
+    <ul>
+      <li><strong>Su ciò che entra da una lezione a pagamento o da una registrazione
+        venduta, il 70% va all’autore e il 30% a Felicitas Omnia S.r.l.s.</strong> La
+        stessa proporzione vale per la diretta e per la registrazione.</li>
+      <li><strong>La registrazione appartiene a chi ha tenuto la lezione.</strong> Se
+        lascia la piattaforma, se la porta via.</li>
+      <li><strong>La trascrizione, la revisione, l’impaginazione e la stampa sono servizi
+        a parte</strong>, con un costo proprio calcolato sul lavoro: non rientrano nella
+        percentuale.</li>
+      <li><strong>Un libro nato da lezioni resta dell’autore.</strong> Il lavoro
+        editoriale che facciamo non ce ne dà la proprietà: le condizioni di pubblicazione
+        e distribuzione si concordano per iscritto prima di cominciare.</li>
+      <li>Se un’opera contiene parti scritte da altri, chi la pubblica deve averne il
+        permesso (vedi sez. 4).</li>
+    </ul>
+
+    <h2 id="s5"><span class="hn">5.</span>Che cosa non si fa qui</h2>
+    <p>Non si considera la piattaforma come un marketplace dedicato alla visibilit&agrave; e alla pubblicit&agrave;, vista soprattutto dal vendere qualcosa che poi non &egrave; coerente.</p>
+    <p>Qui cerchiamo di rendere attiva una micro economia, in cui girano anche soldi, ma non stiamo lavorando per diventare la vetrina di singoli che vogliono usare Felicitas per far profitto, senza partecipare al servizio e senza seguire il praticantato.</p>
+    <p>Qua non si propongono rimedi, strumenti, consulenze e trattamenti &mdash; percorsi di benessere o proposte terapeutiche &mdash; che non sono contestualizzati alle scuole, accademie, centri di ricerca e centri spirituali riconosciuti coerenti rispetto alla filosofia spirituale che sposa il progetto.</p>
+
+    <h2 id="s6"><span class="hn">6.</span>La chat e i contenuti degli altri</h2>
+    <p>La chat Sviluppo &egrave; aperta a chi ha un account. <strong>I messaggi restano conservati:</strong> formano l&rsquo;archivio di come le decisioni sono state prese, ed &egrave; il motivo per cui esiste.</p>
+    <p>Ognuno pu&ograve; cancellare i propri messaggi. Il nucleo pu&ograve; togliere ci&ograve; che non deve restare.</p>
+    <p>I contenuti li scrivono le persone: ciascuno risponde di ci&ograve; che scrive.</p>
+
+    <h2 id="s7"><span class="hn">7.</span>L&rsquo;Emporio</h2>
+    <p><strong>Chi vende prodotti, consulenze e servizi risponde di ci&ograve; che vende.</strong></p>
+    <p>Per i prodotti acquistati nell&rsquo;Emporio valgono il diritto di recesso e le condizioni di spedizione e reso indicate nella scheda di ciascun prodotto.</p>
+    <p>Per l&rsquo;assistenza e le consulenze: passiamo il contatto, e da l&igrave; l&rsquo;accordo &egrave; fra le persone. Ciascun professionista risponde della propria pratica.</p>
+
+    <h2 id="s8"><span class="hn">8.</span>Se qualcosa va storto</h2>
+    <p><strong>Come segnalare.</strong> Dal tuo account trovi la voce per segnalare: un problema della piattaforma, o un reclamo su un prodotto. La segnalazione arriva al nucleo e non &egrave; pubblica.</p>
+    <p>Per i prodotti, ogni reclamo si presenta esclusivamente a Felicitas Omnia S.r.l.s., che lo prende in carico e risponde entro 24 ore lavorative. Non vieni mai indirizzato direttamente al fornitore o al corriere.</p>
+    <p><strong>Che cosa garantiamo e che cosa no.</strong> La piattaforma &egrave; gestita da comunit&agrave; spesso impegnate in attivit&agrave; spirituali e di mutuo supporto, quindi possono esserci dei momenti di manutenzione, spesso gestiti in maniera autonoma da sviluppatori che ci aiutano come servizio gratuito. Quindi se si riscontrano problemi, se si &egrave; in grado di aiutarci si &egrave; accolti.</p>
+
+    <h2 id="s9"><span class="hn">9.</span>Chiudere l&rsquo;account</h2>
+    <p>Nel tuo account trovi il tasto per chiudere. Da quel momento vengono tolti al pubblico i contenuti in Emporio, i dati di Spazio Vivo e quindi articoli e ricerche.</p>
+    <p><strong>I contenuti rimangono nel nostro storico.</strong></p>
+    <p><strong>Non vengono cancellati i testi registrati sulla chat Sviluppo</strong>, che restano come archivio delle decisioni prese insieme.</p>
+    <p>Per la cancellazione dei dati personali ai sensi del GDPR vedi l&rsquo;<a class="inl" href="privacy.html">Informativa privacy</a>, sezione 12.</p>
+
+    <h2 id="s10"><span class="hn">10.</span>Chi risponde, e quale legge</h2>
+    <p>Il gestore della piattaforma &egrave; <strong>Felicitas Omnia S.r.l.s.</strong>, Via Tempio 70/A, 07100 Sassari (SS) &middot; P.IVA 03075740906 &middot; REA SS-227659 &middot; PEC felicitasomniasrls@pec.it.</p>
+    <p>Le presenti condizioni sono regolate dalla legge italiana. Per qualsiasi controversia &egrave; competente il <strong>Foro di Sassari</strong>.</p>
+    <p>Possiamo aggiornare queste condizioni: la versione vigente &egrave; sempre pubblicata qui, con la data di ultimo aggiornamento.</p>
+
+  </div>
+
+  <div class="pie">
+    FelicitasMundi &middot; Felicitas Omnia S.r.l.s. &middot; Via Tempio 70/A, 07100 Sassari &middot; P.IVA 03075740906 &middot; REA SS-227659<br>
+    <a class="inl" href="privacy.html" style="color:var(--c50)">Informativa privacy</a> &middot;
+    <a class="inl" href="cookie.html" style="color:var(--c50)">Cookie Policy</a>
+  </div>
+
+</div>
+
+
+<!-- DOCK -->
+<div id="fm-dock" data-attiva="" data-soglia="chiusa"></div>
+
+<script src="fm-dock.js" defer></script>
+
+
+<div class="fm-piede">
+  <div class="fp-marchio">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
+  <div class="fp-riga">Felicitas Omnia S.r.l.s. &middot; P.IVA 03075740906</div>
+  <div class="fp-riga">&copy; 2026 &middot; Tutti i diritti riservati</div>
+  <div class="fp-link">
+    <a href="privacy.html">Informativa privacy</a>
+    <a href="cookie.html">Cookie</a>
+    <a href="condizioni.html">Condizioni d&rsquo;uso</a>
+  </div>
+</div>
+</body>
+</html>
