@@ -61,6 +61,13 @@
       file lo chiama per nome — annaleDentro(dentro).
       ⛔ fm-annale.js va caricato PRIMA di questo file nel guscio.
 
+   ⭐ E LA FINESTRA «REGOLE» PORTA LA SUA PAGINA. Dal 24 agosto 2026 il
+      quadrante delle regole non mostra più la griglia dei cinque
+      elementi: mostra le regole, una per una, col perché e con
+      l'etichetta di dove ciascuna vive già. Il disegno sta in
+      fm-regole.js — regoleDentro(dentro).
+      ⛔ Anche fm-regole.js va caricato PRIMA di questo file.
+
    ⚠️ `sv-velo` è anche l'id del velo sopra la mappa, nella casa. Non si
       pestano i piedi: le due stanze non stanno mai nel centro insieme.
 
@@ -407,8 +414,10 @@ function nucleo(c){
 /* ── il codice della pagina, come l'ha scritto Design ──
    Nel disegno l'involucro gira da sé appena la pagina è letta; qui la
    pagina nasce dentro nucleo(), quindi lo si chiama lì.
-   ⚠️ Qui dentro ci sono TRE mani, e sono le sole: la riga di FIN, il
-      ramo in apri() e la voce in conta(), tutte per la sesta finestra.
+   ⚠️ Qui dentro ci sono QUATTRO mani, e sono le sole: la riga di FIN,
+      il ramo in apri() e la voce in conta() — tutte e tre per la sesta
+      finestra, l'Annale — e il ramo «regole» in apri(), che ora porta
+      la pagina delle regole invece dei cinque elementi.
       Ognuna è segnata col commento «⭐ TOCCATO». Nient'altro si tocca. */
 function avviaNucleo(){
 (function () {
@@ -543,9 +552,18 @@ function avviaNucleo(){
     if (id === "annale") {
       if (typeof annaleDentro === "function") annaleDentro(dentro);
       else dentro.appendChild(attesa());
+    /* ⭐ TOCCATO — «le regole» portano la loro pagina, non i cinque
+       elementi. Il disegno sta in fm-regole.js. Prima questa finestra
+       divideva con «economia» la griglia dei cinque elementi, e su una
+       regola quella griglia non aveva niente da dire.
+       Se quel file non c'è, la finestra si apre e dice che aspetta —
+       non resta muta e non solleva. */
+    } else if (id === "regole") {
+      if (typeof regoleDentro === "function") regoleDentro(dentro);
+      else dentro.appendChild(attesa());
     } else if (id === "flussi") {
       dentro.appendChild(flussi(dati));
-    } else if (id === "economia" || id === "regole") {
+    } else if (id === "economia") {
       dentro.appendChild(elementi(dati));
     } else {
       dentro.appendChild(righe(dati, id === "lavagna" ? "punto" : "quando"));

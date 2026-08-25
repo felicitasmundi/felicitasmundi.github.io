@@ -473,6 +473,15 @@
     font-family:'DM Sans',sans-serif;font-size:var(--t-eti)}
   .stato-riga:last-child{border-bottom:0}
   .stato-riga b{color:rgba(245,240,230,0.88);font-weight:500}
+  /* ⭐ TOCCATO NEL GUSCIO ⑧ — un collegamento dentro una riga di stato
+     deve vedersi. Il guscio spegne tutti i collegamenti con
+     `a{color:inherit;text-decoration:none}`, e qui il nome della riga
+     porta alle Condizioni d'uso: senza questa riga sarebbe un testo
+     qualunque, e nessuno saprebbe di poterlo toccare.
+     ⛔ Vale solo dentro .stato-riga: nessun altro collegamento cambia. */
+  .stato-riga b a{color:var(--oro-ch);text-decoration:underline;
+    text-underline-offset:0.2em;text-decoration-color:rgba(200,160,85,0.5)}
+  .stato-riga b a:hover{text-decoration-color:var(--oro-ch)}
   .stato-riga i{font-style:normal;color:var(--oro-ch)}
   .stato-riga i.no{color:rgba(245,240,230,0.7)}
 
@@ -1601,6 +1610,7 @@
 <script src="fm-praticantato.js"></script>
 <script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
 <script src="fm-annale.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑤ — l'Annale: la sesta finestra del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
+<script src="fm-regole.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑦ — le regole: il quadrante «regole» del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script>
 <script src="fm-pagina.js"></script>
