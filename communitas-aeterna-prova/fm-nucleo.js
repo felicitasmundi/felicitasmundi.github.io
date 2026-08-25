@@ -378,6 +378,17 @@ var NUCLEO = `<style>
         <span class="de">quello che ci si dice qui dentro</span>
       </button>
 
+      <!-- ⭐ TOCCATO — la settima finestra: l'orma in lavorazione.
+           Il segno è quello scelto — orma-simbolo-scelto.html,
+           77158e33c54f50acea03893800b805ff — preso verbatim, non
+           ridisegnato: è il passo che continua. -->
+      <button class="cd" type="button" style="--c:var(--terra)" data-fin="lavorazione">
+        <span class="vn" id="v-lavorazione"></span>
+        <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/><path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/><g transform="translate(-4,4) scale(0.9)"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(33,3) scale(0.5)" opacity=".45"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(20,-2) scale(0.3)" opacity=".2"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g></svg></span>
+        <b>In lavorazione</b>
+        <span class="de">l&rsquo;orma mentre si scrive</span>
+      </button>
+
     </div>
   </div>
 
@@ -448,7 +459,10 @@ function avviaNucleo(){
     /* ⭐ TOCCATO — la sesta finestra */
     annale: ["L\u2019Annale",
              "la memoria: tutto quello che \u00e8 stato scritto, in ordine di tempo",
-             "var(--oro)"]
+             "var(--oro)"],
+    /* ⭐ TOCCATO — la settima */
+    lavorazione: ["In lavorazione", "l\u2019orma mentre si scrive",
+             "var(--terra)"]
   };
 
   /* ⭐ TOCCATO — il segno dell'Annale, quello che portava la barra.
@@ -535,6 +549,23 @@ function avviaNucleo(){
     return d;
   }
 
+  /* ⭐ TOCCATO — I PEZZI TORNANO AL PARCHEGGIO, INTERI.
+     «Dinamiche» e «In lavorazione» non sono liste di righe: sono due
+     consegne che si reggono da sé, con la loro veste e il loro codice, e
+     vivono in #sv-parcheggio dentro il guscio. Qui si spostano dentro la
+     finestra; a finestra chiusa tornano a casa.
+     ⛔ Questo va chiamato PRIMA di vuota(): vuota() svuota #f-dentro, e un
+        pezzo rimasto lì se ne andrebbe per sempre — la volta dopo la
+        finestra sarebbe muta e non ci sarebbe modo di accorgersene. */
+  function riponi(){
+    var casa = document.getElementById("sv-parcheggio");
+    if (!casa) return;
+    ["svDin","svOrma"].forEach(function (q) {
+      var e = document.getElementById(q);
+      if (e && e.parentNode !== casa) casa.appendChild(e);
+    });
+  }
+
   function apri(id, dati){
     var f = FIN[id];
     if (!f) return;
@@ -543,13 +574,31 @@ function avviaNucleo(){
     document.getElementById("f-tit").textContent = f[0];
     document.getElementById("f-sot").textContent = f[1];
     var dentro = document.getElementById("f-dentro");
+    riponi();
     vuota(dentro);
 
     /* ⭐ TOCCATO — l'Annale non è una lista di righe: porta una pagina
        intera, e se la disegna da sé. fm-annale.js legge le orme vere.
        Se quel file non c'è, la finestra si apre e dice che aspetta —
        non resta muta e non solleva. */
-    if (id === "annale") {
+    /* ⭐ TOCCATO — ⑤ «Dinamiche»: il pezzo di Design prende il posto della
+       lista di righe che c'era. Se il pezzo non c'è si torna a quella:
+       la finestra non resta mai vuota. */
+    var SV = window.SpazioVivo || {};
+    var pezzoDin  = document.getElementById("svDin");
+    var pezzoOrma = document.getElementById("svOrma");
+
+    if (id === "flussi" && pezzoDin) {
+      dentro.appendChild(pezzoDin);
+      if (typeof SV.dinamiche === "function") SV.dinamiche();
+    /* ⭐ TOCCATO — ④ «In lavorazione», la settima finestra. Il pezzo porta
+       dentro la sua fotografia e non va a prendere niente da fuori. */
+    } else if (id === "lavorazione") {
+      if (pezzoOrma) {
+        dentro.appendChild(pezzoOrma);
+        if (typeof SV.orma === "function") SV.orma();
+      } else dentro.appendChild(attesa());
+    } else if (id === "annale") {
       if (typeof annaleDentro === "function") annaleDentro(dentro);
       else dentro.appendChild(attesa());
     /* ⭐ TOCCATO — «le regole» portano la loro pagina, non i cinque
@@ -574,6 +623,7 @@ function avviaNucleo(){
   }
 
   function chiudi(){
+    riponi();                       /* ⭐ TOCCATO — i pezzi tornano a casa */
     velo.classList.remove("on");
     document.body.style.overflow = "";
     if (apert && apert.focus) apert.focus();

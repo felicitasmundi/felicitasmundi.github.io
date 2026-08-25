@@ -2,12 +2,26 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   116.986 byte · MD5 abaf4a67c7c8bb31cf0f7b23372891eb
+   133.486 byte · MD5 bd935787d8b866a3c74faedcde6f8bfa
+   (consegna del 25 agosto 2026 — la precedente era abaf4a67…, 116.986 byte)
+
+   ⭐ QUELLO CHE PORTA DI NUOVO QUESTA CONSEGNA
+     · IL PIEDE, in fondo alla casa: .fm-piede con .fp-riga, .fp-rotte e
+       .fp-link. Torna dopo esserci mancato — stava nel vecchio monolite,
+       dentro home(), e si era perso quando la casa è diventata questo
+       file. Adesso è di Design, e arriva con la consegna: qui non si
+       scrive niente a mano.
+       I tre collegamenti sono informativa-privacy.html, cookie.html e
+       condizioni-uso.html. Non c'è nessuna pagina «informazioni».
+     · LA PROVA DELL'ORMA, sotto la mappa, col suo terzo foglio di codice:
+       vedi avviaOrma() più sotto.
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
    Non contiene: la barra, la plancia della radio, il Megafono, la
-   mappa a tutto schermo, il piede. Quelle sono del guscio.
+   mappa a tutto schermo. Quelle sono del guscio.
+   ⭐ Il piede invece SÌ, da questa consegna: prima era del guscio, adesso
+      è del disegno. La sua veste resta nel guscio.
 
    Chiede al guscio due cose:
      · mappa-ferma.html accanto, con la sua cartella mappa-dati/
@@ -105,6 +119,9 @@
 
 /* il disegno, come consegnato: lo stile della casa e il suo corpo */
 
+
+/* il disegno, come consegnato: lo stile della casa e il suo corpo */
+
 var CASA = `<style>
   .sv-casa,.sv-casa *,.sv-casa *::before,.sv-casa *::after{box-sizing:border-box}
   .sv-casa > section{min-width:0;max-width:100%}
@@ -114,12 +131,20 @@ var CASA = `<style>
   .sv-casa [data-leg] > div > span{min-width:0}
   .sv-casa [data-leg] b,.sv-casa [data-leg] i{min-width:0;overflow-wrap:break-word;hyphens:auto}
   .sv-casa button{font-family:'DM Sans',sans-serif}
+  .sv-casa .fp-link:hover{color:#D4AF6A}
   @media(max-width:40rem){
     .sv-casa [data-cappello] p{padding:0.9rem 1rem;font-size:var(--t-eti);line-height:1.5}
     .sv-casa [data-cappello] [data-luna-cap]{width:7rem;height:7rem;right:-2.2rem;top:-1.8rem;box-shadow:none}
     .sv-casa [data-cappello] canvas{opacity:0.3}
   }
   @media(max-width:34rem){ .sv-casa [data-porte]{gap:1rem} .sv-casa #sv-come{flex:1 1 100%} }
+  .sv-casa [data-tipi] button:hover,.sv-casa [data-attrezzo]:hover{border-color:rgba(200,160,85,0.55)}
+  .sv-casa [data-tipi] button[data-su]{border-color:currentColor;background:rgba(245,240,230,0.07)}
+  .sv-casa [data-attrezzo][data-su]{border-color:currentColor;background:rgba(245,240,230,0.07)}
+  .sv-casa #sv-orma-testo:focus{outline:none;border-color:rgba(200,160,85,0.55)}
+  .sv-casa #sv-orma-testo::placeholder{color:rgba(245,240,230,0.42);font-style:italic}
+  .sv-casa [data-orma-altro]:hover{border-color:currentColor}
+  @media(max-width:34rem){ .sv-casa [data-dove]{grid-template-columns:minmax(0,1fr)} }
   @keyframes sv-respira{0%,100%{transform:scale(1);opacity:0.75}50%{transform:scale(1.28);opacity:1}}
   @media(prefers-reduced-motion:reduce){ .sv-casa [style*="sv-respira"]{animation:none !important} }
   @media(max-width:62rem){ .sv-casa [data-leg]{grid-template-columns:repeat(2,minmax(0,1fr))} }
@@ -222,6 +247,12 @@ var CASA = `<style>
 
   /* ③ in pratica */
   .sv-mleg .pratica{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.7rem}
+  .sv-mleg .pratica[data-una]{grid-template-columns:minmax(0,1fr)}
+  .sv-mleg .pratica[data-una] .pr{padding:1.8rem 1.4rem 1.6rem}
+  .sv-mleg .pratica[data-una] .sg{width:5.2rem;height:5.2rem}
+  .sv-mleg .pratica[data-una] b{font-size:var(--t-cor);margin-bottom:0.5rem}
+  .sv-mleg .pratica[data-una] span{min-height:0;font-size:var(--t-cor);
+    max-width:30rem;margin:0 auto}
   .sv-mleg .pr{position:relative;min-width:0;border:1px solid var(--line);
     border-radius:1rem;overflow:hidden;background:rgba(245,240,230,0.035);
     padding:1.4rem 1.05rem 1.15rem;text-align:center;transition:0.2s}
@@ -348,39 +379,39 @@ var CASA = `<style>
         <div style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.2em;text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.9rem">Legenda</div>
         <div data-leg="1" style="display:grid;gap:0.8rem 1.6rem">
     
-            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"></path><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">orma</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">le tracce del sentiero</i></span>
+            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:start;min-width:0">
+              <span style="width:2.4rem;height:2.4rem;margin-top:0.1rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"></path><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-shadow:0 2px 14px rgba(2,4,12,0.95)">orma</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.4;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Quello che accade, e resta</i></span>
             </div>
     
-            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"></path><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"></path><path d="M14 20L26 20"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">connessione</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">espandere la rete</i></span>
+            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:start;min-width:0">
+              <span style="width:2.4rem;height:2.4rem;margin-top:0.1rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"></path><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"></path><path d="M14 20L26 20"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-shadow:0 2px 14px rgba(2,4,12,0.95)">connessione</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.4;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Uno conosce uno, e la rete cresce</i></span>
             </div>
     
-            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">talenti</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">lo scambio comune</i></span>
+            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:start;min-width:0">
+              <span style="width:2.4rem;height:2.4rem;margin-top:0.1rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-shadow:0 2px 14px rgba(2,4,12,0.95)">talenti</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.4;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Il tempo che dai, torna</i></span>
             </div>
     
-            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"></path><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"></path><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"></path><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"></path><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">vicinato</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">la forza comune</i></span>
+            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:start;min-width:0">
+              <span style="width:2.4rem;height:2.4rem;margin-top:0.1rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"></path><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"></path><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"></path><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"></path><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-shadow:0 2px 14px rgba(2,4,12,0.95)">vicinato</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.4;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Da soli si fa meno</i></span>
             </div>
     
-            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"></path><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"></path><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"></path><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"></path><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">ritmo</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">feste, formazioni, esperienze</i></span>
+            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:start;min-width:0">
+              <span style="width:2.4rem;height:2.4rem;margin-top:0.1rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"></path><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"></path><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"></path><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"></path><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-shadow:0 2px 14px rgba(2,4,12,0.95)">ritmo</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.4;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Ci si trova, e si impara</i></span>
             </div>
     
-            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"></path><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"></path><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">incontro</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">relazione tra vicinati</i></span>
+            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:start;min-width:0">
+              <span style="width:2.4rem;height:2.4rem;margin-top:0.1rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"></path><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"></path><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-shadow:0 2px 14px rgba(2,4,12,0.95)">incontro</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.4;text-shadow:0 2px 14px rgba(2,4,12,0.95)">I vicinati si parlano</i></span>
             </div>
     
-            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:center;min-width:0">
-              <span style="width:2.4rem;height:2.4rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M4 14L20 5L36 14Z"></path><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"></path><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"></path></svg></span>
-              <span><b style="display:block;font-size:var(--t-tas);font-weight:500;line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)">tempio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;text-shadow:0 2px 14px rgba(2,4,12,0.95)">luoghi sacri custoditi</i></span>
+            <div style="display:grid;grid-template-columns:2.9rem minmax(0,1fr);gap:0.8rem;align-items:start;min-width:0">
+              <span style="width:2.4rem;height:2.4rem;margin-top:0.1rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M4 14L20 5L36 14Z"></path><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"></path><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"></path></svg></span>
+              <span><b style="display:block;font-size:var(--t-tas);line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-shadow:0 2px 14px rgba(2,4,12,0.95)">tempio</b><i style="display:block;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.4;text-shadow:0 2px 14px rgba(2,4,12,0.95)">Qualcuno se ne prende cura</i></span>
             </div>
         </div>
 
@@ -408,43 +439,10 @@ var CASA = `<style>
             </div>
           </div>
 
-            <!-- IN PRATICA -->
+            <!-- COME FUNZIONA DAVVERO -->
           <div class="liv">
-            <div class="occhio">In pratica</div>
-            <div class="pratica">
-
-              <div class="pr" data-pr="0">
-                <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
-                  stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".65"/>
-                  <path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".25"/>
-                  <g transform="translate(-4,4) scale(0.9)">
-                    <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/>
-                    <circle cx="22" cy="12" r="3.2"/>
-                    <circle cx="28.5" cy="9.6" r="2.4"/>
-                    <circle cx="33.5" cy="10" r="2.1"/>
-                    <circle cx="37.5" cy="11.6" r="1.8"/>
-                    <circle cx="40.5" cy="14.2" r="1.5"/>
-                  </g>
-                  <g transform="translate(33,3) scale(0.5)" opacity=".45">
-                    <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/>
-                    <circle cx="22" cy="12" r="3.2"/>
-                    <circle cx="28.5" cy="9.6" r="2.4"/>
-                    <circle cx="33.5" cy="10" r="2.1"/>
-                    <circle cx="37.5" cy="11.6" r="1.8"/>
-                    <circle cx="40.5" cy="14.2" r="1.5"/>
-                  </g>
-                  <g transform="translate(20,-2) scale(0.3)" opacity=".2">
-                    <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/>
-                    <circle cx="22" cy="12" r="3.2"/>
-                    <circle cx="28.5" cy="9.6" r="2.4"/>
-                    <circle cx="33.5" cy="10" r="2.1"/>
-                  </g>
-                </svg></span>
-                <b>L&rsquo;intreccio di orme</b>
-                <span data-riga="0"></span>
-              </div>
-
+            <div class="occhio">Come funziona davvero</div>
+            <div class="pratica" data-una="1">
               <div class="pr" data-pr="1">
                 <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -456,36 +454,9 @@ var CASA = `<style>
                   <path d="M3 51 L11 43 C13 41 16 43 14 45 L19 40 C21 38 24 40 22 42 L18 46 C15 50 9 52 5 52Z"/>
                   <path d="M57 51 L49 43 C47 41 44 43 46 45 L41 40 C39 38 36 40 38 42 L42 46 C45 50 51 52 55 52Z" opacity=".65"/>
                 </svg></span>
-                <b>Gestionale condiviso, per cooperare</b>
-                <span data-riga="1"></span>
+                <b>Segna una cosa. Diventa lavoro.</b>
+                <span data-riga="1">Quello che scrivi oggi si ritrova, si collega, si passa a un altro.</span>
               </div>
-
-              <div class="pr" data-pr="2">
-                <span class="sg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor"
-                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M11 22 C19 19 24 24 26 31"/>
-                  <path d="M26 31 C33 26 41 27 45 33" opacity=".9"/>
-                  <path d="M45 33 C50 28 52 22 50 15" opacity=".75"/>
-                  <path d="M26 31 C24 39 27 45 34 48" opacity=".85"/>
-                  <path d="M11 22 C7 28 8 35 13 40" opacity=".7"/>
-                  <path d="M13 40 C19 43 24 43 27 40" opacity=".55"/>
-                  <path d="M45 33 C46 40 43 45 38 47" opacity=".6"/>
-                  <path d="M11 22 C13 16 18 12 24 11" opacity=".55"/>
-                  <path d="M50 15 C52 11 55 9 58 9" opacity=".35"/>
-                  <path d="M34 48 C36 52 40 54 44 54" opacity=".35"/>
-                  <path d="M13 40 C10 45 6 47 2 47" opacity=".3"/>
-                  <circle cx="11" cy="22" r="2.6" fill="currentColor" stroke="none"/>
-                  <circle cx="26" cy="31" r="3" fill="currentColor" stroke="none"/>
-                  <circle cx="45" cy="33" r="2.6" fill="currentColor" stroke="none" opacity=".9"/>
-                  <circle cx="50" cy="15" r="2.2" fill="currentColor" stroke="none" opacity=".8"/>
-                  <circle cx="34" cy="48" r="2.4" fill="currentColor" stroke="none" opacity=".85"/>
-                  <circle cx="13" cy="40" r="2.2" fill="currentColor" stroke="none" opacity=".8"/>
-                  <circle cx="24" cy="11" r="1.9" fill="currentColor" stroke="none" opacity=".6"/>
-                </svg></span>
-                <b>Contenuti interconnessi</b>
-                <span data-riga="2"></span>
-              </div>
-
             </div>
           </div>
           </div>
@@ -494,6 +465,90 @@ var CASA = `<style>
       </div>
 
     </div>
+  </section>
+
+  <!-- LA PROVA DELL'ORMA — si scrive prima di capire, e da lì si capisce -->
+  <section data-prova="1" style="order:2;margin-top:2rem;min-width:0">
+
+    <!-- ① IL GESTO -->
+    <div style="border:1px solid rgba(200,160,85,0.4);border-radius:1rem;background:rgba(10,12,26,0.5);padding:1.1rem 1.15rem 1rem;min-width:0">
+      <div style="display:flex;gap:0.9rem;align-items:flex-start;min-width:0">
+        <span style="flex:none;width:2.6rem;height:2.6rem;color:#AA8844;filter:brightness(1.22) drop-shadow(0 0 0.6rem rgba(170,136,68,0.34))"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"> <path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/> <path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/> <g transform="translate(-4,4) scale(0.9)"> <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/> <circle cx="22" cy="12" r="3.2"/> <circle cx="28.5" cy="9.6" r="2.4"/> <circle cx="33.5" cy="10" r="2.1"/> <circle cx="37.5" cy="11.6" r="1.8"/> <circle cx="40.5" cy="14.2" r="1.5"/> </g> <g transform="translate(33,3) scale(0.5)" opacity=".45"> <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/> <circle cx="22" cy="12" r="3.2"/> <circle cx="28.5" cy="9.6" r="2.4"/> <circle cx="33.5" cy="10" r="2.1"/> <circle cx="37.5" cy="11.6" r="1.8"/> <circle cx="40.5" cy="14.2" r="1.5"/> </g> <g transform="translate(20,-2) scale(0.3)" opacity=".2"> <path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/> <circle cx="22" cy="12" r="3.2"/> <circle cx="28.5" cy="9.6" r="2.4"/> <circle cx="33.5" cy="10" r="2.1"/> </g> </svg></span>
+        <label for="sv-orma-testo" style="flex:1;min-width:0">
+          <textarea id="sv-orma-testo" rows="2" placeholder="Scrivi la tua orma" style="width:100%;min-width:0;resize:vertical;background:rgba(245,240,230,0.05);border:1px solid var(--line);border-radius:0.7rem;color:var(--ivory);font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.5;padding:0.7rem 0.9rem"></textarea>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:0.8rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:0.75rem">
+        <div data-tipi="1" style="display:flex;gap:0.4rem;flex-wrap:wrap;min-width:0">
+        <button type="button" data-tipo="contatto" title="contatto" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid var(--line);background:none;border-radius:999px;padding:0.34rem 0.75rem 0.34rem 0.55rem;cursor:pointer;color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1">
+          <span style="width:1.2rem;height:1.2rem;flex:none"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="20" cy="14.5" r="5.5"/><path d="M9.5 31 C9.5 25 14 22 20 22 C26 22 30.5 25 30.5 31"/></svg></span>
+          <span style="color:rgba(245,240,230,0.86)">contatto</span>
+        </button>
+        <button type="button" data-tipo="idea" title="idea" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid var(--line);background:none;border-radius:999px;padding:0.34rem 0.75rem 0.34rem 0.55rem;cursor:pointer;color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1">
+          <span style="width:1.2rem;height:1.2rem;flex:none"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M20 7 C25.5 7 29.5 11 29.5 16 C29.5 20 26.5 22 26 25.5 L14 25.5 C13.5 22 10.5 20 10.5 16 C10.5 11 14.5 7 20 7Z"/><path d="M15.5 29.5 L24.5 29.5 M17 33 L23 33"/></svg></span>
+          <span style="color:rgba(245,240,230,0.86)">idea</span>
+        </button>
+        <button type="button" data-tipo="obiettivo" title="obiettivo" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid var(--line);background:none;border-radius:999px;padding:0.34rem 0.75rem 0.34rem 0.55rem;cursor:pointer;color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1">
+          <span style="width:1.2rem;height:1.2rem;flex:none"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="20" cy="20" r="12.5"/><circle cx="20" cy="20" r="7"/><circle cx="20" cy="20" r="2" fill="currentColor" stroke="none"/></svg></span>
+          <span style="color:rgba(245,240,230,0.86)">obiettivo</span>
+        </button>
+        <button type="button" data-tipo="racconto" title="racconto" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid var(--line);background:none;border-radius:999px;padding:0.34rem 0.75rem 0.34rem 0.55rem;cursor:pointer;color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1">
+          <span style="width:1.2rem;height:1.2rem;flex:none"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M8 9 C13 7 17.5 8 20 10.5 C22.5 8 27 7 32 9 L32 29 C27 27 22.5 28 20 30.5 C17.5 28 13 27 8 29Z"/><path d="M20 10.5 L20 30.5"/></svg></span>
+          <span style="color:rgba(245,240,230,0.86)">racconto</span>
+        </button>
+        <button type="button" data-tipo="altro" title="altro" style="display:inline-flex;align-items:center;gap:0.4rem;border:1px solid var(--line);background:none;border-radius:999px;padding:0.34rem 0.75rem 0.34rem 0.55rem;cursor:pointer;color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1">
+          <span style="width:1.2rem;height:1.2rem;flex:none"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="11" cy="20" r="2.4" fill="currentColor" stroke="none"/><circle cx="20" cy="20" r="2.4" fill="currentColor" stroke="none"/><circle cx="29" cy="20" r="2.4" fill="currentColor" stroke="none"/></svg></span>
+          <span style="color:rgba(245,240,230,0.86)">altro</span>
+        </button>
+        </div>
+        <div style="display:flex;gap:0.45rem;align-items:center;flex:none">
+          <button type="button" data-attrezzo="foto" title="la macchina fotografica" aria-label="la macchina fotografica" style="flex:none;width:2.4rem;height:2.4rem;display:grid;place-items:center;border:1px solid var(--line);background:none;border-radius:50%;cursor:pointer;color:var(--oro-ch);padding:0.5rem">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M6 13.5 L12 13.5 L15 9.5 L25 9.5 L28 13.5 L34 13.5 L34 31 L6 31Z"/><circle cx="20" cy="21" r="6.5"/></svg>
+          </button>
+          <button type="button" data-attrezzo="voce" title="il microfono" aria-label="il microfono" style="flex:none;width:2.4rem;height:2.4rem;display:grid;place-items:center;border:1px solid var(--line);background:none;border-radius:50%;cursor:pointer;color:var(--oro-ch);padding:0.5rem">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><rect x="15.5" y="6" width="9" height="17" rx="4.5"/><path d="M10.5 19.5 C10.5 25.5 14.5 29 20 29 C25.5 29 29.5 25.5 29.5 19.5 M20 29 L20 34 M15 34 L25 34"/></svg>
+          </button>
+          <button type="button" data-attrezzo="luogo" title="il luogo" aria-label="il luogo" style="flex:none;width:2.4rem;height:2.4rem;display:grid;place-items:center;border:1px solid var(--line);background:none;border-radius:50%;cursor:pointer;color:var(--oro-ch);padding:0.5rem">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M20 34 C13 26 9.5 21 9.5 16.5 C9.5 10.7 14.2 6 20 6 C25.8 6 30.5 10.7 30.5 16.5 C30.5 21 27 26 20 34Z"/><circle cx="20" cy="16.5" r="4"/></svg>
+          </button>
+          <button type="button" data-attrezzo="condividi" title="il gesto di condividere" aria-label="il gesto di condividere" style="flex:none;width:2.4rem;height:2.4rem;display:grid;place-items:center;border:1px solid var(--line);background:none;border-radius:50%;cursor:pointer;color:var(--oro-ch);padding:0.5rem">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="29" cy="10" r="4"/><circle cx="11" cy="20" r="4"/><circle cx="29" cy="30" r="4"/><path d="M14.6 18.1 L25.4 12 M14.6 21.9 L25.4 28"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② COSA NE PUOI FARE -->
+    <ul data-dove="1" style="list-style:none;margin:1.1rem 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:0 1.4rem;min-width:0">
+        <li style="display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0;min-width:0">
+          <span style="flex:none;width:1.35rem;height:1.35rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="18" cy="18" r="10"/><path d="M25.5 25.5 L34 34"/></svg></span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.35;min-width:0">ritrovarla</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0;min-width:0">
+          <span style="flex:none;width:1.35rem;height:1.35rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><circle cx="12" cy="20" r="5"/><circle cx="28" cy="20" r="5"/><path d="M17 20 L23 20"/></svg></span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.35;min-width:0">legarla a qualcuno</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0;min-width:0">
+          <span style="flex:none;width:1.35rem;height:1.35rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M20 7 L20 33 M7 20 L33 20" opacity=".35"/><circle cx="20" cy="20" r="12.5"/><path d="M14 24 L18 17 L22 22 L26 14"/></svg></span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.35;min-width:0">lavorarci</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0;min-width:0">
+          <span style="flex:none;width:1.35rem;height:1.35rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M8 20 L30 20 M24 13 L31 20 L24 27"/></svg></span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.35;min-width:0">passarla a un altro</span>
+        </li>
+        <li style="display:flex;align-items:center;gap:0.7rem;padding:0.42rem 0;min-width:0">
+          <span style="flex:none;width:1.35rem;height:1.35rem;color:var(--oro-ch)"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block"><path d="M12 6 L28 6 L28 14 L12 14Z"/><path d="M7 14 L33 14 L33 26 L7 26Z"/><path d="M12 22 L28 22 L28 34 L12 34Z"/></svg></span>
+          <span style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.88);line-height:1.35;min-width:0">stamparla un giorno</span>
+        </li>
+    </ul>
+
+    <!-- ③ LE ULTIME ORME DEGLI ALTRI -->
+    <div style="margin-top:1.8rem;min-width:0">
+      <div style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.2em;text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.8rem">Le ultime orme</div>
+      <div id="sv-orme-altri" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:0.7rem;min-width:0"></div>
+    </div>
+
   </section>
 
   <!-- LE DUE PORTE — la prima è la porta, la seconda una soglia di servizio -->
@@ -818,6 +873,16 @@ var CASA = `<style>
     </div>
   </section>
 
+  <!-- IL PIEDE — si vede se lo cerchi. La veste è del guscio: .fm-piede, .fp-* -->
+  <footer class="fm-piede" style="order:10;margin-top:3rem;padding-top:1.4rem;border-top:1px solid var(--line);text-align:center;min-width:0">
+    <div class="fp-riga" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);line-height:1.6">Felicitas Omnia S.r.l.s. &middot; P.IVA 03075740906</div>
+    <nav class="fp-rotte" style="display:flex;gap:0.35rem 1.1rem;flex-wrap:wrap;justify-content:center;margin-top:0.5rem">
+      <a class="fp-link" href="informativa-privacy.html" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);text-decoration:none;line-height:1.6">Informativa privacy</a>
+      <a class="fp-link" href="cookie.html" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);text-decoration:none;line-height:1.6">Cookie</a>
+      <a class="fp-link" href="condizioni-uso.html" style="font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.62);text-decoration:none;line-height:1.6">Condizioni d&rsquo;uso</a>
+    </nav>
+  </footer>
+
 </div>
 `;
 
@@ -825,6 +890,7 @@ function home(c){
   c.innerHTML = CASA;
   avviaCasa();
   avviaLegenda();       /* il quadrante della mappa: legenda, formula, pratica */
+  avviaOrma();          /* ⭐ il terzo foglio: la prova dell'orma, sotto la mappa */
   segniDelleStanze();   /* i simboli della barra entrano fra quelli di Design */
   legaLuoghi();
   contaOrme();          /* il cenno delle orme vive nella barra, non nella casa */
@@ -837,7 +903,8 @@ function home(c){
    la scheda del luogo e le due schede del contenuto: salgono, scendono,
    e si riempiono con quello che viene passato loro.
    L'unica mano su questo blocco è lo strato ⭐ del velo, dentro il
-   punto ⑦: sta scritto in testa al file. */
+   punto ⑧: sta scritto in testa al file, ed è rimesso parola per
+   parola come stava — la consegna del 25 agosto 2026 ancora non lo porta. */
 function avviaCasa(){
 (function () {
   "use strict";
@@ -1171,7 +1238,7 @@ function avviaCasa(){
 
      IL QUADRANTE DELLA MAPPA — legenda, formula, pratica:
        · window.SpazioVivo.mappaLegenda({simboli:[{segno,nome,cosa}],
-                                         pratica:[{nome,riga} ×3]})
+                                         pratica:[{nome,riga}]})
        · la formula è fissa e sta nel disegno: non cambia, non arriva da fuori
 
      I DUE TEMPI DEL VELO — dentro il libro la mappa si sposta, ma non sempre:
@@ -1181,6 +1248,13 @@ function avviaCasa(){
        · un trascinamento non apre la mappa: il tocco breve sì
      Serve perché sul telefono, senza i due tempi, la pagina sotto smette di
      scorrere e la persona resta incastrata sulla mappa.
+
+     LA PROVA DELL'ORMA, sotto la mappa: si scrive prima di capire.
+       · window.SpazioVivo.ultimeOrme([{testo, chi, dove, elemento, rotta}])
+         elemento: terra · acqua · fuoco · aria · etere — dà il colore e la stanza
+       · window.SpazioVivo.ormaScritta() restituisce {testo, tipi} quando serve
+       · gli strumenti lanciano 'spazio-vivo:orma-attrezzo' con {attrezzo, testo}
+       Senza orme dal dato resta [ in attesa ]: nessun testo è scritto qui.
 
      LA VIA DI RITORNO, quando si entra nella mappa da una porta:
        · window.SpazioVivo.porta({nome, torna})  — mostra il tasto discreto
@@ -1666,6 +1740,97 @@ function avviaLegenda(){
 
   window.SpazioVivo = window.SpazioVivo || {};
   window.SpazioVivo.mappaLegenda = riempi;
+})();
+}
+
+/* ⭐ IL TERZO FOGLIO, nuovo con la consegna del 25 agosto 2026 — la prova
+   dell'orma, sotto la mappa: si scrive prima di capire.
+   Come gli altri due, nel disegno gira da sé: qui lo chiama home().
+   Apre due porte nuove, e il codice dentro è quello consegnato:
+     · window.SpazioVivo.ormaScritta()  → {testo, tipi} di quello che si è scritto
+     · window.SpazioVivo.ultimeOrme([{testo, chi, dove, elemento, rotta}])
+     · gli strumenti lanciano 'spazio-vivo:orma-attrezzo' con {attrezzo, testo}
+   ⚠️ `ultimeOrme` è una forma vuota che oggi nessuno riempie: finché il
+      dato non arriva resta [ in attesa ], e va bene così — nessun testo
+      è scritto qui. */
+function avviaOrma(){
+(function () {
+  "use strict";
+
+  var ATTESA = "[ in attesa ]";
+  var vuoto = function (v) { return v === undefined || v === null || v === ""; };
+  var COLORI = {terra:"#AA8844", acqua:"#4488BB", fuoco:"#CC6644",
+                aria:"#669944", etere:"#9966CC"};
+
+  var campo = document.getElementById("sv-orma-testo");
+  var box   = document.getElementById("sv-orme-altri");
+  if (!campo || !box) return;
+
+  /* i tipi: nessuno è obbligatorio, e si tolgono toccandoli di nuovo */
+  [].forEach.call(document.querySelectorAll(".sv-casa [data-tipi] button"), function (b) {
+    b.addEventListener("click", function () {
+      if (b.hasAttribute("data-su")) b.removeAttribute("data-su");
+      else b.setAttribute("data-su", "1");
+    });
+  });
+
+  [].forEach.call(document.querySelectorAll(".sv-casa [data-attrezzo]"), function (b) {
+    b.addEventListener("click", function () {
+      document.dispatchEvent(new CustomEvent("spazio-vivo:orma-attrezzo",
+        {detail: {attrezzo: b.getAttribute("data-attrezzo"), testo: campo.value}}));
+    });
+  });
+
+  /* l'orma esce di qui: la raccoglie il guscio */
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.ormaScritta = function () {
+    var tipi = [];
+    [].forEach.call(document.querySelectorAll(".sv-casa [data-tipi] button[data-su]"),
+      function (b) { tipi.push(b.getAttribute("data-tipo")); });
+    return {testo: campo.value, tipi: tipi};
+  };
+
+  /* ③ le ultime orme: tutte dal dato, e ognuna porta nella stanza del suo elemento */
+  function ultime(righe) {
+    while (box.firstChild) box.removeChild(box.firstChild);
+    righe = righe || [];
+    if (!righe.length) {
+      var v = document.createElement("div");
+      v.style.cssText = "font-family:'Cormorant Garamond',serif;font-style:italic;" +
+        "font-size:var(--t-eti);color:rgba(245,240,230,0.5);padding:0.5rem 0";
+      v.textContent = ATTESA;
+      box.appendChild(v);
+      return;
+    }
+    righe.forEach(function (o) {
+      var col = COLORI[o.elemento] || "#C8A055";
+      var a = document.createElement(vuoto(o.rotta) ? "div" : "a");
+      a.setAttribute("data-orma-altro", "1");
+      if (!vuoto(o.rotta)) { a.setAttribute("href", o.rotta); a.style.textDecoration = "none"; }
+      a.style.cssText += ";display:block;min-width:0;border:1px solid var(--line);" +
+        "border-left:0.18rem solid " + col + ";border-radius:0 0.7rem 0.7rem 0;" +
+        "background:rgba(245,240,230,0.03);padding:0.8rem 0.9rem;color:" + col;
+      var t = document.createElement("div");
+      t.style.cssText = "font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);" +
+        "line-height:1.45;color:var(--ivory);min-width:0;overflow-wrap:break-word";
+      t.textContent = vuoto(o.testo) ? ATTESA : String(o.testo);
+      a.appendChild(t);
+      var p = document.createElement("div");
+      p.style.cssText = "display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;" +
+        "margin-top:0.4rem;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);" +
+        "color:rgba(245,240,230,0.6)";
+      var pt = document.createElement("span");
+      pt.style.cssText = "flex:none;width:0.45rem;height:0.45rem;border-radius:50%;background:currentColor";
+      p.appendChild(pt);
+      p.appendChild(document.createTextNode(
+        (vuoto(o.chi) ? ATTESA : o.chi) + " · " + (vuoto(o.dove) ? ATTESA : o.dove)));
+      a.appendChild(p);
+      box.appendChild(a);
+    });
+  }
+
+  ultime([]);
+  window.SpazioVivo.ultimeOrme = ultime;
 })();
 }
 
