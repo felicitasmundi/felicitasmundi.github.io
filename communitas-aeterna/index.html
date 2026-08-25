@@ -957,12 +957,23 @@
   body.mg-pieno .mg-fila #s-invio{opacity:1;transform:scale(1);width:2.9rem;
     margin-left:0;pointer-events:auto}
 
-  /* ── i cinque segni: scendono solo quando c'è del testo, e con loro la
-     riga degli strumenti che a riposo non si vede ── */
-  .mg-segni,#mg .riga-strumenti{max-height:0;overflow:hidden;opacity:0;
+  /* ── SI NASCONDE SOLO QUELLO CHE RIGUARDA L'ORMA CHE STAI SCRIVENDO ──
+     ⭐ TOCCATO NEL GUSCIO ⑰ — prima spariva tutta la riga degli strumenti, e
+        con lei «le cose aperte» e i talenti: due porte che non c'entrano
+        niente con lo scrivere, e per arrivarci bisognava prima digitare.
+        Adesso la riga resta sempre, e dentro si nasconde solo ciò che serve
+        all'orma: dove la porti, l'Integrator, la ricerca — e i quattro segni.
+     ⛔ Chi si aggiunge alla riga e riguarda l'orma prende `mg-scrivendo`.
+        Chi è una porta verso altro, no. */
+  .mg-segni{max-height:0;overflow:hidden;opacity:0;
     margin-top:0;transition:opacity .45s ease,max-height .45s ease,margin-top .45s ease}
   body.mg-pieno .mg-segni{opacity:1;max-height:12rem;margin-top:0.7rem}
-  body.mg-pieno #mg .riga-strumenti{opacity:1;max-height:12rem;margin-top:0.55rem}
+  #mg .riga-strumenti{margin-top:0.55rem}
+  #mg .mg-scrivendo{max-width:0;padding-left:0;padding-right:0;margin:0;
+    border-width:0;opacity:0;overflow:hidden;pointer-events:none;
+    transition:opacity .35s ease,max-width .35s ease}
+  body.mg-pieno #mg .mg-scrivendo{max-width:22rem;opacity:1;pointer-events:auto;
+    padding-left:0.7rem;padding-right:0.7rem;border-width:1px}
   .mg-segni{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
   .mg-sg{display:flex;align-items:center;gap:0.4rem;padding:0.34rem 0.8rem;
     border-radius:999px;border:1px solid var(--c);background:transparent;
@@ -978,7 +989,6 @@
   .mg-sg.quadro i{border-radius:0.12rem}
   .mg-sg.rombo i{transform:rotate(45deg)}
   .mg-sg.pieno i{background:var(--c);border-radius:50%}
-  .mg-sg.rombo-pieno i{background:var(--c);transform:rotate(45deg)}
   #campo:focus{border-color:rgba(200,160,85,0.45)}
   .simboli{display:flex;align-items:center;gap:0.45rem;margin-top:0.55rem;overflow-x:auto;
     scrollbar-width:none}
@@ -1617,12 +1627,12 @@
           </div>
           <div class="mg-segni" id="mg-segni"></div>
       <div class="riga-strumenti">
-        <button class="s-pill" id="s-dove" style="--tc:var(--oro-ch)">
+        <button class="s-pill mg-scrivendo" id="s-dove" style="--tc:var(--oro-ch)">
           <span class="sg" id="dove-sg"></span><span id="dove-tx">Dove lo porti</span>
         </button>
         <!-- al posto di «Edizione»: la scelta del modello non serve più -->
-        <button class="s-pill" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="nexus.png" alt=""></span>INTEGRATOR</button>
-        <button class="s" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
+        <button class="s-pill mg-scrivendo" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="nexus.png" alt=""></span>INTEGRATOR</button>
+        <button class="s mg-scrivendo" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
         <button class="s" id="s-aperte" title="Le cose aperte">&#9673;</button>
         <button class="s" id="s-talenti" title="talenti"><span class="sg-t"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/></svg></span></button>
       </div>
@@ -3548,15 +3558,13 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      Il segno è quello scelto — orma-simbolo-scelto.html,
      77158e33c54f50acea03893800b805ff — preso verbatim, non ridisegnato. */
   var ORMA_SEGNO = '<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/><path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/><g transform="translate(-4,4) scale(0.9)"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(33,3) scale(0.5)" opacity=".45"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(20,-2) scale(0.3)" opacity=".2"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g></svg>';
+  /* ⭐ i quattro segni, e il `tipo` che ciascuno scrive nella tavola `orme`.
+     Sono quattro, non cinque: nessun «altro», nessuna forma inventata. */
   var MG_SEGNI = [
-    ["contatto",  "#AA8844", "tondo"],
-    ["idea",      "#9966CC", "quadro"],
-    ["obiettivo", "#CC6644", "rombo"],
-    ["racconto",  "#669944", "pieno"],
-    /* ⚠️ «altro» non sta nello studio: lì i segni sono quattro. Colore e
-       forma li prende dall'oro del guscio e dalla quinta forma libera —
-       nessuno dei cinque elementi, per non dire una cosa che non è detta. */
-    ["altro",     "#D4AF6A", "rombo-pieno"]
+    ["contatto",  "#AA8844", "tondo",  "contatto"],
+    ["idea",      "#9966CC", "quadro", "idea_nota"],
+    ["obiettivo", "#CC6644", "rombo",  "obiettivo"],
+    ["racconto",  "#669944", "pieno",  "racconto"]
   ];
   (function(){
     var g = $("mg-orma"); if(g) g.innerHTML = ORMA_SEGNO;
@@ -3565,6 +3573,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       var e = document.createElement("button");
       e.type = "button";
       e.className = "mg-sg " + x[2];
+      e.setAttribute("data-tipo", x[3]);
       e.style.setProperty("--c", x[1]);
       e.innerHTML = '<i></i>' + x[0];
       e.addEventListener("click", function(){
@@ -3621,6 +3630,15 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* ── il luogo dell'orma ── */
   var luoghi = [], luogoScelto = null;
+
+  /* ⭐ TOCCATO NEL GUSCIO ⑲ — `quandoScelto` non era dichiarato da nessuna
+     parte, e il tasto che manda lo leggeva. Su un nome che non esiste si
+     solleva: la riga si rompeva PRIMA dell'insert, e l'orma non partiva.
+     Non è una cosa di oggi — è così anche nella copia in linea.
+     ⚠️ «Quando» resta una forma senza gesto: né #s-quando né #q-ok hanno
+        un ascolto, e nessuno scrive qui dentro. Finché non ne ha uno,
+        `accaduto_il` è oggi — che è quello che deve essere. */
+  var quandoScelto = null;
 
   function disegnaLuoghi(){
     var box = $("l-luoghi"); if(!box) return;
@@ -3776,19 +3794,48 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var t=campo.value.trim(); if(!t) return;
     if(cerca){ vai("incontro"); return; }
     if(ospite){ chiediAccesso("Per lasciare un'orma serve l'accesso"); return; }
-    if(!scelta){ parla("Scegli prima dove lo porti."); return; }
+    /* ⭐ TOCCATO NEL GUSCIO ⑳ — «DOVE LO PORTI» NON FERMA PIÙ NIENTE.
+       Bloccava l'invio finché non si sceglieva, per scrivere `destinazione`
+       — una colonna che nessuna query di questo Spazio Vivo rilegge, in
+       nessun file. Intanto il `tipo`, che invece si rilegge, lo decide il
+       segno. Era una scelta chiesta prima di scrivere, e non serviva.
+       ⛔ La voce resta dov'è e funziona come prima: se la si sceglie, la sua
+          destinazione vale. Solo, non ferma più nessuno.
+       ⭐ Senza scelta, la destinazione la dà il segno: la tavola DOVE le
+          accosta già ai tipi — contatto→contatti, idea_nota→note,
+          obiettivo→obiettivi, racconto→bacheca. Non si inventa niente,
+          si legge quello che c'è già. */
+
+    /* ⭐ TOCCATO NEL GUSCIO ⑱ — I QUATTRO SEGNI SCRIVONO DAVVERO.
+       Prima si accendevano e basta. Adesso il segno acceso dice il `tipo`
+       dell'orma; se nessuno è acceso il tipo è idea_nota, che è il posto
+       dove una cosa si tiene quando non si è ancora deciso cos'è.
+       ⛔ Alla nascita l'orma è privata, sempre: `solo_me`. Non è una
+          preferenza, è il primo stato — si apre dopo, non alla nascita.
+       ⚠️ `accaduto_il` è oggi. Se qualcuno ha scelto una data con «Quando»
+          vale quella: è una cosa che ha detto lui, e non si butta via.
+       ⛔ Consenso e legami fra orme NON si toccano: le colonne non ci sono. */
+    var acceso = document.querySelector("#mg-segni .mg-sg.on");
+    var tipoScritto = acceso ? acceso.getAttribute("data-tipo") : "idea_nota";
+    var d = new Date();
+    var oggi = d.getFullYear() + "-"
+             + String(d.getMonth()+1).padStart(2,"0") + "-"
+             + String(d.getDate()).padStart(2,"0");
+
+    var qDest = DOVE.filter(function(x){ return x.tipo === tipoScritto; })[0];
+    var dovePorta = scelta ? scelta.dest : (qDest ? qDest.dest : null);
+
     var riga = {persona_id:io.id, contenuto:t,
-      tipo:scelta.tipo, destinazione:scelta.dest, visibilita:visibilita};
+      tipo:tipoScritto, destinazione:dovePorta, visibilita:"solo_me"};
     if(luogoScelto) riga.vicinato_id = luogoScelto.id;
-    if(quandoScelto) riga.accaduto_il = quandoScelto;
+    riga.accaduto_il = quandoScelto || oggi;
     db.from("orme").insert(riga)
       .select("id,contenuto").single().then(function(r){
       if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
       ultimaOrma = r.data;
       campo.value=""; cresci(); megafonoGuarda();
       [].forEach.call(($("mg-segni")||{children:[]}).children, function(y){ y.classList.remove("on"); });
-      parla("Conservata · " + (visibilita==="solo_me" ? "solo tu la vedi"
-            : visibilita==="vicinato" ? "la vede il tuo vicinato" : "la vedono tutti")
+      parla("Conservata · solo tu la vedi"
             + (luogoScelto ? " · " + luogoScelto.nome : "")
             + (quandoScelto ? " · " + new Date(quandoScelto+"T12:00:00")
                  .toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"}) : ""));
