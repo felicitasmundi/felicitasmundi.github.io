@@ -2,61 +2,35 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   139.435 byte · MD5 47ac146f69e25756e4d34f063a9e801c
-   (la terza consegna del 26 agosto 2026 — le due prime erano
-    ff2524c4…, 139.424 byte, e 57859be9…, 139.384 byte)
+   141.225 byte · MD5 c98db4afe5665ee5a415ea93be6a0021
+   (consegna del 27 agosto 2026 — le tre del 26 erano 47ac146f…,
+    139.435 byte · ff2524c4…, 139.424 · 57859be9…, 139.384)
 
    ⭐ QUELLO CHE PORTA DI NUOVO QUESTA CONSEGNA
-     · LA SOGLIA STA IN ALTO, e non più in mezzo. Prende 1rem sotto la
-       radio, e tutta l'aria che avanza sta SOTTO di lei. Il perché è il
-       Megafono: quando si apre, sale, e mangiava le parole della soglia.
-       Adesso mangia il vuoto.
-       Sono due righe di `.sv-soglia`, dieci byte:
-         align-items:  center → flex-start
-         padding:      clamp(1.4rem,4.5vw,3rem)
-                     → 1rem clamp(1.4rem,4.5vw,3rem) clamp(1.4rem,4.5vw,3rem)
-       e la stessa cosa sotto i 52rem, dove sopra c'era
-       clamp(1.4rem,5vw,2.4rem) e adesso c'è 1rem.
-     · È DAVVERO L'UNICA COSA. Gli otto fogli di codice della consegna
-       sono identici byte per byte a quelli di prima: verificato uno per
-       uno rifacendo il file, non a occhio.
-
-   ⭐ E UN PEZZO A SÉ, CHE ARRIVA FUORI DALLA CONSEGNA DELLA CASA:
-      orma-spazio-vivo.html · 17.518 byte · MD5 153ccc700d1fd9d5745c123a0a5ceeef
-      La consegna della casa porta ancora l'orma vecchia; questo è il
-      blocco corretto, e sostituisce SOLO la sua veste.
-      ⭐ La sostituzione è pulita, e si può dire perché:
-        · il CODICE del pezzo è identico byte per byte a quello della
-          consegna — 11.791 byte, stesso `avviaOrmaViva()`
-        · il CORPO è lo stesso, parola per parola: cambia il rientro e
-          nient'altro. Ci sta già dentro anche la chiusa, `data-coda`
-        · lo STILE della casa sta in un blocco unico, fra i due commenti
-          di Design — quello che dice «l'orma» e quello che dice «i cinque
-          elementi» — e dentro non ci vive nessun altro selettore
-        · lo STILE del pezzo è chiuso in sé: ogni regola comincia per
-          `.sv-orma-vive`, e le uniche @ sono le sue — `@keyframes spinta`
-          e un `@media (max-width:52rem)`
-      Quindi è un blocco che esce e uno che entra, e non si tocca altro.
-      ⭐ QUELLO CHE CAMBIA: il riquadro si stringe e si alza —
-        max-width 56rem → 46rem · aspect-ratio 16/11 → 4/3 ·
-        min-height 22rem → 20rem · max-height min(40rem,76svh) → 32rem.
-        La card e i tre dati stanno dove stavano — 5% sopra, 6% sotto —
-        ma il riquadro è più alto, e l'Italia resta scoperta in mezzo.
-      ⛔ E QUELLO CHE IL PEZZO SI PORTA VIA — va detto, non aggiustato:
-        cade la seconda regola del telefono, quella che dava all'orma la
-        misura del quadrante della radio:
-            @media (max-width:52rem){ .sv-orma-vive{ aspect-ratio:auto;
-              height:var(--sv-orma-h,26rem); … margin-left:-1.1rem … } }
-        Il pezzo arriva da solo e non sa del guscio. Da qui in poi, sul
-        telefono, l'orma NON prende più l'altezza della radio e NON esce
-        più fino ai bordi: sta nel suo 3/4, dentro il rientro.
-        ⚠️ E avviaSoglieEMisure() continua a scrivere `--sv-orma-h` su
-           quell'elemento: adesso nessuno lo legge. Non rompe niente —
-           è una misura che cade nel vuoto — ma è codice vivo su una
-           regola che non c'è più.
-        ⛔ Non l'ho rimessa a mano: sarebbe tenere un pezzo della consegna
-           vecchia dentro quella nuova, e non si fa. Se quella misura
-           serve, la rimette Design nel pezzo.
+     · L'ORMA È PIÙ GRANDE, e ha più cielo sopra. Due cose insieme:
+         nella veste  max-width 46rem → 56rem · aspect-ratio 4/3 → 16/12 ·
+                      min-height 20rem → 26rem ·
+                      max-height 32rem → min(48rem,84svh)
+         nel codice   la fascia della mappa si sposta in basso e si allarga:
+                      alto .23/.30 → .30/.34 · basso .17 → .15/.16 ·
+                      e la mappa prende .86 della larghezza invece di .74
+       ⭐ E TORNA la regola del telefono che il pezzo a sé aveva perso —
+          `height:var(--sv-orma-h)` e i margini negativi. Con lei torna a
+          servire la misura che avviaSoglieEMisure() scrive: al 27 agosto
+          non cade più nel vuoto.
+       ⛔ Quindi il pezzo orma-spazio-vivo.html — 17.518 byte, 153ccc70… —
+          È SUPERATO: la consegna lo contiene e lo va oltre. Non si
+          innesta più niente da fuori, la casa si rifà da questa sola.
+     · IL RIQUADRO DEL TEMPO HA TRE POSTI VUOTI al posto della didascalia
+       «il cielo di oggi»: [data-festa] in oro, [data-santo] e [data-fase]
+       nel grigio, coi punti in mezzo. Nessun nome scritto nella consegna.
+       Li riempie il guscio — vedi ㉛ in spazio-vivo-prova.html.
+       ⭐ La porta è di Design: window.SpazioVivo.oggi({festa, santo, fase}).
+          Quello che manca non compare, e sparisce anche il punto che lo
+          separava; se manca tutto, sparisce la riga. Non si tocca.
+     · Rifacendo il file dalla consegna si muovono: 20 righe nel disegno,
+       31 in avviaCasa (la porta `oggi`), 6 in avviaOrmaViva (le fasce).
+       Gli altri sei fogli tornano identici byte per byte.
 
    ⭐ E DALLE CONSEGNE DI PRIMA, che resta:
      · IL QUADRANTE «SIMBOLI DELL'ESPERIENZA» È VIVO: dentro il cerchio i
@@ -502,8 +476,8 @@ var CASA = `
     --t-med:calc(0.80rem * var(--scala));
     --t-gr:clamp(1.3rem, 4.1vw, 2.15rem);
     --oro-a:#D4AF6A; --terra:#AA8844;
-    position:relative;max-width:46rem;margin:0 auto;
-    aspect-ratio:4/3;min-height:20rem;max-height:32rem;
+    position:relative;max-width:56rem;margin:0 auto;
+    aspect-ratio:16/12;min-height:26rem;max-height:min(48rem,84svh);
     border-radius:1.1rem;overflow:hidden;
     font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
   .sv-orma-vive canvas{position:absolute;inset:0;width:100%;height:100%;
@@ -581,6 +555,14 @@ var CASA = `
     .sv-orma-vive .mega{left:3.5%;right:3.5%;padding:.8rem .85rem .75rem}
     .sv-orma-vive .dati{gap:.5rem 1.4rem;bottom:5%}
     .sv-orma-vive .coda b{font-size:clamp(1.35rem,7.4vw,2.2rem)}
+  }
+
+  /* sul telefono l'orma prende la misura del quadrante della radio */
+  @media (max-width:52rem){
+    .sv-orma-vive{aspect-ratio:auto;
+      height:var(--sv-orma-h,26rem);max-height:none;min-height:0;
+      margin-left:-1.1rem;margin-right:-1.1rem;width:auto;max-width:none;
+      border-radius:0.35rem}
   }
 
   /* ── i cinque elementi ── */
@@ -878,7 +860,13 @@ var CASA = `
       </span>
       <span style="min-width:0">
         <span id="sv-giorno" style="display:block;font-family:'Cinzel',serif;font-size:var(--t-cor);color:var(--ivory);line-height:1.2"></span>
-        <span style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-eti);color:rgba(245,240,230,0.66);margin-top:0.25rem">il cielo di oggi</span>
+        <span data-oggi="1" style="display:flex;gap:0.45rem;flex-wrap:wrap;align-items:baseline;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);line-height:1.4;margin-top:0.25rem;min-width:0">
+          <span data-festa="1" style="color:var(--oro-ch)"></span>
+          <span data-sep="1" style="color:rgba(245,240,230,0.4)">&middot;</span>
+          <span data-santo="1" style="color:rgba(245,240,230,0.66)"></span>
+          <span data-sep="1" style="color:rgba(245,240,230,0.4)">&middot;</span>
+          <span data-fase="1" style="color:rgba(245,240,230,0.66)"></span>
+        </span>
       </span>
     </div>
   </section>
@@ -1152,6 +1140,37 @@ function avviaCasa(){
   if (eMese) eMese.textContent = MESI[ora.getMonth()] + " " + ora.getFullYear();
   var eGiorno = document.getElementById("sv-giorno");
   if (eGiorno) eGiorno.textContent = ora.getDate() + " " + MESI[ora.getMonth()];
+
+  /* la riga del giorno: festa · santo · fase. Tre posti vuoti che riempie il dato.
+     window.SpazioVivo.oggi({festa, santo, fase}) — quello che manca non compare */
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.oggi = function (d) {
+    d = d || {};
+    var riga = document.querySelector("[data-oggi]");
+    if (!riga) return;
+    var q = {festa: d.festa, santo: d.santo, fase: d.fase};
+    Object.keys(q).forEach(function (k) {
+      var n = riga.querySelector("[data-" + k + "]");
+      if (!n) return;
+      var v = (q[k] === undefined || q[k] === null) ? "" : String(q[k]).trim();
+      n.textContent = v;
+      n.hidden = !v;
+    });
+    /* i punti restano solo fra due cose che ci sono */
+    var pieni = [].filter.call(riga.children, function (n) {
+      return !n.hasAttribute("data-sep") && !n.hidden;
+    });
+    [].forEach.call(riga.querySelectorAll("[data-sep]"), function (s) {
+      var prima = false, dopo = false;
+      for (var n = s.previousElementSibling; n; n = n.previousElementSibling)
+        if (!n.hasAttribute("data-sep") && !n.hidden) { prima = true; break; }
+      for (var m = s.nextElementSibling; m; m = m.nextElementSibling)
+        if (!m.hasAttribute("data-sep") && !m.hidden) { dopo = true; break; }
+      s.hidden = !(prima && dopo);
+    });
+    riga.hidden = !pieni.length;
+  };
+  window.SpazioVivo.oggi({});
 
   /* ② il cielo — la luna di oggi, ciclo sinodico 29.530588853 */
   var SINODICO = 29.530588853;
@@ -2112,11 +2131,11 @@ function avviaOrmaViva(){
        mezzo. Sopra resta il cielo per la card, sotto per i dati,
        e la terra non viene mai coperta. */
     var stretto = L < 640;
-    var alto  = stretto ? A * .30 : A * .23;
-    var basso = stretto ? A * .17 : A * .17;
+    var alto  = stretto ? A * .34 : A * .30;
+    var basso = stretto ? A * .16 : A * .15;
     var fascia = A - alto - basso;
 
-    var sx = (L * .74) / (LON1 - LON0);
+    var sx = (L * .86) / (LON1 - LON0);
     var sy = fascia / ((LAT1 - LAT0) * 1.42);
     sc = Math.min(sx, sy);
     px = (L - (LON1 - LON0) * sc) / 2;

@@ -3461,6 +3461,122 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       }).catch(function(){ e.textContent = ""; });
   }
 
+  /* ══ ㉛ IL GIORNO — festa · santo · fase ══════════════════════════
+     La consegna del 27 agosto ha messo tre posti vuoti nel riquadro del
+     tempo e ha lasciato la porta: SpazioVivo.oggi({festa, santo, fase}).
+     Design non scrive nessun nome — li porta il guscio, da qui.
+
+     ⛔ LA FASE NON ASPETTA NIENTE. Si calcola, e si mostra prima ancora
+        di chiedere al database. Se `santi` e le due `feste_*` non
+        rispondono — rete giù, tavola chiusa, colonna diversa — il
+        riquadro resta con la sua luna e non si accorge di niente.
+        È il motivo per cui la fase si scrive subito e le altre due dopo.
+
+     ⭐ LE COSTANTI DELLA LUNA SONO QUELLE DI DESIGN, copiate dalla
+        consegna: SINODICO 29.530588853 e la luna nuova del 6 gennaio
+        2000 alle 18:14 UTC. Se qui se ne usassero altre, la parola
+        direbbe una cosa e il disegno accanto ne mostrerebbe un'altra.
+     ⭐ E LE PAROLE SONO QUELLE CHE IL PROGETTO USA GIÀ — nomeLuna() in
+        la-mia-orma.html: luna nuova · primo quarto · luna piena ·
+        ultimo quarto · luna crescente · luna calante. Sei, non se ne
+        inventano altre, e le soglie sono le stesse: ±0.025.
+
+     ⭐ IL SANTO ARRIVA GIÀ FATTO. `santi.intero` porta il titolo giusto
+        — sant'Agata, santa Genoveva, san Patrizio — e non si ricostruisce
+        da `nome` + `titolo`: l'apostrofo, il maschile e il femminile sono
+        già decisi là.
+
+     ⚠️ IL NOME DELLE DUE TAVOLE DELLE FESTE È L'UNICA COSA CHE HO
+        SUPPOSTO. Di `feste_felicitas` e `feste_indiane` conosco le
+        colonne della DATA — mese e giorno per quelle che tornano ogni
+        anno, data e fine per quelle che durano, data intera per le
+        indiane — ma non come si chiama la colonna del nome. Quindi:
+          · si legge la riga intera, `select("*")`, così una colonna che
+            non c'è non fa fallire la domanda
+          · il nome si prende da `nome`, se no `titolo`, se no `intero`
+        Oggi le due tavole sono vuote e non si vede niente comunque.
+        Il giorno che ci finisce dentro una riga, se il nome non compare
+        è questa la riga da guardare — e basta togliere le altre due.
+
+     ⚠️ Le feste si guardano in ordine: prima `feste_felicitas`, poi
+        `feste_indiane`. La prima che risponde vince, e la seconda non si
+        chiede nemmeno. */
+  var GIORNO = {festa:null, santo:null, fase:null};
+  var giornoLetto = false;
+
+  function nomeDellaLuna(f){
+    if(f < 0.025 || f > 0.975)      return "luna nuova";
+    if(Math.abs(f - 0.25)  < 0.025) return "primo quarto";
+    if(Math.abs(f - 0.5)   < 0.025) return "luna piena";
+    if(Math.abs(f - 0.75)  < 0.025) return "ultimo quarto";
+    return f < 0.5 ? "luna crescente" : "luna calante";
+  }
+
+  function faseDiOggi(){
+    var SINODICO = 29.530588853;
+    var NUOVA = Date.UTC(2000, 0, 6, 18, 14);
+    var f = (((Date.now() - NUOVA) / 86400000) / SINODICO) % 1;
+    if(f < 0) f += 1;
+    return nomeDellaLuna(f);
+  }
+
+  /* il nome di una festa, comunque la tavola lo chiami */
+  function nomeDellaFesta(r){
+    if(!r) return null;
+    var v = r.nome || r.titolo || r.intero || null;
+    return (typeof v === "string" && v.trim()) ? v.trim() : null;
+  }
+
+  /* si ridisegna a ogni ritorno a casa: la porta e i tre posti nascono
+     con la casa, e la casa si rifà tutte le volte che ci si torna */
+  function mostraIlGiorno(){
+    if(window.SpazioVivo && window.SpazioVivo.oggi) window.SpazioVivo.oggi(GIORNO);
+  }
+
+  function riempiIlGiorno(){
+    GIORNO.fase = faseDiOggi();
+    mostraIlGiorno();                 /* la luna si vede subito */
+    if(giornoLetto) return;           /* le altre due si chiedono una volta sola */
+    giornoLetto = true;
+
+    var d = new Date();
+    var mese = d.getMonth() + 1, giorno = d.getDate();
+    var oggi = d.getFullYear() + "-" + String(mese).padStart(2,"0")
+                              + "-" + String(giorno).padStart(2,"0");
+
+    /* ── il santo ── */
+    db.from("santi").select("intero").eq("mese", mese).eq("giorno", giorno).limit(1)
+      .then(function(r){
+        var righe = (r && r.data) || [];
+        var v = righe[0] && righe[0].intero;
+        if(typeof v === "string" && v.trim()){ GIORNO.santo = v.trim(); mostraIlGiorno(); }
+      }).catch(function(){});
+
+    /* ── la festa: prima le nostre, poi le indiane ── */
+    function indiane(){
+      db.from("feste_indiane").select("*").eq("data", oggi).limit(1)
+        .then(function(r){
+          var n = nomeDellaFesta(((r && r.data) || [])[0]);
+          if(n){ GIORNO.festa = n; mostraIlGiorno(); }
+        }).catch(function(){});
+    }
+
+    /* quelle che tornano ogni anno: mese e giorno */
+    db.from("feste_felicitas").select("*").eq("mese", mese).eq("giorno", giorno).limit(1)
+      .then(function(r){
+        var n = nomeDellaFesta(((r && r.data) || [])[0]);
+        if(n){ GIORNO.festa = n; mostraIlGiorno(); return; }
+        /* quelle che durano: comincia prima di oggi e finisce dopo */
+        return db.from("feste_felicitas").select("*")
+          .lte("data", oggi).gte("fine", oggi).limit(1)
+          .then(function(q){
+            var m = nomeDellaFesta(((q && q.data) || [])[0]);
+            if(m){ GIORNO.festa = m; mostraIlGiorno(); return; }
+            indiane();
+          });
+      }).catch(function(){ indiane(); });
+  }
+
   var DOVE = [
     {n:"[ il Nexus ]", s:"[ la riga del Nexus — e il riferimento al percorso antahkarana ]",
      c:"--oro", f:"--nexus-f", el:"nexus", tipo:"anthakarana", dest:"nexus"},
@@ -3748,7 +3864,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     disegnaBarra();
     document.body.classList.remove("barra-aperta");
     var c=$("centro"); c.innerHTML=""; c.scrollTop=0;
-    if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); }
+    /* ⭐ TOCCATO NEL GUSCIO ㉛ — e il riquadro del tempo si riempie. */
+    if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
     else if(id==="orme") mieOrme(c);
     else if(id==="incontro") incontro(c, sub);
     else if(id==="chat"){ chat(c); segnaLetto(); }
