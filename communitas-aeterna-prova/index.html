@@ -439,8 +439,20 @@
   /* ── la tua orma ── */
   .orma-quad{border:1px solid var(--line);border-radius:0.9rem;padding:1.1rem;margin:1.4rem 0}
   .orma-testa{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem}
-  .piede{width:1.6rem;height:1.6rem;flex:0 0 auto;color:var(--oro-ch)}
-  .piede svg{width:100%;height:100%;display:block}
+  /* ⭐ TOCCATO NEL GUSCIO ㉚ — `.piede` TORNA A CASA SUA, dentro .orma-quad.
+     Era un nome nudo, e nel guscio i nomi nudi sono di tutti: `.piede` è
+     anche il PIEDE DELLA BARRA di Design — quello col nome, il ruolo e il
+     nexus. Questa riga, scritta per un segnetto d'orma da 1.6rem, gli
+     cadeva addosso.
+     Misurato prima: il piede della barra 33,6 × 25,6 invece di prendere
+     tutta la colonna; `.chi` dentro largo 6,4; `.codice` largo 0. Da lì
+     «[ in attesa ]» e «nexus [ in attesa ]» spremuti in sei pixel.
+     ⚠️ E la sua stanza non c'è più: `.orma-quad` nel guscio non compare in
+        nessun markup, né qui né nei fm-*.js — restano solo le sue regole.
+        Non le tolgo nello stesso giro: adesso sono chiuse in casa loro e
+        non toccano più nessuno. È lo stesso caso di `.tondo` al ㉗. */
+  .orma-quad .piede{width:1.6rem;height:1.6rem;flex:0 0 auto;color:var(--oro-ch)}
+  .orma-quad .piede svg{width:100%;height:100%;display:block}
   .orma-quad h3{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
     letter-spacing:0.1em;text-transform:uppercase;color:var(--oro-ch)}
   .invito{display:block;width:100%;text-align:left;background:rgba(245,240,230,0.05);
@@ -1608,6 +1620,20 @@
   /* ⭐ il nome in alto a sinistra riporta a casa */
   .sv-barra .capo{cursor:pointer}
   .sv-barra .capo:hover b{color:var(--oro-ch)}
+  /* ⭐ TOCCATO NEL GUSCIO ㉚ — LA BARRA DICE IL NOME E BASTA.
+     Due decisioni di Gab, e si spengono da qui perché il file di Design
+     non si corregge:
+       · VIA LE SPIEGAZIONI sotto ogni voce. «Se serve spiegare cosa c'è
+         dentro, la voce ha il nome sbagliato.»
+       · VIA I NUMERI ① ② ③ ④ ⑤. Non è un percorso, sono posti: un numero
+         dice «prima questo, poi quello», e non è vero.
+     ⛔ Si spengono, non si tolgono. Le parole restano intere in `stanze`
+        e nel seme — `riga` è ancora lì, e la legge attesa() quando una
+        stanza non è ancora fatta. Qui cade solo il disegno.
+     ⚠️ `.pt` resta: è il pallino delle voci piccole di «Cosa incontri»,
+        e non è un numero — è il segno che Gab vuole accanto al nome. */
+  .sv-barra .pg .desc{display:none}
+  .sv-barra .pg .n{display:none}
   @media(max-width:52rem){
     /* ⭐ TOCCATO NEL GUSCIO ⑪ — il 70 che era di #barra, rimesso sulla
        barra vera. Sta fra il velo (69) e il tasto che apre (71): il
@@ -2419,6 +2445,7 @@
      ═══════════════════════════════════════════════════════════════ -->
 
 <style>
+
   .sv-din{--scala:1.4;
     --t-eti:calc(0.62rem * var(--scala));
     --t-pic:calc(0.70rem * var(--scala));
@@ -2627,6 +2654,52 @@
           { nome: "la pagina scritta",       stato: "m" }
         ] },
 
+      { nome: "Il consulente, e la sua pagina",
+        elemento: "fuoco",
+        nota: "cosa riceve con il pacchetto mensile",
+        passi: [
+          { nome: "prende il pacchetto",    stato: "m",
+            nota: "26 € al mese" },
+          { nome: "ha una pagina sua",      stato: "x" },
+          { nome: "gestisce gli appuntamenti", stato: "x" },
+          { nome: "mette le date nel calendario", stato: "x" },
+          { nome: "segna le sue ricerche",  stato: "x",
+            nota: "a mano, quando vuole" },
+          { nome: "tiene insieme i file",   stato: "x",
+            nota: "per argomento, luogo, giornata, persone" }
+        ] },
+
+      { nome: "L'appuntamento",
+        elemento: "fuoco",
+        nota: "il professionista fattura al cliente, non a noi",
+        passi: [
+          { nome: "il cliente prenota",     stato: "x",
+            nota: "dalla pagina del consulente" },
+          { nome: "al consulente arriva un messaggio", stato: "x" },
+          { nome: "nasce l'orma",           stato: "x",
+            nota: "con dentro chi, quando, con chi" },
+          { nome: "il consulente conferma", stato: "x" },
+          { nome: "l'incontro accade",      stato: "x" },
+          { nome: "l'orma si chiude",       stato: "x",
+            nota: "fatta, o disdetta" },
+          { nome: "a fine mese, il conto",  stato: "x",
+            nota: "le orme chiuse sono il registro condiviso" }
+        ] },
+
+      { nome: "Quello che gli vendiamo sopra",
+        elemento: "aria",
+        nota: "ognuno col suo costo, e nessuno obbligatorio",
+        passi: [
+          { nome: "il dialogo coi clienti", stato: "x" },
+          { nome: "la trascrizione dall'audio", stato: "m",
+            nota: "il servizio esterno c'è, il collegamento no" },
+          { nome: "la traduzione",          stato: "x" },
+          { nome: "l'impaginazione di un articolo", stato: "x" },
+          { nome: "la stampa",              stato: "m",
+            nota: "il partner c'è, l'API è arrivata" },
+          { nome: "la distribuzione del cartaceo", stato: "x" }
+        ] },
+
       { nome: "Il bisogno",
         elemento: "fuoco",
         nota: "",
@@ -2647,7 +2720,7 @@
       { nome: "Togli",     riga: "il verso si spegne e si barra. Non sparisce, e si rimette" }
     ],
 
-    coda: "Un passaggio che manca non è un ritardo: è il posto dove il lavoro deve andare. E i gesti restano cinque anche quando le cose diventano molte."
+    coda: "Un passaggio che manca non è un ritardo: è il posto dove il lavoro deve andare. E i gesti restano cinque anche quando le cose diventano molte. L'appuntamento è la prima orma che nasce da due persone invece che da una: nessuno deve fidarsi sulla parola, perché tutti e due vedono la stessa riga."
   };
 
   function disegna(dati) {
@@ -3463,12 +3536,58 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* ══ LA BARRA LA DISEGNA DESIGN ══
      Il guscio le passa i dati e le dice dove si è. Il disegno è suo,
      i dati sono del database: qui non si scrive nessuna parola. */
+  /* ⭐ TOCCATO NEL GUSCIO ㉚ — LE VOCI CHE UNO NON HA NON SI VEDONO.
+     Fin qui una stanza chiusa restava in barra, spenta, con sotto la riga
+     che diceva perché. Decisione di Gab: sparisce. Una porta che non si
+     apre non è una porta — è una cosa che occupa lo sguardo.
+     ⭐ Non si tolgono le parole: `chiusa` e `perche` restano in `stanze`
+        con tutto quello che c'è scritto. Cade solo il disegnarla.
+     ⛔ E QUI IL LAVORO NON È FINITO — va detto invece di far finta.
+        Oggi la sola cosa che il guscio SA di una persona è `io.grado`, e
+        l'unica porta che sa riconoscere è il nucleo. `stanze.chiusa` è un
+        segno UGUALE PER TUTTI: dice «questa è chiusa», non dice «chiusa
+        a TE». Quindi:
+          · il nucleo si comporta bene: lo vede chi è del nucleo
+          · «le aziende se non ne hai» NON si può ancora fare: nessuno
+            chiede se ne hai, e non me lo invento
+        Da dieci voci si scende a nove per chi non è del nucleo. Per
+        arrivare a quattro serve che sia il DATABASE a dire cosa chiede
+        ogni stanza — una colonna in `stanze` — non un elenco scritto qui.
+        L'SQL è pronto e aspetta la decisione di Gab. */
+  /* ci entro? */
+  function possoEntrare(x){
+    if(!x || !x.chiusa) return true;
+    /* ⛔ L'UNICA PORTA CHE IL GUSCIO OGGI SA RICONOSCERE, e la riconosce
+       con la STESSA colonna che sorveglia la stanza: nucleo(), in
+       fm-nucleo.js, legge `persone.nucleo`. Non `grado`: sono due fatti
+       diversi, e la barra che dice una cosa e la stanza un'altra è peggio
+       di una barra che non filtra. */
+    if(x.id === "nucleo") return !!(io && io.nucleo === true);
+    return false;
+  }
+
+  /* ⭐ e chi entra la trova APERTA. `stanze.chiusa` dice «questa stanza è
+     chiusa», non «chiusa a te»: era un segno uguale per tutti, e Design lo
+     disegna come una voce spenta senza `data-pg` — cioè senza il gancio
+     che la fa aprire. Risultato, fin qui: chi è del nucleo vedeva la sua
+     voce e toccandola non succedeva niente. Adesso o non la vede, o la
+     vede viva. Con `chiusa:false` cade anche la riga del `perche`, ed è
+     giusto: spiegava perché NON si entra. */
+  function vociPerMe(elenco){
+    return (elenco || []).filter(possoEntrare).map(function(x){
+      if(!x.chiusa) return x;
+      var c = {}; for(var k in x){ if(x.hasOwnProperty(k)) c[k] = x[k]; }
+      c.chiusa = false; c.perche = null;
+      return c;
+    });
+  }
+
   function disegnaBarra(){
     if(!window.SpazioVivo || !window.SpazioVivo.barra) return;
     var nome = (io && io.nome) || "";
     window.SpazioVivo.barra({
-      pagine:   STANZE.pagine,
-      incontri: STANZE.incontri,
+      pagine:   vociPerMe(STANZE.pagine),
+      incontri: vociPerMe(STANZE.incontri),
       annale:   STANZE.annale,
       chi: {
         nome:     ospite ? "Entra" : nome,
@@ -5345,7 +5464,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        non la riga di `persone`: non hanno niente da aspettare. */
     var pPermessi = db.rpc("fm_miei_tipi");
 
-    return db.from("persone").select("id,nome,grado,livello_n,anthakarana").eq("id",sess.user.id).maybeSingle()
+    /* ⭐ TOCCATO NEL GUSCIO ㉚ — si legge anche `nucleo`. Serve alla barra
+       per sapere se la voce del nucleo si vede, e dev'essere LO STESSO
+       fatto che sorveglia la stanza: nucleo() legge `persone.nucleo`, e
+       due verità sulla stessa porta prima o poi divergono. Una colonna in
+       più sulla riga che già si legge — nessuna domanda in più. */
+    return db.from("persone").select("id,nome,grado,livello_n,anthakarana,nucleo").eq("id",sess.user.id).maybeSingle()
       .then(function(p){
         ospite = false;
         io = (p && p.data) || {id:sess.user.id, nome:"", grado:"karma_yoga"};
