@@ -2,15 +2,26 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   139.424 byte · MD5 ff2524c48d237adf029c0fd5f2fa1393
-   (consegna del 26 agosto 2026 — la precedente era 57859be9…,
-    139.384 byte)
+   139.435 byte · MD5 47ac146f69e25756e4d34f063a9e801c
+   (la terza consegna del 26 agosto 2026 — le due prime erano
+    ff2524c4…, 139.424 byte, e 57859be9…, 139.384 byte)
 
    ⭐ QUELLO CHE PORTA DI NUOVO QUESTA CONSEGNA
-     · LA SOGLIA È CENTRATA fra la radio e il Megafono: aria uguale sopra
-       e sotto. È l'unica cosa che cambia — quaranta byte in tutto.
+     · LA SOGLIA STA IN ALTO, e non più in mezzo. Prende 1rem sotto la
+       radio, e tutta l'aria che avanza sta SOTTO di lei. Il perché è il
+       Megafono: quando si apre, sale, e mangiava le parole della soglia.
+       Adesso mangia il vuoto.
+       Sono due righe di `.sv-soglia`, dieci byte:
+         align-items:  center → flex-start
+         padding:      clamp(1.4rem,4.5vw,3rem)
+                     → 1rem clamp(1.4rem,4.5vw,3rem) clamp(1.4rem,4.5vw,3rem)
+       e la stessa cosa sotto i 52rem, dove sopra c'era
+       clamp(1.4rem,5vw,2.4rem) e adesso c'è 1rem.
+     · È DAVVERO L'UNICA COSA. Gli otto fogli di codice della consegna
+       sono identici byte per byte a quelli di prima: verificato uno per
+       uno rifacendo il file, non a occhio.
 
-   ⭐ E DALLA CONSEGNA DI PRIMA, che resta:
+   ⭐ E DALLE CONSEGNE DI PRIMA, che resta:
      · IL QUADRANTE «SIMBOLI DELL'ESPERIENZA» È VIVO: dentro il cerchio i
        sette segni si affacciano uno per volta, e un anello si allarga e
        svanisce. Ha un occhio suo e comincia quando entra nello schermo.
@@ -380,8 +391,8 @@ var CASA = `
 
   /* ── la soglia ── */
   .sv-soglia{position:relative;width:100%;
-    display:flex;align-items:center;overflow:hidden;border-radius:1.1rem;
-    padding:clamp(1.4rem,4.5vw,3rem);
+    display:flex;align-items:flex-start;overflow:hidden;border-radius:1.1rem;
+    padding:1rem clamp(1.4rem,4.5vw,3rem) clamp(1.4rem,4.5vw,3rem);
     font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
 
   .sv-soglia .cielo{position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -434,8 +445,7 @@ var CASA = `
 
   @media (max-width:52rem){
     .sv-casa [data-pieno]{min-height:var(--sv-alt,calc(100svh - 18rem))}
-    .sv-soglia{align-items:center;
-      padding-top:clamp(1.4rem,5vw,2.4rem);
+    .sv-soglia{align-items:flex-start;padding-top:1rem;
       padding-bottom:clamp(1.4rem,5vw,2.4rem)}
     .sv-soglia .figura{width:100%;top:auto;height:56%;right:0}
     .sv-soglia .figura::after{
@@ -1080,7 +1090,6 @@ var CASA = `
   </footer>
 
 </div>
-
 `;
 
 function home(c){

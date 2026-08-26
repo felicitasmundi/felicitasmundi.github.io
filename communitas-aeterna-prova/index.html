@@ -3331,6 +3331,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         if(!righe.length) return;
         confrontaColSeme(righe);
         versa(righe);
+        /* ⭐ TOCCATO NEL GUSCIO ㉘ — e si ridisegna QUI, appena il dato c'è.
+           Prima versa() cambiava i dati e basta: a portarli in pagina era
+           il primo disegnaBarra() che passava di lì, e quello arrivava con
+           la sessione. Se `stanze` rispondeva prima — e risponde quasi
+           sempre prima, perché non aspetta nessun rinnovo di gettone — la
+           sua risposta restava ferma ad aspettarne un'altra.
+           Ogni pezzo si disegna quando arriva il suo. */
+        disegnaBarra();
       })
       .catch(function(){ /* senza tabella la barra resta quella del seme */ });
   }
@@ -3480,6 +3488,21 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var vAnnale = document.getElementById("sv-annale");
     var idAnnale = STANZE.annale && STANZE.annale.id;
     if(vAnnale) vAnnale.style.display = (idAnnale && ROTTE[idAnnale]) ? "" : "none";
+    /* ⭐ TOCCATO NEL GUSCIO ㉘ — FINCHÉ NON SI SA CHI GUARDA, IL PIEDE RESTA
+       VUOTO. Ed è QUESTA la scritta che Gab ha visto nella prova.
+       La barra si disegna già al primo istante col seme, e in quel primo
+       passaggio `io` è ancora null: Design, su un campo che manca, scrive
+       «[ in attesa ]». Giusto per una parola che non c'è, sbagliato per una
+       che sta arrivando — e nel piede ne scriveva tre, nome, ruolo e nexus.
+       Misurato: comparivano a 611 ms e restavano fino a 2.471.
+       `io === null` dura solo quel tratto: lo pongono daOspite() ed entra(),
+       e da lì in poi questo ramo non passa più. Design non si corregge nel
+       suo file: si spegne il campo da qui, come già per la voce dell'Annale. */
+    if(io === null){
+      var vn = $("sv-chi-nome");  if(vn) vn.textContent = "";
+      var vr = $("sv-chi-ruolo"); if(vr) vr.textContent = "";
+      var vx = $("sv-nexus");     if(vx) vx.textContent = "";
+    }
     collegaLeVoci();
   }
 
@@ -5099,15 +5122,19 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      Misurato, un gettone che non si rinnova costava 27 secondi di pagina
      bianca con la rete che cade, 92 col server muto.
 
-     Adesso è così:
+     ⭐ TOCCATO NEL GUSCIO ㉘ — e adesso nemmeno `stanze` ferma più niente.
+        Era ancora legata al gettone da un Promise.all, e il disegno
+        aspettava tutt'e due. Adesso è così:
 
-       stanze    ─────────────────────────────┐
-       gettone ──→ persone ──→ SI DISEGNA ────┘
-                └→ permessi ──→ aggiornano
+       SUBITO ──→ la barra, col seme
+       stanze  ──→ la barra si aggiorna          (per conto suo)
+       gettone ──→ persone ──→ SI DISEGNA LA STANZA
+                            └→ permessi ──→ la barra si aggiorna
 
-     · `stanze` non dipende da chi guarda: parte subito, insieme al gettone
+     · la barra non aspetta niente: le voci del seme stanno nel guscio
+     · `stanze` non dipende da chi guarda, e nessuno la aspetta
      · i permessi partono insieme a `persone` e non fermano il disegno
-     · e sopra tutto c'è la briglia, qui sotto
+     · e sopra il solo gettone c'è la briglia, qui sotto
 
      ⛔ Il disegno aspetta `persone` e nient'altro: senza sapere chi sei,
         «le mie orme» e i talenti disegnerebbero la stanza di un altro. */
@@ -5213,8 +5240,15 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* ⭐ `stanze` parte adesso, insieme al gettone: non dipende da chi
      guarda, e prima partiva quarta. Se tarda, la barra resta quella del
-     seme — leggiLeStanze() lo fa già da sé. */
-  var pStanze = leggiLeStanze();
+     seme — leggiLeStanze() lo fa già da sé.
+     ⭐ TOCCATO NEL GUSCIO ㉘ — e non la aspetta più nessuno. Prima la sua
+        promessa finiva dentro un Promise.all col gettone, e il disegno
+        stava fermo finché non tornavano tutt'e due. Era l'ultima fila
+        indiana rimasta: la barra aveva già le voci del seme e il centro
+        non ha mai avuto niente da chiedere a `stanze`.
+        Adesso va per conto suo e, quando arriva, ridisegna la barra da
+        sé — dentro leggiLeStanze(). */
+  leggiLeStanze();
 
   var contatoreAcceso = false;
   function contaOgniTanto(){
@@ -5264,25 +5298,31 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         sopra il gettone soltanto non serviva a niente.
         Qui la briglia sta sopra la coppia: allo scadere si disegna con
         quello che c'è — il seme — e chi arriva dopo aggiorna. */
-  var pronto = Promise.all([ db.auth.getSession(), pStanze ]);
+  /* ⭐ TOCCATO NEL GUSCIO ㉘ — la briglia sta sopra il GETTONE, e basta.
+     La nota qui sopra diceva il vero — supabase-js attacca il gettone a
+     ogni chiamata REST, quindi `stanze` restava ferma allo stesso rinnovo
+     — ma la conclusione era un'altra: non serviva aspettarle insieme,
+     serviva non aspettare `stanze` per niente. La barra ha già le voci del
+     seme dal primo istante, e quando la risposta arriva le aggiorna. */
+  var pronto = db.auth.getSession();
 
   briglia(pronto, ATTESA_GETTONE).then(function(g){
 
-    /* la briglia ha morso: né gettone né stanze. Si guarda da ospite — che
+    /* la briglia ha morso: il gettone non torna. Si guarda da ospite — che
        è quello che il guscio fa già quando non c'è nessuno — con le voci
        del seme. Se poi arriva, si entra allora e la vista si rifà. */
     if(g.scaduta){
       daOspite();
-      pronto.then(function(due){
-        var s = due && due[0] && due[0].data && due[0].data.session;
+      pronto.then(function(r){
+        var s = r && r.data && r.data.session;
         if(s) return entra(s);
         disegnaBarra();      /* nessuna sessione: la barra dice «Entra» */
       }).catch(function(){});
       return;
     }
 
-    var due  = g.dato || [];
-    var sess = due[0] && due[0].data && due[0].data.session;
+    var r    = g.dato;
+    var sess = r && r.data && r.data.session;
     if(!sess){ daOspite(); return; }
     return entra(sess);
   }).catch(function(){ daOspite(); });
