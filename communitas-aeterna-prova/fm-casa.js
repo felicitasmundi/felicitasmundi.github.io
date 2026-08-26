@@ -2,15 +2,19 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   139.384 byte · MD5 57859be9aa0d5c2cc1f43ac09db34bf9
-   (consegna del 26 agosto 2026, l'ultima — la precedente era
-    630a0e0c…, 136.617 byte)
+   139.424 byte · MD5 ff2524c48d237adf029c0fd5f2fa1393
+   (consegna del 26 agosto 2026 — la precedente era 57859be9…,
+    139.384 byte)
 
    ⭐ QUELLO CHE PORTA DI NUOVO QUESTA CONSEGNA
+     · LA SOGLIA È CENTRATA fra la radio e il Megafono: aria uguale sopra
+       e sotto. È l'unica cosa che cambia — quaranta byte in tutto.
+
+   ⭐ E DALLA CONSEGNA DI PRIMA, che resta:
      · IL QUADRANTE «SIMBOLI DELL'ESPERIENZA» È VIVO: dentro il cerchio i
        sette segni si affacciano uno per volta, e un anello si allarga e
        svanisce. Ha un occhio suo e comincia quando entra nello schermo.
-     · L'ORMA È TORNATA A 56rem sul computer, com'era prima.
+     · L'ORMA È LARGA 56rem sul computer.
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
@@ -430,7 +434,8 @@ var CASA = `
 
   @media (max-width:52rem){
     .sv-casa [data-pieno]{min-height:var(--sv-alt,calc(100svh - 18rem))}
-    .sv-soglia{align-items:flex-start;
+    .sv-soglia{align-items:center;
+      padding-top:clamp(1.4rem,5vw,2.4rem);
       padding-bottom:clamp(1.4rem,5vw,2.4rem)}
     .sv-soglia .figura{width:100%;top:auto;height:56%;right:0}
     .sv-soglia .figura::after{

@@ -1668,7 +1668,13 @@
                con chi. Non sono segni: i quattro segni dicono COS'È l'orma,
                questi dicono DA DOVE VIENE. Portano già dentro la risposta —
                si legge un valore, non una scelta da fare. -->
-          <div class="mg-dati" id="mg-dati">
+          <!-- ⭐ TOCCATO NEL GUSCIO ㉔ — LA RIGA VECCHIA SI RITIRA, non se ne va.
+               Il canone dice: ① il nuovo esiste e risponde → ② si dirotta →
+               ③ si verifica → ④ solo allora si rimuove il vecchio. Qui siamo
+               a ①②③: la riga sparisce alla vista e il suo codice non tocca
+               più l'invio, ma resta scritta finché il pezzo nuovo non è stato
+               guardato. La rimozione è il giro dopo. -->
+          <div class="mg-dati" id="mg-dati" hidden style="display:none">
             <button type="button" class="mg-d" id="d-quando">oggi</button>
             <span class="mg-p" aria-hidden="true">&middot;</span>
             <button type="button" class="mg-d vuota" id="d-dove">[ dove ]</button>
@@ -1677,6 +1683,521 @@
           </div>
           <!-- ⛔ la riga del canone: compare solo quando un nome non ha
                ancora confermato, e dice chi si aspetta -->
+          <!-- ⭐ TOCCATO NEL GUSCIO ㉔ — I TRE VALORI, il pezzo di Design
+               valori-spazio-vivo.html · 21.471 byte · MD5 37d9d93f06b9a41cbd2cada932dff4f7
+               Sostituisce la riga «oggi · [ dove ] · [ con chi ]»: niente più
+               parentesi quadre. Sta sotto i quattro segni e si accende con loro.
+               ⛔ Del pezzo è caduta solo la veste .sv-valori-fondo: Design la dà
+                  per guardarlo da solo, e nel guscio il fondo è già suo.
+               ⛔ Il resto è verbatim: stile, corpo, foglio e codice.
+               Espone valori(pieno) · valoriLeggi() · valoriPulisci(). -->
+<style>
+  .sv-valori{--scala:1.4;
+    --t-eti:calc(0.64rem * var(--scala));
+    --oro-a:#D4AF6A;
+    display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;
+    margin-top:.55rem;
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .45s cubic-bezier(.16,.84,.28,1),
+               opacity .4s ease,margin .45s ease;
+    font-family:'DM Sans',system-ui,sans-serif}
+  .sv-valori.vivi{max-height:6rem;opacity:1}
+
+  .sv-valori .v{display:inline-flex;align-items:center;gap:.42rem;
+    min-height:2.1rem;padding:.28rem .8rem;border-radius:999px;
+    border:1px solid rgba(245,240,230,.16);background:transparent;
+    color:rgba(245,240,230,.6);cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:.04em;white-space:nowrap;
+    transition:border-color .25s ease,color .25s ease,
+               background .25s ease}
+  .sv-valori .v:hover{border-color:rgba(212,175,106,.5);
+    color:var(--oro-a)}
+  .sv-valori .v .sg{width:.9rem;height:.9rem;flex:none;
+    display:block;opacity:.7}
+  .sv-valori .v:hover .sg{opacity:1}
+
+  /* quando ha una risposta dentro */
+  .sv-valori .v.pieno{border-color:rgba(212,175,106,.44);
+    background:rgba(212,175,106,.1);color:#F5F0E6}
+  .sv-valori .v.pieno .sg{opacity:1;color:var(--oro-a)}
+  .sv-valori .v .via{display:none;margin-left:.1rem;
+    font-size:1.02em;line-height:1;color:rgba(245,240,230,.42)}
+  .sv-valori .v.pieno .via{display:inline}
+  .sv-valori .v .via:hover{color:var(--oro-a)}
+
+  /* il foglio che si apre */
+  .sv-valori-velo{position:fixed;inset:0;z-index:96;
+    background:rgba(5,7,16,.72);backdrop-filter:blur(6px);
+    display:none;align-items:flex-end;justify-content:center}
+  .sv-valori-velo.on{display:flex}
+  @media (min-width:52rem){
+    .sv-valori-velo{align-items:center}
+  }
+  .sv-valori-foglio{width:min(28rem,100%);
+    background:#0E1424;border:1px solid rgba(212,175,106,.3);
+    border-radius:1.1rem 1.1rem 0 0;padding:1.2rem 1.2rem 1.6rem;
+    font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
+  @media (min-width:52rem){
+    .sv-valori-foglio{border-radius:1.1rem}
+  }
+  .sv-valori-foglio .capo{display:flex;align-items:center;
+    justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .sv-valori-foglio .capo b{font-family:'Cinzel',serif;font-weight:500;
+    font-size:1rem;letter-spacing:.1em}
+  .sv-valori-foglio .capo button{background:none;border:0;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:.78rem;letter-spacing:.18em;
+    text-transform:uppercase;color:rgba(245,240,230,.6)}
+  .sv-valori-foglio .capo button:hover{color:var(--oro-a)}
+
+  .sv-valori-foglio input[type="date"],
+  .sv-valori-foglio input[type="text"]{width:100%;min-height:2.9rem;
+    background:rgba(245,240,230,.05);color:#F5F0E6;
+    border:1px solid rgba(212,175,106,.26);border-radius:.7rem;
+    padding:.6rem .85rem;outline:none;
+    font-family:'Cormorant Garamond',serif;font-size:1.06rem}
+  .sv-valori-foglio input:focus{border-color:rgba(212,175,106,.55)}
+  .sv-valori-foglio input::placeholder{color:rgba(245,240,230,.34);
+    font-style:italic}
+
+  /* le proposte che scendono sotto il campo */
+  .sv-valori-foglio .campo-cerca{position:relative}
+  .sv-valori-foglio .proposte{position:absolute;left:0;right:0;top:100%;
+    z-index:2;margin-top:.3rem;border-radius:.7rem;overflow:hidden;
+    background:#131A2C;border:1px solid rgba(212,175,106,.24);
+    max-height:12rem;overflow-y:auto}
+  .sv-valori-foglio .proposte:empty{display:none}
+  .sv-valori-foglio .proposte button{display:block;width:100%;
+    text-align:left;min-height:2.5rem;padding:.4rem .85rem;
+    background:none;border:0;cursor:pointer;color:rgba(245,240,230,.84);
+    font-family:'Cormorant Garamond',serif;font-size:1.02rem;
+    border-bottom:1px solid rgba(245,240,230,.06)}
+  .sv-valori-foglio .proposte button:last-child{border-bottom:0}
+  .sv-valori-foglio .proposte button:hover{background:rgba(212,175,106,.14);
+    color:#F5F0E6}
+
+  .sv-valori-foglio .scorciatoie{display:flex;gap:.4rem;flex-wrap:wrap;
+    margin-top:.7rem}
+  .sv-valori-foglio .scorciatoie button{min-height:2.1rem;
+    padding:.24rem .8rem;border-radius:999px;cursor:pointer;
+    border:1px solid rgba(245,240,230,.16);background:transparent;
+    color:rgba(245,240,230,.66);font-family:'DM Sans',sans-serif;
+    font-size:.8rem;letter-spacing:.04em}
+  .sv-valori-foglio .scorciatoie button:hover{
+    border-color:rgba(212,175,106,.5);color:var(--oro-a)}
+
+  .sv-valori-foglio .nomi{display:flex;gap:.4rem;flex-wrap:wrap;
+    margin-top:.7rem}
+  .sv-valori-foglio .nomi span{display:inline-flex;align-items:center;
+    gap:.4rem;min-height:2.1rem;padding:.22rem .75rem;border-radius:999px;
+    background:rgba(204,102,68,.14);border:1px solid rgba(204,102,68,.4);
+    font-size:.86rem}
+  .sv-valori-foglio .nomi span i{cursor:pointer;font-style:normal;
+    color:rgba(245,240,230,.5)}
+  .sv-valori-foglio .nomi span i:hover{color:#F5F0E6}
+
+  .sv-valori-foglio .nota{margin-top:.9rem;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:.94rem;line-height:1.5;color:rgba(245,240,230,.5)}
+
+  .sv-valori-foglio .fatto{width:100%;min-height:2.9rem;margin-top:1.1rem;
+    border-radius:999px;border:0;cursor:pointer;
+    background:var(--oro-a);color:#0A0C1A;
+    font-family:'DM Sans',sans-serif;font-size:.9rem;letter-spacing:.1em}
+
+  @media (max-width:52rem){ .sv-valori{--scala:1.15} }
+  @media (prefers-reduced-motion:reduce){
+    .sv-valori{transition:opacity .3s ease}
+  }
+</style>
+
+<div class="sv-valori" id="svValori">
+  <button type="button" class="v" data-v="quando">
+    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="5" width="18" height="16" rx="2.5"/>
+      <path d="M3 10h18M8 3v4M16 3v4"/></svg>
+    <span data-testo>oggi</span><span class="via" data-via>&times;</span>
+  </button>
+
+  <button type="button" class="v" data-v="dove">
+    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/>
+      <circle cx="12" cy="10" r="2.6"/></svg>
+    <span data-testo>dove</span><span class="via" data-via>&times;</span>
+  </button>
+
+  <button type="button" class="v" data-v="chi">
+    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="8" r="3.4"/>
+      <path d="M2.6 20c.6-3.4 3.3-5.4 6.4-5.4s5.8 2 6.4 5.4"/>
+      <path d="M17 8.4a3 3 0 0 1 0 5.6M18.6 20c-.2-1.5-.7-2.8-1.5-3.8"
+            opacity=".6"/></svg>
+    <span data-testo>con chi</span><span class="via" data-via>&times;</span>
+  </button>
+</div>
+
+<div class="sv-valori-velo" data-velo>
+  <div class="sv-valori-foglio" data-foglio></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var R = document.getElementById("svValori");
+  if (!R) return;
+
+  var velo   = document.querySelector("[data-velo]");
+  var foglio = document.querySelector("[data-foglio]");
+
+  /* i valori tenuti */
+  var stato = { accaduto_il: null, luogo: null, territorio_cod: null,
+                territorio_nome: null,
+                luogo_lat: null, luogo_lon: null, persone: [] };
+
+  var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno",
+              "luglio","agosto","settembre","ottobre","novembre","dicembre"];
+
+  function iso(d) {
+    return d.getFullYear() + "-" +
+           String(d.getMonth() + 1).padStart(2, "0") + "-" +
+           String(d.getDate()).padStart(2, "0");
+  }
+  function oggi() { return iso(new Date()); }
+
+  function tasto(nome) { return R.querySelector('[data-v="' + nome + '"]'); }
+
+  function scrivi(nome, testo, pieno) {
+    var t = tasto(nome);
+    t.querySelector("[data-testo]").textContent = testo;
+    t.classList.toggle("pieno", !!pieno);
+  }
+
+  function aggiorna() {
+    /* quando */
+    if (stato.accaduto_il && stato.accaduto_il !== oggi()) {
+      var d = new Date(stato.accaduto_il + "T12:00:00");
+      scrivi("quando", d.getDate() + " " + MESI[d.getMonth()], true);
+    } else {
+      scrivi("quando", "oggi", false);
+    }
+    /* dove: il nome del luogo se c'è, se no il comune */
+    var d2 = stato.luogo || stato.territorio_nome;
+    scrivi("dove", d2 || "dove", !!d2);
+    /* con chi */
+    var p = stato.persone;
+    if (!p.length)      scrivi("chi", "con chi", false);
+    else if (p.length === 1) scrivi("chi", "con " + p[0], true);
+    else if (p.length === 2) scrivi("chi", "con " + p[0] + " e " + p[1], true);
+    else scrivi("chi", "con " + p[0] + " e altri " + (p.length - 1), true);
+  }
+
+  /* ── il collegamento al database, se il guscio ce l'ha ── */
+  function db() {
+    return window.db || window.FM_DB || null;
+  }
+
+  /* ⭐ i comuni vengono da `territori`: 7.896 righe, caricate dall'ISTAT.
+     Senza questo, «dove» resterebbe una stringa che non trova niente. */
+  function cercaComune(q, prop, cCom, cLuo) {
+    var d = db();
+    if (!d) { prop.innerHTML = ""; return; }
+    d.from("territori")
+      .select("codice,nome")
+      .ilike("nome", q + "%")
+      .order("nome")
+      .limit(8)
+      .then(function (r) {
+        var righe = (r && r.data) || [];
+        prop.innerHTML = "";
+        righe.forEach(function (t) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = t.nome;
+          b.addEventListener("click", function () {
+            stato.territorio_cod = t.codice;
+            stato.territorio_nome = t.nome;
+            cCom.value = t.nome;
+            prop.innerHTML = "";
+            cLuo.focus();
+          });
+          prop.appendChild(b);
+        });
+      })
+      .catch(function () { prop.innerHTML = ""; });
+  }
+
+  /* ⭐ i nomi già usati: non una rubrica di amici, la tua memoria.
+     Se la tavola è vuota o chiusa, il campo funziona a mano. */
+  function cercaNome(q, prop, campo, dipingi) {
+    var d = db();
+    if (!d) { prop.innerHTML = ""; return; }
+    d.from("orma_persone")
+      .select("nome")
+      .ilike("nome", q + "%")
+      .limit(20)
+      .then(function (r) {
+        var visti = {}, righe = [];
+        ((r && r.data) || []).forEach(function (x) {
+          if (!visti[x.nome] && stato.persone.indexOf(x.nome) < 0) {
+            visti[x.nome] = 1; righe.push(x.nome);
+          }
+        });
+        prop.innerHTML = "";
+        righe.slice(0, 6).forEach(function (n) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = n;
+          b.addEventListener("click", function () {
+            stato.persone.push(n);
+            campo.value = "";
+            prop.innerHTML = "";
+            dipingi();
+            campo.focus();
+          });
+          prop.appendChild(b);
+        });
+      })
+      .catch(function () { prop.innerHTML = ""; });
+  }
+
+  /* ── il foglio che si apre ── */
+  function apri(nome) {
+    if (nome === "quando") {
+      foglio.innerHTML =
+        '<div class="capo"><b>Quando</b>' +
+        '<button type="button" data-chiudi>Chiudi</button></div>' +
+        '<input type="date" data-data min="1900-01-01" max="' + oggi() + '">' +
+        '<div class="scorciatoie">' +
+        '<button type="button" data-giorni="0">oggi</button>' +
+        '<button type="button" data-giorni="1">ieri</button>' +
+        '<button type="button" data-anni="1">un anno fa</button>' +
+        '<button type="button" data-anni="10">dieci anni fa</button>' +
+        '</div>' +
+        '<p class="nota">\u00C8 possibile registrare sia un fatto ' +
+        'accaduto oggi, che avvenimenti storici da collegare alle tue ' +
+        'orme.</p>' +
+        '<button type="button" class="fatto" data-fatto>Fatto</button>';
+
+      var campo = foglio.querySelector("[data-data]");
+      campo.value = stato.accaduto_il || oggi();
+      foglio.querySelectorAll("[data-giorni]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var d = new Date();
+          d.setDate(d.getDate() - parseInt(b.dataset.giorni, 10));
+          campo.value = iso(d);
+        });
+      });
+      foglio.querySelectorAll("[data-anni]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var d = new Date();
+          d.setFullYear(d.getFullYear() - parseInt(b.dataset.anni, 10));
+          campo.value = iso(d);
+          campo.focus();
+        });
+      });
+      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
+        stato.accaduto_il = campo.value || oggi();
+        aggiorna(); chiudi();
+      });
+    }
+
+    if (nome === "dove") {
+      foglio.innerHTML =
+        '<div class="capo"><b>Dove</b>' +
+        '<button type="button" data-chiudi>Chiudi</button></div>' +
+        '<div class="campo-cerca">' +
+        '<input type="text" data-comune placeholder="il comune" ' +
+        'autocomplete="off">' +
+        '<div class="proposte" data-proposte></div></div>' +
+        '<input type="text" data-luogo placeholder="il nome del luogo" ' +
+        'style="margin-top:.6rem">' +
+        '<div class="scorciatoie">' +
+        '<button type="button" data-qui>Usa la mia posizione</button>' +
+        '</div>' +
+        '<p class="nota" data-nota-dove>serve a far comparire ' +
+        'l\u2019orma sulla mappa</p>' +
+        '<button type="button" class="fatto" data-fatto>Fatto</button>';
+
+      var cCom  = foglio.querySelector("[data-comune]");
+      var cLuo  = foglio.querySelector("[data-luogo]");
+      var prop  = foglio.querySelector("[data-proposte]");
+      cCom.value = stato.territorio_nome || "";
+      cLuo.value = stato.luogo || "";
+
+      var attesa = null;
+      cCom.addEventListener("input", function () {
+        stato.territorio_cod = null;
+        clearTimeout(attesa);
+        var q = cCom.value.trim();
+        if (q.length < 2) { prop.innerHTML = ""; return; }
+        attesa = setTimeout(function () { cercaComune(q, prop, cCom, cLuo); },
+                            220);
+      });
+
+      var bQui = foglio.querySelector("[data-qui]");
+      var nQui = foglio.querySelector("[data-nota-dove]");
+
+      /* ⭐ Se la posizione è già stata negata, il tasto non la richiede:
+         il navigatore non lo permette. Porta alle impostazioni. */
+      function alleImpostazioni() {
+        bQui.textContent = "Vai alle impostazioni";
+        nQui.innerHTML = "la posizione \u00E8 spenta: si riaccende " +
+          "dalle impostazioni del tuo account";
+        bQui.onclick = function () {
+          chiudi();
+          if (window.SpazioVivo && window.SpazioVivo.impostazioni) {
+            window.SpazioVivo.impostazioni("posizione");
+          }
+        };
+      }
+
+      if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions.query({ name: "geolocation" })
+          .then(function (p) { if (p.state === "denied") alleImpostazioni(); })
+          .catch(function () {});
+      }
+
+      bQui.addEventListener("click", function () {
+        if (bQui.textContent === "Vai alle impostazioni") return;
+        if (!navigator.geolocation) { bQui.textContent = "non disponibile"; return; }
+        bQui.textContent = "un momento\u2026";
+        navigator.geolocation.getCurrentPosition(function (p) {
+          stato.luogo_lat = p.coords.latitude;
+          stato.luogo_lon = p.coords.longitude;
+          bQui.textContent = "posizione presa";
+          nQui.textContent = "l\u2019orma comparir\u00E0 sulla mappa";
+          if (!cLuo.value) cLuo.focus();
+        }, function (e) {
+          if (e && e.code === 1) alleImpostazioni();
+          else bQui.textContent = "non riuscito";
+        });
+      });
+
+      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
+        stato.luogo = cLuo.value.trim() || null;
+        if (!stato.territorio_cod) stato.territorio_nome = null;
+        aggiorna(); chiudi();
+      });
+      setTimeout(function () { cCom.focus(); }, 120);
+    }
+
+    if (nome === "chi") {
+      foglio.innerHTML =
+        '<div class="capo"><b>Con chi</b>' +
+        '<button type="button" data-chiudi>Chiudi</button></div>' +
+        '<div class="campo-cerca">' +
+        '<input type="text" data-nome placeholder="un nome, e invio" ' +
+        'autocomplete="off">' +
+        '<div class="proposte" data-proposte></div></div>' +
+        '<div class="nomi" data-nomi></div>' +
+        '<p class="nota">Chi era con te. Quando entra, l\u2019orma ' +
+        'diventa anche sua.</p>' +
+        '<button type="button" class="fatto" data-fatto>Fatto</button>';
+
+      var campo3 = foglio.querySelector("[data-nome]");
+      var elenco = foglio.querySelector("[data-nomi]");
+
+      function dipingi() {
+        elenco.innerHTML = "";
+        stato.persone.forEach(function (n, i) {
+          var s = document.createElement("span");
+          s.innerHTML = n + ' <i data-togli="' + i + '">&times;</i>';
+          elenco.appendChild(s);
+        });
+        elenco.querySelectorAll("[data-togli]").forEach(function (x) {
+          x.addEventListener("click", function () {
+            stato.persone.splice(parseInt(x.dataset.togli, 10), 1);
+            dipingi();
+          });
+        });
+      }
+      dipingi();
+
+      var prop3 = foglio.querySelector("[data-proposte]");
+      var attesa3 = null;
+      campo3.addEventListener("input", function () {
+        clearTimeout(attesa3);
+        var q = campo3.value.trim();
+        if (q.length < 2) { prop3.innerHTML = ""; return; }
+        attesa3 = setTimeout(function () {
+          cercaNome(q, prop3, campo3, dipingi);
+        }, 220);
+      });
+
+      campo3.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        var n = campo3.value.trim();
+        if (n && stato.persone.indexOf(n) < 0) stato.persone.push(n);
+        campo3.value = "";
+        prop3.innerHTML = "";
+        dipingi();
+      });
+      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
+        var n = campo3.value.trim();
+        if (n && stato.persone.indexOf(n) < 0) stato.persone.push(n);
+        aggiorna(); chiudi();
+      });
+      setTimeout(function () { campo3.focus(); }, 120);
+    }
+
+    foglio.querySelector("[data-chiudi]").addEventListener("click", chiudi);
+    velo.classList.add("on");
+  }
+
+  function chiudi() { velo.classList.remove("on"); }
+
+  velo.addEventListener("click", function (e) {
+    if (e.target === velo) chiudi();
+  });
+
+  /* ── i tre tasti ── */
+  R.querySelectorAll(".v").forEach(function (t) {
+    var nome = t.dataset.v;
+    t.addEventListener("click", function (e) {
+      /* la × svuota invece di aprire */
+      if (e.target.closest("[data-via]")) {
+        if (nome === "quando") stato.accaduto_il = null;
+        if (nome === "dove") { stato.luogo = null;
+          stato.territorio_cod = null; stato.territorio_nome = null;
+          stato.luogo_lat = null; stato.luogo_lon = null; }
+        if (nome === "chi") stato.persone = [];
+        aggiorna();
+        return;
+      }
+      apri(nome);
+    });
+  });
+
+  aggiorna();
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.valori = function (pieno) {
+    R.classList.toggle("vivi", !!pieno);
+  };
+  window.SpazioVivo.valoriLeggi = function () {
+    return {
+      accaduto_il: stato.accaduto_il || oggi(),
+      luogo: stato.luogo,
+      territorio_cod: stato.territorio_cod,
+      luogo_lat: stato.luogo_lat,
+      luogo_lon: stato.luogo_lon,
+      persone: stato.persone.slice()
+    };
+  };
+  window.SpazioVivo.valoriPulisci = function () {
+    stato = { accaduto_il: null, luogo: null, territorio_cod: null,
+              territorio_nome: null,
+              luogo_lat: null, luogo_lon: null, persone: [] };
+    aggiorna();
+  };
+})();
+</script>
+
           <div class="mg-attesa" id="mg-attesa" hidden></div>
       <div class="riga-strumenti">
         <!-- ⭐ TOCCATO NEL GUSCIO ㉓ — «DOVE LO PORTI» NON STA PIÙ NELLA RIGA.
@@ -3683,7 +4204,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   })();
 
   function megafonoGuarda(){
-    document.body.classList.toggle("mg-pieno", campo.value.trim().length > 0);
+    var pieno = campo.value.trim().length > 0;
+    document.body.classList.toggle("mg-pieno", pieno);
+    /* ⭐ TOCCATO NEL GUSCIO ㉔ — i tre valori si accendono coi quattro segni.
+       Il pezzo non guarda il campo da sé: glielo dice il guscio, qui, nel
+       punto solo dove `mg-pieno` cambia. */
+    if(window.SpazioVivo && window.SpazioVivo.valori) window.SpazioVivo.valori(pieno);
   }
   campo.addEventListener("input", function(){ cresci(); megafonoGuarda(); });
   megafonoGuarda();
@@ -4142,22 +4668,42 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⛔ LA REGOLA DEL CANONE, l'ultima parola. I tasti sono già spenti, ma
        il controllo si rifà qui: fra il tocco e l'invio può essere entrato
        un nome, e la regola non si affida a un tasto. */
-    var aspettano = chiAspetta();
+    /* ⭐ TOCCATO NEL GUSCIO ㉔ — I TRE VALORI ARRIVANO DAL PEZZO DI DESIGN.
+       Prima li tenevano tre variabili della riga vecchia — `quandoScelto`,
+       `luogoDato`, `conChi`. Adesso li chiede una funzione sola.
+       ⚠️ Se il pezzo non c'è, si torna alle variabili di prima e niente si
+          rompe: è la stessa rete che tiene su una pagina non aggiornata. */
+    var V = (window.SpazioVivo && window.SpazioVivo.valoriLeggi)
+      ? window.SpazioVivo.valoriLeggi()
+      : { accaduto_il: quandoScelto || oggi,
+          luogo: luogoDato && luogoDato.nome,
+          territorio_cod: luogoDato && luogoDato.cod,
+          luogo_lat: luogoDato && luogoDato.lat,
+          luogo_lon: luogoDato && luogoDato.lon,
+          persone: conChi.map(function(x){ return x.nome; }) };
+
+    /* ⛔ LA REGOLA DEL CANONE, l'ultima parola. Un'orma che nomina qualcuno
+       che non ha ancora confermato resta privata. La regola non cambia:
+       cambia solo da dove arrivano i nomi.
+       ⚠️ `valoriLeggi()` dà nomi nudi; qui tornano oggetti, perché
+          frasePerChiAspetta() e la scrittura su `orma_persone` leggono
+          `.nome` e non si toccano. */
+    var aspettano = (V.persone || []).map(function(n){ return {nome:n}; });
     if(aspettano.length) apertaCosi = "solo_me";
 
     var riga = {persona_id:io.id, contenuto:t,
       tipo:tipoScritto, destinazione:dovePorta, visibilita:apertaCosi};
     if(luogoScelto) riga.vicinato_id = luogoScelto.id;
-    riga.accaduto_il = quandoScelto || oggi;
+    riga.accaduto_il = V.accaduto_il || oggi;
 
     /* ── il dove: il nome, il punto, il comune ── */
-    if(luogoDato){
-      if(luogoDato.nome) riga.luogo = luogoDato.nome;
-      if(luogoDato.lat != null) riga.luogo_lat = luogoDato.lat;
-      if(luogoDato.lon != null) riga.luogo_lon = luogoDato.lon;
-      if(luogoDato.cod) riga.territorio_cod = luogoDato.cod;
-    }
-    var conChiOra = conChi.slice(), doveOra = luogoDato;
+    if(V.luogo)                riga.luogo          = V.luogo;
+    if(V.luogo_lat != null)    riga.luogo_lat      = V.luogo_lat;
+    if(V.luogo_lon != null)    riga.luogo_lon      = V.luogo_lon;
+    if(V.territorio_cod)       riga.territorio_cod = V.territorio_cod;
+
+    var conChiOra = aspettano.slice();
+    var doveOra = V.luogo ? {nome: V.luogo} : null;
     db.from("orme").insert(riga)
       .select("id,contenuto").single().then(function(r){
       if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
@@ -4189,6 +4735,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       /* ⭐ e con lei i tre dati: la prossima orma è di oggi, senza luogo e
          senza nomi. Restassero, si porterebbero dietro il luogo e le persone
          di un'orma che non c'entra. */
+      /* ⭐ TOCCATO NEL GUSCIO ㉔ — a pulire adesso è il pezzo. Le tre
+         variabili vecchie si azzerano lo stesso finché la riga vecchia
+         resta scritta: il giorno che se ne va, se ne vanno con lei. */
+      if(window.SpazioVivo && window.SpazioVivo.valoriPulisci) window.SpazioVivo.valoriPulisci();
       quandoScelto = null; luogoDato = null; conChi = [];
       var sq = $("s-quando-v"); if(sq) sq.textContent = "Oggi";
       aggiornaTreDati();
@@ -4197,7 +4747,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
             + (aspettano.length ? " · " + frasePerChiAspetta(aspettano) : "")
             + (doveOra && doveOra.nome ? " · " + doveOra.nome : "")
             + (luogoScelto ? " · " + luogoScelto.nome : "")
-            + (quandoScelto ? " · " + new Date(quandoScelto+"T12:00:00")
+            + (V.accaduto_il && V.accaduto_il !== oggi ? " · " + new Date(V.accaduto_il+"T12:00:00")
                  .toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"}) : ""));
       if(vista==="orme") caricaOrme(); else contaOrme();
     });
