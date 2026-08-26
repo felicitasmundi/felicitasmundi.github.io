@@ -957,18 +957,29 @@
   body.mg-pieno .mg-fila #s-invio{opacity:1;transform:scale(1);width:2.9rem;
     margin-left:0;pointer-events:auto}
 
-  /* ── SI NASCONDE SOLO QUELLO CHE RIGUARDA L'ORMA CHE STAI SCRIVENDO ──
-     ⭐ TOCCATO NEL GUSCIO ⑰ — prima spariva tutta la riga degli strumenti, e
-        con lei «le cose aperte» e i talenti: due porte che non c'entrano
-        niente con lo scrivere, e per arrivarci bisognava prima digitare.
-        Adesso la riga resta sempre, e dentro si nasconde solo ciò che serve
-        all'orma: dove la porti, l'Integrator, la ricerca — e i quattro segni.
-     ⛔ Chi si aggiunge alla riga e riguarda l'orma prende `mg-scrivendo`.
-        Chi è una porta verso altro, no. */
+  /* ── A RIPOSO, SOTTO IL CAMPO NON C'È NIENTE ──
+     ⭐ TOCCATO NEL GUSCIO ㉓ — e questo ribalta il ⑰.
+        Al ⑰ «le cose aperte» e i talenti erano rimasti sempre visibili,
+        perché sono porte verso altro e non riguardano lo scrivere. Guardati
+        sul telefono non reggono: a campo vuoto restano due tondi muti sotto
+        il campo, senza niente che dica cosa sono. Adesso si nascondono come
+        tutto il resto, e la forma a riposo è il campo e basta.
+     ⛔ LA REGOLA, ADESSO: tutto quello che sta nella riga degli strumenti
+        prende `mg-scrivendo`. Non c'è più l'eccezione delle porte. */
   .mg-segni{max-height:0;overflow:hidden;opacity:0;
     margin-top:0;transition:opacity .45s ease,max-height .45s ease,margin-top .45s ease}
   body.mg-pieno .mg-segni{opacity:1;max-height:12rem;margin-top:0.7rem}
-  #mg .riga-strumenti{margin-top:0.55rem}
+  /* ⭐ TOCCATO NEL GUSCIO ㉓ — a riposo la riga si chiude tutta.
+     Nascondere i tasti non basta: perdono la larghezza ma non l'altezza, e
+     sotto il campo restava una fascia vuota di quasi 3rem col filo del bordo
+     sopra. Si ritirano anche l'altezza, il margine, il cuscino e il filo.
+     ⛔ L'overflow non si tocca: sotto i 40rem e sotto i 55rem questa riga
+        scorre di lato, e quelle regole devono restare padrone. */
+  #mg .riga-strumenti{max-height:0;margin-top:0;padding-top:0;border-top-width:0;
+    transition:max-height .45s ease,margin-top .45s ease,
+               padding-top .45s ease,border-top-width .45s ease}
+  body.mg-pieno #mg .riga-strumenti{max-height:8rem;margin-top:0.55rem;
+    padding-top:0.55rem;border-top-width:1px}
   #mg .mg-scrivendo{max-width:0;padding-left:0;padding-right:0;margin:0;
     border-width:0;opacity:0;overflow:hidden;pointer-events:none;
     transition:opacity .35s ease,max-width .35s ease}
@@ -989,6 +1000,33 @@
   .mg-sg.quadro i{border-radius:0.12rem}
   .mg-sg.rombo i{transform:rotate(45deg)}
   .mg-sg.pieno i{background:var(--c);border-radius:50%}
+
+  /* ── i tre dati: tre parole in grigio che si toccano ── */
+  .mg-dati{display:flex;align-items:center;gap:0.15rem;flex-wrap:wrap}
+  .mg-p{color:rgba(245,240,230,0.28);font-size:var(--t-eti);padding:0 0.15rem}
+  .mg-d{background:none;border:0;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.62);padding:0.5rem 0.5rem;
+    min-height:2.75rem;border-bottom:1px solid transparent;border-radius:0.4rem}
+  .mg-d:hover{color:var(--ivory);border-bottom-color:rgba(200,160,85,0.4)}
+  .mg-d.vuota{color:rgba(245,240,230,0.38);font-style:italic}
+  .mg-d.scelta{color:var(--oro-ch);border-bottom-color:rgba(200,160,85,0.45)}
+  /* ⛔ la riga del canone, quando un nome aspetta ancora */
+  .mg-attesa{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-eti);color:var(--oro-ch);padding:0.35rem 0.5rem 0}
+  /* i tre tasti della visibilità si spengono, e si vede che sono spenti */
+  .v-t.chiusa{opacity:0.4;cursor:not-allowed}
+
+  /* le righe di «con chi» */
+  .cc-riga{display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0;
+    border-bottom:1px solid var(--line)}
+  .cc-riga b{flex:1;min-width:0;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-tas);font-weight:500;color:var(--ivory)}
+  .cc-riga i{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-eti);color:rgba(245,240,230,0.6)}
+  .cc-via{background:none;border:0;color:rgba(245,240,230,0.6);cursor:pointer;
+    font-size:var(--t-cor);min-width:2.75rem;min-height:2.75rem}
+  .cc-via:hover{color:var(--ivory)}
   #campo:focus{border-color:rgba(200,160,85,0.45)}
   .simboli{display:flex;align-items:center;gap:0.45rem;margin-top:0.55rem;overflow-x:auto;
     scrollbar-width:none}
@@ -1626,15 +1664,36 @@
         <button class="s invia" id="s-invio" title="Manda">&#8594;</button>
           </div>
           <div class="mg-segni" id="mg-segni"></div>
+          <!-- ⭐ TOCCATO NEL GUSCIO ㉒ — I TRE DATI DELL'ORMA: quando, dove,
+               con chi. Non sono segni: i quattro segni dicono COS'È l'orma,
+               questi dicono DA DOVE VIENE. Portano già dentro la risposta —
+               si legge un valore, non una scelta da fare. -->
+          <div class="mg-dati" id="mg-dati">
+            <button type="button" class="mg-d" id="d-quando">oggi</button>
+            <span class="mg-p" aria-hidden="true">&middot;</span>
+            <button type="button" class="mg-d vuota" id="d-dove">[ dove ]</button>
+            <span class="mg-p" aria-hidden="true">&middot;</span>
+            <button type="button" class="mg-d vuota" id="d-chi">[ con chi ]</button>
+          </div>
+          <!-- ⛔ la riga del canone: compare solo quando un nome non ha
+               ancora confermato, e dice chi si aspetta -->
+          <div class="mg-attesa" id="mg-attesa" hidden></div>
       <div class="riga-strumenti">
-        <button class="s-pill mg-scrivendo" id="s-dove" style="--tc:var(--oro-ch)">
-          <span class="sg" id="dove-sg"></span><span id="dove-tx">Dove lo porti</span>
-        </button>
+        <!-- ⭐ TOCCATO NEL GUSCIO ㉓ — «DOVE LO PORTI» NON STA PIÙ NELLA RIGA.
+             Al ⑳ aveva smesso di fermare l'invio; adesso esce del tutto. La
+             destinazione la decide il segno: la tavola DOVE accosta un `dest`
+             a ogni `tipo`, e il segno acceso dice il tipo. Due file di tasti
+             per lo stesso gesto erano una di troppo.
+             ⚠️ Restano fermi e senza voce il foglio #vele, #pista, chiudiVele()
+                e la variabile `scelta`: erano suoi soltanto. Non li tolgo nello
+                stesso giro — il guscio si tocca il meno possibile — ma da qui
+                in poi `scelta` non può che essere null, e `destinazione` è
+                sempre quella che dà il segno. -->
         <!-- al posto di «Edizione»: la scelta del modello non serve più -->
         <button class="s-pill mg-scrivendo" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="nexus.png" alt=""></span>INTEGRATOR</button>
         <button class="s mg-scrivendo" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
-        <button class="s" id="s-aperte" title="Le cose aperte">&#9673;</button>
-        <button class="s" id="s-talenti" title="talenti"><span class="sg-t"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/></svg></span></button>
+        <button class="s mg-scrivendo" id="s-aperte" title="Le cose aperte">&#9673;</button>
+        <button class="s mg-scrivendo" id="s-talenti" title="talenti"><span class="sg-t"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/></svg></span></button>
       </div>
         </div>
       </div>
@@ -1684,6 +1743,44 @@
     <button class="mini" id="nl-crea">Fai nascere il luogo</button>
     <div id="nl-esito" style="margin-top:0.5rem"></div>
   </div>
+</div></div>
+
+<!-- ⭐ TOCCATO NEL GUSCIO ㉒ — DOVE: il punto e il nome.
+     ⛔ Il luogo non si chiede mai da solo: si chiede quando si tocca «dove».
+     ⚠️ Un no al navigatore vale per sempre — non si richiede più, e il nome
+        si scrive a mano lo stesso. -->
+<div class="velo" id="v-dove"><div class="foglio">
+  <button class="x" data-x="v-dove">&times;</button>
+  <h3>Dove</h3>
+  <div class="fs">Il punto lo d&agrave; il telefono, il nome lo dai tu.</div>
+  <div class="invito-box">
+    <button class="mini" id="dv-punto">Prendi il punto da qui</button>
+    <div id="dv-esito" style="margin-top:0.5rem"></div>
+    <input id="dv-nome" placeholder="il nome del posto, come lo diresti"
+           style="margin-top:0.6rem">
+    <div id="dv-terr" style="margin-top:0.5rem"></div>
+    <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.6rem">
+      <button class="mini" id="dv-ok">Segna questo luogo</button>
+      <button class="mini" id="dv-via">Togli il luogo</button>
+    </div>
+  </div>
+</div></div>
+
+<!-- ⭐ TOCCATO NEL GUSCIO ㉒ — CON CHI. Ogni nome diventa una riga in
+     `orma_persone` con stato «proposto». Se il nome corrisponde a chi ha un
+     conto ci va anche persona_id; se non corrisponde, il nome basta: quella
+     riga diventer&agrave; un collegamento vero il giorno che quella persona entra. -->
+<div class="velo" id="v-conchi"><div class="foglio">
+  <button class="x" data-x="v-conchi">&times;</button>
+  <h3>Con chi</h3>
+  <div class="fs">Un&rsquo;orma che nomina un&rsquo;altra persona resta privata finch&eacute; quella
+    persona non conferma. Il legame si propone, non si impone.</div>
+  <div class="invito-box">
+    <input id="cc-nome" placeholder="il nome di chi c&rsquo;era">
+    <div id="cc-trovati" style="margin-top:0.5rem"></div>
+    <button class="mini" id="cc-agg" style="margin-top:0.5rem">Aggiungi</button>
+  </div>
+  <div id="cc-lista" style="margin-top:0.8rem"></div>
 </div></div>
 
 <div class="velo" id="v-priv"><div class="foglio">
@@ -3601,32 +3698,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     return o.el ? sg(o.el) : "";
   }
 
-  $("s-dove").addEventListener("click", function(){
-    if(veleSu){ $("vele").classList.remove("su"); veleSu=false; return; }
-    var pista=$("pista"); pista.innerHTML="";
-    var t=document.createElement("div"); t.className="dest-griglia";
-    DOVE.forEach(function(o){
-      var ok = o.tipo && permessi.indexOf(o.tipo)>=0;
-      var b=document.createElement("button");
-      b.className="dest" + (ok ? "" : " spenta") + (scelta===o ? " on" : "");
-      b.style.setProperty("--dc","var("+o.c+")");
-      b.innerHTML='<span class="d-sg"></span><b></b><i></i>';
-      b.querySelector(".d-sg").innerHTML = bollo(o);
-      b.querySelector("b").textContent = o.n;
-      b.querySelector("i").textContent = ok ? o.s : "non al tuo grado";
-      if(ok) b.addEventListener("click", function(){
-        scelta=o;
-        $("s-dove").style.setProperty("--tc","var("+o.c+")");
-        $("dove-tx").textContent=o.n;
-        $("dove-sg").innerHTML=bollo(o);
-        document.querySelectorAll(".dest").forEach(function(x){ x.classList.remove("on"); });
-        b.classList.add("on");
-      });
-      t.appendChild(b);
-    });
-    pista.appendChild(t);
-    $("vele").classList.add("su"); veleSu=true;
-  });
+  /* ⭐ TOCCATO NEL GUSCIO ㉓ — il gestore di «Dove lo porti» se ne va col
+     suo tasto. Restando, $("s-dove") sarebbe null e la riga solleverebbe
+     prima ancora che il Megafono si apra. */
 
   /* ── il luogo dell'orma ── */
   var luoghi = [], luogoScelto = null;
@@ -3775,10 +3849,236 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       .then(function(){ b.disabled = false; b.textContent = "Fai nascere il luogo"; });
   });
 
+  /* ══════════════════════════════════════════════════════════════
+     ⭐ TOCCATO NEL GUSCIO ㉒ — I TRE DATI DELL'ORMA
+     quando · dove · con chi. Tre parole sotto i segni che portano già
+     dentro la loro risposta. Ognuna apre il suo foglio.
+     ══════════════════════════════════════════════════════════════ */
+
+  var luogoDato = null;      /* {nome, lat, lon, cod} */
+  var conChi    = [];        /* [{nome, persona_id}] */
+
+  var MESI_BREVI = ["gennaio","febbraio","marzo","aprile","maggio","giugno",
+                    "luglio","agosto","settembre","ottobre","novembre","dicembre"];
+  function inItaliano(iso){
+    var d = new Date(iso + "T12:00:00");
+    return d.getDate() + " " + MESI_BREVI[d.getMonth()];
+  }
+  function dataDiOggi(){
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0")
+                           + "-" + String(d.getDate()).padStart(2,"0");
+  }
+
+  /* le tre parole dicono quello che c'è, non quello che si può scegliere */
+  function aggiornaTreDati(){
+    var q = $("d-quando");
+    if(q){
+      q.textContent = quandoScelto ? inItaliano(quandoScelto) : "oggi";
+      q.classList.toggle("scelta", !!quandoScelto);
+      q.classList.remove("vuota");
+    }
+    var d = $("d-dove");
+    if(d){
+      d.textContent = luogoDato && luogoDato.nome ? luogoDato.nome : "[ dove ]";
+      d.classList.toggle("scelta", !!(luogoDato && luogoDato.nome));
+      d.classList.toggle("vuota", !(luogoDato && luogoDato.nome));
+    }
+    var c = $("d-chi");
+    if(c){
+      c.textContent = !conChi.length ? "[ con chi ]"
+        : conChi.length === 1 ? conChi[0].nome
+        : conChi.length + " persone";
+      c.classList.toggle("scelta", conChi.length > 0);
+      c.classList.toggle("vuota", conChi.length === 0);
+    }
+    aggiornaAttesa();
+  }
+
+  /* ⛔ LA REGOLA DEL CANONE, quella di le-regole.html e della 4g:
+     un'orma che nomina un'altra persona resta privata finché quella persona
+     non conferma. Finché una riga di `orma_persone` non è «confermato», la
+     visibilità non può essere né «tutti» né «il mio vicinato».
+     Alla nascita ogni riga è «proposto», quindi basta un nome. */
+  function chiAspetta(){
+    return conChi.filter(function(x){ return x.stato !== "confermato"; });
+  }
+  function frasePerChiAspetta(chi){
+    if(chi.length === 1) return "Aspetta che " + chi[0].nome + " confermi.";
+    if(chi.length === 2) return "Aspetta che " + chi[0].nome + " e " + chi[1].nome + " confermino.";
+    return "Aspetta che " + chi[0].nome + " e altri " + (chi.length-1) + " confermino.";
+  }
+  function aggiornaAttesa(){
+    var chi = chiAspetta(), chiusa = chi.length > 0;
+    var r = $("mg-attesa");
+    if(r){
+      r.textContent = chiusa ? frasePerChiAspetta(chi) : "";
+      r.hidden = !chiusa;
+    }
+    document.querySelectorAll(".v-t").forEach(function(x){
+      var bloccato = chiusa && x.dataset.v !== "solo_me";
+      x.classList.toggle("chiusa", bloccato);
+      x.setAttribute("aria-disabled", bloccato ? "true" : "false");
+    });
+    /* e se una era già accesa, torna al difetto: privata */
+    if(chiusa && visibilita !== "solo_me"){
+      visibilita = "solo_me";
+      document.querySelectorAll(".v-t").forEach(function(x){
+        x.classList.toggle("on", x.dataset.v === "solo_me");
+      });
+    }
+  }
+
+  /* ── ① QUANDO ──
+     `momento` è quando l'hai scritta e non si tocca. `accaduto_il` è quando
+     è successo, ed è questa che si sposta. Il difetto resta oggi. */
+  function apriQuando(){
+    var i = $("q-data");
+    if(i) i.value = quandoScelto || dataDiOggi();
+    $("v-quando").classList.add("on");
+  }
+  if($("d-quando"))  $("d-quando").addEventListener("click", apriQuando);
+  if($("s-quando"))  $("s-quando").addEventListener("click", apriQuando);
+  if($("q-ok")) $("q-ok").addEventListener("click", function(){
+    var v = ($("q-data")||{}).value || "";
+    quandoScelto = v || null;
+    var e = $("s-quando-v"); if(e) e.textContent = quandoScelto ? inItaliano(quandoScelto) : "Oggi";
+    aggiornaTreDati();
+    $("v-quando").classList.remove("on");
+  });
+  if($("q-oggi")) $("q-oggi").addEventListener("click", function(){
+    quandoScelto = null;
+    var e = $("s-quando-v"); if(e) e.textContent = "Oggi";
+    aggiornaTreDati();
+    $("v-quando").classList.remove("on");
+  });
+
+  /* ── ② DOVE ──
+     ⛔ Non si chiede mai da solo: si chiede toccando «dove».
+     ⚠️ Un no vale per sempre: non si richiede più, e il nome si scrive
+        a mano lo stesso. */
+  var NO_AL_PUNTO = "fm_luogo_no";
+  function puntoNegato(){
+    try{ return localStorage.getItem(NO_AL_PUNTO) === "1"; }catch(e){ return false; }
+  }
+  function segnaIlNo(){ try{ localStorage.setItem(NO_AL_PUNTO,"1"); }catch(e){} }
+
+  function apriDove(){
+    if(!luogoDato) luogoDato = {nome:"", lat:null, lon:null, cod:null};
+    var n = $("dv-nome"); if(n) n.value = luogoDato.nome || "";
+    var t = $("dv-terr"); if(t) t.textContent = luogoDato.cod ? ("comune: " + luogoDato.cod) : "";
+    var e = $("dv-esito");
+    if(e) e.textContent = puntoNegato()
+      ? "Il punto non si chiede più: hai già detto di no. Il nome si scrive lo stesso."
+      : (luogoDato.lat != null ? "punto preso" : "");
+    var b = $("dv-punto"); if(b) b.hidden = puntoNegato();
+    $("v-dove").classList.add("on");
+  }
+  if($("d-dove")) $("d-dove").addEventListener("click", apriDove);
+
+  if($("dv-punto")) $("dv-punto").addEventListener("click", function(){
+    var e = $("dv-esito");
+    if(!navigator.geolocation){ if(e) e.textContent = "Questo navigatore non sa dire dove sei."; return; }
+    if(e) e.textContent = "sto guardando…";
+    navigator.geolocation.getCurrentPosition(function(pos){
+      luogoDato.lat = pos.coords.latitude;
+      luogoDato.lon = pos.coords.longitude;
+      if(e) e.textContent = "punto preso";
+      cercaIlComune(luogoDato.lat, luogoDato.lon);
+    }, function(err){
+      if(err && err.code === 1){ segnaIlNo(); var b=$("dv-punto"); if(b) b.hidden = true;
+        if(e) e.textContent = "Va bene. Il punto non te lo chiedo più: scrivi il nome."; return; }
+      if(e) e.textContent = "Il punto non è arrivato. Il nome si scrive lo stesso.";
+    }, {enableHighAccuracy:false, timeout:10000, maximumAge:600000});
+  });
+
+  /* dal punto al comune, e dal comune al codice: `territori` ha i 7.896 comuni */
+  function cercaIlComune(lat, lon){
+    var t = $("dv-terr"); if(t) t.textContent = "cerco il comune…";
+    fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&lat="+lat+"&lon="+lon,
+          {headers:{"Accept":"application/json"}})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var a = (d && d.address) || {};
+        var nome = a.city || a.town || a.village || a.municipality || a.county || "";
+        if(!nome){ if(t) t.textContent = ""; return; }
+        var n = $("dv-nome"); if(n && !n.value) { n.value = nome; luogoDato.nome = nome; }
+        return db.from("territori").select("codice,nome").ilike("nome", nome).limit(1)
+          .then(function(r2){
+            var riga = (r2 && r2.data && r2.data[0]) || null;
+            luogoDato.cod = riga ? riga.codice : null;
+            if(t) t.textContent = riga ? ("comune: " + riga.nome + " · " + riga.codice)
+                                       : ("«" + nome + "» non è fra i comuni: resta il nome e il punto");
+          });
+      })
+      .catch(function(){ if(t) t.textContent = "Il comune non è arrivato. Il nome e il punto restano."; });
+  }
+
+  if($("dv-ok")) $("dv-ok").addEventListener("click", function(){
+    luogoDato.nome = (($("dv-nome")||{}).value || "").trim();
+    if(!luogoDato.nome && luogoDato.lat == null) luogoDato = null;
+    aggiornaTreDati();
+    $("v-dove").classList.remove("on");
+  });
+  if($("dv-via")) $("dv-via").addEventListener("click", function(){
+    luogoDato = null; aggiornaTreDati(); $("v-dove").classList.remove("on");
+  });
+
+  /* ── ③ CON CHI ── */
+  function disegnaConChi(){
+    var box = $("cc-lista"); if(!box) return;
+    box.innerHTML = "";
+    conChi.forEach(function(x, i){
+      var r = document.createElement("div"); r.className = "cc-riga";
+      var b = document.createElement("b"); b.textContent = x.nome;
+      var e = document.createElement("i");
+      e.textContent = x.persona_id ? "ha un conto qui" : "non ancora fra noi";
+      var v = document.createElement("button");
+      v.type = "button"; v.className = "cc-via"; v.textContent = "\u00d7";
+      v.setAttribute("aria-label", "Togli " + x.nome);
+      v.addEventListener("click", function(){ conChi.splice(i,1); disegnaConChi(); aggiornaTreDati(); });
+      r.appendChild(b); r.appendChild(e); r.appendChild(v);
+      box.appendChild(r);
+    });
+    aggiornaTreDati();
+  }
+  if($("d-chi")) $("d-chi").addEventListener("click", function(){
+    disegnaConChi(); $("v-conchi").classList.add("on");
+  });
+  if($("cc-nome")) $("cc-nome").addEventListener("input", function(){
+    var q = this.value.trim(), box = $("cc-trovati"); if(!box) return;
+    box.innerHTML = "";
+    if(q.length < 2) return;
+    db.from("persone_pubbliche").select("id,nome").ilike("nome","%"+q+"%").limit(5)
+      .then(function(r){
+        ((r && r.data) || []).forEach(function(pp){
+          var b = document.createElement("button");
+          b.type = "button"; b.className = "mini"; b.style.marginRight = "0.35rem";
+          b.textContent = pp.nome;
+          b.addEventListener("click", function(){
+            conChi.push({nome:pp.nome, persona_id:pp.id});
+            $("cc-nome").value = ""; box.innerHTML = ""; disegnaConChi();
+          });
+          box.appendChild(b);
+        });
+      }).catch(function(){});
+  });
+  if($("cc-agg")) $("cc-agg").addEventListener("click", function(){
+    var q = (($("cc-nome")||{}).value || "").trim(); if(!q) return;
+    conChi.push({nome:q, persona_id:null});
+    $("cc-nome").value = ""; $("cc-trovati").innerHTML = ""; disegnaConChi();
+  });
+
   /* i tre tasti della visibilità */
   var visibilita = "solo_me";
   document.querySelectorAll(".v-t").forEach(function(b){
     b.addEventListener("click", function(){
+      /* ⛔ finché un nome aspetta, questi due non si accendono */
+      if(b.classList.contains("chiusa")){
+        var chi = chiAspetta();
+        if(chi.length) parla(frasePerChiAspetta(chi));
+        return;
+      }
       visibilita = b.dataset.v;
       document.querySelectorAll(".v-t").forEach(function(x){
         x.classList.toggle("on", x===b);
@@ -3786,6 +4086,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       campo.focus();
     });
   });
+  aggiornaTreDati();
 
   /* l'invito: parte dall'ultima orma scritta */
   var ultimaOrma = null;
@@ -3810,8 +4111,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        Prima si accendevano e basta. Adesso il segno acceso dice il `tipo`
        dell'orma; se nessuno è acceso il tipo è idea_nota, che è il posto
        dove una cosa si tiene quando non si è ancora deciso cos'è.
-       ⛔ Alla nascita l'orma è privata, sempre: `solo_me`. Non è una
-          preferenza, è il primo stato — si apre dopo, non alla nascita.
+       ⭐ TOCCATO NEL GUSCIO ㉑ — LA VISIBILITÀ ARRIVA DAI TRE TASTI.
+          Il difetto è privata, e si vede: «solo me» è quello acceso quando
+          il Megafono si apre, e chi non tocca niente scrive un'orma privata.
+          Ma chi tocca «il mio vicinato» o «tutti» apre davvero: quella
+          scelta finisce in `visibilita`, e il messaggio dice cos'è successo.
+       ⚠️ `vicinato` è un valore che oggi NESSUNA query rilegge — solo
+          `pubblico` ha chi lo guarda, in fm-casa.js e in fm-edizione.js.
+          E senza «Dov'è successo» la riga non porta `vicinato_id`, quindi
+          non dice nemmeno A QUALE vicinato si apre. Si scrive lo stesso:
+          il valore è giusto, è chi legge che manca.
        ⚠️ `accaduto_il` è oggi. Se qualcuno ha scelto una data con «Quando»
           vale quella: è una cosa che ha detto lui, e non si butta via.
        ⛔ Consenso e legami fra orme NON si toccano: le colonne non ci sono. */
@@ -3825,17 +4134,68 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var qDest = DOVE.filter(function(x){ return x.tipo === tipoScritto; })[0];
     var dovePorta = scelta ? scelta.dest : (qDest ? qDest.dest : null);
 
+    /* ⚠️ si tiene da parte: sotto, a orma conservata, `visibilita` torna al
+       difetto — e il messaggio deve dire quello che è successo ADESSO,
+       non quello che sarà la prossima volta. */
+    var apertaCosi = visibilita;
+
+    /* ⛔ LA REGOLA DEL CANONE, l'ultima parola. I tasti sono già spenti, ma
+       il controllo si rifà qui: fra il tocco e l'invio può essere entrato
+       un nome, e la regola non si affida a un tasto. */
+    var aspettano = chiAspetta();
+    if(aspettano.length) apertaCosi = "solo_me";
+
     var riga = {persona_id:io.id, contenuto:t,
-      tipo:tipoScritto, destinazione:dovePorta, visibilita:"solo_me"};
+      tipo:tipoScritto, destinazione:dovePorta, visibilita:apertaCosi};
     if(luogoScelto) riga.vicinato_id = luogoScelto.id;
     riga.accaduto_il = quandoScelto || oggi;
+
+    /* ── il dove: il nome, il punto, il comune ── */
+    if(luogoDato){
+      if(luogoDato.nome) riga.luogo = luogoDato.nome;
+      if(luogoDato.lat != null) riga.luogo_lat = luogoDato.lat;
+      if(luogoDato.lon != null) riga.luogo_lon = luogoDato.lon;
+      if(luogoDato.cod) riga.territorio_cod = luogoDato.cod;
+    }
+    var conChiOra = conChi.slice(), doveOra = luogoDato;
     db.from("orme").insert(riga)
       .select("id,contenuto").single().then(function(r){
       if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
       ultimaOrma = r.data;
+
+      /* ── ③ le persone nominate: una riga a testa, stato «proposto» ──
+         ⛔ Il legame si propone, non si impone: nasce «proposto» e diventa
+            «confermato» solo per mano di chi è stato nominato.
+         ⚠️ Senza persona_id la riga vale lo stesso: il nome da solo basta, e
+            diventerà un collegamento vero il giorno che quella persona entra. */
+      if(conChiOra.length && r.data && r.data.id){
+        db.from("orma_persone").insert(conChiOra.map(function(x){
+          return {orma_id:r.data.id, persona_id:x.persona_id || null,
+                  nome:x.nome, stato:"proposto"};
+        })).then(function(q){
+          if(q && q.error) parla("L'orma c'è, i nomi no: " + q.error.message);
+        }).catch(function(){});
+      }
+
       campo.value=""; cresci(); megafonoGuarda();
       [].forEach.call(($("mg-segni")||{children:[]}).children, function(y){ y.classList.remove("on"); });
-      parla("Conservata · solo tu la vedi"
+      /* ⭐ TOCCATO NEL GUSCIO ㉑ — e si torna al difetto: la PROSSIMA orma
+         nasce privata come questa. Senza, chi ne apre una a tutti aprirebbe
+         a tutti anche la successiva senza averlo chiesto. */
+      visibilita = "solo_me";
+      document.querySelectorAll(".v-t").forEach(function(x){
+        x.classList.toggle("on", x.dataset.v === "solo_me");
+      });
+      /* ⭐ e con lei i tre dati: la prossima orma è di oggi, senza luogo e
+         senza nomi. Restassero, si porterebbero dietro il luogo e le persone
+         di un'orma che non c'entra. */
+      quandoScelto = null; luogoDato = null; conChi = [];
+      var sq = $("s-quando-v"); if(sq) sq.textContent = "Oggi";
+      aggiornaTreDati();
+      parla("Conservata · " + (apertaCosi==="solo_me" ? "solo tu la vedi"
+            : apertaCosi==="vicinato" ? "la vede il tuo vicinato" : "la vedono tutti")
+            + (aspettano.length ? " · " + frasePerChiAspetta(aspettano) : "")
+            + (doveOra && doveOra.nome ? " · " + doveOra.nome : "")
             + (luogoScelto ? " · " + luogoScelto.nome : "")
             + (quandoScelto ? " · " + new Date(quandoScelto+"T12:00:00")
                  .toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"}) : ""));
@@ -3846,7 +4206,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   $("s-cerca").addEventListener("click", function(){
     cerca=!cerca; this.classList.toggle("attivo",cerca);
     campo.placeholder = cerca ? "[ la riga della ricerca — in attesa ]" : "Traccia l'orma di oggi";
-    ["s-dove","s-file","s-aperte","s-integrator","s-talenti"].forEach(function(i){
+    /* ⭐ TOCCATO NEL GUSCIO ㉓ — «s-dove» fuori dall'elenco: il tasto non
+       c'è più, e $(i).style su null solleverebbe al primo tocco sulla lente. */
+    ["s-file","s-aperte","s-integrator","s-talenti"].forEach(function(i){
       $(i).style.display = cerca ? "none" : "";
     });
     $("vele").classList.remove("su"); veleSu=false;
