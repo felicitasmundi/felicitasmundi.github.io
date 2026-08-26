@@ -318,6 +318,12 @@
     border-radius:0.4rem;padding:0.55rem 0.75rem;margin-bottom:0.5rem}
   .orma .meta{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.8)}
   .orma p{margin:0.15rem 0 0}
+  /* ⭐ TOCCATO NEL GUSCIO ㉙ — il titolo del giorno, sopra le sue orme.
+     Una riga sola, e prende le misure che ci sono già. */
+  .orme-giorno{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-eti);
+    letter-spacing:0.18em;text-transform:uppercase;color:var(--oro-ch);
+    margin:1.1rem 0 0.5rem;padding-bottom:0.3rem;border-bottom:1px solid var(--line)}
+  .orme-giorno:first-child{margin-top:0}
 
 
   /* ── la radio: una striscia, ma un apparecchio ──
@@ -4034,12 +4040,59 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
 
   /* ── le mie orme ── */
+  /* ⭐ TOCCATO NEL GUSCIO ㉙ — «LA MIA ORMA» LEGGE ANCHE IL PASSATO.
+     Il difetto, ed è una riga di Gab: la stanza leggeva
+     `gte("momento", mezzanotte)`, cioè solo le orme SCRITTE oggi. Un'orma
+     segnata stasera, domani da lì non si vedeva più — e una segnata oggi
+     ma accaduta a maggio compariva sotto oggi.
+     ⭐ Adesso il giorno è quello dell'ACCADUTO, non quello della scrittura:
+        si legge tutto, si raggruppa per `accaduto_il`, e ogni gruppo ha il
+        suo titolo. Un'orma spostata a ieri finisce a ieri.
+     ⛔ LE ORME VECCHIE NON SI PERDONO. `accaduto_il` esiste solo da quando
+        il Megafono lo scrive: prima è vuoto. Per quelle il giorno è quello
+        in cui furono scritte — giornoDi() ricade su `momento`. Senza questa
+        ricaduta sparirebbero dalla stanza, e sono le più vecchie.
+        ⚠️ La ricaduta è in lettura, non nel database: nessuna riga viene
+           toccata. Se un giorno si vuole riempire davvero la colonna, è un
+           `update` sulle sole righe con `accaduto_il is null`, e si guarda
+           prima di lanciarlo.
+     ⛔ E SI FILTRA PER PERSONA. Prima non c'era: `caricaOrme()` si affidava
+        alle sole regole di riga, mentre contaOrme() il filtro ce l'aveva.
+        Col filtro sulla data non si vedeva; togliendolo, quel buco restava
+        scoperto. Adesso c'è anche qui.
+     ⚠️ contaOrme() — la riga sotto il campo — resta su `momento`, ed è
+        giusto: dice quante ne hai LASCIATE oggi, e lasciarne una è un atto
+        di oggi anche se racconta maggio. Sono due domande diverse. */
+  var ORME_QUANTE = 300;   /* quante se ne leggono in un colpo */
+
+  /* il giorno di un'orma: l'accaduto se c'è, se no quando fu scritta */
+  function giornoDi(o){
+    if(o.accaduto_il) return String(o.accaduto_il).slice(0,10);
+    var d = new Date(o.momento);
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")
+                          +"-"+String(d.getDate()).padStart(2,"0");
+  }
+
+  /* ⭐ «oggi» e «ieri» sono le stesse due parole che il Megafono usa nelle
+     scorciatoie di «Quando»: non se ne inventano altre. Più indietro, la
+     data per esteso. */
+  function nomeDelGiorno(g){
+    var iso = function(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")
+                                                 +"-"+String(d.getDate()).padStart(2,"0"); };
+    var oggi = new Date(); oggi.setHours(0,0,0,0);
+    var ieri = new Date(oggi); ieri.setDate(ieri.getDate()-1);
+    if(g === iso(oggi)) return "oggi";
+    if(g === iso(ieri)) return "ieri";
+    return new Date(g+"T12:00:00").toLocaleDateString("it-IT",
+      {day:"numeric",month:"long",year:"numeric"});
+  }
+
   function mieOrme(c){
     c.innerHTML='<div class="occhio">Comunità Eterna FelicitasMundi</div>'
       +'<h1>Le mie orme</h1><p class="sotto">Gli strumenti, e il filo del percorso.</p>'
       +'<h2>Il filo</h2><div class="filo"><div class="filo-riga" id="filo-orme"></div></div>'
       +'<p><span class="segna">i cerchietti aspettano i loro nomi</span></p>'
-      +'<h2 style="margin-top:1.6rem">Le orme di oggi</h2><div id="orme-corpo"></div>';
+      +'<h2 style="margin-top:1.6rem">Le orme</h2><div id="orme-corpo"></div>';
     var f=$("filo-orme");
     for(var i=0;i<9;i++){ var d=document.createElement("span"); d.className="cer"; f.appendChild(d); }
     caricaOrme();
@@ -4048,24 +4101,39 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   function caricaOrme(){
     var box=$("orme-corpo"); if(!box) return;
     if(ospite){ box.innerHTML='<p class="vuoto">Le orme si vedono con l\'accesso.</p>'; return; }
-    var oggi=new Date(); oggi.setHours(0,0,0,0);
     db.from("orme").select("id,contenuto,tipo,destinazione,momento,accaduto_il")
-      .gte("momento",oggi.toISOString()).order("momento",{ascending:false})
+      .eq("persona_id", io.id)
+      .order("accaduto_il",{ascending:false,nullsFirst:false})
+      .order("momento",{ascending:false})
+      .limit(ORME_QUANTE)
       .then(function(r){
         var righe=(r.data)||[];
-        if(!righe.length){ box.innerHTML='<p class="vuoto">Oggi non hai ancora lasciato orme.</p>'; return; }
+        if(!righe.length){ box.innerHTML='<p class="vuoto">Non hai ancora lasciato orme.</p>'; return; }
+        /* ⭐ si riordina anche qui: il database ordina per `accaduto_il`, e
+           le righe vecchie ce l'hanno vuoto. Il giorno vero lo sa giornoDi(). */
+        righe.sort(function(a,b){
+          var ga=giornoDi(a), gb=giornoDi(b);
+          if(ga !== gb) return ga < gb ? 1 : -1;
+          return (a.momento < b.momento) ? 1 : -1;
+        });
         box.innerHTML="";
+        var giornoScritto = null;
         righe.forEach(function(o){
+          var g = giornoDi(o);
+          if(g !== giornoScritto){
+            giornoScritto = g;
+            var t = document.createElement("h3");
+            t.className = "orme-giorno";
+            t.textContent = nomeDelGiorno(g);
+            box.appendChild(t);
+          }
           var d=document.createElement("div"); d.className="orma";
           var q=DOVE.filter(function(x){return x.tipo===o.tipo;})[0];
           if(q) d.style.setProperty("--oc","var("+q.c+")");
           var ora=new Date(o.momento).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
           d.innerHTML='<div class="meta"></div><p></p>';
-          var quando = o.accaduto_il
-            ? new Date(o.accaduto_il+"T12:00:00").toLocaleDateString("it-IT",
-                {day:"numeric",month:"long",year:"numeric"})
-            : ora;
-          d.querySelector(".meta").textContent=quando+" · "+(q?q.n:o.tipo)+" → "+(o.destinazione||"—");
+          /* la data non si ripete: il giorno sta nel titolo qui sopra */
+          d.querySelector(".meta").textContent=ora+" · "+(q?q.n:o.tipo)+" → "+(o.destinazione||"—");
 
           /* il tasto che la porta in Edizione */
           var st = document.createElement("button");
@@ -4085,6 +4153,19 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
           d.querySelector("p").textContent=o.contenuto||"";
           box.appendChild(d);
         });
+        /* ⭐ TOCCATO NEL GUSCIO ㉙ — IL TETTO SI DICE, non si tace. Se sono
+           tornate esattamente ORME_QUANTE righe, quasi certamente ce n'è
+           dell'altro più indietro, e una stanza che si ferma in silenzio
+           sembra una stanza che ha finito. Come si va oltre non è deciso —
+           un tasto, una data, il filo dei cerchietti — e quello che non è
+           deciso si scrive [ in attesa ], non si inventa. */
+        if(righe.length === ORME_QUANTE){
+          var pi = document.createElement("p");
+          pi.className = "vuoto";
+          pi.textContent = "Qui ci sono le ultime " + ORME_QUANTE
+                         + " orme. Per andare più indietro: [ in attesa ]";
+          box.appendChild(pi);
+        }
       });
   }
 

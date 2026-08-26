@@ -21,6 +21,43 @@
        sono identici byte per byte a quelli di prima: verificato uno per
        uno rifacendo il file, non a occhio.
 
+   ⭐ E UN PEZZO A SÉ, CHE ARRIVA FUORI DALLA CONSEGNA DELLA CASA:
+      orma-spazio-vivo.html · 17.518 byte · MD5 153ccc700d1fd9d5745c123a0a5ceeef
+      La consegna della casa porta ancora l'orma vecchia; questo è il
+      blocco corretto, e sostituisce SOLO la sua veste.
+      ⭐ La sostituzione è pulita, e si può dire perché:
+        · il CODICE del pezzo è identico byte per byte a quello della
+          consegna — 11.791 byte, stesso `avviaOrmaViva()`
+        · il CORPO è lo stesso, parola per parola: cambia il rientro e
+          nient'altro. Ci sta già dentro anche la chiusa, `data-coda`
+        · lo STILE della casa sta in un blocco unico, fra i due commenti
+          di Design — quello che dice «l'orma» e quello che dice «i cinque
+          elementi» — e dentro non ci vive nessun altro selettore
+        · lo STILE del pezzo è chiuso in sé: ogni regola comincia per
+          `.sv-orma-vive`, e le uniche @ sono le sue — `@keyframes spinta`
+          e un `@media (max-width:52rem)`
+      Quindi è un blocco che esce e uno che entra, e non si tocca altro.
+      ⭐ QUELLO CHE CAMBIA: il riquadro si stringe e si alza —
+        max-width 56rem → 46rem · aspect-ratio 16/11 → 4/3 ·
+        min-height 22rem → 20rem · max-height min(40rem,76svh) → 32rem.
+        La card e i tre dati stanno dove stavano — 5% sopra, 6% sotto —
+        ma il riquadro è più alto, e l'Italia resta scoperta in mezzo.
+      ⛔ E QUELLO CHE IL PEZZO SI PORTA VIA — va detto, non aggiustato:
+        cade la seconda regola del telefono, quella che dava all'orma la
+        misura del quadrante della radio:
+            @media (max-width:52rem){ .sv-orma-vive{ aspect-ratio:auto;
+              height:var(--sv-orma-h,26rem); … margin-left:-1.1rem … } }
+        Il pezzo arriva da solo e non sa del guscio. Da qui in poi, sul
+        telefono, l'orma NON prende più l'altezza della radio e NON esce
+        più fino ai bordi: sta nel suo 3/4, dentro il rientro.
+        ⚠️ E avviaSoglieEMisure() continua a scrivere `--sv-orma-h` su
+           quell'elemento: adesso nessuno lo legge. Non rompe niente —
+           è una misura che cade nel vuoto — ma è codice vivo su una
+           regola che non c'è più.
+        ⛔ Non l'ho rimessa a mano: sarebbe tenere un pezzo della consegna
+           vecchia dentro quella nuova, e non si fa. Se quella misura
+           serve, la rimette Design nel pezzo.
+
    ⭐ E DALLE CONSEGNE DI PRIMA, che resta:
      · IL QUADRANTE «SIMBOLI DELL'ESPERIENZA» È VIVO: dentro il cerchio i
        sette segni si affacciano uno per volta, e un anello si allarga e
@@ -465,8 +502,8 @@ var CASA = `
     --t-med:calc(0.80rem * var(--scala));
     --t-gr:clamp(1.3rem, 4.1vw, 2.15rem);
     --oro-a:#D4AF6A; --terra:#AA8844;
-    position:relative;max-width:56rem;margin:0 auto;
-    aspect-ratio:16/11;min-height:22rem;max-height:min(40rem,76svh);
+    position:relative;max-width:46rem;margin:0 auto;
+    aspect-ratio:4/3;min-height:20rem;max-height:32rem;
     border-radius:1.1rem;overflow:hidden;
     font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
   .sv-orma-vive canvas{position:absolute;inset:0;width:100%;height:100%;
@@ -544,14 +581,6 @@ var CASA = `
     .sv-orma-vive .mega{left:3.5%;right:3.5%;padding:.8rem .85rem .75rem}
     .sv-orma-vive .dati{gap:.5rem 1.4rem;bottom:5%}
     .sv-orma-vive .coda b{font-size:clamp(1.35rem,7.4vw,2.2rem)}
-  }
-
-  /* sul telefono l'orma prende la misura del quadrante della radio */
-  @media (max-width:52rem){
-    .sv-orma-vive{aspect-ratio:auto;
-      height:var(--sv-orma-h,26rem);max-height:none;min-height:0;
-      margin-left:-1.1rem;margin-right:-1.1rem;width:auto;max-width:none;
-      border-radius:0.35rem}
   }
 
   /* ── i cinque elementi ── */
