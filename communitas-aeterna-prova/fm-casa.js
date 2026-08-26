@@ -2,53 +2,64 @@
    Comunità Eterna FelicitasMundi · LA CASA — la home dello Spazio Vivo
 
    Il disegno è di Design: casa-spazio-vivo.html
-   136.467 byte · MD5 9aa482a3edb6b0d858c430c141b1c046
-   (consegna del 26 agosto 2026 — la precedente era 715ca2a6…, 132.115 byte)
+   139.384 byte · MD5 57859be9aa0d5c2cc1f43ac09db34bf9
+   (consegna del 26 agosto 2026, l'ultima — la precedente era
+    630a0e0c…, 136.617 byte)
 
    ⭐ QUELLO CHE PORTA DI NUOVO QUESTA CONSEGNA
-     · I CINQUE SEGNI GIRANO piano su sé stessi: una regola sulla classe
-       .sg, che vale per qualunque disegno le stia dentro.
-     · «SIMBOLI DELL'ESPERIENZA» è diventato un quadrante intero, in oro,
-       con il suo segno e la sua riga. Prima era un tasto in fila.
-     · L'ALMANACCO — IL TEMPO e IL CIELO in un riquadro loro, fra il
-       quadrante d'oro e i cinque elementi: la luna grande di oggi e il
-       giorno accanto. Nella consegna di ieri erano stati portati via ed
-       erano stati rimessi a mano qui; adesso arrivano dal disegno, più
-       larghi di prima, e la mano si ritira. `sv-giorno` al posto di
-       `sv-mese`; il codice che li calcola li serve tutti e due.
+     · IL QUADRANTE «SIMBOLI DELL'ESPERIENZA» È VIVO: dentro il cerchio i
+       sette segni si affacciano uno per volta, e un anello si allarga e
+       svanisce. Ha un occhio suo e comincia quando entra nello schermo.
+     · L'ORMA È TORNATA A 56rem sul computer, com'era prima.
 
    ⭐ Aggiornare la home vuol dire sostituire questo file, e basta.
 
-   ⭐ LE SETTE PARTI DEL DISEGNO. La consegna è un HTML con otto fogli di
-      codice; uno è morto e resta fuori. Gli altri diventano funzioni, e
-      home() li chiama:
+   ⭐ LE OTTO PARTI DEL DISEGNO. La consegna è un HTML con otto fogli di
+      codice. Da questa consegna nessuno resta fuori: ognuno diventa una
+      funzione, e home() le chiama:
 
         avviaCasa()      il tempo, il cielo, il micelio, la mappa nel
                          libro, la scheda del luogo, il velo a due tempi
+        avviaSegniDellaLegenda()  i sette segni — orma, connessione,
+                         talenti, vicinato, ritmo, incontro, tempio —
+                         messi in comune su window.SpazioVivo.segni
         avviaOrma()      la prova dell'orma, sotto la mappa
         avviaSoglia()    la voce che gira · SpazioVivo.soglia()
         avviaOrmaViva()  i dieci secondi · SpazioVivo.orma()
         avviaCinque()    i cinque quadranti · SpazioVivo.elementi()
         avviaFormula()   la formula · SpazioVivo.formula()
-        avviaMisure()    le due misure, e l'occhio che ferma il disegno
+        avviaSoglieEMisure()  i sette segni che si affacciano, le due
+                         misure, e l'occhio che ferma il disegno
 
-      ⛔ avviaMisure() VA CHIAMATA PER ULTIMA. Il suo occhio prende
-         SpazioVivo.soglia e SpazioVivo.orma nell'istante in cui gira, e
-         se le trova non ancora poste non ferma più niente.
+      ⭐ In questa consegna Design ha messo tre cose nello stesso foglio:
+         i sette segni della soglia, le due misure e l'IntersectionObserver
+         che spegne soglia e orma. Prima erano due fogli. Qui restano
+         insieme, come consegnati.
+      ⛔ avviaSoglieEMisure() VA CHIAMATA PER ULTIMA. Il suo occhio prende
+         SpazioVivo.soglia e SpazioVivo.orma nell'istante in cui gira, e se
+         le trova non ancora poste non ferma più niente.
 
    ⭐ IL DISEGNO SI FERMA QUANDO ESCE DALLO SCHERMO, e lo fa da sé:
       l'IntersectionObserver è dentro la consegna, non aggiunto qui.
       Soglia e orma disegnano sessanta volte al secondo; fuori dallo
       sguardo si spengono, e riprendono quando tornano.
 
-   ⛔ TOLTA, COME NEL GIRO PRECEDENTE: avviaLegenda(), il quadrante della
-      mappa. È codice vivo su un markup che non c'è: `data-leg`,
-      `data-riga`, `data-pr` e `.sv-mleg` non compaiono nemmeno una volta
-      nel corpo della consegna, e window.SpazioVivo.mappaLegenda non la
-      chiama nessuno, in nessun file. Con lei restano fuori i sette segni
-      della legenda, che qui non servivano ad altro.
-      ⚠️ La VESTE di quel quadrante è ancora nello stile di Design e resta
-         dov'è: è roba del disegno, e non si tocca a mano. Non si vede.
+   ⛔ IL FOGLIO DELLA LEGENDA NON SI TOGLIE PIÙ, e questa consegna
+      ribalta i due giri precedenti. Fin qui era codice vivo su un markup
+      che non c'è — `data-leg`, `data-riga`, `data-pr` e `.sv-mleg` non
+      compaiono ancora nemmeno una volta nel corpo — e lo si buttava.
+      ⭐ Adesso quel foglio fa un'altra cosa, e serve: alla sua ultima riga
+         mette i SETTE SEGNI DELLA LEGENDA in comune, su
+         window.SpazioVivo.segni. È da lì che il quadrante nuovo di
+         «Simboli dell'esperienza» li prende — legge (window.SpazioVivo
+         || {}).segni e, se non li trova, esce senza disegnare niente.
+         Toglierlo avrebbe spento in silenzio la cosa principale di questa
+         consegna.
+      ⛔ VA CHIAMATA PRESTO, e comunque PRIMA di avviaSoglieEMisure(): i
+         sette segni devono essere in comune quando la giostra li cerca.
+      ⚠️ Il resto di quel foglio gira ancora a vuoto e non rompe niente:
+         riempi({}) ha la sua guardia — `if (box && simboli.length)` — e i
+         due querySelectorAll non trovano nulla su cui girare.
 
    ⭐ LE DUE MANI SU QUESTO FILE, tutte e due dentro avviaCinque() e
       segnate sul posto:
@@ -57,6 +68,14 @@
         ④ le rotte vengono dalla tavola `stanze`, lette da ROTTE. Nella
           consegna sono `?p=vicinati`; la rotta vera è
           `?p=incontro:vicinati`, e quattro su cinque non aprivano niente.
+
+   ⚠️ «SIMBOLI DELL'ESPERIENZA» PORTA A come-funziona.html, CHE NON ESISTE.
+      Il file non è nella cartella di lavoro né nel magazzino pubblico:
+      l'unica copia sta in PRECEDENTI/. Il guscio intercetta il tocco e
+      chiama vai("come-funziona"), che non è una rotta conosciuta: si
+      finisce su attesa(), una stanza vuota col nome del file per titolo.
+      ⛔ Non si inventa dove deve portare, e non si tocca il disegno: il
+         posto dove spegnerlo è collegaLePorteDellaCasa(), nel guscio.
 
    Non contiene: la barra, la plancia della radio, il Megafono, la mappa
    a tutto schermo. Quelle sono del guscio. Il piede invece sì.
@@ -85,8 +104,7 @@
    ⚠️ DUE QUADRANTI DEL DISEGNO SONO ANCORA SENZA MARKUP, e le loro
       funzioni escono al primo passo senza rompere niente:
       · LA PROVA DELL'ORMA — avviaOrma() cerca `sv-orma-testo` e
-        `sv-orme-altri`: nessuno dei due sta nel corpo. SpazioVivo.ultimeOrme
-        e ormaScritta non vengono posti.
+        `sv-orme-altri`: nessuno dei due sta nel corpo.
       · LA SCHEDA DEL CONTENUTO — `data-cont` non compare, e nessun foglio
         pone mostraContenuto. Di conseguenza SpazioVivo.segni non esiste.
       ⛔ NON SI TOGLIE NIENTE, ed è una decisione presa, non un'attesa:
@@ -119,6 +137,25 @@ var CASA = `
   .sv-casa [data-leg] b,.sv-casa [data-leg] i{min-width:0;overflow-wrap:break-word;hyphens:auto}
   .sv-casa button{font-family:'DM Sans',sans-serif}
   .sv-casa .fp-link:hover{color:#D4AF6A}
+  /* ⭐ la soglia non gira su di sé: fa passare. Dentro il cerchio i sette
+     segni si affacciano uno per volta — la porta mostra quello che apre —
+     e un anello si allarga piano, come una soglia che si apre. */
+  .sv-casa [data-soglia] [data-anello]{position:absolute;inset:0;
+    border-radius:50%;border:1px solid currentColor;opacity:0;
+    animation:sv-apre 4.4s ease-out infinite}
+  @keyframes sv-apre{
+    0%{transform:scale(.62);opacity:0}
+    28%{opacity:.34}
+    100%{transform:scale(1.5);opacity:0}
+  }
+  .sv-casa [data-soglia] [data-passa]{position:absolute;inset:0;opacity:0;
+    transform:scale(.86) translateY(0.2rem);
+    transition:opacity .7s ease,transform .9s cubic-bezier(.16,.84,.28,1)}
+  .sv-casa [data-soglia] [data-passa].viva{opacity:1;
+    transform:none}
+  .sv-casa [data-soglia] [data-passa] svg{width:100%;height:100%;display:block}
+  .sv-casa [data-soglia]:hover [data-anello]{animation-duration:2s}
+
   /* la soglia si comporta come i cinque, ma in oro */
   .sv-casa [data-soglia]{position:relative;overflow:hidden;
     transition:border-color .3s ease,transform .3s ease,background .3s ease}
@@ -133,7 +170,7 @@ var CASA = `
     animation:sv-segnale 2.6s ease-in-out infinite}
   .sv-casa [data-soglia] > *{position:relative;z-index:1}
   .sv-casa [data-soglia] [data-sg]{transition:transform .8s cubic-bezier(.16,.84,.28,1),filter .5s ease}
-  .sv-casa [data-soglia]:hover [data-sg]{transform:scale(1.14);
+  .sv-casa [data-soglia]:hover [data-sg]{transform:scale(1.12);
     filter:brightness(1.5) drop-shadow(0 0 1rem rgba(200,160,85,.6))}
   .sv-casa [data-soglia] [data-vai]{transition:letter-spacing .5s ease}
   .sv-casa [data-soglia]:hover [data-vai]{letter-spacing:.2em}
@@ -141,6 +178,8 @@ var CASA = `
     .sv-casa [data-soglia],.sv-casa [data-soglia] [data-sg]{transition:none}
     .sv-casa [data-soglia]:hover{transform:none}
     .sv-casa [data-soglia]:hover::before{animation:none}
+    .sv-casa [data-soglia] [data-anello]{animation:none;opacity:.3}
+    .sv-casa [data-soglia] [data-passa]{transition:none}
   }
   @media(max-width:40rem){
     .sv-casa [data-cappello] p{padding:0.9rem 1rem;font-size:var(--t-eti);line-height:1.5}
@@ -405,10 +444,11 @@ var CASA = `
   }
 
   /* ── l'orma ── */
+
   .sv-orma-vive{--scala:1.4;
     --t-eti:calc(0.66rem * var(--scala));
     --t-med:calc(0.80rem * var(--scala));
-    --t-gr:clamp(1.55rem, 5vw, 2.9rem);
+    --t-gr:clamp(1.3rem, 4.1vw, 2.15rem);
     --oro-a:#D4AF6A; --terra:#AA8844;
     position:relative;max-width:56rem;margin:0 auto;
     aspect-ratio:16/11;min-height:22rem;max-height:min(40rem,76svh);
@@ -478,17 +518,25 @@ var CASA = `
     opacity:0;transition:opacity 1.4s ease}
   .sv-orma-vive .coda.on{opacity:1}
   .sv-orma-vive .coda b{font-family:'Cinzel',serif;font-weight:500;
-    font-size:clamp(1.7rem,6.8vw,3.6rem);line-height:1.2;
+    font-size:clamp(1.5rem,6.2vw,3.1rem);line-height:1.2;
     letter-spacing:.06em;text-align:center;
     color:rgba(245,240,230,.95);
     text-shadow:0 2px 30px rgba(4,6,16,1),0 0 60px rgba(212,175,106,.28)}
 
   @media (max-width:52rem){
-    .sv-orma-vive{--scala:1.2;aspect-ratio:auto;
+    .sv-orma-vive{--scala:1.05;aspect-ratio:3/4;max-height:none;
+      min-height:26rem}
+    .sv-orma-vive .mega{left:3.5%;right:3.5%;padding:.8rem .85rem .75rem}
+    .sv-orma-vive .dati{gap:.5rem 1.4rem;bottom:5%}
+    .sv-orma-vive .coda b{font-size:clamp(1.35rem,7.4vw,2.2rem)}
+  }
+
+  /* sul telefono l'orma prende la misura del quadrante della radio */
+  @media (max-width:52rem){
+    .sv-orma-vive{aspect-ratio:auto;
       height:var(--sv-orma-h,26rem);max-height:none;min-height:0;
       margin-left:-1.1rem;margin-right:-1.1rem;width:auto;max-width:none;
       border-radius:0.35rem}
-    .sv-orma-vive .mega{left:3.5%;right:3.5%;padding:.85rem .8rem .7rem}
   }
 
   /* ── i cinque elementi ── */
@@ -761,11 +809,9 @@ var CASA = `
   <section data-porte="1" style="order:3;margin-top:2.2rem;min-width:0">
     <a id="sv-come" href="come-funziona.html" data-soglia="1" style="display:block;text-decoration:none;color:inherit;border-radius:1.1rem;padding:1.3rem 1.3rem 1.2rem;min-width:0;background:rgba(200,160,85,0.07);border:1px solid rgba(200,160,85,0.3)">
       <span style="display:flex;align-items:center;gap:0.85rem;min-width:0">
-        <span data-sg="1" style="flex:none;width:2.6rem;height:2.6rem;color:var(--oro-ch)">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;display:block">
-            <path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"></path>
-            <path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"></path>
-          </svg>
+        <span data-sg="1" style="position:relative;flex:none;width:3rem;height:3rem;color:var(--oro-ch)">
+          <span data-anello="1"></span>
+          <span data-giostra="1" style="position:absolute;inset:0"></span>
         </span>
         <span style="flex:1;min-width:0">
           <span style="display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:0.24em;text-transform:uppercase;color:var(--oro-ch)">La soglia</span>
@@ -1029,21 +1075,23 @@ var CASA = `
   </footer>
 
 </div>
+
 `;
 
 function home(c){
   c.innerHTML = CASA;
-  avviaCasa();       /* ① il tempo, il cielo, il micelio, la mappa, la scheda del luogo */
-  avviaOrma();       /* ② la prova dell'orma (il markup non c'è ancora: esce da sé) */
-  avviaSoglia();     /* ③ la voce che gira */
-  avviaOrmaViva();   /* ④ i dieci secondi che si ripetono */
-  avviaCinque();     /* ⑤ i cinque quadranti */
-  avviaFormula();    /* ⑥ la formula */
-  avviaMisure();     /* ⑦ ⛔ PER ULTIMA: l'occhio prende le funzioni già poste */
-  segniDelleStanze();/* i simboli della barra, per la scheda del contenuto */
+  avviaCasa();              /* ① il tempo, il cielo, il micelio, la mappa, la scheda del luogo */
+  avviaSegniDellaLegenda(); /* ② i sette segni in comune — ⛔ PRIMA della giostra */
+  avviaOrma();              /* ③ la prova dell'orma (il markup non c'è ancora: esce da sé) */
+  avviaSoglia();            /* ④ la voce che gira */
+  avviaOrmaViva();          /* ⑤ i dieci secondi che si ripetono */
+  avviaCinque();            /* ⑥ i cinque quadranti */
+  avviaFormula();           /* ⑦ la formula */
+  avviaSoglieEMisure();     /* ⑧ ⛔ PER ULTIMA: l'occhio prende le funzioni già poste */
+  segniDelleStanze();       /* i simboli della barra, per la scheda del contenuto */
   legaLuoghi();
-  contaOrme();       /* il cenno delle orme vive nella barra, non nella casa */
-  leOrme();          /* le due schede: il dato entra nella forma, quando la forma torna */
+  contaOrme();              /* il cenno delle orme vive nella barra, non nella casa */
+  leOrme();                 /* le due schede: il dato entra nella forma, quando la forma torna */
 }
 
 /* ── ① il codice della casa, come l'ha scritto Design: non si tocca ──
@@ -1619,7 +1667,113 @@ function avviaCasa(){
 })();
 }
 
-/* ── ② la prova dell'orma, sotto la mappa ──
+/* ── ② i sette segni della legenda ──
+   ⭐ QUESTO FOGLIO ERA STATO TOLTO NEI DUE GIRI PRECEDENTI, e torna.
+      Il quadrante della legenda non c'è ancora — `data-leg`, `data-riga`,
+      `data-pr` e `.sv-mleg` sono zero nel corpo del disegno — ma la sua
+      ultima riga mette i sette segni in comune su SpazioVivo.segni, e da
+      lì li prende la giostra di «Simboli dell'esperienza». Senza, quel
+      cerchio resta vuoto.
+   ⛔ VA CHIAMATA PRIMA di avviaSoglieEMisure().
+   ⚠️ Il resto gira a vuoto e non rompe niente: riempi({}) è guardata. */
+function avviaSegniDellaLegenda(){
+(function () {
+  "use strict";
+
+  var ATTESA = "[ in attesa ]";
+  var vuoto = function (v) { return v === undefined || v === null || v === ""; };
+  var testo = function (v) { return vuoto(v) ? ATTESA : String(v); };
+  function svuota(n) { while (n && n.firstChild) n.removeChild(n.firstChild); }
+
+  var SEGNI = {
+    orma:'<path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"/><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"/>',
+    connessione:'<path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"/><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"/><path d="M14 20L26 20"/>',
+    talenti:'<circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/>',
+    vicinato:'<path d="M23.4 10C23.4 11.92 21.92 13.4 20 13.4C18.08 13.4 16.6 11.92 16.6 10C16.6 8.08 18.08 6.6 20 6.6C21.92 6.6 23.4 8.08 23.4 10Z"/><path d="M13.9 27C13.9 28.92 12.42 30.4 10.5 30.4C8.58 30.4 7.1 28.92 7.1 27C7.1 25.08 8.58 23.6 10.5 23.6C12.42 23.6 13.9 25.08 13.9 27Z"/><path d="M32.9 27C32.9 28.92 31.42 30.4 29.5 30.4C27.58 30.4 26.1 28.92 26.1 27C26.1 25.08 27.58 23.6 29.5 23.6C31.42 23.6 32.9 25.08 32.9 27Z"/><path d="M20 13.4L20 19M13 25.2L17.4 20.8M27 25.2L22.6 20.8"/><path d="M22 20C22 21.13 21.13 22 20 22C18.87 22 18 21.13 18 20C18 18.87 18.87 18 20 18C21.13 18 22 18.87 22 20Z" fill="currentColor" stroke="none"/>',
+    ritmo:'<path d="M33 20C33 27.33 27.33 33 20 33C12.67 33 7 27.33 7 20C7 12.67 12.67 7 20 7C27.33 7 33 12.67 33 20Z"/><path d="M22.4 7C22.4 8.35 21.35 9.4 20 9.4C18.65 9.4 17.6 8.35 17.6 7C17.6 5.65 18.65 4.6 20 4.6C21.35 4.6 22.4 5.65 22.4 7Z" fill="currentColor" stroke="none"/><path d="M33.7 26.5C33.7 27.85 32.65 28.9 31.3 28.9C29.95 28.9 28.9 27.85 28.9 26.5C28.9 25.15 29.95 24.1 31.3 24.1C32.65 24.1 33.7 25.15 33.7 26.5Z" fill="currentColor" stroke="none"/><path d="M11.1 26.5C11.1 27.85 10.05 28.9 8.7 28.9C7.35 28.9 6.3 27.85 6.3 26.5C6.3 25.15 7.35 24.1 8.7 24.1C10.05 24.1 11.1 25.15 11.1 26.5Z" fill="currentColor" stroke="none"/><path d="M23.2 20C23.2 21.81 21.81 23.2 20 23.2C18.19 23.2 16.8 21.81 16.8 20C16.8 18.19 18.19 16.8 20 16.8C21.81 16.8 23.2 18.19 23.2 20Z"/>',
+    incontro:'<path d="M23 20C23 25.08 19.08 29 14 29C8.92 29 5 25.08 5 20C5 14.92 8.92 11 14 11C19.08 11 23 14.92 23 20Z"/><path d="M35 20C35 25.08 31.08 29 26 29C20.92 29 17 25.08 17 20C17 14.92 20.92 11 26 11C31.08 11 35 14.92 35 20Z"/><path d="M20 12.9C22 17.63 22 22.37 20 27.1C18 22.37 18 17.63 20 12.9Z"/>',
+    tempio:'<path d="M4 14L20 5L36 14Z"/><path d="M5 16.5L35 16.5M8.5 19L8.5 31M16 19L16 31M24 19L24 31M31.5 19L31.5 31M5 33.5L35 33.5"/><path d="M20 29.5C17.67 26.83 17.33 23.67 19 20C19.4 22.27 20 23.6 20.8 24C22.13 22.8 22.63 21.47 22.3 20C23.97 22.67 24.37 25.07 23.5 27.2C22.9 28.47 21.73 29.23 20 29.5Z" fill="currentColor" stroke="none"/>'
+  };
+
+  /* i tre segni della pratica, per chi li vuole anche in legenda */
+  [].forEach.call(document.querySelectorAll(".sv-mleg .pr"), function (p) {
+    var chiavi = ["intreccio", "lavagna", "micelio"];
+    SEGNI[chiavi[+p.getAttribute("data-pr")]] = p.querySelector("svg").innerHTML;
+  });
+
+  function disegna(chiave) {
+    var d = SEGNI[chiave];
+    if (!d) return null;
+    var vb = ["intreccio", "lavagna", "micelio"].indexOf(chiave) >= 0
+      ? "0 0 60 60" : "0 0 40 40";
+    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("viewBox", vb);
+    s.setAttribute("fill", "none");
+    s.setAttribute("stroke", "currentColor");
+    s.setAttribute("stroke-width", "1.4");
+    s.setAttribute("stroke-linecap", "round");
+    s.setAttribute("stroke-linejoin", "round");
+    s.innerHTML = d;
+    return s;
+  }
+
+  function riempi(dati) {
+    dati = dati || {};
+
+    /* i simboli: la legenda disegnata resta al suo posto finché non arriva un dato */
+    var box = document.querySelector(".sv-casa [data-leg]")
+           || document.getElementById("sv-mleg-simboli");
+    var simboli = dati.simboli || [];
+    if (box && simboli.length) {
+      svuota(box);
+      simboli.forEach(function (s) {
+        var e = document.createElement("div");
+        e.style.cssText = "display:grid;grid-template-columns:2.9rem minmax(0,1fr);" +
+          "gap:0.8rem;align-items:center;min-width:0";
+        var sg = document.createElement("span");
+        sg.style.cssText = "width:2.4rem;height:2.4rem;color:var(--oro-ch)";
+        var ic = disegna(s.segno);
+        if (ic) { ic.style.cssText = "width:100%;height:100%;display:block"; sg.appendChild(ic); }
+        e.appendChild(sg);
+        var tx = document.createElement("span");
+        tx.style.minWidth = "0";
+        var n = document.createElement("b");
+        n.style.cssText = "display:block;font-size:var(--t-tas);font-weight:500;" +
+          "line-height:1.25;text-shadow:0 2px 14px rgba(2,4,12,0.95)";
+        n.textContent = testo(s.nome);
+        tx.appendChild(n);
+        var q = document.createElement("i");
+        q.style.cssText = "display:block;font-family:'Cormorant Garamond',serif;" +
+          "font-size:var(--t-cor);color:rgba(245,240,230,0.86);line-height:1.35;" +
+          "text-shadow:0 2px 14px rgba(2,4,12,0.95)";
+        q.textContent = testo(s.cosa);
+        tx.appendChild(q);
+        e.appendChild(tx);
+        box.appendChild(e);
+      });
+    }
+
+    /* ③ le tre righe — il posto resta anche quando sono vuote */
+    var pratica = dati.pratica || [];
+    [].forEach.call(document.querySelectorAll("[data-riga]"), function (n, k) {
+      var p = pratica[k] || {};
+      n.textContent = vuoto(p.riga) ? "" : String(p.riga);
+      if (!vuoto(p.nome)) {
+        n.parentNode.querySelector("b").textContent = String(p.nome);
+      }
+    });
+  }
+
+  /* a vuoto il quadrante si legge intero */
+  riempi({});
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.mappaLegenda = riempi;
+  window.SpazioVivo.segni = SEGNI;
+})();
+}
+
+/* ── ③ la prova dell'orma, sotto la mappa ──
    ⚠️ Il suo markup non sta nella consegna: la funzione cerca
       `sv-orma-testo` e `sv-orme-altri`, non li trova, ed esce al primo
       passo. Resta scritta perché il quadrante deve tornare. */
@@ -1704,7 +1858,7 @@ function avviaOrma(){
 })();
 }
 
-/* ── ③ la soglia: quello che si vede aprendo la casa ──
+/* ── ④ la soglia: quello che si vede aprendo la casa ──
    Una riga per volta, e il colore cambia con l'elemento a cui la cosa
    appartiene. Le parole sono di Gab.
    Espone SpazioVivo.soglia() e SpazioVivo.sogliaFerma().
@@ -1837,9 +1991,10 @@ function avviaSoglia(){
 })();
 }
 
-/* ── ④ l'orma viva: dieci secondi che si ripetono ──
+/* ── ⑤ l'orma viva: dieci secondi che si ripetono ──
    Il Megafono con dentro le parole, la card che cade su Paulilatino, i
-   fili che raggiungono le persone, la rete che si muove.
+   fili che raggiungono le persone, la rete che si muove. Sul computer
+   torna larga 56rem, com'era prima.
    Espone SpazioVivo.orma() e SpazioVivo.ormaFerma(). */
 function avviaOrmaViva(){
 (function () {
@@ -1910,11 +2065,19 @@ function avviaOrmaViva(){
     L = R.clientWidth; A = R.clientHeight;
     tela.width = L * dpr; tela.height = A * dpr;
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var sx = (L * .70) / (LON1 - LON0);
-    var sy = (A * .60) / ((LAT1 - LAT0) * 1.42);
+    /* ⭐ La mappa non usa tutto il riquadro: sta in una fascia in
+       mezzo. Sopra resta il cielo per la card, sotto per i dati,
+       e la terra non viene mai coperta. */
+    var stretto = L < 640;
+    var alto  = stretto ? A * .30 : A * .23;
+    var basso = stretto ? A * .17 : A * .17;
+    var fascia = A - alto - basso;
+
+    var sx = (L * .74) / (LON1 - LON0);
+    var sy = fascia / ((LAT1 - LAT0) * 1.42);
     sc = Math.min(sx, sy);
     px = (L - (LON1 - LON0) * sc) / 2;
-    py = (A - (LAT1 - LAT0) * sc * 1.42) / 2 + A * .05;
+    py = alto + (fascia - (LAT1 - LAT0) * sc * 1.42) / 2;
     semina();
   }
 
@@ -2145,7 +2308,7 @@ function avviaOrmaViva(){
 })();
 }
 
-/* ── ⑤ i cinque quadranti: cosa trovi, e dove si entra ──
+/* ── ⑥ i cinque quadranti: cosa trovi, e dove si entra ──
    Espone SpazioVivo.elementi().
    Le due mani su questo file stanno qui dentro, scritte sul posto:
      ③ i segni sono quelli del guscio, non quelli della consegna
@@ -2163,9 +2326,10 @@ function avviaCinque(){
      barra a sinistra, e sono quelli di SIMBOLI. Due disegni per la stessa
      stanza, nella stessa schermata, sarebbero due cose.
      ⛔ Qui non si scrive nessun segno: si legge quello che c'è già.
-     ⚠️ Il giro lento su sé stessi resta: è una regola sulla classe .sg,
-        e vale per qualunque disegno le stia dentro. Ma quello che gira
-        non sono più i solidi — sono i segni delle stanze.
+     ⚠️ Il giro lento e il battito restano: sono regole su
+        `.sv-cinque .sg svg`, e valgono per qualunque disegno le stia
+        dentro. Ma quello che gira non sono più i solidi — sono i segni
+        delle stanze.
      Se SIMBOLI non c'è, il cerchio resta vuoto e il quadrante regge. */
   function segnoDi(el) {
     if (typeof SIMBOLI === "undefined" || !SIMBOLI) return "";
@@ -2251,7 +2415,7 @@ function avviaCinque(){
 })();
 }
 
-/* ── ⑥ la formula: si compone quando entra nello schermo ──
+/* ── ⑦ la formula: si compone quando entra nello schermo ──
    Espone SpazioVivo.formula() e SpazioVivo.formulaFerma().
    Ha un occhio suo, e non dipende dall'ordine di chiamata. */
 function avviaFormula(){
@@ -2366,15 +2530,54 @@ function avviaFormula(){
 })();
 }
 
-/* ── ⑦ le due misure, e l'occhio che ferma il disegno ──
-   La soglia prende lo spazio fra la radio e il Megafono; sul telefono
-   l'orma è alta come il quadrante della radio. Poi l'occhio: quello che
-   disegna sessanta volte al secondo si ferma quando esce dallo schermo.
+/* ── ⑧ la giostra dei sette segni, le due misure, e l'occhio ──
+   Un foglio solo, come l'ha consegnato Design, con tre cose dentro:
+     · dentro il cerchio di «Simboli dell'esperienza» i sette segni si
+       affacciano uno per volta, e un anello si allarga e svanisce.
+       Li legge da SpazioVivo.segni: se non ci sono, esce senza disegnare.
+       Ha un occhio suo: gira quando è in vista, si ferma quando esce.
+     · la soglia prende lo spazio fra la radio e il Megafono, misurato;
+       sul telefono l'orma è alta come il quadrante della radio.
+     · l'occhio che ferma il disegno: quello che disegna sessanta volte
+       al secondo si spegne quando esce dallo schermo, e riprende.
    ⛔ VA CHIAMATA PER ULTIMA: prende SpazioVivo.soglia e .orma
-      nell'istante in cui gira. */
-function avviaMisure(){
+      nell'istante in cui gira, e SpazioVivo.segni per la giostra. */
+function avviaSoglieEMisure(){
 (function () {
   "use strict";
+  /* i sette segni si affacciano nella soglia, uno per volta, e si fermano
+     quando la porta esce dallo schermo */
+  (function () {
+    var g = document.querySelector("[data-soglia] [data-giostra]");
+    var S = (window.SpazioVivo || {}).segni;
+    if (!g || !S) return;
+    if (g.children.length) return;
+    var ordine = ["orma","connessione","talenti","vicinato","ritmo","incontro","tempio"];
+    var fogli = ordine.map(function (k, i) {
+      var s = document.createElement("span");
+      s.setAttribute("data-passa", "1");
+      s.innerHTML = '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" ' +
+        'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+        (S[k] || "") + '</svg>';
+      if (i === 0) s.className = "viva";
+      g.appendChild(s);
+      return s;
+    });
+    var i = 0, orologio = null;
+    function passa() {
+      fogli[i].classList.remove("viva");
+      i = (i + 1) % fogli.length;
+      fogli[i].classList.add("viva");
+    }
+    function vai()   { if (!orologio) orologio = setInterval(passa, 2200); }
+    function sta()   { if (orologio) { clearInterval(orologio); orologio = null; } }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (voci) {
+        voci.forEach(function (v) { v.isIntersecting ? vai() : sta(); });
+      }, {rootMargin: "80px"}).observe(g);
+    } else vai();
+  })();
+
   /* ⭐ la soglia prende esattamente lo spazio fra la radio e il Megafono:
      misurato, non indovinato — la radio è più alta sul telefono */
   (function () {
