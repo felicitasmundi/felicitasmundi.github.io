@@ -2199,23 +2199,25 @@
 </script>
 
           <div class="mg-attesa" id="mg-attesa" hidden></div>
-      <div class="riga-strumenti">
-        <!-- ⭐ TOCCATO NEL GUSCIO ㉓ — «DOVE LO PORTI» NON STA PIÙ NELLA RIGA.
-             Al ⑳ aveva smesso di fermare l'invio; adesso esce del tutto. La
-             destinazione la decide il segno: la tavola DOVE accosta un `dest`
-             a ogni `tipo`, e il segno acceso dice il tipo. Due file di tasti
-             per lo stesso gesto erano una di troppo.
-             ⚠️ Restano fermi e senza voce il foglio #vele, #pista, chiudiVele()
-                e la variabile `scelta`: erano suoi soltanto. Non li tolgo nello
-                stesso giro — il guscio si tocca il meno possibile — ma da qui
-                in poi `scelta` non può che essere null, e `destinazione` è
-                sempre quella che dà il segno. -->
-        <!-- al posto di «Edizione»: la scelta del modello non serve più -->
-        <button class="s-pill mg-scrivendo" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="nexus.png" alt=""></span>INTEGRATOR</button>
-        <button class="s mg-scrivendo" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
-        <button class="s mg-scrivendo" id="s-aperte" title="Le cose aperte">&#9673;</button>
-        <button class="s mg-scrivendo" id="s-talenti" title="talenti"><span class="sg-t"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/></svg></span></button>
-      </div>
+      <!-- ⭐ TOCCATO NEL GUSCIO ㉕ — SOTTO IL CAMPO NON C'È PIÙ NIENTE.
+           La riga degli strumenti è tolta, non nascosta: a riposo il Megafono
+           è il campo e basta, e scrivendo compaiono soltanto i quattro segni,
+           i tre valori — oggi, dove, con chi — e la freccia che manda.
+           I quattro tasti che stavano qui, e dove sono finiti:
+             · la lente         non serve un altro posto: la ricerca ha già il
+                                suo campo dentro «Cosa incontro», .campo-cerca
+             · INTEGRATOR       non aveva gestore e non portava a nulla — la
+                                pagina la sta ancora facendo Design. Esce di
+                                qui e per ora non finisce da nessuna parte
+             · «le cose aperte» il foglio #v-aperte resta scritto e funziona,
+                                ma da oggi non ha più una maniglia
+             · i talenti        talentiApri() e fm-talenti.js restano interi,
+                                ma da oggi non hanno più una maniglia
+           ⛔ Gli ultimi due sono porte vere che perdono il pomello: sta
+              scritto in conversazione, e la strada per rimetterle è una riga
+              per ciascuna nella tavola `stanze`, con le parole che avevano
+              già addosso — «Le cose aperte» e «talenti».
+           ⚠️ `.riga-strumenti` resta nello stile: la usa anche altrove. -->
         </div>
       </div>
     </div>
@@ -4167,7 +4169,29 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* ══ IL MEGAFONO ══ */
   var campo=$("campo");
-  function cresci(){ campo.style.height="auto"; campo.style.height=campo.scrollHeight+"px"; }
+  /* ⭐ TOCCATO NEL GUSCIO ㉖ — A CAMPO VUOTO NON SI SCRIVE NESSUNA ALTEZZA.
+     Il difetto: si mandava un'orma lunga e il campo restava alto, vuoto.
+     Non era l'invio. Era la misura. `scrollHeight` di un textarea vuoto
+     conta anche il segnaposto, e il segnaposto va a capo quando il campo
+     è stretto. Sul telefono, nel momento in cui si misura, il campo è
+     largo 160 e non 242: `mg-pieno` è ancora addosso al corpo — cresci()
+     corre PRIMA di megafonoGuarda() — e il segno dell'orma e la freccia
+     stanno ancora prendendo il loro posto. Lì «scrivi la tua orma» sta su
+     tre righe: 98 invece di 62. Quei 98 finivano scritti nello stile del
+     campo, e ci restavano anche dopo che la riga si era riallargata.
+     Misurato: a riposo 62, dopo l'invio 98 — il Megafono 150 invece di 114.
+     Sul computer il campo è largo 835 e il segnaposto ci sta in una riga:
+     stesso errore, ma non si vedeva.
+     ⭐ La cura: a campo vuoto l'altezza non la scrive nessuno. Si toglie
+        lo stile e comanda il foglio — min-height 2.9rem, rows="1" — che è
+        esattamente la forma a riposo. Così non conta più né quanto è largo
+        il campo quando si misura, né quanto è lungo il segnaposto.
+     ⚠️ Vale anche per chi cancella tutto a mano: stessa strada, stesso
+        punto. */
+  function cresci(){
+    if(!campo.value){ campo.style.height=""; return; }
+    campo.style.height="auto"; campo.style.height=campo.scrollHeight+"px";
+  }
 
   /* ⭐ TOCCATO NEL GUSCIO ⑯ — IL MEGAFONO A RIPOSO, E QUANDO SI SCRIVE.
      A riposo il campo è nudo. Appena c'è del testo il segno dell'orma si
@@ -4753,17 +4777,11 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     });
   });
 
-  $("s-cerca").addEventListener("click", function(){
-    cerca=!cerca; this.classList.toggle("attivo",cerca);
-    campo.placeholder = cerca ? "[ la riga della ricerca — in attesa ]" : "Traccia l'orma di oggi";
-    /* ⭐ TOCCATO NEL GUSCIO ㉓ — «s-dove» fuori dall'elenco: il tasto non
-       c'è più, e $(i).style su null solleverebbe al primo tocco sulla lente. */
-    ["s-file","s-aperte","s-integrator","s-talenti"].forEach(function(i){
-      $(i).style.display = cerca ? "none" : "";
-    });
-    $("vele").classList.remove("su"); veleSu=false;
-    campo.value=""; cresci(); campo.focus();
-  });
+  /* ⭐ TOCCATO NEL GUSCIO ㉕ — via il gestore della lente col suo tasto.
+     Restando, $("s-cerca") sarebbe null e la riga solleverebbe all'avvio.
+     ⚠️ `cerca` resta dichiarata e da qui in poi non può che essere false:
+        l'invio la guarda ancora (`if(cerca) vai("incontro")`) e quel ramo
+        semplicemente non si prende più. */
 
   /* i fogli */
   function rigo(o, poi){
@@ -4819,12 +4837,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     '<p class="vuoto" style="font-family:\'Cormorant Garamond\',serif;font-style:italic;'
     +'color:rgba(245,240,230,0.78)">Qui compaiono le cose che hai aperto e non hai ancora chiuso.</p>';
 
-  $("s-aperte").addEventListener("click", function(){ $("v-aperte").classList.add("on"); });
+  /* ⭐ TOCCATO NEL GUSCIO ㉕ — via i gestori dei due tondi coi loro tasti.
+     Il foglio #v-aperte e talentiApri() restano interi: è la maniglia che
+     manca, non la stanza. */
   /* ⭐ i talenti non aprono il campo di scrittura: aprono la loro finestra,
      e se la disegna fm-talenti.js */
-  $("s-talenti").addEventListener("click", function(){
-    if(typeof talentiApri === "function") talentiApri();
-  });
+
   /* ── chiudere la mappa a tutto schermo ── */
   function chiudiMappa(){
     var p = $("mappa-piena"); if(!p) return;
