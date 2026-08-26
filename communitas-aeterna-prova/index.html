@@ -986,20 +986,47 @@
   body.mg-pieno #mg .mg-scrivendo{max-width:22rem;opacity:1;pointer-events:auto;
     padding-left:0.7rem;padding-right:0.7rem;border-width:1px}
   .mg-segni{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
+  /* ⭐ TOCCATO NEL GUSCIO ㉗ — OGNI PASTIGLIA SI PRENDE LA LARGHEZZA CHE LE
+     SERVE. Il difetto: sotto i 52rem «contatto» — la più lunga delle quattro
+     — usciva dal suo cerchio e finiva sopra «idea». Misurato sul telefono:
+     44 di larghezza, un tondo, con dentro una parola da 84.
+     Erano due cose insieme, e da sole non bastavano:
+       · `min-width:2.75rem` diceva quanto poteva stringersi. Un minimo
+         scritto a mano sostituisce quello che il testo si prenderebbe da sé,
+         e da lì in poi la parola non conta più.
+       · e le pastiglie sono figlie di un flex: senza dirglielo, si
+         RESTRINGONO per far stare la riga. Wrap e shrink lavorano insieme —
+         prima va a capo, poi schiaccia quello che resta sulla riga.
+     ⭐ La cura: nessuna larghezza e nessuna altezza imposte — comanda il
+        testo, con l'imbottitura ai lati. `flex:0 0 auto` toglie il
+        restringimento: una pastiglia non si stringe mai. Se la riga non ci
+        sta, `flex-wrap:wrap` su .mg-segni la manda a capo — che è l'unica
+        cosa che devono fare. `white-space:nowrap` tiene la parola intera.
+     ⚠️ Cade con `min-height` anche il bersaglio da 2.75rem: le pastiglie
+        passano da 44 a 34 di altezza. È quello che è stato chiesto — se il
+        dito lo vuole indietro, torna `min-height` da solo, che non c'entrava
+        col difetto. */
   .mg-sg{display:flex;align-items:center;gap:0.4rem;padding:0.34rem 0.8rem;
     border-radius:999px;border:1px solid var(--c);background:transparent;
     cursor:pointer;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
     letter-spacing:0.04em;color:rgba(245,240,230,0.8);
-    min-height:2.75rem;min-width:2.75rem;transition:.25s}
+    flex:0 0 auto;white-space:nowrap;transition:.25s}
   .mg-sg:hover,.mg-sg.on{border-color:var(--c);color:var(--ivory);
     background:rgba(245,240,230,0.07)}
   /* ⭐ ogni segno ha una FORMA sua oltre al colore: il colore da solo non basta */
+  /* ⭐ TOCCATO NEL GUSCIO ㉗ — LE FORME PRENDONO UN NOME LORO: sg-tondo,
+     sg-quadro, sg-rombo, sg-pieno. Prima si chiamavano `tondo`, `quadro`,
+     `rombo`, `pieno` — nomi nudi, già di altri. `.tondo` in questo stesso
+     guscio è il TASTO ROTONDO, largo 2.5rem e alto 2.5rem: la pastiglia di
+     «contatto» se li prendeva addosso e diventava un cerchio da 40 con
+     dentro una parola da 84. Era quella, la larghezza fissa.
+     ⛔ Il nome è la forma del segno, non un tasto: adesso lo dice. */
   .mg-sg i{width:0.72rem;height:0.72rem;flex:none;font-style:normal;
     border:1.5px solid var(--c);display:block}
-  .mg-sg.tondo i{border-radius:50%}
-  .mg-sg.quadro i{border-radius:0.12rem}
-  .mg-sg.rombo i{transform:rotate(45deg)}
-  .mg-sg.pieno i{background:var(--c);border-radius:50%}
+  .mg-sg.sg-tondo i{border-radius:50%}
+  .mg-sg.sg-quadro i{border-radius:0.12rem}
+  .mg-sg.sg-rombo i{transform:rotate(45deg)}
+  .mg-sg.sg-pieno i{background:var(--c);border-radius:50%}
 
   /* ── i tre dati: tre parole in grigio che si toccano ── */
   .mg-dati{display:flex;align-items:center;gap:0.15rem;flex-wrap:wrap}
@@ -4203,10 +4230,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* ⭐ i quattro segni, e il `tipo` che ciascuno scrive nella tavola `orme`.
      Sono quattro, non cinque: nessun «altro», nessuna forma inventata. */
   var MG_SEGNI = [
-    ["contatto",  "#AA8844", "tondo",  "contatto"],
-    ["idea",      "#9966CC", "quadro", "idea_nota"],
-    ["obiettivo", "#CC6644", "rombo",  "obiettivo"],
-    ["racconto",  "#669944", "pieno",  "racconto"]
+    ["contatto",  "#AA8844", "sg-tondo",  "contatto"],
+    ["idea",      "#9966CC", "sg-quadro", "idea_nota"],
+    ["obiettivo", "#CC6644", "sg-rombo",  "obiettivo"],
+    ["racconto",  "#669944", "sg-pieno",  "racconto"]
   ];
   (function(){
     var g = $("mg-orma"); if(g) g.innerHTML = ORMA_SEGNO;
