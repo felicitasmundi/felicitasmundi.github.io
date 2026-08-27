@@ -3308,6 +3308,7 @@
 <script src="fm-regole.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑦ — le regole: il quadrante «regole» del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script>
+<script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
@@ -4073,6 +4074,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ uscendo dalla consolle si esce anche dalla sala: il microfono non
        resta aperto in una stanza che non si vede più */
     if(id !== "consolle" && typeof salaEsci === "function") salaEsci();
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — uscendo da un'orma si dimentica QUALE.
+       Senza, `?o=` tornerebbe da sola la volta dopo che si passa di lì. */
+    if(id !== "orma") window.ormaChiesta = null;
     vista=id;
     chiudiFinestre();
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
@@ -4099,6 +4103,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="gruppi") gruppi(c);   /* ⭐ la terza voce della barra */
     else if(id==="nucleo") nucleo(c);   /* ⭐ la quinta: si difende da sé, dentro */
     else if(id==="pagina") pagina(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma, quella di `?o=<id>`.
+       Il disegno sta in fm-orma.js. Se il file non c'è la riga non esiste
+       e si cade su attesa(), come per ogni stanza non ancora costruita. */
+    else if(id==="orma" && typeof unaOrma === "function") unaOrma(c);
     else attesa(c, id);
     /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
     scriviIndirizzo();
@@ -4602,6 +4610,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
           });
           d.appendChild(st);
           d.querySelector("p").textContent=o.contenuto||"";
+          /* ⭐ TOCCATO NEL GUSCIO ㊱ — e da qui si entra nella singola.
+             Un indirizzo che nessuno sa produrre non serve a niente: il
+             tocco sulla scheda è il modo di ottenerlo, e da lì si copia.
+             ⚠️ Il tasto «Pubblica» ferma già il tocco con stopPropagation:
+                era stato scritto prevedendolo, e non si tocca. */
+          d.style.cursor = "pointer";
+          d.addEventListener("click", function(){
+            window.ormaChiesta = o.id;
+            vai("orma");
+          });
           box.appendChild(d);
         });
         /* ⭐ TOCCATO NEL GUSCIO ㉙ — IL TETTO SI DICE, non si tace. Se sono
@@ -5528,10 +5546,18 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var BASE_INDIRIZZO = location.origin + location.pathname;
 
   /* i soli parametri che il guscio scrive e cancella */
-  var MIEI_PARAMETRI = ["p", "n"];
+  /* ⭐ TOCCATO NEL GUSCIO ㊱ — `o` entra fra i parametri del guscio.
+     È l'id di UNA orma, e come `n` per un libro dice QUALE. Deve stare
+     qui per una ragione sola: se non ci stesse, uscendo dall'orma la `o`
+     resterebbe appiccicata all'indirizzo, e da Emporio si copierebbe un
+     link che dice ancora quell'orma.
+     ⛔ `t` — il gettone di fm-talenti.js — non si tocca: non è del guscio. */
+  var MIEI_PARAMETRI = ["p", "n", "o"];
 
   /* le viste che vai() gestisce senza avere una voce nella barra */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina"];
+  /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
+     ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma"];
 
   /* alzata mentre si legge la storia: allora l'indirizzo non si riscrive */
   var tornando = false;
@@ -5574,6 +5600,11 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       q.set("p", rotta);
       if(rotta === "pagina" && window.pagineNomeChiesto)
         q.set("n", window.pagineNomeChiesto);
+      /* ⭐ TOCCATO NEL GUSCIO ㊱ — e per un'orma si riscrive il suo id.
+         MIEI_PARAMETRI l'ha appena cancellato: qui torna, ma SOLO se la
+         rotta è quella. È la coppia esatta di `n`. */
+      if(rotta === "orma" && window.ormaChiesta)
+        q.set("o", window.ormaChiesta);
     }
     var coda = q.toString();
     return BASE_INDIRIZZO + (coda ? "?" + coda : "");
@@ -5609,6 +5640,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      li ha scritti URLSearchParams: si legge in tutti e due i modi. */
   function rottaDaIndirizzo(){
     var q = parametri(), v = q ? q.get("p") : null;
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — `?o=<id>` NUDO, senza `p`, vale rotta `orma`.
+       È il link che una persona manda a un'altra: dev'essere corto, e non
+       deve costringere chi lo scrive a ricordarsi anche `p=orma`.
+       ⛔ `p` vince comunque: se c'è, comanda lui. Così `?p=talenti&o=…`
+          resta una stanza con un id di passaggio, non un'orma. */
+    if(!v && q && q.get("o")) v = "orma";
     if(!v){
       var m = location.search.match(/[?&]p=([^&]{1,80})/);
       if(m){ try{ v = decodeURIComponent(m[1]); }catch(e){ v = m[1]; } }
@@ -5627,6 +5664,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(id === "pagina"){
       var q = parametri(), n = q ? q.get("n") : null;
       if(n) window.pagineNomeChiesto = n;
+    }
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — quale orma. Si RILEGGE ogni volta, anche
+       quando è vuota: è la trappola che `pagina` ha ancora addosso. Il tasto
+       indietro passa di qui, e se il valore vecchio restasse, tornando da
+       un'orma a un'altra si riaprirebbe sempre la prima. */
+    if(id === "orma"){
+      var qo = parametri();
+      window.ormaChiesta = (qo && qo.get("o")) || null;
     }
     if(sub) sottoRichiesta = sub;
     vai(id, sub);
