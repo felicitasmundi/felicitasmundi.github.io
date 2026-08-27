@@ -1385,8 +1385,8 @@
     font-size:var(--t-eti);color:rgba(212,175,106,0.75);margin-top:0.1rem}
 
   /* le cinque pagine */
-  .sv-barra .pagine{flex:1 1 auto;min-height:max-content;padding:0.7rem 0 0.9rem;
-    display:flex;flex-direction:column;justify-content:space-evenly}
+  .sv-barra .pagine{flex:0 0 auto;padding:0.7rem 0 0;
+    display:flex;flex-direction:column;gap:0.35rem}
   .sv-barra .pg{display:block;flex:0 0 auto;padding:0.85rem 1.05rem;border-left:2px solid transparent;
     cursor:pointer;transition:background 0.15s;min-width:0}
   .sv-barra .pg:hover{background:rgba(245,240,230,0.07)}
@@ -1398,6 +1398,7 @@
   .sv-barra .pg:hover .sg{opacity:1}
   .sv-barra .pg.on .sg{opacity:1;filter:brightness(1.25)}
   .sv-barra .pg.chiusa .sg{opacity:.34}
+  .sv-barra .pg b{min-width:0;overflow-wrap:break-word;hyphens:auto}
   .sv-barra .pg .n{flex:none;width:1.1rem;font-family:'Cinzel',serif;font-size:var(--t-tas);
     color:var(--c,var(--oro-ch));line-height:1}
   .sv-barra .pg b{flex:1;min-width:0;font-family:'Cinzel',serif;font-weight:500;
@@ -1419,9 +1420,9 @@
     color:rgba(200,160,85,0.62);line-height:1.4}
 
   /* il titolo del gruppo */
-  .sv-barra .gruppo{padding:1.5rem 1.05rem 0.7rem;font-size:var(--t-eti);
+  .sv-barra .gruppo{margin-top:auto;padding:1.5rem 1.05rem 0.7rem;font-size:var(--t-eti);
     letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.45);
-    margin-top:0;border-top:1px solid rgba(245,240,230,0.05)}
+    border-top:1px solid rgba(245,240,230,0.05)}
 
   /* cosa incontri: quadranti semitrasparenti, ognuno col suo colore */
   .sv-barra .sotto{padding:0 0.75rem 0.6rem;display:flex;flex-direction:column;gap:0.6rem}
@@ -3384,8 +3385,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
          · «Squadre» è una voce NUOVA — non «Gruppi Cooperativi»
            rinominata. Porta le squadre di lavoro e i team che nascono
            da un fatto. La sua stanza non esiste ancora: rotta vuota.
-         · «Gruppi Cooperativi» passa nel nucleo — rotta vuota qui.
-         · «Aziende, team e classi» aspetta la sua tavola — rotta vuota.
+         · «Gruppi Cooperativi» passa nel nucleo — gruppo `riposo`.
+         · «Aziende, team e classi» aspetta la sua tavola — `riposo`.
+       ⭐ «Squadre» si vede SEMPRE, anche a rotta vuota: il Praticantato
+          è la squadra automatica, e nessuno ne ha zero.
        ⭐ E `riga` è vuota per Squadre, non «[ in attesa ]»: le descrizioni
           sono uscite da tutta la barra, che porta il nome e il segno. Un
           segnaposto visibile ha senso dove qualcosa si vede; qui no.
@@ -3404,10 +3407,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     {id:"nucleo",     gruppo:"pagina",   ordine:4, nome:"Il nucleo",
      riga:null,
      elemento:null, segno:"nucleo", rotta:"nucleo", chiusa:true, perche:"Ci entra chi fa parte del nucleo."},
-    {id:"gruppi",     gruppo:"pagina",   ordine:5, nome:"Gruppi Cooperativi",
+    {id:"gruppi",     gruppo:"riposo",   ordine:1, nome:"Gruppi Cooperativi",
      riga:null,
      elemento:null, rotta:"", chiusa:false, perche:null},
-    {id:"aziende",    gruppo:"pagina",   ordine:6, nome:"Aziende, team e classi",
+    {id:"aziende",    gruppo:"riposo",   ordine:2, nome:"Aziende, team e classi",
      riga:null,
      elemento:null, rotta:"", chiusa:false, perche:null},
 
@@ -3890,23 +3893,25 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      voce e toccandola non succedeva niente. Adesso o non la vede, o la
      vede viva. Con `chiusa:false` cade anche la riga del `perche`, ed è
      giusto: spiegava perché NON si entra. */
-  /* ⭐ TOCCATO NEL GUSCIO ㉝ — E UNA VOCE SENZA ROTTA NON SI DISEGNA.
-     Fin qui questo valeva per la sola voce dell'Annale, e lo faceva il ③
-     spegnendo a mano il suo contenitore. Ma è una regola sola, e vale per
-     tutte: una riga di `stanze` con la rotta vuota non porta da nessuna
-     parte — collegaLeVoci() lo sa già e sul clic non fa niente. Disegnarla
-     comunque vuol dire mettere in barra una porta che non si apre.
-     ⭐ Così una voce si spegne e si riaccende da `stanze.rotta`, senza
-        toccare il guscio e senza perdere una parola: le tre righe ferme
-        oggi — Squadre che aspetta la sua stanza, Gruppi Cooperativi che
-        passa nel nucleo, Aziende che aspetta la sua tavola — restano
-        scritte per intero e tornano il giorno che la rotta si riempie.
-     ⚠️ Il ③ resta dov'è: quello nasconde il contenitore dell'Annale, che
-        Design disegna sempre e che non passa da qui. */
+  /* ⭐ TOCCATO NEL GUSCIO ㉟ — LA ROTTA NON DICE PIÙ SE UNA VOCE SI VEDE.
+     Il ㉝ le faceva dire due cose insieme: «non si apre» e «non si vede».
+     Reggeva finché le due combaciavano, e ha smesso di reggere subito:
+     «Squadre» si deve vedere sempre — il Praticantato È la squadra
+     automatica, chi entra ne ha già una e nessuno ne ha zero — ma la sua
+     stanza non c'è ancora, quindi la rotta è vuota. Una voce sola con le
+     due cose separate, e la regola vecchia non sa più dove stare.
+     ⭐ Adesso: la ROTTA dice solo se si apre — e collegaLeVoci() lo sa già
+        da sé, sul clic di una voce senza rotta non fa niente. A dire se
+        una voce sta in barra è il GRUPPO, che è la colonna fatta apposta:
+        `pagina` sta in alto, `incontro` sotto, `riposo` da nessuna parte.
+     ⚠️ Perché funzioni, in `stanze` le righe che non sono più voci —
+        Gruppi Cooperativi, che è passata nel nucleo, e Aziende, che
+        aspetta la sua tavola — devono stare nel gruppo `riposo`. Finché
+        dicono ancora `pagina`, tornano a disegnarsi in barra.
+        Le parole non si perdono lo stesso: BARRA le porta tutte, gruppo
+        per gruppo, e le legge attesa(). */
   function vociPerMe(elenco){
-    return (elenco || []).filter(function(x){
-      return x && ROTTE[x.id];
-    }).filter(possoEntrare).map(function(x){
+    return (elenco || []).filter(possoEntrare).map(function(x){
       if(!x.chiusa) return x;
       var c = {}; for(var k in x){ if(x.hasOwnProperty(k)) c[k] = x[k]; }
       c.chiusa = false; c.perche = null;
