@@ -3472,31 +3472,21 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         riquadro resta con la sua luna e non si accorge di niente.
         È il motivo per cui la fase si scrive subito e le altre due dopo.
 
-     ⭐ LE COSTANTI DELLA LUNA SONO QUELLE DI DESIGN, copiate dalla
-        consegna: SINODICO 29.530588853 e la luna nuova del 6 gennaio
-        2000 alle 18:14 UTC. Se qui se ne usassero altre, la parola
-        direbbe una cosa e il disegno accanto ne mostrerebbe un'altra.
-     ⭐ E LE PAROLE SONO QUELLE CHE IL PROGETTO USA GIÀ — nomeLuna() in
-        la-mia-orma.html: luna nuova · primo quarto · luna piena ·
-        ultimo quarto · luna crescente · luna calante. Sei, non se ne
-        inventano altre, e le soglie sono le stesse: ±0.025.
+     ⭐ LA LUNA SI CALCOLA SUGLI ISTANTI VERI — vedi ㉜ qui sotto. Le
+        parole sono le sei che il progetto usa già.
 
      ⭐ IL SANTO ARRIVA GIÀ FATTO. `santi.intero` porta il titolo giusto
         — sant'Agata, santa Genoveva, san Patrizio — e non si ricostruisce
         da `nome` + `titolo`: l'apostrofo, il maschile e il femminile sono
         già decisi là.
 
-     ⚠️ IL NOME DELLE DUE TAVOLE DELLE FESTE È L'UNICA COSA CHE HO
-        SUPPOSTO. Di `feste_felicitas` e `feste_indiane` conosco le
-        colonne della DATA — mese e giorno per quelle che tornano ogni
-        anno, data e fine per quelle che durano, data intera per le
-        indiane — ma non come si chiama la colonna del nome. Quindi:
-          · si legge la riga intera, `select("*")`, così una colonna che
-            non c'è non fa fallire la domanda
-          · il nome si prende da `nome`, se no `titolo`, se no `intero`
-        Oggi le due tavole sono vuote e non si vede niente comunque.
-        Il giorno che ci finisce dentro una riga, se il nome non compare
-        è questa la riga da guardare — e basta togliere le altre due.
+     ⭐ IL NOME DELLE FESTE STA IN `nome`, in tutte e due le tavole.
+        Le colonne della DATA sono: mese e giorno per quelle che tornano
+        ogni anno, data e fine per quelle che durano, data intera per le
+        indiane.
+        ⚠️ Si legge ancora la riga intera, `select("*")`, e non la sola
+           colonna: così se un domani una tavola cambia forma, la domanda
+           non fallisce e il riquadro resta in piedi con la sua luna.
 
      ⚠️ Le feste si guardano in ordine: prima `feste_felicitas`, poi
         `feste_indiane`. La prima che risponde vince, e la seconda non si
@@ -3504,27 +3494,134 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var GIORNO = {festa:null, santo:null, fase:null};
   var giornoLetto = false;
 
-  function nomeDellaLuna(f){
-    if(f < 0.025 || f > 0.975)      return "luna nuova";
-    if(Math.abs(f - 0.25)  < 0.025) return "primo quarto";
-    if(Math.abs(f - 0.5)   < 0.025) return "luna piena";
-    if(Math.abs(f - 0.75)  < 0.025) return "ultimo quarto";
-    return f < 0.5 ? "luna crescente" : "luna calante";
+  /* ⭐ TOCCATO NEL GUSCIO ㉜ — LA LUNA SI CALCOLA SUGLI ISTANTI VERI.
+     Quello di prima era la LUNAZIONE MEDIA: si contavano i giorni dal
+     novilunio del 6 gennaio 2000 e si divideva per 29.530588853, un
+     numero che è la media di cicli che vanno da 29,27 a 29,83 giorni.
+     Due errori insieme, e il secondo è il peggiore:
+       · la media sbaglia fino a mezza giornata — basta a spostare una
+         fase di un giorno intero
+       · e metteva il plenilunio a METÀ del tempo fra due noviluni, che
+         non è dove sta. La Luna non va a velocità costante: fra il
+         novilunio e il plenilunio possono passare 14,1 giorni o 15,0.
+     Misurato sulle cinque date verificate da Gab: 4 su 5. Il 12 agosto
+     2026 — novilunio vero — diceva «luna calante», f = 0.9721, appena
+     fuori dalla soglia.
+     ⭐ Adesso: Meeus, «Astronomical Algorithms», capitolo 49. Si calcola
+        l'ISTANTE VERO di ogni fase — novilunio, primo quarto, plenilunio,
+        ultimo quarto — con le correzioni periodiche, e il giorno prende
+        il nome della fase che ci cade dentro. Sulle cinque date: 5 su 5.
+          12 ago 2026 17:38 UTC  novilunio
+          20 ago 2026 02:47 UTC  primo quarto
+          28 ago 2026 04:19 UTC  plenilunio
+          11 set 2026 03:28 UTC  novilunio
+          26 set 2026 16:50 UTC  plenilunio
+     ⭐ E le sei parole restano quelle di sempre — nomeLuna() in
+        la-mia-orma.html: luna nuova · primo quarto · luna piena ·
+        ultimo quarto · luna crescente · luna calante.
+     ⭐ IL GIORNO PRENDE IL NOME DELLA FASE CHE CI CADE DENTRO. Non una
+        soglia di ±0.025 su una frazione: il riquadro mostra un GIORNO,
+        e il giorno del plenilunio è il giorno in cui il plenilunio
+        avviene. Fuori da quei quattro giorni, si guarda da che parte si
+        sta rispetto al plenilunio vero: crescente prima, calante dopo.
+     ⚠️ Le correzioni A1…A14 di Meeus non ci sono: valgono meno di un
+        minuto, e qui si dà un nome a un giorno.
+     ⛔ LA LUNA DISEGNATA — il `path` dentro il riquadro — la calcola
+        ancora Design con la lunazione media, dentro avviaCasa() in
+        fm-casa.js. Non l'ho toccata: è il file di Design. Vuol dire che
+        la PAROLA adesso è giusta e la FORMA può essere spostata fino a
+        mezza giornata. Nei giorni di mezzo non si vede; nei quattro
+        giorni che contano sì. Va detto a Design. */
+  var LUNA_RAD = Math.PI / 180;
+  function lsin(g){ return Math.sin(g * LUNA_RAD); }
+  function lcos(g){ return Math.cos(g * LUNA_RAD); }
+
+  /* k intero = novilunio · +0.25 primo quarto · +0.5 plenilunio ·
+     +0.75 ultimo quarto. Torna i millisecondi dell'istante vero. */
+  function istanteDellaFase(k){
+    var T  = k / 1236.85, T2 = T*T, T3 = T2*T, T4 = T3*T;
+    var JDE = 2451550.09766 + 29.530588861*k
+            + 0.00015437*T2 - 0.000000150*T3 + 0.00000000073*T4;
+    var E  = 1 - 0.002516*T - 0.0000074*T2;
+    var M  = 2.5534   + 29.10535670*k  - 0.0000014*T2 - 0.00000011*T3;
+    var Mp = 201.5643 + 385.81693528*k + 0.0107582*T2 + 0.00001238*T3 - 0.000000058*T4;
+    var F  = 160.7108 + 390.67050284*k - 0.0016118*T2 - 0.00000227*T3 + 0.000000011*T4;
+    var O  = 124.7746 - 1.56375588*k   + 0.0020672*T2 + 0.00000215*T3;
+    var q = ((k % 1) + 1) % 1, c;
+    if(q < 0.01 || q > 0.99 || Math.abs(q - 0.5) < 0.01){
+      var nuova = (q < 0.01 || q > 0.99);
+      c = (nuova ? -0.40720 : -0.40614) * lsin(Mp)
+        + (nuova ?  0.17241 :  0.17302) * E * lsin(M)
+        + (nuova ?  0.01608 :  0.01614) * lsin(2*Mp)
+        + (nuova ?  0.01039 :  0.01043) * lsin(2*F)
+        + (nuova ?  0.00739 :  0.00734) * E * lsin(Mp - M)
+        + (nuova ? -0.00514 : -0.00515) * E * lsin(Mp + M)
+        + (nuova ?  0.00208 :  0.00209) * E*E * lsin(2*M)
+        - 0.00111 * lsin(Mp - 2*F)      - 0.00057 * lsin(Mp + 2*F)
+        + 0.00056 * E * lsin(2*Mp + M)  - 0.00042 * lsin(3*Mp)
+        + 0.00042 * E * lsin(M + 2*F)   + 0.00038 * E * lsin(M - 2*F)
+        - 0.00024 * E * lsin(2*Mp - M)  - 0.00017 * lsin(O)
+        - 0.00007 * lsin(Mp + 2*M)      + 0.00004 * lsin(2*Mp - 2*F)
+        + 0.00004 * lsin(3*M)           + 0.00003 * lsin(Mp + M - 2*F)
+        + 0.00003 * lsin(2*Mp + 2*F)    - 0.00003 * lsin(Mp + M + 2*F)
+        + 0.00003 * lsin(Mp - M + 2*F)  - 0.00002 * lsin(Mp - M - 2*F)
+        - 0.00002 * lsin(3*Mp + M)      + 0.00002 * lsin(4*Mp);
+    } else {
+      c = -0.62801 * lsin(Mp)           + 0.17172 * E * lsin(M)
+        - 0.01183 * E * lsin(Mp + M)    + 0.00862 * lsin(2*Mp)
+        + 0.00804 * lsin(2*F)           + 0.00454 * E * lsin(Mp - M)
+        + 0.00204 * E*E * lsin(2*M)     - 0.00180 * lsin(Mp - 2*F)
+        - 0.00070 * lsin(Mp + 2*F)      - 0.00040 * lsin(3*Mp)
+        - 0.00034 * E * lsin(2*Mp - M)  + 0.00032 * E * lsin(M + 2*F)
+        + 0.00032 * E * lsin(M - 2*F)   - 0.00028 * E*E * lsin(Mp + 2*M)
+        + 0.00027 * E * lsin(2*Mp + M)  - 0.00017 * lsin(O)
+        - 0.00005 * lsin(Mp - M - 2*F)  + 0.00004 * lsin(2*Mp + 2*F)
+        - 0.00004 * lsin(Mp + M + 2*F)  + 0.00004 * lsin(Mp - 2*M)
+        + 0.00003 * lsin(Mp + M - 2*F)  + 0.00003 * lsin(3*M)
+        + 0.00002 * lsin(2*Mp - 2*F)    + 0.00002 * lsin(Mp - M + 2*F)
+        - 0.00002 * lsin(3*Mp + M);
+      var W = 0.00306 - 0.00038 * E * lcos(M) + 0.00026 * lcos(Mp)
+            - 0.00002 * lcos(Mp - M) + 0.00002 * lcos(Mp + M) + 0.00002 * lcos(2*F);
+      c += (Math.abs(q - 0.25) < 0.01) ? W : -W;
+    }
+    /* dal giorno giuliano ai millisecondi */
+    return ((JDE + c) - 2440587.5) * 86400000;
   }
 
-  function faseDiOggi(){
-    var SINODICO = 29.530588853;
-    var NUOVA = Date.UTC(2000, 0, 6, 18, 14);
-    var f = (((Date.now() - NUOVA) / 86400000) / SINODICO) % 1;
-    if(f < 0) f += 1;
-    return nomeDellaLuna(f);
+  var LE_QUATTRO = [[0,"luna nuova"],[0.25,"primo quarto"],
+                    [0.5,"luna piena"],[0.75,"ultimo quarto"]];
+
+  function nomeDellaLuna(quando){
+    var g0 = new Date(quando.getFullYear(), quando.getMonth(), quando.getDate()).getTime();
+    var g1 = g0 + 86400000, t = quando.getTime();
+    var k = Math.round(((t - Date.UTC(2000,0,6)) / 86400000 / 365.25) * 12.3685);
+    var i, j;
+    /* una fase vera che cade dentro il giorno dà il nome al giorno */
+    for(i = k-1; i <= k+1; i++)
+      for(j = 0; j < 4; j++){
+        var f = istanteDellaFase(i + LE_QUATTRO[j][0]);
+        if(f >= g0 && f < g1) return LE_QUATTRO[j][1];
+      }
+    /* se no: prima o dopo il PLENILUNIO VERO, non la metà del tempo */
+    for(i = k-1; i <= k+1; i++){
+      var nuova = istanteDellaFase(i), poi = istanteDellaFase(i + 1);
+      if(t >= nuova && t < poi)
+        return t < istanteDellaFase(i + 0.5) ? "luna crescente" : "luna calante";
+    }
+    return "luna crescente";
   }
 
-  /* il nome di una festa, comunque la tavola lo chiami */
+  function faseDiOggi(){ return nomeDellaLuna(new Date()); }
+
+  /* ⭐ TOCCATO NEL GUSCIO ㉜ — LA COLONNA È `nome`, E BASTA.
+     Ieri leggevo `nome`, se no `titolo`, se no `intero`: era un ripiego,
+     e l'avevo scritto perché non sapevo come si chiamasse la colonna.
+     Adesso lo so: `titolo` e `intero` esistono solo su `santi`. Un
+     ripiego su colonne che in queste due tavole non ci sono non è una
+     rete — è una riga che nasconde un errore invece di mostrarlo. */
   function nomeDellaFesta(r){
     if(!r) return null;
-    var v = r.nome || r.titolo || r.intero || null;
-    return (typeof v === "string" && v.trim()) ? v.trim() : null;
+    return (typeof r.nome === "string" && r.nome.trim()) ? r.nome.trim() : null;
   }
 
   /* si ridisegna a ogni ritorno a casa: la porta e i tre posti nascono
