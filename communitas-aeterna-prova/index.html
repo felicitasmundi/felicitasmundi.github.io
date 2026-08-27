@@ -1347,13 +1347,15 @@
      dati = {
        pagine:   [ {id, nome, riga, quante, colore, rotta, chiusa, perche} ],
        incontri: [ {id, nome, riga, quante, colore, rotta} ],
-       annale:   {nome, riga, rotta},
        chi:      {nome, ruolo, iniziale},
        nexus:    "codice"
      }
-     Le cinque pagine e i cinque elementi sono quanti ne arrivano; quello
-     che manca diventa [ in attesa ]. Una pagina chiusa resta visibile e
-     spenta, con la riga che dice perché.
+     LE VOCI CHE UNO NON HA NON SI VEDONO: una voce senza nome non compare.
+     Squadre nasce il giorno che c'è una squadra; prima non c'è.
+     I segni disponibili: orma · praticantato · squadre · edizione · scuola
+     — la chiave la dà il dato con «segno», altrimenti va in ordine.
+     Una pagina chiusa invece resta visibile e spenta, con la riga che dice
+     perché: quella esiste, e non è aperta.
      ═══════════════════════════════════════════════════════════════ -->
 
 <style>
@@ -1383,12 +1385,19 @@
     font-size:var(--t-eti);color:rgba(212,175,106,0.75);margin-top:0.1rem}
 
   /* le cinque pagine */
-  .sv-barra .pagine{padding:0.5rem 0}
-  .sv-barra .pg{display:block;padding:0.7rem 1.05rem;border-left:2px solid transparent;
+  .sv-barra .pagine{flex:1 1 auto;min-height:max-content;padding:0.7rem 0 0.9rem;
+    display:flex;flex-direction:column;justify-content:space-evenly}
+  .sv-barra .pg{display:block;flex:0 0 auto;padding:0.85rem 1.05rem;border-left:2px solid transparent;
     cursor:pointer;transition:background 0.15s;min-width:0}
   .sv-barra .pg:hover{background:rgba(245,240,230,0.07)}
   .sv-barra .pg.on{background:rgba(200,160,85,0.2);border-left-color:var(--oro)}
   .sv-barra .pg .alto{display:flex;align-items:baseline;gap:0.55rem;min-width:0}
+  .sv-barra .pg .sg{flex:none;width:1.5rem;height:1.5rem;color:var(--c,#D4AF6A);
+    opacity:.82;transition:opacity .2s,filter .2s}
+  .sv-barra .pg .sg svg{width:100%;height:100%;display:block}
+  .sv-barra .pg:hover .sg{opacity:1}
+  .sv-barra .pg.on .sg{opacity:1;filter:brightness(1.25)}
+  .sv-barra .pg.chiusa .sg{opacity:.34}
   .sv-barra .pg .n{flex:none;width:1.1rem;font-family:'Cinzel',serif;font-size:var(--t-tas);
     color:var(--c,var(--oro-ch));line-height:1}
   .sv-barra .pg b{flex:1;min-width:0;font-family:'Cinzel',serif;font-weight:500;
@@ -1410,15 +1419,13 @@
     color:rgba(200,160,85,0.62);line-height:1.4}
 
   /* il titolo del gruppo */
-  .sv-barra .gruppo{padding:1rem 1.05rem 0.35rem;font-size:var(--t-eti);
+  .sv-barra .gruppo{padding:1.5rem 1.05rem 0.7rem;font-size:var(--t-eti);
     letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.45);
-    margin-top:0.4rem;border-top:1px solid rgba(245,240,230,0.05)}
+    margin-top:0;border-top:1px solid rgba(245,240,230,0.05)}
 
   /* cosa incontri: quadranti semitrasparenti, ognuno col suo colore */
-  .sv-barra .sotto{padding:0 0.75rem 0.4rem;display:flex;flex-direction:column;gap:0.45rem}
-  .sv-barra .sotto.solo{border-top:1px solid rgba(245,240,230,0.09);
-    margin-top:0.65rem;padding-top:0.75rem}
-  .sv-barra .pg.pic{padding:0.75rem 0.9rem;border-radius:0.7rem;border-left:0;
+  .sv-barra .sotto{padding:0 0.75rem 0.6rem;display:flex;flex-direction:column;gap:0.6rem}
+  .sv-barra .pg.pic{padding:0.85rem 0.95rem;border-radius:0.7rem;border-left:0;
     background:color-mix(in srgb,var(--c,var(--oro-ch)) 13%,rgba(245,240,230,0.05));
     border:1px solid color-mix(in srgb,var(--c,var(--oro-ch)) 34%,transparent);
     backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -1470,7 +1477,7 @@
 <nav class="sv-barra" id="sv-barra" aria-label="Le pagine">
 
   <div class="capo">
-    <span class="segno"><img src="nexus.png" alt=""></span><!-- ⭐ il file accanto, non WordPress -->
+    <span class="segno"><img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt=""></span>
     <div>
       <b>FelicitasMundi</b>
       <span>Comunità Eterna</span>
@@ -1481,8 +1488,6 @@
 
   <div class="gruppo">Cosa incontri</div>
   <div class="sotto" id="sv-incontri"></div>
-
-  <div class="sotto solo" id="sv-annale"></div>
 
   <div class="piede">
     <div class="chi">
@@ -1502,7 +1507,58 @@
   "use strict";
 
   var ATTESA = "[ in attesa ]";
-  var NUM = ["\u2460", "\u2461", "\u2462", "\u2463", "\u2464", "\u2465", "\u2466"];
+
+  /* l'impronta del passo, ripetuta a tre misure dentro il segno dell'orma */
+  var PASSO =
+    '<path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34' +
+    ' C26 29 21 27 21 24 C21 20 25 18 30 18' +
+    ' C35 18 39 20 39 24 C39 29 36 33 36 38' +
+    ' C36 44 34 51 28 51Z"/>' +
+    '<circle cx="22" cy="12" r="3.2"/>' +
+    '<circle cx="28.5" cy="9.6" r="2.4"/>' +
+    '<circle cx="33.5" cy="10" r="2.1"/>' +
+    '<circle cx="37.5" cy="11.6" r="1.8"/>' +
+    '<circle cx="40.5" cy="14.2" r="1.5"/>';
+
+  /* i segni delle voci: linea sola, stessa mano dei sette.
+     La chiave la dà il dato (segno), altrimenti si prende in ordine. */
+  var SEGNI = {
+    /* la mia orma — il passo che continua: verbatim dal simbolo scelto.
+       Riquadro 60, tratto 1,35 — non si ridisegna. */
+    orma: {vb: "0 0 60 60", w: "1.35", d:
+      '<path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/>' +
+      '<path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/>' +
+      '<g transform="translate(-4,4) scale(0.9)">' + PASSO + '</g>' +
+      '<g transform="translate(33,3) scale(0.5)" opacity=".45">' + PASSO + '</g>' +
+      '<g transform="translate(20,-2) scale(0.3)" opacity=".2">' + PASSO + '</g>'},
+    /* il praticantato — la scala: il passo che sale */
+    praticantato: '<path d="M8 33L8 25L16 25L16 17L24 17L24 9L34 9"/><path d="M8 33L34 33" opacity=".45"/>',
+    /* squadre — più orme che si tengono: da tre persone in su, e il lavoro
+       che le lega. Non un cerchio di comando: una maglia fra pari. */
+    squadre: '<path d="M13.4 12C13.4 13.44 12.24 14.6 10.8 14.6C9.36 14.6 8.2 13.44 8.2 12C8.2 10.56 9.36 9.4 10.8 9.4C12.24 9.4 13.4 10.56 13.4 12Z"/><path d="M31.8 12C31.8 13.44 30.64 14.6 29.2 14.6C27.76 14.6 26.6 13.44 26.6 12C26.6 10.56 27.76 9.4 29.2 9.4C30.64 9.4 31.8 10.56 31.8 12Z"/><path d="M22.6 29C22.6 30.44 21.44 31.6 20 31.6C18.56 31.6 17.4 30.44 17.4 29C17.4 27.56 18.56 26.4 20 26.4C21.44 26.4 22.6 27.56 22.6 29Z"/><path d="M13.4 12L26.6 12M12.4 14.4L18.4 26.6M27.6 14.4L21.6 26.6"/><path d="M20 12L20 20" opacity=".4"/><path d="M21.4 20C21.4 20.77 20.77 21.4 20 21.4C19.23 21.4 18.6 20.77 18.6 20C18.6 19.23 19.23 18.6 20 18.6C20.77 18.6 21.4 19.23 21.4 20Z" fill="currentColor" stroke="none" opacity=".6"/>',
+    /* edizione — il foglio piegato: l'opera che prende forma */
+    edizione: '<path d="M10 6L24 6L30 12L30 34L10 34Z"/><path d="M24 6L24 12L30 12" opacity=".7"/><path d="M15 20L25 20M15 25L25 25M15 15L20 15" opacity=".5"/>',
+    /* scuola — il seme che si apre: la conoscenza che germina */
+    scuola: '<path d="M20 34L20 20"/><path d="M20 20C20 14 15 9 8 9C8 16 13 20 20 20Z"/><path d="M20 20C20 14 25 9 32 9C32 16 27 20 20 20Z"/><path d="M14 34L26 34" opacity=".45"/>'
+  };
+  var ORDINE = ["orma", "praticantato", "squadre", "edizione", "scuola"];
+
+  function disegnaSegno(chiave) {
+    var v = SEGNI[chiave];
+    if (!v) return null;
+    var d  = (typeof v === "string") ? v : v.d;
+    var vb = (typeof v === "string") ? "0 0 40 40" : (v.vb || "0 0 40 40");
+    var w  = (typeof v === "string") ? "1.5" : (v.w || "1.5");
+    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("viewBox", vb);
+    s.setAttribute("fill", "none");
+    s.setAttribute("stroke", "currentColor");
+    s.setAttribute("stroke-width", w);
+    s.setAttribute("stroke-linecap", "round");
+    s.setAttribute("stroke-linejoin", "round");
+    s.innerHTML = d;
+    return s;
+  }
   var barra = document.getElementById("sv-barra");
   var velo  = document.getElementById("sv-velo-barra");
   var apri  = document.getElementById("sv-apri-barra");
@@ -1531,7 +1587,12 @@
 
     var alto = riga("alto");
     if (piccola) alto.appendChild(riga("pt"));
-    else alto.appendChild(riga("n", NUM[i] || String(i + 1)));
+    else {
+      var sg = riga("sg");
+      var ic = disegnaSegno(p.segno || ORDINE[i]);
+      if (ic) sg.appendChild(ic);
+      alto.appendChild(sg);
+    }
 
     var b = document.createElement("b");
     b.textContent = testo(p.nome);
@@ -1540,7 +1601,6 @@
     if (!vuoto(p.quante)) alto.appendChild(riga("vn", String(p.quante)));
     e.appendChild(alto);
 
-    e.appendChild(riga("desc", testo(p.riga)));
     if (chiusa) e.appendChild(riga("perche", testo(p.perche)));
     return e;
   }
@@ -1548,28 +1608,48 @@
   function riempi(dati) {
     dati = dati || {};
 
+    /* ⭐ le voci che uno non ha non si vedono: una voce senza nome non è
+       in attesa, è una cosa che per lui non esiste ancora — Squadre compare
+       il giorno che ne nasce una */
     var pg = document.getElementById("sv-pagine");
     svuota(pg);
-    (dati.pagine || []).forEach(function (p, i) { pg.appendChild(unaPagina(p, i, false)); });
+    (dati.pagine || [])
+      .filter(function (p) { return p && !vuoto(p.nome); })
+      .forEach(function (p, i) { pg.appendChild(unaPagina(p, i, false)); });
 
     var inc = document.getElementById("sv-incontri");
     svuota(inc);
     (dati.incontri || []).forEach(function (p, i) { inc.appendChild(unaPagina(p, i, true)); });
 
-    var an = document.getElementById("sv-annale");
-    svuota(an);
-    var a = dati.annale || {};
-    an.appendChild(unaPagina({
-      id: a.id || "annale", nome: a.nome, riga: a.riga, rotta: a.rotta,
-      colore: "rgba(245,240,230,0.4)"
-    }, 0, true));
-
+    /* ⭐ il piede segue la stessa regola: quello che non c'è non si vede.
+       Un nome vuoto non è «in attesa» — è qualcuno che non ha ancora firmato. */
     var chi = dati.chi || {};
-    document.getElementById("sv-chi-es").textContent =
-      vuoto(chi.iniziale) ? (vuoto(chi.nome) ? "\u00B7" : String(chi.nome).charAt(0)) : chi.iniziale;
-    document.getElementById("sv-chi-nome").textContent  = testo(chi.nome);
-    document.getElementById("sv-chi-ruolo").textContent = testo(chi.ruolo);
-    document.getElementById("sv-nexus").textContent     = testo(dati.nexus);
+    var pd = document.querySelector(".sv-barra .piede");
+    var nome = document.getElementById("sv-chi-nome");
+    var ruolo = document.getElementById("sv-chi-ruolo");
+    var es = document.getElementById("sv-chi-es");
+    var nx = document.getElementById("sv-nexus");
+    var cod = nx ? nx.parentNode : null;
+
+    function metti(n, v) {
+      if (!n) return false;
+      var t = vuoto(v) ? "" : String(v).trim();
+      n.textContent = t;
+      n.hidden = !t;
+      return !!t;
+    }
+
+    var haNome  = metti(nome, chi.nome);
+    var haRuolo = metti(ruolo, chi.ruolo);
+    if (es) {
+      es.textContent = haNome ? String(chi.nome).trim().charAt(0).toUpperCase() : "";
+      es.hidden = !haNome;
+    }
+    var haNexus = metti(nx, dati.nexus);
+    if (cod) cod.hidden = !haNexus;
+    var riga = document.querySelector(".sv-barra .chi");
+    if (riga) riga.hidden = !(haNome || haRuolo);
+    if (pd) pd.hidden = !(haNome || haRuolo || haNexus);
 
     collega();
   }
@@ -1595,7 +1675,6 @@
   velo.addEventListener("click", chiudiBarra);
 
   /* a vuoto la forma si legge lo stesso */
-  riempi({ pagine: [], incontri: [], annale: {}, chi: {}, nexus: "" });
 
   window.SpazioVivo = window.SpazioVivo || {};
   window.SpazioVivo.barra       = riempi;
@@ -1620,20 +1699,15 @@
   /* ⭐ il nome in alto a sinistra riporta a casa */
   .sv-barra .capo{cursor:pointer}
   .sv-barra .capo:hover b{color:var(--oro-ch)}
-  /* ⭐ TOCCATO NEL GUSCIO ㉚ — LA BARRA DICE IL NOME E BASTA.
-     Due decisioni di Gab, e si spengono da qui perché il file di Design
-     non si corregge:
-       · VIA LE SPIEGAZIONI sotto ogni voce. «Se serve spiegare cosa c'è
-         dentro, la voce ha il nome sbagliato.»
-       · VIA I NUMERI ① ② ③ ④ ⑤. Non è un percorso, sono posti: un numero
-         dice «prima questo, poi quello», e non è vero.
-     ⛔ Si spengono, non si tolgono. Le parole restano intere in `stanze`
-        e nel seme — `riga` è ancora lì, e la legge attesa() quando una
-        stanza non è ancora fatta. Qui cade solo il disegno.
-     ⚠️ `.pt` resta: è il pallino delle voci piccole di «Cosa incontri»,
-        e non è un numero — è il segno che Gab vuole accanto al nome. */
-  .sv-barra .pg .desc{display:none}
-  .sv-barra .pg .n{display:none}
+  /* ⭐ TOCCATO NEL GUSCIO ㉞ — VIA LE DUE REGOLE DEL ㉚.
+     Il ㉚ spegneva da qui due cose che Design disegnava e Gab non voleva:
+     le spiegazioni sotto ogni voce, e i numeri ① ② ③ ④ ⑤. Si spegnevano
+     invece di toglierle perché il file di Design non si corregge.
+     Adesso non c'è più niente da spegnere: la consegna del 27 agosto non
+     disegna né `.desc` né `.n`. Due regole che non trovano più il loro
+     bersaglio sono una trappola per chi legge — sembrano fare qualcosa.
+     ⭐ Le parole non si sono perse: `stanze.riga` è intera, e la legge
+        attesa() quando una stanza non è ancora fatta. */
   @media(max-width:52rem){
     /* ⭐ TOCCATO NEL GUSCIO ⑪ — il 70 che era di #barra, rimesso sulla
        barra vera. Sta fra il velo (69) e il tasto che apre (71): il
@@ -3300,20 +3374,42 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         si vedrebbe quella vecchia. */
   var SEME = [
     {id:"orme",       gruppo:"pagina",   ordine:1, nome:"La mia orma",
-     riga:"orme, flussi economici, progetti, impegni, contatti, idee",
-     elemento:null, rotta:"orme", chiusa:false, perche:null},
+     riga:null,
+     elemento:null, segno:"orma", rotta:"orme", chiusa:false, perche:null},
     {id:"sentiero",   gruppo:"pagina",   ordine:2, nome:"Praticantato",
-     riga:"servizio e pratica, settimana per settimana · due dirette al mese · accompagnamento",
-     elemento:null, rotta:"sentiero", chiusa:false, perche:null},
-    {id:"gruppi",     gruppo:"pagina",   ordine:3, nome:"Gruppi Cooperativi",
-     riga:"chi segue Emporio, Assistenza, Scuola, Edizione, Vicinati",
-     elemento:null, rotta:"gruppi", chiusa:false, perche:null},
-    {id:"aziende",    gruppo:"pagina",   ordine:4, nome:"Aziende, team e classi",
-     riga:"compiti, calendari, bisogni, costi, progetti · e le audio-lezioni che vanno nell’Emporio",
-     elemento:null, rotta:"aziende", chiusa:false, perche:null},
-    {id:"nucleo",     gruppo:"pagina",   ordine:5, nome:"Il nucleo",
-     riga:"i flussi economici e l’avanzamento della piattaforma",
-     elemento:null, rotta:"nucleo", chiusa:true, perche:"Ci entra chi fa parte del nucleo."},
+     riga:null,
+     elemento:null, segno:"praticantato", rotta:"sentiero", chiusa:false, perche:null},
+    /* ⭐ TOCCATO NEL GUSCIO ㉝ — il seme segue `stanze`, come dice la
+       nota in cima. Tre cambi, il 27 agosto 2026:
+         · «Squadre» è una voce NUOVA — non «Gruppi Cooperativi»
+           rinominata. Porta le squadre di lavoro e i team che nascono
+           da un fatto. La sua stanza non esiste ancora: rotta vuota.
+         · «Gruppi Cooperativi» passa nel nucleo — rotta vuota qui.
+         · «Aziende, team e classi» aspetta la sua tavola — rotta vuota.
+       ⭐ E `riga` è vuota per Squadre, non «[ in attesa ]»: le descrizioni
+          sono uscite da tutta la barra, che porta il nome e il segno. Un
+          segnaposto visibile ha senso dove qualcosa si vede; qui no.
+          Le righe delle altre voci restano dove sono — non le disegna
+          più la barra, ma le legge ancora attesa().
+       ⭐ E `segno` sta anche qui, non solo in `stanze`: il seme disegna
+          il primo istante, e se non lo portasse la barra ricadrebbe sulla
+          posizione — proprio la cosa da cui il ㉞ toglie il piede.
+       ⚠️ `segno:"nucleo"` è una chiave che la barra ancora non conosce:
+          Design non l'ha disegnato. disegnaSegno() torna vuoto e la voce
+          resta col nome e basta — nessun danno, solo un segno che manca.
+       ⚠️ Questa riga e l'SQL vanno insieme: `database/stanze.sql`. */
+    {id:"squadre",    gruppo:"pagina",   ordine:3, nome:"Squadre",
+     riga:null,
+     elemento:null, segno:"squadre", rotta:"", chiusa:false, perche:null},
+    {id:"nucleo",     gruppo:"pagina",   ordine:4, nome:"Il nucleo",
+     riga:null,
+     elemento:null, segno:"nucleo", rotta:"nucleo", chiusa:true, perche:"Ci entra chi fa parte del nucleo."},
+    {id:"gruppi",     gruppo:"pagina",   ordine:5, nome:"Gruppi Cooperativi",
+     riga:null,
+     elemento:null, rotta:"", chiusa:false, perche:null},
+    {id:"aziende",    gruppo:"pagina",   ordine:6, nome:"Aziende, team e classi",
+     riga:null,
+     elemento:null, rotta:"", chiusa:false, perche:null},
 
     {id:"vicinati",   gruppo:"incontro", ordine:1, nome:"Vicinati",
      riga:"i luoghi e le persone vicine a te, e quello di cui c’è bisogno",
@@ -3355,8 +3451,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
          da cui `colore` viene calcolato: qui non si aggiunge un dato, si
          smette di buttarlo via. La barra di Design ignora i campi che
          non conosce, quindi non cambia niente di quello che disegna. */
+      /* ⭐ TOCCATO NEL GUSCIO ㉞ — E ANCHE `segno` PASSA INTERO.
+         La barra nuova disegna il segno accanto al nome e la chiave gliela
+         dà il dato: `p.segno`. Se non arriva si prende quello che tocca
+         alla POSIZIONE, e la posizione è la cosa più fragile che ci sia —
+         basta che una voce non si veda perché non ce l'hai, e tutte quelle
+         sotto scalano di un segno. La colonna `stanze.segno` esiste per
+         questo: i segni li decide il dato, non l'ordine. */
       return { id:x.id, nome:x.nome, riga:x.riga, elemento: x.elemento || "",
                colore: x.elemento ? "var(--"+x.elemento+")" : "",
+               segno: x.segno || "",
                rotta: "#"+x.id, chiusa: !!x.chiusa, perche: x.perche };
     }
     var delGruppo = function(g){
@@ -3402,7 +3506,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   function leggiLeStanze(){
     return db.from("stanze")
-      .select("id,gruppo,ordine,nome,riga,elemento,rotta,chiusa,perche")
+      .select("id,gruppo,ordine,nome,riga,elemento,segno,rotta,chiusa,perche")
       .order("ordine")
       .then(function(r){
         var righe = (r && r.data) || [];
@@ -3786,8 +3890,23 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      voce e toccandola non succedeva niente. Adesso o non la vede, o la
      vede viva. Con `chiusa:false` cade anche la riga del `perche`, ed è
      giusto: spiegava perché NON si entra. */
+  /* ⭐ TOCCATO NEL GUSCIO ㉝ — E UNA VOCE SENZA ROTTA NON SI DISEGNA.
+     Fin qui questo valeva per la sola voce dell'Annale, e lo faceva il ③
+     spegnendo a mano il suo contenitore. Ma è una regola sola, e vale per
+     tutte: una riga di `stanze` con la rotta vuota non porta da nessuna
+     parte — collegaLeVoci() lo sa già e sul clic non fa niente. Disegnarla
+     comunque vuol dire mettere in barra una porta che non si apre.
+     ⭐ Così una voce si spegne e si riaccende da `stanze.rotta`, senza
+        toccare il guscio e senza perdere una parola: le tre righe ferme
+        oggi — Squadre che aspetta la sua stanza, Gruppi Cooperativi che
+        passa nel nucleo, Aziende che aspetta la sua tavola — restano
+        scritte per intero e tornano il giorno che la rotta si riempie.
+     ⚠️ Il ③ resta dov'è: quello nasconde il contenitore dell'Annale, che
+        Design disegna sempre e che non passa da qui. */
   function vociPerMe(elenco){
-    return (elenco || []).filter(possoEntrare).map(function(x){
+    return (elenco || []).filter(function(x){
+      return x && ROTTE[x.id];
+    }).filter(possoEntrare).map(function(x){
       if(!x.chiusa) return x;
       var c = {}; for(var k in x){ if(x.hasOwnProperty(k)) c[k] = x[k]; }
       c.chiusa = false; c.perche = null;
@@ -3812,20 +3931,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       nexus: (io && io.anthakarana) || ""
     });
     window.SpazioVivo.barraQui(vista);
-    /* ⭐ TOCCATO NEL GUSCIO ③ — la voce dell'Annale si spegne quando la
-       sua riga non porta più da nessuna parte.
-       La barra di Design disegna quella riga SEMPRE, anche a mani vuote:
-       senza dati scrive «[ in attesa ]», che è giusto quando una parola
-       manca e sbagliato quando la voce è stata tolta apposta. Design non
-       si corregge: si spegne il contenitore da qui.
-       ⭐ Il segno è la ROTTA, non la presenza della riga. Così per
-          togliere la voce basta svuotare `stanze.rotta`: la riga resta
-          dov'è con le sue parole, e il giorno che l'Annale torna a essere
-          una stanza si rimette la rotta e la voce riappare. Una `delete`
-          si porterebbe via le parole di Gab, e non torna indietro. */
-    var vAnnale = document.getElementById("sv-annale");
-    var idAnnale = STANZE.annale && STANZE.annale.id;
-    if(vAnnale) vAnnale.style.display = (idAnnale && ROTTE[idAnnale]) ? "" : "none";
+    /* ⭐ TOCCATO NEL GUSCIO ㉞ — VIA IL ③, ERA CODICE MORTO.
+       Il ③ spegneva a mano il contenitore `#sv-annale`, perché la barra
+       vecchia disegnava quella riga SEMPRE, anche a mani vuote. Nella
+       barra nuova quel contenitore non esiste più: l'Annale è una
+       finestra del nucleo e ci si arriva da lì.
+       ⭐ La regola però non si perde, è solo salita di un piano: una voce
+          senza rotta non si disegna, e lo decide vociPerMe() — vale per
+          tutte, non per la sola riga dell'Annale. */
     /* ⭐ TOCCATO NEL GUSCIO ㉘ — FINCHÉ NON SI SA CHI GUARDA, IL PIEDE RESTA
        VUOTO. Ed è QUESTA la scritta che Gab ha visto nella prova.
        La barra si disegna già al primo istante col seme, e in quel primo
