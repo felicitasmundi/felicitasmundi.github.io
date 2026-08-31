@@ -2,29 +2,9 @@
    Comunità Eterna FelicitasMundi · LE REGOLE — tutte in un posto solo
 
    Il disegno è di Design: le-regole.html
-   19.217 byte · MD5 01f3d7fd04a4a00fc90aa12444c87b19
-   (consegna del 27 agosto 2026 — la precedente era 2374f2be…,
-    18.962 byte)
+   18.962 byte · MD5 2374f2befacb88ac4d63c8520ce09e68
 
    ⭐ Aggiornare le regole vuol dire sostituire questo file, e basta.
-
-   ⭐ QUELLO CHE PORTA DI NUOVO QUESTA CONSEGNA
-     · UNA REGOLA SOLA, in cima al gruppo «Come si costruisce»:
-       «Le feste della comunità le stabilisce il nucleo.»
-     · È l'unica cosa che cambia, e non è a occhio: rifacendo il file
-       dalla consegna, in avviaRegole() si muovono TRE righe — le tre
-       della regola nuova. Il foglio di stile e il corpo tornano
-       identici a quelli di prima, regola per regola.
-     ⚠️ La regola porta l'etichetta «26 agosto», e COL non la conosce:
-        le sette che conosce sono canone · nel database · nelle
-        condizioni · nella privacy · detta a chi entra · in CLAUDE.md ·
-        non ancora. Quindi quel cartellino nasce con `class="undefined"`
-        e prende la veste comune invece del suo colore. Si vede e si
-        legge — non si rompe niente — ma è una parola nuova che la
-        legenda in fondo alla pagina non elenca.
-        ⛔ Non l'ho cambiata: è testo di Design, e il testo non si tocca.
-           Se «26 agosto» deve avere un colore, o diventare una delle
-           sette, si cambia nella consegna e si rifà questo file.
 
    ══ DOVE VIVE ══
    Nel quadrante «regole» del nucleo — la finestra che si apre col tasto
@@ -328,9 +308,6 @@ var G = [
    "Se fossero un dono, il praticantato non avrebbe più un contenuto.", ["canone"]]]],
 
  ["Come si costruisce","var(--svil)",[
-  ["<b>Le feste della comunit&agrave; le stabilisce il nucleo.</b>",
-   "Si estraggono dal calendario, e valgono per tutti. Le feste dei santi e quelle della tradizione indiana restano quelle che sono; queste sono le nostre.",
-   ["canone","26 agosto"]],
   ["<b>I file nuovi li scrive la penna, le modifiche dentro file esistenti le fa Code.</b>",
    "Code vede il file vivo per intero; la penna no.", ["in CLAUDE.md"]],
   ["<b>Mai sostituzioni automatiche larghe</b> su un file esistente: ancorare a una stringa esatta.",
