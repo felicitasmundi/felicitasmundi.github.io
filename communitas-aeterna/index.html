@@ -318,6 +318,12 @@
     border-radius:0.4rem;padding:0.55rem 0.75rem;margin-bottom:0.5rem}
   .orma .meta{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.8)}
   .orma p{margin:0.15rem 0 0}
+  /* ⭐ TOCCATO NEL GUSCIO ㉙ — il titolo del giorno, sopra le sue orme.
+     Una riga sola, e prende le misure che ci sono già. */
+  .orme-giorno{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-eti);
+    letter-spacing:0.18em;text-transform:uppercase;color:var(--oro-ch);
+    margin:1.1rem 0 0.5rem;padding-bottom:0.3rem;border-bottom:1px solid var(--line)}
+  .orme-giorno:first-child{margin-top:0}
 
 
   /* ── la radio: una striscia, ma un apparecchio ──
@@ -433,8 +439,20 @@
   /* ── la tua orma ── */
   .orma-quad{border:1px solid var(--line);border-radius:0.9rem;padding:1.1rem;margin:1.4rem 0}
   .orma-testa{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem}
-  .piede{width:1.6rem;height:1.6rem;flex:0 0 auto;color:var(--oro-ch)}
-  .piede svg{width:100%;height:100%;display:block}
+  /* ⭐ TOCCATO NEL GUSCIO ㉚ — `.piede` TORNA A CASA SUA, dentro .orma-quad.
+     Era un nome nudo, e nel guscio i nomi nudi sono di tutti: `.piede` è
+     anche il PIEDE DELLA BARRA di Design — quello col nome, il ruolo e il
+     nexus. Questa riga, scritta per un segnetto d'orma da 1.6rem, gli
+     cadeva addosso.
+     Misurato prima: il piede della barra 33,6 × 25,6 invece di prendere
+     tutta la colonna; `.chi` dentro largo 6,4; `.codice` largo 0. Da lì
+     «[ in attesa ]» e «nexus [ in attesa ]» spremuti in sei pixel.
+     ⚠️ E la sua stanza non c'è più: `.orma-quad` nel guscio non compare in
+        nessun markup, né qui né nei fm-*.js — restano solo le sue regole.
+        Non le tolgo nello stesso giro: adesso sono chiuse in casa loro e
+        non toccano più nessuno. È lo stesso caso di `.tondo` al ㉗. */
+  .orma-quad .piede{width:1.6rem;height:1.6rem;flex:0 0 auto;color:var(--oro-ch)}
+  .orma-quad .piede svg{width:100%;height:100%;display:block}
   .orma-quad h3{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-cor);
     letter-spacing:0.1em;text-transform:uppercase;color:var(--oro-ch)}
   .invito{display:block;width:100%;text-align:left;background:rgba(245,240,230,0.05);
@@ -986,20 +1004,47 @@
   body.mg-pieno #mg .mg-scrivendo{max-width:22rem;opacity:1;pointer-events:auto;
     padding-left:0.7rem;padding-right:0.7rem;border-width:1px}
   .mg-segni{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
+  /* ⭐ TOCCATO NEL GUSCIO ㉗ — OGNI PASTIGLIA SI PRENDE LA LARGHEZZA CHE LE
+     SERVE. Il difetto: sotto i 52rem «contatto» — la più lunga delle quattro
+     — usciva dal suo cerchio e finiva sopra «idea». Misurato sul telefono:
+     44 di larghezza, un tondo, con dentro una parola da 84.
+     Erano due cose insieme, e da sole non bastavano:
+       · `min-width:2.75rem` diceva quanto poteva stringersi. Un minimo
+         scritto a mano sostituisce quello che il testo si prenderebbe da sé,
+         e da lì in poi la parola non conta più.
+       · e le pastiglie sono figlie di un flex: senza dirglielo, si
+         RESTRINGONO per far stare la riga. Wrap e shrink lavorano insieme —
+         prima va a capo, poi schiaccia quello che resta sulla riga.
+     ⭐ La cura: nessuna larghezza e nessuna altezza imposte — comanda il
+        testo, con l'imbottitura ai lati. `flex:0 0 auto` toglie il
+        restringimento: una pastiglia non si stringe mai. Se la riga non ci
+        sta, `flex-wrap:wrap` su .mg-segni la manda a capo — che è l'unica
+        cosa che devono fare. `white-space:nowrap` tiene la parola intera.
+     ⚠️ Cade con `min-height` anche il bersaglio da 2.75rem: le pastiglie
+        passano da 44 a 34 di altezza. È quello che è stato chiesto — se il
+        dito lo vuole indietro, torna `min-height` da solo, che non c'entrava
+        col difetto. */
   .mg-sg{display:flex;align-items:center;gap:0.4rem;padding:0.34rem 0.8rem;
     border-radius:999px;border:1px solid var(--c);background:transparent;
     cursor:pointer;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
     letter-spacing:0.04em;color:rgba(245,240,230,0.8);
-    min-height:2.75rem;min-width:2.75rem;transition:.25s}
+    flex:0 0 auto;white-space:nowrap;transition:.25s}
   .mg-sg:hover,.mg-sg.on{border-color:var(--c);color:var(--ivory);
     background:rgba(245,240,230,0.07)}
   /* ⭐ ogni segno ha una FORMA sua oltre al colore: il colore da solo non basta */
+  /* ⭐ TOCCATO NEL GUSCIO ㉗ — LE FORME PRENDONO UN NOME LORO: sg-tondo,
+     sg-quadro, sg-rombo, sg-pieno. Prima si chiamavano `tondo`, `quadro`,
+     `rombo`, `pieno` — nomi nudi, già di altri. `.tondo` in questo stesso
+     guscio è il TASTO ROTONDO, largo 2.5rem e alto 2.5rem: la pastiglia di
+     «contatto» se li prendeva addosso e diventava un cerchio da 40 con
+     dentro una parola da 84. Era quella, la larghezza fissa.
+     ⛔ Il nome è la forma del segno, non un tasto: adesso lo dice. */
   .mg-sg i{width:0.72rem;height:0.72rem;flex:none;font-style:normal;
     border:1.5px solid var(--c);display:block}
-  .mg-sg.tondo i{border-radius:50%}
-  .mg-sg.quadro i{border-radius:0.12rem}
-  .mg-sg.rombo i{transform:rotate(45deg)}
-  .mg-sg.pieno i{background:var(--c);border-radius:50%}
+  .mg-sg.sg-tondo i{border-radius:50%}
+  .mg-sg.sg-quadro i{border-radius:0.12rem}
+  .mg-sg.sg-rombo i{transform:rotate(45deg)}
+  .mg-sg.sg-pieno i{background:var(--c);border-radius:50%}
 
   /* ── i tre dati: tre parole in grigio che si toccano ── */
   .mg-dati{display:flex;align-items:center;gap:0.15rem;flex-wrap:wrap}
@@ -1302,13 +1347,15 @@
      dati = {
        pagine:   [ {id, nome, riga, quante, colore, rotta, chiusa, perche} ],
        incontri: [ {id, nome, riga, quante, colore, rotta} ],
-       annale:   {nome, riga, rotta},
        chi:      {nome, ruolo, iniziale},
        nexus:    "codice"
      }
-     Le cinque pagine e i cinque elementi sono quanti ne arrivano; quello
-     che manca diventa [ in attesa ]. Una pagina chiusa resta visibile e
-     spenta, con la riga che dice perché.
+     LE VOCI CHE UNO NON HA NON SI VEDONO: una voce senza nome non compare.
+     Squadre nasce il giorno che c'è una squadra; prima non c'è.
+     I segni disponibili: orma · praticantato · squadre · edizione · scuola
+     — la chiave la dà il dato con «segno», altrimenti va in ordine.
+     Una pagina chiusa invece resta visibile e spenta, con la riga che dice
+     perché: quella esiste, e non è aperta.
      ═══════════════════════════════════════════════════════════════ -->
 
 <style>
@@ -1338,12 +1385,20 @@
     font-size:var(--t-eti);color:rgba(212,175,106,0.75);margin-top:0.1rem}
 
   /* le cinque pagine */
-  .sv-barra .pagine{padding:0.5rem 0}
-  .sv-barra .pg{display:block;padding:0.7rem 1.05rem;border-left:2px solid transparent;
+  .sv-barra .pagine{flex:0 0 auto;padding:0.7rem 0 0;
+    display:flex;flex-direction:column;gap:0.35rem}
+  .sv-barra .pg{display:block;flex:0 0 auto;padding:0.85rem 1.05rem;border-left:2px solid transparent;
     cursor:pointer;transition:background 0.15s;min-width:0}
   .sv-barra .pg:hover{background:rgba(245,240,230,0.07)}
   .sv-barra .pg.on{background:rgba(200,160,85,0.2);border-left-color:var(--oro)}
   .sv-barra .pg .alto{display:flex;align-items:baseline;gap:0.55rem;min-width:0}
+  .sv-barra .pg .sg{flex:none;width:1.5rem;height:1.5rem;color:var(--c,#D4AF6A);
+    opacity:.82;transition:opacity .2s,filter .2s}
+  .sv-barra .pg .sg svg{width:100%;height:100%;display:block}
+  .sv-barra .pg:hover .sg{opacity:1}
+  .sv-barra .pg.on .sg{opacity:1;filter:brightness(1.25)}
+  .sv-barra .pg.chiusa .sg{opacity:.34}
+  .sv-barra .pg b{min-width:0;overflow-wrap:break-word;hyphens:auto}
   .sv-barra .pg .n{flex:none;width:1.1rem;font-family:'Cinzel',serif;font-size:var(--t-tas);
     color:var(--c,var(--oro-ch));line-height:1}
   .sv-barra .pg b{flex:1;min-width:0;font-family:'Cinzel',serif;font-weight:500;
@@ -1365,15 +1420,13 @@
     color:rgba(200,160,85,0.62);line-height:1.4}
 
   /* il titolo del gruppo */
-  .sv-barra .gruppo{padding:1rem 1.05rem 0.35rem;font-size:var(--t-eti);
+  .sv-barra .gruppo{margin-top:auto;padding:1.5rem 1.05rem 0.7rem;font-size:var(--t-eti);
     letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.45);
-    margin-top:0.4rem;border-top:1px solid rgba(245,240,230,0.05)}
+    border-top:1px solid rgba(245,240,230,0.05)}
 
   /* cosa incontri: quadranti semitrasparenti, ognuno col suo colore */
-  .sv-barra .sotto{padding:0 0.75rem 0.4rem;display:flex;flex-direction:column;gap:0.45rem}
-  .sv-barra .sotto.solo{border-top:1px solid rgba(245,240,230,0.09);
-    margin-top:0.65rem;padding-top:0.75rem}
-  .sv-barra .pg.pic{padding:0.75rem 0.9rem;border-radius:0.7rem;border-left:0;
+  .sv-barra .sotto{padding:0 0.75rem 0.6rem;display:flex;flex-direction:column;gap:0.6rem}
+  .sv-barra .pg.pic{padding:0.85rem 0.95rem;border-radius:0.7rem;border-left:0;
     background:color-mix(in srgb,var(--c,var(--oro-ch)) 13%,rgba(245,240,230,0.05));
     border:1px solid color-mix(in srgb,var(--c,var(--oro-ch)) 34%,transparent);
     backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -1425,7 +1478,7 @@
 <nav class="sv-barra" id="sv-barra" aria-label="Le pagine">
 
   <div class="capo">
-    <span class="segno"><img src="nexus.png" alt=""></span><!-- ⭐ il file accanto, non WordPress -->
+    <span class="segno"><img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt=""></span>
     <div>
       <b>FelicitasMundi</b>
       <span>Comunità Eterna</span>
@@ -1436,8 +1489,6 @@
 
   <div class="gruppo">Cosa incontri</div>
   <div class="sotto" id="sv-incontri"></div>
-
-  <div class="sotto solo" id="sv-annale"></div>
 
   <div class="piede">
     <div class="chi">
@@ -1457,7 +1508,58 @@
   "use strict";
 
   var ATTESA = "[ in attesa ]";
-  var NUM = ["\u2460", "\u2461", "\u2462", "\u2463", "\u2464", "\u2465", "\u2466"];
+
+  /* l'impronta del passo, ripetuta a tre misure dentro il segno dell'orma */
+  var PASSO =
+    '<path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34' +
+    ' C26 29 21 27 21 24 C21 20 25 18 30 18' +
+    ' C35 18 39 20 39 24 C39 29 36 33 36 38' +
+    ' C36 44 34 51 28 51Z"/>' +
+    '<circle cx="22" cy="12" r="3.2"/>' +
+    '<circle cx="28.5" cy="9.6" r="2.4"/>' +
+    '<circle cx="33.5" cy="10" r="2.1"/>' +
+    '<circle cx="37.5" cy="11.6" r="1.8"/>' +
+    '<circle cx="40.5" cy="14.2" r="1.5"/>';
+
+  /* i segni delle voci: linea sola, stessa mano dei sette.
+     La chiave la dà il dato (segno), altrimenti si prende in ordine. */
+  var SEGNI = {
+    /* la mia orma — il passo che continua: verbatim dal simbolo scelto.
+       Riquadro 60, tratto 1,35 — non si ridisegna. */
+    orma: {vb: "0 0 60 60", w: "1.35", d:
+      '<path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/>' +
+      '<path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/>' +
+      '<g transform="translate(-4,4) scale(0.9)">' + PASSO + '</g>' +
+      '<g transform="translate(33,3) scale(0.5)" opacity=".45">' + PASSO + '</g>' +
+      '<g transform="translate(20,-2) scale(0.3)" opacity=".2">' + PASSO + '</g>'},
+    /* il praticantato — la scala: il passo che sale */
+    praticantato: '<path d="M8 33L8 25L16 25L16 17L24 17L24 9L34 9"/><path d="M8 33L34 33" opacity=".45"/>',
+    /* squadre — più orme che si tengono: da tre persone in su, e il lavoro
+       che le lega. Non un cerchio di comando: una maglia fra pari. */
+    squadre: '<path d="M13.4 12C13.4 13.44 12.24 14.6 10.8 14.6C9.36 14.6 8.2 13.44 8.2 12C8.2 10.56 9.36 9.4 10.8 9.4C12.24 9.4 13.4 10.56 13.4 12Z"/><path d="M31.8 12C31.8 13.44 30.64 14.6 29.2 14.6C27.76 14.6 26.6 13.44 26.6 12C26.6 10.56 27.76 9.4 29.2 9.4C30.64 9.4 31.8 10.56 31.8 12Z"/><path d="M22.6 29C22.6 30.44 21.44 31.6 20 31.6C18.56 31.6 17.4 30.44 17.4 29C17.4 27.56 18.56 26.4 20 26.4C21.44 26.4 22.6 27.56 22.6 29Z"/><path d="M13.4 12L26.6 12M12.4 14.4L18.4 26.6M27.6 14.4L21.6 26.6"/><path d="M20 12L20 20" opacity=".4"/><path d="M21.4 20C21.4 20.77 20.77 21.4 20 21.4C19.23 21.4 18.6 20.77 18.6 20C18.6 19.23 19.23 18.6 20 18.6C20.77 18.6 21.4 19.23 21.4 20Z" fill="currentColor" stroke="none" opacity=".6"/>',
+    /* edizione — il foglio piegato: l'opera che prende forma */
+    edizione: '<path d="M10 6L24 6L30 12L30 34L10 34Z"/><path d="M24 6L24 12L30 12" opacity=".7"/><path d="M15 20L25 20M15 25L25 25M15 15L20 15" opacity=".5"/>',
+    /* scuola — il seme che si apre: la conoscenza che germina */
+    scuola: '<path d="M20 34L20 20"/><path d="M20 20C20 14 15 9 8 9C8 16 13 20 20 20Z"/><path d="M20 20C20 14 25 9 32 9C32 16 27 20 20 20Z"/><path d="M14 34L26 34" opacity=".45"/>'
+  };
+  var ORDINE = ["orma", "praticantato", "squadre", "edizione", "scuola"];
+
+  function disegnaSegno(chiave) {
+    var v = SEGNI[chiave];
+    if (!v) return null;
+    var d  = (typeof v === "string") ? v : v.d;
+    var vb = (typeof v === "string") ? "0 0 40 40" : (v.vb || "0 0 40 40");
+    var w  = (typeof v === "string") ? "1.5" : (v.w || "1.5");
+    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("viewBox", vb);
+    s.setAttribute("fill", "none");
+    s.setAttribute("stroke", "currentColor");
+    s.setAttribute("stroke-width", w);
+    s.setAttribute("stroke-linecap", "round");
+    s.setAttribute("stroke-linejoin", "round");
+    s.innerHTML = d;
+    return s;
+  }
   var barra = document.getElementById("sv-barra");
   var velo  = document.getElementById("sv-velo-barra");
   var apri  = document.getElementById("sv-apri-barra");
@@ -1486,7 +1588,12 @@
 
     var alto = riga("alto");
     if (piccola) alto.appendChild(riga("pt"));
-    else alto.appendChild(riga("n", NUM[i] || String(i + 1)));
+    else {
+      var sg = riga("sg");
+      var ic = disegnaSegno(p.segno || ORDINE[i]);
+      if (ic) sg.appendChild(ic);
+      alto.appendChild(sg);
+    }
 
     var b = document.createElement("b");
     b.textContent = testo(p.nome);
@@ -1495,7 +1602,6 @@
     if (!vuoto(p.quante)) alto.appendChild(riga("vn", String(p.quante)));
     e.appendChild(alto);
 
-    e.appendChild(riga("desc", testo(p.riga)));
     if (chiusa) e.appendChild(riga("perche", testo(p.perche)));
     return e;
   }
@@ -1503,28 +1609,48 @@
   function riempi(dati) {
     dati = dati || {};
 
+    /* ⭐ le voci che uno non ha non si vedono: una voce senza nome non è
+       in attesa, è una cosa che per lui non esiste ancora — Squadre compare
+       il giorno che ne nasce una */
     var pg = document.getElementById("sv-pagine");
     svuota(pg);
-    (dati.pagine || []).forEach(function (p, i) { pg.appendChild(unaPagina(p, i, false)); });
+    (dati.pagine || [])
+      .filter(function (p) { return p && !vuoto(p.nome); })
+      .forEach(function (p, i) { pg.appendChild(unaPagina(p, i, false)); });
 
     var inc = document.getElementById("sv-incontri");
     svuota(inc);
     (dati.incontri || []).forEach(function (p, i) { inc.appendChild(unaPagina(p, i, true)); });
 
-    var an = document.getElementById("sv-annale");
-    svuota(an);
-    var a = dati.annale || {};
-    an.appendChild(unaPagina({
-      id: a.id || "annale", nome: a.nome, riga: a.riga, rotta: a.rotta,
-      colore: "rgba(245,240,230,0.4)"
-    }, 0, true));
-
+    /* ⭐ il piede segue la stessa regola: quello che non c'è non si vede.
+       Un nome vuoto non è «in attesa» — è qualcuno che non ha ancora firmato. */
     var chi = dati.chi || {};
-    document.getElementById("sv-chi-es").textContent =
-      vuoto(chi.iniziale) ? (vuoto(chi.nome) ? "\u00B7" : String(chi.nome).charAt(0)) : chi.iniziale;
-    document.getElementById("sv-chi-nome").textContent  = testo(chi.nome);
-    document.getElementById("sv-chi-ruolo").textContent = testo(chi.ruolo);
-    document.getElementById("sv-nexus").textContent     = testo(dati.nexus);
+    var pd = document.querySelector(".sv-barra .piede");
+    var nome = document.getElementById("sv-chi-nome");
+    var ruolo = document.getElementById("sv-chi-ruolo");
+    var es = document.getElementById("sv-chi-es");
+    var nx = document.getElementById("sv-nexus");
+    var cod = nx ? nx.parentNode : null;
+
+    function metti(n, v) {
+      if (!n) return false;
+      var t = vuoto(v) ? "" : String(v).trim();
+      n.textContent = t;
+      n.hidden = !t;
+      return !!t;
+    }
+
+    var haNome  = metti(nome, chi.nome);
+    var haRuolo = metti(ruolo, chi.ruolo);
+    if (es) {
+      es.textContent = haNome ? String(chi.nome).trim().charAt(0).toUpperCase() : "";
+      es.hidden = !haNome;
+    }
+    var haNexus = metti(nx, dati.nexus);
+    if (cod) cod.hidden = !haNexus;
+    var riga = document.querySelector(".sv-barra .chi");
+    if (riga) riga.hidden = !(haNome || haRuolo);
+    if (pd) pd.hidden = !(haNome || haRuolo || haNexus);
 
     collega();
   }
@@ -1550,7 +1676,6 @@
   velo.addEventListener("click", chiudiBarra);
 
   /* a vuoto la forma si legge lo stesso */
-  riempi({ pagine: [], incontri: [], annale: {}, chi: {}, nexus: "" });
 
   window.SpazioVivo = window.SpazioVivo || {};
   window.SpazioVivo.barra       = riempi;
@@ -1575,6 +1700,15 @@
   /* ⭐ il nome in alto a sinistra riporta a casa */
   .sv-barra .capo{cursor:pointer}
   .sv-barra .capo:hover b{color:var(--oro-ch)}
+  /* ⭐ TOCCATO NEL GUSCIO ㉞ — VIA LE DUE REGOLE DEL ㉚.
+     Il ㉚ spegneva da qui due cose che Design disegnava e Gab non voleva:
+     le spiegazioni sotto ogni voce, e i numeri ① ② ③ ④ ⑤. Si spegnevano
+     invece di toglierle perché il file di Design non si corregge.
+     Adesso non c'è più niente da spegnere: la consegna del 27 agosto non
+     disegna né `.desc` né `.n`. Due regole che non trovano più il loro
+     bersaglio sono una trappola per chi legge — sembrano fare qualcosa.
+     ⭐ Le parole non si sono perse: `stanze.riga` è intera, e la legge
+        attesa() quando una stanza non è ancora fatta. */
   @media(max-width:52rem){
     /* ⭐ TOCCATO NEL GUSCIO ⑪ — il 70 che era di #barra, rimesso sulla
        barra vera. Sta fra il velo (69) e il tasto che apre (71): il
@@ -1668,7 +1802,13 @@
                con chi. Non sono segni: i quattro segni dicono COS'È l'orma,
                questi dicono DA DOVE VIENE. Portano già dentro la risposta —
                si legge un valore, non una scelta da fare. -->
-          <div class="mg-dati" id="mg-dati">
+          <!-- ⭐ TOCCATO NEL GUSCIO ㉔ — LA RIGA VECCHIA SI RITIRA, non se ne va.
+               Il canone dice: ① il nuovo esiste e risponde → ② si dirotta →
+               ③ si verifica → ④ solo allora si rimuove il vecchio. Qui siamo
+               a ①②③: la riga sparisce alla vista e il suo codice non tocca
+               più l'invio, ma resta scritta finché il pezzo nuovo non è stato
+               guardato. La rimozione è il giro dopo. -->
+          <div class="mg-dati" id="mg-dati" hidden style="display:none">
             <button type="button" class="mg-d" id="d-quando">oggi</button>
             <span class="mg-p" aria-hidden="true">&middot;</span>
             <button type="button" class="mg-d vuota" id="d-dove">[ dove ]</button>
@@ -1677,24 +1817,541 @@
           </div>
           <!-- ⛔ la riga del canone: compare solo quando un nome non ha
                ancora confermato, e dice chi si aspetta -->
+          <!-- ⭐ TOCCATO NEL GUSCIO ㉔ — I TRE VALORI, il pezzo di Design
+               valori-spazio-vivo.html · 21.471 byte · MD5 37d9d93f06b9a41cbd2cada932dff4f7
+               Sostituisce la riga «oggi · [ dove ] · [ con chi ]»: niente più
+               parentesi quadre. Sta sotto i quattro segni e si accende con loro.
+               ⛔ Del pezzo è caduta solo la veste .sv-valori-fondo: Design la dà
+                  per guardarlo da solo, e nel guscio il fondo è già suo.
+               ⛔ Il resto è verbatim: stile, corpo, foglio e codice.
+               Espone valori(pieno) · valoriLeggi() · valoriPulisci(). -->
+<style>
+  .sv-valori{--scala:1.4;
+    --t-eti:calc(0.64rem * var(--scala));
+    --oro-a:#D4AF6A;
+    display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;
+    margin-top:.55rem;
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .45s cubic-bezier(.16,.84,.28,1),
+               opacity .4s ease,margin .45s ease;
+    font-family:'DM Sans',system-ui,sans-serif}
+  .sv-valori.vivi{max-height:6rem;opacity:1}
+
+  .sv-valori .v{display:inline-flex;align-items:center;gap:.42rem;
+    min-height:2.1rem;padding:.28rem .8rem;border-radius:999px;
+    border:1px solid rgba(245,240,230,.16);background:transparent;
+    color:rgba(245,240,230,.6);cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:.04em;white-space:nowrap;
+    transition:border-color .25s ease,color .25s ease,
+               background .25s ease}
+  .sv-valori .v:hover{border-color:rgba(212,175,106,.5);
+    color:var(--oro-a)}
+  .sv-valori .v .sg{width:.9rem;height:.9rem;flex:none;
+    display:block;opacity:.7}
+  .sv-valori .v:hover .sg{opacity:1}
+
+  /* quando ha una risposta dentro */
+  .sv-valori .v.pieno{border-color:rgba(212,175,106,.44);
+    background:rgba(212,175,106,.1);color:#F5F0E6}
+  .sv-valori .v.pieno .sg{opacity:1;color:var(--oro-a)}
+  .sv-valori .v .via{display:none;margin-left:.1rem;
+    font-size:1.02em;line-height:1;color:rgba(245,240,230,.42)}
+  .sv-valori .v.pieno .via{display:inline}
+  .sv-valori .v .via:hover{color:var(--oro-a)}
+
+  /* il foglio che si apre */
+  .sv-valori-velo{position:fixed;inset:0;z-index:96;
+    background:rgba(5,7,16,.72);backdrop-filter:blur(6px);
+    display:none;align-items:flex-end;justify-content:center}
+  .sv-valori-velo.on{display:flex}
+  @media (min-width:52rem){
+    .sv-valori-velo{align-items:center}
+  }
+  .sv-valori-foglio{width:min(28rem,100%);
+    background:#0E1424;border:1px solid rgba(212,175,106,.3);
+    border-radius:1.1rem 1.1rem 0 0;padding:1.2rem 1.2rem 1.6rem;
+    font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
+  @media (min-width:52rem){
+    .sv-valori-foglio{border-radius:1.1rem}
+  }
+  .sv-valori-foglio .capo{display:flex;align-items:center;
+    justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .sv-valori-foglio .capo b{font-family:'Cinzel',serif;font-weight:500;
+    font-size:1rem;letter-spacing:.1em}
+  .sv-valori-foglio .capo button{background:none;border:0;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:.78rem;letter-spacing:.18em;
+    text-transform:uppercase;color:rgba(245,240,230,.6)}
+  .sv-valori-foglio .capo button:hover{color:var(--oro-a)}
+
+  .sv-valori-foglio input[type="date"],
+  .sv-valori-foglio input[type="text"]{width:100%;min-height:2.9rem;
+    background:rgba(245,240,230,.05);color:#F5F0E6;
+    border:1px solid rgba(212,175,106,.26);border-radius:.7rem;
+    padding:.6rem .85rem;outline:none;
+    font-family:'Cormorant Garamond',serif;font-size:1.06rem}
+  .sv-valori-foglio input:focus{border-color:rgba(212,175,106,.55)}
+  .sv-valori-foglio input::placeholder{color:rgba(245,240,230,.34);
+    font-style:italic}
+
+  /* le proposte che scendono sotto il campo */
+  .sv-valori-foglio .campo-cerca{position:relative}
+  .sv-valori-foglio .proposte{position:absolute;left:0;right:0;top:100%;
+    z-index:2;margin-top:.3rem;border-radius:.7rem;overflow:hidden;
+    background:#131A2C;border:1px solid rgba(212,175,106,.24);
+    max-height:12rem;overflow-y:auto}
+  .sv-valori-foglio .proposte:empty{display:none}
+  .sv-valori-foglio .proposte button{display:block;width:100%;
+    text-align:left;min-height:2.5rem;padding:.4rem .85rem;
+    background:none;border:0;cursor:pointer;color:rgba(245,240,230,.84);
+    font-family:'Cormorant Garamond',serif;font-size:1.02rem;
+    border-bottom:1px solid rgba(245,240,230,.06)}
+  .sv-valori-foglio .proposte button:last-child{border-bottom:0}
+  .sv-valori-foglio .proposte button:hover{background:rgba(212,175,106,.14);
+    color:#F5F0E6}
+
+  .sv-valori-foglio .scorciatoie{display:flex;gap:.4rem;flex-wrap:wrap;
+    margin-top:.7rem}
+  .sv-valori-foglio .scorciatoie button{min-height:2.1rem;
+    padding:.24rem .8rem;border-radius:999px;cursor:pointer;
+    border:1px solid rgba(245,240,230,.16);background:transparent;
+    color:rgba(245,240,230,.66);font-family:'DM Sans',sans-serif;
+    font-size:.8rem;letter-spacing:.04em}
+  .sv-valori-foglio .scorciatoie button:hover{
+    border-color:rgba(212,175,106,.5);color:var(--oro-a)}
+
+  .sv-valori-foglio .nomi{display:flex;gap:.4rem;flex-wrap:wrap;
+    margin-top:.7rem}
+  .sv-valori-foglio .nomi span{display:inline-flex;align-items:center;
+    gap:.4rem;min-height:2.1rem;padding:.22rem .75rem;border-radius:999px;
+    background:rgba(204,102,68,.14);border:1px solid rgba(204,102,68,.4);
+    font-size:.86rem}
+  .sv-valori-foglio .nomi span i{cursor:pointer;font-style:normal;
+    color:rgba(245,240,230,.5)}
+  .sv-valori-foglio .nomi span i:hover{color:#F5F0E6}
+
+  .sv-valori-foglio .nota{margin-top:.9rem;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:.94rem;line-height:1.5;color:rgba(245,240,230,.5)}
+
+  .sv-valori-foglio .fatto{width:100%;min-height:2.9rem;margin-top:1.1rem;
+    border-radius:999px;border:0;cursor:pointer;
+    background:var(--oro-a);color:#0A0C1A;
+    font-family:'DM Sans',sans-serif;font-size:.9rem;letter-spacing:.1em}
+
+  @media (max-width:52rem){ .sv-valori{--scala:1.15} }
+  @media (prefers-reduced-motion:reduce){
+    .sv-valori{transition:opacity .3s ease}
+  }
+</style>
+
+<div class="sv-valori" id="svValori">
+  <button type="button" class="v" data-v="quando">
+    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="5" width="18" height="16" rx="2.5"/>
+      <path d="M3 10h18M8 3v4M16 3v4"/></svg>
+    <span data-testo>oggi</span><span class="via" data-via>&times;</span>
+  </button>
+
+  <button type="button" class="v" data-v="dove">
+    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/>
+      <circle cx="12" cy="10" r="2.6"/></svg>
+    <span data-testo>dove</span><span class="via" data-via>&times;</span>
+  </button>
+
+  <button type="button" class="v" data-v="chi">
+    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="8" r="3.4"/>
+      <path d="M2.6 20c.6-3.4 3.3-5.4 6.4-5.4s5.8 2 6.4 5.4"/>
+      <path d="M17 8.4a3 3 0 0 1 0 5.6M18.6 20c-.2-1.5-.7-2.8-1.5-3.8"
+            opacity=".6"/></svg>
+    <span data-testo>con chi</span><span class="via" data-via>&times;</span>
+  </button>
+</div>
+
+<div class="sv-valori-velo" data-velo>
+  <div class="sv-valori-foglio" data-foglio></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var R = document.getElementById("svValori");
+  if (!R) return;
+
+  var velo   = document.querySelector("[data-velo]");
+  var foglio = document.querySelector("[data-foglio]");
+
+  /* i valori tenuti */
+  var stato = { accaduto_il: null, luogo: null, territorio_cod: null,
+                territorio_nome: null,
+                luogo_lat: null, luogo_lon: null, persone: [] };
+
+  var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno",
+              "luglio","agosto","settembre","ottobre","novembre","dicembre"];
+
+  function iso(d) {
+    return d.getFullYear() + "-" +
+           String(d.getMonth() + 1).padStart(2, "0") + "-" +
+           String(d.getDate()).padStart(2, "0");
+  }
+  function oggi() { return iso(new Date()); }
+
+  function tasto(nome) { return R.querySelector('[data-v="' + nome + '"]'); }
+
+  function scrivi(nome, testo, pieno) {
+    var t = tasto(nome);
+    t.querySelector("[data-testo]").textContent = testo;
+    t.classList.toggle("pieno", !!pieno);
+  }
+
+  function aggiorna() {
+    /* quando */
+    if (stato.accaduto_il && stato.accaduto_il !== oggi()) {
+      var d = new Date(stato.accaduto_il + "T12:00:00");
+      scrivi("quando", d.getDate() + " " + MESI[d.getMonth()], true);
+    } else {
+      scrivi("quando", "oggi", false);
+    }
+    /* dove: il nome del luogo se c'è, se no il comune */
+    var d2 = stato.luogo || stato.territorio_nome;
+    scrivi("dove", d2 || "dove", !!d2);
+    /* con chi */
+    var p = stato.persone;
+    if (!p.length)      scrivi("chi", "con chi", false);
+    else if (p.length === 1) scrivi("chi", "con " + p[0], true);
+    else if (p.length === 2) scrivi("chi", "con " + p[0] + " e " + p[1], true);
+    else scrivi("chi", "con " + p[0] + " e altri " + (p.length - 1), true);
+  }
+
+  /* ── il collegamento al database, se il guscio ce l'ha ── */
+  function db() {
+    return window.db || window.FM_DB || null;
+  }
+
+  /* ⭐ i comuni vengono da `territori`: 7.896 righe, caricate dall'ISTAT.
+     Senza questo, «dove» resterebbe una stringa che non trova niente. */
+  function cercaComune(q, prop, cCom, cLuo) {
+    var d = db();
+    if (!d) { prop.innerHTML = ""; return; }
+    d.from("territori")
+      .select("codice,nome")
+      .ilike("nome", q + "%")
+      .order("nome")
+      .limit(8)
+      .then(function (r) {
+        var righe = (r && r.data) || [];
+        prop.innerHTML = "";
+        righe.forEach(function (t) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = t.nome;
+          b.addEventListener("click", function () {
+            stato.territorio_cod = t.codice;
+            stato.territorio_nome = t.nome;
+            cCom.value = t.nome;
+            prop.innerHTML = "";
+            cLuo.focus();
+          });
+          prop.appendChild(b);
+        });
+      })
+      .catch(function () { prop.innerHTML = ""; });
+  }
+
+  /* ⭐ i nomi già usati: non una rubrica di amici, la tua memoria.
+     Se la tavola è vuota o chiusa, il campo funziona a mano. */
+  function cercaNome(q, prop, campo, dipingi) {
+    var d = db();
+    if (!d) { prop.innerHTML = ""; return; }
+    d.from("orma_persone")
+      .select("nome")
+      .ilike("nome", q + "%")
+      .limit(20)
+      .then(function (r) {
+        var visti = {}, righe = [];
+        ((r && r.data) || []).forEach(function (x) {
+          if (!visti[x.nome] && stato.persone.indexOf(x.nome) < 0) {
+            visti[x.nome] = 1; righe.push(x.nome);
+          }
+        });
+        prop.innerHTML = "";
+        righe.slice(0, 6).forEach(function (n) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = n;
+          b.addEventListener("click", function () {
+            stato.persone.push(n);
+            campo.value = "";
+            prop.innerHTML = "";
+            dipingi();
+            campo.focus();
+          });
+          prop.appendChild(b);
+        });
+      })
+      .catch(function () { prop.innerHTML = ""; });
+  }
+
+  /* ── il foglio che si apre ── */
+  function apri(nome) {
+    if (nome === "quando") {
+      foglio.innerHTML =
+        '<div class="capo"><b>Quando</b>' +
+        '<button type="button" data-chiudi>Chiudi</button></div>' +
+        '<input type="date" data-data min="1900-01-01" max="' + oggi() + '">' +
+        '<div class="scorciatoie">' +
+        '<button type="button" data-giorni="0">oggi</button>' +
+        '<button type="button" data-giorni="1">ieri</button>' +
+        '<button type="button" data-anni="1">un anno fa</button>' +
+        '<button type="button" data-anni="10">dieci anni fa</button>' +
+        '</div>' +
+        '<p class="nota">\u00C8 possibile registrare sia un fatto ' +
+        'accaduto oggi, che avvenimenti storici da collegare alle tue ' +
+        'orme.</p>' +
+        '<button type="button" class="fatto" data-fatto>Fatto</button>';
+
+      var campo = foglio.querySelector("[data-data]");
+      campo.value = stato.accaduto_il || oggi();
+      foglio.querySelectorAll("[data-giorni]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var d = new Date();
+          d.setDate(d.getDate() - parseInt(b.dataset.giorni, 10));
+          campo.value = iso(d);
+        });
+      });
+      foglio.querySelectorAll("[data-anni]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var d = new Date();
+          d.setFullYear(d.getFullYear() - parseInt(b.dataset.anni, 10));
+          campo.value = iso(d);
+          campo.focus();
+        });
+      });
+      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
+        stato.accaduto_il = campo.value || oggi();
+        aggiorna(); chiudi();
+      });
+    }
+
+    if (nome === "dove") {
+      foglio.innerHTML =
+        '<div class="capo"><b>Dove</b>' +
+        '<button type="button" data-chiudi>Chiudi</button></div>' +
+        '<div class="campo-cerca">' +
+        '<input type="text" data-comune placeholder="il comune" ' +
+        'autocomplete="off">' +
+        '<div class="proposte" data-proposte></div></div>' +
+        '<input type="text" data-luogo placeholder="il nome del luogo" ' +
+        'style="margin-top:.6rem">' +
+        '<div class="scorciatoie">' +
+        '<button type="button" data-qui>Usa la mia posizione</button>' +
+        '</div>' +
+        '<p class="nota" data-nota-dove>serve a far comparire ' +
+        'l\u2019orma sulla mappa</p>' +
+        '<button type="button" class="fatto" data-fatto>Fatto</button>';
+
+      var cCom  = foglio.querySelector("[data-comune]");
+      var cLuo  = foglio.querySelector("[data-luogo]");
+      var prop  = foglio.querySelector("[data-proposte]");
+      cCom.value = stato.territorio_nome || "";
+      cLuo.value = stato.luogo || "";
+
+      var attesa = null;
+      cCom.addEventListener("input", function () {
+        stato.territorio_cod = null;
+        clearTimeout(attesa);
+        var q = cCom.value.trim();
+        if (q.length < 2) { prop.innerHTML = ""; return; }
+        attesa = setTimeout(function () { cercaComune(q, prop, cCom, cLuo); },
+                            220);
+      });
+
+      var bQui = foglio.querySelector("[data-qui]");
+      var nQui = foglio.querySelector("[data-nota-dove]");
+
+      /* ⭐ Se la posizione è già stata negata, il tasto non la richiede:
+         il navigatore non lo permette. Porta alle impostazioni. */
+      function alleImpostazioni() {
+        bQui.textContent = "Vai alle impostazioni";
+        nQui.innerHTML = "la posizione \u00E8 spenta: si riaccende " +
+          "dalle impostazioni del tuo account";
+        bQui.onclick = function () {
+          chiudi();
+          if (window.SpazioVivo && window.SpazioVivo.impostazioni) {
+            window.SpazioVivo.impostazioni("posizione");
+          }
+        };
+      }
+
+      if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions.query({ name: "geolocation" })
+          .then(function (p) { if (p.state === "denied") alleImpostazioni(); })
+          .catch(function () {});
+      }
+
+      bQui.addEventListener("click", function () {
+        if (bQui.textContent === "Vai alle impostazioni") return;
+        if (!navigator.geolocation) { bQui.textContent = "non disponibile"; return; }
+        bQui.textContent = "un momento\u2026";
+        navigator.geolocation.getCurrentPosition(function (p) {
+          stato.luogo_lat = p.coords.latitude;
+          stato.luogo_lon = p.coords.longitude;
+          bQui.textContent = "posizione presa";
+          nQui.textContent = "l\u2019orma comparir\u00E0 sulla mappa";
+          if (!cLuo.value) cLuo.focus();
+        }, function (e) {
+          if (e && e.code === 1) alleImpostazioni();
+          else bQui.textContent = "non riuscito";
+        });
+      });
+
+      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
+        stato.luogo = cLuo.value.trim() || null;
+        if (!stato.territorio_cod) stato.territorio_nome = null;
+        aggiorna(); chiudi();
+      });
+      setTimeout(function () { cCom.focus(); }, 120);
+    }
+
+    if (nome === "chi") {
+      foglio.innerHTML =
+        '<div class="capo"><b>Con chi</b>' +
+        '<button type="button" data-chiudi>Chiudi</button></div>' +
+        '<div class="campo-cerca">' +
+        '<input type="text" data-nome placeholder="un nome, e invio" ' +
+        'autocomplete="off">' +
+        '<div class="proposte" data-proposte></div></div>' +
+        '<div class="nomi" data-nomi></div>' +
+        '<p class="nota">Chi era con te. Quando entra, l\u2019orma ' +
+        'diventa anche sua.</p>' +
+        '<button type="button" class="fatto" data-fatto>Fatto</button>';
+
+      var campo3 = foglio.querySelector("[data-nome]");
+      var elenco = foglio.querySelector("[data-nomi]");
+
+      function dipingi() {
+        elenco.innerHTML = "";
+        stato.persone.forEach(function (n, i) {
+          var s = document.createElement("span");
+          s.innerHTML = n + ' <i data-togli="' + i + '">&times;</i>';
+          elenco.appendChild(s);
+        });
+        elenco.querySelectorAll("[data-togli]").forEach(function (x) {
+          x.addEventListener("click", function () {
+            stato.persone.splice(parseInt(x.dataset.togli, 10), 1);
+            dipingi();
+          });
+        });
+      }
+      dipingi();
+
+      var prop3 = foglio.querySelector("[data-proposte]");
+      var attesa3 = null;
+      campo3.addEventListener("input", function () {
+        clearTimeout(attesa3);
+        var q = campo3.value.trim();
+        if (q.length < 2) { prop3.innerHTML = ""; return; }
+        attesa3 = setTimeout(function () {
+          cercaNome(q, prop3, campo3, dipingi);
+        }, 220);
+      });
+
+      campo3.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        var n = campo3.value.trim();
+        if (n && stato.persone.indexOf(n) < 0) stato.persone.push(n);
+        campo3.value = "";
+        prop3.innerHTML = "";
+        dipingi();
+      });
+      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
+        var n = campo3.value.trim();
+        if (n && stato.persone.indexOf(n) < 0) stato.persone.push(n);
+        aggiorna(); chiudi();
+      });
+      setTimeout(function () { campo3.focus(); }, 120);
+    }
+
+    foglio.querySelector("[data-chiudi]").addEventListener("click", chiudi);
+    velo.classList.add("on");
+  }
+
+  function chiudi() { velo.classList.remove("on"); }
+
+  velo.addEventListener("click", function (e) {
+    if (e.target === velo) chiudi();
+  });
+
+  /* ── i tre tasti ── */
+  R.querySelectorAll(".v").forEach(function (t) {
+    var nome = t.dataset.v;
+    t.addEventListener("click", function (e) {
+      /* la × svuota invece di aprire */
+      if (e.target.closest("[data-via]")) {
+        if (nome === "quando") stato.accaduto_il = null;
+        if (nome === "dove") { stato.luogo = null;
+          stato.territorio_cod = null; stato.territorio_nome = null;
+          stato.luogo_lat = null; stato.luogo_lon = null; }
+        if (nome === "chi") stato.persone = [];
+        aggiorna();
+        return;
+      }
+      apri(nome);
+    });
+  });
+
+  aggiorna();
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.valori = function (pieno) {
+    R.classList.toggle("vivi", !!pieno);
+  };
+  window.SpazioVivo.valoriLeggi = function () {
+    return {
+      accaduto_il: stato.accaduto_il || oggi(),
+      luogo: stato.luogo,
+      territorio_cod: stato.territorio_cod,
+      luogo_lat: stato.luogo_lat,
+      luogo_lon: stato.luogo_lon,
+      persone: stato.persone.slice()
+    };
+  };
+  window.SpazioVivo.valoriPulisci = function () {
+    stato = { accaduto_il: null, luogo: null, territorio_cod: null,
+              territorio_nome: null,
+              luogo_lat: null, luogo_lon: null, persone: [] };
+    aggiorna();
+  };
+})();
+</script>
+
           <div class="mg-attesa" id="mg-attesa" hidden></div>
-      <div class="riga-strumenti">
-        <!-- ⭐ TOCCATO NEL GUSCIO ㉓ — «DOVE LO PORTI» NON STA PIÙ NELLA RIGA.
-             Al ⑳ aveva smesso di fermare l'invio; adesso esce del tutto. La
-             destinazione la decide il segno: la tavola DOVE accosta un `dest`
-             a ogni `tipo`, e il segno acceso dice il tipo. Due file di tasti
-             per lo stesso gesto erano una di troppo.
-             ⚠️ Restano fermi e senza voce il foglio #vele, #pista, chiudiVele()
-                e la variabile `scelta`: erano suoi soltanto. Non li tolgo nello
-                stesso giro — il guscio si tocca il meno possibile — ma da qui
-                in poi `scelta` non può che essere null, e `destinazione` è
-                sempre quella che dà il segno. -->
-        <!-- al posto di «Edizione»: la scelta del modello non serve più -->
-        <button class="s-pill mg-scrivendo" id="s-integrator" style="--tc:var(--oro-ch)"><span class="sg"><img src="nexus.png" alt=""></span>INTEGRATOR</button>
-        <button class="s mg-scrivendo" id="s-cerca" title="Cerca">&#128269;&#xFE0E;</button>
-        <button class="s mg-scrivendo" id="s-aperte" title="Le cose aperte">&#9673;</button>
-        <button class="s mg-scrivendo" id="s-talenti" title="talenti"><span class="sg-t"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/></svg></span></button>
-      </div>
+      <!-- ⭐ TOCCATO NEL GUSCIO ㉕ — SOTTO IL CAMPO NON C'È PIÙ NIENTE.
+           La riga degli strumenti è tolta, non nascosta: a riposo il Megafono
+           è il campo e basta, e scrivendo compaiono soltanto i quattro segni,
+           i tre valori — oggi, dove, con chi — e la freccia che manda.
+           I quattro tasti che stavano qui, e dove sono finiti:
+             · la lente         non serve un altro posto: la ricerca ha già il
+                                suo campo dentro «Cosa incontro», .campo-cerca
+             · INTEGRATOR       non aveva gestore e non portava a nulla — la
+                                pagina la sta ancora facendo Design. Esce di
+                                qui e per ora non finisce da nessuna parte
+             · «le cose aperte» il foglio #v-aperte resta scritto e funziona,
+                                ma da oggi non ha più una maniglia
+             · i talenti        talentiApri() e fm-talenti.js restano interi,
+                                ma da oggi non hanno più una maniglia
+           ⛔ Gli ultimi due sono porte vere che perdono il pomello: sta
+              scritto in conversazione, e la strada per rimetterle è una riga
+              per ciascuna nella tavola `stanze`, con le parole che avevano
+              già addosso — «Le cose aperte» e «talenti».
+           ⚠️ `.riga-strumenti` resta nello stile: la usa anche altrove. -->
         </div>
       </div>
     </div>
@@ -1863,6 +2520,7 @@
      ═══════════════════════════════════════════════════════════════ -->
 
 <style>
+
   .sv-din{--scala:1.4;
     --t-eti:calc(0.62rem * var(--scala));
     --t-pic:calc(0.70rem * var(--scala));
@@ -2071,6 +2729,52 @@
           { nome: "la pagina scritta",       stato: "m" }
         ] },
 
+      { nome: "Il consulente, e la sua pagina",
+        elemento: "fuoco",
+        nota: "cosa riceve con il pacchetto mensile",
+        passi: [
+          { nome: "prende il pacchetto",    stato: "m",
+            nota: "26 € al mese" },
+          { nome: "ha una pagina sua",      stato: "x" },
+          { nome: "gestisce gli appuntamenti", stato: "x" },
+          { nome: "mette le date nel calendario", stato: "x" },
+          { nome: "segna le sue ricerche",  stato: "x",
+            nota: "a mano, quando vuole" },
+          { nome: "tiene insieme i file",   stato: "x",
+            nota: "per argomento, luogo, giornata, persone" }
+        ] },
+
+      { nome: "L'appuntamento",
+        elemento: "fuoco",
+        nota: "il professionista fattura al cliente, non a noi",
+        passi: [
+          { nome: "il cliente prenota",     stato: "x",
+            nota: "dalla pagina del consulente" },
+          { nome: "al consulente arriva un messaggio", stato: "x" },
+          { nome: "nasce l'orma",           stato: "x",
+            nota: "con dentro chi, quando, con chi" },
+          { nome: "il consulente conferma", stato: "x" },
+          { nome: "l'incontro accade",      stato: "x" },
+          { nome: "l'orma si chiude",       stato: "x",
+            nota: "fatta, o disdetta" },
+          { nome: "a fine mese, il conto",  stato: "x",
+            nota: "le orme chiuse sono il registro condiviso" }
+        ] },
+
+      { nome: "Quello che gli vendiamo sopra",
+        elemento: "aria",
+        nota: "ognuno col suo costo, e nessuno obbligatorio",
+        passi: [
+          { nome: "il dialogo coi clienti", stato: "x" },
+          { nome: "la trascrizione dall'audio", stato: "m",
+            nota: "il servizio esterno c'è, il collegamento no" },
+          { nome: "la traduzione",          stato: "x" },
+          { nome: "l'impaginazione di un articolo", stato: "x" },
+          { nome: "la stampa",              stato: "m",
+            nota: "il partner c'è, l'API è arrivata" },
+          { nome: "la distribuzione del cartaceo", stato: "x" }
+        ] },
+
       { nome: "Il bisogno",
         elemento: "fuoco",
         nota: "",
@@ -2091,7 +2795,7 @@
       { nome: "Togli",     riga: "il verso si spegne e si barra. Non sparisce, e si rimette" }
     ],
 
-    coda: "Un passaggio che manca non è un ritardo: è il posto dove il lavoro deve andare. E i gesti restano cinque anche quando le cose diventano molte."
+    coda: "Un passaggio che manca non è un ritardo: è il posto dove il lavoro deve andare. E i gesti restano cinque anche quando le cose diventano molte. L'appuntamento è la prima orma che nasce da due persone invece che da una: nessuno deve fidarsi sulla parola, perché tutti e due vedono la stessa riga."
   };
 
   function disegna(dati) {
@@ -2591,6 +3295,774 @@
 })();
 </script>
 
+
+<!-- ═══════════════════════════════════════════════════════════════
+
+<!-- ═══════════════════════════════════════════════════════════════
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LA SPECIFICA — pezzo da incollare nella finestra «specifica»
+     del nucleo. Niente doctype, head, body: il fondo e i caratteri
+     li porta il guscio.
+
+     Espone:
+       window.SpazioVivo.specifica()   restituisce i dati in uso
+
+     ⚠️ A differenza delle Dinamiche NON va ridisegnato: si disegna da
+        sé quando il guscio si carica, e fm-nucleo.js lo sposta e basta.
+     ⛔ È un file di Gab, incollato tale e quale. Non si corregge da qui:
+        se qualcosa non torna lo si dice, e lo corregge lui.
+     · la-specifica.html · 54.585 byte · 4da73af4cad0b52267c42de812c6c48f
+       16 funzioni · 10 gruppi · 88 regole -->
+<!-- ═══════════════════════════════════════════════════════════════
+     LA SPECIFICA — ogni funzione, dalla superficie al dato.
+
+     Pezzo da incollare nel guscio: niente doctype, head, body.
+     ⛔ Va nel NUCLEO: dice come è fatta la macchina.
+
+     Ogni voce taglia tutti gli strati insieme:
+       ① cosa vede chi usa
+       ② cosa vale — le regole
+       ③ chi può toccarlo — i permessi
+       ④ dove sta il dato — le tavole
+       ⑤ a che punto è
+
+     Espone: window.SpazioVivo.specifica()
+     ═══════════════════════════════════════════════════════════════ -->
+
+<style>
+  .sv-spec-fondo{background:#0A0C1A;
+    background-image:
+      radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.42),transparent 58%),
+      radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.34),transparent 60%);
+    padding:1.8rem 1rem 3rem;border-radius:1.1rem;min-height:100vh}
+
+  .sv-spec{--scala:1.4;
+    --t-eti:calc(0.60rem * var(--scala));
+    --t-cor:calc(0.76rem * var(--scala));
+    --oro-a:#D4AF6A;
+    --fatto:#6E9E5A; --meta:#C8A055; --manca:#B4574A;
+    max-width:50rem;margin:0 auto;
+    font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
+  .sv-spec *{box-sizing:border-box}
+
+  .sv-spec .occ{font-size:var(--t-eti);letter-spacing:.24em;
+    text-transform:uppercase;color:var(--oro-a);margin-bottom:.4rem}
+  .sv-spec h2{font-family:'Cinzel',serif;font-weight:500;
+    font-size:calc(1.08rem * var(--scala));letter-spacing:.04em}
+  .sv-spec .sot{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,.55);
+    max-width:38rem;margin:.5rem 0 1.3rem}
+
+  /* i due mondi */
+  .sv-spec .mondi{display:flex;gap:.4rem;margin-bottom:.9rem}
+  .sv-spec .mondi button{background:transparent;
+    border:1px solid rgba(245,240,230,.16);color:rgba(245,240,230,.5);
+    border-radius:999px;padding:.34rem 1rem;cursor:pointer;
+    font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.1em;
+    min-height:2.3rem}
+  .sv-spec .mondi button.on{border-color:var(--oro-a);color:var(--oro-a);
+    background:rgba(212,175,106,.14)}
+
+  /* le regole */
+  .sv-spec .grp{margin-bottom:1.6rem}
+  .sv-spec .grp > .capo{display:flex;align-items:baseline;gap:.7rem;
+    flex-wrap:wrap;padding-bottom:.4rem;margin-bottom:.7rem;
+    border-bottom:1px solid color-mix(in srgb,var(--c) 40%,transparent)}
+  .sv-spec .grp > .capo b{font-family:'Cinzel',serif;font-weight:500;
+    font-size:.94rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--c);filter:brightness(1.3)}
+  .sv-spec .grp > .capo em{margin-left:auto;font-style:normal;font-size:.69rem;
+    color:rgba(245,240,230,.3)}
+  .sv-spec .rg{border-radius:.8rem;padding:.8rem .95rem;margin-bottom:.4rem;
+    background:color-mix(in srgb,var(--c) 6%,rgba(2,4,12,.42));
+    border:1px solid color-mix(in srgb,var(--c) 20%,transparent);
+    border-left:3px solid color-mix(in srgb,var(--c) 50%,transparent)}
+  .sv-spec .rg b{display:block;font-weight:400;
+    font-family:'Cormorant Garamond',serif;font-size:1.06rem;line-height:1.36;
+    color:#F5F0E6}
+  .sv-spec .rg p{font-family:'Cormorant Garamond',serif;font-size:1rem;
+    line-height:1.5;color:rgba(245,240,230,.7);margin-top:.3rem}
+  .sv-spec .rg .eti{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.45rem}
+  .sv-spec .rg .eti span{font-size:.59rem;letter-spacing:.14em;
+    text-transform:uppercase;padding:.14rem .5rem;border-radius:.35rem;
+    border:1px solid rgba(245,240,230,.14);color:rgba(245,240,230,.42)}
+  .sv-spec .rg .eti span.c{border-color:rgba(212,175,106,.42);
+    color:var(--oro-a)}
+
+  /* la plancia */
+  .sv-spec .plancia{position:sticky;top:0;z-index:20;margin-bottom:1.1rem;
+    background:rgba(6,8,18,.95);backdrop-filter:blur(8px);
+    border:1px solid rgba(212,175,106,.24);border-radius:.7rem;
+    padding:.5rem .8rem;display:flex;gap:.35rem;align-items:center;
+    flex-wrap:wrap}
+  .sv-spec .plancia button{background:transparent;
+    border:1px solid rgba(212,175,106,.32);color:var(--oro-a);
+    border-radius:999px;padding:.24rem .72rem;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:.78rem;letter-spacing:.05em;
+    min-height:2.1rem;white-space:nowrap}
+  .sv-spec .plancia button.on{background:rgba(212,175,106,.2)}
+  .sv-spec .plancia .conto{margin-left:auto;font-size:.78rem;
+    color:rgba(245,240,230,.46)}
+
+  /* una funzione */
+  .sv-spec .fn{border-radius:.9rem;margin-bottom:.45rem;overflow:hidden;
+    background:color-mix(in srgb,var(--c) 6%,rgba(2,4,12,.44));
+    border:1px solid color-mix(in srgb,var(--c) 24%,transparent);
+    border-left:3px solid color-mix(in srgb,var(--c) 56%,transparent)}
+  .sv-spec .fn > .testa{display:flex;align-items:flex-start;gap:.7rem;
+    padding:.85rem 1rem;cursor:pointer;user-select:none}
+  .sv-spec .fn > .testa .tx{flex:1;min-width:0}
+  .sv-spec .fn > .testa b{display:block;font-weight:400;font-size:1.04rem;
+    line-height:1.34}
+  .sv-spec .fn > .testa .el{display:block;font-size:.62rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--c);filter:brightness(1.35);
+    margin-bottom:.2rem}
+  .sv-spec .fn > .testa em{flex:none;font-style:normal;
+    color:rgba(245,240,230,.28);font-size:1.1rem;
+    transition:transform .25s ease}
+  .sv-spec .fn.on > .testa em{transform:rotate(90deg)}
+
+  /* il semaforo */
+  .sv-spec .punto{flex:none;width:.52rem;height:.52rem;border-radius:50%;
+    margin-top:.52rem}
+  .sv-spec .fn[data-p="fatto"] .punto{background:var(--fatto)}
+  .sv-spec .fn[data-p="meta"]  .punto{background:var(--meta)}
+  .sv-spec .fn[data-p="manca"] .punto{background:var(--manca)}
+
+  .sv-spec .fn > .dentro{display:none;padding:0 1rem 1.1rem;
+    border-top:1px solid color-mix(in srgb,var(--c) 16%,transparent)}
+  .sv-spec .fn.on > .dentro{display:block}
+
+  /* gli strati */
+  .sv-spec .str{margin-top:.95rem}
+  .sv-spec .str > .et{display:flex;align-items:center;gap:.45rem;
+    font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--oro-a);opacity:.85;margin-bottom:.45rem}
+  .sv-spec .str p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;
+    line-height:1.55;color:rgba(245,240,230,.82);padding:.14rem 0 .14rem .95rem;
+    position:relative}
+  .sv-spec .str p::before{content:'';position:absolute;left:.2rem;top:.72em;
+    width:4px;height:4px;border-radius:50%;background:var(--c);opacity:.62}
+  .sv-spec .str p.no::before{background:var(--manca)}
+  .sv-spec .str p.no{color:rgba(245,240,230,.62)}
+
+  /* le tavole */
+  .sv-spec .tav{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.2rem}
+  .sv-spec .tav code{font-family:ui-monospace,monospace;font-size:.8rem;
+    background:rgba(245,240,230,.07);border:1px solid rgba(245,240,230,.1);
+    padding:.2rem .55rem;border-radius:.4rem;color:rgba(245,240,230,.86)}
+  .sv-spec .tav code.manca{border-color:rgba(180,87,74,.4);
+    color:rgba(245,240,230,.5)}
+
+  /* i passaggi */
+  .sv-spec .passi{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.3rem}
+  .sv-spec .passo{display:flex;align-items:center;gap:.4rem;
+    padding:.3rem .7rem;border-radius:.55rem;
+    background:rgba(2,4,12,.4);border:1px solid rgba(245,240,230,.09);
+    font-family:'Cormorant Garamond',serif;font-size:.98rem;
+    color:rgba(245,240,230,.8)}
+  .sv-spec .passo i{width:.55rem;height:.55rem;border-radius:1px;
+    flex:none;font-style:normal}
+  .sv-spec .passo[data-s="c"] i{background:var(--fatto)}
+  .sv-spec .passo[data-s="m"] i{background:var(--meta)}
+  .sv-spec .passo[data-s="x"] i{border:1px dashed rgba(180,87,74,.7)}
+
+  /* quello che aspetta una riga */
+  .sv-spec .aperta{margin-top:.85rem;padding:.6rem .8rem;border-radius:.6rem;
+    background:rgba(200,160,85,.09);border:1px solid rgba(200,160,85,.26);
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:1rem;line-height:1.5;color:rgba(245,240,230,.74)}
+  .sv-spec .aperta b{display:block;font-family:'DM Sans',sans-serif;
+    font-style:normal;font-weight:400;font-size:.62rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--oro-a);margin-bottom:.25rem}
+
+  .sv-spec .legenda{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.4rem;
+    padding-top:.9rem;border-top:1px solid rgba(245,240,230,.09);
+    font-size:var(--t-eti);color:rgba(245,240,230,.4)}
+  .sv-spec .legenda span{display:flex;align-items:center;gap:.4rem}
+  .sv-spec .legenda i{width:.5rem;height:.5rem;border-radius:50%;
+    font-style:normal}
+
+  @media (max-width:52rem){ .sv-spec{--scala:1.15} }
+</style>
+
+<div class="sv-spec-fondo">
+<div class="sv-spec" id="svSpec">
+
+  <div class="occ">Comunit&agrave; Eterna FelicitasMundi &middot; il nucleo</div>
+  <h2>La specifica</h2>
+  <p class="sot">Ogni funzione dalla superficie al dato: cosa vede chi usa,
+     cosa vale, chi pu&ograve; toccarla, dove sta, e a che punto &egrave;.
+     E le regole che valgono su tutto, in dieci gruppi.</p>
+
+  <div class="mondi">
+    <button class="mondo on" data-m="funzioni">Le funzioni</button>
+    <button class="mondo" data-m="regole">Le regole</button>
+  </div>
+
+  <div class="plancia" data-solo="funzioni">
+    <button class="tasto on" data-f="tutte">tutte</button>
+    <button class="tasto" data-f="fatto">fatte</button>
+    <button class="tasto" data-f="meta">a met&agrave;</button>
+    <button class="tasto" data-f="manca">da fare</button>
+    <span class="conto" id="specConto"></span>
+  </div>
+
+  <div id="specLista" data-solo="funzioni"></div>
+
+  <div id="specRegole" data-solo="regole" hidden></div>
+
+  <div class="legenda" data-solo="funzioni">
+    <span><i style="background:#6E9E5A"></i>fatto</span>
+    <span><i style="background:#C8A055"></i>a met&agrave;</span>
+    <span><i style="background:#B4574A"></i>da fare</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var R = document.getElementById("svSpec");
+  if (!R) return;
+
+  var COL = { nexus:"#8C2F39", terra:"#AA8844", acqua:"#4488BB",
+              fuoco:"#CC6644", aria:"#669944", etere:"#9966CC" };
+
+  /* ⛔ Niente è inventato: quello che non è deciso porta [ in attesa ]. */
+  var FN = [
+
+  { nome:"L'orma condivisa", el:"nexus", punto:"meta",
+    vede:[
+      "Scrivi un'orma e nomini chi c'era",
+      "A quella persona arriva un collegamento suo",
+      "Entra col proprio account, e conferma",
+      "Da quel momento l'orma non &egrave; pi&ugrave; solo tua"
+    ],
+    vale:[
+      "Chi &egrave; nominato vede TUTTI i nomi, non solo il suo &mdash; " +
+        "&laquo; \u00E8 l\u00EC il figo &raquo;",
+      "Chi ha confermato vede l'orma anche se &egrave; &laquo; solo me &raquo;",
+      "Una riga, una persona, una porta, un consenso",
+      "Un consenso ritirato fa uscire chi ritira: l'orma va avanti, e " +
+        "quella persona non ne fa pi\u00F9 parte",
+      "\u26D4 Le foto pubbliche sono l'unico posto dove un consenso " +
+        "ritirato produce un effetto vero: chi non ha dato il consenso " +
+        "non pu\u00F2 restarci"
+    ],
+    puo:[
+      "legge: chi \u00E8 confermato in quell'orma \u2014 e ognuno vede " +
+        "sempre la propria riga, anche solo proposta",
+      "modifica: chi l'ha lasciata",
+      "\u2B50 la funzione `orma_mia(uuid)` guarda da sopra le regole e " +
+        "spezza il cerchio: la usano tutte e cinque le tavole",
+      "\u26D4 la policy VECCHIA di lettura su `orme` \u00E8 `to public`: " +
+        "anon legge ancora le orme"
+    ],
+    tav:[["orme",1],["orma_persone",1]],
+    passi:[["l'orma nasce","c"],["si nomina qualcuno","c"],
+           ["il collegamento ?o=","c"],["orma_mia()","c"],
+           ["la lettura di orme e orma_persone","c"],
+           ["riscrivere le policy vecchie su public","x"],
+           ["il gesto di confermare","x"]],
+    aperta:"\u2713 SCIOLTA il 28 agosto: esce solo chi ritira. Resta da " +
+      "guardare come si toglie qualcuno da una foto pubblica." },
+
+  { nome:"I bisogni \u2014 chi chiede, e chi pu\u00F2 rispondere",
+    el:"fuoco", punto:"meta",
+    vede:[
+      "\u2B50 Una riga sola dove si passa: «due bisogni per te». " +
+        "Si tocca e si apre la pagina",
+      "La riga sta in tre posti: in cima a «La mia orma», dentro una " +
+        "stanza, in fondo a una squadra",
+      "\u26D4 Se non ce n'\u00E8 nessuno, la riga non c'\u00E8: non dice " +
+        "«nessuno»",
+      "Nella pagina, ogni bisogno dice A CHI SERVE \u2014 la figura, col " +
+        "suo simbolo",
+      "\u2B50 E chi apre un bisogno sceglie fin dove arriva, e vede " +
+        "quante persone lo leggeranno prima di chiedere"
+    ],
+    vale:[
+      "\u2B50 Un bisogno non \u00E8 vicino: \u00E8 vicino a chi pu\u00F2 " +
+        "rispondere. Chi ha bisogno di arance sta a Milano, chi le ha sta " +
+        "in Sicilia \u2014 se si filtra per luogo non si trovano mai",
+      "Il luogo resta scritto, ma non filtra: serve quando si risponde",
+      "\u26D4 I bisogni NON vanno sulla mappa",
+      "\u26D4 E non hanno una voce nella barra: si vedono da dove si passa",
+      "Fin dove arriva lo decide chi chiede: la mia squadra \u00B7 il mio " +
+        "vicinato \u00B7 chi ha questo simbolo \u00B7 tutti",
+      "La scadenza spegne da sola: \u00E8 la query che esclude, e la riga " +
+        "resta"
+    ],
+    puo:[
+      "\u2713 anon non tocca pi\u00F9 i bisogni: il permesso \u00E8 " +
+        "stato tolto",
+      "\u26D4 ma la policy resta rotta: USING con «OR stato = aperto», " +
+        "vero per chiunque, e nessun WITH CHECK",
+      "\u26D4 e `talenti` non deve poter cambiare dopo che qualcuno ha " +
+        "preso il bisogno: quello lo fa un trigger"
+    ],
+    tav:[["bisogni",1],["orme",1]],
+    passi:[["la tavola","c"],["la riga","c"],["la pagina","c"],
+           ["il revoke ad anon","c"],
+           ["riscrivere la policy","x"],["il trigger su talenti","x"],
+           ["la query «per te»","x"],
+           ["dove stanno i simboli di una persona","x"]],
+    aperta:"Dove sta scritto quali simboli ha scelto una persona? " +
+      "`bisogni` ha `faccia` e le figure ci sono, ma manca la tavola che " +
+      "le lega a una persona. Senza, la riga non sa che numero scrivere." },
+
+  { nome:"Il calendario \u2014 ricorrenze ed eventi", el:"terra",
+    punto:"meta",
+    vede:[
+      "\u2B50 Nel riquadro del tempo, in casa: il giorno, la luna, il " +
+        "santo, e le cose strutturate dal nucleo",
+      "\u2B50 Nel calendario del vicinato: tutto quello che accade " +
+        "l\u00EC \u2014 feste, lezioni, mercati, incontri",
+      "\u2B50 Sulla mappa: toccando una zona si vedono gli eventi di " +
+        "quella zona, anche senza essere entrati",
+      "E chi organizza usa il proprio team per segnare quella festa"
+    ],
+    vale:[
+      "\u26D4 Le ricorrenze e gli eventi sono due cose diverse. Una " +
+        "ricorrenza cade ogni anno e non ha un luogo; un evento si fa in " +
+        "un posto, a un'ora, e qualcuno lo tiene",
+      "\u2B50 In casa si vede solo quello che struttura il nucleo. Lo " +
+        "specifico sta nel calendario del vicinato e sulla mappa",
+      "Un evento lo mette chi fa karma yoga, o chi paga la quota"
+    ],
+    puo:[
+      "legge: chiunque, se l'evento \u00E8 aperto e ha un posto vero",
+      "scrive: chi fa karma yoga, chi paga la quota, o il nucleo",
+      "cambia e toglie: solo chi l'ha messo"
+    ],
+    tav:[["eventi",1],["feste_felicitas",1],["feste_indiane",1],
+         ["santi",1],["lune",1],["classi_incontri",1]],
+    passi:[["i santi, 366 righe","c"],["le lune, 149 fasi","c"],
+           ["le feste indiane, 113 date","c"],
+           ["la tavola eventi","c"],
+           ["i cinque eventi di settembre e ottobre","c"],
+           ["persone.karma_yoga e quota_attiva","c"],
+           ["le coordinate dell'Accademia Sharda","x"],
+           ["la vista che unisce tutto","x"],
+           ["il riquadro del tempo che interroga il database","x"],
+           ["il calendario nel vicinato","x"],
+           ["gli eventi sulla mappa","x"]],
+    aperta:"Quando in un giorno cadono pi\u00F9 cose \u2014 un santo, un " +
+      "ekadashi, una luna, un evento \u2014 cosa si vede? Tutte, una sola " +
+      "con le altre che si aprono, o una riga che le nomina di fila? E i " +
+      "24 ekadashi: sempre, o solo a chi li segue?" },
+
+  { nome:"La biografia dell'account", el:"nexus", punto:"manca",
+    vede:[
+      "Ognuno ha una presentazione sua, nell'impostazione account",
+      "Chi apre il profilo la legge"
+    ],
+    vale:[
+      "\u26D4 Oggi non c'\u00E8 nessun posto dove sta: `persone` ha nome, " +
+        "grado e livello, ma non una presentazione",
+      "Si era pensato prima dentro «La mia orma», poi nell'impostazione " +
+        "account, come su WordPress"
+    ],
+    puo:["la scrive chi la porta, e la legge chi apre il profilo"],
+    tav:[["persone",1]],
+    passi:[["la colonna","x"],["dove si scrive","x"],
+           ["dove si legge","x"]],
+    aperta:"La voce di Gab \u00E8 gi\u00E0 scritta, in italiano e in " +
+      "inglese, e sta nel Cruscotto. Manca il posto." },
+
+  { nome:"Simboli dell'esperienza \u2014 dove si sceglie chi sei",
+    el:"nexus", punto:"manca",
+    vede:[
+      "Dalla home si tocca «Simboli dell'esperienza»",
+      "Si guardano i simboli, e ci si riconosce in uno o pi\u00F9",
+      "Da l\u00EC si attiva l'account",
+      "\u2B50 E qui si spiega, con parole non tecniche, che scegliere " +
+        "chi sei serve a far incontrare chi ha un bisogno e chi pu\u00F2 " +
+        "rispondere"
+    ],
+    vale:[
+      "\u2B50 La spiegazione sta DOVE SI SCEGLIE, non su una schermata a " +
+        "s\u00E9. Chi arriva non legge un manuale: sceglie, e capisce " +
+        "scegliendo",
+      "Il tasto porta la riga «Ti riconosci, e inizi»",
+      "Dopo aver scelto, la comunit\u00E0 risponde: cosa puoi fare, e cosa " +
+        "possiamo fare per te",
+      "E i simboli restano dentro «La mia orma»: da l\u00EC si capisce " +
+        "come funziona"
+    ],
+    puo:["chiunque arrivi dalla home"],
+    tav:[["persone",1]],
+    passi:[["il tasto nella home","c"],["i 43 simboli disegnati","c"],
+           ["la pagina dove si sceglie","x"],
+           ["dove si salva la scelta","x"],
+           ["le parole che spiegano a cosa serve","x"]],
+    aperta:"Le parole le scrive Gab. Quelle della penna erano un manuale: " +
+      "«Qualcuno ha bisogno di quello che sai fare» \u2014 troppo " +
+      "impersonale." },
+
+  { nome:"Cosa si vede da fuori, senza account", el:"terra", punto:"meta",
+    vede:[
+      "\u2B50 Le orme che stanno sulla mappa: un evento, una lezione, una " +
+        "festa, una connessione fra vicinati",
+      "E da l\u00EC si entra nelle stanze \u2014 vicinati, Emporio, " +
+        "Assistenza, Edizione, Scuola",
+      "\u26D4 «La mia orma» e «Squadre» chiedono di entrare, sempre"
+    ],
+    vale:[
+      "Non \u00E8 «pubblico o privato»: \u00E8 cosa si vede da fuori",
+      "Sulla mappa vanno solo i sette segni della scala dell'orma \u2014 " +
+        "orma, connessione, scambio, vicinato, ritmo, incontro, tempio",
+      "\u26D4 «visibilita = pubblico» da solo NON basta: aprirebbe ad anon " +
+        "tutte le orme pubbliche, non solo quelle della mappa"
+    ],
+    puo:["\u2B50 anon legge OTTO COLONNE, non la tavola: id, tipo, segno, " +
+         "contenuto, luogo, luogo_lat, luogo_lon, destinazione",
+         "\u26D4 persona_id, visibilita e vicinato_id restano fuori: dalla " +
+         "mappa non si risale a chi c'\u00E8 dietro",
+         "\u2B50 e le tre condizioni valgono INSIEME: pubblica, col segno, " +
+         "e con un posto"],
+    tav:[["orme",1]],
+    passi:[["i sette segni","c"],["la colonna orme.segno","c"],
+           ["il vincolo sui sette","c"],["la policy per anon","c"],
+           ["chi mette il segno su un'orma","x"],
+           ["la mappa che legge dal database","x"]],
+    aperta:"Oggi `mappa-ferma.html` non interroga niente: nessuna orma " +
+      "\u00E8 mai arrivata sulla mappa. E manca il gesto che mette il " +
+      "segno su un'orma." },
+
+  { nome:"La porta \u2014 chi riceve un'orma", el:"nexus", punto:"meta",
+    vede:[
+      "Ti arriva un collegamento a un'orma",
+      "Metti la tua mail e ricevi un codice",
+      "Entri, e sei dentro quell'orma",
+      "\u2B50 Da l\u00EC scegli: restare a guardare, oppure andare a " +
+        "creare il profilo e scegliere i simboli"
+    ],
+    vale:[
+      "Chi riceve un'orma entra loggato a prescindere: mail, codice, " +
+        "dentro",
+      "\u2B50 Dopo il codice NON parte la creazione del profilo. Prima " +
+        "si vede la cosa vera, poi si sceglie",
+      "Un'orma cancellata dice che \u00E8 stata cancellata, e riporta " +
+        "alla home"
+    ],
+    puo:["chi ha il codice della sua riga in orma_persone"],
+    tav:[["orma_persone",1],["persone",1]],
+    passi:[["il collegamento ?o=","c"],
+           ["la propria riga si vede sempre","c"],
+           ["mail e codice","x"],["la scelta dopo l'ingresso","x"],
+           ["la pagina dell'orma cancellata","x"]],
+    aperta:"" },
+
+  { nome:"Le squadre", el:"nexus", punto:"meta",
+    vede:[
+      "Una lista: le squadre di lavoro, e i team nati da un'orma",
+      "Ogni riga dice quante cose sono in corso e quante chiuse",
+      "Il coordinamento sta in cima, staccato"
+    ],
+    vale:[
+      "Sono DUE cose diverse: `squadre` + `appartenenze` &egrave; la " +
+        "squadra di lavoro &mdash; azienda, progetto, capofila",
+      "Un'orma con almeno due persone confermate &egrave; il team nato da " +
+        "un fatto",
+      "`orme.squadra_id` le collega: un'orma pu&ograve; stare dentro una " +
+        "squadra",
+      "Una squadra si mostra se ci sei ancora E se esiste ancora",
+      "I team si addormentano, non si chiudono: `dorme_dal`"
+    ],
+    puo:[
+      "legge: chi ha un'appartenenza viva, o &egrave; confermato nell'orma"
+    ],
+    tav:[["squadre",1],["appartenenze",1],["orme",1],["orma_persone",1]],
+    passi:[["le tavole","c"],["la query","x"],["la stanza","x"]],
+    aperta:"" },
+
+  { nome:"Chi vede cosa", el:"nexus", punto:"manca",
+    vede:[
+      "Chi entra la prima volta vede il praticantato, e le squadre a cui " +
+        "&egrave; stato invitato",
+      "Le voci che non hai, non ci sono"
+    ],
+    vale:[
+      "&Egrave; il database a dire cosa chiede ogni stanza, non un elenco " +
+        "scritto nel guscio",
+      "La casa NON si svuota: &laquo; nient'altro &raquo; vale per la barra"
+    ],
+    puo:["oggi il guscio conosce una porta sola: il nucleo"],
+    tav:[["stanze",1],["persone",1],["appartenenze",1]],
+    passi:[["la colonna in stanze","x"],["possoEntrare()","m"],
+           ["la query all'avvio","x"]],
+    aperta:"&laquo; Nient'altro &raquo; vale solo per la barra, o anche per " +
+      "la casa? [ in attesa ]" },
+
+  { nome:"Lo stato d'avanzamento", el:"fuoco", punto:"manca",
+    vede:[
+      "I partecipanti toccano il quadrante e cambiano lo stato",
+      "Si vede da fuori, nella pagina Squadre"
+    ],
+    vale:[
+      "Tutti i partecipanti possono muoverlo, non solo chi ha aperto",
+      "Gli stadi sono quelli veri: in_coda &middot; in_avanzamento " +
+        "&middot; sviluppato &middot; annullato",
+      "Resta la storia: chi l'ha mosso, e quando"
+    ],
+    puo:["scrive: chi &egrave; confermato in quell'orma"],
+    tav:[["orme",1],["lavagne",1],["task",1]],
+    passi:[["gli stadi esistono","c"],["la tavola dello stato","x"],
+           ["lavagne accetta orma_id","x"]],
+    aperta:"Colonna su `orme`, o tavola sua con la storia? " +
+      "[ Code consiglia la tavola: lo stato cambia spesso, e si vuole " +
+      "rileggere all'indietro ]" },
+
+  { nome:"I documenti dentro un'orma", el:"aria", punto:"manca",
+    vede:[
+      "Ogni voce si espande, e dentro ci sono documenti, testi trascritti, " +
+        "appunti",
+      "Un messaggio della chat si tocca, e resta"
+    ],
+    vale:[
+      "Le colonne ricalcano `opera_pezzi`: cos&igrave; il ponte verso " +
+        "l'Edizione &egrave; una copia, non una traduzione",
+      "Chi l'ha messa l&igrave; e di chi &egrave; il testo sono due cose " +
+        "diverse: si trascrive quello che ha detto un altro"
+    ],
+    puo:["legge e scrive: chi &egrave; dentro quell'orma"],
+    tav:[["orma_carte",0]],
+    passi:[["la tavola","x"],["il secchio per i file","x"],
+           ["le regole di riga","x"]],
+    aperta:"I valori di `tipo` \u2014 e chiudono anche `opera_pezzi.tipo`, " +
+      "che aspetta da prima. [ in attesa ]" },
+
+  { nome:"Dall'orma all'opera", el:"aria", punto:"meta",
+    vede:[
+      "Dentro un'orma si scelgono dei testi e si tocca pubblica",
+      "Escono tutti quelli selezionati",
+      "E si decide: nell'Emporio, oppure un file da stampare"
+    ],
+    vale:[
+      "Il contenuto si COPIA: un'opera &egrave; una fotografia, e resta " +
+        "com'era il giorno che &egrave; stata chiusa",
+      "Il puntatore resta solo per sapere da dove veniva",
+      "La destinazione dice a chi, il formato dice in che forma: due " +
+        "colonne, non una"
+    ],
+    puo:["ogni pezzo resta di chi l'ha scritto, col permesso che si ritira"],
+    tav:[["opere",1],["opera_pezzi",1],["opera_permessi",1],["orma_carte",0]],
+    passi:[["creaDaOrme()","c"],["portaInEdizione()","c"],
+           ["daPubblicare diventa un elenco","x"],
+           ["la spunta nel database","x"],["il file da stampare","x"]],
+    aperta:"Chi ha confermato dentro l'orma va chiesto lo stesso quando si " +
+      "pubblica, o il consenso all'orma vale anche per l'opera? " +
+      "[ in attesa ]" },
+
+  { nome:"La chat, e i capitoli", el:"nexus", punto:"meta",
+    vede:[
+      "Dentro un'orma si scrive, e basta",
+      "\u2B50 I capitoli si aprono da soli quando il discorso cambia",
+      "Stanno nella colonna a destra, per giornata, col colore " +
+        "dell'elemento",
+      "Si tocca un capitolo e la chat va l\u00EC",
+      "Se un titolo non torna, si passa sopra e si corregge",
+      "Con @ scendono le persone dell'orma, e chi \u00E8 chiamato riceve " +
+        "un avviso"
+    ],
+    vale:[
+      "Un messaggio resta un messaggio finch\u00E9 qualcuno non decide che " +
+        "deve restare",
+      "Ogni messaggio pu\u00F2 diventare un'orma nuova, e generare team " +
+        "figli",
+      "\u2B50 Il titolo corretto a mano resta di chi l'ha scritto: il " +
+        "sistema non lo tocca pi\u00F9",
+      "L'elemento lo propone il sistema leggendo le radici delle parole"
+    ],
+    puo:["legge e scrive: chi \u00E8 dentro quell'orma",
+         "\u26D4 oggi le due tavole hanno ZERO policy: nessuno legge e " +
+         "nessuno scrive"],
+    tav:[["orma_messaggi",1],["messaggio_chiamati",1],["orma_persone",1]],
+    passi:[["le due tavole","c"],["i capitoli che si aprono","c"],
+           ["il motore dell'elemento","c"],["il tag @","c"],
+           ["scrivere e leggere dal database","x"],
+           ["l'avviso a chi \u00E8 chiamato","x"],
+           ["caricare a pezzi, e tornare a un argomento vecchio","x"],
+           ["le regole di riga","x"]],
+    aperta:"Come arriva l'avviso: Brevo, o una riga che si legge entrando? " +
+      "[ chiesto a Code ]" },
+
+  { nome:"Il karma yoga, e i task", el:"nexus", punto:"manca",
+    vede:[
+      "Le cose da fare della settimana, dentro il praticantato",
+      "Se ne prende una, e la si chiude pubblicando"
+    ],
+    vale:[
+      "Il task &egrave; il bisogno del gruppo: non una lista che qualcuno " +
+        "compila",
+      "Almeno un'orma a settimana, in un gruppo",
+      "Il compito si chiude pubblicando un racconto o una testimonianza",
+      "Il conto si azzera ogni settimana, e non si accumula",
+      "Lo vede il gruppo, che si autoregola"
+    ],
+    puo:["chi partecipa a quel gruppo"],
+    tav:[["bisogni",1],["orme",1]],
+    passi:[["i bisogni esistono","c"],["chiude_bisogno_id","c"],
+           ["chi prende un bisogno","x"],["il giro settimanale","x"]],
+    aperta:"" },
+
+  { nome:"Il vaglio", el:"acqua", punto:"meta",
+    vede:["Un prodotto entra nell'Emporio dopo il vaglio"],
+    vale:[
+      "Alimenti: la cristallizzazione sensibile, 55 &euro; a campione",
+      "Rimedi: l'erborista, che guarda anche l'etichettatura",
+      "Trattamenti: l'assistenza spirituale",
+      "Insegnamenti: l'insegnante della scuola",
+      "Guarda anche i luoghi e le persone, non solo i prodotti"
+    ],
+    puo:["chi ha il ruolo di vagliare quel genere"],
+    tav:[["prodotti",1],["opere",1]],
+    passi:[["le tavole","c"],["il gesto del vaglio","x"]],
+    aperta:"Il vaglio &egrave; una porta o un segno? Guido dice segno, il " +
+      "canone dice porta. [ da decidere ]" },
+
+  { nome:"I bisogni", el:"fuoco", punto:"meta",
+    vede:["Un bisogno si apre, e qualcuno lo prende"],
+    vale:["La scadenza spegne da sola: &egrave; la query che esclude, " +
+          "e la riga resta"],
+    puo:["\u2713 Il permesso di scrivere \u00E8 stato tolto ad anon su " +
+         "TUTTE le tavole, non solo su questa",
+         "\u26D4 Ma la policy resta rotta: USING con «OR stato = aperto», " +
+         "vero per chiunque, e nessun WITH CHECK"],
+    tav:[["bisogni",1]],
+    passi:[["la tavola","c"],["la lente","c"],
+           ["il revoke ad anon","c"],
+           ["riscrivere la policy","x"],
+           ["il trigger su talenti","x"]],
+    aperta:"La policy va riscritta: chi legge, chi scrive, chi modifica. " +
+      "E `talenti` non deve poter cambiare dopo che qualcuno ha preso il " +
+      "bisogno: quello lo fa un trigger, non le regole di riga." }
+
+  ];
+
+  /* ⭐ Le 67 regole, portate qui da le-regole.html il 28 agosto 2026.
+     ⛔ Quel file non esiste più: la specifica è il contenitore. */
+  var REGOLE = [["Cosa puoi fare, e cosa ricevi", "--nexus", [["<b>Da fuori si vedono solo le orme che stanno sulla mappa.</b>", "Un evento, una lezione, una festa, una connessione fra vicinati: dicono che qualcosa sta accadendo, e portano alle stanze. &laquo;La mia orma&raquo; e &laquo;Squadre&raquo; chiedono di entrare, sempre.", ["canone", "28 agosto"]], ["<b>Chi si riconosce sa subito cosa pu&ograve; fare.</b>", "Si sceglie da &laquo;Simboli dell&rsquo;esperienza&raquo;, e da l&igrave; la comunit&agrave; risponde: cosa puoi fare, e cosa possiamo fare per te. Poi i simboli restano dentro la propria orma, e da quelli si capisce come funziona.", ["canone", "27 agosto"]], ["<b>Il karma yoga cambia forma per ognuno: si paga con quello che si ha.</b>", "Chi produce porta informazione, chi ospita apre la porta, chi custodisce si prende cura, chi viaggia risponde ai bisogni dei luoghi che lo ospitano.", ["canone", "27 agosto"]], ["<b>Il task &egrave; il bisogno del gruppo.</b>", "Non una lista che qualcuno compila: le cose da fare nascono dai gruppi, e chi partecipa ne prende una.", ["canone", "27 agosto"]], ["<b>Almeno un&rsquo;orma a settimana, in un gruppo.</b>", "&Egrave; quello che tiene vivi i propri team. Il karma yoga parte dal momento in cui si comincia a fare, non dall&rsquo;iscrizione. Lo vede il gruppo, che si autoregola.", ["canone", "27 agosto"]], ["<b>Il compito si chiude pubblicando un racconto o una testimonianza.</b>", "Non un tasto &laquo;fatto&raquo;: la cosa fatta che diventa un&rsquo;orma. La settimana riprende dal nuovo compito e dalla nuova pubblicazione.", ["canone", "27 agosto"]], ["<b>Il conto si azzera ogni settimana, e non si accumula.</b>", "Otto compiti in una settimana non coprono i due mesi dopo. Chi comincia luned&igrave; e finisce luned&igrave; ha l&rsquo;accesso per tutta la settimana. Il pagamento invece resta mensile.", ["canone", "27 agosto"]], ["<b>Il servizio vale pi&ugrave; dei ventisei euro.</b>", "Chi paga compra uno strumento; chi serve fa un&rsquo;esperienza. Sono due cose diverse che si trovano nello stesso posto.", ["canone", "27 agosto"]], ["<b>I team si addormentano, non si chiudono.</b>", "Chi smette di partecipare li ritrova dove li aveva lasciati: restano visibili, ma dentro non si scrive pi&ugrave;. Si risvegliano partecipando a un bisogno &mdash; nessuno deve chiedere il permesso di tornare.", ["canone", "27 agosto"]], ["<b>La partecipazione tiene aperti i team e tiene visibili sulla mappa.</b>", "Chi partecipa figura fra i segni della mappa. Chi smette non figura pi&ugrave; &mdash; o non &egrave; pi&ugrave; connettibile: questa parte va guardata meglio.", ["da guardare", "27 agosto"]], ["<b>Il team del vicinato &egrave; strutturale: non ha un costo.</b>", "Chi ci entra per fare un&rsquo;esperienza o una formazione non paga. Deve per&ograve; avere un conto ed essere conosciuto: non si pubblica un operatore qualunque.", ["canone", "27 agosto"]], ["<b>&Egrave; il team del vicinato a scrivere quale servizio sta dando una persona, e a segnarne lo stato d&rsquo;avanzamento.</b>", "Chi serve non tiene il conto delle proprie ore: lo vede chi gli sta accanto. Da quello si sa che il servizio c&rsquo;&egrave;.", ["canone", "27 agosto"]], ["<b>I gruppi si autogestiscono.</b>", "Le decisioni che riguardano un gruppo le prende il gruppo, non il nucleo.", ["canone", "27 agosto"]], ["<b>Chi non &egrave; autorizzato non pubblica: prepara.</b>", "Lo studente, il viaggiatore, il praticante possono allestire e modificare. Prodotti, insegnamenti, trattamenti e ricerche li pubblica sempre un account autorizzato.", ["canone", "27 agosto"]], ["<b>Il vaglio guarda anche i luoghi e le persone, non solo i prodotti.</b>", "Un luogo sacro lo vagliano gli assistenti spirituali. Chi ospita non pu&ograve; mettere in calendario un operatore che non &egrave; passato dal vaglio: ospitare qualcuno &egrave; metterci la faccia.", ["canone", "27 agosto"]], ["<b>Sulla mappa vanno solo i sette segni della scala dell&rsquo;orma.</b>", "Orma, connessione, scambio, vicinato, ritmo, incontro, tempio. I racconti e le testimonianze non ci vanno: la mappa &egrave; la sintesi visiva di ci&ograve; che si &egrave; mosso nel campo, e che nel tempo ha dato spessore al territorio.", ["canone", "27 agosto"]]]], ["Chi entra e cosa vede", "--nexus", [["<b>Un evento che porta il nome di FelicitasMundi &egrave; vegetariano.</b>", "Vale per il tour, per il praticantato, e per le cose fatte in un vicinato che si presentano come &laquo;questo &egrave; un evento FelicitasMundi&raquo;. Il vino e la birra ai pasti si accolgono, perch&eacute; in Italia sono cultura e abitudine; i superalcolici no. E non si promuovono grandi eventi dove i costi si coprono vendendo alcol e carne.", ["canone", "29 agosto"]], ["<b>Nei loro eventi, i vicinati e i team fanno le loro regole.</b>", "La linea qui sopra vale per chi porta il nome di FelicitasMundi. Dentro casa loro decidono loro: nel circuito c&rsquo;&egrave; gente che organizza eventi diversi, e non spetta al nucleo dettare come. Il canone lo dice gi&agrave;: i gruppi si autogestiscono, e il marchio non si compra &mdash; si passa.", ["canone", "29 agosto"]], ["<b>Quello che &egrave; scritto fuori vincola.</b>", "Se un evento &egrave; annunciato da un&rsquo;ora a un&rsquo;altra, quegli orari si tengono. Se poi chi partecipa decide insieme di fare diversamente, &egrave; cosa loro: ma chi legge l&rsquo;annuncio deve trovare quello che gli &egrave; stato detto.", ["canone", "29 agosto"]], ["<b>Nella griglia stanno insieme il nome preciso e il nome largo.</b>", "In Terra c&rsquo;erano fabbro, orafo e vasaio accanto a &laquo;Sono un artigiano&raquo;. Ma il 29 agosto l&rsquo;artigiano &egrave; uscito: il suo simbolo era un vaso, e accanto al vasaio faceva confusione. Quindi il nome largo non vale sempre: <b>dove i mestieri sono riconoscibili si nominano uno per uno</b>, e il nome largo resta solo dove serve davvero, come &laquo;Produco alimenti o rimedi&raquo;. E ognuno pu&ograve; prendere pi&ugrave; figure.", ["canone", "29 agosto"]], ["<b>Nel riquadro del tempo, in casa, si vedono solo le cose strutturate dal nucleo.</b>", "Gli eventi che mette una persona o una squadra &mdash; una festa, una lezione, un mercato &mdash; si vedono nel calendario del vicinato e sulla mappa, non in casa. Chi tocca Livorno sulla mappa vede gli eventi di quella zona, anche senza essere entrato.", ["canone", "29 agosto"]], ["<b>Un evento nel calendario del vicinato lo mette chi fa karma yoga, o chi paga la quota.</b>", "Non chiunque. Chi organizza usa il proprio team per segnare quella festa, ed &egrave; gi&agrave; scritto nelle figure.", ["canone", "29 agosto"]], ["<b>Il pagamento arriva per bonifico o sulla carta di Gab.</b>", "Niente Stripe, per ora. Fino a ottobre l&rsquo;azienda col codice ATECO non &egrave; attiva, e si parte con la base di entrate fuori partita IVA.", ["canone", "28 agosto"]], ["<b>Per fare acquisti o prenotare una festa o una lezione bisogna attivare l&rsquo;account.</b>", "Il pagamento della quota parte solo dal momento in cui uno non accetta gli incarichi del karma yoga e desidera usufruire dei servizi.", ["canone", "28 agosto"]], ["<b>Guardare è libero.</b> Per pubblicare, connettere o scambiare: prima paghi, o dai quattro ore alla comunità.", "Non è un muro commerciale: è un filtro. Chi passa a insultare non dà quattro ore di lavoro.", ["canone", "non ancora"]], ["<b>Con l&rsquo;account si possono acquistare le lezioni a pagamento</b> e riceverne il codice.", "Comprare non è partecipare: anche una lezione è una cosa che si acquista. Senza account non si può nemmeno comprare.", ["canone", "non ancora"]], ["<b>Il karma yoga paga la piattaforma, non il tempo di chi accompagna.</b> Quattro ore al mese valgono i 26 €. Gli incontri di ogni fase lunare si pagano in denaro, sempre.", "Se il tempo di chi guida si potesse comprare con le ore, bisognerebbe esserci per chiunque ne accumuli abbastanza.", ["canone", "nelle condizioni"]], ["<b>Gli incontri di ogni fase lunare: 50 € l'uno, 100 € al mese.</b> Sei lune 510 €, un anno 900 € — pagati subito, non a rate.", "A rate è uguale al mensile, ma con dodici scadenze da inseguire — e chi smette a metà lascia un debito da rincorrere.", ["canone", "non ancora"]], ["<b>Chi conduce non è un counselor né un terapeuta</b>, e non esercita professioni regolamentate: propone l'uso di strumenti propri.", "La scrittura, il metodo e l'impianto di FelicitasMundi sono opera dell'autore.", ["nelle condizioni"]], ["<b>Servire per almeno quattro ore dà accesso al praticantato e agli scambi.</b> Supportare in un bisogno pubblico è già servizio.", "Non è un pagamento in ore: è entrare facendo. E chi passa a insultare non prende un bisogno e non lo porta a termine.", ["canone", "non ancora"]], ["<b>I bisogni aperti si vedono anche da fuori</b>, prima di entrare.", "Altrimenti la porta non si vede: è la prima cosa che chi arriva può fare.", ["canone", "non ancora"]], ["<b>Chi non ha dato i due consensi non entra</b> in nessuna voce di Integrator.", "Dati e uso, con la data e la versione dei documenti.", ["nel database", "nelle condizioni"]], ["<b>Un consenso dato non si toglie</b> svuotando un campo: si revoca cancellando l&rsquo;account.", "Il database rifiuta chi ci prova.", ["nel database", "nelle condizioni"]]]], ["Chi vede cosa", "--terra", [["<b>I dati interni dei team sono privati.</b>", "Squadre, classi, aziende, associazioni, cooperative. Se un team smette di partecipare i dati restano registrati sul database: non si cancella ogni volta che qualcuno non partecipa pi&ugrave;. Si prende in considerazione che dopo cinque anni quei dati vengano cancellati.", ["canone", "28 agosto"]], ["<b>Il nucleo non entra nelle orme private o dei team.</b>", "Vede la quantit&agrave; di spazio consumato, il numero di squadre, quante orme madri e figlie sono associate. Non vede i dettagli, se non ci&ograve; che viene pubblicato. Pu&ograve; essere inserito un tasto di assistenza, con cui la squadra pu&ograve; dialogare col nucleo, che vedr&agrave; solo il contenuto della chat.", ["canone", "28 agosto"]], ["<b>Chi ha la chiave d&rsquo;amministratore pu&ograve; vedere i dati del database.</b>", "", ["canone", "28 agosto"]], ["<b>Un&rsquo;orma che nomina un&rsquo;altra persona resta privata finch&eacute; quella persona non conferma.</b> Il legame si propone, non si impone: chi lo riceve apre l&rsquo;invito e decide. Finch&eacute; non decide, il legame esiste solo dalla parte di chi l&rsquo;ha segnato, e non compare da nessun&rsquo;altra.", "Vale per le fotografie in cui compaiono altri e per ogni collegamento fra orme di persone diverse. Il consenso arriva quando quell&rsquo;orma viene connessa.", ["canone", "non ancora"]], ["<b>Il nucleo vede il metadato, non il contenuto.</b> Che una squadra esiste, quante persone, quanto lavoro si muove, e ciò che pubblica.", "Nessuno userebbe uno strumento dove il fornitore legge dentro.", ["nella privacy", "non ancora"]], ["<b>La chiave d&rsquo;amministratore non si dà</b> — nemmeno per una lettura.", "Se la prima volta che serve la si dà, la promessa nella privacy non vale niente.", ["canone", "in CLAUDE.md"]]]], ["I talenti", "--acqua", [["<b>I talenti sono crediti interni alla comunit&agrave;.</b>", "Attualmente non convertibili in euro. Un giorno lo saranno.", ["canone", "28 agosto"]], ["<b>Un movimento confermato non si modifica e non si cancella.</b> Un errore si corregge con un movimento contrario.", "È una garanzia per tutti: la storia resta leggibile.", ["nelle condizioni", "non ancora"]], ["<b>Nessuno si attribuisce talenti da solo.</b> Ogni movimento ha due gesti, di due persone diverse.", "", ["nel database", "nelle condizioni"]], ["<b>Non si va sotto zero.</b>", "", ["nel database"]], ["<b>Non tutto si paga in talenti.</b> Mettere le orme, invitare persone, unire chi si conosce: è il praticantato, non lavoro.", "Se ogni gesto paga, non è più una comunità: è un sistema a punti.", ["canone"]]]], ["Vendere e vagliare", "--acqua", [["<b>Il colloquio viene prima del pagamento.</b>", "", ["canone"]], ["<b>Il vaglio è un riconoscimento di coerenza, non una certificazione.</b> FelicitasMundi non è un ente di certificazione e non ne rilascia.", "Dire «certifichiamo» senza esserlo è contestabile. E se un cliente lo scambia per una certificazione, la responsabilità torna a noi.", ["nelle condizioni"]], ["<b>L'analisi non è la prova: è uno degli sguardi.</b> Insieme al colloquio, a chi lo fa, a dove sta, a come lavora.", "Trent'anni di certificazioni hanno insegnato a Vittorino che il bollino è una formalità pagata. Il vaglio nasce per non essere quello.", ["nelle condizioni"]], ["<b>Chi decide se un prodotto entra non guadagna dalla sua vendita.</b> Il vaglio si paga a campione.", "Se chi vaglia prendesse sul venduto, avrebbe interesse a far passare tutto — e il vaglio è ciò che ci distingue.", ["canone", "non ancora"]], ["<b>L&rsquo;erboristeria resta chiusa</b> finché non c&rsquo;è un responsabile erborista.", "Non è una formalità: è la condizione per aprire lo scaffale.", ["canone"]]]], ["Quello che si pubblica", "--aria", [["<b>I campi necessari:</b> nome, descrizione, foto, e a quale luogo appartiene. Per chi vende: prezzo e disponibilità. Per un libro: autore ed editore.", "Un prodotto senza foto e senza descrizione esiste, ma per un motore di ricerca no — e non lo compra nessuno.", ["canone", "non ancora"]], ["<b>La macchina misura, la persona giudica.</b> Sfocata, troppo piccola, storta: si blocca. «Asettica», «non c&rsquo;entra»: si segnala al vaglio.", "", ["canone", "non ancora"]], ["<b>Si guardano solo le foto pubbliche</b>, e quelle che qualcuno segnala. Mai il resto.", "", ["nella privacy"]], ["<b>Le foto di persone riconoscibili o di minori</b> non si pubblicano senza liberatoria firmata.", "È una regola ferma della piattaforma.", ["nella privacy", "nelle condizioni"]], ["<b>Un&rsquo;orma pubblica collegata a un luogo lo mostra sulla mappa.</b> Chi la rende pubblica lo sa.", "Una serie di orme nel tempo racconta dove sei stato e quando.", ["nella privacy"]]]], ["Insegnare e pubblicare", "--etere", [["<b>Pubblicare vuol dire far uscire una cosa DENTRO la piattaforma.</b>", "Nel calendario, nell&rsquo;Emporio, nella scuola: quello lo fa solo chi &egrave; autorizzato.", ["canone", "28 agosto"]], ["<b>Stampare &egrave; un servizio, e lo pu&ograve; usare chiunque.</b>", "Con la propria grafica, oppure chiedendo il nostro servizio, che ha un costo. Portare fuori un proprio contenuto stampandolo con FelicitasMundi &egrave; un altro discorso: non &egrave; pubblicare.", ["canone", "28 agosto"]], ["<b>I servizi di Edizione legati alla creazione dell&rsquo;opera sono trascrizione, editing e impaginazione.</b>", "", ["canone", "28 agosto"]], ["<b>&Egrave; l&rsquo;insegnante ad accettare l&rsquo;alunno a insegnamento iniziato.</b>", "Nel caso, potr&agrave; iscriversi alla lezione successiva o acquistare la lezione sull&rsquo;Emporio.", ["canone", "28 agosto"]], ["<b>70% all&rsquo;autore, 30% a FelicitasMundi</b> — lo stesso numero per la diretta e per la registrazione.", "Un numero solo si spiega in una riga e si ricorda: vale più della precisione.", ["nelle condizioni"]], ["<b>Senza codice non si entra</b> a una lezione. Non si entra e poi si chiede il codice.", "", ["nelle condizioni", "non ancora"]], ["<b>La registrazione resta all&rsquo;autore.</b> Se lascia la piattaforma, se la porta via.", "", ["nelle condizioni"]], ["<b>Un libro nato da lezioni resta dell&rsquo;autore.</b> Il lavoro editoriale non ce ne dà la proprietà.", "Le condizioni si concordano per iscritto prima di cominciare.", ["nelle condizioni"]]]], ["La radio", "--aria", [["<b>La diretta è libera per chiunque. L&rsquo;archivio no</b>: per riascoltare serve il karma yoga o il praticantato.", "", ["canone", "non ancora"]], ["<b>I canti restano accessibili sempre.</b>", "", ["canone"]], ["<b>La registrazione vuole il consenso.</b> Chi entra sa prima che si registra, e la puntata esce solo se chi ha parlato dice sì.", "", ["nella privacy", "non ancora"]], ["<b>I ruoli durano una diretta</b>: regia, ospite, in ascolto, co-regia. Chi ha la consolle comanda.", "", ["canone", "non ancora"]], ["<b>Le due dirette del ciclo lunare sono un servizio</b>, non un dono. Hanno un orario, e vanno tenute anche con due persone.", "Se fossero un dono, il praticantato non avrebbe più un contenuto.", ["canone"]]]], ["Come si costruisce", "--svil", [["<b>Le ricorrenze e gli eventi sono due cose diverse, e stanno in due posti.</b>", "Una ricorrenza cade ogni anno e non ha un luogo: Janmashti&agrave;, un santo, una festa di FelicitasMundi. Un evento invece si fa in un posto, a un&rsquo;ora, e qualcuno lo tiene. Le ricorrenze stanno in <code>feste_felicitas</code> e <code>feste_indiane</code>; gli eventi in <code>eventi</code>, con data, ora, luogo e chi lo organizza.", ["canone", "29 agosto"]], ["<b>La riga dei bisogni compare in tre posti, ma il conto si fa una volta sola.</b>", "La riga che dice quanti bisogni ci sono \"per te\" sta in cima a &laquo;La mia orma&raquo;, dentro una stanza e in fondo a una squadra. Se ognuna delle tre chiedesse al database quanti sono, la stessa domanda partirebbe tre volte per la stessa persona &mdash; e con duemila persone dentro si blocca. Quindi il conto si fa quando la persona entra e resta in memoria: la prima riga chiede, le altre due leggono quello che &egrave; gi&agrave; arrivato. Si ricalcola solo quando cambia qualcosa: si apre un bisogno, se ne prende uno, si entra in una squadra. La stessa cosa vale per qualunque altro pezzo che compaia in pi&ugrave; posti leggendo lo stesso dato.", ["canone", "29 agosto"]], ["<b>Si chiude quello che &egrave; aperto prima di aprire altro.</b>", "Un cantiere per volta. Un comando dato mentre un altro &egrave; a met&agrave; genera caos, e serve chiarezza.", ["canone", "28 agosto"]], ["<b>Prima il ciclo vivo, poi le persone dentro. Le cinque stanze dopo.</b>", "Le stanze disegnate oggi nascerebbero su come si immagina che verranno usate. Costruite dopo che qualcuno ha fatto orme vere, nascono su come sono usate davvero.", ["canone", "28 agosto"]], ["<b>Un comando &egrave; tutto quello che arriva.</b>", "Quello che deve sapere Code sta dentro il comando. Fuori resta solo quello che riguarda Gab, e in una riga: lui copia e incolla, e ci&ograve; che sta fuori dal riquadro non arriva a nessuno.", ["canone", "28 agosto"]], ["<b>Niente dati inventati nel codice, nemmeno come ripiego.</b>", "Se un campo non arriva, resta vuoto. Un valore plausibile messo al posto di un dato mancante viene preso per vero, e decide cose che non dovrebbe decidere.", ["canone", "28 agosto"]], ["<b>Gli errori vanno in console, non a schermo.</b>", "Chi legge la pagina non deve vedere un errore che non pu&ograve; risolvere. Chi costruisce s&igrave;.", ["canone", "28 agosto"]], ["<b>Le feste della comunit&agrave; le stabilisce il nucleo.</b>", "Si estraggono dal calendario, e valgono per tutti. Le feste dei santi e quelle della tradizione indiana restano quelle che sono; queste sono le nostre.", ["canone", "26 agosto"]], ["<b>I file nuovi li scrive la penna, le modifiche dentro file esistenti le fa Code.</b>", "Code vede il file vivo per intero; la penna no.", ["in CLAUDE.md"]], ["<b>Mai sostituzioni automatiche larghe</b> su un file esistente: ancorare a una stringa esatta.", "Una sostituzione su «Ultimo aggiornamento» si è mangiata il riferimento al Regolamento UE.", ["in CLAUDE.md"]], ["<b>Prima di un delete o un update senza where: fermarsi e chiedere.</b>", "Una riga cancellata per sbaglio non torna.", ["in CLAUDE.md"]], ["<b>Le copie di sicurezza in COPIE/, fuori da git.</b> Le parole d&rsquo;ordine non si scrivono nei file né si chiedono in chat.", "", ["in CLAUDE.md", "non ancora"]], ["<b>Le pagine legali vivono solo nel magazzino pubblico</b>, non nella cartella di lavoro.", "Due copie in due posti, con quella vecchia dove si pubblica, è come si perde il lavoro.", ["canone"]], ["<b>Ogni file consegnato porta byte e MD5</b>, nello stesso turno.", "", ["canone"]], ["<b>Nessun dato scritto a mano nelle pagine</b>: tutto dal database. E ogni pagina deve reggere il vuoto.", "", ["canone"]]]], ["Le parole", "--nexus", [["<b>Sono esclusi i termini militari o commerciali ordinari.</b>", "Non si parla di capo reparto n&eacute; di reparti.", ["canone", "28 agosto"]], ["<b>FelicitasMundi non è «un sito»</b>: è piattaforma, ecosistema, esperienza oltre la soglia.", "", ["canone"]], ["<b>Mai cura, terapia, diagnosi</b> o promesse cliniche.", "", ["canone"]], ["<b>Verbatim o segnaposto visibile.</b> Mai inventare prosa in nome di Gab.", "", ["canone"]], ["<b>Mai «non è X, è Y»</b>: affermare sempre in positivo.", "", ["canone"]], ["<b>Nei file consegnati non si parla a Gab.</b> Quei file vanno ai clienti.", "", ["canone"]]]]];
+
+  var lista = document.getElementById("specLista");
+  var conto = document.getElementById("specConto");
+
+  function strato(et, righe, classe) {
+    if (!righe || !righe.length) return "";
+    return '<div class="str"><div class="et">' + et + '</div>' +
+      righe.map(function (r) {
+        return '<p' + (classe ? ' class="' + classe + '"' : '') + '>' +
+          r + '</p>';
+      }).join("") + '</div>';
+  }
+
+  FN.forEach(function (f) {
+    var d = document.createElement("div");
+    d.className = "fn";
+    d.dataset.p = f.punto;
+    d.style.setProperty("--c", COL[f.el] || "#C8A055");
+
+    var tav = f.tav.map(function (t) {
+      return '<code' + (t[1] ? '' : ' class="manca"') + '>' + t[0] + '</code>';
+    }).join("");
+
+    var passi = f.passi.map(function (p) {
+      return '<span class="passo" data-s="' + p[1] + '"><i></i>' +
+        p[0] + '</span>';
+    }).join("");
+
+    d.innerHTML =
+      '<div class="testa"><span class="punto"></span><span class="tx">' +
+      '<span class="el">' + f.el + '</span><b></b></span>' +
+      '<em>&rsaquo;</em></div><div class="dentro">' +
+      strato("Cosa vede chi usa", f.vede) +
+      strato("Cosa vale", f.vale) +
+      strato("Chi pu\u00F2 toccarlo", f.puo, "no") +
+      '<div class="str"><div class="et">Dove sta il dato</div>' +
+      '<div class="tav">' + tav + '</div></div>' +
+      '<div class="str"><div class="et">A che punto \u00E8</div>' +
+      '<div class="passi">' + passi + '</div></div>' +
+      (f.aperta ? '<div class="aperta"><b>Aspetta una riga</b>' +
+        f.aperta + '</div>' : '') +
+      '</div>';
+
+    d.querySelector("b").textContent = f.nome;
+    d.querySelector(".testa").addEventListener("click", function () {
+      d.classList.toggle("on");
+    });
+    lista.appendChild(d);
+  });
+
+  var tutte = lista.querySelectorAll(".fn");
+
+  function conta() {
+    var n = 0;
+    tutte.forEach(function (x) { if (x.style.display !== "none") n++; });
+    var a = 0;
+    tutte.forEach(function (x) { if (x.querySelector(".aperta")) a++; });
+    conto.textContent = n + " funzioni \u00B7 " + a + " aspettano una riga";
+  }
+
+  R.querySelectorAll(".tasto").forEach(function (b) {
+    b.addEventListener("click", function () {
+      R.querySelectorAll(".tasto").forEach(function (x) {
+        x.classList.remove("on");
+      });
+      b.classList.add("on");
+      var q = b.dataset.f;
+      tutte.forEach(function (x) {
+        x.style.display = (q === "tutte" || x.dataset.p === q) ? "" : "none";
+      });
+      conta();
+    });
+  });
+
+  conta();
+
+  /* ── le regole ── */
+  var box = document.getElementById("specRegole");
+  REGOLE.forEach(function (g) {
+    var d = document.createElement("div");
+    d.className = "grp";
+    d.style.setProperty("--c", "var(" + g[1] + ")");
+    d.innerHTML = '<div class="capo"><b></b><em>' + g[2].length + '</em></div>';
+    d.querySelector("b").textContent = g[0];
+    g[2].forEach(function (r) {
+      var e = document.createElement("div");
+      e.className = "rg";
+      var eti = r[2].map(function (x) {
+        return '<span' + (x === "canone" ? ' class="c"' : '') + '>' + x + '</span>';
+      }).join("");
+      e.innerHTML = '<b>' + r[0].replace(/<\/?b>/g, "") + '</b><p>' + r[1] +
+        '</p>' + (eti ? '<div class="eti">' + eti + '</div>' : '');
+      d.appendChild(e);
+    });
+    box.appendChild(d);
+  });
+
+  /* ── i due mondi ── */
+  R.querySelectorAll(".mondo").forEach(function (b) {
+    b.addEventListener("click", function () {
+      R.querySelectorAll(".mondo").forEach(function (x) {
+        x.classList.remove("on");
+      });
+      b.classList.add("on");
+      var q = b.dataset.m;
+      R.querySelectorAll("[data-solo]").forEach(function (x) {
+        x.hidden = (x.dataset.solo !== q);
+      });
+    });
+  });
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.specifica = function () { return FN; };
+})();
+</script>
 </div>
 
 <script src="fm-incontro.js"></script>
@@ -2601,9 +4073,9 @@
 <script src="fm-praticantato.js"></script>
 <script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
 <script src="fm-annale.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑤ — l'Annale: la sesta finestra del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
-<script src="fm-regole.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑦ — le regole: il quadrante «regole» del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script>
+<script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
@@ -2671,20 +4143,44 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         si vedrebbe quella vecchia. */
   var SEME = [
     {id:"orme",       gruppo:"pagina",   ordine:1, nome:"La mia orma",
-     riga:"orme, flussi economici, progetti, impegni, contatti, idee",
-     elemento:null, rotta:"orme", chiusa:false, perche:null},
+     riga:null,
+     elemento:null, segno:"orma", rotta:"orme", chiusa:false, perche:null},
     {id:"sentiero",   gruppo:"pagina",   ordine:2, nome:"Praticantato",
-     riga:"servizio e pratica, settimana per settimana · due dirette al mese · accompagnamento",
-     elemento:null, rotta:"sentiero", chiusa:false, perche:null},
-    {id:"gruppi",     gruppo:"pagina",   ordine:3, nome:"Gruppi Cooperativi",
-     riga:"chi segue Emporio, Assistenza, Scuola, Edizione, Vicinati",
-     elemento:null, rotta:"gruppi", chiusa:false, perche:null},
-    {id:"aziende",    gruppo:"pagina",   ordine:4, nome:"Aziende, team e classi",
-     riga:"compiti, calendari, bisogni, costi, progetti · e le audio-lezioni che vanno nell’Emporio",
-     elemento:null, rotta:"aziende", chiusa:false, perche:null},
-    {id:"nucleo",     gruppo:"pagina",   ordine:5, nome:"Il nucleo",
-     riga:"i flussi economici e l’avanzamento della piattaforma",
-     elemento:null, rotta:"nucleo", chiusa:true, perche:"Ci entra chi fa parte del nucleo."},
+     riga:null,
+     elemento:null, segno:"praticantato", rotta:"sentiero", chiusa:false, perche:null},
+    /* ⭐ TOCCATO NEL GUSCIO ㉝ — il seme segue `stanze`, come dice la
+       nota in cima. Tre cambi, il 27 agosto 2026:
+         · «Squadre» è una voce NUOVA — non «Gruppi Cooperativi»
+           rinominata. Porta le squadre di lavoro e i team che nascono
+           da un fatto. La sua stanza non esiste ancora: rotta vuota.
+         · «Gruppi Cooperativi» passa nel nucleo — gruppo `riposo`.
+         · «Aziende, team e classi» aspetta la sua tavola — `riposo`.
+       ⭐ «Squadre» si vede SEMPRE, anche a rotta vuota: il Praticantato
+          è la squadra automatica, e nessuno ne ha zero.
+       ⭐ E `riga` è vuota per Squadre, non «[ in attesa ]»: le descrizioni
+          sono uscite da tutta la barra, che porta il nome e il segno. Un
+          segnaposto visibile ha senso dove qualcosa si vede; qui no.
+          Le righe delle altre voci restano dove sono — non le disegna
+          più la barra, ma le legge ancora attesa().
+       ⭐ E `segno` sta anche qui, non solo in `stanze`: il seme disegna
+          il primo istante, e se non lo portasse la barra ricadrebbe sulla
+          posizione — proprio la cosa da cui il ㉞ toglie il piede.
+       ⚠️ `segno:"nucleo"` è una chiave che la barra ancora non conosce:
+          Design non l'ha disegnato. disegnaSegno() torna vuoto e la voce
+          resta col nome e basta — nessun danno, solo un segno che manca.
+       ⚠️ Questa riga e l'SQL vanno insieme: `database/stanze.sql`. */
+    {id:"squadre",    gruppo:"pagina",   ordine:3, nome:"Squadre",
+     riga:null,
+     elemento:null, segno:"squadre", rotta:"", chiusa:false, perche:null},
+    {id:"nucleo",     gruppo:"pagina",   ordine:4, nome:"Il nucleo",
+     riga:null,
+     elemento:null, segno:"nucleo", rotta:"nucleo", chiusa:true, perche:"Ci entra chi fa parte del nucleo."},
+    {id:"gruppi",     gruppo:"riposo",   ordine:1, nome:"Gruppi Cooperativi",
+     riga:null,
+     elemento:null, rotta:"", chiusa:false, perche:null},
+    {id:"aziende",    gruppo:"riposo",   ordine:2, nome:"Aziende, team e classi",
+     riga:null,
+     elemento:null, rotta:"", chiusa:false, perche:null},
 
     {id:"vicinati",   gruppo:"incontro", ordine:1, nome:"Vicinati",
      riga:"i luoghi e le persone vicine a te, e quello di cui c’è bisogno",
@@ -2726,8 +4222,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
          da cui `colore` viene calcolato: qui non si aggiunge un dato, si
          smette di buttarlo via. La barra di Design ignora i campi che
          non conosce, quindi non cambia niente di quello che disegna. */
+      /* ⭐ TOCCATO NEL GUSCIO ㉞ — E ANCHE `segno` PASSA INTERO.
+         La barra nuova disegna il segno accanto al nome e la chiave gliela
+         dà il dato: `p.segno`. Se non arriva si prende quello che tocca
+         alla POSIZIONE, e la posizione è la cosa più fragile che ci sia —
+         basta che una voce non si veda perché non ce l'hai, e tutte quelle
+         sotto scalano di un segno. La colonna `stanze.segno` esiste per
+         questo: i segni li decide il dato, non l'ordine. */
       return { id:x.id, nome:x.nome, riga:x.riga, elemento: x.elemento || "",
                colore: x.elemento ? "var(--"+x.elemento+")" : "",
+               segno: x.segno || "",
                rotta: "#"+x.id, chiusa: !!x.chiusa, perche: x.perche };
     }
     var delGruppo = function(g){
@@ -2773,7 +4277,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   function leggiLeStanze(){
     return db.from("stanze")
-      .select("id,gruppo,ordine,nome,riga,elemento,rotta,chiusa,perche")
+      .select("id,gruppo,ordine,nome,riga,elemento,segno,rotta,chiusa,perche")
       .order("ordine")
       .then(function(r){
         var righe = (r && r.data) || [];
@@ -2781,6 +4285,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         if(!righe.length) return;
         confrontaColSeme(righe);
         versa(righe);
+        /* ⭐ TOCCATO NEL GUSCIO ㉘ — e si ridisegna QUI, appena il dato c'è.
+           Prima versa() cambiava i dati e basta: a portarli in pagina era
+           il primo disegnaBarra() che passava di lì, e quello arrivava con
+           la sessione. Se `stanze` rispondeva prima — e risponde quasi
+           sempre prima, perché non aspetta nessun rinnovo di gettone — la
+           sua risposta restava ferma ad aspettarne un'altra.
+           Ogni pezzo si disegna quando arriva il suo. */
+        disegnaBarra();
       })
       .catch(function(){ /* senza tabella la barra resta quella del seme */ });
   }
@@ -2822,6 +4334,219 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
                       : n === 1 ? "Oggi hai lasciato un\u2019orma."
                       : "Oggi hai lasciato " + n + " orme.";
       }).catch(function(){ e.textContent = ""; });
+  }
+
+  /* ══ ㉛ IL GIORNO — festa · santo · fase ══════════════════════════
+     La consegna del 27 agosto ha messo tre posti vuoti nel riquadro del
+     tempo e ha lasciato la porta: SpazioVivo.oggi({festa, santo, fase}).
+     Design non scrive nessun nome — li porta il guscio, da qui.
+
+     ⛔ LA FASE NON ASPETTA NIENTE. Si calcola, e si mostra prima ancora
+        di chiedere al database. Se `santi` e le due `feste_*` non
+        rispondono — rete giù, tavola chiusa, colonna diversa — il
+        riquadro resta con la sua luna e non si accorge di niente.
+        È il motivo per cui la fase si scrive subito e le altre due dopo.
+
+     ⭐ LA LUNA SI CALCOLA SUGLI ISTANTI VERI — vedi ㉜ qui sotto. Le
+        parole sono le sei che il progetto usa già.
+
+     ⭐ IL SANTO ARRIVA GIÀ FATTO. `santi.intero` porta il titolo giusto
+        — sant'Agata, santa Genoveva, san Patrizio — e non si ricostruisce
+        da `nome` + `titolo`: l'apostrofo, il maschile e il femminile sono
+        già decisi là.
+
+     ⭐ IL NOME DELLE FESTE STA IN `nome`, in tutte e due le tavole.
+        Le colonne della DATA sono: mese e giorno per quelle che tornano
+        ogni anno, data e fine per quelle che durano, data intera per le
+        indiane.
+        ⚠️ Si legge ancora la riga intera, `select("*")`, e non la sola
+           colonna: così se un domani una tavola cambia forma, la domanda
+           non fallisce e il riquadro resta in piedi con la sua luna.
+
+     ⚠️ Le feste si guardano in ordine: prima `feste_felicitas`, poi
+        `feste_indiane`. La prima che risponde vince, e la seconda non si
+        chiede nemmeno. */
+  var GIORNO = {festa:null, santo:null, fase:null};
+  var giornoLetto = false;
+
+  /* ⭐ TOCCATO NEL GUSCIO ㉜ — LA LUNA SI CALCOLA SUGLI ISTANTI VERI.
+     Quello di prima era la LUNAZIONE MEDIA: si contavano i giorni dal
+     novilunio del 6 gennaio 2000 e si divideva per 29.530588853, un
+     numero che è la media di cicli che vanno da 29,27 a 29,83 giorni.
+     Due errori insieme, e il secondo è il peggiore:
+       · la media sbaglia fino a mezza giornata — basta a spostare una
+         fase di un giorno intero
+       · e metteva il plenilunio a METÀ del tempo fra due noviluni, che
+         non è dove sta. La Luna non va a velocità costante: fra il
+         novilunio e il plenilunio possono passare 14,1 giorni o 15,0.
+     Misurato sulle cinque date verificate da Gab: 4 su 5. Il 12 agosto
+     2026 — novilunio vero — diceva «luna calante», f = 0.9721, appena
+     fuori dalla soglia.
+     ⭐ Adesso: Meeus, «Astronomical Algorithms», capitolo 49. Si calcola
+        l'ISTANTE VERO di ogni fase — novilunio, primo quarto, plenilunio,
+        ultimo quarto — con le correzioni periodiche, e il giorno prende
+        il nome della fase che ci cade dentro. Sulle cinque date: 5 su 5.
+          12 ago 2026 17:38 UTC  novilunio
+          20 ago 2026 02:47 UTC  primo quarto
+          28 ago 2026 04:19 UTC  plenilunio
+          11 set 2026 03:28 UTC  novilunio
+          26 set 2026 16:50 UTC  plenilunio
+     ⭐ E le sei parole restano quelle di sempre — nomeLuna() in
+        la-mia-orma.html: luna nuova · primo quarto · luna piena ·
+        ultimo quarto · luna crescente · luna calante.
+     ⭐ IL GIORNO PRENDE IL NOME DELLA FASE CHE CI CADE DENTRO. Non una
+        soglia di ±0.025 su una frazione: il riquadro mostra un GIORNO,
+        e il giorno del plenilunio è il giorno in cui il plenilunio
+        avviene. Fuori da quei quattro giorni, si guarda da che parte si
+        sta rispetto al plenilunio vero: crescente prima, calante dopo.
+     ⚠️ Le correzioni A1…A14 di Meeus non ci sono: valgono meno di un
+        minuto, e qui si dà un nome a un giorno.
+     ⛔ LA LUNA DISEGNATA — il `path` dentro il riquadro — la calcola
+        ancora Design con la lunazione media, dentro avviaCasa() in
+        fm-casa.js. Non l'ho toccata: è il file di Design. Vuol dire che
+        la PAROLA adesso è giusta e la FORMA può essere spostata fino a
+        mezza giornata. Nei giorni di mezzo non si vede; nei quattro
+        giorni che contano sì. Va detto a Design. */
+  var LUNA_RAD = Math.PI / 180;
+  function lsin(g){ return Math.sin(g * LUNA_RAD); }
+  function lcos(g){ return Math.cos(g * LUNA_RAD); }
+
+  /* k intero = novilunio · +0.25 primo quarto · +0.5 plenilunio ·
+     +0.75 ultimo quarto. Torna i millisecondi dell'istante vero. */
+  function istanteDellaFase(k){
+    var T  = k / 1236.85, T2 = T*T, T3 = T2*T, T4 = T3*T;
+    var JDE = 2451550.09766 + 29.530588861*k
+            + 0.00015437*T2 - 0.000000150*T3 + 0.00000000073*T4;
+    var E  = 1 - 0.002516*T - 0.0000074*T2;
+    var M  = 2.5534   + 29.10535670*k  - 0.0000014*T2 - 0.00000011*T3;
+    var Mp = 201.5643 + 385.81693528*k + 0.0107582*T2 + 0.00001238*T3 - 0.000000058*T4;
+    var F  = 160.7108 + 390.67050284*k - 0.0016118*T2 - 0.00000227*T3 + 0.000000011*T4;
+    var O  = 124.7746 - 1.56375588*k   + 0.0020672*T2 + 0.00000215*T3;
+    var q = ((k % 1) + 1) % 1, c;
+    if(q < 0.01 || q > 0.99 || Math.abs(q - 0.5) < 0.01){
+      var nuova = (q < 0.01 || q > 0.99);
+      c = (nuova ? -0.40720 : -0.40614) * lsin(Mp)
+        + (nuova ?  0.17241 :  0.17302) * E * lsin(M)
+        + (nuova ?  0.01608 :  0.01614) * lsin(2*Mp)
+        + (nuova ?  0.01039 :  0.01043) * lsin(2*F)
+        + (nuova ?  0.00739 :  0.00734) * E * lsin(Mp - M)
+        + (nuova ? -0.00514 : -0.00515) * E * lsin(Mp + M)
+        + (nuova ?  0.00208 :  0.00209) * E*E * lsin(2*M)
+        - 0.00111 * lsin(Mp - 2*F)      - 0.00057 * lsin(Mp + 2*F)
+        + 0.00056 * E * lsin(2*Mp + M)  - 0.00042 * lsin(3*Mp)
+        + 0.00042 * E * lsin(M + 2*F)   + 0.00038 * E * lsin(M - 2*F)
+        - 0.00024 * E * lsin(2*Mp - M)  - 0.00017 * lsin(O)
+        - 0.00007 * lsin(Mp + 2*M)      + 0.00004 * lsin(2*Mp - 2*F)
+        + 0.00004 * lsin(3*M)           + 0.00003 * lsin(Mp + M - 2*F)
+        + 0.00003 * lsin(2*Mp + 2*F)    - 0.00003 * lsin(Mp + M + 2*F)
+        + 0.00003 * lsin(Mp - M + 2*F)  - 0.00002 * lsin(Mp - M - 2*F)
+        - 0.00002 * lsin(3*Mp + M)      + 0.00002 * lsin(4*Mp);
+    } else {
+      c = -0.62801 * lsin(Mp)           + 0.17172 * E * lsin(M)
+        - 0.01183 * E * lsin(Mp + M)    + 0.00862 * lsin(2*Mp)
+        + 0.00804 * lsin(2*F)           + 0.00454 * E * lsin(Mp - M)
+        + 0.00204 * E*E * lsin(2*M)     - 0.00180 * lsin(Mp - 2*F)
+        - 0.00070 * lsin(Mp + 2*F)      - 0.00040 * lsin(3*Mp)
+        - 0.00034 * E * lsin(2*Mp - M)  + 0.00032 * E * lsin(M + 2*F)
+        + 0.00032 * E * lsin(M - 2*F)   - 0.00028 * E*E * lsin(Mp + 2*M)
+        + 0.00027 * E * lsin(2*Mp + M)  - 0.00017 * lsin(O)
+        - 0.00005 * lsin(Mp - M - 2*F)  + 0.00004 * lsin(2*Mp + 2*F)
+        - 0.00004 * lsin(Mp + M + 2*F)  + 0.00004 * lsin(Mp - 2*M)
+        + 0.00003 * lsin(Mp + M - 2*F)  + 0.00003 * lsin(3*M)
+        + 0.00002 * lsin(2*Mp - 2*F)    + 0.00002 * lsin(Mp - M + 2*F)
+        - 0.00002 * lsin(3*Mp + M);
+      var W = 0.00306 - 0.00038 * E * lcos(M) + 0.00026 * lcos(Mp)
+            - 0.00002 * lcos(Mp - M) + 0.00002 * lcos(Mp + M) + 0.00002 * lcos(2*F);
+      c += (Math.abs(q - 0.25) < 0.01) ? W : -W;
+    }
+    /* dal giorno giuliano ai millisecondi */
+    return ((JDE + c) - 2440587.5) * 86400000;
+  }
+
+  var LE_QUATTRO = [[0,"luna nuova"],[0.25,"primo quarto"],
+                    [0.5,"luna piena"],[0.75,"ultimo quarto"]];
+
+  function nomeDellaLuna(quando){
+    var g0 = new Date(quando.getFullYear(), quando.getMonth(), quando.getDate()).getTime();
+    var g1 = g0 + 86400000, t = quando.getTime();
+    var k = Math.round(((t - Date.UTC(2000,0,6)) / 86400000 / 365.25) * 12.3685);
+    var i, j;
+    /* una fase vera che cade dentro il giorno dà il nome al giorno */
+    for(i = k-1; i <= k+1; i++)
+      for(j = 0; j < 4; j++){
+        var f = istanteDellaFase(i + LE_QUATTRO[j][0]);
+        if(f >= g0 && f < g1) return LE_QUATTRO[j][1];
+      }
+    /* se no: prima o dopo il PLENILUNIO VERO, non la metà del tempo */
+    for(i = k-1; i <= k+1; i++){
+      var nuova = istanteDellaFase(i), poi = istanteDellaFase(i + 1);
+      if(t >= nuova && t < poi)
+        return t < istanteDellaFase(i + 0.5) ? "luna crescente" : "luna calante";
+    }
+    return "luna crescente";
+  }
+
+  function faseDiOggi(){ return nomeDellaLuna(new Date()); }
+
+  /* ⭐ TOCCATO NEL GUSCIO ㉜ — LA COLONNA È `nome`, E BASTA.
+     Ieri leggevo `nome`, se no `titolo`, se no `intero`: era un ripiego,
+     e l'avevo scritto perché non sapevo come si chiamasse la colonna.
+     Adesso lo so: `titolo` e `intero` esistono solo su `santi`. Un
+     ripiego su colonne che in queste due tavole non ci sono non è una
+     rete — è una riga che nasconde un errore invece di mostrarlo. */
+  function nomeDellaFesta(r){
+    if(!r) return null;
+    return (typeof r.nome === "string" && r.nome.trim()) ? r.nome.trim() : null;
+  }
+
+  /* si ridisegna a ogni ritorno a casa: la porta e i tre posti nascono
+     con la casa, e la casa si rifà tutte le volte che ci si torna */
+  function mostraIlGiorno(){
+    if(window.SpazioVivo && window.SpazioVivo.oggi) window.SpazioVivo.oggi(GIORNO);
+  }
+
+  function riempiIlGiorno(){
+    GIORNO.fase = faseDiOggi();
+    mostraIlGiorno();                 /* la luna si vede subito */
+    if(giornoLetto) return;           /* le altre due si chiedono una volta sola */
+    giornoLetto = true;
+
+    var d = new Date();
+    var mese = d.getMonth() + 1, giorno = d.getDate();
+    var oggi = d.getFullYear() + "-" + String(mese).padStart(2,"0")
+                              + "-" + String(giorno).padStart(2,"0");
+
+    /* ── il santo ── */
+    db.from("santi").select("intero").eq("mese", mese).eq("giorno", giorno).limit(1)
+      .then(function(r){
+        var righe = (r && r.data) || [];
+        var v = righe[0] && righe[0].intero;
+        if(typeof v === "string" && v.trim()){ GIORNO.santo = v.trim(); mostraIlGiorno(); }
+      }).catch(function(){});
+
+    /* ── la festa: prima le nostre, poi le indiane ── */
+    function indiane(){
+      db.from("feste_indiane").select("*").eq("data", oggi).limit(1)
+        .then(function(r){
+          var n = nomeDellaFesta(((r && r.data) || [])[0]);
+          if(n){ GIORNO.festa = n; mostraIlGiorno(); }
+        }).catch(function(){});
+    }
+
+    /* quelle che tornano ogni anno: mese e giorno */
+    db.from("feste_felicitas").select("*").eq("mese", mese).eq("giorno", giorno).limit(1)
+      .then(function(r){
+        var n = nomeDellaFesta(((r && r.data) || [])[0]);
+        if(n){ GIORNO.festa = n; mostraIlGiorno(); return; }
+        /* quelle che durano: comincia prima di oggi e finisce dopo */
+        return db.from("feste_felicitas").select("*")
+          .lte("data", oggi).gte("fine", oggi).limit(1)
+          .then(function(q){
+            var m = nomeDellaFesta(((q && q.data) || [])[0]);
+            if(m){ GIORNO.festa = m; mostraIlGiorno(); return; }
+            indiane();
+          });
+      }).catch(function(){ indiane(); });
   }
 
   var DOVE = [
@@ -2899,12 +4624,75 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* ══ LA BARRA LA DISEGNA DESIGN ══
      Il guscio le passa i dati e le dice dove si è. Il disegno è suo,
      i dati sono del database: qui non si scrive nessuna parola. */
+  /* ⭐ TOCCATO NEL GUSCIO ㉚ — LE VOCI CHE UNO NON HA NON SI VEDONO.
+     Fin qui una stanza chiusa restava in barra, spenta, con sotto la riga
+     che diceva perché. Decisione di Gab: sparisce. Una porta che non si
+     apre non è una porta — è una cosa che occupa lo sguardo.
+     ⭐ Non si tolgono le parole: `chiusa` e `perche` restano in `stanze`
+        con tutto quello che c'è scritto. Cade solo il disegnarla.
+     ⛔ E QUI IL LAVORO NON È FINITO — va detto invece di far finta.
+        Oggi la sola cosa che il guscio SA di una persona è `io.grado`, e
+        l'unica porta che sa riconoscere è il nucleo. `stanze.chiusa` è un
+        segno UGUALE PER TUTTI: dice «questa è chiusa», non dice «chiusa
+        a TE». Quindi:
+          · il nucleo si comporta bene: lo vede chi è del nucleo
+          · «le aziende se non ne hai» NON si può ancora fare: nessuno
+            chiede se ne hai, e non me lo invento
+        Da dieci voci si scende a nove per chi non è del nucleo. Per
+        arrivare a quattro serve che sia il DATABASE a dire cosa chiede
+        ogni stanza — una colonna in `stanze` — non un elenco scritto qui.
+        L'SQL è pronto e aspetta la decisione di Gab. */
+  /* ci entro? */
+  function possoEntrare(x){
+    if(!x || !x.chiusa) return true;
+    /* ⛔ L'UNICA PORTA CHE IL GUSCIO OGGI SA RICONOSCERE, e la riconosce
+       con la STESSA colonna che sorveglia la stanza: nucleo(), in
+       fm-nucleo.js, legge `persone.nucleo`. Non `grado`: sono due fatti
+       diversi, e la barra che dice una cosa e la stanza un'altra è peggio
+       di una barra che non filtra. */
+    if(x.id === "nucleo") return !!(io && io.nucleo === true);
+    return false;
+  }
+
+  /* ⭐ e chi entra la trova APERTA. `stanze.chiusa` dice «questa stanza è
+     chiusa», non «chiusa a te»: era un segno uguale per tutti, e Design lo
+     disegna come una voce spenta senza `data-pg` — cioè senza il gancio
+     che la fa aprire. Risultato, fin qui: chi è del nucleo vedeva la sua
+     voce e toccandola non succedeva niente. Adesso o non la vede, o la
+     vede viva. Con `chiusa:false` cade anche la riga del `perche`, ed è
+     giusto: spiegava perché NON si entra. */
+  /* ⭐ TOCCATO NEL GUSCIO ㉟ — LA ROTTA NON DICE PIÙ SE UNA VOCE SI VEDE.
+     Il ㉝ le faceva dire due cose insieme: «non si apre» e «non si vede».
+     Reggeva finché le due combaciavano, e ha smesso di reggere subito:
+     «Squadre» si deve vedere sempre — il Praticantato È la squadra
+     automatica, chi entra ne ha già una e nessuno ne ha zero — ma la sua
+     stanza non c'è ancora, quindi la rotta è vuota. Una voce sola con le
+     due cose separate, e la regola vecchia non sa più dove stare.
+     ⭐ Adesso: la ROTTA dice solo se si apre — e collegaLeVoci() lo sa già
+        da sé, sul clic di una voce senza rotta non fa niente. A dire se
+        una voce sta in barra è il GRUPPO, che è la colonna fatta apposta:
+        `pagina` sta in alto, `incontro` sotto, `riposo` da nessuna parte.
+     ⚠️ Perché funzioni, in `stanze` le righe che non sono più voci —
+        Gruppi Cooperativi, che è passata nel nucleo, e Aziende, che
+        aspetta la sua tavola — devono stare nel gruppo `riposo`. Finché
+        dicono ancora `pagina`, tornano a disegnarsi in barra.
+        Le parole non si perdono lo stesso: BARRA le porta tutte, gruppo
+        per gruppo, e le legge attesa(). */
+  function vociPerMe(elenco){
+    return (elenco || []).filter(possoEntrare).map(function(x){
+      if(!x.chiusa) return x;
+      var c = {}; for(var k in x){ if(x.hasOwnProperty(k)) c[k] = x[k]; }
+      c.chiusa = false; c.perche = null;
+      return c;
+    });
+  }
+
   function disegnaBarra(){
     if(!window.SpazioVivo || !window.SpazioVivo.barra) return;
     var nome = (io && io.nome) || "";
     window.SpazioVivo.barra({
-      pagine:   STANZE.pagine,
-      incontri: STANZE.incontri,
+      pagine:   vociPerMe(STANZE.pagine),
+      incontri: vociPerMe(STANZE.incontri),
       annale:   STANZE.annale,
       chi: {
         nome:     ospite ? "Entra" : nome,
@@ -2916,20 +4704,29 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       nexus: (io && io.anthakarana) || ""
     });
     window.SpazioVivo.barraQui(vista);
-    /* ⭐ TOCCATO NEL GUSCIO ③ — la voce dell'Annale si spegne quando la
-       sua riga non porta più da nessuna parte.
-       La barra di Design disegna quella riga SEMPRE, anche a mani vuote:
-       senza dati scrive «[ in attesa ]», che è giusto quando una parola
-       manca e sbagliato quando la voce è stata tolta apposta. Design non
-       si corregge: si spegne il contenitore da qui.
-       ⭐ Il segno è la ROTTA, non la presenza della riga. Così per
-          togliere la voce basta svuotare `stanze.rotta`: la riga resta
-          dov'è con le sue parole, e il giorno che l'Annale torna a essere
-          una stanza si rimette la rotta e la voce riappare. Una `delete`
-          si porterebbe via le parole di Gab, e non torna indietro. */
-    var vAnnale = document.getElementById("sv-annale");
-    var idAnnale = STANZE.annale && STANZE.annale.id;
-    if(vAnnale) vAnnale.style.display = (idAnnale && ROTTE[idAnnale]) ? "" : "none";
+    /* ⭐ TOCCATO NEL GUSCIO ㉞ — VIA IL ③, ERA CODICE MORTO.
+       Il ③ spegneva a mano il contenitore `#sv-annale`, perché la barra
+       vecchia disegnava quella riga SEMPRE, anche a mani vuote. Nella
+       barra nuova quel contenitore non esiste più: l'Annale è una
+       finestra del nucleo e ci si arriva da lì.
+       ⭐ La regola però non si perde, è solo salita di un piano: una voce
+          senza rotta non si disegna, e lo decide vociPerMe() — vale per
+          tutte, non per la sola riga dell'Annale. */
+    /* ⭐ TOCCATO NEL GUSCIO ㉘ — FINCHÉ NON SI SA CHI GUARDA, IL PIEDE RESTA
+       VUOTO. Ed è QUESTA la scritta che Gab ha visto nella prova.
+       La barra si disegna già al primo istante col seme, e in quel primo
+       passaggio `io` è ancora null: Design, su un campo che manca, scrive
+       «[ in attesa ]». Giusto per una parola che non c'è, sbagliato per una
+       che sta arrivando — e nel piede ne scriveva tre, nome, ruolo e nexus.
+       Misurato: comparivano a 611 ms e restavano fino a 2.471.
+       `io === null` dura solo quel tratto: lo pongono daOspite() ed entra(),
+       e da lì in poi questo ramo non passa più. Design non si corregge nel
+       suo file: si spegne il campo da qui, come già per la voce dell'Annale. */
+    if(io === null){
+      var vn = $("sv-chi-nome");  if(vn) vn.textContent = "";
+      var vr = $("sv-chi-ruolo"); if(vr) vr.textContent = "";
+      var vx = $("sv-nexus");     if(vx) vx.textContent = "";
+    }
     collegaLeVoci();
   }
 
@@ -3044,13 +4841,17 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ uscendo dalla consolle si esce anche dalla sala: il microfono non
        resta aperto in una stanza che non si vede più */
     if(id !== "consolle" && typeof salaEsci === "function") salaEsci();
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — uscendo da un'orma si dimentica QUALE.
+       Senza, `?o=` tornerebbe da sola la volta dopo che si passa di lì. */
+    if(id !== "orma") window.ormaChiesta = null;
     vista=id;
     chiudiFinestre();
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
     disegnaBarra();
     document.body.classList.remove("barra-aperta");
     var c=$("centro"); c.innerHTML=""; c.scrollTop=0;
-    if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); }
+    /* ⭐ TOCCATO NEL GUSCIO ㉛ — e il riquadro del tempo si riempie. */
+    if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
     else if(id==="orme") mieOrme(c);
     else if(id==="incontro") incontro(c, sub);
     else if(id==="chat"){ chat(c); segnaLetto(); }
@@ -3069,6 +4870,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="gruppi") gruppi(c);   /* ⭐ la terza voce della barra */
     else if(id==="nucleo") nucleo(c);   /* ⭐ la quinta: si difende da sé, dentro */
     else if(id==="pagina") pagina(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma, quella di `?o=<id>`.
+       Il disegno sta in fm-orma.js. Se il file non c'è la riga non esiste
+       e si cade su attesa(), come per ogni stanza non ancora costruita. */
+    else if(id==="orma" && typeof unaOrma === "function") unaOrma(c);
     else attesa(c, id);
     /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
     scriviIndirizzo();
@@ -3461,12 +5266,59 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
 
   /* ── le mie orme ── */
+  /* ⭐ TOCCATO NEL GUSCIO ㉙ — «LA MIA ORMA» LEGGE ANCHE IL PASSATO.
+     Il difetto, ed è una riga di Gab: la stanza leggeva
+     `gte("momento", mezzanotte)`, cioè solo le orme SCRITTE oggi. Un'orma
+     segnata stasera, domani da lì non si vedeva più — e una segnata oggi
+     ma accaduta a maggio compariva sotto oggi.
+     ⭐ Adesso il giorno è quello dell'ACCADUTO, non quello della scrittura:
+        si legge tutto, si raggruppa per `accaduto_il`, e ogni gruppo ha il
+        suo titolo. Un'orma spostata a ieri finisce a ieri.
+     ⛔ LE ORME VECCHIE NON SI PERDONO. `accaduto_il` esiste solo da quando
+        il Megafono lo scrive: prima è vuoto. Per quelle il giorno è quello
+        in cui furono scritte — giornoDi() ricade su `momento`. Senza questa
+        ricaduta sparirebbero dalla stanza, e sono le più vecchie.
+        ⚠️ La ricaduta è in lettura, non nel database: nessuna riga viene
+           toccata. Se un giorno si vuole riempire davvero la colonna, è un
+           `update` sulle sole righe con `accaduto_il is null`, e si guarda
+           prima di lanciarlo.
+     ⛔ E SI FILTRA PER PERSONA. Prima non c'era: `caricaOrme()` si affidava
+        alle sole regole di riga, mentre contaOrme() il filtro ce l'aveva.
+        Col filtro sulla data non si vedeva; togliendolo, quel buco restava
+        scoperto. Adesso c'è anche qui.
+     ⚠️ contaOrme() — la riga sotto il campo — resta su `momento`, ed è
+        giusto: dice quante ne hai LASCIATE oggi, e lasciarne una è un atto
+        di oggi anche se racconta maggio. Sono due domande diverse. */
+  var ORME_QUANTE = 300;   /* quante se ne leggono in un colpo */
+
+  /* il giorno di un'orma: l'accaduto se c'è, se no quando fu scritta */
+  function giornoDi(o){
+    if(o.accaduto_il) return String(o.accaduto_il).slice(0,10);
+    var d = new Date(o.momento);
+    return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")
+                          +"-"+String(d.getDate()).padStart(2,"0");
+  }
+
+  /* ⭐ «oggi» e «ieri» sono le stesse due parole che il Megafono usa nelle
+     scorciatoie di «Quando»: non se ne inventano altre. Più indietro, la
+     data per esteso. */
+  function nomeDelGiorno(g){
+    var iso = function(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")
+                                                 +"-"+String(d.getDate()).padStart(2,"0"); };
+    var oggi = new Date(); oggi.setHours(0,0,0,0);
+    var ieri = new Date(oggi); ieri.setDate(ieri.getDate()-1);
+    if(g === iso(oggi)) return "oggi";
+    if(g === iso(ieri)) return "ieri";
+    return new Date(g+"T12:00:00").toLocaleDateString("it-IT",
+      {day:"numeric",month:"long",year:"numeric"});
+  }
+
   function mieOrme(c){
     c.innerHTML='<div class="occhio">Comunità Eterna FelicitasMundi</div>'
       +'<h1>Le mie orme</h1><p class="sotto">Gli strumenti, e il filo del percorso.</p>'
       +'<h2>Il filo</h2><div class="filo"><div class="filo-riga" id="filo-orme"></div></div>'
       +'<p><span class="segna">i cerchietti aspettano i loro nomi</span></p>'
-      +'<h2 style="margin-top:1.6rem">Le orme di oggi</h2><div id="orme-corpo"></div>';
+      +'<h2 style="margin-top:1.6rem">Le orme</h2><div id="orme-corpo"></div>';
     var f=$("filo-orme");
     for(var i=0;i<9;i++){ var d=document.createElement("span"); d.className="cer"; f.appendChild(d); }
     caricaOrme();
@@ -3475,24 +5327,39 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   function caricaOrme(){
     var box=$("orme-corpo"); if(!box) return;
     if(ospite){ box.innerHTML='<p class="vuoto">Le orme si vedono con l\'accesso.</p>'; return; }
-    var oggi=new Date(); oggi.setHours(0,0,0,0);
     db.from("orme").select("id,contenuto,tipo,destinazione,momento,accaduto_il")
-      .gte("momento",oggi.toISOString()).order("momento",{ascending:false})
+      .eq("persona_id", io.id)
+      .order("accaduto_il",{ascending:false,nullsFirst:false})
+      .order("momento",{ascending:false})
+      .limit(ORME_QUANTE)
       .then(function(r){
         var righe=(r.data)||[];
-        if(!righe.length){ box.innerHTML='<p class="vuoto">Oggi non hai ancora lasciato orme.</p>'; return; }
+        if(!righe.length){ box.innerHTML='<p class="vuoto">Non hai ancora lasciato orme.</p>'; return; }
+        /* ⭐ si riordina anche qui: il database ordina per `accaduto_il`, e
+           le righe vecchie ce l'hanno vuoto. Il giorno vero lo sa giornoDi(). */
+        righe.sort(function(a,b){
+          var ga=giornoDi(a), gb=giornoDi(b);
+          if(ga !== gb) return ga < gb ? 1 : -1;
+          return (a.momento < b.momento) ? 1 : -1;
+        });
         box.innerHTML="";
+        var giornoScritto = null;
         righe.forEach(function(o){
+          var g = giornoDi(o);
+          if(g !== giornoScritto){
+            giornoScritto = g;
+            var t = document.createElement("h3");
+            t.className = "orme-giorno";
+            t.textContent = nomeDelGiorno(g);
+            box.appendChild(t);
+          }
           var d=document.createElement("div"); d.className="orma";
           var q=DOVE.filter(function(x){return x.tipo===o.tipo;})[0];
           if(q) d.style.setProperty("--oc","var("+q.c+")");
           var ora=new Date(o.momento).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
           d.innerHTML='<div class="meta"></div><p></p>';
-          var quando = o.accaduto_il
-            ? new Date(o.accaduto_il+"T12:00:00").toLocaleDateString("it-IT",
-                {day:"numeric",month:"long",year:"numeric"})
-            : ora;
-          d.querySelector(".meta").textContent=quando+" · "+(q?q.n:o.tipo)+" → "+(o.destinazione||"—");
+          /* la data non si ripete: il giorno sta nel titolo qui sopra */
+          d.querySelector(".meta").textContent=ora+" · "+(q?q.n:o.tipo)+" → "+(o.destinazione||"—");
 
           /* il tasto che la porta in Edizione */
           var st = document.createElement("button");
@@ -3510,8 +5377,31 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
           });
           d.appendChild(st);
           d.querySelector("p").textContent=o.contenuto||"";
+          /* ⭐ TOCCATO NEL GUSCIO ㊱ — e da qui si entra nella singola.
+             Un indirizzo che nessuno sa produrre non serve a niente: il
+             tocco sulla scheda è il modo di ottenerlo, e da lì si copia.
+             ⚠️ Il tasto «Pubblica» ferma già il tocco con stopPropagation:
+                era stato scritto prevedendolo, e non si tocca. */
+          d.style.cursor = "pointer";
+          d.addEventListener("click", function(){
+            window.ormaChiesta = o.id;
+            vai("orma");
+          });
           box.appendChild(d);
         });
+        /* ⭐ TOCCATO NEL GUSCIO ㉙ — IL TETTO SI DICE, non si tace. Se sono
+           tornate esattamente ORME_QUANTE righe, quasi certamente ce n'è
+           dell'altro più indietro, e una stanza che si ferma in silenzio
+           sembra una stanza che ha finito. Come si va oltre non è deciso —
+           un tasto, una data, il filo dei cerchietti — e quello che non è
+           deciso si scrive [ in attesa ], non si inventa. */
+        if(righe.length === ORME_QUANTE){
+          var pi = document.createElement("p");
+          pi.className = "vuoto";
+          pi.textContent = "Qui ci sono le ultime " + ORME_QUANTE
+                         + " orme. Per andare più indietro: [ in attesa ]";
+          box.appendChild(pi);
+        }
       });
   }
 
@@ -3646,7 +5536,29 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* ══ IL MEGAFONO ══ */
   var campo=$("campo");
-  function cresci(){ campo.style.height="auto"; campo.style.height=campo.scrollHeight+"px"; }
+  /* ⭐ TOCCATO NEL GUSCIO ㉖ — A CAMPO VUOTO NON SI SCRIVE NESSUNA ALTEZZA.
+     Il difetto: si mandava un'orma lunga e il campo restava alto, vuoto.
+     Non era l'invio. Era la misura. `scrollHeight` di un textarea vuoto
+     conta anche il segnaposto, e il segnaposto va a capo quando il campo
+     è stretto. Sul telefono, nel momento in cui si misura, il campo è
+     largo 160 e non 242: `mg-pieno` è ancora addosso al corpo — cresci()
+     corre PRIMA di megafonoGuarda() — e il segno dell'orma e la freccia
+     stanno ancora prendendo il loro posto. Lì «scrivi la tua orma» sta su
+     tre righe: 98 invece di 62. Quei 98 finivano scritti nello stile del
+     campo, e ci restavano anche dopo che la riga si era riallargata.
+     Misurato: a riposo 62, dopo l'invio 98 — il Megafono 150 invece di 114.
+     Sul computer il campo è largo 835 e il segnaposto ci sta in una riga:
+     stesso errore, ma non si vedeva.
+     ⭐ La cura: a campo vuoto l'altezza non la scrive nessuno. Si toglie
+        lo stile e comanda il foglio — min-height 2.9rem, rows="1" — che è
+        esattamente la forma a riposo. Così non conta più né quanto è largo
+        il campo quando si misura, né quanto è lungo il segnaposto.
+     ⚠️ Vale anche per chi cancella tutto a mano: stessa strada, stesso
+        punto. */
+  function cresci(){
+    if(!campo.value){ campo.style.height=""; return; }
+    campo.style.height="auto"; campo.style.height=campo.scrollHeight+"px";
+  }
 
   /* ⭐ TOCCATO NEL GUSCIO ⑯ — IL MEGAFONO A RIPOSO, E QUANDO SI SCRIVE.
      A riposo il campo è nudo. Appena c'è del testo il segno dell'orma si
@@ -3658,10 +5570,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* ⭐ i quattro segni, e il `tipo` che ciascuno scrive nella tavola `orme`.
      Sono quattro, non cinque: nessun «altro», nessuna forma inventata. */
   var MG_SEGNI = [
-    ["contatto",  "#AA8844", "tondo",  "contatto"],
-    ["idea",      "#9966CC", "quadro", "idea_nota"],
-    ["obiettivo", "#CC6644", "rombo",  "obiettivo"],
-    ["racconto",  "#669944", "pieno",  "racconto"]
+    ["contatto",  "#AA8844", "sg-tondo",  "contatto"],
+    ["idea",      "#9966CC", "sg-quadro", "idea_nota"],
+    ["obiettivo", "#CC6644", "sg-rombo",  "obiettivo"],
+    ["racconto",  "#669944", "sg-pieno",  "racconto"]
   ];
   (function(){
     var g = $("mg-orma"); if(g) g.innerHTML = ORMA_SEGNO;
@@ -3683,7 +5595,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   })();
 
   function megafonoGuarda(){
-    document.body.classList.toggle("mg-pieno", campo.value.trim().length > 0);
+    var pieno = campo.value.trim().length > 0;
+    document.body.classList.toggle("mg-pieno", pieno);
+    /* ⭐ TOCCATO NEL GUSCIO ㉔ — i tre valori si accendono coi quattro segni.
+       Il pezzo non guarda il campo da sé: glielo dice il guscio, qui, nel
+       punto solo dove `mg-pieno` cambia. */
+    if(window.SpazioVivo && window.SpazioVivo.valori) window.SpazioVivo.valori(pieno);
   }
   campo.addEventListener("input", function(){ cresci(); megafonoGuarda(); });
   megafonoGuarda();
@@ -4142,22 +6059,42 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⛔ LA REGOLA DEL CANONE, l'ultima parola. I tasti sono già spenti, ma
        il controllo si rifà qui: fra il tocco e l'invio può essere entrato
        un nome, e la regola non si affida a un tasto. */
-    var aspettano = chiAspetta();
+    /* ⭐ TOCCATO NEL GUSCIO ㉔ — I TRE VALORI ARRIVANO DAL PEZZO DI DESIGN.
+       Prima li tenevano tre variabili della riga vecchia — `quandoScelto`,
+       `luogoDato`, `conChi`. Adesso li chiede una funzione sola.
+       ⚠️ Se il pezzo non c'è, si torna alle variabili di prima e niente si
+          rompe: è la stessa rete che tiene su una pagina non aggiornata. */
+    var V = (window.SpazioVivo && window.SpazioVivo.valoriLeggi)
+      ? window.SpazioVivo.valoriLeggi()
+      : { accaduto_il: quandoScelto || oggi,
+          luogo: luogoDato && luogoDato.nome,
+          territorio_cod: luogoDato && luogoDato.cod,
+          luogo_lat: luogoDato && luogoDato.lat,
+          luogo_lon: luogoDato && luogoDato.lon,
+          persone: conChi.map(function(x){ return x.nome; }) };
+
+    /* ⛔ LA REGOLA DEL CANONE, l'ultima parola. Un'orma che nomina qualcuno
+       che non ha ancora confermato resta privata. La regola non cambia:
+       cambia solo da dove arrivano i nomi.
+       ⚠️ `valoriLeggi()` dà nomi nudi; qui tornano oggetti, perché
+          frasePerChiAspetta() e la scrittura su `orma_persone` leggono
+          `.nome` e non si toccano. */
+    var aspettano = (V.persone || []).map(function(n){ return {nome:n}; });
     if(aspettano.length) apertaCosi = "solo_me";
 
     var riga = {persona_id:io.id, contenuto:t,
       tipo:tipoScritto, destinazione:dovePorta, visibilita:apertaCosi};
     if(luogoScelto) riga.vicinato_id = luogoScelto.id;
-    riga.accaduto_il = quandoScelto || oggi;
+    riga.accaduto_il = V.accaduto_il || oggi;
 
     /* ── il dove: il nome, il punto, il comune ── */
-    if(luogoDato){
-      if(luogoDato.nome) riga.luogo = luogoDato.nome;
-      if(luogoDato.lat != null) riga.luogo_lat = luogoDato.lat;
-      if(luogoDato.lon != null) riga.luogo_lon = luogoDato.lon;
-      if(luogoDato.cod) riga.territorio_cod = luogoDato.cod;
-    }
-    var conChiOra = conChi.slice(), doveOra = luogoDato;
+    if(V.luogo)                riga.luogo          = V.luogo;
+    if(V.luogo_lat != null)    riga.luogo_lat      = V.luogo_lat;
+    if(V.luogo_lon != null)    riga.luogo_lon      = V.luogo_lon;
+    if(V.territorio_cod)       riga.territorio_cod = V.territorio_cod;
+
+    var conChiOra = aspettano.slice();
+    var doveOra = V.luogo ? {nome: V.luogo} : null;
     db.from("orme").insert(riga)
       .select("id,contenuto").single().then(function(r){
       if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
@@ -4189,6 +6126,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       /* ⭐ e con lei i tre dati: la prossima orma è di oggi, senza luogo e
          senza nomi. Restassero, si porterebbero dietro il luogo e le persone
          di un'orma che non c'entra. */
+      /* ⭐ TOCCATO NEL GUSCIO ㉔ — a pulire adesso è il pezzo. Le tre
+         variabili vecchie si azzerano lo stesso finché la riga vecchia
+         resta scritta: il giorno che se ne va, se ne vanno con lei. */
+      if(window.SpazioVivo && window.SpazioVivo.valoriPulisci) window.SpazioVivo.valoriPulisci();
       quandoScelto = null; luogoDato = null; conChi = [];
       var sq = $("s-quando-v"); if(sq) sq.textContent = "Oggi";
       aggiornaTreDati();
@@ -4197,23 +6138,17 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
             + (aspettano.length ? " · " + frasePerChiAspetta(aspettano) : "")
             + (doveOra && doveOra.nome ? " · " + doveOra.nome : "")
             + (luogoScelto ? " · " + luogoScelto.nome : "")
-            + (quandoScelto ? " · " + new Date(quandoScelto+"T12:00:00")
+            + (V.accaduto_il && V.accaduto_il !== oggi ? " · " + new Date(V.accaduto_il+"T12:00:00")
                  .toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"}) : ""));
       if(vista==="orme") caricaOrme(); else contaOrme();
     });
   });
 
-  $("s-cerca").addEventListener("click", function(){
-    cerca=!cerca; this.classList.toggle("attivo",cerca);
-    campo.placeholder = cerca ? "[ la riga della ricerca — in attesa ]" : "Traccia l'orma di oggi";
-    /* ⭐ TOCCATO NEL GUSCIO ㉓ — «s-dove» fuori dall'elenco: il tasto non
-       c'è più, e $(i).style su null solleverebbe al primo tocco sulla lente. */
-    ["s-file","s-aperte","s-integrator","s-talenti"].forEach(function(i){
-      $(i).style.display = cerca ? "none" : "";
-    });
-    $("vele").classList.remove("su"); veleSu=false;
-    campo.value=""; cresci(); campo.focus();
-  });
+  /* ⭐ TOCCATO NEL GUSCIO ㉕ — via il gestore della lente col suo tasto.
+     Restando, $("s-cerca") sarebbe null e la riga solleverebbe all'avvio.
+     ⚠️ `cerca` resta dichiarata e da qui in poi non può che essere false:
+        l'invio la guarda ancora (`if(cerca) vai("incontro")`) e quel ramo
+        semplicemente non si prende più. */
 
   /* i fogli */
   function rigo(o, poi){
@@ -4269,12 +6204,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     '<p class="vuoto" style="font-family:\'Cormorant Garamond\',serif;font-style:italic;'
     +'color:rgba(245,240,230,0.78)">Qui compaiono le cose che hai aperto e non hai ancora chiuso.</p>';
 
-  $("s-aperte").addEventListener("click", function(){ $("v-aperte").classList.add("on"); });
+  /* ⭐ TOCCATO NEL GUSCIO ㉕ — via i gestori dei due tondi coi loro tasti.
+     Il foglio #v-aperte e talentiApri() restano interi: è la maniglia che
+     manca, non la stanza. */
   /* ⭐ i talenti non aprono il campo di scrittura: aprono la loro finestra,
      e se la disegna fm-talenti.js */
-  $("s-talenti").addEventListener("click", function(){
-    if(typeof talentiApri === "function") talentiApri();
-  });
+
   /* ── chiudere la mappa a tutto schermo ── */
   function chiudiMappa(){
     var p = $("mappa-piena"); if(!p) return;
@@ -4378,10 +6313,18 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var BASE_INDIRIZZO = location.origin + location.pathname;
 
   /* i soli parametri che il guscio scrive e cancella */
-  var MIEI_PARAMETRI = ["p", "n"];
+  /* ⭐ TOCCATO NEL GUSCIO ㊱ — `o` entra fra i parametri del guscio.
+     È l'id di UNA orma, e come `n` per un libro dice QUALE. Deve stare
+     qui per una ragione sola: se non ci stesse, uscendo dall'orma la `o`
+     resterebbe appiccicata all'indirizzo, e da Emporio si copierebbe un
+     link che dice ancora quell'orma.
+     ⛔ `t` — il gettone di fm-talenti.js — non si tocca: non è del guscio. */
+  var MIEI_PARAMETRI = ["p", "n", "o"];
 
   /* le viste che vai() gestisce senza avere una voce nella barra */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina"];
+  /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
+     ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma"];
 
   /* alzata mentre si legge la storia: allora l'indirizzo non si riscrive */
   var tornando = false;
@@ -4424,6 +6367,11 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       q.set("p", rotta);
       if(rotta === "pagina" && window.pagineNomeChiesto)
         q.set("n", window.pagineNomeChiesto);
+      /* ⭐ TOCCATO NEL GUSCIO ㊱ — e per un'orma si riscrive il suo id.
+         MIEI_PARAMETRI l'ha appena cancellato: qui torna, ma SOLO se la
+         rotta è quella. È la coppia esatta di `n`. */
+      if(rotta === "orma" && window.ormaChiesta)
+        q.set("o", window.ormaChiesta);
     }
     var coda = q.toString();
     return BASE_INDIRIZZO + (coda ? "?" + coda : "");
@@ -4459,6 +6407,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      li ha scritti URLSearchParams: si legge in tutti e due i modi. */
   function rottaDaIndirizzo(){
     var q = parametri(), v = q ? q.get("p") : null;
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — `?o=<id>` NUDO, senza `p`, vale rotta `orma`.
+       È il link che una persona manda a un'altra: dev'essere corto, e non
+       deve costringere chi lo scrive a ricordarsi anche `p=orma`.
+       ⛔ `p` vince comunque: se c'è, comanda lui. Così `?p=talenti&o=…`
+          resta una stanza con un id di passaggio, non un'orma. */
+    if(!v && q && q.get("o")) v = "orma";
     if(!v){
       var m = location.search.match(/[?&]p=([^&]{1,80})/);
       if(m){ try{ v = decodeURIComponent(m[1]); }catch(e){ v = m[1]; } }
@@ -4477,6 +6431,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(id === "pagina"){
       var q = parametri(), n = q ? q.get("n") : null;
       if(n) window.pagineNomeChiesto = n;
+    }
+    /* ⭐ TOCCATO NEL GUSCIO ㊱ — quale orma. Si RILEGGE ogni volta, anche
+       quando è vuota: è la trappola che `pagina` ha ancora addosso. Il tasto
+       indietro passa di qui, e se il valore vecchio restasse, tornando da
+       un'orma a un'altra si riaprirebbe sempre la prima. */
+    if(id === "orma"){
+      var qo = parametri();
+      window.ormaChiesta = (qo && qo.get("o")) || null;
     }
     if(sub) sottoRichiesta = sub;
     vai(id, sub);
@@ -4504,15 +6466,19 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      Misurato, un gettone che non si rinnova costava 27 secondi di pagina
      bianca con la rete che cade, 92 col server muto.
 
-     Adesso è così:
+     ⭐ TOCCATO NEL GUSCIO ㉘ — e adesso nemmeno `stanze` ferma più niente.
+        Era ancora legata al gettone da un Promise.all, e il disegno
+        aspettava tutt'e due. Adesso è così:
 
-       stanze    ─────────────────────────────┐
-       gettone ──→ persone ──→ SI DISEGNA ────┘
-                └→ permessi ──→ aggiornano
+       SUBITO ──→ la barra, col seme
+       stanze  ──→ la barra si aggiorna          (per conto suo)
+       gettone ──→ persone ──→ SI DISEGNA LA STANZA
+                            └→ permessi ──→ la barra si aggiorna
 
-     · `stanze` non dipende da chi guarda: parte subito, insieme al gettone
+     · la barra non aspetta niente: le voci del seme stanno nel guscio
+     · `stanze` non dipende da chi guarda, e nessuno la aspetta
      · i permessi partono insieme a `persone` e non fermano il disegno
-     · e sopra tutto c'è la briglia, qui sotto
+     · e sopra il solo gettone c'è la briglia, qui sotto
 
      ⛔ Il disegno aspetta `persone` e nient'altro: senza sapere chi sei,
         «le mie orme» e i talenti disegnerebbero la stanza di un altro. */
@@ -4618,8 +6584,15 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* ⭐ `stanze` parte adesso, insieme al gettone: non dipende da chi
      guarda, e prima partiva quarta. Se tarda, la barra resta quella del
-     seme — leggiLeStanze() lo fa già da sé. */
-  var pStanze = leggiLeStanze();
+     seme — leggiLeStanze() lo fa già da sé.
+     ⭐ TOCCATO NEL GUSCIO ㉘ — e non la aspetta più nessuno. Prima la sua
+        promessa finiva dentro un Promise.all col gettone, e il disegno
+        stava fermo finché non tornavano tutt'e due. Era l'ultima fila
+        indiana rimasta: la barra aveva già le voci del seme e il centro
+        non ha mai avuto niente da chiedere a `stanze`.
+        Adesso va per conto suo e, quando arriva, ridisegna la barra da
+        sé — dentro leggiLeStanze(). */
+  leggiLeStanze();
 
   var contatoreAcceso = false;
   function contaOgniTanto(){
@@ -4635,10 +6608,26 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        non la riga di `persone`: non hanno niente da aspettare. */
     var pPermessi = db.rpc("fm_miei_tipi");
 
-    return db.from("persone").select("id,nome,grado,livello_n,anthakarana").eq("id",sess.user.id).maybeSingle()
+    /* ⭐ TOCCATO NEL GUSCIO ㉚ — si legge anche `nucleo`. Serve alla barra
+       per sapere se la voce del nucleo si vede, e dev'essere LO STESSO
+       fatto che sorveglia la stanza: nucleo() legge `persone.nucleo`, e
+       due verità sulla stessa porta prima o poi divergono. Una colonna in
+       più sulla riga che già si legge — nessuna domanda in più. */
+    return db.from("persone").select("id,nome,grado,livello_n,anthakarana,nucleo").eq("id",sess.user.id).maybeSingle()
       .then(function(p){
         ospite = false;
-        io = (p && p.data) || {id:sess.user.id, nome:"", grado:"karma_yoga"};
+        /* ⭐ TOCCATO NEL GUSCIO ㊲ — VIA IL GRADO DI RIPIEGO.
+           Qui c'era grado:"karma_yoga". Era un dato inventato, e la barra
+           lo prendeva per vero: col nome vuoto sopra, la pastiglia
+           dell'account finiva per dire soltanto «karma yoga». Adesso il
+           grado resta vuoto e la barra mostra quello che spetta a chi non
+           ha grado — mai una retrocessione travestita.
+           ⛔ Questo è solo la rete. Che la riga di `persone` arrivi SEMPRE
+              lo garantisce la sua regola di riga: ognuno legge la propria.
+           ⛔ L'errore non si mostra a chi legge la pagina: non può
+              risolverlo. Va in console, per chi costruisce. */
+        if(p && p.error) console.warn("[fm] `persone` non risponde:", p.error.message || p.error);
+        io = (p && p.data) || {id:sess.user.id, nome:"", grado:""};
         disegnaBarra();
         var torna = "";
         try{ torna = sessionStorage.getItem("fm_ritorno") || ""; sessionStorage.removeItem("fm_ritorno"); }catch(e){}
@@ -4669,25 +6658,31 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         sopra il gettone soltanto non serviva a niente.
         Qui la briglia sta sopra la coppia: allo scadere si disegna con
         quello che c'è — il seme — e chi arriva dopo aggiorna. */
-  var pronto = Promise.all([ db.auth.getSession(), pStanze ]);
+  /* ⭐ TOCCATO NEL GUSCIO ㉘ — la briglia sta sopra il GETTONE, e basta.
+     La nota qui sopra diceva il vero — supabase-js attacca il gettone a
+     ogni chiamata REST, quindi `stanze` restava ferma allo stesso rinnovo
+     — ma la conclusione era un'altra: non serviva aspettarle insieme,
+     serviva non aspettare `stanze` per niente. La barra ha già le voci del
+     seme dal primo istante, e quando la risposta arriva le aggiorna. */
+  var pronto = db.auth.getSession();
 
   briglia(pronto, ATTESA_GETTONE).then(function(g){
 
-    /* la briglia ha morso: né gettone né stanze. Si guarda da ospite — che
+    /* la briglia ha morso: il gettone non torna. Si guarda da ospite — che
        è quello che il guscio fa già quando non c'è nessuno — con le voci
        del seme. Se poi arriva, si entra allora e la vista si rifà. */
     if(g.scaduta){
       daOspite();
-      pronto.then(function(due){
-        var s = due && due[0] && due[0].data && due[0].data.session;
+      pronto.then(function(r){
+        var s = r && r.data && r.data.session;
         if(s) return entra(s);
         disegnaBarra();      /* nessuna sessione: la barra dice «Entra» */
       }).catch(function(){});
       return;
     }
 
-    var due  = g.dato || [];
-    var sess = due[0] && due[0].data && due[0].data.session;
+    var r    = g.dato;
+    var sess = r && r.data && r.data.session;
     if(!sess){ daOspite(); return; }
     return entra(sess);
   }).catch(function(){ daOspite(); });

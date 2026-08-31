@@ -37,7 +37,7 @@
         window.SpazioVivo.nucleo({
           chi:      { … le persone dei cinque elementi … },
           economia: { quante, righe|lista },
-          flussi:   { … }, regole: { … },
+          flussi:   { … }, specifica: { … },
           lavagna:  { quante, righe:[{chi, cosa, punto|quando}] },
           chat:     { … }
         })
@@ -61,12 +61,15 @@
       file lo chiama per nome — annaleDentro(dentro).
       ⛔ fm-annale.js va caricato PRIMA di questo file nel guscio.
 
-   ⭐ E LA FINESTRA «REGOLE» PORTA LA SUA PAGINA. Dal 24 agosto 2026 il
-      quadrante delle regole non mostra più la griglia dei cinque
-      elementi: mostra le regole, una per una, col perché e con
-      l'etichetta di dove ciascuna vive già. Il disegno sta in
-      fm-regole.js — regoleDentro(dentro).
-      ⛔ Anche fm-regole.js va caricato PRIMA di questo file.
+   ⭐ E AL POSTO DELLE REGOLE C'È «LA SPECIFICA». Dal 28 agosto 2026 la
+      finestra non porta più le sole regole: porta la specifica intera —
+      dodici funzioni su cinque strati col semaforo, e le 67 regole nei
+      loro dieci gruppi, sotto il secondo tasto. Stesse parole, stesse
+      etichette: le regole non sono andate perse, sono lì dentro.
+      ⛔ fm-regole.js e le-regole.html sono usciti con la voce vecchia.
+      ⚠️ Il disegno NON è un file .js: è un pezzo di Design che sta nel
+         parcheggio del guscio e si disegna da sé. Qui lo si sposta
+         soltanto, come le Dinamiche e «In lavorazione».
 
    ⚠️ `sv-velo` è anche l'id del velo sopra la mappa, nella casa. Non si
       pestano i piedi: le due stanze non stanno mai nel centro insieme.
@@ -307,8 +310,8 @@ var NUCLEO = `<style>
         <span class="de">come i contenuti interagiscono e creano movimento</span>
       </button>
 
-      <button class="cd" type="button" style="--c:var(--terra)" data-fin="regole">
-        <span class="vn" id="v-regole"></span>
+      <button class="cd" type="button" style="--c:var(--terra)" data-fin="specifica">
+        <span class="vn" id="v-specifica"></span>
         <span class="sg"><svg viewBox="0 0 48 48" fill="none"
           stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
           stroke-linejoin="round">
@@ -318,8 +321,8 @@ var NUCLEO = `<style>
           <path d="M33 34 C36 34 38 36 37 38 C36 40 32 39 32 36
                    C32 33 37 32 39 35" opacity=".7"/>
         </svg></span>
-        <b>Le regole</b>
-        <span class="de">quello che è stato deciso, e dove vive</span>
+        <b>La specifica</b>
+        <span class="de">ogni funzione, dalla superficie al dato</span>
       </button>
 
       <!-- ⭐ AGGIUNTO — LA SESTA FINESTRA: L'ANNALE.
@@ -452,7 +455,7 @@ function avviaNucleo(){
              "var(--acqua)"],
     flussi: ["Dinamiche","come i contenuti interagiscono e creano movimento",
              "var(--nexus)"],
-    regole: ["Le regole","quello che è stato deciso, e dove vive",
+    specifica:["La specifica","ogni funzione, dalla superficie al dato",
              "var(--terra)"],
     lavagna:["Integrator","le task, e a che punto sono","var(--svil)"],
     chat:   ["La chat","quello che ci si dice qui dentro","var(--etere)"],
@@ -564,6 +567,10 @@ function avviaNucleo(){
       var e = document.getElementById(q);
       if (e && e.parentNode !== casa) casa.appendChild(e);
     });
+    /* ⭐ TOCCATO — anche la specifica torna a casa. Va per classe e non
+       per id: quello che si sposta è il suo fondo, che id non ne ha. */
+    var s = document.querySelector(".sv-spec-fondo");
+    if (s && s.parentNode !== casa) casa.appendChild(s);
   }
 
   function apri(id, dati){
@@ -587,6 +594,12 @@ function avviaNucleo(){
     var SV = window.SpazioVivo || {};
     var pezzoDin  = document.getElementById("svDin");
     var pezzoOrma = document.getElementById("svOrma");
+    /* ⭐ TOCCATO — «La specifica». Si prende il FONDO, non #svSpec: il
+       pezzo di Design porta il proprio sfondo in un involucro esterno
+       che non ha id, e spostando solo il figlio lo sfondo resterebbe
+       nel parcheggio. ⛔ La specifica è un file di Gab e non si tocca:
+       ci si adatta da qui. */
+    var pezzoSpec = document.querySelector(".sv-spec-fondo");
 
     if (id === "flussi" && pezzoDin) {
       dentro.appendChild(pezzoDin);
@@ -601,14 +614,14 @@ function avviaNucleo(){
     } else if (id === "annale") {
       if (typeof annaleDentro === "function") annaleDentro(dentro);
       else dentro.appendChild(attesa());
-    /* ⭐ TOCCATO — «le regole» portano la loro pagina, non i cinque
-       elementi. Il disegno sta in fm-regole.js. Prima questa finestra
-       divideva con «economia» la griglia dei cinque elementi, e su una
-       regola quella griglia non aveva niente da dire.
-       Se quel file non c'è, la finestra si apre e dice che aspetta —
+    /* ⭐ TOCCATO — «La specifica» prende il posto di «Le regole». Il pezzo
+       si è già disegnato da sé nel parcheggio: qui lo si sposta soltanto,
+       come le Dinamiche. Non c'è niente da chiamare — window.SpazioVivo
+       .specifica() restituisce i dati, non ridisegna.
+       Se il pezzo non c'è, la finestra si apre e dice che aspetta —
        non resta muta e non solleva. */
-    } else if (id === "regole") {
-      if (typeof regoleDentro === "function") regoleDentro(dentro);
+    } else if (id === "specifica") {
+      if (pezzoSpec) dentro.appendChild(pezzoSpec);
       else dentro.appendChild(attesa());
     } else if (id === "flussi") {
       dentro.appendChild(flussi(dati));
@@ -663,7 +676,7 @@ function avviaNucleo(){
   /* il numero in alto a destra: quanto è pieno quel posto */
   function conta(d){
     /* ⭐ TOCCATO — «annale» in coda: senza un numero resta vuoto, come gli altri */
-    ["economia","regole","flussi","lavagna","chat","annale"].forEach(function (k) {
+    ["economia","specifica","flussi","lavagna","chat","annale"].forEach(function (k) {
       var e = document.getElementById("v-" + k);
       if (!e) return;
       var q = d && d[k] ? d[k].quante : undefined;
@@ -696,7 +709,7 @@ function avviaNucleo(){
       che si è già dato da sé con {}: ogni riga dice [ in attesa ] e i
       contatori restano vuoti.
    ⭐ Il giorno che i dati ci sono, qui si chiama
-      window.SpazioVivo.nucleo({chi, economia, flussi, regole, lavagna, chat})
+      window.SpazioVivo.nucleo({chi, economia, flussi, specifica, lavagna, chat})
       — e nient'altro.
    ⛔ Non si inventano né tabelle né colonne: si chiede. */
 function datiDelNucleo(){
