@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icona-felicitas-ios-180.png"><meta name="theme-color" content="#0A0C1A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><!-- ⭐ TOCCATO NEL GUSCIO ㊶ — la web app installabile: la riga passata dal terminale APP, incollata com'è (agenti/00-APP.md, 2 settembre 2026) -->
 <title>Spazio Vivo · Comunità Eterna FelicitasMundi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2499,7 +2500,15 @@
         nella pagina, e la loro funzione lo riempie dove si trova.
      · dinamiche-spazio-vivo.html · 13.266 byte · 1407cf765d4eb6bf2d8143d22135f8db
      · orma-lavorazione-spazio-vivo.html · 116.018 byte · 9aa5d83649c97a14187f0e4fcb0c9ea5
-       porta dentro una fotografia: non va a prendere niente da fuori. -->
+       porta dentro una fotografia: non va a prendere niente da fuori.
+     ⭐ TOCCATO NEL GUSCIO ㊳ — e adesso sono quattro:
+     · chat-spazio-vivo.html · 28.974 byte · f75c7efa3028691c6e02a591bec10e4b
+       ⚠️ Incollata con due cambi, e nessuno tocca la forma: le righe di
+          prova e i quattro nomi scritti nel codice sono usciti, e al loro
+          posto c'è chatChi(). Questa la prende fm-orma.js, non il nucleo.
+     · talenti-spazio-vivo.html · 64.424 byte · 530ac85522bd9f8741966d393cbab1ab
+       incollato com'è consegnato. ⛔ Nessuno lo apre ancora: la porta
+       arriva con la prossima consegna di Design. -->
 <div id="sv-parcheggio" hidden>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -4063,6 +4072,1046 @@
   window.SpazioVivo.specifica = function () { return FN; };
 })();
 </script>
+
+<!-- ⭐ TOCCATO NEL GUSCIO ㊳ — ③ LA CHAT DI UN'ORMA entra nel parcheggio.
+     Stessa forma degli altri due: porta la sua veste, il suo corpo e il suo
+     codice, e si sposta dentro l'orma quando serve. La prende e la rimette
+     fm-orma.js, non il nucleo: questa chat vive dentro un'orma.
+     ⛔ Non è la chat di `chat(c)` qui sopra, che è quella dello sviluppo e
+        legge da `sviluppo`. Sono due cose diverse e non si toccano. -->
+<!-- ═══════════════════════════════════════════════════════════════
+     LA CHAT DI UN'ORMA — coi suoi argomenti a lato.
+
+     Pezzo da incollare nel guscio: niente doctype, head, body.
+
+     ⭐ La colonna di destra tiene gli argomenti della giornata, in
+     ordine di ora. Si tocca uno e la chat va lì.
+     ⭐ L'argomento lo scrive chi parla ed è libero. La stanza la
+     propone il sistema riconoscendo le parole, e chi scrive la
+     conferma o la cambia. Sotto resta scritto l'elemento.
+
+     Il tempo li tiene in ordine: le giornate scendono, e dentro
+     ogni giornata gli argomenti si susseguono.
+
+     Espone:
+       window.SpazioVivo.chat(righe)      disegna
+       window.SpazioVivo.chatDici(riga)   aggiunge una riga
+       window.SpazioVivo.chatArgomenti()  gli argomenti trovati
+
+       window.SpazioVivo.chatChi(elenco)   chi c'è dentro l'orma
+
+     ⭐ LE TAVOLE CI SONO, dall'1 settembre 2026: `orma_messaggi`
+     — con `argomento` ed `elemento` — e `messaggio_chiamati`, con
+     `letto_il`. Le regole di riga sono accese su tutte e due.
+     Le righe le porta fm-orma.js: qui dentro non ne è scritta
+     nessuna, e nessun nome.
+     ═══════════════════════════════════════════════════════════════ -->
+
+<style>
+  .sv-chat-fondo{background:#0A0C1A;
+    background-image:
+      radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.42),transparent 58%),
+      radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.34),transparent 60%);
+    padding:1.6rem 1rem 2.4rem;border-radius:1.1rem;min-height:100vh}
+
+  .sv-chat{--scala:1.4;
+    --t-eti:calc(0.60rem * var(--scala));
+    --t-cor:calc(0.76rem * var(--scala));
+    --oro-a:#D4AF6A;
+    max-width:58rem;margin:0 auto;
+    font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
+  .sv-chat *{box-sizing:border-box}
+
+  .sv-chat .capo{display:flex;align-items:baseline;gap:.8rem;
+    flex-wrap:wrap;margin-bottom:1rem}
+  .sv-chat .capo h2{font-family:'Cinzel',serif;font-weight:500;
+    font-size:calc(1.04rem * var(--scala));letter-spacing:.05em}
+  .sv-chat .capo span{font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:var(--t-cor);color:rgba(245,240,230,.42)}
+
+  /* due colonne: la chat, e gli argomenti */
+  .sv-chat .due{display:grid;gap:1rem;
+    grid-template-columns:minmax(0,1fr) 15rem;align-items:start}
+
+  /* ── la chat ── */
+  .sv-chat .flusso{border-radius:1rem;overflow:hidden;
+    background:rgba(2,4,12,.42);border:1px solid rgba(245,240,230,.09)}
+  .sv-chat .scorri{max-height:32rem;overflow-y:auto;scroll-behavior:smooth}
+
+  .sv-chat .giorno{position:sticky;top:0;z-index:3;
+    padding:.42rem .95rem;font-size:10px;letter-spacing:.22em;
+    text-transform:uppercase;color:rgba(245,240,230,.44);
+    background:rgba(6,9,20,.94);backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(245,240,230,.07)}
+
+  /* il capitolo: dove comincia un argomento */
+  .sv-chat .cap{display:flex;align-items:center;gap:.55rem;
+    padding:.7rem .95rem .3rem;scroll-margin-top:2.4rem}
+  .sv-chat .cap i{width:.42rem;height:.42rem;border-radius:50%;
+    background:var(--c);flex:none;font-style:normal;
+    filter:brightness(1.35)}
+  .sv-chat .cap b{font-family:'Cormorant Garamond',serif;font-weight:400;
+    font-size:1.04rem;color:var(--c);filter:brightness(1.35)}
+  .sv-chat .cap em{font-style:normal;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(245,240,230,.28)}
+
+  .sv-chat .msg{display:flex;gap:.65rem;padding:.5rem .95rem;
+    position:relative}
+  .sv-chat .msg:hover{background:rgba(245,240,230,.03)}
+  .sv-chat .msg .chi{flex:none;width:1.55rem;height:1.55rem;
+    border-radius:50%;display:grid;place-items:center;font-size:11px;
+    font-weight:500;color:#04060F;margin-top:.1rem}
+  .sv-chat .msg .cn{flex:1;min-width:0}
+  .sv-chat .msg .testa{display:flex;align-items:baseline;gap:.5rem;
+    flex-wrap:wrap;margin-bottom:.1rem}
+  .sv-chat .msg .testa b{font-weight:500;font-size:12.5px;
+    color:rgba(245,240,230,.84)}
+  .sv-chat .msg .testa span{font-size:10.5px;color:rgba(245,240,230,.3)}
+  .sv-chat .msg p{font-family:'Cormorant Garamond',serif;font-size:1.02rem;
+    line-height:1.5;color:rgba(245,240,230,.88)}
+  .sv-chat .msg p .tag{color:var(--oro-a);font-style:normal}
+  .sv-chat .msg .mano{flex:none;align-self:center;opacity:0;
+    transition:opacity .2s ease;background:transparent;
+    border:1px solid rgba(212,175,106,.32);color:var(--oro-a);
+    border-radius:999px;padding:.14rem .58rem;font-size:10.5px;
+    letter-spacing:.06em;cursor:pointer;white-space:nowrap;
+    font-family:'DM Sans',sans-serif}
+  .sv-chat .msg:hover .mano,.sv-chat .msg:focus-within .mano{opacity:1}
+  .sv-chat .msg.presa{background:rgba(212,175,106,.08)}
+  .sv-chat .msg.presa .mano{opacity:1;border-color:var(--oro-a);
+    background:rgba(212,175,106,.18)}
+
+  /* ── si scrive ── */
+  .sv-chat .scrivi{border-top:1px solid rgba(245,240,230,.08);
+    background:rgba(2,4,12,.62);padding:.6rem .9rem;position:relative}
+  .sv-chat .riga1{display:flex;gap:.5rem;align-items:center}
+  .sv-chat .riga1 input{flex:1;min-width:0;background:transparent;
+    border:0;outline:none;color:#F5F0E6;
+    font-family:'Cormorant Garamond',serif;font-size:1.02rem;
+    min-height:2.3rem}
+  .sv-chat .riga1 input::placeholder{color:rgba(245,240,230,.28);
+    font-style:italic}
+  .sv-chat .riga1 button{flex:none;width:2.1rem;height:2.1rem;
+    border-radius:50%;border:0;background:var(--oro-a);color:#0A0C1A;
+    cursor:pointer;display:grid;place-items:center;font-size:1rem}
+
+  /* la riga dell'argomento */
+  .sv-chat .riga2{display:flex;gap:.4rem;align-items:center;
+    flex-wrap:wrap;margin-top:.42rem;padding-top:.42rem;
+    border-top:1px solid rgba(245,240,230,.06)}
+  .sv-chat .riga2 .et{font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(245,240,230,.3)}
+  .sv-chat .riga2 input{background:rgba(245,240,230,.05);
+    border:1px solid rgba(245,240,230,.12);border-radius:999px;
+    padding:.24rem .7rem;color:#F5F0E6;outline:none;min-width:8rem;
+    font-family:'Cormorant Garamond',serif;font-size:.96rem;
+    min-height:1.9rem}
+  .sv-chat .riga2 input:focus{border-color:rgba(212,175,106,.42)}
+  .sv-chat .riga2 .ele{display:flex;gap:.24rem;flex-wrap:wrap}
+  .sv-chat .riga2 .ele button{background:transparent;
+    border:1px solid rgba(245,240,230,.14);color:rgba(245,240,230,.44);
+    border-radius:999px;padding:.16rem .58rem;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:10.5px;
+    letter-spacing:.1em;text-transform:uppercase;min-height:1.9rem}
+  .sv-chat .riga2 .ele button.on{border-color:var(--c);color:var(--c);
+    filter:brightness(1.35);background:color-mix(in srgb,var(--c) 12%,transparent)}
+  .sv-chat .riga2 .ora{font-family:'Cormorant Garamond',serif;
+    font-size:1rem;color:rgba(245,240,230,.62);flex:1;min-width:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sv-chat .riga2 .ele button{pointer-events:none;opacity:.9}
+  .sv-chat .cap b[contenteditable="true"]{outline:none;
+    border-bottom:1px dashed rgba(212,175,106,.55);cursor:text}
+  .sv-chat .cap .corr{background:none;border:0;cursor:pointer;
+    color:rgba(245,240,230,.24);font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;font-family:'DM Sans',sans-serif;
+    padding:.1rem .3rem;opacity:0;transition:opacity .2s ease}
+  .sv-chat .cap:hover .corr{opacity:1}
+  .sv-chat .cap .corr:hover{color:var(--oro-a)}
+
+  .sv-chat .prop{position:absolute;left:.9rem;right:.9rem;bottom:100%;
+    z-index:4;margin-bottom:.4rem;border-radius:.7rem;overflow:hidden;
+    background:#131A2C;border:1px solid rgba(212,175,106,.26)}
+  .sv-chat .prop:empty{display:none}
+  .sv-chat .prop button{display:flex;align-items:center;gap:.5rem;
+    width:100%;min-height:2.4rem;padding:.3rem .8rem;background:none;
+    border:0;cursor:pointer;color:rgba(245,240,230,.86);text-align:left;
+    font-family:'Cormorant Garamond',serif;font-size:1rem;
+    border-bottom:1px solid rgba(245,240,230,.06)}
+  .sv-chat .prop button:last-child{border-bottom:0}
+  .sv-chat .prop button:hover{background:rgba(212,175,106,.14)}
+  .sv-chat .prop button i{width:1.25rem;height:1.25rem;border-radius:50%;
+    display:grid;place-items:center;font-size:10.5px;font-weight:500;
+    color:#04060F;font-style:normal;flex:none}
+
+  /* ── la colonna degli argomenti ── */
+  .sv-chat .lato{position:sticky;top:.6rem;border-radius:1rem;
+    padding:.9rem .85rem;background:rgba(2,4,12,.42);
+    border:1px solid rgba(245,240,230,.09);
+    max-height:32rem;overflow-y:auto}
+  .sv-chat .lato > .et{font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--oro-a);opacity:.8;
+    margin-bottom:.6rem}
+  .sv-chat .lato .gg{font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:rgba(245,240,230,.3);
+    margin:.8rem 0 .35rem;padding-bottom:.2rem;
+    border-bottom:1px solid rgba(245,240,230,.07)}
+  .sv-chat .lato .gg:first-of-type{margin-top:0}
+  .sv-chat .lato .vc{display:flex;align-items:flex-start;gap:.5rem;
+    width:100%;padding:.4rem .5rem;border-radius:.5rem;cursor:pointer;
+    background:none;border:0;text-align:left;
+    border-left:2px solid transparent}
+  .sv-chat .lato .vc:hover{background:rgba(245,240,230,.05)}
+  .sv-chat .lato .vc.qui{background:color-mix(in srgb,var(--c) 12%,transparent);
+    border-left-color:var(--c)}
+  .sv-chat .lato .vc i{width:.4rem;height:.4rem;border-radius:50%;
+    background:var(--c);flex:none;margin-top:.5rem;font-style:normal;
+    filter:brightness(1.35)}
+  .sv-chat .lato .vc span{flex:1;min-width:0;
+    font-family:'Cormorant Garamond',serif;font-size:.98rem;
+    line-height:1.35;color:rgba(245,240,230,.78)}
+  .sv-chat .lato .vc.qui span{color:#F5F0E6}
+  .sv-chat .lato .vc em{flex:none;font-style:normal;font-size:10px;
+    color:rgba(245,240,230,.26)}
+
+  .sv-chat .nota{margin-top:.9rem;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:var(--t-cor);line-height:1.55;
+    color:rgba(245,240,230,.4)}
+
+  @media (max-width:52rem){
+    .sv-chat{--scala:1.15}
+    .sv-chat .due{grid-template-columns:1fr}
+    .sv-chat .lato{position:static;max-height:14rem;order:-1}
+  }
+</style>
+
+<div class="sv-chat-fondo">
+<div class="sv-chat" id="svChat">
+
+  <div class="capo">
+    <h2>La conversazione</h2>
+    <span>gli argomenti della giornata stanno a lato</span>
+  </div>
+
+  <div class="due">
+
+    <div class="flusso">
+      <div class="scorri" data-scorri></div>
+      <div class="scrivi">
+        <div class="prop" data-prop></div>
+        <div class="riga1">
+          <input type="text" data-testo
+                 placeholder="scrivi, e @ per chiamare qualcuno"
+                 aria-label="scrivi un messaggio" autocomplete="off">
+          <button type="button" data-manda aria-label="manda">&uarr;</button>
+        </div>
+        <div class="riga2">
+          <span class="et">Si parla di</span>
+          <span class="ora" data-ora>&mdash;</span>
+          <span class="ele" data-ele></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lato">
+      <div class="et">Di cosa si &egrave; parlato</div>
+      <div data-lato></div>
+    </div>
+
+  </div>
+
+  <p class="nota">Gli argomenti si aprono da s&eacute;, mentre parlate.
+     Li ritrovi a lato quando ti servono, e se un titolo non torna lo
+     tocchi e lo cambi.</p>
+
+</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var R = document.getElementById("svChat");
+  if (!R) return;
+
+  /* ⭐ Le radici, non le parole intere: «cost» prende costo, costa,
+     costano, costoso. Così una parola coniugata non sfugge. */
+  /* ⭐ Ogni elemento porta il nome della sua stanza: è quello che si
+     legge. Il colore e il nome interno restano dell'elemento, perché
+     è quello che va nella tavola dei messaggi. */
+  var ELE = [
+    ["nexus", "#8C2F39", ["orma","orme","squadr","team","karma","nexus",
+      "talent","figur","simbol","pratican","cooper","gruppo","gruppi",
+      "insieme","connett","conness","legam","filo","fili","rete","reti",
+      "person","incontr","invit","confirm","conferm","nomin","partecip"], "Nexus"],
+    ["terra", "#AA8844", ["vicinat","luogo","luoghi","terren","territor",
+      "paese","paesi","ospit","villagg","casa","case","orto","orti","campo",
+      "campi","coltiv","sardegn","comune","comuni","region","citt","zona",
+      "mappa","dove","sacro","sacri","tempio","custod","abit"], "Vicinati"],
+    ["acqua", "#4488BB", ["emporio","prodott","prezz","vaglio","vagli",
+      "vend","scambi","dono","doni","donare","cost","euro","fattur",
+      "spedizion","compra","acquist","mercat","botteg","negozi","carrell",
+      "pagament","soldi","denar","econom","guadagn","stripe","catalog",
+      "aliment","rimed","cibo","erbor"], "Emporio"],
+    ["fuoco", "#CC6644", ["assistenz","assist","operator","trattament",
+      "cura","cure","curar","medic","terap","bisogn","aiut","spiritual",
+      "consulenz","salut","benesser","accompagn","sostegn","mutuo",
+      "nutrizion","appuntament"], "Assistenza"],
+    ["aria",  "#669944", ["radio","opera","opere","articol","libro","libri",
+      "stamp","edizion","megafon","raccont","diretta","dirette","testo",
+      "testi","pubblic","scriv","scritt","narra","podcast","intervist",
+      "brochure","locandin","agenda","distribu","voce","voci","comunica"], "Edizione"],
+    ["etere", "#9966CC", ["scuola","scuole","lezion","formazion","classe",
+      "classi","insegn","ricerc","corso","corsi","luna","lune","calendari",
+      "studi","impar","allev","maestr","student","antahkarana","medit",
+      "esercizi","pratica","festa","feste","santo","santi","tempo"], "Scuola"]
+  ];
+  var COL = {}, STANZA = {};
+  ELE.forEach(function (e) { COL[e[0]] = e[1]; STANZA[e[0]] = e[3]; });
+
+  /* ⭐ Quello che si legge è il nome della stanza. */
+  function nomeStanza(e) { return STANZA[e] || ""; }
+
+  /* ⭐ Il motore: guarda l'inizio di ogni parola, non la parola intera.
+     Così «costa», «costano» e «costoso» valgono tutti «cost».
+     ⭐ E le parole dell'argomento pesano il doppio: chi le scrive sta
+     già dicendo di cosa parla. */
+  function radici(t) {
+    return (" " + t.toLowerCase()
+      .replace(/[àá]/g,"a").replace(/[èé]/g,"e").replace(/[ìí]/g,"i")
+      .replace(/[òó]/g,"o").replace(/[ùú]/g,"u")
+      .replace(/[^a-z]+/g, " ") + " ").split(/\s+/).filter(Boolean);
+  }
+
+  function proponiElemento(testo, argomento) {
+    var parole = radici(testo || "");
+    var forti  = radici(argomento || "");
+    var conto = {};
+    ELE.forEach(function (e) { conto[e[0]] = 0; });
+
+    function pesa(elenco, peso) {
+      elenco.forEach(function (w) {
+        if (w.length < 4) return;
+        ELE.forEach(function (e) {
+          for (var i = 0; i < e[2].length; i++) {
+            var r = e[2][i];
+            /* ⛔ Solo in un verso: la parola comincia con la radice.
+               Al contrario, «per» aggancerebbe «person» e «alle»
+               «allev»: le parole corte prenderebbero tutto. */
+            if (r.length >= 4 && w.indexOf(r) === 0) {
+              conto[e[0]] += peso; return;
+            }
+          }
+        });
+      });
+    }
+    pesa(parole, 1);
+    pesa(forti, 2);
+
+    var meglio = null, punti = 0;
+    ELE.forEach(function (e) {
+      if (conto[e[0]] > punti) { punti = conto[e[0]]; meglio = e[0]; }
+    });
+    return punti > 0 ? meglio : null;
+  }
+
+  /* ⛔ Le parole che non dicono niente: non entrano mai in un titolo. */
+  var VUOTE = ("il lo la i gli le un uno una di a da in con su per tra fra " +
+    "e o ma se che chi cui non ne ci vi mi ti si me te lo li ne al del dal " +
+    "nel col sul allo dello dalla nella sulla agli degli dai nei sui alle " +
+    "delle dalle nelle sulle questo questa questi queste quello quella " +
+    "quel quei come quando dove perche piu meno molto poco tutto tutti " +
+    "essere avere fare dire stare dare andare venire dovere potere volere " +
+    "sono era erano stato stata sarebbe ho hai ha abbiamo avete hanno " +
+    "faccio fai fa facciamo fate fanno cosa cose roba anche ancora gia " +
+    "poi adesso ora dopo prima sempre mai bene male si no ok vabbe pero " +
+    "quindi allora insomma cioe magari forse credo penso secondo " +
+    "grazie ciao senti guarda dimmi vedi sai boh " +
+    "parlare parlando parlato parlo parla parliamo detto dice dico " +
+    "chiesto chiedo chiede vorrei volevo pensavo dicevo stavo " +
+    "oggi ieri domani dopo andro vado andiamo andate vanno").split(" ");
+
+  function pesanti(t) {
+    return radici(t).filter(function (w) {
+      return w.length >= 4 && VUOTE.indexOf(w) < 0;
+    });
+  }
+
+  /* ⭐ Quanto due pezzi di discorso si somigliano: quante parole hanno
+     in comune, sul totale. Zero vuol dire che si parla d'altro. */
+  function somiglianza(a, b) {
+    if (!a.length || !b.length) return 0;
+    var comuni = 0;
+    a.forEach(function (w) {
+      for (var i = 0; i < b.length; i++) {
+        if (w === b[i] || w.indexOf(b[i]) === 0 || b[i].indexOf(w) === 0) {
+          comuni++; return;
+        }
+      }
+    });
+    return comuni / Math.min(a.length, b.length);
+  }
+
+  /* ⭐ Il titolo: le parole più ripetute del pezzo, al massimo tre.
+     ⚠️ Non è una frase bella: sono le parole che fanno ricordare. */
+  function titolo(righe) {
+    var conto = {}, quanteRighe = {}, quando = {}, n = 0;
+    righe.forEach(function (m, i) {
+      var viste = {};
+      pesanti(m.testo).forEach(function (w) {
+        conto[w] = (conto[w] || 0) + 1;
+        if (quando[w] === undefined) quando[w] = n;
+        if (!viste[w]) { viste[w] = 1; quanteRighe[w] = (quanteRighe[w] || 0) + 1; }
+        n++;
+      });
+    });
+    /* ⭐ Prima quante volte è stata detta, poi in quanti messaggi diversi
+       compare, poi chi è stato detto per primo.
+       ⛔ La lunghezza della parola non conta più: era lei a far uscire
+       «parlando» davanti a «mosche». */
+    var f = Object.keys(conto).sort(function (x, y) {
+      return conto[y] - conto[x] ||
+             quanteRighe[y] - quanteRighe[x] ||
+             quando[x] - quando[y];
+    }).slice(0, 3);
+    return f.length ? f.join(" ") : "";
+  }
+
+  /* ⭐⭐ Il capitolo si apre da sé quando il discorso cambia.
+     Tre righe di respiro prima di cambiare: una frase di passaggio
+     non deve aprire un capitolo nuovo. */
+  /* ⭐ RESPIRO 1: dal secondo messaggio in poi un capitolo può aprirsi.
+     ⭐ FINESTRA: il messaggio nuovo si confronta con le ultime quattro
+        righe del capitolo, più la riga che l'ha aperto — non con tutto.
+        ⛔ Prima si confrontava con tutto: più il capitolo cresceva, più
+        parole aveva dentro, e più diventava difficile tagliarlo.
+        Il capitolo si gonfiava da solo.
+     ⭐ PIENE: una battuta corta non apre mai un capitolo. */
+  var SOGLIA = 0.18, RESPIRO = 2, FINESTRA = 4, PIENE = 3;
+
+  function riconosci() {
+    var apertoDa = 0;
+    RIGHE.forEach(function (m, i) {
+      if (m.titoloMio) { apertoDa = i; m.apre = true; return; }
+      if (i === 0 || m.giorno !== RIGHE[i-1].giorno) {
+        apertoDa = i; m.apre = true; return;
+      }
+      m.apre = false;
+      if (i - apertoDa < RESPIRO) return;
+
+      var w = pesanti(m.testo);
+      if (w.length < PIENE) return;
+
+      /* la riga che ha aperto il capitolo: è la memoria di cosa si dice */
+      var dentro = pesanti(RIGHE[apertoDa].testo);
+      if (RIGHE[apertoDa].titoloMio) {
+        dentro = dentro.concat(pesanti(RIGHE[apertoDa].titoloMio));
+      }
+      /* e le ultime righe, non tutte */
+      var da = Math.max(apertoDa, i - FINESTRA);
+      for (var k = da; k < i; k++) dentro = dentro.concat(pesanti(RIGHE[k].testo));
+      if (!dentro.length) return;
+
+      if (somiglianza(w, dentro) < SOGLIA) { m.apre = true; apertoDa = i; }
+    });
+
+    /* ⭐ A ogni capitolo il suo titolo e il suo elemento.
+       ⭐ E IL CONGELAMENTO: quando il capitolo dopo si è aperto, questo
+          è chiuso e il suo titolo si fissa. Da lì non cambia più da sé:
+          lo cambia solo chi lo corregge a mano, e quello resta suo. */
+    var inizio = 0;
+    RIGHE.forEach(function (m, i) {
+      if (m.apre) inizio = i;
+      if (i === RIGHE.length - 1 || RIGHE[i+1].apre) {
+        var testa = RIGHE[inizio];
+        var pezzo = RIGHE.slice(inizio, i + 1);
+        var ultimo = (i === RIGHE.length - 1);
+        var t, e;
+
+        if (testa.titoloMio) {
+          t = testa.titoloMio;
+        } else if (testa.titoloFermo && !ultimo) {
+          t = testa.titoloFermo;
+        } else {
+          t = titolo(pezzo);
+          if (!ultimo) testa.titoloFermo = t;   /* chiuso: si ferma qui */
+        }
+
+        var tutte = pezzo.map(function (x) { return x.testo; }).join(" ");
+        e = (!ultimo && testa.elementoFermo) ? testa.elementoFermo
+                                            : proponiElemento(tutte, t);
+        if (!ultimo && !testa.elementoFermo) testa.elementoFermo = e;
+
+        pezzo.forEach(function (x) { x.argomento = t; x.elemento = e; });
+      }
+    });
+
+    salvaSeTocca();
+  }
+
+  /* ⭐ Ogni N messaggi gli argomenti si consegnano a chi li scrive.
+     Qui c'è l'attacco: la scrittura vera sta fuori da questo file.
+     Chi la fa assegna window.SpazioVivo.chatSalvaGancio. */
+  var SALVA_OGNI = 5, salvatiFinoA = 0;
+
+  function salvaSeTocca() {
+    if (RIGHE.length - salvatiFinoA < SALVA_OGNI) return;
+    salvatiFinoA = RIGHE.length;
+    var g = window.SpazioVivo && window.SpazioVivo.chatSalvaGancio;
+    if (typeof g !== "function") return;
+    var f = [];
+    RIGHE.forEach(function (m, i) {
+      if (m.apre && m.argomento) {
+        f.push({ riga: i, giorno: m.giorno, ora: m.ora,
+                 argomento: m.argomento, elemento: m.elemento,
+                 fermo: !!(m.titoloFermo || m.titoloMio),
+                 mio: !!m.titoloMio });
+      }
+    });
+    try { g(f); } catch (err) {}
+  }
+
+  /* ⛔ NESSUN NOME SCRITTO QUI. Chi c'è dentro l'orma lo porta
+     fm-orma.js con chatChi(): finché non lo fa, il tag @ non propone
+     nessuno e le iniziali restano d'oro. Un elenco scritto nel codice
+     mostrerebbe a chiunque nomi di persone che in quell'orma non ci sono.
+     ⭐ Il colore è facoltativo: senza, si ricade sull'oro del canone. */
+  var CHI = [];
+  var COLCHI = {};
+  var IO_NOME = "";
+
+  /* ⛔ Vuote. Le righe vere arrivano da `orma_messaggi`, e le porta
+     fm-orma.js con SpazioVivo.chat(righe). */
+  var RIGHE = [];
+
+  var scorri = R.querySelector("[data-scorri]");
+  var lato   = R.querySelector("[data-lato]");
+  var testo  = R.querySelector("[data-testo]");
+  var eleBox = R.querySelector("[data-ele]");
+  var prop   = R.querySelector("[data-prop]");
+
+
+  /* i tasti degli elementi */
+  ELE.forEach(function (e) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.textContent = e[3];
+    b.dataset.e = e[0];
+    b.style.setProperty("--c", e[1]);
+    eleBox.appendChild(b);
+  });
+
+
+  function iniziale(n) { return (n || "?").trim().charAt(0).toUpperCase(); }
+
+  /* ── il flusso, coi capitoli dove l'argomento cambia ── */
+  function dipingi() {
+    scorri.innerHTML = "";
+    lato.innerHTML = "";
+
+    var g = null, a = null, n = 0;
+
+    RIGHE.forEach(function (m, i) {
+      if (m.giorno !== g) {
+        g = m.giorno;
+        var d = document.createElement("div");
+        d.className = "giorno";
+        d.textContent = g;
+        scorri.appendChild(d);
+
+        var dl = document.createElement("div");
+        dl.className = "gg";
+        dl.textContent = g;
+        lato.appendChild(dl);
+        a = null;
+      }
+
+      if (m.apre && m.argomento) {
+        a = m.argomento;
+        n++;
+        var col = COL[m.elemento] || "#C8A055";
+        var id = "cap" + n;
+
+        var c = document.createElement("div");
+        c.className = "cap";
+        c.id = id;
+        c.style.setProperty("--c", col);
+        c.innerHTML = '<i></i><b></b><em>' + nomeStanza(m.elemento) + '</em>' +
+          '<button class="corr" type="button">correggi</button>';
+        var bb = c.querySelector("b");
+        bb.textContent = a;
+        (function (msg, campo, tasto) {
+          tasto.addEventListener("click", function () {
+            var acceso = campo.isContentEditable;
+            campo.contentEditable = acceso ? "false" : "true";
+            tasto.textContent = acceso ? "correggi" : "fatto";
+            if (!acceso) { campo.focus(); return; }
+            var t = campo.textContent.trim();
+            if (t) { msg.titoloMio = t; riconosci(); dipingi(); }
+          });
+        })(m, bb, c.querySelector(".corr"));
+        scorri.appendChild(c);
+
+        var v = document.createElement("button");
+        v.type = "button";
+        v.className = "vc";
+        v.dataset.va = id;
+        v.style.setProperty("--c", col);
+        v.innerHTML = '<i></i><span></span><em>' + m.ora + '</em>';
+        v.querySelector("span").textContent = a;
+        v.addEventListener("click", function () {
+          document.getElementById(id).scrollIntoView({ block: "start" });
+          lato.querySelectorAll(".vc").forEach(function (x) {
+            x.classList.remove("qui");
+          });
+          v.classList.add("qui");
+        });
+        lato.appendChild(v);
+      }
+
+      scorri.appendChild(riga(m));
+    });
+
+    if (!RIGHE.length) {
+      lato.innerHTML = '<p class="nota" style="margin:0">Gli argomenti ' +
+        'compaiono qui appena qualcuno scrive.</p>';
+    }
+    scorri.scrollTop = scorri.scrollHeight;
+  }
+
+  function riga(m) {
+    var d = document.createElement("div");
+    d.className = "msg";
+    var col = COLCHI[m.chi] || "#C8A055";
+    d.innerHTML =
+      '<span class="chi" style="background:' + col + '">' +
+      iniziale(m.chi) + '</span><span class="cn">' +
+      '<span class="testa"><b></b><span>' + m.ora + '</span></span>' +
+      '<p></p></span>' +
+      '<button class="mano" type="button">fanne un\u2019orma</button>';
+    d.querySelector("b").textContent = m.chi;
+
+    var p = d.querySelector("p");
+    m.testo.split(/(@[A-Za-z\u00C0-\u017F]+)/).forEach(function (pz) {
+      if (pz.charAt(0) === "@" && CHI.indexOf(pz.slice(1)) >= 0) {
+        var t = document.createElement("span");
+        t.className = "tag";
+        t.textContent = pz;
+        p.appendChild(t);
+      } else {
+        p.appendChild(document.createTextNode(pz));
+      }
+    });
+
+    var b = d.querySelector(".mano");
+    b.addEventListener("click", function () {
+      if (d.classList.contains("presa")) return;
+      d.classList.add("presa");
+      b.textContent = "\u00E8 un\u2019orma";
+    });
+    return d;
+  }
+
+  /* ── il tag @ ── */
+  testo.addEventListener("input", function () {
+    var v = testo.value;
+    var m = v.match(/@([A-Za-z\u00C0-\u017F]*)$/);
+    prop.innerHTML = "";
+
+    if (!m) return;
+    var q = m[1].toLowerCase();
+    CHI.filter(function (n) {
+      return n.toLowerCase().indexOf(q) === 0;
+    }).forEach(function (n) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = '<i style="background:' + (COLCHI[n] || "#C8A055") +
+        '">' + iniziale(n) + '</i>' + n;
+      b.addEventListener("click", function () {
+        testo.value = v.replace(/@[A-Za-z\u00C0-\u017F]*$/, "@" + n + " ");
+        prop.innerHTML = "";
+        testo.focus();
+      });
+      prop.appendChild(b);
+    });
+  });
+
+  function oggi() {
+    var d = new Date();
+    var G = ["Domenica","Luned\u00EC","Marted\u00EC","Mercoled\u00EC",
+             "Gioved\u00EC","Venerd\u00EC","Sabato"];
+    var M = ["gennaio","febbraio","marzo","aprile","maggio","giugno",
+             "luglio","agosto","settembre","ottobre","novembre","dicembre"];
+    return G[d.getDay()] + " " + d.getDate() + " " + M[d.getMonth()];
+  }
+  function adesso() {
+    var d = new Date();
+    return ("0" + d.getHours()).slice(-2) + ":" +
+           ("0" + d.getMinutes()).slice(-2);
+  }
+
+  function manda() {
+    var t = testo.value.trim();
+    if (!t) return;
+    /* ⛔ CHI PARLA È CHI È ENTRATO. Il nome lo posa chatChi(), letto da
+       `persone_pubbliche`. Se non c'è non si manda niente: un messaggio
+       senza autore non è di nessuno, e un nome scritto qui firmerebbe
+       ogni riga con la stessa persona. */
+    if (!IO_NOME) return;
+    var riga = { chi: IO_NOME, giorno: oggi(), ora: adesso(), testo: t };
+    RIGHE.push(riga);
+    testo.value = "";
+    prop.innerHTML = "";
+    riconosci();
+    dipingi();
+    diciDove();
+    /* ⭐ riconosci() ha appena posato argomento ed elemento sulla riga:
+       il gancio parte DOPO, così chi scrive su `orma_messaggi` li ha già.
+       La scrittura vera sta fuori da qui — la fa fm-orma.js. */
+    var g = window.SpazioVivo && window.SpazioVivo.chatMandaGancio;
+    if (typeof g === "function") { try { g(riga); } catch (e) {} }
+  }
+
+  /* ⭐ La riga sotto dice di cosa si sta parlando adesso. */
+  function diciDove() {
+    var m = RIGHE.length ? RIGHE[RIGHE.length - 1] : null;
+    R.querySelector("[data-ora]").textContent =
+      (m && m.argomento) ? m.argomento : "\u2014";
+    eleBox.querySelectorAll("button").forEach(function (b) {
+      b.classList.toggle("on", !!m && b.dataset.e === m.elemento);
+    });
+  }
+
+  R.querySelector("[data-manda]").addEventListener("click", manda);
+  testo.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); manda(); }
+  });
+
+  riconosci();
+  dipingi();
+  diciDove();
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.chat = function (righe) {
+    if (righe) { RIGHE = righe; salvatiFinoA = RIGHE.length; }
+    riconosci(); dipingi(); diciDove();
+  };
+  window.SpazioVivo.chatDici = function (m) {
+    RIGHE.push(m); riconosci(); dipingi(); diciDove();
+  };
+  window.SpazioVivo.chatArgomenti = function () {
+    var f = [];
+    RIGHE.forEach(function (m) {
+      if (m.apre && m.argomento) {
+        f.push({ giorno: m.giorno, ora: m.ora,
+                 argomento: m.argomento, elemento: m.elemento });
+      }
+    });
+    return f;
+  };
+
+  /* ⭐ CHI C'È DENTRO QUEST'ORMA — lo passa fm-orma.js, letto da
+     `orma_persone` e `persone_pubbliche`. Serve al tag @ e al colore
+     dell'iniziale. ⛔ Se non arriva, il tag @ non propone nessuno:
+     meglio muto che con dei nomi inventati.
+     ⭐ Il secondo pezzo è CHI SONO IO: senza, il campo non manda. */
+  window.SpazioVivo.chatChi = function (elenco, io) {
+    CHI = [];
+    COLCHI = {};
+    IO_NOME = io || "";
+    (elenco || []).forEach(function (x) {
+      var nome = (typeof x === "string") ? x : (x && x.nome);
+      if (!nome) return;
+      CHI.push(nome);
+      if (x && x.colore) COLCHI[nome] = x.colore;
+    });
+    dipingi();
+  };
+})();
+</script>
+
+
+<!-- ⭐ TOCCATO NEL GUSCIO ㊳ — ④ I SIMBOLI DELL'ESPERIENZA entrano nel parcheggio.
+     Incollato COM'È CONSEGNATO: non gli ho cambiato niente.
+     81 talenti in 7 famiglie — Il cammino 3 · La terra e i luoghi 30 ·
+     L'Emporio 6 · Chi accompagna 14 · La voce 13 · Chi insegna e chi cerca 9 ·
+     Chi costruisce 6.
+     ⛔ LA PORTA CHE LO APRE NON C'È ANCORA, e non me la sono inventata:
+        «Simboli dell'esperienza» in fm-casa.js oggi è la giostra dei sette
+        segni della legenda, che è un'altra cosa. La porta arriva con la
+        prossima consegna di Design — fm-casa.js non si rifà a mano.
+     ⛔ E NON SI CHIAMA UNA ROTTA `talenti`: quel nome è già di
+        fm-talenti.js, che sono i crediti. Sono due cose diverse.
+     ⚠️ (superata il 2 settembre 2026 — ㊴) La scelta ORA SI SCRIVE:
+        il gancio apriLeMieOrme sta in fm-radice.js, innestato in fondo
+        al guscio, e per ogni talento scelto nasce l'orma radice. -->
+<!-- ═══════════════════════════════════════════════════════════════
+     I TALENTI — dove si sceglie chi sei, e nasce la prima orma.
+
+     Pezzo da incollare nel guscio: niente doctype, head, body.
+
+     ⭐ Dalla home si tocca «Simboli dell'esperienza» e si arriva
+     qui. Riga di Gab del 29 agosto 2026: «questa finestra può
+     organizzarsi in macrovoci, ma qui devono esserci tutti, e
+     devono essere comprensibili».
+
+     ⭐⭐ E scegliere non è spuntare una lista: LA SCELTA GENERA
+     UN'ORMA. Quel talento diventa un percorso, con le sue task e
+     il suo stato d'avanzamento. Le orme che nascono dopo si
+     attaccano a quella con un filo — la figlia alla madre.
+
+     ⭐ «I talenti sono un riconoscimento, ma anche un'analisi del
+     proprio stato d'avanzamento, del proprio stato di
+     realizzazione. Sta realizzando chi sei? È quello il vero
+     talento.»
+
+     ⛔ Non è collegato al database: la tavola che lega una persona
+     ai suoi talenti non esiste ancora, e la scelta non genera
+     nessuna orma vera.
+
+     Espone:
+       window.SpazioVivo.talenti(scelti)   apre, coi già scelti
+       window.SpazioVivo.talentiScelti()   torna quelli scelti
+     ═══════════════════════════════════════════════════════════════ -->
+
+<style>
+  .sv-tal-fondo{background:#0A0C1A;
+    background-image:
+      radial-gradient(ellipse at 20% 6%,rgba(38,64,120,.44),transparent 58%),
+      radial-gradient(ellipse at 86% 88%,rgba(60,44,110,.34),transparent 60%);
+    padding:2rem 1rem 7rem;border-radius:1.1rem;min-height:100vh}
+
+  .sv-tal{--scala:1.4;
+    --t-eti:calc(0.60rem * var(--scala));
+    --t-cor:calc(0.76rem * var(--scala));
+    --oro-a:#D4AF6A; --oro:#C8A055;
+    --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644;
+    --aria:#669944; --etere:#9966CC; --nexus:#8C2F39; --svil:#5A7A8C;
+    max-width:46rem;margin:0 auto;
+    font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
+  .sv-tal *{box-sizing:border-box}
+
+  .sv-tal h2{font-family:'Cinzel',serif;font-weight:500;
+    font-size:calc(1.12rem * var(--scala));letter-spacing:.05em;
+    margin-bottom:.5rem}
+  .sv-tal .sot{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-cor);line-height:1.6;color:rgba(245,240,230,.6);
+    max-width:34rem;margin-bottom:1.6rem}
+
+  /* ── le macrovoci ── */
+  .sv-tal .voci{display:flex;gap:.34rem;flex-wrap:wrap;margin-bottom:1.4rem}
+  .sv-tal .voci button{display:flex;align-items:center;gap:.4rem;
+    background:transparent;border:1px solid rgba(245,240,230,.14);
+    color:rgba(245,240,230,.5);border-radius:999px;padding:.3rem .85rem;
+    cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12.5px;
+    letter-spacing:.04em;min-height:2.3rem}
+  .sv-tal .voci button::before{content:'';width:6px;height:6px;
+    border-radius:50%;background:var(--vc,var(--oro));opacity:.75}
+  .sv-tal .voci button.on{border-color:var(--vc,var(--oro-a));
+    color:#F5F0E6;background:color-mix(in srgb,var(--vc) 18%,transparent)}
+
+  /* ── una famiglia ── */
+  .sv-tal .fam{margin-bottom:1.8rem}
+  .sv-tal .fam[hidden]{display:none}
+  .sv-tal .fam > .capo{display:flex;align-items:baseline;gap:.7rem;
+    flex-wrap:wrap;padding-bottom:.42rem;margin-bottom:.8rem;
+    border-bottom:1px solid color-mix(in srgb,var(--c) 38%,transparent)}
+  .sv-tal .fam > .capo b{font-family:'Cinzel',serif;font-weight:500;
+    font-size:.92rem;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--c);filter:brightness(1.3)}
+  .sv-tal .fam > .capo em{margin-left:auto;font-style:normal;font-size:11px;
+    color:rgba(245,240,230,.3)}
+
+  /* ── un talento ── */
+  .sv-tal .griglia{display:grid;gap:.4rem;
+    grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}
+  .sv-tal .t{display:flex;align-items:flex-start;gap:.7rem;
+    padding:.7rem .85rem;border-radius:.85rem;cursor:pointer;text-align:left;
+    background:color-mix(in srgb,var(--c) 5%,rgba(2,4,12,.4));
+    border:1px solid color-mix(in srgb,var(--c) 18%,transparent);
+    color:inherit;font:inherit;
+    transition:transform .18s ease,border-color .18s ease,
+               background .18s ease}
+  .sv-tal .t:hover{transform:translateY(-1px);
+    border-color:color-mix(in srgb,var(--c) 45%,transparent)}
+  .sv-tal .t.on{border-color:var(--c);
+    background:color-mix(in srgb,var(--c) 16%,rgba(2,4,12,.4));
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 30%,transparent)}
+
+  .sv-tal .t .sg{flex:none;width:2.1rem;color:var(--c);
+    filter:brightness(1.25);opacity:.85;transition:opacity .18s ease}
+  .sv-tal .t.on .sg{opacity:1;filter:brightness(1.45)}
+  .sv-tal .t .sg svg{width:100%;aspect-ratio:1;display:block}
+
+  .sv-tal .t .tx{flex:1;min-width:0}
+  .sv-tal .t .tx b{display:block;font-weight:400;
+    font-family:'Cormorant Garamond',serif;
+    font-size:calc(0.8rem * var(--scala));line-height:1.28;
+    color:rgba(245,240,230,.92)}
+  .sv-tal .t .tx span{display:block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:.98rem;line-height:1.35;
+    color:rgba(245,240,230,.42);margin-top:.2rem}
+
+  /* ── la barra in fondo ── */
+  .sv-tal-barra{position:sticky;bottom:0;z-index:5;margin-top:1.6rem;
+    display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+    padding:.85rem 1.1rem;border-radius:1rem;
+    background:rgba(10,12,26,.94);backdrop-filter:blur(12px);
+    border:1px solid rgba(212,175,106,.3)}
+  .sv-tal-barra .cont{flex:1;min-width:0;
+    font-family:'Cormorant Garamond',serif;font-size:1.06rem;line-height:1.4;
+    color:rgba(245,240,230,.78)}
+  .sv-tal-barra .cont b{color:var(--oro-a);font-weight:400}
+  .sv-tal-barra .cont span{display:block;font-style:italic;font-size:.96rem;
+    color:rgba(245,240,230,.4);margin-top:.16rem}
+  .sv-tal-barra .vai{flex:none;background:var(--oro-a);color:#0A0C1A;
+    border:0;border-radius:999px;padding:.62rem 1.5rem;cursor:pointer;
+    font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;
+    letter-spacing:.03em;min-height:2.8rem;
+    transition:transform .2s ease,opacity .2s ease}
+  .sv-tal-barra .vai:hover{transform:translateY(-1px)}
+  .sv-tal-barra .vai:disabled{opacity:.32;cursor:default;transform:none}
+
+  @media (max-width:52rem){
+    .sv-tal{--scala:1.15}
+    .sv-tal .griglia{grid-template-columns:1fr}
+  }
+</style>
+
+<div class="sv-tal-fondo">
+<div class="sv-tal" id="svTal">
+
+  <h2>I simboli dell&rsquo;esperienza</h2>
+  <p class="sot">Quello che sai fare, e a che punto sei nel farlo.
+     Scegline uno o pi&ugrave;: ognuno apre un percorso.</p>
+
+  <div class="voci" data-voci></div>
+  <div data-griglia></div>
+
+  <div class="sv-tal-barra">
+    <span class="cont" data-cont></span>
+    <button class="vai" type="button" data-vai disabled>Apri le tue orme</button>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var R = document.getElementById("svTal");
+  if (!R) return;
+
+  /* ⭐ Gli 82 talenti, presi da i-simboli.html: stessi disegni, stesse
+     righe. ⛔ Se cambiano là, vanno rigenerati anche qui. */
+  var FAM = [["Il cammino", "--nexus", [["All’inizio di un percorso", "la spirale che si svolge e diventa fiamma", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\"> <path d=\"M30 52 C22 46 20 38 26 34 C31 31 36 34 35 39 C34 43 29 44 27 41\"/> <path d=\"M30 52 L30 22\" opacity=\".55\"/> <path d=\"M30 22 C26 18 26 12 30 7 C34 12 34 18 30 22Z\"/> <circle cx=\"30\" cy=\"14\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M18 55 C24 53 36 53 42 55\" opacity=\".35\"/> </svg>"], ["Praticante o devoto", "il loto a otto petali", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <g> <path d=\"M30 30 C26 24 26 16 30 9 C34 16 34 24 30 30Z\"/> <path d=\"M30 30 C34 24 42 22 49 25 C44 31 36 33 30 30Z\"/> <path d=\"M30 30 C34 36 34 44 30 51 C26 44 26 36 30 30Z\"/> <path d=\"M30 30 C26 36 18 38 11 35 C16 29 24 27 30 30Z\"/> </g> <g opacity=\".5\"> <path d=\"M30 30 C33 25 39 22 45 22 C44 28 38 32 30 30Z\"/> <path d=\"M30 30 C33 35 39 38 45 38 C44 32 38 28 30 30Z\"/> <path d=\"M30 30 C27 35 21 38 15 38 C16 32 22 28 30 30Z\"/> <path d=\"M30 30 C27 25 21 22 15 22 C16 28 22 32 30 30Z\"/> </g> <circle cx=\"30\" cy=\"30\" r=\"3\"/> </svg>"], ["Sono praticante d’arti marziali", "il corpo che si stacca da terra", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"24\" cy=\"14\" r=\"4\"/> <path d=\"M24 18 C22 22 21 26 22 30\"/> <path d=\"M22 30 C26 30 34 28 44 22\" opacity=\".95\"/> <path d=\"M44 22 C46 21 48 22 48 24 C48 26 46 27 44 26\" opacity=\".85\"/> <path d=\"M22 30 C24 34 26 38 25 42\"/> <path d=\"M25 42 C23 44 20 45 17 44\" opacity=\".8\"/> <path d=\"M23 24 C26 25 30 26 33 25\" opacity=\".7\"/> <path d=\"M22 27 C19 29 16 32 15 36\" opacity=\".7\"/> <path d=\"M9 24 C13 26 16 28 18 31\" opacity=\".28\"/> <path d=\"M8 33 C12 33 15 34 17 36\" opacity=\".2\"/> <path d=\"M12 50 C20 47 34 47 44 50\" opacity=\".25\"/> </svg>"]]], ["La terra e i luoghi", "--terra", [["Sono un apicoltore", "la cella esagonale, e chi la abita", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 8 L41 14 L41 27 L30 33 L19 27 L19 14Z\" opacity=\".5\"/> <path d=\"M19 27 L8 33 L8 46 L19 52 L30 46 L30 33Z\" opacity=\".35\"/> <path d=\"M41 27 L52 33 L52 46 L41 52 L30 46 L30 33Z\" opacity=\".35\"/> <ellipse cx=\"30\" cy=\"22\" rx=\"4\" ry=\"6\"/> <path d=\"M30 17 L30 27\" opacity=\".55\"/> <path d=\"M26 19 C22 15 20 17 22 21 C24 24 27 23 28 21\" opacity=\".7\"/> <path d=\"M34 19 C38 15 40 17 38 21 C36 24 33 23 32 21\" opacity=\".7\"/> <path d=\"M29 15 L27 11 M31 15 L33 11\" opacity=\".5\"/> </svg>"], ["Mi prendo cura dei cavalli", "il collo che si china, e la mano che aspetta", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M40 12 C44 16 45 22 43 27 C41 32 36 35 32 38 C29 40 27 43 27 46\" opacity=\".9\"/> <path d=\"M40 12 C36 11 32 12 30 15 C28 18 29 22 32 24\" opacity=\".75\"/> <path d=\"M38 10 L36 5 M42 11 L44 6\" opacity=\".6\"/> <circle cx=\"37\" cy=\"18\" r=\"1.6\" opacity=\".85\"/> <path d=\"M43 27 C40 26 37 27 35 30\" opacity=\".4\"/> <path d=\"M20 46 C20 41 23 38 27 38\" opacity=\".7\"/> <path d=\"M13 44 C13 40 16 38 19 39 C21 40 21 43 19 44\" opacity=\".8\"/> <path d=\"M12 52 L46 52\" opacity=\".35\"/> </svg>"], ["Mi prendo cura delle mucche", "le corna, e il tempo lento del ruminare", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M20 26 C20 18 24 14 30 14 C36 14 40 18 40 26 C40 34 36 40 30 40 C24 40 20 34 20 26Z\"/> <path d=\"M20 22 C15 20 11 15 12 10 C17 10 21 14 22 19\" opacity=\".85\"/> <path d=\"M40 22 C45 20 49 15 48 10 C43 10 39 14 38 19\" opacity=\".85\"/> <circle cx=\"26\" cy=\"25\" r=\"1.8\" opacity=\".85\"/> <circle cx=\"34\" cy=\"25\" r=\"1.8\" opacity=\".85\"/> <path d=\"M25 33 C27 35 33 35 35 33\" opacity=\".6\"/> <path d=\"M27 31 L27 32 M33 31 L33 32\" opacity=\".5\"/> <path d=\"M14 48 C20 45 40 45 46 48\" opacity=\".35\"/> </svg>"], ["Raccolgo le erbe", "la pianta colta, e il mazzo che si appende", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 50 L30 20\"/> <path d=\"M30 32 C24 30 20 25 20 19 C26 19 30 24 30 30\" opacity=\".8\"/> <path d=\"M30 28 C36 26 40 21 40 15 C34 15 30 20 30 26\" opacity=\".7\"/> <path d=\"M30 42 C25 41 22 37 22 32 C27 33 30 37 30 41\" opacity=\".5\"/> <path d=\"M24 12 L36 12\" opacity=\".6\"/> <path d=\"M30 20 L30 12\" opacity=\".5\"/> <path d=\"M14 52 C20 50 40 50 46 52\" opacity=\".35\"/> </svg>"], ["Produco alimenti o rimedi", "il seme che sale dalla vesica", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 54 L30 26\"/> <path d=\"M30 34 C22 34 16 28 16 20 C24 20 30 26 30 34Z\"/> <path d=\"M30 28 C38 28 44 22 44 14 C36 14 30 20 30 28Z\"/> <path d=\"M30 26 C27 21 27 14 30 9 C33 14 33 21 30 26Z\" opacity=\".65\"/> <circle cx=\"30\" cy=\"18\" r=\"1.4\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M17 54 C23 51 37 51 43 54\" opacity=\".4\"/> </svg>"], ["Ho un luogo che ospita", "la soglia, e il fuoco acceso dentro", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M8 26 L30 8 L52 26\"/> <path d=\"M13 24 L13 48 L47 48 L47 24\"/> <path d=\"M23 48 L23 32 C23 29 37 29 37 32 L37 48\" opacity=\".85\"/> <path d=\"M30 44 C27 41 26 38 28 35 C29 36.5 29.5 37 30 37 C30.5 35 30 33.5 29 32.5 C32 34 34 37 33 40 C32.5 42 31.5 43.5 30 44Z\"/> <path d=\"M18 52 C22 49 38 49 42 52\" opacity=\".35\"/> <path d=\"M52 26 L56 30 M8 26 L4 30\" opacity=\".3\"/> <path d=\"M30 8 L30 3\" opacity=\".5\"/> <circle cx=\"30\" cy=\"2\" r=\"1.8\" fill=\"currentColor\" stroke=\"none\" opacity=\".65\"/> </svg>"], ["Ho uno spazio dove si fa insieme", "il banco, gli attrezzi appesi, e le mani che si incontrano", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M8 36 L52 36\"/> <path d=\"M13 36 L13 50 M47 36 L47 50\" opacity=\".7\"/> <path d=\"M11 50 L49 50\" opacity=\".4\"/> <path d=\"M20 30 C18 26 20 22 24 22 C27 22 28 25 27 28\"/> <path d=\"M40 30 C42 26 40 22 36 22 C33 22 32 25 33 28\"/> <path d=\"M27 28 C28 31 32 31 33 28\" opacity=\".85\"/> <path d=\"M30 29 L30 36\" opacity=\".5\"/> <g opacity=\".45\"> <path d=\"M14 10 L14 18 M20 10 L20 17 M26 10 L26 18\"/> <path d=\"M11 10 L29 10\"/> </g> <g opacity=\".35\"> <path d=\"M40 10 C43 12 43 16 40 18 M46 10 L46 18\"/> <path d=\"M37 10 L49 10\"/> </g> </svg>"], ["Ho una palestra", "il corpo dentro il cerchio, e il respiro che lo tiene", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"21\" opacity=\".45\"/> <circle cx=\"30\" cy=\"30\" r=\"26\" opacity=\".2\"/> <path d=\"M30 15 L30 34\"/> <circle cx=\"30\" cy=\"11\" r=\"3\"/> <path d=\"M18 22 C24 26 36 26 42 22\"/> <path d=\"M30 34 L22 47 M30 34 L38 47\"/> <path d=\"M14 30 C14 24 18 20 22 19\" opacity=\".35\"/> <path d=\"M46 30 C46 24 42 20 38 19\" opacity=\".35\"/> <path d=\"M9 52 L51 52\" opacity=\".4\"/> </svg>"], ["Custodisco un luogo sacro", "la cupola, col fiore in cima", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M13 48 C13 30 20 17 30 8 C40 17 47 30 47 48\"/> <path d=\"M13 48 L47 48\"/> <path d=\"M24 48 C24 39 26 33 30 28 C34 33 36 39 36 48\" opacity=\".7\"/> <path d=\"M30 8 L30 2\"/> <circle cx=\"30\" cy=\"4\" r=\"1.8\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M9 52 L51 52\" opacity=\".4\"/> <path d=\"M16 41 C22 39 38 39 44 41\" opacity=\".3\"/> </svg>"], ["Sono un viaggiatore", "la stella sopra l’orizzonte", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 4 C31.5 12 34 15.5 42 17 C34 18.5 31.5 22 30 30 C28.5 22 26 18.5 18 17 C26 15.5 28.5 12 30 4Z\"/> <circle cx=\"46\" cy=\"10\" r=\"1.4\" fill=\"currentColor\" stroke=\"none\" opacity=\".7\"/> <circle cx=\"14\" cy=\"12\" r=\"1.1\" fill=\"currentColor\" stroke=\"none\" opacity=\".5\"/> <circle cx=\"48\" cy=\"24\" r=\"1\" fill=\"currentColor\" stroke=\"none\" opacity=\".45\"/> <path d=\"M4 42 C12 38 20 40 30 40 C40 40 48 38 56 42\" opacity=\".85\"/> <path d=\"M8 47 C16 44 24 45 30 45 C36 45 44 44 52 47\" opacity=\".45\"/> <path d=\"M13 52 C20 50 26 50 30 50 C34 50 40 50 47 52\" opacity=\".25\"/> <path d=\"M30 30 L30 40\" opacity=\".5\"/> </svg>"], ["Navigo", "la vela che prende il vento", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 8 L30 40\" opacity=\".8\"/> <path d=\"M30 12 C38 18 42 26 42 36 L30 36Z\"/> <path d=\"M30 18 C24 23 21 29 21 36 L30 36Z\" opacity=\".6\"/> <path d=\"M12 42 C18 46 42 46 48 42 L44 50 L16 50Z\"/> <path d=\"M8 54 C14 52 20 55 26 54 C32 53 38 55 44 54 C48 53 51 54 53 55\" opacity=\".35\"/> <circle cx=\"30\" cy=\"8\" r=\"2\" opacity=\".7\"/> </svg>"], ["Progetto modi per muoversi", "la ruota e la vela, e il vento che le muove", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"18\" cy=\"40\" r=\"10\"/> <circle cx=\"18\" cy=\"40\" r=\"2.4\" opacity=\".7\"/> <path d=\"M11 33 L25 47 M25 33 L11 47\" opacity=\".3\"/> <path d=\"M42 44 L42 16\" opacity=\".75\"/> <path d=\"M42 20 C48 25 50 32 50 40 L42 40Z\" opacity=\".8\"/> <path d=\"M42 24 C38 28 36 34 36 40 L42 40Z\" opacity=\".5\"/> <path d=\"M8 14 C14 10 22 12 26 16\" opacity=\".4\"/> <path d=\"M10 20 C16 17 22 18 25 21\" opacity=\".28\"/> <path d=\"M8 52 L52 52\" opacity=\".4\"/> </svg>"], ["Accompagno ragazzi nella natura", "l’albero, il fuoco, e i passi che si susseguono", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 6 L20 24 L40 24 Z\"/> <path d=\"M30 16 L23 32 L37 32 Z\" opacity=\".75\"/> <path d=\"M30 32 L30 40\"/> <path d=\"M22 44 C24 40 26 39 27 41 C28 39 32 39 33 41 C34 39 36 40 38 44\" opacity=\".55\"/> <circle cx=\"16\" cy=\"47\" r=\"2\" opacity=\".7\"/> <circle cx=\"24\" cy=\"49\" r=\"2\" opacity=\".55\"/> <circle cx=\"32\" cy=\"47\" r=\"2\" opacity=\".4\"/> <circle cx=\"40\" cy=\"49\" r=\"2\" opacity=\".28\"/> <path d=\"M9 53 L51 53\" opacity=\".4\"/> </svg>"], ["Progetto comunità", "le case che si dispongono, e il filo che le tiene", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"21\" opacity=\".22\"/> <path d=\"M26 12 L30 8 L34 12 L34 18 L26 18 Z\"/> <path d=\"M44 24 L48 20 L52 24 L52 30 L44 30 Z\" opacity=\".8\"/> <path d=\"M8 24 L12 20 L16 24 L16 30 L8 30 Z\" opacity=\".8\"/> <path d=\"M35 44 L39 40 L43 44 L43 50 L35 50 Z\" opacity=\".6\"/> <path d=\"M17 44 L21 40 L25 44 L25 50 L17 50 Z\" opacity=\".6\"/> <path d=\"M30 18 L48 24 M30 18 L12 24 M48 30 L39 42 M12 30 L21 42 M25 47 L35 47\" opacity=\".4\"/> <circle cx=\"30\" cy=\"30\" r=\"2.6\" opacity=\".85\"/> </svg>"], ["Organizzo feste", "il cerchio attorno al fuoco: nutrire l’anima radunando", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"32\" r=\"19\" opacity=\".38\"/> <g fill=\"currentColor\" stroke=\"none\" opacity=\".8\"> <circle cx=\"30\" cy=\"13\" r=\"2.4\"/> <circle cx=\"43.4\" cy=\"18.6\" r=\"2.4\"/> <circle cx=\"49\" cy=\"32\" r=\"2.4\"/> <circle cx=\"43.4\" cy=\"45.4\" r=\"2.4\"/> <circle cx=\"30\" cy=\"51\" r=\"2.4\"/> <circle cx=\"16.6\" cy=\"45.4\" r=\"2.4\"/> <circle cx=\"11\" cy=\"32\" r=\"2.4\"/> <circle cx=\"16.6\" cy=\"18.6\" r=\"2.4\"/> </g> <path d=\"M30 43 C25 38 24 33 27 28 C28.5 30.5 29.5 32 30.5 32 C31.5 29 30.5 26 29 24 C34 26.5 37 31 36 36 C35.5 39.5 33 42.5 30 43Z\"/> </svg>"], ["Faccio i mestieri della casa", "il filo e l’acqua, che tornano a funzionare", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M9 20 L24 20 C28 20 28 26 24 26 L18 26 C13 26 13 34 18 34 L28 34\" opacity=\".9\"/> <path d=\"M28 34 C31 34 31 40 28 40 L12 40\" opacity=\".9\"/> <circle cx=\"9\" cy=\"20\" r=\"2.2\"/> <circle cx=\"12\" cy=\"40\" r=\"2.2\" opacity=\".7\"/> <path d=\"M40 12 C38 17 34 20 34 25 C34 29 37 32 41 32 C45 32 48 29 48 25 C48 20 44 17 42 12Z\"/> <path d=\"M38 25 C39 22 43 22 44 25\" opacity=\".5\"/> <path d=\"M41 6 L41 12\" opacity=\".55\"/> <path d=\"M36 45 L50 45 M38 50 L48 50\" opacity=\".35\"/> <path d=\"M41 32 L41 45\" opacity=\".4\"/> </svg>"], ["Curo una libreria", "il libro che si apre come una porta", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 14 C30 14 30 46 30 50\"/> <path d=\"M30 16 C25 11 16 10 10 12 L10 46 C16 44 25 45 30 50\"/> <path d=\"M30 16 C35 11 44 10 50 12 L50 46 C44 44 35 45 30 50\"/> <path d=\"M23 43 L23 26 C23 22 26 20 30 20 C34 20 37 22 37 26 L37 43\" opacity=\".75\"/> <path d=\"M30 20 L30 43\" opacity=\".4\"/> <circle cx=\"27\" cy=\"33\" r=\"1.1\" fill=\"currentColor\" stroke=\"none\" opacity=\".7\"/> <circle cx=\"33\" cy=\"33\" r=\"1.1\" fill=\"currentColor\" stroke=\"none\" opacity=\".7\"/> <path d=\"M30 10 C28 7 28 4 30 1 C32 4 32 7 30 10Z\" opacity=\".55\"/> </svg>"], ["Curo un locale di cultura", "la lampada accesa, e le sedie disposte attorno", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 4 L30 13\"/> <path d=\"M20 13 L40 13 L36 25 L24 25Z\"/> <path d=\"M24 25 C26 31 34 31 36 25\" opacity=\".45\"/> <g opacity=\".7\"> <path d=\"M13 44 L13 38 C13 36 19 36 19 38 L19 44\"/> <path d=\"M11 44 L21 44 M13 44 L13 49 M19 44 L19 49\"/> </g> <g opacity=\".7\"> <path d=\"M41 44 L41 38 C41 36 47 36 47 38 L47 44\"/> <path d=\"M39 44 L49 44 M41 44 L41 49 M47 44 L47 49\"/> </g> <path d=\"M26 40 C28 38 32 38 34 40 L34 46 L26 46Z\" opacity=\".55\"/> <path d=\"M25 52 L35 52\" opacity=\".3\"/> <path d=\"M8 30 C11 27 14 27 16 29\" opacity=\".3\"/> <path d=\"M52 30 C49 27 46 27 44 29\" opacity=\".3\"/> </svg>"], ["Costruisco", "la squadra, il filo a piombo, e la pietra posata", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M14 10 L14 26 L38 26\" opacity=\".85\"/> <path d=\"M14 16 L24 16 M14 21 L19 21\" opacity=\".4\"/> <path d=\"M30 6 L30 34\"/> <path d=\"M30 34 C27 31 27 26 30 23 C33 26 33 31 30 34Z\"/> <path d=\"M11 46 L49 46\" opacity=\".8\"/> <path d=\"M11 52 L49 52\" opacity=\".5\"/> <path d=\"M22 46 L22 52 M36 46 L36 52 M29 40 L29 46\" opacity=\".35\"/> <path d=\"M15 40 L45 40\" opacity=\".55\"/> </svg>"], ["Sono un fabbro", "il fuoco che ammorbidisce, e il colpo che decide", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M14 44 L46 44\" opacity=\".6\"/> <path d=\"M20 44 L20 34 C20 30 24 28 30 28 C36 28 40 30 40 34 L40 44Z\" opacity=\".5\"/> <path d=\"M30 28 C26 22 27 16 31 12 C31 17 35 18 36 22 C37 25 35 27 30 28Z\"/> <path d=\"M12 20 L26 20\" opacity=\".85\"/> <path d=\"M14 16 L14 24 M24 17 L24 23\" opacity=\".7\"/> <path d=\"M19 20 L19 12\" opacity=\".55\"/> <circle cx=\"30\" cy=\"38\" r=\"2\" opacity=\".7\"/> </svg>"], ["Sono un orafo", "il cerchio che si chiude, e la pietra che tiene", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"34\" r=\"15\" opacity=\".45\"/> <circle cx=\"30\" cy=\"34\" r=\"11\" opacity=\".7\"/> <path d=\"M30 19 L26 12 L34 12 Z\"/> <path d=\"M30 12 L30 8\" opacity=\".6\"/> <path d=\"M23 30 C26 27 34 27 37 30\" opacity=\".5\"/> <path d=\"M23 38 C26 41 34 41 37 38\" opacity=\".5\"/> <circle cx=\"30\" cy=\"34\" r=\"2.6\" opacity=\".9\"/> <path d=\"M13 22 L17 26 M47 22 L43 26\" opacity=\".3\"/> </svg>"], ["Sono un vasaio", "la terra che sale, e le mani che la tengono", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <ellipse cx=\"30\" cy=\"48\" rx=\"18\" ry=\"4\" opacity=\".35\"/> <path d=\"M22 46 C18 40 18 34 22 30 C24 28 24 26 22 24 C20 22 21 19 24 18 L36 18 C39 19 40 22 38 24 C36 26 36 28 38 30 C42 34 42 40 38 46Z\"/> <ellipse cx=\"30\" cy=\"18\" rx=\"6\" ry=\"2\" opacity=\".7\"/> <path d=\"M22 34 C26 36 34 36 38 34\" opacity=\".4\"/> <path d=\"M13 40 C13 36 15 34 17 33\" opacity=\".55\"/> <path d=\"M47 40 C47 36 45 34 43 33\" opacity=\".55\"/> </svg>"], ["Lavoro il legno", "gli anelli dell’albero, e la lama che li apre", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"28\" cy=\"32\" r=\"18\" opacity=\".3\"/> <circle cx=\"28\" cy=\"32\" r=\"13\" opacity=\".45\"/> <circle cx=\"28\" cy=\"32\" r=\"8\" opacity=\".6\"/> <circle cx=\"28\" cy=\"32\" r=\"3\" opacity=\".85\"/> <path d=\"M44 14 L52 22 L40 34 L34 36 L36 30Z\" opacity=\".8\"/> <path d=\"M42 17 L49 24\" opacity=\".45\"/> </svg>"], ["Lavoro il cuoio", "la pelle tesa, e il punto che la cuce", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M16 18 C24 14 36 14 44 18 C48 24 48 36 44 42 C36 46 24 46 16 42 C12 36 12 24 16 18Z\" opacity=\".7\"/> <path d=\"M20 22 L20 38 M40 22 L40 38\" opacity=\".3\"/> <path d=\"M24 26 L36 26 M24 30 L36 30 M24 34 L36 34\" stroke-dasharray=\"2 3\" opacity=\".85\"/> <path d=\"M46 12 L52 18\" opacity=\".6\"/> <circle cx=\"53\" cy=\"19\" r=\"1.8\" opacity=\".7\"/> </svg>"], ["Lavoro il vetro", "la bolla che nasce dal soffio", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"38\" cy=\"34\" r=\"13\"/> <circle cx=\"38\" cy=\"34\" r=\"8\" opacity=\".3\"/> <path d=\"M25 34 L10 34\" opacity=\".8\"/> <circle cx=\"8\" cy=\"34\" r=\"2.4\" opacity=\".7\"/> <path d=\"M33 27 C35 25 38 25 40 26\" opacity=\".5\"/> <path d=\"M38 47 C34 51 30 52 27 51\" opacity=\".35\"/> <path d=\"M50 26 C53 30 53 38 50 42\" opacity=\".3\"/> </svg>"], ["Tesso", "la trama e l’ordito che si incontrano", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M16 10 L16 50 M24 10 L24 50 M32 10 L32 50 M40 10 L40 50 M48 10 L48 50\" opacity=\".45\"/> <path d=\"M10 20 C14 16 18 24 22 20 C26 16 30 24 34 20 C38 16 42 24 46 20 C48 18 50 19 52 20\" opacity=\".9\"/> <path d=\"M10 30 C14 34 18 26 22 30 C26 34 30 26 34 30 C38 34 42 26 46 30 C48 32 50 31 52 30\" opacity=\".75\"/> <path d=\"M10 40 C14 36 18 44 22 40 C26 36 30 44 34 40 C38 36 42 44 46 40 C48 38 50 39 52 40\" opacity=\".55\"/> </svg>"], ["Faccio i cesti", "il vimine che gira, e il fondo che tiene", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M16 22 L20 46 L40 46 L44 22Z\"/> <ellipse cx=\"30\" cy=\"22\" rx=\"14\" ry=\"4\"/> <path d=\"M17 30 L43 30 M18 38 L42 38\" opacity=\".45\"/> <path d=\"M24 22 L26 46 M30 22 L30 46 M36 22 L34 46\" opacity=\".3\"/> <path d=\"M18 22 C20 12 40 12 42 22\" opacity=\".6\"/> </svg>"], ["Faccio le scarpe", "la forma del piede, e il filo che la chiude", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M12 42 C12 34 16 28 22 24 C28 20 34 22 36 27 C38 32 42 34 47 35 C50 36 50 42 47 42Z\"/> <path d=\"M12 46 L47 46\" opacity=\".55\"/> <path d=\"M22 26 L26 30 M26 24 L30 28 M30 23 L33 27\" opacity=\".5\"/> <path d=\"M38 32 C41 30 44 30 46 32\" opacity=\".4\"/> <circle cx=\"52\" cy=\"24\" r=\"1.8\" opacity=\".6\"/> <path d=\"M52 26 C48 28 46 30 45 33\" stroke-dasharray=\"2 2\" opacity=\".5\"/> </svg>"], ["Faccio strumenti musicali", "la cassa che risuona, e la corda tesa", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M22 50 C15 50 12 44 14 38 C16 33 22 32 22 27 C22 22 17 20 18 15 C19 11 24 9 29 10 C34 11 36 15 34 19 C32 24 27 25 27 30 C27 36 30 43 25 48 C24 49 23 50 22 50Z\"/> <circle cx=\"21\" cy=\"41\" r=\"4\" opacity=\".7\"/> <path d=\"M30 10 L44 10\" opacity=\".8\"/> <path d=\"M32 8 L32 12 M36 8 L36 12 M40 8 L40 12\" opacity=\".5\"/> <path d=\"M26 22 L38 10\" opacity=\".45\"/> <path d=\"M46 24 C49 28 49 36 46 40\" opacity=\".28\"/> </svg>"], ["Faccio candele e saponi", "la cera che cola, e la fiamma che la scioglie", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M22 48 L22 24 L32 24 L32 48Z\"/> <path d=\"M27 24 L27 19\" opacity=\".7\"/> <path d=\"M27 19 C24 15 25 11 27 8 C29 11 30 15 27 19Z\"/> <path d=\"M22 30 C24 34 22 36 24 40\" opacity=\".35\"/> <path d=\"M38 36 C38 30 42 26 46 26 C50 26 52 30 50 34 C48 38 42 40 38 36Z\" opacity=\".6\"/> <path d=\"M41 32 C43 30 46 30 47 32\" opacity=\".4\"/> <path d=\"M18 52 L50 52\" opacity=\".4\"/> </svg>"]]], ["L’Emporio", "--acqua", [["Ho una bottega", "la soglia aperta, e le cose che passano", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M12 26 L30 12 L48 26\"/> <path d=\"M15 26 L15 48 M45 26 L45 48\"/> <path d=\"M15 48 L45 48\"/> <path d=\"M23 48 L23 32 C23 29 26 27 30 27 C34 27 37 29 37 32 L37 48\" opacity=\".85\"/> <circle cx=\"30\" cy=\"37\" r=\"2.4\" opacity=\".6\"/> <path d=\"M9 52 L51 52\" opacity=\".4\"/> <path d=\"M20 20 L20 16 M40 20 L40 16\" opacity=\".3\"/> </svg>"], ["Faccio mercati autogestiti", "i banchi in cerchio, e nessuno in mezzo", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"19\" opacity=\".28\"/> <path d=\"M23 12 L37 12 M25 12 L25 19 M35 12 L35 19\" opacity=\".9\"/> <path d=\"M46 22 L52 34 M46 24 L41 28 M52 32 L47 36\" opacity=\".75\"/> <path d=\"M37 49 L23 49 M35 49 L35 42 M25 49 L25 42\" opacity=\".6\"/> <path d=\"M14 34 L8 22 M14 32 L19 28 M8 24 L13 20\" opacity=\".45\"/> <circle cx=\"30\" cy=\"30\" r=\"2.2\" opacity=\".22\"/> </svg>"], ["Tengo un banco alle fiere", "il telo teso, e le cose in fila davanti", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M10 22 C16 16 24 16 30 22 C36 16 44 16 50 22\"/> <path d=\"M10 22 L10 27 M50 22 L50 27\" opacity=\".7\"/> <path d=\"M14 34 L46 34\"/> <path d=\"M18 34 L18 48 M42 34 L42 48\" opacity=\".55\"/> <circle cx=\"24\" cy=\"29\" r=\"2.2\" opacity=\".7\"/> <circle cx=\"30\" cy=\"29\" r=\"2.2\" opacity=\".55\"/> <circle cx=\"36\" cy=\"29\" r=\"2.2\" opacity=\".4\"/> <path d=\"M9 52 L51 52\" opacity=\".4\"/> </svg>"], ["Partecipo a un gruppo di acquisto solidale", "un cesto solo, e molte mani", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M18 28 L42 28 L38 46 L22 46 Z\"/> <path d=\"M22 28 C22 20 26 16 30 16 C34 16 38 20 38 28\" opacity=\".75\"/> <path d=\"M20 34 L40 34\" opacity=\".4\"/> <path d=\"M12 44 C12 39 15 36 18 36\" opacity=\".7\"/> <path d=\"M48 44 C48 39 45 36 42 36\" opacity=\".7\"/> <path d=\"M24 52 C24 48 27 46 30 46 C33 46 36 48 36 52\" opacity=\".55\"/> <circle cx=\"9\" cy=\"46\" r=\"2\" opacity=\".5\"/> <circle cx=\"51\" cy=\"46\" r=\"2\" opacity=\".5\"/> </svg>"], ["Porto i prodotti in giro", "la ruota, e il filo fra due punti", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"34\" r=\"13\"/> <circle cx=\"30\" cy=\"34\" r=\"3.4\" opacity=\".7\"/> <path d=\"M30 21 L30 31 M30 37 L30 47 M17 34 L27 34 M33 34 L43 34\" opacity=\".5\"/> <path d=\"M21 25 L27 31 M33 37 L39 43 M39 25 L33 31 M27 37 L21 43\" opacity=\".3\"/> <path d=\"M10 12 C18 8 42 8 50 12\" opacity=\".6\"/> <circle cx=\"10\" cy=\"12\" r=\"2.4\"/> <circle cx=\"50\" cy=\"12\" r=\"2.4\"/> </svg>"], ["Faccio ricerca per il vaglio", "la goccia che sale, e il disegno che lascia", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"32\" r=\"18\" opacity=\".4\"/> <path d=\"M30 32 C24 26 22 20 26 16 C29 13 31 13 34 16 C38 20 36 26 30 32Z\" opacity=\".85\"/> <path d=\"M30 32 C36 38 38 44 34 48 C31 51 29 51 26 48 C22 44 24 38 30 32Z\" opacity=\".55\"/> <path d=\"M30 32 C36 26 42 24 46 28 M30 32 C24 38 18 40 14 36\" opacity=\".45\"/> <circle cx=\"30\" cy=\"32\" r=\"2.6\" fill=\"currentColor\" stroke=\"none\" opacity=\".8\"/> </svg>"]]], ["Chi accompagna", "--fuoco", [["Sono un medico", "il bastone di Asclepio", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 4 L30 56\"/> <path d=\"M30 50 C24 48 22 44 25 41 C28 38 34 40 34 44 C34 48 29 50 25 47 C21 44 22 38 27 35 C33 32 36 27 33 23 C30 19 24 21 24 25 C24 29 29 31 33 28 C37 25 37 19 33 15 C31 13 29 12 27 12\"/> <path d=\"M27 12 C25 11 25 8 27 7 C29 6 31 8 30 10\" opacity=\".95\"/> <circle cx=\"28.5\" cy=\"9\" r=\"0.9\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M22 54 L38 54\" opacity=\".45\"/> <path d=\"M28 5 C29 3 31 3 32 5\" opacity=\".4\"/> </svg>"], ["Sono un chirurgo", "il taglio netto, e la mano che lo guida", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M12 46 L30 28\" opacity=\".85\"/> <path d=\"M30 28 L40 14 C43 11 47 13 46 17 L38 32Z\"/> <path d=\"M10 50 C12 46 15 45 18 46\" opacity=\".55\"/> <path d=\"M24 44 C30 40 38 40 44 44\" opacity=\".35\"/> <path d=\"M28 50 C32 47 38 47 42 50\" opacity=\".22\"/> </svg>"], ["Sono un’ostetrica", "le mani aperte, e la vita che passa", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M14 34 C14 26 20 20 26 20\" opacity=\".7\"/> <path d=\"M46 34 C46 26 40 20 34 20\" opacity=\".7\"/> <path d=\"M14 34 C16 42 22 48 30 48 C38 48 44 42 46 34\" opacity=\".55\"/> <circle cx=\"30\" cy=\"28\" r=\"8\"/> <path d=\"M30 20 C27 23 27 27 30 30 C33 27 33 23 30 20Z\" opacity=\".8\"/> <path d=\"M24 12 C27 8 33 8 36 12\" opacity=\".4\"/> </svg>"], ["Sono un dentosofo", "il dente, e l’asse che riallinea", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M20 18 C20 13 25 11 30 13 C35 11 40 13 40 18 C40 26 37 30 36 38 C35 44 33 46 31 44 C30 42 30 38 30 34 C30 38 30 42 29 44 C27 46 25 44 24 38 C23 30 20 26 20 18Z\"/> <path d=\"M30 8 L30 13\" opacity=\".5\"/> <path d=\"M12 30 L18 30 M42 30 L48 30\" opacity=\".45\"/> <path d=\"M30 50 L30 46\" opacity=\".4\"/> <circle cx=\"30\" cy=\"53\" r=\"2\" opacity=\".55\"/> </svg>"], ["Sono un iridologo", "l’iride, e quello che vi si legge", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M8 30 C16 18 44 18 52 30 C44 42 16 42 8 30Z\" opacity=\".5\"/> <circle cx=\"30\" cy=\"30\" r=\"11\"/> <circle cx=\"30\" cy=\"30\" r=\"4\" opacity=\".9\"/> <path d=\"M30 19 L30 24 M30 36 L30 41 M19 30 L24 30 M36 30 L41 30\" opacity=\".6\"/> <path d=\"M22 22 L26 26 M38 22 L34 26 M22 38 L26 34 M38 38 L34 34\" opacity=\".4\"/> </svg>"], ["Sono un operatore del benessere integrato", "le mani che si avvicinano, e i tre corpi che rispondono", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <ellipse cx=\"30\" cy=\"32\" rx=\"10\" ry=\"17\" opacity=\".85\"/> <ellipse cx=\"30\" cy=\"32\" rx=\"15\" ry=\"21\" opacity=\".45\"/> <ellipse cx=\"30\" cy=\"32\" rx=\"20\" ry=\"25\" opacity=\".22\"/> <circle cx=\"30\" cy=\"21\" r=\"4\"/> <path d=\"M30 25 L30 44\" opacity=\".6\"/> <circle cx=\"30\" cy=\"30\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\" opacity=\".8\"/> <circle cx=\"30\" cy=\"37\" r=\"1.4\" fill=\"currentColor\" stroke=\"none\" opacity=\".6\"/> <path d=\"M8 30 C11 27 14 26 16 27\" opacity=\".7\"/> <path d=\"M52 30 C49 27 46 26 44 27\" opacity=\".7\"/> <path d=\"M6 34 C9 32 13 31 15 32\" opacity=\".4\"/> <path d=\"M54 34 C51 32 47 31 45 32\" opacity=\".4\"/> </svg>"], ["Sono un naturopata", "la pianta e il corpo, che si rispondono", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"20\" opacity=\".24\"/> <path d=\"M30 48 L30 22\"/> <path d=\"M30 34 C24 32 20 27 20 21 C26 21 30 26 30 32\" opacity=\".75\"/> <path d=\"M30 30 C36 28 40 23 40 17 C34 17 30 22 30 28\" opacity=\".6\"/> <circle cx=\"30\" cy=\"14\" r=\"3.4\"/> <path d=\"M22 48 C22 42 26 40 30 40 C34 40 38 42 38 48\" opacity=\".5\"/> <path d=\"M14 30 C17 27 20 27 22 28\" opacity=\".3\"/> <path d=\"M46 30 C43 27 40 27 38 28\" opacity=\".3\"/> </svg>"], ["Assisto l’ambiente", "la mano che raccoglie ciò che il mare riporta", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M5 44 C11 40 17 48 23 44 C29 40 35 48 41 44 C47 40 53 48 55 45\" opacity=\".75\"/> <path d=\"M7 52 C13 48 19 55 25 51 C31 47 37 54 43 50 C48 47 52 51 54 52\" opacity=\".4\"/> <path d=\"M18 33 C16 28 18 23 22 22 C25 22 26 25 25 29 L26 33\"/> <path d=\"M26 33 L24 22 C23 19 27 18 28 21 L31 32\"/> <path d=\"M31 32 L31 20 C31 17 35 17 35 20 L37 33\"/> <path d=\"M37 33 L38 26 C39 23 42 24 42 27 L42 36 C42 40 38 42 34 42 L26 42 C21 42 18 39 18 33Z\"/> <path d=\"M28 30 C26 27 27 23 30 21 C33 23 34 27 32 30Z\" opacity=\".6\"/> </svg>"], ["Mi curo di chi è anziano", "il bastone, e la mano più giovane che si posa accanto", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M24 52 L24 22 C24 17 29 14 33 16\"/> <path d=\"M18 26 C18 23 20 21 23 22 L26 23 C29 24 30 26 29 29 C28 31 25 31 23 30 L20 29 C18 28 18 27 18 26Z\"/> <path d=\"M31 36 C31 33 33 31 36 32 L39 33 C42 34 43 36 42 39 C41 41 38 41 36 40 L33 39 C31 38 31 37 31 36Z\" opacity=\".8\"/> <path d=\"M29 29 L31 36\" opacity=\".4\"/> <path d=\"M15 55 C20 52 34 52 39 55\" opacity=\".35\"/> <path d=\"M43 22 C41 19 41 15 43 12 C45 15 45 19 43 22Z\" opacity=\".5\"/> </svg>"], ["Curo i conflitti", "due volti che si voltano, e il filo che ancora li tiene", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <g> <path d=\"M20 16 C14 18 11 24 12 31 C13 38 17 43 22 44\"/> <path d=\"M20 16 C24 15 27 17 27 21 L27 39 C27 43 24 45 22 44\" opacity=\".55\"/> <circle cx=\"17\" cy=\"27\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M13 35 C15 33 18 33 20 34\" opacity=\".8\"/> </g> <g> <path d=\"M40 16 C46 18 49 24 48 31 C47 38 43 43 38 44\"/> <path d=\"M40 16 C36 15 33 17 33 21 L33 39 C33 43 36 45 38 44\" opacity=\".55\"/> <circle cx=\"43\" cy=\"27\" r=\"1.5\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M40 35 C42 33 45 33 47 34\" opacity=\".8\"/> </g> <path d=\"M27 30 C28 27 32 27 33 30\" opacity=\".4\" stroke-dasharray=\"2 2.5\"/> <path d=\"M30 48 C27 52 33 52 30 56\" opacity=\".3\"/> </svg>"], ["Mi prendo cura delle neurodivergenze", "la via che attraversa il cerchio invece di seguirlo", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"20\" opacity=\".3\" stroke-dasharray=\"2 4\"/> <g opacity=\".45\"> <circle cx=\"30\" cy=\"10\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/> <circle cx=\"47\" cy=\"20\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/> <circle cx=\"47\" cy=\"40\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/> <circle cx=\"30\" cy=\"50\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/> <circle cx=\"13\" cy=\"40\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/> <circle cx=\"13\" cy=\"20\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/> </g> <path d=\"M30 10 C36 16 34 24 28 27 C22 30 20 37 24 43 C27 47 33 48 38 45\"/> <path d=\"M30 30 C33 26 38 26 41 29\" opacity=\".4\"/> <circle cx=\"38\" cy=\"45\" r=\"2.6\"/> </svg>"], ["Accompagno i bambini e i ragazzi", "il germoglio, e la fiamma che lo scalda senza bruciarlo", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M24 52 L24 26\"/> <path d=\"M24 34 C18 34 14 29 14 23 C20 23 24 28 24 34Z\"/> <path d=\"M24 29 C30 29 34 24 34 18 C28 18 24 23 24 29Z\" opacity=\".8\"/> <path d=\"M12 52 L36 52\" opacity=\".4\"/> <path d=\"M46 46 C43 42 42 36 44 31 C45 33 46 34 47 34 C48 31 47 28 45 26 C50 28 53 33 52 38 C51 43 49 45 46 46Z\" opacity=\".55\"/> <path d=\"M38 30 C41 27 45 27 48 29\" opacity=\".3\"/> </svg>"], ["Accompagno alla morte", "la barca che parte, e la vela che raccoglie il vento", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M11 38 C17 42 43 42 49 38 L45 46 C40 49 20 49 15 46Z\"/> <path d=\"M30 38 L30 16\"/> <path d=\"M30 18 C36 15 42 20 46 17 L46 30 C42 33 36 28 30 31Z\" opacity=\".7\"/> <path d=\"M6 52 C14 49 24 53 30 51 C36 49 46 53 54 50\" opacity=\".4\"/> <path d=\"M9 56 C17 53 27 57 33 55 C39 53 48 57 54 55\" opacity=\".22\"/> <path d=\"M30 13 C27 10 27 6 30 3 C33 6 33 10 30 13Z\"/> </svg>"], ["Curo luoghi di rigenerazione", "la sorgente, e chi la tiene aperta", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"20\" opacity=\".26\"/> <path d=\"M30 42 C24 36 22 30 26 26 C29 23 31 23 34 26 C38 30 36 36 30 42Z\"/> <path d=\"M30 42 L30 50\" opacity=\".6\"/> <path d=\"M22 34 C18 32 14 33 12 36\" opacity=\".5\"/> <path d=\"M38 34 C42 32 46 33 48 36\" opacity=\".5\"/> <path d=\"M20 20 C24 16 28 15 30 17 C32 15 36 16 40 20\" opacity=\".45\"/> <circle cx=\"30\" cy=\"30\" r=\"2.4\" opacity=\".85\"/> <path d=\"M12 50 C18 47 24 47 30 50 C36 47 42 47 48 50\" opacity=\".4\"/> </svg>"]]], ["La voce", "--aria", [["Sono uno scrittore", "le foglie di palma legate al centro", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M8 34 C8 30 52 30 52 34 C52 38 8 38 8 34Z\"/> <path d=\"M9 27 C12 24 48 24 51 27\" opacity=\".7\"/> <path d=\"M10 21 C14 18 46 18 50 21\" opacity=\".45\"/> <path d=\"M9 41 C12 44 48 44 51 41\" opacity=\".7\"/> <path d=\"M10 47 C14 50 46 50 50 47\" opacity=\".45\"/> <circle cx=\"30\" cy=\"34\" r=\"2.2\"/> <path d=\"M30 30 L30 12\" opacity=\".55\"/> <path d=\"M30 12 C27 9 27 5 30 2 C33 5 33 9 30 12Z\"/> </svg>"], ["Sono un poeta", "la riga che si spezza, e il vuoto che dice", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M14 16 L40 16\" opacity=\".9\"/> <path d=\"M14 24 L32 24\" opacity=\".7\"/> <path d=\"M14 32 L44 32\" opacity=\".55\"/> <path d=\"M14 40 L26 40\" opacity=\".4\"/> <path d=\"M14 48 L36 48\" opacity=\".28\"/> <circle cx=\"47\" cy=\"24\" r=\"2.4\" opacity=\".8\"/> <path d=\"M47 27 C47 33 44 37 40 39\" opacity=\".45\"/> </svg>"], ["Sono un cantastorie", "il cerchio che ascolta, e la voce al centro", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"21\" opacity=\".22\"/> <circle cx=\"30\" cy=\"26\" r=\"4\"/> <path d=\"M24 42 C24 35 27 32 30 32 C33 32 36 35 36 42\" opacity=\".8\"/> <circle cx=\"13\" cy=\"24\" r=\"2.4\" opacity=\".6\"/> <circle cx=\"47\" cy=\"24\" r=\"2.4\" opacity=\".6\"/> <circle cx=\"17\" cy=\"42\" r=\"2.4\" opacity=\".45\"/> <circle cx=\"43\" cy=\"42\" r=\"2.4\" opacity=\".45\"/> <circle cx=\"30\" cy=\"10\" r=\"2.4\" opacity=\".5\"/> <path d=\"M22 20 C24 16 27 14 30 14 C33 14 36 16 38 20\" opacity=\".35\"/> </svg>"], ["Compongo musica", "le note che salgono, e la misura che le tiene", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M10 20 L50 20 M10 26 L50 26 M10 32 L50 32 M10 38 L50 38 M10 44 L50 44\" opacity=\".3\"/> <circle cx=\"20\" cy=\"38\" r=\"3.4\"/> <path d=\"M23 38 L23 20\" opacity=\".85\"/> <circle cx=\"34\" cy=\"32\" r=\"3.4\" opacity=\".8\"/> <path d=\"M37 32 L37 16\" opacity=\".7\"/> <circle cx=\"45\" cy=\"26\" r=\"3.4\" opacity=\".55\"/> <path d=\"M48 26 L48 12\" opacity=\".5\"/> <path d=\"M23 20 C28 17 33 16 37 16\" opacity=\".45\"/> </svg>"], ["Sono un musicista", "la corda che vibra, e l’onda che ne esce", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M22 48 C15 45 13 36 18 31 C23 26 32 28 34 35\"/> <path d=\"M34 35 C36 42 32 49 25 50 C21 50.5 18 49 22 48\" opacity=\".8\"/> <path d=\"M30 32 L44 12\"/> <path d=\"M44 12 C42 9 43 5 46 4 C48 7 47 11 44 12Z\"/> <path d=\"M20 41 C24 38 30 38 33 40\" opacity=\".5\"/> <path d=\"M14 22 C20 19 26 20 30 24\" opacity=\".35\"/> <path d=\"M11 16 C19 12 28 13 34 19\" opacity=\".22\"/> </svg>"], ["Sono un artista", "la forma che nasce dal vuoto", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"20\" opacity=\".28\"/> <path d=\"M30 12 C22 20 22 30 30 38 C38 30 38 20 30 12Z\" opacity=\".8\"/> <path d=\"M30 38 C22 40 18 44 18 48\" opacity=\".55\"/> <path d=\"M30 38 C38 40 42 44 42 48\" opacity=\".55\"/> <circle cx=\"30\" cy=\"24\" r=\"3\" opacity=\".9\"/> <path d=\"M14 30 C18 26 22 26 26 28\" opacity=\".3\"/> <path d=\"M46 30 C42 26 38 26 34 28\" opacity=\".3\"/> </svg>"], ["Sono uno scultore", "la pietra che si toglie, e la figura che resta", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M18 50 L18 22 L42 22 L42 50Z\" opacity=\".28\"/> <path d=\"M24 50 L24 30 C24 26 27 24 30 24 C33 24 36 26 36 30 L36 50Z\"/> <circle cx=\"30\" cy=\"18\" r=\"4\"/> <path d=\"M14 50 L46 50\" opacity=\".6\"/> <path d=\"M10 16 L18 24\" opacity=\".7\"/> <path d=\"M8 14 L12 18\" opacity=\".85\"/> <path d=\"M44 34 L48 30 M44 42 L49 40\" opacity=\".3\"/> </svg>"], ["Sono un pittore", "i colori che si incontrano, e quello che nasce", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"24\" cy=\"24\" r=\"11\" opacity=\".75\"/> <circle cx=\"36\" cy=\"24\" r=\"11\" opacity=\".55\"/> <circle cx=\"30\" cy=\"35\" r=\"11\" opacity=\".4\"/> <path d=\"M46 12 L52 18 L34 36 L27 38 L29 31Z\" opacity=\".85\"/> <path d=\"M43 15 L49 21\" opacity=\".5\"/> <circle cx=\"30\" cy=\"27\" r=\"2\" opacity=\".8\"/> </svg>"], ["Sono un grafico", "la griglia, e il segno che la attraversa", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M12 12 L48 12 L48 48 L12 48Z\" opacity=\".35\"/> <path d=\"M24 12 L24 48 M36 12 L36 48 M12 24 L48 24 M12 36 L48 36\" opacity=\".2\"/> <path d=\"M16 40 C22 24 30 18 40 20\" opacity=\".9\"/> <circle cx=\"40\" cy=\"20\" r=\"3\" opacity=\".85\"/> <circle cx=\"16\" cy=\"40\" r=\"2.4\" opacity=\".7\"/> <path d=\"M24 24 L36 36 M36 24 L24 36\" opacity=\".16\"/> </svg>"], ["Sono un creator", "l’informazione che crea possibilità", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"20\" cy=\"30\" r=\"7\"/> <path d=\"M20 23 C24 26 24 34 20 37\" opacity=\".7\"/> <path d=\"M29 22 C33 26 33 34 29 38\" opacity=\".85\"/> <path d=\"M36 17 C42 24 42 36 36 43\" opacity=\".6\"/> <path d=\"M43 12 C51 22 51 38 43 48\" opacity=\".35\"/> <circle cx=\"20\" cy=\"30\" r=\"2\" fill=\"currentColor\" stroke=\"none\"/> </svg>"], ["Sono un comunicatore", "una cosa detta da uno, che arriva a molti", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"15\" cy=\"30\" r=\"4\"/> <path d=\"M22 30 C28 26 32 26 38 28\" opacity=\".85\"/> <path d=\"M22 30 C28 30 32 32 38 34\" opacity=\".7\"/> <path d=\"M22 30 C28 34 32 38 38 42\" opacity=\".5\"/> <path d=\"M22 30 C28 22 32 18 38 16\" opacity=\".5\"/> <circle cx=\"42\" cy=\"27\" r=\"2.6\" opacity=\".85\"/> <circle cx=\"42\" cy=\"35\" r=\"2.6\" opacity=\".7\"/> <circle cx=\"41\" cy=\"44\" r=\"2.4\" opacity=\".5\"/> <circle cx=\"41\" cy=\"15\" r=\"2.4\" opacity=\".5\"/> <path d=\"M8 24 C5 27 5 33 8 36\" opacity=\".3\"/> </svg>"], ["Dirigo una radio o una testata", "l’antenna, e l’onda che si propaga", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 52 L30 20\"/> <path d=\"M22 52 L30 34 L38 52\" opacity=\".7\"/> <path d=\"M25 44 L35 44\" opacity=\".45\"/> <path d=\"M18 56 C22 53 38 53 42 56\" opacity=\".35\"/> <circle cx=\"30\" cy=\"17\" r=\"2.6\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M23 12 C25 8 35 8 37 12\" opacity=\".9\"/> <path d=\"M18 7 C22 1 38 1 42 7\" opacity=\".6\"/> <path d=\"M13 3 C19 -5 41 -5 47 3\" opacity=\".32\"/> <path d=\"M14 22 C11 19 10 15 11 12\" opacity=\".45\"/> <path d=\"M46 22 C49 19 50 15 49 12\" opacity=\".45\"/> <path d=\"M8 27 C4 22 3 16 5 11\" opacity=\".22\"/> <path d=\"M52 27 C56 22 57 16 55 11\" opacity=\".22\"/> </svg>"], ["Traduco, perché una cosa detta qui si senta altrove", "la stessa cosa in due alfabeti, e il passaggio fra loro", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"16\" cy=\"22\" r=\"9\" opacity=\".8\"/> <circle cx=\"44\" cy=\"38\" r=\"9\" opacity=\".55\"/> <path d=\"M12 22 L20 22 M16 18 L16 26\" opacity=\".9\"/> <path d=\"M40 34 C42 32 46 32 48 34 C48 38 40 38 40 42 C42 44 46 44 48 42\" opacity=\".85\"/> <path d=\"M23 26 C29 28 31 32 37 34\"/> <path d=\"M35 30 L37 34 L33 35\" opacity=\".8\"/> <path d=\"M37 34 C31 32 29 28 23 26\" opacity=\"0\"/> <path d=\"M25 30 L23 26 L27 25\" opacity=\".6\"/> </svg>"]]], ["Chi insegna e chi cerca", "--etere", [["Sono un insegnante", "la fiamma che ne accende un’altra", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M20 44 C15 39 15 32 20 25 C23 30 24 32 25 32 C26 27 24 22 21 19 C30 22 35 31 33 39 C32 43 27 46 20 44Z\"/> <path d=\"M14 48 C18 46 26 46 30 48\" opacity=\".45\"/> <path d=\"M43 40 C40 37 40 33 43 29 C45 32 45.5 33 46 33 C47 30 46 27 44 25 C49 27 52 32 51 37 C50.5 40 47 41 43 40Z\" opacity=\".75\"/> <path d=\"M39 43 C42 42 47 42 50 43\" opacity=\".35\"/> <path d=\"M34 33 C37 32 40 32 42 33\" opacity=\".5\"/> </svg>"], ["Sono maestro d’arti marziali", "la cintura annodata, e le due vie che ne scendono", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M8 26 C16 23 24 26 30 26 C36 26 44 23 52 26\"/> <path d=\"M8 26 C16 29 24 32 30 32 C36 32 44 29 52 26\" opacity=\".8\"/> <path d=\"M25 24 C22 27 22 31 25 34 C28 32 28 26 25 24Z\"/> <path d=\"M35 24 C38 27 38 31 35 34 C32 32 32 26 35 24Z\"/> <path d=\"M25 34 L19 46 M35 34 L41 46\" opacity=\".7\"/> <path d=\"M19 46 C21 44 24 44 26 46\" opacity=\".4\"/> <path d=\"M34 46 C36 44 39 44 41 46\" opacity=\".4\"/> <circle cx=\"30\" cy=\"12\" r=\"4\" opacity=\".6\"/> <path d=\"M30 16 L30 24\" opacity=\".4\"/> </svg>"], ["Sono un formatore", "il fiore della vita: uno genera sei", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\"> <circle cx=\"30\" cy=\"30\" r=\"8.5\"/> <g opacity=\".7\"> <circle cx=\"30\" cy=\"21.5\" r=\"8.5\"/> <circle cx=\"37.4\" cy=\"25.8\" r=\"8.5\"/> <circle cx=\"37.4\" cy=\"34.2\" r=\"8.5\"/> <circle cx=\"30\" cy=\"38.5\" r=\"8.5\"/> <circle cx=\"22.6\" cy=\"34.2\" r=\"8.5\"/> <circle cx=\"22.6\" cy=\"25.8\" r=\"8.5\"/> </g> <circle cx=\"30\" cy=\"30\" r=\"21\" opacity=\".3\"/> </svg>"], ["Sono un educatore", "le due mani che riparano il germoglio", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M13 32 C13 44 20 52 30 54 C40 52 47 44 47 32\"/> <path d=\"M13 32 C13 26 16 23 19 26\" opacity=\".8\"/> <path d=\"M47 32 C47 26 44 23 41 26\" opacity=\".8\"/> <path d=\"M30 48 L30 30\"/> <path d=\"M30 36 C25 36 22 32 22 27 C27 27 30 31 30 36Z\"/> <path d=\"M30 32 C35 32 38 28 38 23 C33 23 30 27 30 32Z\"/> <path d=\"M30 30 C28 26 28 21 30 17 C32 21 32 26 30 30Z\" opacity=\".6\"/> </svg>"], ["Sono un capo scout", "il giglio, e l’ago che tiene il nord", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 6 C27 14 27 20 30 26 C33 20 33 14 30 6Z\"/> <path d=\"M30 26 C24 22 20 16 21 10 C25 12 28 17 30 22\" opacity=\".8\"/> <path d=\"M30 26 C36 22 40 16 39 10 C35 12 32 17 30 22\" opacity=\".8\"/> <path d=\"M22 30 L38 30\"/> <path d=\"M30 30 L30 40\"/> <circle cx=\"30\" cy=\"44\" r=\"8\" opacity=\".45\"/> <path d=\"M30 38 L33 44 L30 50 L27 44 Z\" opacity=\".85\"/> <path d=\"M9 55 L51 55\" opacity=\".35\"/> </svg>"], ["Sono un ricercatore", "il cerchio nel quadrato, e il punto al centro", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <rect x=\"11\" y=\"11\" width=\"38\" height=\"38\" stroke-dasharray=\"2.5 3.5\" opacity=\".55\"/> <circle cx=\"30\" cy=\"30\" r=\"19\" opacity=\".8\"/> <path d=\"M30 11 L30 49 M11 30 L49 30\" opacity=\".28\"/> <path d=\"M30 30 C26 26 26 20 30 15 C34 20 34 26 30 30Z\" opacity=\".7\"/> <path d=\"M30 30 C34 34 34 40 30 45 C26 40 26 34 30 30Z\" opacity=\".7\"/> <circle cx=\"30\" cy=\"30\" r=\"2.4\" fill=\"currentColor\" stroke=\"none\"/> </svg>"], ["Sono un astrologo", "la ruota dei dodici, e il momento che si legge", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"21\"/> <circle cx=\"30\" cy=\"30\" r=\"13\" opacity=\".4\"/> <path d=\"M30 9 L30 17 M30 43 L30 51 M9 30 L17 30 M43 30 L51 30\" opacity=\".65\"/> <path d=\"M15 15 L20 20 M45 15 L40 20 M15 45 L20 40 M45 45 L40 40\" opacity=\".45\"/> <circle cx=\"30\" cy=\"30\" r=\"3\" opacity=\".9\"/> <circle cx=\"38\" cy=\"20\" r=\"2\" opacity=\".75\"/> <circle cx=\"21\" cy=\"36\" r=\"1.8\" opacity=\".6\"/> <circle cx=\"36\" cy=\"40\" r=\"1.6\" opacity=\".5\"/> <path d=\"M38 20 L30 30 L21 36\" opacity=\".3\"/> </svg>"], ["Sono un alchimista", "i tre principi, e il crogiolo che li unisce", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 8 L46 34 L14 34Z\" opacity=\".7\"/> <path d=\"M30 52 L14 26 L46 26Z\" opacity=\".45\"/> <circle cx=\"30\" cy=\"30\" r=\"19\" opacity=\".22\"/> <path d=\"M22 40 L38 40 L34 50 L26 50Z\" opacity=\".85\"/> <path d=\"M26 44 C28 46 32 46 34 44\" opacity=\".5\"/> <circle cx=\"30\" cy=\"30\" r=\"2.6\" opacity=\".9\"/> </svg>"], ["Faccio analisi geopolitiche", "il globo, e le linee di forza che lo attraversano", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"20\"/> <path d=\"M10 30 L50 30\" opacity=\".55\"/> <path d=\"M30 10 C36 16 36 44 30 50 C24 44 24 16 30 10\" opacity=\".45\"/> <path d=\"M14 19 C20 23 40 23 46 19\" opacity=\".3\"/> <path d=\"M14 41 C20 37 40 37 46 41\" opacity=\".3\"/> <path d=\"M20 22 L34 38\" opacity=\".85\"/> <circle cx=\"20\" cy=\"22\" r=\"2.6\" opacity=\".9\"/> <circle cx=\"34\" cy=\"38\" r=\"2.6\" opacity=\".7\"/> <path d=\"M40 20 L44 36\" opacity=\".5\"/> <circle cx=\"40\" cy=\"20\" r=\"2\" opacity=\".6\"/> </svg>"]]], ["Chi costruisce", "--svil", [["Sono uno sviluppatore", "i triangoli intrecciati: sopra e sotto", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 9 L48 42 L12 42Z\"/> <path d=\"M30 51 L12 18 L48 18Z\" opacity=\".78\"/> <path d=\"M30 19 L39 36 L21 36Z\" opacity=\".5\"/> <path d=\"M30 41 L21 24 L39 24Z\" opacity=\".5\"/> <circle cx=\"30\" cy=\"30\" r=\"2\" fill=\"currentColor\" stroke=\"none\"/> <circle cx=\"30\" cy=\"30\" r=\"22\" opacity=\".22\"/> </svg>"], ["Guido un gruppo", "la ruota: il mozzo e chi sta sul cerchio", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"20\"/> <circle cx=\"30\" cy=\"30\" r=\"5.5\"/> <g opacity=\".62\"> <path d=\"M30 10 L30 24.5 M30 35.5 L30 50\"/> <path d=\"M10 30 L24.5 30 M35.5 30 L50 30\"/> <path d=\"M16 16 L26 26 M34 34 L44 44\"/> <path d=\"M44 16 L34 26 M26 34 L16 44\"/> </g> <g fill=\"currentColor\" stroke=\"none\" opacity=\".85\"> <circle cx=\"30\" cy=\"10\" r=\"2\"/><circle cx=\"50\" cy=\"30\" r=\"2\"/> <circle cx=\"30\" cy=\"50\" r=\"2\"/><circle cx=\"10\" cy=\"30\" r=\"2\"/> </g> </svg>"], ["Sono un notaio", "il sigillo, e la carta che resta", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M16 10 L38 10 L44 16 L44 50 L16 50Z\"/> <path d=\"M38 10 L38 16 L44 16\" opacity=\".6\"/> <path d=\"M22 22 L38 22 M22 28 L38 28 M22 34 L32 34\" opacity=\".45\"/> <circle cx=\"34\" cy=\"42\" r=\"6\" opacity=\".85\"/> <path d=\"M31 42 L33 44 L37 40\" opacity=\".7\"/> <path d=\"M30 47 L28 53 M38 47 L40 53\" opacity=\".4\"/> </svg>"], ["Sono un avvocato", "i due piatti, e il perno che li tiene", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M30 12 L30 46\"/> <path d=\"M14 20 L46 20\"/> <circle cx=\"30\" cy=\"12\" r=\"2.4\"/> <path d=\"M14 20 L8 32 C8 36 20 36 20 32Z\" opacity=\".8\"/> <path d=\"M46 20 L40 32 C40 36 52 36 52 32Z\" opacity=\".8\"/> <path d=\"M22 50 L38 50\" opacity=\".6\"/> <path d=\"M26 46 L26 50 M34 46 L34 50\" opacity=\".45\"/> </svg>"], ["Sono un commercialista", "le colonne dei conti, e la riga che chiude", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <path d=\"M14 12 L46 12 L46 48 L14 48Z\" opacity=\".45\"/> <path d=\"M14 22 L46 22\" opacity=\".7\"/> <path d=\"M30 22 L30 48\" opacity=\".4\"/> <path d=\"M20 30 L26 30 M20 36 L26 36 M20 42 L24 42\" opacity=\".6\"/> <path d=\"M34 30 L40 30 M34 36 L40 36\" opacity=\".45\"/> <path d=\"M34 42 L42 42\" opacity=\".85\"/> <path d=\"M18 17 L42 17\" opacity=\".3\"/> </svg>"], ["Esercito la sovranità individuale", "chi sta in piedi da sé, dentro il proprio cerchio", "<svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> <circle cx=\"30\" cy=\"30\" r=\"21\" opacity=\".35\"/> <circle cx=\"30\" cy=\"16\" r=\"4\"/> <path d=\"M30 20 L30 38\"/> <path d=\"M18 28 L42 28\" opacity=\".8\"/> <path d=\"M30 38 L22 50 M30 38 L38 50\"/> <path d=\"M12 22 C9 26 9 34 12 38\" opacity=\".3\"/> <path d=\"M48 22 C51 26 51 34 48 38\" opacity=\".3\"/> </svg>"]]]];
+
+  var scelti = [];
+  var quale = null;   /* la macrovoce aperta: null = tutte */
+
+  var vociBox = R.querySelector("[data-voci]");
+  var grigBox = R.querySelector("[data-griglia]");
+  var cont    = R.querySelector("[data-cont]");
+  var vai     = R.querySelector("[data-vai]");
+
+  /* ── le macrovoci ── */
+  var tutte = document.createElement("button");
+  tutte.type = "button";
+  tutte.textContent = "tutti";
+  tutte.className = "on";
+  tutte.style.setProperty("--vc", "var(--oro)");
+  tutte.addEventListener("click", function () { apri(null, tutte); });
+  vociBox.appendChild(tutte);
+
+  FAM.forEach(function (f, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.textContent = f[0];
+    b.style.setProperty("--vc", "var(" + f[1] + ")");
+    b.addEventListener("click", function () { apri(i, b); });
+    vociBox.appendChild(b);
+  });
+
+  function apri(i, tasto) {
+    quale = i;
+    vociBox.querySelectorAll("button").forEach(function (x) {
+      x.classList.remove("on");
+    });
+    tasto.classList.add("on");
+    R.querySelectorAll(".fam").forEach(function (d, k) {
+      d.hidden = (quale !== null && quale !== k);
+    });
+  }
+
+  /* ── le famiglie ── */
+  FAM.forEach(function (f) {
+    var d = document.createElement("div");
+    d.className = "fam";
+    d.style.setProperty("--c", "var(" + f[1] + ")");
+    d.innerHTML = '<div class="capo"><b></b><em>' + f[2].length +
+      '</em></div><div class="griglia"></div>';
+    d.querySelector("b").textContent = f[0];
+    var g = d.querySelector(".griglia");
+
+    f[2].forEach(function (t) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "t";
+      b.innerHTML = '<span class="sg">' + t[2] + '</span>' +
+        '<span class="tx"><b></b><span></span></span>';
+      b.querySelector(".tx b").textContent = t[0];
+      b.querySelector(".tx span").textContent = t[1];
+      b.addEventListener("click", function () {
+        var k = scelti.indexOf(t[0]);
+        if (k < 0) scelti.push(t[0]); else scelti.splice(k, 1);
+        b.classList.toggle("on", k < 0);
+        conta();
+      });
+      g.appendChild(b);
+    });
+    grigBox.appendChild(d);
+  });
+
+  /* ⭐⭐ Il conto dice cosa succede scegliendo: non «hai selezionato 3
+     voci», ma «nasceranno tre orme». La scelta genera un percorso. */
+  function conta() {
+    var n = scelti.length;
+    vai.disabled = !n;
+    if (!n) {
+      cont.innerHTML = "Scegli quello in cui ti riconosci." +
+        "<span>Puoi prenderne pi\u00F9 d\u2019uno.</span>";
+      return;
+    }
+    cont.innerHTML = "<b>" + n + (n === 1 ? " talento" : " talenti") +
+      "</b><span>" + (n === 1
+        ? "Nascer\u00E0 un\u2019orma, e da l\u00EC il tuo percorso."
+        : "Nasceranno " + n + " orme, e da l\u00EC i tuoi percorsi.") +
+      "</span>";
+  }
+
+  vai.addEventListener("click", function () {
+    /* ⛔ Non collegato: qui il guscio dovrà creare un'orma per ogni
+       talento scelto, e portare a «La mia orma». */
+    if (window.SpazioVivo && window.SpazioVivo.apriLeMieOrme) {
+      window.SpazioVivo.apriLeMieOrme(scelti);
+    }
+  });
+
+  conta();
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.talenti = function (gia) {
+    scelti = (gia || []).slice();
+    R.querySelectorAll(".t").forEach(function (b) {
+      b.classList.toggle("on",
+        scelti.indexOf(b.querySelector(".tx b").textContent) >= 0);
+    });
+    conta();
+  };
+  window.SpazioVivo.talentiScelti = function () { return scelti.slice(); };
+})();
+</script>
+
 </div>
 
 <script src="fm-incontro.js"></script>
@@ -4076,6 +5125,7 @@
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script>
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
+<script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
@@ -4844,11 +5894,22 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ TOCCATO NEL GUSCIO ㊱ — uscendo da un'orma si dimentica QUALE.
        Senza, `?o=` tornerebbe da sola la volta dopo che si passa di lì. */
     if(id !== "orma") window.ormaChiesta = null;
+    /* ⭐ TOCCATO NEL GUSCIO ㊳ — e si dimentica anche CON QUALE CODICE.
+       ⛔ Il codice è la chiave di quell'orma: non deve sopravvivere in
+          memoria a una stanza che non lo riguarda. */
+    if(id !== "orma") window.codiceChiesto = null;
     vista=id;
     chiudiFinestre();
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
     disegnaBarra();
     document.body.classList.remove("barra-aperta");
+    /* ⭐ TOCCATO NEL GUSCIO ㊳ — LA CHAT TORNA AL PARCHEGGIO, INTERA.
+       ⛔ PRIMA della riga qui sotto, che svuota #centro: la chat è un pezzo
+          che si regge da sé e vive nel parcheggio. Se restasse dentro se ne
+          andrebbe con lo svuotamento, e la volta dopo l'orma sarebbe muta
+          senza modo di accorgersene. È la stessa regola di riponi() nel
+          nucleo, e vale per lo stesso motivo. */
+    if(typeof riponiLaChat === "function") riponiLaChat();
     var c=$("centro"); c.innerHTML=""; c.scrollTop=0;
     /* ⭐ TOCCATO NEL GUSCIO ㉛ — e il riquadro del tempo si riempie. */
     if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
@@ -6319,7 +7380,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      resterebbe appiccicata all'indirizzo, e da Emporio si copierebbe un
      link che dice ancora quell'orma.
      ⛔ `t` — il gettone di fm-talenti.js — non si tocca: non è del guscio. */
-  var MIEI_PARAMETRI = ["p", "n", "o"];
+  /* ⭐ TOCCATO NEL GUSCIO ㊳ — `c` sta qui perché DEVE sparire dall'indirizzo
+     appena si esce dall'orma: ⛔ il codice non finisce mai in un indirizzo che
+     porta a una pagina pubblica, né resta nella barra a farsi copiare. */
+  var MIEI_PARAMETRI = ["p", "n", "o", "c"];
 
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
@@ -6377,17 +7441,74 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     return BASE_INDIRIZZO + (coda ? "?" + coda : "");
   }
 
+  /* ⭐ TOCCATO NEL GUSCIO ㊵ — IL TITOLO E LA DESCRIZIONE DI OGNI FINESTRA.
+     Comando del 1 settembre 2026: un solo <title> per tutti gli indirizzi
+     è, per un motore di ricerca, venti indirizzi con lo stesso nome —
+     li vede e li scarta. Il titolo prende il nome della finestra COM'È
+     NEL DATO (ROTTE ↔ BARRA: qui non c'è scritto nessun nome), la
+     descrizione le parole di Gab dalle guide dei Gruppi Cooperativi,
+     e il canonical l'indirizzo che scriviIndirizzo() sta scrivendo.
+     ⛔ Gli og: NON si scrivono: li passa il ⓪, e non li ha ancora passati.
+     ⛔ Le finestre senza parole di Gab (la casa, La mia orma, il
+        Praticantato, Squadre…) restano SENZA descrizione: la riga manca,
+        e non si inventa — se ne mette una, sparisce anche quella vecchia.
+     ⛔ E per un'orma né nome né descrizione: da fuori non si deve capire
+        nemmeno se esiste (regola del ㊳). Resta il titolo di sempre. */
+  var TITOLO_BASE = document.title;
+  var GUIDA_FINESTRA = {
+    vicinati: "I vicinati sono formati da tre responsabili (amministratore · guida educazione · comunicazione), i residenti, gli ospiti e i praticanti karma yoga. In questo spazio si coordinano bisogni, calendari, richieste e vaglio di nuovi vicinati.",
+    emporio: "Emporio raccoglie all\u2019interno il mondo dei doni e degli scambi, con la connessione dei gruppi locali, la comunicazione fatta di pagine e dirette radiofoniche, la gestione dei talenti come credito interno, e il mondo della vendita di prodotti organizzati in pi\u00f9 categorie (alimenti, libri, rimedi, abbigliamento, oggettistica, ecc).",
+    assistenza: "L\u2019Assistenza Comunitaria Integrata somma il supporto Spirituale, basato sugli insegnamenti indo-vedici, con il supporto organizzato tra dottori, operatori e strutture di rigenerazione. In questo spazio possono essere organizzate consulenze e predisposte formazioni e dirette radio, cooperando con i responsabili delle aree dedicate.",
+    edizione: "Edizione FelicitasMundi abbraccia la comunicazione che accompagna l\u2019idea verso la realizzazione dell\u2019opera, che poi pu\u00f2 essere stampata, comunicata attraverso radio e strumenti espositivi, fino alla distribuzione attraverso l\u2019emporio e le librerie coinvolte nei vicinati.",
+    scuola: "La scuola itinerante parte da un principio. Chi siamo? Una societ\u00e0 pu\u00f2 cooperare alla creazione di nuovi modelli di civilt\u00e0, nel momento in cui ogni partecipante si riconosce come anima individualizzata di un\u2019anima suprema.",
+    nucleo: "Area di coordinamento tra chi amministra e guida lo sviluppo."
+  };
+  function scriviTesta(r, ind){
+    var id = null, k;
+    for(k in ROTTE){
+      if(ROTTE.hasOwnProperty(k) && ROTTE[k] && ROTTE[k] === r){ id = k; break; }
+    }
+    var nome = null;
+    if(id) BARRA.some(function(v){ if(v.id === id){ nome = v.n; return true; } return false; });
+    document.title = nome ? nome + " \u00b7 " + TITOLO_BASE : TITOLO_BASE;
+    var testo = id ? (GUIDA_FINESTRA[id] || null) : null;
+    var md = document.querySelector('meta[name="description"]');
+    if(testo){
+      if(!md){
+        md = document.createElement("meta");
+        md.setAttribute("name", "description");
+        document.head.appendChild(md);
+      }
+      md.setAttribute("content", testo);
+    }else if(md){
+      md.parentNode.removeChild(md);
+    }
+    var ca = document.querySelector('link[rel="canonical"]');
+    if(!ca){
+      ca = document.createElement("link");
+      ca.setAttribute("rel", "canonical");
+      document.head.appendChild(ca);
+    }
+    ca.setAttribute("href", ind);
+  }
+
   /* ⛔ SI SCRIVE SOLO UNA ROTTA CHE L'INDIRIZZO SAPREBBE RIAPRIRE.
      Raccogli e Cura sono stanze di lavoro dentro l'Edizione, non posti
      dove si arriva da fuori: entrandoci l'indirizzo resta quello di
      prima, invece di diventare un link che non riporta da nessuna parte.
      Su file:// pushState solleva: la stanza si apre lo stesso. */
   function scriviIndirizzo(){
-    if(tornando) return;
     var r = rottaCorrente();
     if(r !== "spazio" && !conosciuta(r)) return;
     var ind = indirizzoDi(r);
     if(ind === null) return;
+    /* ⭐ TOCCATO NEL GUSCIO ㊵ — la testa si scrive PRIMA dei ritorni:
+       il titolo deve seguire la finestra anche tornando indietro
+       (`tornando`) e anche quando l'indirizzo è già quello e non c'è
+       niente da riscrivere. rottaCorrente() e indirizzoDi() non toccano
+       niente: anticiparli non cambia l'indirizzo. */
+    scriviTesta(r, ind);
+    if(tornando) return;
     /* ⚠️ il primo giro si consuma qui, ANCHE quando non c'è niente da
        scrivere. Se aspettasse la prima scrittura, chi apre la casa e tocca
        una stanza si vedrebbe sostituire la casa invece che impilarla, e il
@@ -6412,6 +7533,13 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        deve costringere chi lo scrive a ricordarsi anche `p=orma`.
        ⛔ `p` vince comunque: se c'è, comanda lui. Così `?p=talenti&o=…`
           resta una stanza con un id di passaggio, non un'orma. */
+    /* ⭐ TOCCATO NEL GUSCIO ㊳ — `?c=` COMANDA SU TUTTO.
+       È il codice di UNA persona dentro un'orma, e chi lo riceve legge
+       quell'orma anche senza essere entrato. Sta prima di `p` e di `o`
+       perché vince su tutti e due: `?p=talenti&c=…` resta l'orma del codice.
+       ⛔ IL LINK È LA CHIAVE. Chi lo riceve e lo gira, gira anche
+          l'accesso: non si scrive in un log, in un titolo o in un og:. */
+    if(q && q.get("c")) v = "orma";
     if(!v && q && q.get("o")) v = "orma";
     if(!v){
       var m = location.search.match(/[?&]p=([^&]{1,80})/);
@@ -6439,6 +7567,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(id === "orma"){
       var qo = parametri();
       window.ormaChiesta = (qo && qo.get("o")) || null;
+      /* ⭐ TOCCATO NEL GUSCIO ㊳ — e con quale codice ci si è arrivati. Stessa
+         rilettura di `o`, e per la stessa ragione: se il valore vecchio
+         restasse, il tasto indietro riaprirebbe l'orma di prima. */
+      window.codiceChiesto = (qo && qo.get("c")) || null;
     }
     if(sub) sottoRichiesta = sub;
     vai(id, sub);
