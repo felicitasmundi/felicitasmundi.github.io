@@ -315,8 +315,26 @@
     max-height:8rem;min-height:2.7rem}
 
   /* le orme */
-  .orma{border-left:0.2rem solid var(--oc,var(--oro));background:rgba(245,240,230,0.04);
-    border-radius:0.4rem;padding:0.55rem 0.75rem;margin-bottom:0.5rem}
+  /* ⭐ TOCCATO NEL GUSCIO ㊷ — LA VESTE DELL'ORMA PASSA A `orma-la-forma.html`.
+     Prima: costola 0.2rem, fondo avorio piatto al 4%, angoli 0.4rem, ferma.
+     Adesso i quattro segni della forma: costola 3px, fondo `color-mix`
+     dell'elemento all'8%, angoli 0.9rem, e i tre pixel al passaggio.
+     `--c` legge da `--oc`, che è la variabile che il guscio già posa in
+     disegnaLeOrme(): nessuna riga di JS cambia.
+     ⛔ LA TESTA NON SI TOCCA — i cerchi, il nome e il quando che la forma
+        chiede stanno in `disegnaLOrma()`, ed è di ORMA: `.meta` e `p` qui
+        sotto restano esattamente com'erano. */
+  .orma{--c:var(--oc,var(--oro));
+    background:color-mix(in srgb,var(--c) 8%,rgba(2,4,12,0.42));
+    border:1px solid color-mix(in srgb,var(--c) 26%,transparent);
+    border-left:3px solid color-mix(in srgb,var(--c) 62%,transparent);
+    border-radius:0.9rem;padding:0.9rem 1rem;margin-bottom:0.5rem;
+    transition:transform 0.2s ease,border-color 0.2s ease}
+  .orma:hover{transform:translateX(3px);
+    border-color:color-mix(in srgb,var(--c) 56%,transparent);
+    border-left-color:color-mix(in srgb,var(--c) 85%,transparent)}
+  /* un'orma dentro un'orma si sposta di meno, come nella forma */
+  .orma .orma:hover{transform:translateX(2px)}
   .orma .meta{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.8)}
   .orma p{margin:0.15rem 0 0}
   /* ⭐ TOCCATO NEL GUSCIO ㉙ — il titolo del giorno, sopra le sue orme.
