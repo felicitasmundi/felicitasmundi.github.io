@@ -43,9 +43,13 @@
 
 /* ⚠️ VESTE PROVVISORIA. Design non ha consegnato la pagina di una sola
    orma: qui c'è il minimo perché si legga, e riusa le classi che il
-   guscio ha già — .occhio .sotto .orma .meta .vuoto .segna. Il giorno
-   che la consegna arriva, questo blocco se ne va con lei.
-   ⛔ Misure in rem. Nessun px. */
+   guscio ha già — .occhio .sotto .orma .vuoto .segna. Il giorno che la
+   consegna arriva, questo blocco se ne va con lei.
+   ⭐ La FORMA dell'orma invece è fissata: `orma-la-forma.html`, 3
+      settembre 2026. La scorza — costola, fondo, angoli, i tre pixel al
+      passaggio — sta già nel guscio; qui sotto ci sono la TESTA e il
+      PIEDE, che il guscio dice per iscritto di lasciare a questo file.
+   ⛔ Misure in rem. Nessun px. Niente sotto --t-eti. */
 (function vesteProvvisoriaDellOrma(){
   if(document.getElementById("fm-orma-veste")) return;
   var s = document.createElement("style");
@@ -68,8 +72,62 @@
   + "#orma-nomina .trovati{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.5rem}"
   + "#orma-nomina .trovati:empty{display:none}"
   + "#orma-nomina > .mini{margin-top:0.6rem}"
-  + ".orma-dove{margin-top:0.6rem;font-family:'DM Sans',sans-serif;"
-  +   "font-size:var(--t-eti);color:rgba(245,240,230,0.78)}"
+  /* ── LA TESTA E IL PIEDE DELL'ORMA — da `orma-la-forma.html` ───────
+     ⛔ `.cer` ESISTE GIÀ nel guscio, ed è un'altra cosa: i cerchietti
+        del filo, 2.1rem, bordo tratteggiato, margine e z-index propri.
+        Qui si scrive sempre scopato — `.orma .da .cer` — e si azzerano
+        a mano margine, posizione e stile del bordo, o i cerchi della
+        testa ereditano quelli del filo.
+     ⛔ E i caratteri non scendono mai sotto `--t-eti`. La forma, che è
+        una pagina a sé e non ha `--scala`, arriva a .58rem: qui non si
+        può, e la testa arretra col colore invece che con la misura. */
+  /* ⚠️ La riga va a capo: su una colonna stretta, con tre cerchi e un
+     nome lungo, il quando scende sotto invece di finire addosso al
+     nome. Misurato in una colonna da 20rem, dove senza questo il nome
+     debordava di 12 punti. */
+  + ".orma .da{display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;"
+  +   "margin-bottom:0.5rem}"
+  /* ⚠️ Il cerchio è più largo di quello della forma — 2.5rem invece di
+     1.5rem — perché le iniziali qui stanno a `--t-eti` e non possono
+     scendere. La forma tiene il cerchio 2,6 volte il carattere: questo
+     ne tiene 2,2, che è il più stretto in cui due lettere respirano. */
+  + ".orma .da .cer{position:static;flex:none;width:2.5rem;height:2.5rem;"
+  +   "margin:0;border-radius:50%;"
+  +   "border:1px solid color-mix(in srgb,var(--c) 55%,transparent);"
+  +   "background:color-mix(in srgb,var(--c) 16%,transparent);"
+  +   "display:grid;place-items:center;line-height:1;"
+  +   "font-family:'DM Sans',sans-serif;font-size:var(--t-eti);"
+  +   "color:color-mix(in srgb,var(--c) 85%,var(--ivory))}"
+  /* quando la mettono in più i cerchi si accavallano: è la forma */
+  + ".orma .da .cer.pi{margin-left:-0.9rem}"
+  + ".orma .da .nm{flex:1 1 auto;min-width:0;overflow-wrap:anywhere;"
+  +   "font-family:'DM Sans',sans-serif;"
+  +   "font-size:var(--t-eti);color:rgba(245,240,230,0.62);line-height:1.25}"
+  + ".orma .da .nm i{font-style:normal;color:rgba(245,240,230,0.34)}"
+  + ".orma .da .qd{margin-left:auto;font-family:'DM Sans',sans-serif;"
+  +   "font-size:var(--t-eti);color:rgba(245,240,230,0.34);white-space:nowrap}"
+  + ".orma .tt{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);"
+  +   "line-height:1.4;color:rgba(245,240,230,0.94)}"
+  + ".orma .rg{display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;"
+  +   "margin-top:0.4rem;font-family:'DM Sans',sans-serif;"
+  +   "font-size:var(--t-eti);color:rgba(245,240,230,0.44)}"
+  + ".orma .rg:empty{display:none}"
+  + ".orma .rg .sep{color:rgba(245,240,230,0.18)}"
+  + ".orma .rg .el{color:var(--c);filter:brightness(1.3)}"
+  /* lo stadio: in fondo, mai in cima, e col suo colore.
+     ⚠️ `--nexus` NON sta in `:root` del guscio — solo dentro `.sv-tal` —
+        quindi qui va col ripiego, che è il valore che il guscio e la
+        forma scrivono identico. */
+  + ".orma .stadio{display:inline-flex;align-items:center;gap:0.4rem;"
+  +   "font-family:'DM Sans',sans-serif;font-size:var(--t-eti);"
+  +   "letter-spacing:0.1em;padding:0.1rem 0.5rem;border-radius:999px;"
+  +   "border:1px solid color-mix(in srgb,var(--s) 44%,transparent);"
+  +   "color:color-mix(in srgb,var(--s) 78%,var(--ivory))}"
+  + ".orma .stadio i{flex:none;width:0.4rem;height:0.4rem;border-radius:50%;"
+  +   "background:var(--s);filter:brightness(1.3)}"
+  + ".orma .stadio.in-coda{--s:var(--nexus,#8C2F39)}"
+  + ".orma .stadio.in-avanzamento{--s:var(--terra)}"
+  + ".orma .stadio.sviluppato{--s:var(--etere)}"
   + ".orma-porta{margin-top:1.2rem}"
   /* ⛔ `.tasto` sta in invito.html e accesso.html, NON nel guscio: qui
      non esiste, e appoggiarcisi darebbe un collegamento nudo. La porta
@@ -107,19 +165,52 @@ function unaOrma(c){
   var corpo = document.getElementById("orma-corpo");
   if(corpo) corpo.innerHTML = '<p class="vuoto">…</p>';
 
-  db.from("orme")
-    .select("id,titolo,sottotitolo,contenuto,tipo,destinazione,"
-          + "momento,accaduto_il,luogo,persona_id")
+  chiediLOrma(id, function(d){
+    /* ⛔ l'errore e il vuoto finiscono nello STESSO posto: una regola di
+       riga che nasconde una riga non torna come errore, torna come
+       niente — e le due risposte non devono distinguersi qui. */
+    if(!d){ ormaNonCe(); return; }
+    disegnaLOrma(d);
+  });
+}
+
+/* ── la lettura dell'orma, e la colonna che forse non c'è ───────────
+
+   ⛔ La forma vuole lo STADIO in fondo. Su `orme` quella colonna oggi
+      NON risulta: nello schema del magazzino non c'è, e `stadio` si
+      trova solo su `task`. Chiederla a vuoto farebbe rifiutare TUTTA
+      la lettura, e l'orma sparirebbe dietro la pagina del «non c'è» —
+      che qui è il danno peggiore che si possa fare.
+
+   ⭐ Quindi si chiede, e se il database la rifiuta si rilegge senza.
+      Lo stadio si disegna solo se torna: un campo che non arriva resta
+      vuoto, non si inventa. Il giorno che il ② dice se `orme.stadio`
+      c'è o non ci va, questo ripiego si toglie e resta una lettura
+      sola — la domanda è in `agenti/posta/per-database.md`.
+
+   ⛔ E le due strade tornano NELLO STESSO MODO — `null` — perché una
+      regola di riga che nasconde una riga non torna come errore,
+      torna come niente. */
+var ORMA_CAMPI = "id,titolo,sottotitolo,contenuto,tipo,destinazione,"
+               + "momento,accaduto_il,luogo,visibilita,persona_id";
+
+function chiediLOrma(id, poi){
+  db.from("orme").select(ORMA_CAMPI + ",stadio")
     .eq("id", id)
     .maybeSingle()
     .then(function(r){
-      /* ⛔ l'errore e il vuoto finiscono nello STESSO posto: una regola di
-         riga che nasconde una riga non torna come errore, torna come
-         niente — e le due risposte non devono distinguersi qui. */
-      if(!r || r.error || !r.data){ ormaNonCe(); return; }
-      disegnaLOrma(r.data);
+      if(r && r.error){ ormaSenzaLoStadio(id, poi); return; }
+      poi((r && r.data) || null);
     })
-    .catch(function(){ ormaNonCe(); });
+    .catch(function(){ ormaSenzaLoStadio(id, poi); });
+}
+
+function ormaSenzaLoStadio(id, poi){
+  db.from("orme").select(ORMA_CAMPI)
+    .eq("id", id)
+    .maybeSingle()
+    .then(function(r){ poi((r && !r.error && r.data) || null); })
+    .catch(function(){ poi(null); });
 }
 
 /* ── ⓪ IL CODICE PER PERSONA: `?c=<codice>` ─────────────────────────
@@ -206,40 +297,84 @@ function disegnaLOrma(o){
 
   corpo.innerHTML = "";
 
-  /* il giorno e l'ora: le stesse due funzioni della stanza delle orme,
-     così un'orma dice la stessa data dovunque la si guardi */
+  /* ── LA FORMA DELL'ORMA — `orma-la-forma.html`, 3 settembre 2026 ──
+     Tre pezzi, in quest'ordine e mai in un altro:
+       ① LA TESTA — i cerchi con le iniziali, il nome di chi l'ha
+         lasciata, e il quando. ⛔ PRIMA del contenuto, sempre:
+         «la prima riga dice sempre da chi viene».
+       ② il contenuto.
+       ③ la riga in fondo — dove sta la cosa, il luogo, e LO STADIO
+         col suo colore. ⛔ Lo stadio in fondo, mai in cima.
+     ⛔ Il nome non sta in `orme`: quella tavola porta `persona_id`. Si
+        legge da `persone_pubbliche`, la vista aperta — `persone` è
+        chiusa e non si tocca. È una seconda lettura e arriva dopo: la
+        testa nasce subito col cerchio e il quando, e il nome ci si
+        posa quando torna. */
   var riga = document.createElement("div");
+  riga.id = "orma-riga";
   riga.className = "orma";
   if(q) riga.style.setProperty("--oc", "var(" + q.c + ")");
-  riga.innerHTML = '<div class="meta"></div><p></p>';
+  riga.innerHTML = '<div class="da"><span class="nm"></span>'
+                 + '<span class="qd"></span></div>'
+                 + '<div class="tt"></div><div class="rg"></div>';
+
+  /* il giorno e l'ora: le stesse due funzioni della stanza delle orme,
+     così un'orma dice la stessa data dovunque la si guardi */
   var quando = "";
   if(typeof giornoDi === "function" && typeof nomeDelGiorno === "function")
     quando = nomeDelGiorno(giornoDi(o));
   var ora = new Date(o.momento).toLocaleTimeString("it-IT",
               {hour:"2-digit", minute:"2-digit"});
-  riga.querySelector(".meta").textContent =
-    (quando ? quando + " · " : "") + ora
-    + (q ? " · " + q.n : "") + " → " + (o.destinazione || "—");
-  riga.querySelector("p").textContent = o.contenuto || "";
-  corpo.appendChild(riga);
+  riga.querySelector(".qd").textContent = (quando ? quando + " · " : "") + ora;
 
-  if(o.luogo){
-    var d = document.createElement("p");
-    d.className = "orma-dove";
-    d.textContent = o.luogo;
-    corpo.appendChild(d);
-  }
+  riga.querySelector(".tt").textContent = o.contenuto || "";
+
+  /* ── ③ la riga in fondo ──
+     📌 La `destinazione` non si scrive più accanto alla stanza: le due
+        escono dalla stessa riga di DOVE e dicevano la stessa cosa due
+        volte. Resta come ripiego, se il tipo non si riconosce.
+     ⭐ Dove non c'è lo stadio, in coda va l'apertura — «solo me», «il
+        mio vicinato», «tutti»: sono le tre parole del velo «E chi la
+        vede?» che il guscio ha già, non se ne scrivono di nuove. */
+  var voci = [];
+  var dove = q ? q.n : (o.tipo || o.destinazione || "");
+  if(dove) voci.push({ t: dove, c: "el" });
+  if(o.luogo) voci.push({ t: o.luogo });
+  var stadio = segnoDelloStadio(o.stadio);
+  if(stadio) voci.push({ e: stadio });
+  else if(parolaDellApertura(o.visibilita))
+    voci.push({ t: parolaDellApertura(o.visibilita) });
+
+  var rg = riga.querySelector(".rg");
+  voci.forEach(function(v, i){
+    if(i){
+      var sp = document.createElement("span");
+      sp.className = "sep";
+      sp.textContent = "\u00B7";
+      rg.appendChild(sp);
+    }
+    if(v.e){ rg.appendChild(v.e); return; }
+    var e = document.createElement("span");
+    if(v.c) e.className = v.c;
+    e.textContent = v.t;
+    rg.appendChild(e);
+  });
+
+  corpo.appendChild(riga);
+  nomeDellaTesta(riga, o);
 
   /* ── chi c'è dentro ──
      ⭐ Decisione di Gab: chi è nominato e ha confermato vede TUTTI i nomi.
-        È lì il senso — entri e vedi con chi stai lavorando. */
-  var h = document.createElement("h2");
-  h.style.marginTop = "1.6rem";
-  h.textContent = "Chi c'è";
-  var box = document.createElement("div");
-  box.id = "orma-chi";
-  corpo.appendChild(h);
-  corpo.appendChild(box);
+        È lì il senso — entri e vedi con chi stai lavorando.
+     ⛔ E QUANDO NON C'È NESSUNO IL RIQUADRO NON SI DISEGNA: niente
+        titolo, niente segnaposto — la stessa regola della riga dei
+        bisogni, decisa da Gab l'1 settembre 2026 e chiesta da STANZE
+        in `agenti/posta/per-orma.md` il 3 settembre. Qui resta solo il
+        posto vuoto dove il riquadro nasce se qualcuno arriva — e serve
+        anche al ridisegno dopo i due gesti. */
+  var blocco = document.createElement("div");
+  blocco.id = "orma-chi-blocco";
+  corpo.appendChild(blocco);
 
   /* il campo per nominare: solo su un'orma PROPRIA. Dal `?c=` la
      risposta può non dire di chi è l'orma — allora non compare, e
@@ -248,11 +383,145 @@ function disegnaLOrma(o){
     nominaDentroLOrma(o, corpo);
 
   leggiChiCe(o.id, function(righe){
-    versaChiCe(box, righe, o);
+    versaChiCe(blocco, righe, o);
+    /* ⭐ e la testa impara chi altro c'è dentro: la forma dice che
+       «quando la mettono in più» i cerchi si affiancano e il nome
+       diventa «e altri due». Il corpo resta identico. */
+    testaDellOrma(riga).righe = righe;
+    posaLaTesta(riga);
     /* ⭐ la chat si apre in ogni caso: «Chi c'è» vuoto non vuol dire
        che non ci siano messaggi — da ospite col codice è la norma. */
     chatDentroLOrma(o.id, corpo, righe);
   });
+}
+
+/* ── LO STADIO — le tre parole, e i tre colori ──────────────────────
+
+   ⭐ Parole e colori vengono dalla forma, e sono tre: «in coda» col
+      rosso del Nexus, «in avanzamento» col colore della terra,
+      «sviluppato» con quello dell'etere. ⛔ Non se ne inventano altre:
+      uno stadio che non è uno di questi tre non si disegna affatto.
+
+   ⚠️ Nel database lo stadio si scrive con la lineetta bassa — `in_coda`,
+      come su `task`. Qui si accettano tutte e due le grafie e si mostra
+      sempre quella con lo spazio, che è quella della forma. */
+var ORMA_STADI = ["in coda", "in avanzamento", "sviluppato"];
+
+function segnoDelloStadio(v){
+  if(typeof v !== "string" || !v) return null;
+  var parola = v.replace(/_/g, " ").trim().toLowerCase();
+  if(ORMA_STADI.indexOf(parola) < 0) return null;
+  var e = document.createElement("span");
+  e.className = "stadio " + parola.replace(/ /g, "-");
+  e.appendChild(document.createElement("i"));
+  e.appendChild(document.createTextNode(parola));
+  return e;
+}
+
+/* le tre parole dell'apertura sono quelle del velo «E chi la vede?» del
+   guscio — solo me · il mio vicinato · tutti. Non se ne scrivono altre. */
+var ORMA_APERTURA = { solo_me: "solo me", vicinato: "il mio vicinato",
+                      pubblico: "tutti" };
+function parolaDellApertura(v){
+  return (typeof v === "string" && ORMA_APERTURA[v]) || "";
+}
+
+/* ── LA TESTA: i cerchi, il nome, il quando ─────────────────────────
+
+   Due letture la riempiono e arrivano quando arrivano: il nome di chi
+   ha lasciato l'orma, da `persone_pubbliche`, e le righe di «Chi c'è»,
+   già lette per il riquadro. Ognuna posa la sua parte e chiama il
+   ridisegno: l'ordine fra le due non conta.
+
+   ⛔ E se un nome non torna non se ne inventa uno: resta il segnaposto
+      spento, e il cerchio senza iniziali. */
+function testaDellOrma(riga){
+  if(!riga._testa) riga._testa = { autore: "", autoreId: "", righe: [] };
+  return riga._testa;
+}
+
+/* ⛔ I nomi da `persone_pubbliche`, MAI da `persone`: quella è chiusa.
+   ⭐ Dal `?c=` la risposta può non dire di chi è l'orma: allora non si
+      chiede niente, e la testa resta col solo quando. */
+function nomeDellaTesta(riga, o){
+  var t = testaDellOrma(riga);
+  posaLaTesta(riga);
+  if(!o || !o.persona_id) return;
+  t.autoreId = o.persona_id;
+  db.from("persone_pubbliche").select("id,nome")
+    .eq("id", o.persona_id)
+    .maybeSingle()
+    .then(function(r){
+      t.autore = (r && !r.error && r.data && r.data.nome) || "";
+      posaLaTesta(riga);
+    })
+    .catch(function(){ posaLaTesta(riga); });
+}
+
+function posaLaTesta(riga){
+  if(!riga) return;
+  var t  = testaDellOrma(riga);
+  var da = riga.querySelector(".da");
+  var nm = riga.querySelector(".nm");
+  if(!da || !nm) return;
+
+  /* ⛔ Solo chi ha CONFERMATO entra nella testa: una proposta non è
+     ancora un fatto, e la testa dice chi l'orma l'ha messa. Chi è
+     ancora in attesa resta nel riquadro «Chi c'è», visibile e spento. */
+  var altri = (t.righe || []).filter(function(x){
+    if(!x || !x.nome || x.stato !== "confermato") return false;
+    if(t.autoreId && x.persona_id === t.autoreId) return false;
+    if(t.autore  && x.nome === t.autore) return false;
+    return true;
+  }).map(function(x){ return x.nome; });
+
+  /* i cerchi: prima chi l'ha lasciata, poi gli altri, accavallati.
+     ⭐ Se ne disegnano al massimo tre, quanti la forma ne mostra: il
+        conto vero resta nelle parole, che non arrotondano. */
+  var nomi   = (t.autore ? [t.autore] : [""]).concat(altri);
+  var vecchi = da.querySelectorAll(".cer");
+  for(var i = 0; i < vecchi.length; i++) da.removeChild(vecchi[i]);
+  var quanti = Math.min(nomi.length, 3);
+  for(var k = 0; k < quanti; k++){
+    var c = document.createElement("span");
+    c.className = "cer" + (k ? " pi" : "");
+    c.textContent = inizialiDi(nomi[k]);
+    da.insertBefore(c, nm);
+  }
+
+  nm.textContent = "";
+  if(!t.autore){
+    /* ⛔ Il nome manca: segnaposto visibile, mai un nome inventato. */
+    var v = document.createElement("i");
+    v.textContent = "[ in attesa ]";
+    nm.appendChild(v);
+    return;
+  }
+  nm.appendChild(document.createTextNode(t.autore));
+  if(!altri.length) return;
+  var coda = document.createElement("i");
+  coda.textContent = (altri.length === 1)
+    ? " e " + primoNomeDi(altri[0])
+    : " e altri " + quantiInParole(altri.length);
+  nm.appendChild(coda);
+}
+
+/* le iniziali: la prima lettera del nome e quella del secondo pezzo,
+   se c'è. Un nome che non arriva lascia il cerchio vuoto. */
+function inizialiDi(n){
+  var p = String(n || "").trim().split(/\s+/).filter(Boolean);
+  if(!p.length) return "";
+  return (p[0].charAt(0) + (p.length > 1 ? p[1].charAt(0) : "")).toUpperCase();
+}
+
+function primoNomeDi(n){
+  return String(n || "").trim().split(/\s+/)[0] || "";
+}
+
+var ORMA_CONTA = ["", "", "due", "tre", "quattro", "cinque",
+                  "sei", "sette", "otto", "nove", "dieci"];
+function quantiInParole(n){
+  return ORMA_CONTA[n] || String(n);
 }
 
 /* ── I DUE GESTI SUL LEGAME ─────────────────────────────────────────
@@ -275,14 +544,28 @@ function leggiChiCe(ormaId, poi){
     .catch(function(){ poi([]); });
 }
 
-/* i nomi dentro il riquadro — e sulla PROPRIA riga proposta, il tasto */
-function versaChiCe(box, righe, o){
-  if(!box) return;
-  if(!righe.length){
-    box.innerHTML = '<span class="segna">[ in attesa ]</span>';
-    return;
-  }
-  box.innerHTML = "";
+/* i nomi dentro il riquadro — e sulla PROPRIA riga proposta, il tasto.
+
+   ⛔ CON ZERO RIGHE IL RIQUADRO NON SI DISEGNA: niente titolo, niente
+      segnaposto. È la stessa regola della riga dei bisogni, decisa da
+      Gab l'1 settembre 2026 e chiesta da STANZE il 3 settembre. Si
+      svuota il posto e si esce.
+   ⭐ Il campo del nominare non sta qui dentro e resta comunque: quello
+      non è il riquadro dei nomi. */
+function versaChiCe(blocco, righe, o){
+  if(!blocco) return;
+  blocco.innerHTML = "";
+  if(!righe.length) return;
+
+  var h = document.createElement("h2");
+  h.style.marginTop = "1.6rem";
+  h.textContent = "Chi c'è";
+  blocco.appendChild(h);
+
+  var box = document.createElement("div");
+  box.id = "orma-chi";
+  blocco.appendChild(box);
+
   righe.forEach(function(x){
     var e = document.createElement("span");
     /* ⛔ «confermato» è l'unico stato che vale. `proposto` e `ritirato`
@@ -331,10 +614,16 @@ function confermaIlLegame(rigaId, o){
 /* il ridisegno dopo un gesto: il riquadro, il tag @ della chat, e la
    penna — che deve conoscere i nomi nuovi per le chiamate */
 function rileggiChiCe(o){
-  var box = document.getElementById("orma-chi");
-  if(!box) return;
+  /* ⛔ il posto fisso è il BLOCCO, non il riquadro: con zero righe il
+     riquadro non esiste, e cercare `orma-chi` fermerebbe il ridisegno
+     proprio quando serve — subito dopo la prima proposta. */
+  var blocco = document.getElementById("orma-chi-blocco");
+  if(!blocco) return;
   leggiChiCe(o.id, function(righe){
-    versaChiCe(box, righe, o);
+    versaChiCe(blocco, righe, o);
+    /* e la testa si rifà con chi ha confermato adesso */
+    var riga = document.getElementById("orma-riga");
+    if(riga){ testaDellOrma(riga).righe = righe; posaLaTesta(riga); }
     var SV = window.SpazioVivo || {};
     var elenco = [], perNome = {};
     righe.forEach(function(x){
@@ -478,7 +767,9 @@ function chatDentroLOrma(ormaId, corpo, gente){
 
   var h = document.createElement("h2");
   h.style.marginTop = "1.6rem";
-  h.textContent = "La chat";
+  /* ⭐ «La conversazione»: è la parola della fonte e del mandato — il
+     file scriveva «La chat». Segnalato da STANZE il 3 settembre. */
+  h.textContent = "La conversazione";
   corpo.appendChild(h);
   corpo.appendChild(pezzo);
 
