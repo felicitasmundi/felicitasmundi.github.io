@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.felicitasmundi.felicitas",
+    "sha256_cert_fingerprints": ["C7:C2:58:7B:CA:33:BE:9A:75:B1:5D:71:8B:E0:37:F2:A2:66:A1:EC:35:7F:DA:C8:9F:0C:F5:64:24:D5:52:7C"]
+  }
+}]
