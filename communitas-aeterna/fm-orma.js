@@ -174,38 +174,26 @@ function unaOrma(c){
   });
 }
 
-/* ── la lettura dell'orma, e la colonna che forse non c'è ───────────
+/* ── la lettura dell'orma ───────────────────────────────────────────
 
-   ⛔ La forma vuole lo STADIO in fondo. Su `orme` quella colonna oggi
-      NON risulta: nello schema del magazzino non c'è, e `stadio` si
-      trova solo su `task`. Chiederla a vuoto farebbe rifiutare TUTTA
-      la lettura, e l'orma sparirebbe dietro la pagina del «non c'è» —
-      che qui è il danno peggiore che si possa fare.
+   ⭐ `orme.stadio` c'è: lanciata da Gab il 4 settembre 2026 — `text`
+      vuotabile, CHECK `orme_stadio_tre_parole` sulle tre parole, senza
+      difetto. Il ripiego che provava la colonna e rileggeva senza al
+      rifiuto è stato tolto: una lettura sola, come deve essere.
 
-   ⭐ Quindi si chiede, e se il database la rifiuta si rilegge senza.
-      Lo stadio si disegna solo se torna: un campo che non arriva resta
-      vuoto, non si inventa. Il giorno che il ② dice se `orme.stadio`
-      c'è o non ci va, questo ripiego si toglie e resta una lettura
-      sola — la domanda è in `agenti/posta/per-database.md`.
+   ⛔ La colonna è VUOTABILE, e resta vuota su tutte le orme di prima:
+      il difetto non è stato messo apposta, perché messo all'indietro
+      avrebbe riempito «in coda» anche note, spese e link. Quindi lo
+      stadio vuoto è il caso NORMALE, non l'eccezione — e vuoto non si
+      disegna: la riga in fondo mostra l'apertura al suo posto.
 
-   ⛔ E le due strade tornano NELLO STESSO MODO — `null` — perché una
-      regola di riga che nasconde una riga non torna come errore,
-      torna come niente. */
+   ⛔ E l'errore e il vuoto tornano NELLO STESSO MODO — `null` — perché
+      una regola di riga che nasconde una riga non torna come errore,
+      torna come niente, e le due risposte non devono distinguersi. */
 var ORMA_CAMPI = "id,titolo,sottotitolo,contenuto,tipo,destinazione,"
-               + "momento,accaduto_il,luogo,visibilita,persona_id";
+               + "momento,accaduto_il,luogo,visibilita,stadio,persona_id";
 
 function chiediLOrma(id, poi){
-  db.from("orme").select(ORMA_CAMPI + ",stadio")
-    .eq("id", id)
-    .maybeSingle()
-    .then(function(r){
-      if(r && r.error){ ormaSenzaLoStadio(id, poi); return; }
-      poi((r && r.data) || null);
-    })
-    .catch(function(){ ormaSenzaLoStadio(id, poi); });
-}
-
-function ormaSenzaLoStadio(id, poi){
   db.from("orme").select(ORMA_CAMPI)
     .eq("id", id)
     .maybeSingle()
