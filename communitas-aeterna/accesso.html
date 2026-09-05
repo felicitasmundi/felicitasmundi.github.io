@@ -106,6 +106,14 @@
     color:var(--oro-ch,#D4AF6A);text-decoration:none;
     border-bottom:1px solid rgba(200,160,85,0.35);padding-bottom:0.1rem}
   .fp-link a:hover{color:var(--ivory,#F5F0E6);border-bottom-color:var(--ivory,#F5F0E6)}
+  /* ⭐ da telefono il piede va SOTTO, a tutta larghezza: il body gira in colonna.
+     Il centraggio passa da justify-content a margin:auto su .porta, che collassa
+     a zero quando il contenuto supera lo schermo — così la cima resta raggiungibile. */
+  @media(max-width:40rem){
+    body{flex-direction:column;justify-content:flex-start}
+    .porta{margin:auto}
+    .fm-piede{flex:none}
+  }
 </style>
 </head>
 <body>
