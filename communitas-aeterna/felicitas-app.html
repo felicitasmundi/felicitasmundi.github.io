@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ⛔ questa pagina si apre solo col link: nessuna pagina del sito la richiama,
+     e il noindex tiene fuori i motori di ricerca -->
+<meta name="robots" content="noindex,nofollow">
+<title>Felicitas &middot; l&rsquo;app per Android</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0A0C1A;--oro:#C8A055;--oro-ch:#D4AF6A;--ivory:#F5F0E6;--line:rgba(184,150,62,.22);
+    --scala:1;
+    --t-eti: calc(0.8125rem * var(--scala));
+    --t-cor: calc(1.0625rem * var(--scala));
+    --t-tit: calc(1.75rem   * var(--scala))}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#02040c;color:var(--ivory);font-family:'DM Sans',sans-serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    padding:1.5rem;min-height:100vh;text-align:center}
+  body::before{content:'';position:fixed;inset:0;z-index:-1;
+    background:radial-gradient(ellipse at 50% 30%,#0a1428,#060c1c 46%,#02040c 100%)}
+  .foglio{width:100%;max-width:24rem;margin:auto}
+  .nx{width:8.5rem;max-width:60%;height:auto;
+    filter:drop-shadow(0 0 1.4rem rgba(200,160,85,.35))}
+  h1{font-family:'Cinzel',serif;font-weight:500;font-size:var(--t-tit);
+    color:var(--oro-ch);letter-spacing:.08em;margin-top:1.2rem}
+  .eti{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,230,.55);
+    margin-top:.4rem}
+  /* ⚠️ versione e byte cambiano insieme all'apk: quando felicitas.apk si
+     rinnova, queste due righe si aggiornano a mano nello stesso giro */
+  .dati{font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:var(--t-cor);color:rgba(245,240,230,.75);margin-top:1.1rem;line-height:1.6}
+  .tasto{display:inline-block;margin-top:1.6rem;padding:.85rem 2.6rem;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-cor);font-weight:500;
+    color:var(--navy);background:linear-gradient(180deg,var(--oro-ch),var(--oro));
+    border-radius:2rem;text-decoration:none;letter-spacing:.04em}
+  .tasto:hover{filter:brightness(1.07)}
+  .come{margin:2.2rem auto 0;max-width:21rem;text-align:left;
+    border-top:1px solid var(--line);padding-top:1.3rem}
+  .come li{font-size:var(--t-eti);color:rgba(245,240,230,.7);line-height:1.6;
+    margin:0 0 .55rem 1.1rem}
+</style>
+</head>
+<body>
+<div class="foglio">
+  <img class="nx" src="nexus.png" alt="Il Nexus">
+  <h1>Felicitas</h1>
+  <div class="eti">L&rsquo;app per Android</div>
+  <div class="dati">Versione 2026.09.04 &middot; 803.129 byte</div>
+  <a class="tasto" href="felicitas.apk" download>Scarica</a>
+  <ol class="come">
+    <li>Scarica il file e aprilo dalla tendina delle notifiche o dalla cartella Download.</li>
+    <li>Android chiede se consentire l&rsquo;installazione da questa origine: consenti.</li>
+    <li>Tocca &laquo;Installa&raquo;: l&rsquo;icona di Felicitas compare fra le tue app.</li>
+  </ol>
+</div>
+</body>
+</html>
