@@ -1,0 +1,1263 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FelicitasMundi — ora in linea</title>
+<meta name="description" content="Comunità Eterna FelicitasMundi. La piattaforma è in linea: scarica l’app ed entra.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@400;500&display=swap">
+<style>
+:root{
+  --fondo:#0A0C1A; --ivory:#F5F0E6; --oro:#C8A055; --oro-ch:#D4AF6A;
+  --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644;
+  --aria:#669944; --etere:#9966CC; --nexus:#8C2F39;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--ivory);
+  font-family:'DM Sans',system-ui,sans-serif;line-height:1.6;
+  -webkit-text-size-adjust:100%;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(ellipse at 22% 8%,rgba(38,64,120,.44),transparent 58%),
+             radial-gradient(ellipse at 84% 88%,rgba(60,44,110,.36),transparent 60%)}
+
+/* ═══ la scena: una idea per schermata ═══ */
+.scena{min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:4rem 1.2rem;position:relative;text-align:center}
+/* ⭐ l'alone: ogni scena tiene la luce al centro, e il bordo respira nel buio */
+.scena::before{content:'';position:absolute;inset:0;z-index:-1;
+  pointer-events:none;
+  background:radial-gradient(ellipse 62% 48% at 50% 46%,
+    rgba(212,175,106,.055),transparent 72%)}
+/* il filo che separa: non una riga, un respiro */
+.scena + .scena::after{content:'';position:absolute;top:0;left:50%;
+  transform:translateX(-50%);width:min(22rem,52%);height:1px;
+  background:linear-gradient(90deg,transparent,
+    rgba(212,175,106,.26),transparent)}
+.occ{font-size:.94rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--oro-ch);opacity:.9;margin-bottom:1.1rem}
+.grande{font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:clamp(2.1rem,6.4vw,3.5rem);line-height:1.24;
+  max-width:22ch;margin:0 auto}
+.sotto{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(1.5rem,3.6vw,1.9rem);line-height:1.6;
+  color:rgba(245,240,230,.74);max-width:36ch;margin:1.3rem auto 0}
+
+/* quello che entra scorrendo */
+.entra{opacity:0;transform:translateY(1.4rem);
+  transition:opacity 1.1s ease,transform 1.1s ease}
+.entra.vista{opacity:1;transform:none}
+.entra.r1{transition-delay:.12s} .entra.r2{transition-delay:.28s}
+.entra.r3{transition-delay:.44s}
+
+/* ═══ ① la testa ═══ */
+.testa{gap:0}
+.marchio{font-family:'Cinzel',serif;font-weight:500;
+  font-size:clamp(2.05rem,6.5vw,3rem);letter-spacing:.1em;
+  text-shadow:0 .125rem 1.6rem rgba(2,4,12,.9);
+  display:flex;justify-content:center;align-items:baseline;flex-wrap:nowrap}
+/* ⭐ ogni lettera si posa a una sua altezza e con la sua inclinazione:
+   la riga ondeggia come una scrittura a mano, e respira piano */
+.marchio i{font-style:normal;display:inline-block;
+  transform:translateY(var(--y,0)) rotate(var(--r,0deg));
+  animation:respiro-lettera var(--t,7s) ease-in-out infinite;
+  animation-delay:var(--d,0s)}
+@keyframes respiro-lettera{
+  0%,100%{transform:translateY(var(--y,0)) rotate(var(--r,0deg))}
+  50%{transform:translateY(calc(var(--y,0px) * .35)) rotate(calc(var(--r,0deg) * .4))}
+}
+/* la linea sopra: il matra della devanagari, che tiene insieme le lettere */
+.marchio-riga{position:relative;display:inline-block}
+@media (prefers-reduced-motion:reduce){.marchio i{animation:none}}
+.marchio + .occ{margin-top:.5rem;margin-bottom:2.6rem}
+.quando{text-decoration:none;display:block;cursor:pointer;
+  transition:transform .22s,border-color .22s,background .22s}
+.quando:hover{transform:translateY(-2px);
+  border-color:rgba(212,175,106,.62);background:rgba(212,175,106,.09)}
+.quando:active{transform:translateY(0)}
+.quando b::after{content:' \2193';font-size:.78em;opacity:.7;margin-left:.35em}
+.quando{font-family:'Cormorant Garamond',serif;font-size:1.35rem;
+  color:rgba(245,240,230,.52);margin-top:2.8rem;
+  border:1px solid rgba(212,175,106,.22);border-radius:999px;
+  padding:.85rem 1.6rem;background:rgba(200,160,85,.05)}
+.quando b{display:block;font-family:'Cinzel',serif;font-weight:500;
+  font-size:1.55rem;letter-spacing:.1em;color:var(--oro-ch);
+  margin-bottom:.3rem}
+.giu{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  font-size:1.3rem;color:rgba(212,175,106,.5);
+  animation:respira 3s ease-in-out infinite;text-decoration:none}
+@keyframes respira{0%,100%{opacity:.34;transform:translate(-50%,0)}
+  50%{opacity:.8;transform:translate(-50%,.4rem)}}
+
+/* ═══ ② da adesso puoi ═══ */
+.potrai{margin-bottom:2rem}
+.potrai b{display:block;font-family:'Cinzel',serif;font-weight:500;
+  font-size:clamp(1.05rem,2.8vw,1.28rem);letter-spacing:.3em;
+  color:rgba(245,240,230,.42)}
+.potrai em{display:block;font-family:'Cinzel',serif;font-style:normal;
+  font-weight:500;font-size:clamp(2.4rem,10vw,4.6rem);letter-spacing:.08em;
+  color:var(--oro-ch);line-height:1.06;margin-top:.2rem}
+/* ⭐ un quadrante di luce bianca: nessun colore, solo il chiarore che filtra
+   da dietro le parole — come una porta che si apre sul chiaro. */
+.scorre{position:relative;min-height:clamp(14rem,36svh,20rem);display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;width:100%;max-width:42rem;
+  padding:clamp(1.6rem,5vw,2.6rem) clamp(1.2rem,4vw,2.2rem);
+  border-radius:1.4rem;overflow:hidden;
+  border:1px solid rgba(245,240,230,.24);
+  background:linear-gradient(180deg,rgba(245,240,230,.075),rgba(245,240,230,.03));
+  box-shadow:inset 0 .06rem 0 rgba(255,252,244,.22)}
+/* nessun alone: solo il quadrante e le parole */
+.scorre::before{content:none}
+@media (prefers-reduced-motion:reduce){.scorre::before{animation:none}}
+.scorre span{position:relative;z-index:1;
+  font-family:'Cinzel',serif;font-weight:500;
+  font-size:clamp(1.6rem,5.6vw,2.6rem);letter-spacing:.05em;line-height:1.2;
+  color:#FFFCF4;filter:none;
+  text-shadow:0 .1rem 1.5rem rgba(2,4,12,.7);
+  opacity:0;transform:translateY(.5rem);
+  transition:opacity .8s ease,transform .8s cubic-bezier(.16,.84,.28,1)}
+.scorre span.on{opacity:1;transform:none}
+
+/* ═══ il segno dell'orma ═══ */
+.segno{width:clamp(3.4rem,11vw,5rem);color:var(--terra);
+  filter:brightness(1.28) drop-shadow(0 0 1.4rem rgba(170,136,68,.34));
+  margin-bottom:1.6rem}
+.segno svg{width:100%;aspect-ratio:1;display:block}
+
+/* ═══ ② l'orma: la scena della mappa ═══ */
+.tela{position:relative;width:100%;max-width:40rem;
+  aspect-ratio:16/11;margin:1.8rem auto 0;border-radius:1.1rem;
+  border:1px solid rgba(212,175,106,.16);overflow:hidden;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,
+    rgba(10,16,36,.6),rgba(2,4,12,.34))}
+.tela canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.tre{display:flex;gap:1.6rem;justify-content:center;flex-wrap:wrap;
+  margin-top:1.4rem}
+.tre > span{text-align:center}
+.tre .et{display:block;font-size:.85rem;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(245,240,230,.36);margin-bottom:.2rem}
+.tre .vl{font-family:'Cormorant Garamond',serif;font-size:1.42rem;
+  color:rgba(245,240,230,.84)}
+
+/* le cinque cose che puoi farne */
+.cinquer{display:flex;flex-direction:column;gap:.28rem;margin-top:1.4rem}
+.cinquer span{font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,3.6vw,1.85rem);line-height:1.5;
+  color:rgba(245,240,230,.84);position:relative;padding-left:1.4rem}
+.cinquer span::before{content:'';position:absolute;left:.15rem;top:.72em;
+  width:.5rem;height:1px;background:var(--oro-ch);opacity:.5}
+.cinquer span{transition:color .3s ease}
+.cinquer span:hover{color:rgba(245,240,230,.95)}
+
+/* ═══ ③ le squadre: due volti e un filo ═══ */
+.volti{display:flex;align-items:center;justify-content:center;
+  gap:0;margin:1.8rem 0 .4rem;height:5rem}
+.volti .v{width:3rem;height:3rem;border-radius:50%;flex:none;
+  display:grid;place-items:center;color:#0A0C1A;font-weight:500;
+  font-size:1.02rem;border:2px solid #0A0C1A;position:relative;z-index:2}
+.volti .filo{width:clamp(2.2rem,9vw,4.4rem);height:1px;flex:none;
+  background:linear-gradient(90deg,
+    rgba(212,175,106,.18),rgba(212,175,106,.75),rgba(212,175,106,.18));
+  position:relative}
+.volti .filo::after{content:'';position:absolute;top:-.125rem;left:0;
+  width:.31rem;height:.31rem;border-radius:50%;background:#FFECBE;
+  box-shadow:0 0 .5rem rgba(212,175,106,.9);
+  animation:passa 2.6s linear infinite}
+@keyframes passa{0%{left:0;opacity:0}12%{opacity:1}
+  88%{opacity:1}100%{left:100%;opacity:0}}
+
+/* ═══ ④ i cinque ═══ */
+.cinque{display:flex;gap:clamp(.8rem,3vw,1.8rem);justify-content:center;
+  flex-wrap:wrap;margin-top:2rem}
+.cinque > span{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.cinque i{width:clamp(2.1rem,6.4vw,2.9rem);color:var(--c);
+  filter:brightness(1.25);font-style:normal;
+  animation:gira 22s linear infinite}
+.cinque span:nth-child(2) i{animation-delay:-4s}
+.cinque span:nth-child(3) i{animation-delay:-8s}
+.cinque span:nth-child(4) i{animation-delay:-12s}
+.cinque span:nth-child(5) i{animation-delay:-16s}
+.cinque i svg{width:100%;aspect-ratio:1;display:block}
+@keyframes gira{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.cinque b{font-family:'Cinzel',serif;font-weight:400;font-size:.95rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--c);
+  filter:brightness(1.3)}
+
+/* ═══ le cinque stanze, che si aprono ═══ */
+.stanze{display:grid;gap:.42rem;width:100%;max-width:34rem;margin-top:1.8rem;
+  text-align:left}
+.st{border-radius:.85rem;overflow:hidden;background:rgba(2,4,12,.42);
+  border:1px solid color-mix(in srgb,var(--c) 22%,transparent);
+  border-left:3px solid color-mix(in srgb,var(--c) 58%,transparent);
+  transition:background .3s ease,border-color .3s ease,transform .3s ease}
+.st:hover{background:color-mix(in srgb,var(--c) 8%,rgba(2,4,12,.5));
+  border-color:color-mix(in srgb,var(--c) 42%,transparent)}
+.st.on{background:color-mix(in srgb,var(--c) 10%,rgba(2,4,12,.55))}
+.st > .testa i{transition:transform .4s cubic-bezier(.16,.84,.28,1),filter .3s}
+.st:hover > .testa i{transform:rotate(-12deg) scale(1.08);filter:brightness(1.5)}
+.st > .testa{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;
+  cursor:pointer;user-select:none}
+.st > .testa i{flex:none;width:1.9rem;color:var(--c);filter:brightness(1.3);
+  font-style:normal}
+.st > .testa i svg{width:100%;aspect-ratio:1;display:block}
+.st > .testa .tx{flex:1;min-width:0}
+.st > .testa b{display:block;font-family:'Cinzel',serif;font-weight:500;
+  font-size:1.1rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--c);filter:brightness(1.3)}
+.st > .testa span{display:block;font-family:'Cormorant Garamond',serif;
+  font-size:1.45rem;line-height:1.4;color:rgba(245,240,230,.8);
+  margin-top:.16rem}
+.st > .testa em{flex:none;font-style:normal;color:rgba(245,240,230,.28);
+  font-size:1.1rem;transition:transform .25s ease}
+.st.on > .testa em{transform:rotate(90deg)}
+.st > .dentro{display:none;padding:0 1rem 1rem 3.65rem}
+.st.on > .dentro{display:block}
+.st > .dentro p{font-family:'Cormorant Garamond',serif;font-size:1.38rem;
+  line-height:1.55;color:rgba(245,240,230,.78);padding:.2rem 0 .2rem .9rem;
+  position:relative}
+.st > .dentro p::before{content:'';position:absolute;left:.15rem;top:.72em;
+  width:.25rem;height:.25rem;border-radius:50%;background:var(--c);opacity:.7}
+
+/* ═══ ⑤ il praticantato: la geometria sacra gira attorno, la figura resta
+   ferma dentro — è lei il centro, non il movimento. ═══ */
+  .fm-ak-fig{position:relative;width:100%;max-width:21em;margin:0 auto;
+    aspect-ratio:1;display:grid;place-items:center}
+  .fm-ak-geo{position:absolute;left:50%;top:50%;width:100%;aspect-ratio:1;transform:translate(-50%,-50%);
+    pointer-events:none;z-index:2}
+  .fm-ak-geo .fm-ak-ret{animation:fm-ak-gira 150s linear infinite}
+  /* ⭐ la figura sta DENTRO la geometria: entra nel cerchio del cubo, non
+     lo copre. Il ritaglio la chiude in un ovale morbido — l'uovo. */
+  .fm-ak-fig img{position:relative;z-index:1;
+    display:block;width:66%;height:auto;margin:0 auto;
+    filter:brightness(1.06) saturate(1.04)
+      drop-shadow(0 0 1.6rem rgba(212,175,106,.28))}
+  .fm-ak-fig::after{content:"";position:absolute;inset:14%;pointer-events:none;
+    z-index:0;border-radius:50%;
+    background:radial-gradient(ellipse 62% 58% at 50% 50%,rgba(212,175,106,.18),transparent 72%);
+    animation:fm-ak-puls 14s ease-in-out infinite}
+  .fm-ak-fig{max-width:min(26rem,84vw);margin:1rem auto 1.4rem}
+  .fm-ak-geo{animation:fm-ak-gira 150s linear infinite}
+  .fm-ak-geo .fm-ak-ret{animation:none}
+  .fm-ak-fig img{animation:none}
+  @keyframes fm-ak-gira{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  @keyframes fm-ak-puls{0%,100%{opacity:.8}50%{opacity:1}}
+
+/* ⭐ il quadrante dorato: i cinque passaggi stanno dentro una cornice d'oro */
+.oro{width:100%;max-width:34rem;margin:1.8rem auto 0;padding:2rem 1.8rem;
+  border-radius:1.2rem;text-align:left;
+  border:1px solid rgba(212,175,106,.4);
+  background:linear-gradient(160deg,rgba(200,160,85,.12),rgba(2,4,12,.5))}
+.oro > b{display:block;font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.35rem,3.4vw,1.7rem);line-height:1.4;text-align:center;
+  color:var(--ivory);margin-bottom:1.3rem;padding-bottom:1.1rem;
+  border-bottom:1px solid rgba(212,175,106,.24)}
+.oro .cinquer{gap:.5rem;margin-top:0}
+
+/* ═══ la luna, non più usata ═══ */
+.luna{position:relative;width:clamp(4.4rem,14vw,6rem);aspect-ratio:1;
+  border-radius:50%;margin:1.8rem auto .4rem;overflow:hidden;
+  border:1px solid rgba(245,240,230,.2);background:rgba(245,240,230,.04)}
+.luna span{position:absolute;inset:0;border-radius:50%;
+  background:rgba(245,240,230,.88);
+  animation:cresce 9s ease-in-out infinite}
+@keyframes cresce{
+  0%{clip-path:ellipse(0% 50% at 100% 50%)}
+  48%{clip-path:ellipse(100% 50% at 100% 50%)}
+  52%{clip-path:ellipse(100% 50% at 0% 50%)}
+  100%{clip-path:ellipse(0% 50% at 0% 50%)}}
+
+/* ═══ ⑥ le due porte ═══ */
+.porte{display:grid;gap:1rem;width:100%;max-width:46rem;margin-top:2.4rem;
+  grid-template-columns:repeat(auto-fit,minmax(19rem,1fr))}
+.porta{border-radius:1.2rem;padding:2.2rem 1.9rem;text-align:left;
+  background:rgba(2,4,12,.44);
+  border:1px solid rgba(212,175,106,.2);
+  transition:border-color .3s ease,background .3s ease}
+.porta:hover{border-color:rgba(212,175,106,.42);background:rgba(2,4,12,.56)}
+.porta:first-child{background:linear-gradient(160deg,
+  rgba(200,160,85,.1),rgba(2,4,12,.5));border-color:rgba(212,175,106,.36)}
+.porta b{display:block;font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;line-height:1.34;margin-bottom:.6rem}
+.porta p{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.42rem;line-height:1.5;color:rgba(245,240,230,.66);
+  margin-bottom:1.3rem}
+.campo{display:flex;gap:.4rem}
+.campo input{flex:1;min-width:0;background:rgba(245,240,230,.05);
+  border:1px solid rgba(245,240,230,.16);border-radius:999px;
+  padding:.6rem .95rem;color:var(--ivory);outline:none;
+  font-family:'Cormorant Garamond',serif;font-size:1.2rem;min-height:3.3rem}
+.campo input::placeholder{color:rgba(245,240,230,.3);font-style:italic}
+.campo input:focus{border-color:rgba(212,175,106,.5)}
+.tasto{display:inline-flex;align-items:center;justify-content:center;
+  gap:.4rem;background:var(--oro-ch);color:#0A0C1A;border:0;
+  border-radius:999px;padding:.9rem 1.8rem;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:1.14rem;font-weight:500;
+  letter-spacing:.03em;min-height:3.3rem;text-decoration:none;
+  white-space:nowrap;transition:transform .2s ease}
+.tasto:hover{transform:translateY(-.06rem)}
+.tasto.vuoto{background:transparent;color:var(--oro-ch);
+  border:1px solid rgba(212,175,106,.44)}
+.grazie{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:var(--oro-ch);display:none}
+.grazie.on{display:block}
+
+.pie .lk{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;
+  margin-bottom:.9rem}
+.pie .lk a{color:rgba(245,240,230,.4);text-decoration:none;
+  border-bottom:1px solid rgba(245,240,230,.14);padding-bottom:.06rem}
+.pie .lk a:hover{color:var(--oro-ch)}
+
+/* ═══ la finestra della mail ═══ */
+.velo-mail{position:fixed;inset:0;z-index:60;display:grid;place-items:center;
+  padding:1.2rem;background:rgba(4,6,14,.86);backdrop-filter:blur(6px)}
+.velo-mail[hidden]{display:none}
+.finestra{position:relative;width:100%;max-width:30rem;border-radius:1.1rem;
+  padding:1.6rem 1.4rem 1.2rem;background:#0D1020;
+  border:1px solid rgba(212,175,106,.3);
+  max-height:calc(100svh - 2.4rem);overflow:auto}
+.finestra .chiudi{position:absolute;top:.7rem;right:.9rem;background:none;
+  border:0;color:rgba(245,240,230,.4);font-size:1.6rem;line-height:1;
+  cursor:pointer;padding:.2rem .4rem}
+.finestra .chiudi:hover{color:var(--oro-ch)}
+.occ-f{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--oro-ch);opacity:.85;margin-bottom:.4rem}
+.finestra h3{font-family:'Cinzel',serif;font-weight:500;font-size:1.16rem;
+  letter-spacing:.04em;margin-bottom:.5rem}
+.sp-f{font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.5;
+  color:rgba(245,240,230,.6);margin-bottom:1rem}
+.telaio-mail{border-radius:.7rem;overflow:hidden;background:#fff;
+  min-height:22rem}
+.telaio-mail iframe{width:100%;height:24rem;border:0;display:block}
+.sotto-f{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.9rem;line-height:1.5;color:rgba(245,240,230,.4);margin-top:.8rem}
+.sotto-f a{color:var(--oro-ch);text-decoration:none}
+
+.pie{padding:3.2rem 1.2rem 3.6rem;text-align:center;
+  font-family:'Cormorant Garamond',serif;font-size:1.24rem;
+  color:rgba(245,240,230,.4);line-height:1.8;
+  border-top:1px solid rgba(245,240,230,.07)}
+
+@media(max-width:34rem){
+  .scena{padding:2.4rem 1rem;min-height:auto;
+    padding-top:4rem;padding-bottom:4rem}
+  .scena.testa{min-height:100svh}
+  .scorre{min-height:9.6rem;padding:2rem 1.2rem}
+  .volti{gap:0;height:4rem}
+  .volti .v{width:2.5rem;height:2.5rem;font-size:.92rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .entra{opacity:1;transform:none}
+}
+
+/* ═══ l'orma: il pezzo che vive dentro la scena ③ ═══ */
+
+  .sv-orma-vive{--scala:1.4;
+    --t-eti:calc(0.66rem * var(--scala));
+    --t-med:calc(0.80rem * var(--scala));
+    --t-gr:clamp(1.3rem, 4.1vw, 2.15rem);
+    --oro-a:#D4AF6A; --terra:#AA8844;
+    position:relative;max-width:46rem;margin:0 auto;
+    aspect-ratio:4/3;min-height:20rem;max-height:32rem;
+    border-radius:1.1rem;overflow:hidden;
+    font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
+  .sv-orma-vive canvas{position:absolute;inset:0;width:100%;height:100%;
+    display:block}
+
+  /* ── il quadrante: la frase e il tasto ── */
+  .sv-orma-vive .mega{position:absolute;left:5%;right:5%;top:5%;
+    background:rgba(6,9,20,.88);backdrop-filter:blur(7px);
+    border:1px solid rgba(212,175,106,.3);border-radius:1rem;
+    padding:1.05rem 1.1rem;pointer-events:none;
+    box-shadow:0 .75rem 2.75rem rgba(0,0,0,.55);
+    opacity:0;transform:translateY(-.625rem);
+    transition:opacity 1s ease,transform 1s ease}
+  .sv-orma-vive .mega.on{opacity:1;transform:none}
+
+  .sv-orma-vive .riga{display:flex;align-items:flex-end;gap:.85rem}
+  .sv-orma-vive .colonna{flex:1;min-width:0;text-align:left}
+  .sv-orma-vive .campo b{display:block;font-family:'Cormorant Garamond',serif;
+    font-weight:400;font-size:var(--t-gr);line-height:1.24}
+  .sv-orma-vive .campo span{display:block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:var(--t-med);line-height:1.5;
+    color:rgba(245,240,230,.6);margin-top:.5rem}
+  .sv-orma-vive .manda{flex:none;width:2.9rem;height:2.9rem;
+    border-radius:50%;background:var(--oro-a);
+    color:#0A0C1A;display:grid;place-items:center;
+    box-shadow:0 0 0 0 rgba(212,175,106,.5)}
+  .sv-orma-vive .manda svg{width:1.25rem;height:1.25rem;display:block}
+  .sv-orma-vive .mega.spinge .manda{animation:spinta .6s ease-out}
+  @keyframes spinta{
+    0%{box-shadow:0 0 0 0 rgba(212,175,106,.65)}
+    100%{box-shadow:0 0 0 1.3rem rgba(212,175,106,0)}
+  }
+
+
+  /* ── la parola, quando l'orma resta ── */
+  .sv-orma-vive .resta{position:absolute;left:0;right:0;top:44%;
+    text-align:center;pointer-events:none;opacity:0;
+    transition:opacity .8s ease}
+  .sv-orma-vive .resta.on{opacity:1}
+  .sv-orma-vive .resta em{display:block;font-family:'Cinzel',serif;
+    font-style:normal;font-size:var(--t-med);letter-spacing:.3em;
+    text-transform:uppercase;color:rgba(212,175,106,.9);
+    text-shadow:0 .125rem 1.25rem rgba(4,6,16,1)}
+
+  /* ── i tre ancoraggi, in fondo ── */
+  .sv-orma-vive .dati{position:absolute;left:5%;right:5%;bottom:6%;
+    display:flex;justify-content:center;gap:clamp(.9rem,4.5vw,3rem);
+    flex-wrap:wrap;pointer-events:none;
+    opacity:0;transform:translateY(.375rem);
+    transition:opacity 1.1s ease,transform 1.1s ease}
+  .sv-orma-vive .dati.on{opacity:1;transform:none}
+  .sv-orma-vive .dati span{display:block;text-align:center;
+    font-size:var(--t-med);color:rgba(245,240,230,.92);
+    text-shadow:0 .125rem 1.125rem rgba(4,6,16,1)}
+  .sv-orma-vive .dati span em{display:block;font-style:normal;
+    font-size:var(--t-eti);letter-spacing:.22em;text-transform:uppercase;
+    color:rgba(212,175,106,.72);margin-bottom:.2rem}
+
+  /* ── la chiusa, che copre tutto ── */
+  .sv-orma-vive .coda{position:absolute;inset:0;z-index:3;
+    display:grid;place-items:center;pointer-events:none;padding:8%;
+    background:radial-gradient(ellipse at 50% 50%,
+      rgba(4,6,16,.72),rgba(4,6,16,.5) 60%,rgba(4,6,16,.34));
+    opacity:0;transition:opacity 1.4s ease}
+  .sv-orma-vive .coda.on{opacity:1}
+  .sv-orma-vive .coda b{font-family:'Cinzel',serif;font-weight:500;
+    font-size:clamp(1.5rem,6.2vw,3.1rem);line-height:1.2;
+    letter-spacing:.06em;text-align:center;
+    color:rgba(245,240,230,.95);
+    text-shadow:0 .125rem 1.875rem rgba(4,6,16,1),0 0 3.75rem rgba(212,175,106,.28)}
+
+  @media (max-width:52rem){
+    .sv-orma-vive{--scala:1.05;aspect-ratio:3/4;max-height:none;
+      min-height:26rem}
+    .sv-orma-vive .mega{left:3.5%;right:3.5%;padding:.8rem .85rem .75rem}
+    .sv-orma-vive .dati{gap:.5rem 1.4rem;bottom:5%}
+    .sv-orma-vive .coda b{font-size:clamp(1.35rem,7.4vw,2.2rem)}
+  }
+.sv-orma-vive{margin:1.8rem auto 0}
+</style>
+</head>
+<body>
+
+<!-- ═══ ① LA TESTA ═══ -->
+<section class="scena testa">
+  <div class="marchio entra"><span class="marchio-riga" id="marchio"><i>F</i><i>e</i><i>l</i><i>i</i><i>c</i><i>i</i><i>t</i><i>a</i><i>s</i><i>M</i><i>u</i><i>n</i><i>d</i><i>i</i></span></div>
+  <div class="occ entra r1">Comunit&agrave; Eterna</div>
+  <p class="grande entra r2">Persone che si trovano<br>
+     in luoghi che esistono.</p>
+  <a class="quando entra r3" href="https://felicitasmundi.github.io/communitas-aeterna/felicitas-app.html"><b>Ora in linea</b>
+     Scarica l&rsquo;app ed entra</a>
+  <a href="#soglia" class="giu" aria-label="scendi">&darr;</a>
+</section>
+
+<!-- ═══ ② DA ADESSO PUOI ═══ -->
+<section class="scena soglia" id="soglia">
+  <div class="scorre entra" id="scorre">
+    <div class="potrai">
+      <b>DA ADESSO</b>
+      <em>puoi</em>
+    </div>
+    <span data-riga></span>
+  </div>
+  <span class="polso entra r2" id="polso"></span>
+</section>
+
+<!-- ═══ ③ L'ORMA ═══ -->
+<section class="scena" id="orma">
+  <span class="segno entra" id="segno"></span>
+  <div class="occ entra r1">Questa &egrave; un&rsquo;orma</div>
+  <p class="grande entra r2">Porti quello che sai fare,<br>
+     e trovi chi lo riconosce.</p>
+  <div class="entra r3" style="width:100%">
+    <div class="sv-orma-vive" id="svOrmaVive">
+      <canvas data-tela></canvas>
+
+      <div class="mega" data-mega>
+        <div class="riga">
+          <span class="colonna campo">
+            <b>Abbiamo trovato il terreno<br>dove creare il primo villaggio</b>
+          </span>
+          <span class="manda" data-manda></span>
+        </div>
+      </div>
+
+      <div class="resta" data-resta><em>un&rsquo;orma</em></div>
+
+      <div class="dati" data-dati>
+        <span><em>Dove</em>Paulilatino, Pozzo Santa Cristina</span>
+        <span><em>Quanto</em>30k</span>
+        <span><em>Come</em>SuperAdobe</span>
+      </div>
+
+      <div class="coda" data-coda><b>Il tracciato che resta, e nutre.</b></div>
+    </div>
+  </div>
+  <p class="sotto entra r3">Ogni orma diventa uno strumento per fissare e
+     ricordare un&rsquo;idea, un contatto e un obiettivo.<br>
+     Ti aiuta a creare squadra, a darsi dei compiti e rispondere ai bisogni
+     della comunit&agrave;.</p>
+
+</section>
+
+<!-- ═══ ③ LE SQUADRE ═══ -->
+<section class="scena">
+  <div class="volti entra">
+    <span class="v" style="background:#AA8844">M</span>
+    <span class="filo"></span>
+    <span class="v" style="background:#4488BB">G</span>
+    <span class="filo"></span>
+    <span class="v" style="background:#669944">L</span>
+  </div>
+  <div class="occ entra r1">Le squadre</div>
+  <p class="grande entra r2">Imparare a cooperare.</p>
+  <p class="sotto entra r3">Uno strumento che parte da un&rsquo;assistenza spirituale
+     comune e mette insieme team, obiettivi, sviluppo di progetto. E poi la
+     pubblicazione, la distribuzione e la visibilit&agrave; di produzioni
+     naturali, formazioni e mutuo aiuto.</p>
+</section>
+
+<!-- ═══ ④ I CINQUE ═══ -->
+<section class="scena">
+  <div class="occ entra">Cosa incontri</div>
+  <p class="grande entra r1">Dove tutto quello che si muove<br>
+     diventa visibile.</p>
+  <div class="stanze entra r2" id="cinque"></div>
+</section>
+
+<!-- ═══ ⑤ IL PRATICANTATO ═══ -->
+<section class="scena">
+  <div class="entra">
+    <div class="fm-ak-fig">
+      <svg class="fm-ak-geo" viewBox="-125 -125 250 250" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#D4AF6A" stroke-linejoin="round">
+          <g class="fm-ak-ret">
+            <g stroke-width=".7" opacity=".5"><line x1="0" y1="0" x2="0" y2="-46"/><line x1="0" y1="0" x2="39.84" y2="-23"/><line x1="0" y1="0" x2="39.84" y2="23"/><line x1="0" y1="0" x2="0" y2="46"/><line x1="0" y1="0" x2="-39.84" y2="23"/><line x1="0" y1="0" x2="-39.84" y2="-23"/><line x1="0" y1="0" x2="0" y2="-92"/><line x1="0" y1="0" x2="79.67" y2="-46"/><line x1="0" y1="0" x2="79.67" y2="46"/><line x1="0" y1="0" x2="0" y2="92"/><line x1="0" y1="0" x2="-79.67" y2="46"/><line x1="0" y1="0" x2="-79.67" y2="-46"/><line x1="0" y1="-46" x2="39.84" y2="-23"/><line x1="0" y1="-46" x2="39.84" y2="23"/><line x1="0" y1="-46" x2="0" y2="46"/><line x1="0" y1="-46" x2="-39.84" y2="23"/><line x1="0" y1="-46" x2="-39.84" y2="-23"/><line x1="0" y1="-46" x2="0" y2="-92"/><line x1="0" y1="-46" x2="79.67" y2="-46"/><line x1="0" y1="-46" x2="79.67" y2="46"/><line x1="0" y1="-46" x2="0" y2="92"/><line x1="0" y1="-46" x2="-79.67" y2="46"/><line x1="0" y1="-46" x2="-79.67" y2="-46"/><line x1="39.84" y1="-23" x2="39.84" y2="23"/><line x1="39.84" y1="-23" x2="0" y2="46"/><line x1="39.84" y1="-23" x2="-39.84" y2="23"/><line x1="39.84" y1="-23" x2="-39.84" y2="-23"/><line x1="39.84" y1="-23" x2="0" y2="-92"/><line x1="39.84" y1="-23" x2="79.67" y2="-46"/><line x1="39.84" y1="-23" x2="79.67" y2="46"/><line x1="39.84" y1="-23" x2="0" y2="92"/><line x1="39.84" y1="-23" x2="-79.67" y2="46"/><line x1="39.84" y1="-23" x2="-79.67" y2="-46"/><line x1="39.84" y1="23" x2="0" y2="46"/><line x1="39.84" y1="23" x2="-39.84" y2="23"/><line x1="39.84" y1="23" x2="-39.84" y2="-23"/><line x1="39.84" y1="23" x2="0" y2="-92"/><line x1="39.84" y1="23" x2="79.67" y2="-46"/><line x1="39.84" y1="23" x2="79.67" y2="46"/><line x1="39.84" y1="23" x2="0" y2="92"/><line x1="39.84" y1="23" x2="-79.67" y2="46"/><line x1="39.84" y1="23" x2="-79.67" y2="-46"/><line x1="0" y1="46" x2="-39.84" y2="23"/><line x1="0" y1="46" x2="-39.84" y2="-23"/><line x1="0" y1="46" x2="0" y2="-92"/><line x1="0" y1="46" x2="79.67" y2="-46"/><line x1="0" y1="46" x2="79.67" y2="46"/><line x1="0" y1="46" x2="0" y2="92"/><line x1="0" y1="46" x2="-79.67" y2="46"/><line x1="0" y1="46" x2="-79.67" y2="-46"/><line x1="-39.84" y1="23" x2="-39.84" y2="-23"/><line x1="-39.84" y1="23" x2="0" y2="-92"/><line x1="-39.84" y1="23" x2="79.67" y2="-46"/><line x1="-39.84" y1="23" x2="79.67" y2="46"/><line x1="-39.84" y1="23" x2="0" y2="92"/><line x1="-39.84" y1="23" x2="-79.67" y2="46"/><line x1="-39.84" y1="23" x2="-79.67" y2="-46"/><line x1="-39.84" y1="-23" x2="0" y2="-92"/><line x1="-39.84" y1="-23" x2="79.67" y2="-46"/><line x1="-39.84" y1="-23" x2="79.67" y2="46"/><line x1="-39.84" y1="-23" x2="0" y2="92"/><line x1="-39.84" y1="-23" x2="-79.67" y2="46"/><line x1="-39.84" y1="-23" x2="-79.67" y2="-46"/><line x1="0" y1="-92" x2="79.67" y2="-46"/><line x1="0" y1="-92" x2="79.67" y2="46"/><line x1="0" y1="-92" x2="0" y2="92"/><line x1="0" y1="-92" x2="-79.67" y2="46"/><line x1="0" y1="-92" x2="-79.67" y2="-46"/><line x1="79.67" y1="-46" x2="79.67" y2="46"/><line x1="79.67" y1="-46" x2="0" y2="92"/><line x1="79.67" y1="-46" x2="-79.67" y2="46"/><line x1="79.67" y1="-46" x2="-79.67" y2="-46"/><line x1="79.67" y1="46" x2="0" y2="92"/><line x1="79.67" y1="46" x2="-79.67" y2="46"/><line x1="79.67" y1="46" x2="-79.67" y2="-46"/><line x1="0" y1="92" x2="-79.67" y2="46"/><line x1="0" y1="92" x2="-79.67" y2="-46"/><line x1="-79.67" y1="46" x2="-79.67" y2="-46"/></g>
+            <g stroke-width="1" opacity=".46" stroke="#C9A6E0"><circle cx="0" cy="0" r="23"/><circle cx="0" cy="-46" r="23"/><circle cx="39.84" cy="-23" r="23"/><circle cx="39.84" cy="23" r="23"/><circle cx="0" cy="46" r="23"/><circle cx="-39.84" cy="23" r="23"/><circle cx="-39.84" cy="-23" r="23"/><circle cx="0" cy="-92" r="23"/><circle cx="79.67" cy="-46" r="23"/><circle cx="79.67" cy="46" r="23"/><circle cx="0" cy="92" r="23"/><circle cx="-79.67" cy="46" r="23"/><circle cx="-79.67" cy="-46" r="23"/></g>
+          </g>
+          <circle r="115" stroke-width="1" opacity=".5"/>
+          <rect x="-115" y="-115" width="230" height="230" stroke-width=".8"
+                stroke-dasharray="3 3.6" opacity=".34"/>
+        </g>
+      </svg>
+      <!-- ⭐ corretto su parola di Gab, 7 set 2026: era .png, la figura in linea è la .jpg della casa -->
+      <img src="praticantato-figura.jpg" alt="Figura umana di luce entro tre involucri concentrici &mdash; fisico, emotivo, mentale &mdash; con i sette centri di luce lungo l'asse centrale">
+    </div>
+  </div>
+
+  <div class="occ entra r1">Il praticantato</div>
+  <p class="grande entra r2">Dal progetto sogno<br>
+     alla cooperazione per una civilt&agrave; evoluta.</p>
+  <div class="oro entra r3">
+    <b>Per arrivare alla cooperazione c&rsquo;&egrave; bisogno prima di
+       centrarsi.</b>
+    <div class="cinquer">
+      <span>la centratura dentro i cinque elementi</span>
+      <span>lo sviluppo del progetto sogno</span>
+      <span>l&rsquo;interazione con la comunit&agrave;</span>
+      <span>si inseriscono persone dentro un team</span>
+      <span>e quel team alimenta le aree centrali</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ⑥ LE DUE PORTE ═══ -->
+<section class="scena">
+
+  <div class="porte entra r2">
+    <div class="porta">
+      <b>Tieniti aggiornato sull&rsquo;uscita della piattaforma</b>
+      <p>Ti scriviamo quando apre, e nient&rsquo;altro.</p>
+      <button type="button" class="tasto" id="apri-mail">Lascia la mail</button>
+    </div>
+
+    <div class="porta">
+      <b>Dacci una mano col karma yoga</b>
+      <p>Per organizzare il tour di lancio, da ottobre a dicembre.</p>
+      <a class="tasto vuoto"
+         href="mailto:felicitasmundi@protonmail.com?subject=Karma%20yoga%20-%20tour%20di%20lancio">
+         Scrivici</a>
+    </div>
+  </div>
+</section>
+
+<div class="pie">
+  <span class="lk">
+    <a href="privacy.html">Informativa privacy</a>
+    <a href="cookie.html">Cookie</a>
+    <a href="condizioni.html">Condizioni d&rsquo;uso</a>
+  </span>
+  Comunit&agrave; Eterna FelicitasMundi &middot; Felicitas Omnia S.r.l.s.
+  &middot; P.IVA 03075740906
+</div>
+
+<!-- ═══ LA FINESTRA DELLA MAIL — il modulo Brevo, come nella pagina in
+     onda. L'indirizzo è quello vero, e il modulo si carica solo quando si
+     apre: prima non parte niente. ═══ -->
+<div class="velo-mail" id="velo-mail" hidden>
+  <div class="finestra" role="dialog" aria-modal="true"
+       aria-labelledby="fm-tit">
+    <button class="chiudi" type="button" id="chiudi-mail"
+            aria-label="Chiudi">&times;</button>
+    <div class="occ-f">Comunit&agrave; Eterna</div>
+    <h3 id="fm-tit">Tieniti aggiornato</h3>
+    <p class="sp-f">Ti scriviamo quando la piattaforma apre, e
+       nient&rsquo;altro. Puoi toglierti quando vuoi.</p>
+    <div class="telaio-mail">
+      <iframe id="modulo-brevo" title="Iscrizione agli aggiornamenti"
+              loading="lazy"
+              data-src="https://b49671e2.sibforms.com/serve/MUIFAJhZFFuf8gJbILDVWQ6yGYXoYABCGhm7e9TAHe3Bv1D6i_n9-r9uFLQ_EAFoqDdeseLZiliRNtqnrz5fXhk_bmqFuvK_a6BhVtBJdMZrwxdft7KTu3s3YCNBBav4l0j_DR-rxGyPPrYJzEa3HFiYJDw_zbC_X_pZfnLFEKTx6vz5CcWwzTIPFI6pXpN1zhlp7cwYfGlPEMz7mA=="></iframe>
+    </div>
+    <p class="sotto-f">Se il modulo non si apre, scrivi a
+       <a href="mailto:felicitasmundi@protonmail.com">felicitasmundi@protonmail.com</a></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ═══ le diciotto righe — parole di Gab, coi loro colori ═══ */
+  var RIGHE = [
+    ["Trovare chi risuona con te",                           "#8C2F39"],
+    ["Conoscere chi ha scelto un'altra vita",                "#9966CC"],
+    ["Partecipare a unire la rete vicino a casa tua",        "#AA8844"],
+    ["Ricevere assistenza spirituale",                       "#CC6644"],
+    ["Portare a casa cibo vero e rimedi naturali",           "#4488BB"],
+    ["Imparare a farli da te",                               "#4488BB"],
+    ["Creare i presupposti perch\u00E9 un bisogno trovi una mano", "#CC6644"],
+    ["Servire qualcosa di pi\u00F9 grande di te",               "#8C2F39"],
+    ["Lavorare in un altro modo",                            "#C8A055"],
+    ["Guidare la tua azienda con altre regole",              "#C8A055"],
+    ["Allenare l'attenzione",                                "#9966CC"],
+    ["Frequentare una scuola itinerante",                    "#9966CC"],
+    ["Insegnare quello che sai",                             "#9966CC"],
+    ["Condividere cultura in diretta radio",                 "#669944"],
+    ["Trasmutare la tua idea in un'opera",                   "#669944"],
+    ["Segnare una cosa e ritrovarla fra tre anni",           "#8C2F39"],
+    ["Tenere traccia di idee, amicizie e luoghi",            "#8C2F39"],
+    ["Sentirti accolto da chi cammina come te",              "#AA8844"]
+  ];
+
+  (function () {
+    var r = document.querySelector("[data-riga]");
+    var i = 0, giro = -1;
+    function batti() {
+      r.classList.remove("on");
+      setTimeout(function () {
+        r.textContent = RIGHE[i][0];
+        r.style.setProperty("--c", RIGHE[i][1]);
+        var pl = document.getElementById("polso");
+        if (pl) pl.style.setProperty("--c", RIGHE[i][1]);
+        var nu = document.getElementById("scorre");
+        if (nu) nu.style.setProperty("--cn", RIGHE[i][1]);
+        r.classList.add("on");
+        i = (i + 1) % RIGHE.length;
+      }, 700);
+    }
+    function parti() {
+      if (giro < 0) { batti(); giro = setInterval(batti, 3500); }
+    }
+    function ferma() {
+      if (giro >= 0) { clearInterval(giro); giro = -1; }
+    }
+    new IntersectionObserver(function (v) {
+      v[0].isIntersecting ? parti() : ferma();
+    }, { threshold: .3 }).observe(document.getElementById("scorre"));
+  })();
+
+  /* ── il segno dell'orma ── */
+  document.getElementById("segno").innerHTML =
+    '<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".5"/><path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".2"/><g transform="translate(-4,4) scale(0.9)"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(33,3) scale(0.5)" opacity=".42"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/></g></svg>';
+
+  /* ⭐ Le cinque stanze: nomi, righe e cose sono quelle della casa. */
+  var STANZE = [
+    ["Vicinati", "#AA8844", "Chi c\u2019\u00E8 vicino a te, e cosa si fa insieme",
+     ["I gruppi del tuo territorio",
+      "I bisogni aperti, e chi li prende",
+      "I calendari di quello che accade",
+      "Chi ospita, e chi custodisce un luogo"]],
+    ["Emporio", "#4488BB", "Quello che si scambia, si dona e si compra",
+     ["Cibo e rimedi che hanno passato il vaglio",
+      "Libri, oggetti, abbigliamento",
+      "I doni, e i talenti che passano di mano",
+      "La distribuzione, dal produttore a casa"]],
+    ["Assistenza", "#CC6644", "Chi ti accompagna quando serve",
+     ["Assistenza spirituale, sugli insegnamenti indo-vedici",
+      "Dottori e operatori che lavorano insieme",
+      "Strutture di rigenerazione",
+      "Consulenze, e formazioni per chi vuole imparare"]],
+    ["Edizione", "#669944", "L\u2019idea che diventa opera, e si sente",
+     ["La radio, tutti i giorni",
+      "I libri: dalle tracce alla stampa",
+      "Lezioni audio, in diretta o quando vuoi",
+      "Quello che si stampa, e dove arriva"]],
+    ["Scuola", "#9966CC", "Dove si impara, e dove si insegna",
+     ["La scuola itinerante, che va dove serve",
+      "Le lezioni a cui puoi partecipare",
+      "La ricerca che le accompagna",
+      "Il tuo talento che diventa un lavoro"]]
+  ];
+
+  /* ── i cinque solidi ── */
+  var CINQUE = [
+    ["Terra", "#AA8844",
+     '<path d="M32 8 L52 44 L12 44 Z"/><path d="M32 8 L32 44"/><path d="M12 44 L52 44"/>'],
+    ["Acqua", "#4488BB",
+     '<circle cx="32" cy="32" r="22"/><path d="M10 32 h44"/><path d="M32 10 a22 22 0 0 1 0 44 a11 22 0 0 0 0-44"/>'],
+    ["Fuoco", "#CC6644",
+     '<path d="M32 8 L54 32 L32 56 L10 32 Z"/><path d="M10 32 h44"/><path d="M32 8 v48"/>'],
+    ["Aria", "#669944",
+     '<rect x="13" y="13" width="38" height="38"/><path d="M13 13 L51 51"/><path d="M51 13 L13 51"/>'],
+    ["Etere", "#9966CC",
+     '<path d="M32 7 L54 23 L46 50 L18 50 L10 23 Z"/><path d="M32 7 L32 32 M54 23 L32 32 M46 50 L32 32 M18 50 L32 32 M10 23 L32 32"/>']
+  ];
+  var box = document.getElementById("cinque");
+  STANZE.forEach(function (st, k) {
+    var d = document.createElement("div");
+    d.className = "st";
+    d.style.setProperty("--c", st[1]);
+    d.innerHTML =
+      '<div class="testa"><i><svg viewBox="0 0 64 64" fill="none" ' +
+      'stroke="currentColor" stroke-width="1.4" stroke-linecap="round" ' +
+      'stroke-linejoin="round">' + CINQUE[k][2] + '</svg></i>' +
+      '<span class="tx"><b></b><span></span></span>' +
+      '<em>&rsaquo;</em></div><div class="dentro"></div>';
+    d.querySelector("b").textContent = st[0];
+    d.querySelector(".tx span").textContent = st[2];
+    var dentro = d.querySelector(".dentro");
+    st[3].forEach(function (c) {
+      var p = document.createElement("p");
+      p.textContent = c;
+      dentro.appendChild(p);
+    });
+    d.querySelector(".testa").addEventListener("click", function () {
+      d.classList.toggle("on");
+    });
+    box.appendChild(d);
+  });
+
+  /* ── quello che entra scorrendo ── */
+  var occhio = new IntersectionObserver(function (voci) {
+    voci.forEach(function (v) {
+      if (v.isIntersecting) { v.target.classList.add("vista"); }
+    });
+  }, { threshold: .18 });
+  document.querySelectorAll(".entra").forEach(function (e) { occhio.observe(e); });
+
+  /* ═══ la mappa: un punto si posa, e i fili raggiungono ═══
+     ⛔ Le città sono quelle vere dell'orma di Paulilatino. */
+  /* ⭐ La sagoma: più punti, e in ordine, così l'Italia si riconosce. */
+  var PENISOLA = [
+    /* l'arco alpino, da ovest a est */
+    [7.35,45.10],[7.69,45.07],[8.20,45.55],[8.62,45.80],[9.19,45.46],
+    [9.68,46.16],[10.35,46.50],[11.12,46.07],[11.88,46.07],[12.50,46.55],
+    [13.24,46.22],[13.78,45.65],
+    /* la pianura */
+    [8.05,44.90],[8.62,45.07],[9.19,45.20],[9.70,45.19],[10.22,45.14],
+    [10.99,45.44],[11.34,45.44],[11.88,45.41],[12.33,45.44],
+    /* il fianco adriatico, giù */
+    [12.24,44.42],[12.40,44.14],[13.05,43.61],[13.51,43.62],[13.72,43.11],
+    [14.20,42.46],[14.63,42.20],[15.05,41.94],[15.55,41.46],[16.02,41.45],
+    [16.60,40.64],[17.24,40.46],[17.94,40.64],[18.17,40.35],[18.51,40.14],
+    [18.02,39.86],[17.24,40.47],[16.86,40.66],[16.60,40.14],
+    /* la punta e il fianco tirrenico, su */
+    [16.87,39.30],[16.51,38.90],[16.10,37.95],[15.65,38.11],[15.90,38.75],
+    [16.24,39.32],[15.80,40.03],[15.28,40.10],[14.79,40.68],[14.25,40.85],
+    [14.00,41.10],[13.60,41.21],[13.05,41.25],[12.48,41.90],[12.24,42.28],
+    [11.80,42.42],[11.13,42.42],[10.77,42.93],[10.53,43.20],[10.40,43.72],
+    [10.10,44.03],[9.83,44.10],[9.39,44.30],[8.93,44.41],[8.45,44.31],
+    [8.05,43.90],[7.60,43.79],
+    /* dentro, perché non sia solo un contorno */
+    [11.25,43.77],[12.62,43.77],[12.10,43.10],[13.20,42.35],[14.15,41.46],
+    [12.90,41.46],[11.50,44.49],[10.92,44.64],[10.32,44.80],[9.19,44.41],
+    [11.00,43.20],[12.10,42.60],[13.20,41.20],[14.60,40.20],[15.90,39.20],
+    [16.80,39.80],[15.60,40.60],[14.90,41.00],[13.80,42.90],[12.60,44.00],
+    [11.50,44.80],[10.60,45.20],[9.60,44.90],[8.80,45.30],[12.00,44.90]
+  ];
+  var SARDEGNA = [
+    [8.22,41.10],[8.55,41.13],[9.10,41.13],[9.55,41.14],[9.66,40.92],
+    [9.51,40.55],[9.71,40.30],[9.69,39.80],[9.56,39.50],[9.68,39.10],
+    [9.13,39.22],[8.87,38.90],[8.46,39.10],[8.38,39.55],[8.47,39.90],
+    [8.32,40.30],[8.22,40.60],[8.32,40.83],
+    [8.74,40.09],[9.00,40.50],[9.20,39.60],[8.80,39.40],[8.90,40.80]
+  ];
+  var SICILIA = [
+    [12.51,37.80],[13.10,38.02],[13.36,38.12],[14.02,38.03],[14.80,38.02],
+    [15.24,38.25],[15.55,38.19],[15.10,37.50],[15.29,37.08],[15.09,36.69],
+    [14.50,36.72],[13.90,36.98],[13.20,37.10],[12.60,37.58],
+    [13.60,37.60],[14.40,37.60],[14.20,37.90]
+  ];
+  var TERRA = PENISOLA.concat(SARDEGNA, SICILIA);
+
+  var NATA = [8.744, 40.093];               /* Paulilatino */
+  var VERSO = [
+    [9.50, 40.92, "#AA8844"],               /* Olbia      */
+    [8.59, 39.90, "#4488BB"],               /* Oristano   */
+    [10.31, 43.55, "#CC6644"],              /* Livorno    */
+    [11.34, 44.49, "#669944"],              /* Bologna    */
+    [13.95, 42.75, "#9966CC"],              /* Giulianova */
+    [15.55, 38.19, "#8C2F39"]               /* Messina    */
+  ];
+
+  var cv = document.querySelector("[data-tela]"), c = cv.getContext("2d");
+  var L = 0, A = 0, t0 = 0, anim = -1, acceso = false;
+
+  function misura() {
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    L = cv.clientWidth; A = cv.clientHeight;
+    cv.width = L * d; cv.height = A * d;
+    c.setTransform(d, 0, 0, d, 0, 0);
+  }
+
+  /* la terra sta in una fascia sua: il testo non ci va sopra */
+  function dove(p) {
+    var x0 = 6.6, x1 = 18.6, y0 = 47.2, y1 = 36.6;
+    var m = Math.min(L, A) * .08;
+    var w = L - m * 2, h = A - m * 2;
+    var k = Math.min(w / (x1 - x0), h / (y0 - y1));
+    return [m + (p[0] - x0) * k + (w - (x1 - x0) * k) / 2,
+            m + (y0 - p[1]) * k + (h - (y0 - y1) * k) / 2];
+  }
+
+  function disegna(ms) {
+    if (!t0) t0 = ms;
+    var t = ((ms - t0) / 1000) % 11;          /* undici secondi, in giro */
+    c.clearRect(0, 0, L, A);
+
+    /* ⭐ la terra: la costa si legge, l'interno resta un respiro.
+       I punti del contorno sono più chiari e uniti da un filo sottile. */
+    [PENISOLA, SARDEGNA, SICILIA].forEach(function (isola) {
+      var costa = isola.slice(0, isola.length - 6);
+      c.beginPath();
+      costa.forEach(function (p, i) {
+        var q = dove(p);
+        i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]);
+      });
+      c.strokeStyle = "rgba(245,240,230,.44)";
+      c.lineWidth = 1.1;
+      c.stroke();
+      c.fillStyle = "rgba(62,88,138,.3)";
+      c.fill();
+    });
+    TERRA.forEach(function (p, i) {
+      var q = dove(p);
+      var costa = i < PENISOLA.length - 6;
+      c.fillStyle = costa ? "rgba(245,240,230,.74)" : "rgba(245,240,230,.36)";
+      c.beginPath(); c.arc(q[0], q[1], costa ? 1.5 : 1.15, 0, 6.2832); c.fill();
+    });
+
+    var n = dove(NATA);
+
+    /* il punto scende */
+    if (t > .6 && t < 2.2) {
+      var k = (t - .6) / 1.6;
+      var y = n[1] - (1 - k) * A * .5;
+      var g = c.createRadialGradient(n[0], y, 0, n[0], y, 9);
+      g.addColorStop(0, "rgba(255,236,190," + k.toFixed(2) + ")");
+      g.addColorStop(1, "rgba(212,175,106,0)");
+      c.fillStyle = g;
+      c.beginPath(); c.arc(n[0], y, 9, 0, 6.2832); c.fill();
+    }
+
+    /* l'orma si posa, e resta */
+    if (t > 2.1) {
+      var b = Math.min(1, (t - 2.1) / .5);
+      var o = 6 + Math.sin(t * 2) * 1.2;
+      var g2 = c.createRadialGradient(n[0], n[1], 0, n[0], n[1], o + 8);
+      g2.addColorStop(0, "rgba(255,236,190," + (b * .85).toFixed(2) + ")");
+      g2.addColorStop(1, "rgba(212,175,106,0)");
+      c.fillStyle = g2;
+      c.beginPath(); c.arc(n[0], n[1], o + 8, 0, 6.2832); c.fill();
+      c.fillStyle = "rgba(255,240,200," + b.toFixed(2) + ")";
+      c.beginPath(); c.arc(n[0], n[1], 2.6, 0, 6.2832); c.fill();
+    }
+
+    /* i fili, uno dopo l'altro */
+    VERSO.forEach(function (v, i) {
+      var p = 2.6 + i * .34;
+      if (t < p) return;
+      var k = Math.min(1, (t - p) / 1.5);
+      var q = dove(v);
+      var x = n[0] + (q[0] - n[0]) * k, y = n[1] + (q[1] - n[1]) * k;
+      c.strokeStyle = "rgba(212,175,106,.3)";
+      c.lineWidth = .7;
+      c.beginPath(); c.moveTo(n[0], n[1]); c.lineTo(x, y); c.stroke();
+      var g3 = c.createRadialGradient(x, y, 0, x, y, 6);
+      g3.addColorStop(0, v[2] + "dd");
+      g3.addColorStop(1, v[2] + "00");
+      c.fillStyle = g3;
+      c.beginPath(); c.arc(x, y, 6, 0, 6.2832); c.fill();
+      if (k >= 1) {
+        c.fillStyle = v[2];
+        c.beginPath(); c.arc(q[0], q[1], 2.4, 0, 6.2832); c.fill();
+      }
+    });
+
+    anim = requestAnimationFrame(disegna);
+  }
+
+  function parti() {
+    if (acceso) return;
+    acceso = true; misura();
+    anim = requestAnimationFrame(disegna);
+  }
+  function ferma() {
+    if (!acceso) return;
+    acceso = false; cancelAnimationFrame(anim); anim = -1; t0 = 0;
+  }
+
+  new IntersectionObserver(function (v) {
+    v[0].isIntersecting ? parti() : ferma();
+  }, { threshold: .12 }).observe(cv);
+
+  window.addEventListener("resize", function () { if (acceso) misura(); });
+
+  /* ── la finestra della mail: il modulo si carica solo quando serve ── */
+  (function () {
+    var velo = document.getElementById("velo-mail");
+    var apri = document.getElementById("apri-mail");
+    var chiudi = document.getElementById("chiudi-mail");
+    var telaio = document.getElementById("modulo-brevo");
+    if (!velo || !apri) return;
+
+    function mostra() {
+      if (telaio && !telaio.src) telaio.src = telaio.dataset.src;
+      velo.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+    function nascondi() {
+      velo.hidden = true;
+      document.body.style.overflow = "";
+    }
+    apri.addEventListener("click", mostra);
+    chiudi.addEventListener("click", nascondi);
+    velo.addEventListener("click", function (e) {
+      if (e.target === velo) nascondi();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !velo.hidden) nascondi();
+    });
+  })();
+
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+
+  var R = document.getElementById("svOrmaVive");
+  if (!R) return;
+
+  var tela  = R.querySelector("[data-tela]");
+  var c     = tela.getContext("2d");
+  var mega  = R.querySelector("[data-mega]");
+  var tasto = R.querySelector("[data-manda]");
+  var resta = R.querySelector("[data-resta]");
+  var coda  = R.querySelector("[data-coda]");
+
+
+  R.querySelector("[data-manda]").innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>';
+
+
+  var L = 0, A = 0, dpr = 1, anim = -1, t0 = 0;
+  var GIRO = 17000;
+
+  var CASA = { lon: 8.7519, lat: 40.0653 };          /* Paulilatino */
+  var GENTE = [
+    { chi: "Gabriele", lon:  9.4989, lat: 40.9236 },  /* Olbia */
+    { chi: "Marco",    lon:  8.5915, lat: 39.9036, sotto: true },
+    { chi: "Laura",    lon: 10.3106, lat: 43.5485 },  /* Livorno */
+    { chi: "Giovanni", lon: 11.3426, lat: 44.4949 },  /* Bologna */
+    { chi: "Roberta",  lon: 13.9556, lat: 42.7514 },  /* Giulianova */
+    { chi: "Francesco", lon: 15.5540, lat: 38.1938 }  /* Messina */
+  ];
+
+  var PENISOLA = [
+    [7.0,45.0],[6.8,45.9],[7.6,45.9],[8.6,46.4],[9.2,46.5],[10.1,46.6],
+    [11.2,46.9],[12.2,46.7],[13.6,46.5],[13.7,45.8],[13.1,45.7],[12.3,45.4],
+    [12.5,44.4],[13.5,43.6],[14.5,42.4],[15.1,41.9],[16.2,41.9],[15.9,41.4],
+    [16.5,41.2],[17.3,40.8],[18.0,40.5],[18.5,40.1],[18.4,39.8],[17.9,40.3],
+    [17.2,40.4],[16.6,40.1],[16.9,39.6],[17.1,39.0],[16.6,38.4],[16.1,37.9],
+    [15.6,38.0],[15.8,38.7],[16.0,39.4],[15.5,40.0],[14.9,40.4],[14.2,40.6],
+    [13.7,41.2],[12.9,41.4],[12.2,41.8],[11.2,42.4],[10.8,42.9],[10.3,43.5],
+    [10.0,44.0],[9.1,44.3],[8.3,44.3],[7.6,43.8],[7.5,44.2],[6.9,44.4]
+  ];
+  var SARDEGNA = [
+    [9.2,41.25],[9.6,40.9],[9.8,40.5],[9.7,40.0],[9.6,39.5],[9.3,39.2],
+    [9.1,39.0],[8.6,38.9],[8.4,39.1],[8.5,39.5],[8.4,39.9],[8.2,40.3],
+    [8.2,40.6],[8.4,40.8],[8.8,41.1]
+  ];
+  var SICILIA = [
+    [12.44,37.80],[12.66,38.02],[13.36,38.19],[14.05,38.05],[14.75,38.03],
+    [15.24,38.13],[15.65,38.27],[15.62,38.10],[15.29,37.85],[15.09,37.50],
+    [15.29,37.06],[15.14,36.68],[14.50,36.79],[13.92,37.10],[13.58,37.31],
+    [12.92,37.57]
+  ];
+
+  var LON0 = 6.4, LON1 = 18.9, LAT0 = 36.4, LAT1 = 47.2;
+  var px = 0, py = 0, sc = 1;
+
+  function proietta(lon, lat) {
+    return [px + (lon - LON0) * sc, py + (LAT1 - lat) * sc * 1.42];
+  }
+
+  var NODI = [], FILI = [], SCAMBI = [], STELLE = [], TRAMA = [];
+  function caso(a, b) { return a + Math.random() * (b - a); }
+
+  function misura() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    L = R.clientWidth; A = R.clientHeight;
+    tela.width = L * dpr; tela.height = A * dpr;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    /* ⭐ La mappa non usa tutto il riquadro: sta in una fascia in
+       mezzo. Sopra resta il cielo per la card, sotto per i dati,
+       e la terra non viene mai coperta. */
+    var stretto = L < 640;
+    var alto  = stretto ? A * .40 : A * .36;
+    var basso = stretto ? A * .15 : A * .14;
+    var fascia = A - alto - basso;
+
+    var sx = (L * .74) / (LON1 - LON0);
+    var sy = fascia / ((LAT1 - LAT0) * 1.42);
+    sc = Math.min(sx, sy);
+    px = (L - (LON1 - LON0) * sc) / 2;
+    py = alto + (fascia - (LAT1 - LAT0) * sc * 1.42) / 2;
+    semina();
+  }
+
+  function semina() {
+    STELLE = [];
+    var q = Math.round(L * A / 3400);
+    for (var s = 0; s < q; s++) {
+      STELLE.push({ x: Math.random() * L, y: Math.random() * A,
+                    r: caso(.3, 1), o: caso(.1, .36),
+                    f: caso(0, 6.28), v: caso(.6, 1.8) });
+    }
+    var p = proietta(CASA.lon, CASA.lat);
+    NODI = [{ x: p[0], y: p[1], r: 3.8, chi: "", luce: 0, mio: true }];
+    GENTE.forEach(function (g) {
+      var q2 = proietta(g.lon, g.lat);
+      NODI.push({ x: q2[0], y: q2[1], r: 2.8, chi: g.chi, luce: 0,
+                  sotto: !!g.sotto });
+    });
+
+    /* ⭐ la tessitura: quello che c'era già prima di questa orma.
+       Sta dietro, vive per conto suo, e non aspetta nessuno. */
+    TRAMA = [];
+    var quanti = Math.max(26, Math.round(L * A / 9000));
+    for (var k = 0; k < quanti; k++) {
+      TRAMA.push({ x: Math.random() * L, y: Math.random() * A,
+                   vx: (Math.random() - .5) * .12,
+                   vy: (Math.random() - .5) * .12,
+                   r: caso(.7, 1.5) });
+    }
+    /* e i sei nodi veri entrano nella trama, così i fili si innestano */
+    NODI.forEach(function (n2) {
+      TRAMA.push({ x: n2.x, y: n2.y, vx: 0, vy: 0, r: 0, fermo: true });
+    });
+    FILI = [];
+    for (var i = 1; i < NODI.length; i++) FILI.push({ a: 0, b: i, v: 0 });
+    SCAMBI = FILI.map(function (f, i) {
+      return { filo: i, p: Math.random(), v: caso(.0024, .005),
+               verso: Math.random() < .5 ? 1 : -1 };
+    });
+  }
+
+  /* dove sta il tasto che manda, dentro il riquadro */
+  function puntoTasto() {
+    var a = tasto.getBoundingClientRect(), b = R.getBoundingClientRect();
+    return [a.left - b.left + a.width / 2, a.top - b.top + a.height / 2];
+  }
+
+  function costa(punti, o) {
+    c.beginPath();
+    punti.forEach(function (p, i) {
+      var q = proietta(p[0], p[1]);
+      if (i === 0) c.moveTo(q[0], q[1]); else c.lineTo(q[0], q[1]);
+    });
+    c.closePath();
+    c.fillStyle = "rgba(38,64,120," + (o * .38).toFixed(3) + ")";
+    c.fill();
+    c.strokeStyle = "rgba(120,164,214," + o.toFixed(3) + ")";
+    c.lineWidth = 1; c.lineJoin = "round";
+    c.stroke();
+  }
+
+  function disegna(ora) {
+    if (!t0) t0 = ora;
+    var t = ((ora - t0) % GIRO) / GIRO;
+
+    c.clearRect(0, 0, L, A);
+    c.fillStyle = "#04060F"; c.fillRect(0, 0, L, A);
+    var g = c.createRadialGradient(L * .4, A * .35, 0, L * .5, A * .5,
+                                   Math.max(L, A) * .9);
+    g.addColorStop(0, "rgba(30,52,112,.4)");
+    g.addColorStop(.6, "rgba(44,34,92,.24)");
+    g.addColorStop(1, "rgba(4,6,16,0)");
+    c.fillStyle = g; c.fillRect(0, 0, L, A);
+
+    STELLE.forEach(function (s) {
+      var b = .7 + .3 * Math.sin(s.f + ora * .0012 * s.v);
+      c.fillStyle = "rgba(245,240,230," + (s.o * b).toFixed(3) + ")";
+      c.beginPath(); c.arc(s.x, s.y, s.r, 0, 6.2832); c.fill();
+    });
+
+    var terra = Math.min(1, Math.max(0, (t - .02) / .14));
+    costa(PENISOLA, .28 * terra);
+    costa(SARDEGNA, .34 * terra);
+    costa(SICILIA,  .24 * terra);
+
+    /* la tessitura che c'era già */
+    var tess = Math.min(1, Math.max(0, (t - .08) / .18));
+    if (tess > 0) {
+      c.lineWidth = .6;
+      for (var i2 = 0; i2 < TRAMA.length; i2++) {
+        var a2 = TRAMA[i2];
+        if (!a2.fermo) {
+          a2.x += a2.vx; a2.y += a2.vy;
+          if (a2.x < 0 || a2.x > L) a2.vx *= -1;
+          if (a2.y < 0 || a2.y > A) a2.vy *= -1;
+        }
+        for (var j2 = i2 + 1; j2 < TRAMA.length; j2++) {
+          var b2 = TRAMA[j2];
+          var dx = a2.x - b2.x, dy = a2.y - b2.y;
+          var d2 = Math.sqrt(dx * dx + dy * dy);
+          if (d2 > 108) continue;
+          c.strokeStyle = "rgba(150,178,220," +
+            ((1 - d2 / 108) * .11 * tess).toFixed(3) + ")";
+          c.beginPath(); c.moveTo(a2.x, a2.y); c.lineTo(b2.x, b2.y); c.stroke();
+        }
+        if (a2.r > 0) {
+          c.fillStyle = "rgba(180,204,238," + (.2 * tess).toFixed(3) + ")";
+          c.beginPath(); c.arc(a2.x, a2.y, a2.r, 0, 6.2832); c.fill();
+        }
+      }
+    }
+
+    /* ① il Megafono · ② si manda */
+    mega.classList.toggle("on", t >= .03 && t < .90);
+    mega.classList.toggle("spinge", t >= .16 && t < .21);
+    resta.classList.toggle("on", t > .25 && t < .34);
+
+    /* ⭐ l'orma scende dal tasto che manda fino a Paulilatino */
+    if (t >= .18 && t < .25) {
+      var q = (t - .18) / .07;
+      var e = q * q * (3 - 2 * q);              /* parte piano, arriva piano */
+      var p0 = puntoTasto(), p1 = NODI[0];
+      var mx = (p0[0] + p1.x) / 2 + (p1.x - p0[0]) * .22;
+      var my = (p0[1] + p1.y) / 2 - Math.abs(p1.y - p0[1]) * .22;
+      var u = 1 - e;
+      var x = u * u * p0[0] + 2 * u * e * mx + e * e * p1.x;
+      var y = u * u * p0[1] + 2 * u * e * my + e * e * p1.y;
+
+      /* la scia */
+      for (var s2 = 1; s2 <= 6; s2++) {
+        var e2 = Math.max(0, e - s2 * .028);
+        var u2 = 1 - e2;
+        var sx2 = u2 * u2 * p0[0] + 2 * u2 * e2 * mx + e2 * e2 * p1.x;
+        var sy2 = u2 * u2 * p0[1] + 2 * u2 * e2 * my + e2 * e2 * p1.y;
+        c.fillStyle = "rgba(212,175,106," + (.2 * (1 - s2 / 7)).toFixed(3) + ")";
+        c.beginPath(); c.arc(sx2, sy2, 2.4 * (1 - s2 / 8), 0, 6.2832); c.fill();
+      }
+
+      var raggio = 11 + 5 * Math.sin(e * Math.PI);
+      var gc = c.createRadialGradient(x, y, 0, x, y, raggio);
+      gc.addColorStop(0, "rgba(255,236,190,.95)");
+      gc.addColorStop(.4, "rgba(212,175,106,.55)");
+      gc.addColorStop(1, "rgba(212,175,106,0)");
+      c.fillStyle = gc;
+      c.beginPath(); c.arc(x, y, raggio, 0, 6.2832); c.fill();
+      c.fillStyle = "rgba(255,244,214,.95)";
+      c.beginPath(); c.arc(x, y, 2.6, 0, 6.2832); c.fill();
+    }
+
+    NODI[0].luce = t > .24 ? Math.min(1, (t - .24) / .04) : 0;
+
+    /* ③ i fili — il cuore: nascono piano e restano accesi a lungo */
+    FILI.forEach(function (f, i) {
+      var parte = .30 + i * .028;
+      var q = Math.max(0, Math.min(1, (t - parte) / .10));
+      f.v = q;
+      if (q <= 0) { NODI[f.b].luce = 0; return; }
+      var a = NODI[f.a], b = NODI[f.b];
+      c.strokeStyle = "rgba(212,175,106," + (.38 * q).toFixed(3) + ")";
+      c.lineWidth = 1.1;
+      c.beginPath(); c.moveTo(a.x, a.y);
+      c.lineTo(a.x + (b.x - a.x) * q, a.y + (b.y - a.y) * q);
+      c.stroke();
+      NODI[f.b].luce = q;
+    });
+
+    /* ④ la rete si muove — questo è il cuore, e dura */
+    if (t > .48) {
+      SCAMBI.forEach(function (s) {
+        var f = FILI[s.filo];
+        if (!f || f.v < 1) return;
+        s.p += s.v * s.verso;
+        if (s.p > 1) s.p = 0;
+        if (s.p < 0) s.p = 1;
+        var a = NODI[f.a], b = NODI[f.b];
+        var x = a.x + (b.x - a.x) * s.p, y = a.y + (b.y - a.y) * s.p;
+        var gg = c.createRadialGradient(x, y, 0, x, y, 7);
+        gg.addColorStop(0, "rgba(255,232,180,.9)");
+        gg.addColorStop(1, "rgba(212,175,106,0)");
+        c.fillStyle = gg;
+        c.beginPath(); c.arc(x, y, 7, 0, 6.2832); c.fill();
+      });
+    }
+    R.querySelector("[data-dati]").classList.toggle("on", t > .40 && t < .90);
+    coda.classList.toggle("on", t > .90);
+
+    /* i nodi, e i soli nomi delle persone */
+    var gran = Math.max(13, Math.round(Math.min(L, A) * .036));
+    NODI.forEach(function (n) {
+      if (n.luce <= .02) return;
+      var raggio = 13 + n.luce * (n.mio ? 18 : 9);
+      var gg = c.createRadialGradient(n.x, n.y, 0, n.x, n.y, raggio);
+      gg.addColorStop(0, "rgba(212,175,106," + (.36 * n.luce).toFixed(3) + ")");
+      gg.addColorStop(1, "rgba(212,175,106,0)");
+      c.fillStyle = gg;
+      c.beginPath(); c.arc(n.x, n.y, raggio, 0, 6.2832); c.fill();
+
+      c.fillStyle = "rgba(245,240,230," + (.45 + n.luce * .5).toFixed(3) + ")";
+      c.beginPath(); c.arc(n.x, n.y, n.r, 0, 6.2832); c.fill();
+
+      if (n.chi && n.luce > .55) {
+        var o = Math.min(1, (n.luce - .55) * 2.4);
+        c.textAlign = "center";
+        c.fillStyle = "rgba(245,240,230," + (o * .88).toFixed(3) + ")";
+        c.font = "500 " + gran + "px 'DM Sans', system-ui, sans-serif";
+        c.fillText(n.chi, n.x,
+                   n.sotto ? n.y + n.r + gran + 2 : n.y - n.r - 9);
+      }
+    });
+
+    anim = requestAnimationFrame(disegna);
+  }
+
+  function parti() {
+    misura(); t0 = 0;
+    if (anim === -1) anim = requestAnimationFrame(disegna);
+  }
+  function ferma() {
+    if (anim !== -1) { cancelAnimationFrame(anim); anim = -1; }
+  }
+
+  window.addEventListener("resize", misura);
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.orma = parti;
+  window.SpazioVivo.ormaFerma = ferma;
+
+  parti();
+})();
+</script>
+</body>
+</html>
