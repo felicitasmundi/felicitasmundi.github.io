@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La mia orma &middot; la matrice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--scala:1.2;--navy:#14172B;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+--line:rgba(184,150,62,.22);--nexus:#8C2F39;--terra:#AA8844;--acqua:#4488BB;
+--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--svil:#5A7A8C;--verde:#6E9E5A}
+html{font-size:calc(100% * var(--scala))}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#0C0E1C}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+display:flex;justify-content:center;min-height:100vh}
+.f{width:100%;max-width:30rem;background:var(--navy);min-height:100vh;
+padding:0 0 2rem;position:relative;overflow:hidden}
+.f::before{content:'';position:absolute;inset:0;pointer-events:none;
+background:radial-gradient(ellipse at 22% 4%,rgba(58,88,160,.32),transparent 54%),
+radial-gradient(ellipse at 82% 94%,rgba(70,52,120,.22),transparent 56%)}
+.f > *{position:relative}
+.corpo{padding:0 1rem}
+
+/* il riquadro del tempo: in cima, è la giornata */
+.tempo{display:flex;gap:.55rem;padding:1.4rem 1rem .3rem}
+.tempo .q{flex:1;border:1px solid var(--line);border-radius:.75rem;
+background:rgba(8,11,26,.4);padding:.55rem .5rem;text-align:center}
+.tempo .q b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:.82rem;
+color:var(--oro-ch);line-height:1.2}
+.tempo .q span{display:block;font-size:.62rem;color:rgba(245,240,230,.4);margin-top:.2rem}
+.tempo .q .lu{font-size:1.15rem;line-height:1}
+
+/* la testa: chi sei, e a che livello */
+.io{display:flex;align-items:center;gap:.6rem;padding:.9rem 1rem .3rem}
+.io .av{width:3rem;height:3rem;border-radius:50%;flex:none;display:grid;place-items:center;
+font-family:'Cinzel',serif;font-size:.95rem;color:var(--oro-ch);
+border:1.5px solid var(--oro);background:rgba(200,160,85,.2);position:relative;
+box-shadow:0 0 1rem rgba(200,160,85,.45),0 0 0 .25rem rgba(200,160,85,.12)}
+.io .av::after{content:'\2726';position:absolute;top:-.3rem;right:-.3rem;
+font-size:.62rem;color:var(--oro)}
+.io .nm b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:1.1rem;
+color:var(--oro-ch)}
+.io .nm span{display:block;font-size:.74rem;color:rgba(245,240,230,.45);margin-top:.1rem}
+
+/* i segni presi */
+.segni{display:flex;gap:.35rem;flex-wrap:wrap;padding:.6rem 1rem .2rem}
+.segni .sg{display:inline-flex;align-items:center;gap:.32rem;font-size:.76rem;
+padding:.22rem .6rem;border-radius:1rem;
+border:1px solid color-mix(in srgb,var(--c) 45%,transparent);
+background:color-mix(in srgb,var(--c) 12%,transparent);color:rgba(245,240,230,.85)}
+.segni .sg i{width:.4rem;height:.4rem;border-radius:50%;background:var(--c);display:block}
+.segni .piu{font-size:.76rem;padding:.22rem .6rem;border-radius:1rem;
+border:1px dashed rgba(245,240,230,.2);color:rgba(245,240,230,.35)}
+
+h2{font-family:'Cinzel',serif;font-weight:400;font-size:.95rem;color:var(--oro-ch);
+margin:1.5rem 0 .5rem;padding-top:.9rem;border-top:1px solid var(--line)}
+h2 small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;
+font-size:.82rem;color:rgba(245,240,230,.4);margin-top:.1rem;letter-spacing:0}
+
+/* le orme */
+.orma{border:1px solid color-mix(in srgb,var(--c) 26%,transparent);
+border-left:3px solid color-mix(in srgb,var(--c) 60%,transparent);border-radius:.9rem;
+background:color-mix(in srgb,var(--c) 9%,rgba(8,11,26,.5));margin-bottom:.5rem;
+cursor:pointer;transition:transform .22s,border-color .22s}
+.orma:hover{transform:translateX(3px);border-color:color-mix(in srgb,var(--c) 56%,transparent)}
+.orma > .dentro{padding:.85rem}
+.testa{display:flex;align-items:center;gap:.4rem;margin-bottom:.45rem}
+.ce{width:1.5rem;height:1.5rem;border-radius:50%;flex:none;display:grid;place-items:center;
+font-size:.56rem;color:var(--ivory);
+border:1px solid color-mix(in srgb,var(--c) 55%,transparent);
+background:color-mix(in srgb,var(--c) 18%,transparent)}
+.ce+.ce{margin-left:-.52rem}
+.ce.osp{border-style:dashed;opacity:.65}
+.testa .nn{font-size:.82rem;color:rgba(245,240,230,.72);margin-left:.25rem;
+flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.testa .qd{flex:none;font-size:.7rem;color:rgba(245,240,230,.44)}
+.ti{font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.32}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;
+color:rgba(245,240,230,.48);margin-top:.12rem;line-height:1.35}
+.piede{display:flex;gap:.32rem;align-items:center;flex-wrap:wrap;
+margin-top:.5rem;font-size:.75rem;color:rgba(245,240,230,.52)}
+.st{display:inline-flex;align-items:center;gap:.3rem;font-size:.6rem;letter-spacing:.05em;
+padding:.09rem .48rem;border-radius:1rem;border:1px solid rgba(245,240,230,.16);
+color:rgba(245,240,230,.8)}
+.st i{width:.36rem;height:.36rem;border-radius:50%;display:block}
+.st.coda i{background:rgba(245,240,230,.4)}
+.st.avanz{border-color:rgba(170,136,68,.55)} .st.avanz i{background:var(--terra)}
+.st.svil{border-color:rgba(110,158,90,.55);color:var(--verde)} .st.svil i{background:var(--verde)}
+.fr{margin-left:auto;color:rgba(245,240,230,.3);transition:transform .22s;flex:none}
+.orma.on .fr{transform:rotate(90deg)}
+.figlie{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.orma.on .figlie{grid-template-rows:1fr}
+.figlie > .in{overflow:hidden}
+.figlie .cor{position:relative;padding:.2rem 0 .2rem 1.3rem;margin:.5rem .85rem .85rem}
+.figlie .cor::before{content:'';position:absolute;left:.38rem;top:-.2rem;bottom:1.1rem;width:1px;
+background:color-mix(in srgb,var(--c) 45%,transparent)}
+.fg{position:relative;border:1px solid color-mix(in srgb,var(--x) 26%,transparent);
+border-left:3px solid color-mix(in srgb,var(--x) 60%,transparent);border-radius:.7rem;
+background:color-mix(in srgb,var(--x) 9%,rgba(8,11,26,.45));padding:.5rem .68rem;margin-bottom:.36rem}
+.fg::before{content:'';position:absolute;left:-.95rem;top:.9rem;width:.65rem;height:1px;
+background:color-mix(in srgb,var(--c) 45%,transparent)}
+.fg .et{font-size:.66rem;color:var(--x);filter:brightness(1.3)}
+.fg .tx{font-family:'Cormorant Garamond',serif;font-size:.98rem;line-height:1.35;margin-top:.06rem}
+.fg .pi{display:flex;gap:.3rem;align-items:center;margin-top:.3rem;font-size:.72rem;
+color:rgba(245,240,230,.42);flex-wrap:wrap}
+
+/* le squadre */
+.sq{border:1px solid var(--line);border-radius:.85rem;background:rgba(8,11,26,.45);
+padding:.75rem .85rem;margin-bottom:.45rem}
+.sq b{font-family:'Cinzel',serif;font-weight:400;font-size:.9rem;color:var(--oro-ch)}
+.sq .d{font-size:.82rem;color:rgba(245,240,230,.5);margin-top:.2rem;line-height:1.4}
+.sq.vuota{border-style:dashed;opacity:.65}
+.sq.vuota .d{font-family:'Cormorant Garamond',serif;font-style:italic}
+
+/* il praticantato: tasto fisso dentro la mia orma */
+.prat{display:flex;align-items:center;gap:.6rem;border:1px solid rgba(200,160,85,.5);
+border-radius:.85rem;background:rgba(200,160,85,.09);padding:.8rem .85rem;margin:.6rem 0}
+.prat .sg{width:2.2rem;height:2.2rem;border-radius:50%;flex:none;display:grid;place-items:center;
+border:1px solid var(--oro);color:var(--oro-ch);font-size:1rem}
+.prat .tx{flex:1}
+.prat .tx b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:.92rem;color:var(--oro-ch)}
+.prat .tx span{display:block;font-size:.78rem;color:rgba(245,240,230,.5);margin-top:.1rem}
+
+/* la biografia, in fondo */
+.et3{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(245,240,230,.35);margin:.7rem 0 .35rem}
+.segni .sg{cursor:pointer;transition:border-color .2s,background .2s,opacity .2s}
+.segni .sg[data-t="tutti"]{--c:var(--oro)}
+.segni .sg.on{border-color:var(--oro);background:rgba(200,160,85,.2);
+  color:var(--oro-ch);box-shadow:0 0 .6rem rgba(200,160,85,.3)}
+.segni .sg.vu{opacity:.45;border-style:dashed}
+.ferme{border:1px dashed rgba(245,240,230,.16);border-radius:.8rem;
+  background:rgba(8,11,26,.35);padding:.6rem .8rem;margin-bottom:.5rem}
+.ferme b{display:block;font-weight:400;font-size:.85rem;color:rgba(245,240,230,.55)}
+.ferme span{display:block;font-family:'Cormorant Garamond',serif;font-size:.85rem;
+  color:rgba(245,240,230,.32);margin-top:.15rem;line-height:1.4}
+.gesti{display:flex;gap:.4rem;padding:.7rem 0 .2rem;flex-wrap:wrap}
+.ge{display:inline-flex;align-items:center;gap:.35rem;font-family:'DM Sans',sans-serif;
+  font-size:.8rem;padding:.4rem .8rem;border-radius:1.4rem;cursor:pointer;
+  background:transparent;border:1px solid rgba(245,240,230,.16);
+  color:rgba(245,240,230,.7)}
+.ge i{font-style:normal;font-size:.9rem;line-height:1;color:rgba(245,240,230,.5)}
+.ge.pr{border-color:var(--oro);background:rgba(200,160,85,.14);color:var(--oro-ch)}
+.ge.pr i{color:var(--oro-ch)}
+
+/* ⛔ le orme dettate e non ancora collegate */
+.collegare{margin-bottom:.6rem}
+.collegare > .capo{display:flex;align-items:center;gap:.5rem;
+  border:1px dashed rgba(90,122,140,.6);border-radius:.8rem;
+  background:rgba(90,122,140,.1);padding:.6rem .8rem}
+.collegare > .capo i{width:.45rem;height:.45rem;border-radius:50%;
+  background:var(--svil);display:block;flex:none}
+.collegare > .capo b{font-family:'Cinzel',serif;font-weight:400;font-size:.9rem;
+  color:var(--svil);filter:brightness(1.4);flex:1}
+.collegare > .capo em{font-style:normal;font-size:.68rem;color:rgba(245,240,230,.4)}
+.collegare .sotto{position:relative;padding-left:1.35rem;margin:.4rem 0 0 .9rem}
+.collegare .sotto::before{content:'';position:absolute;left:.4rem;top:-.2rem;bottom:1rem;
+  width:1px;background:rgba(90,122,140,.5)}
+.collegare .om::before{background:rgba(90,122,140,.5)}
+.da.vuoto2{color:var(--svil);filter:brightness(1.35);
+  border:1px dashed rgba(90,122,140,.5);border-radius:1rem;
+  padding:.14rem .55rem;display:inline-block;margin-top:.35rem}
+
+/* ⭐ la radice, e sotto le orme in fila — niente annidamento */
+.radice{margin-bottom:.6rem}
+.radice > .capo{display:flex;align-items:center;gap:.5rem;
+  border:1.5px solid color-mix(in srgb,var(--c) 55%,transparent);border-radius:.8rem;
+  background:color-mix(in srgb,var(--c) 14%,rgba(8,11,26,.5));padding:.6rem .8rem;
+  box-shadow:0 0 .8rem color-mix(in srgb,var(--c) 22%,transparent)}
+.radice > .capo .sgt{width:2.4rem;height:2.4rem;flex:none;color:var(--c);
+  filter:brightness(1.25) drop-shadow(0 0 .5rem color-mix(in srgb,var(--c) 40%,transparent))}
+.radice > .capo .sgt svg{width:100%;height:100%;display:block}
+.radice > .capo b{font-family:'Cinzel',serif;font-weight:400;font-size:.92rem;
+  color:var(--c);filter:brightness(1.35);flex:1}
+.radice > .capo em{font-style:normal;font-size:.68rem;color:rgba(245,240,230,.4)}
+.radice.sp > .capo{border-style:dashed;opacity:.6;box-shadow:none}
+.radice .sotto{position:relative;padding-left:1.35rem;margin:.4rem 0 0 .9rem}
+.radice .sotto::before{content:'';position:absolute;left:.4rem;top:-.2rem;bottom:1rem;
+  width:1px;background:color-mix(in srgb,var(--c) 45%,transparent)}
+.radice .sotto > .orma, .collegare .sotto > .orma{position:relative}
+.radice .sotto > .orma::before, .collegare .sotto > .orma::before{
+  content:'';position:absolute;left:-.98rem;top:1.15rem;width:.62rem;height:1px;
+  background:color-mix(in srgb,var(--c) 45%,transparent)}
+.collegare .sotto > .orma::before{background:rgba(90,122,140,.5)}
+.orma .da{margin-top:.4rem;font-size:.76rem;color:rgba(245,240,230,.42);
+  line-height:1.4;cursor:pointer}
+.orma .da b{color:rgba(245,240,230,.74);font-weight:400}
+.orma .da:hover b{color:var(--oro-ch)}
+.da.vuoto2{color:var(--svil);filter:brightness(1.35);
+  border:1px dashed rgba(90,122,140,.5);border-radius:1rem;
+  padding:.14rem .55rem;display:inline-block}
+.piede .dentro2{color:var(--oro-ch);cursor:pointer}
+.vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;
+font-size:.92rem;color:rgba(245,240,230,.32);padding:.5rem 0 .2rem;text-align:center}
+.bio{border:1px solid var(--line);border-radius:.85rem;background:rgba(8,11,26,.45);padding:.9rem}
+.bio .r{display:flex;gap:.5rem;padding:.4rem 0;border-top:1px solid rgba(245,240,230,.06);
+font-size:.85rem;line-height:1.4}
+.bio .r:first-child{border-top:0}
+.bio .r .k{flex:none;width:7.5rem;color:rgba(245,240,230,.42);font-size:.78rem}
+.bio .r .v{flex:1;color:rgba(245,240,230,.85)}
+
+.nota{border:1px solid var(--line);border-radius:.85rem;background:rgba(6,9,22,.5);
+padding:.9rem;margin:1rem 0;font-size:.9rem;line-height:1.55;color:rgba(245,240,230,.8)}
+.nota b{color:var(--oro-ch);font-weight:500}
+.spento{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;
+color:rgba(245,240,230,.3);padding:.5rem 0 .3rem}
+</style></head><body><div class="f">
+
+<!-- il Megafono: sempre -->
+
+
+<!-- ⛔ la radio non c'è: compare solo quando c'è la diretta -->
+
+<!-- il riquadro del tempo: è la giornata -->
+<div class="tempo">
+  <div class="q"><b>[ giorno ]</b><span>[ mese ]</span></div>
+  <div class="q"><b class="lu">&#127761;</b><span>[ la luna ]</span></div>
+  <div class="q"><b>[ il santo ]</b><span>il santo</span></div>
+</div>
+
+<div class="io">
+  <span class="av">—</span>
+  <span class="nm"><b>[ nome e cognome ]</b><span>[ livello ] &middot; [ vicinato radice ]</span></span>
+</div>
+
+<div class="gesti">
+  <button class="ge pr"><i>+</i>nuova orma</button>
+  <button class="ge"><i>☉</i>contatto</button>
+  <button class="ge"><i>€</i>conto</button>
+</div>
+
+<div class="et3">i miei talenti &middot; toccane uno per filtrare</div>
+<div class="segni">
+  <span class="sg on" data-t="tutti"><i></i>tutti</span>
+  <span class="sg" style="--c:var(--terra)" data-t="a"><i></i>[ un talento con orme ]</span>
+  <span class="sg" style="--c:var(--aria)" data-t="b"><i></i>[ un altro con orme ]</span>
+  <span class="sg vu" style="--c:var(--terra)" data-t="c"><i></i>[ un talento senza orme ]</span>
+  <span class="piu">+ aggiungi</span>
+</div>
+
+<div class="corpo">
+
+<div class="prat">
+  <span class="sg">&#10022;</span>
+  <span class="tx"><b>Antahkarana</b><span>[ la prossima puntata ]</span></span>
+  <span style="color:rgba(245,240,230,.3)">&rsaquo;</span>
+</div>
+
+<h2>Le mie orme<small>una radice per talento, e sotto tutto quello che ne è venuto</small></h2>
+
+<div class="collegare">
+  <div class="capo"><i></i><b>Da collegare</b><em>[ quante ]</em></div>
+  <div class="sotto">
+<div class="orma" style="--c:var(--svil)">
+  <div class="dentro">
+    <div class="testa"><span class="ce">—</span>
+      <span class="nn">[ chi c&rsquo;è dentro ]</span><span class="qd">[ dove, o quando ]</span></div>
+    <div class="ti">[ un&rsquo;orma dettata dal Megafono ]</div>
+    <div class="sub">[ la riga sotto, se serve ]</div>
+    <div class="piede"><span style="color:var(--svil);filter:brightness(1.3)">[ la stanza ]</span>
+      <span>&middot;</span><span class="st coda"><i></i>in coda</span>
+      <span>&middot;</span><span>[ quante nate ]</span><span class="fr">&rsaquo;</span></div>
+    <div class="da vuoto2">↳ da collegare a un talento</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="radice" style="--c:var(--terra)" data-t="a">
+  <div class="capo"><span class="sgt"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"> <path d="M30 8 L41 14 L41 27 L30 33 L19 27 L19 14Z" opacity=".5"/> <path d="M19 27 L8 33 L8 46 L19 52 L30 46 L30 33Z" opacity=".35"/> <path d="M41 27 L52 33 L52 46 L41 52 L30 46 L30 33Z" opacity=".35"/> <ellipse cx="30" cy="22" rx="4" ry="6"/> <path d="M30 17 L30 27" opacity=".55"/> <path d="M26 19 C22 15 20 17 22 21 C24 24 27 23 28 21" opacity=".7"/> <path d="M34 19 C38 15 40 17 38 21 C36 24 33 23 32 21" opacity=".7"/> <path d="M29 15 L27 11 M31 15 L33 11" opacity=".5"/> </svg></span><b>[ il talento preso ]</b><em>[ quante orme ]</em></div>
+  <div class="sotto">
+<div class="orma" style="--c:var(--terra)">
+  <div class="dentro">
+    <div class="testa"><span class="ce">—</span>
+      <span class="nn">[ chi c&rsquo;è dentro ]</span><span class="qd">[ dove, o quando ]</span></div>
+    <div class="ti">[ il titolo dell&rsquo;orma ]</div>
+    <div class="sub">[ la riga sotto, se serve ]</div>
+    <div class="piede"><span style="color:var(--terra);filter:brightness(1.3)">[ la stanza ]</span>
+      <span>&middot;</span><span class="st coda"><i></i>in coda</span>
+      <span>&middot;</span><span>[ quante nate ]</span><span class="fr">&rsaquo;</span></div>
+    
+  </div>
+</div>
+<div class="orma" style="--c:var(--acqua)">
+  <div class="dentro">
+    <div class="testa"><span class="ce">—</span>
+      <span class="nn">[ chi c&rsquo;è dentro ]</span><span class="qd">[ dove, o quando ]</span></div>
+    <div class="ti">[ un&rsquo;altra orma, nata da quella sopra ]</div>
+    <div class="sub">[ la riga sotto ]</div>
+    <div class="piede"><span style="color:var(--acqua);filter:brightness(1.3)">[ la stanza ]</span>
+      <span>&middot;</span><span class="st coda"><i></i>in coda</span>
+      <span>&middot;</span><span>[ quante nate ]</span><span class="fr">&rsaquo;</span></div>
+    <div class="da">↳ nata da <b>[ il titolo dell’orma madre ]</b></div>
+  </div>
+</div>
+<div class="orma" style="--c:var(--terra)">
+  <div class="dentro">
+    <div class="testa"><span class="ce">—</span>
+      <span class="nn">[ chi c&rsquo;è dentro ]</span><span class="qd">[ dove, o quando ]</span></div>
+    <div class="ti">[ un&rsquo;orma che ne contiene altre ]</div>
+    <div class="sub">[ la riga sotto ]</div>
+    <div class="piede"><span style="color:var(--terra);filter:brightness(1.3)">[ la stanza ]</span>
+      <span>&middot;</span><span class="st coda"><i></i>in coda</span>
+      <span>&middot;</span><span><span class="dentro2">[ n ] dentro</span></span><span class="fr">&rsaquo;</span></div>
+    
+  </div>
+</div>
+<div class="orma" style="--c:var(--aria)">
+  <div class="dentro">
+    <div class="testa"><span class="ce">—</span>
+      <span class="nn">[ chi c&rsquo;è dentro ]</span><span class="qd">[ dove, o quando ]</span></div>
+    <div class="ti">[ un&rsquo;orma che sta a cavallo ]</div>
+    <div class="sub">[ la riga sotto ]</div>
+    <div class="piede"><span style="color:var(--aria);filter:brightness(1.3)">[ la stanza ]</span>
+      <span>&middot;</span><span class="st coda"><i></i>in coda</span>
+      <span>&middot;</span><span>[ quante nate ]</span><span class="fr">&rsaquo;</span></div>
+    <div class="da">⚓ ancorata anche a <b>[ un altro talento ]</b></div>
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="radice" style="--c:var(--aria)" data-t="b">
+  <div class="capo"><span class="sgt"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"> <path d="M8 26 L30 8 L52 26"/> <path d="M13 24 L13 48 L47 48 L47 24"/> <path d="M23 48 L23 32 C23 29 37 29 37 32 L37 48" opacity=".85"/> <path d="M30 44 C27 41 26 38 28 35 C29 36.5 29.5 37 30 37 C30.5 35 30 33.5 29 32.5 C32 34 34 37 33 40 C32.5 42 31.5 43.5 30 44Z"/> <path d="M18 52 C22 49 38 49 42 52" opacity=".35"/> <path d="M52 26 L56 30 M8 26 L4 30" opacity=".3"/> <path d="M30 8 L30 3" opacity=".5"/> <circle cx="30" cy="2" r="1.8" fill="currentColor" stroke="none" opacity=".65"/> </svg></span><b>[ un altro talento con orme ]</b><em>[ quante ]</em></div>
+  <div class="sotto">
+<div class="orma" style="--c:var(--aria)">
+  <div class="dentro">
+    <div class="testa"><span class="ce">—</span>
+      <span class="nn">[ chi c&rsquo;è dentro ]</span><span class="qd">[ dove, o quando ]</span></div>
+    <div class="ti">[ un&rsquo;orma sotto questa radice ]</div>
+    <div class="sub">[ la riga sotto ]</div>
+    <div class="piede"><span style="color:var(--aria);filter:brightness(1.3)">[ la stanza ]</span>
+      <span>&middot;</span><span class="st coda"><i></i>in coda</span>
+      <span>&middot;</span><span>[ quante nate ]</span><span class="fr">&rsaquo;</span></div>
+    
+  </div>
+</div>
+  </div>
+</div>
+
+<div class="ferme" data-t="c">
+  <b>[ n ] talenti non hanno ancora un&rsquo;orma</b>
+  <span>[ i loro nomi, in fila ]</span>
+</div>
+
+<div class="vuoto">Quando prendi un talento nasce la sua radice, e compare qui.</div>
+
+<h2>Le squadre<small>i riquadri si riempiono in base a chi guarda</small></h2>
+<div class="sq vuota"><b>[ una squadra ]</b>
+  <div class="d">Compare quando ti chiamano dentro.</div></div>
+
+<div class="nota">
+⛔ <b>Questa è la matrice de «la mia orma»: la forma, senza contenuto.</b> Ogni <code>[ quadra ]</code> è un posto da riempire, non un testo da riscrivere.<br><br>⭐ <b>Piatto fuori, profondo dentro.</b> Sotto la radice le orme stanno in fila e non si annidano; ma un’orma che ne contiene altre lo dice — <em>[ n ] dentro</em> — e ci si entra. <b>Così non ti perdi in cima e non perdi niente in fondo.</b><br><br>⭐ <b>Un’orma dettata dal Megafono nasce senza radice</b> e sta in <em>Da collegare</em>, in cima. Si tocca la riga e si sceglie fra i propri talenti. <b>Se invece nasce dentro un’orma, eredita e basta.</b><br><br>Ognuna dice da quale è nata con una riga toccabile — <em>↳ nata da</em> — e chi sta a cavallo di due talenti lo dice con <em>⚓ ancorata anche a</em>.<br><b>La profondità serve a leggere, non a esistere:</b> la catena resta nei dati anche quando non si disegna, e si risale sempre fino alla radice.<br><br>⭐ <b>Non c’è una home:</b> è la pagina che si apre entrando. Il riquadro del tempo sta in cima perché è la giornata. Il praticantato è un tasto fisso qui dentro. E la radio compare solo quando c’è la diretta.<br><br>⭐ <b>I talenti si vedono una volta sola, in cima, e sono i filtri:</b> toccane uno e resta la sua radice. Le radici senza orme non occupano spazio: stanno in una riga sola.<br><br>⛔ <b>La biografia non sta qui:</b> questa è l’orma, non il profilo pubblico.</div>
+
+</div>
+
+
+
+</div>
+<script>
+document.querySelectorAll(".segni .sg").forEach(function (p) {
+  p.onclick = function () {
+    document.querySelectorAll(".segni .sg").forEach(function (x) {
+      x.classList.remove("on");
+    });
+    p.classList.add("on");
+    var q = p.dataset.t;
+    document.querySelectorAll("[data-t]").forEach(function (r) {
+      if (r.classList.contains("sg")) return;
+      r.style.display = (q === "tutti" || r.dataset.t === q) ? "" : "none";
+    });
+    // ⛔ le orme non ancora collegate non appartengono a nessun talento
+    var c = document.querySelector(".collegare");
+    if (c) c.style.display = (q === "tutti") ? "" : "none";
+  };
+});
+
+document.querySelectorAll(".orma .dentro").forEach(function (d) {
+  d.onclick = function () { d.parentNode.classList.toggle("on"); };
+});
+</script>
+</body></html>
