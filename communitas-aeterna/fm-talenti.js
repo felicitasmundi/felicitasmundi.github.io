@@ -1,501 +1,519 @@
-/* ═══════════════════════════════════════════════════════════════════════
-   FM-TALENTI.JS — lo scambio comune
-   Comunità Eterna FelicitasMundi · 13 agosto 2026
+/* ═══════════════════════════════════════════════════════════════
+   Comunità Eterna FelicitasMundi · IL PERCORSO DEI TALENTI
 
-   Si carica come gli altri fm-*.js, dopo il guscio.
-   Usa del guscio: db · io · ospite · parla() · chiediAccesso()
-                   caricaOrme() · contaOrme() · vista
+   Il disegno è quello di `il-percorso-dei-talenti.html` (quinta
+   consegna, 91.337 · 55b126ef4825aab7e151abcbb4e04ded, MD5
+   verificato prima di leggere): qui non si reinventa, si
+   riproduce leggendo i dati veri.
 
-   Nel Megafono serve una voce «talenti» che chiami talentiApri().
-   ═══════════════════════════════════════════════════════════════════════ */
+   COSA LEGGE — aperto anche a chi non è entrato:
+     talenti_famiglie   le 6 sezioni (nome, sottotitolo, colore)
+     talenti_gruppi     i 20 gruppi (nome, descrizione, ordine)
+     talenti            i segni dentro i gruppi — solo `attivo`
+     talenti_mosse      le 21 mosse: fai (7) · condividi (9) · ricevi (5)
 
-(function(){
+   COSA FA: i tre quadranti delle mosse in cima, che si aprono ·
+   i gruppi chiusi che al tocco mostrano i talenti · ogni talento
+   ha la casella: si prende e si toglie.
+   ⭐ PRENDERE APRE L'ORMA RADICE, subito: nasce come in fm-radice.js
+      (tipo `talento_radice`, PUBBLICA — decisione del 2 settembre).
+   ⭐ TOGLIERE LASCIA L'ORMA E STACCA IL TALENTO: `talento_id`
+      torna vuoto, la riga resta. Niente si cancella.
 
-  /* ── le due librerie, caricate quando servono ──────────────────────── */
+   ⛔ L'ORDINE: i gruppi in ordine alfabetico dentro la sezione, i
+      talenti in ordine alfabetico dentro il gruppo. IL CAMMINO NO:
+      è una sequenza — Primi passi, poi In cammino — e va col suo
+      `ordine`. Le righe poetiche non si mostrano: bastano il nome
+      del gruppo e la sua riga (`descrizione`).
 
-  var LIB_QR   = "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js";
-  var LIB_LEGGI= "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js";
-  var caricate = {};
+   ⚠️ QUESTO FILE PRENDE IL NOME DEI CREDITI, per ordine di Gab del
+      7 settembre. Il file di prima — saldo, sigillo, gettone `?t=`,
+      talentiApri()/talentiChiudi() — è INTERO in
+      PRECEDENTI/fm-talenti_2026-09-07_crediti-prima-del-percorso.js
+      (23.919 · d18568db936134bfbadade770e2a6d6c). ⛔ Il guscio lo
+      carica già col vecchio mestiere: prima del prossimo /pubblica
+      il GUSCIO decide la casa nuova dei crediti — scritto nella
+      sua posta.
 
-  function carica(url, poi){
-    if(caricate[url]){ poi(); return; }
-    var s = document.createElement("script");
-    s.src = url;
-    s.onload = function(){ caricate[url] = true; poi(); };
-    s.onerror= function(){ parla("Non si è caricato lo strumento del codice."); };
-    document.head.appendChild(s);
+   ⚠️ La barra in fondo del modello è `fixed`: dentro il guscio
+      coprirebbe il Megafono, che non si copre (legge dei margini).
+      Qui è `sticky` dentro la colonna — unica deviazione, detta.
+
+   Il guscio chiama `percorsoDeiTalenti(contenitore)` da vai().
+
+   ⛔ Niente involucro (function(){ … })(): il guscio mette tutto
+      in comune e questo file legge da lì.
+   ═══════════════════════════════════════════════════════════════ */
+
+"use strict";
+
+/* ── la veste: quella del modello, sotto il nome .fm-perc ── */
+function percVeste(){
+  if(document.getElementById("fm-perc-veste")) return;
+  var s = document.createElement("style");
+  s.id = "fm-perc-veste";
+  s.textContent =
+    ".fm-perc{width:100%;max-width:30rem;margin:0 auto;position:relative;" +
+      "padding:1.5rem 1rem 6rem;font-family:'DM Sans',system-ui,sans-serif;" +
+      "color:#F5F0E6}" +
+    ".fm-perc *{box-sizing:border-box}" +
+    ".fm-perc .oc{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;" +
+      "color:#C8A055;margin-bottom:.3rem}" +
+    ".fm-perc h1{font-family:'Cinzel',serif;font-weight:400;font-size:1.4rem;" +
+      "line-height:1.15;margin:0 0 .25rem}" +
+    ".fm-perc .sot{font-family:'Cormorant Garamond',serif;font-style:italic;" +
+      "font-size:.95rem;color:rgba(245,240,230,.5);line-height:1.45;margin-bottom:1.1rem}" +
+    ".fm-perc h2{font-family:'Cinzel',serif;font-weight:400;font-size:.92rem;" +
+      "color:#D4AF6A;margin:1.6rem 0 .5rem;padding-top:.9rem;" +
+      "border-top:1px solid rgba(184,150,62,.2)}" +
+    ".fm-perc h2 small{display:block;font-family:'Cormorant Garamond',serif;" +
+      "font-style:italic;font-size:.82rem;color:rgba(245,240,230,.4);" +
+      "margin-top:.1rem;letter-spacing:0}" +
+
+    ".fm-perc .base{border:1px solid rgba(200,160,85,.45);border-radius:.85rem;" +
+      "background:rgba(200,160,85,.07);padding:.9rem;margin-bottom:1.2rem}" +
+    ".fm-perc .base p{font-size:.92rem;line-height:1.55;" +
+      "color:rgba(245,240,230,.8);margin:0 0 .4rem}" +
+    ".fm-perc .base p:last-child{margin-bottom:0}" +
+    ".fm-perc .base b{color:#D4AF6A;font-weight:500}" +
+
+    /* i tre quadranti delle mosse: si toccano e si aprono */
+    ".fm-perc .qd{border:1px solid color-mix(in srgb,var(--c) 28%,transparent);" +
+      "border-radius:.9rem;overflow:hidden;margin-bottom:.5rem;" +
+      "background:linear-gradient(160deg,color-mix(in srgb,var(--c) 11%,rgba(2,4,12,.5)),rgba(2,4,12,.55));" +
+      "transition:border-color .25s}" +
+    ".fm-perc .qd .capo{display:flex;align-items:baseline;gap:.55rem;" +
+      "padding:.8rem .85rem;cursor:pointer}" +
+    ".fm-perc .qd .capo b{font-family:'Cinzel',serif;font-weight:400;" +
+      "font-size:1rem;color:var(--c);filter:brightness(1.35)}" +
+    ".fm-perc .qd .capo em{font-style:normal;font-family:'Cormorant Garamond',serif;" +
+      "font-size:.8rem;color:rgba(245,240,230,.42);flex:1;min-width:0}" +
+    ".fm-perc .qd .capo i{font-style:normal;flex:none;font-family:'Cinzel',serif;" +
+      "font-size:.78rem;color:color-mix(in srgb,var(--c) 75%,transparent);" +
+      "filter:brightness(1.3);width:1.5rem;height:1.5rem;border-radius:50%;" +
+      "display:grid;place-items:center;" +
+      "border:1px solid color-mix(in srgb,var(--c) 35%,transparent);align-self:center}" +
+    ".fm-perc .qd .mm{display:grid;grid-template-rows:0fr;" +
+      "transition:grid-template-rows .35s ease}" +
+    ".fm-perc .qd.on .mm{grid-template-rows:1fr}" +
+    ".fm-perc .qd .mm > div{overflow:hidden}" +
+    ".fm-perc .qd .m{padding:.5rem .85rem;" +
+      "border-top:1px solid color-mix(in srgb,var(--c) 12%,transparent)}" +
+    ".fm-perc .qd .m b{display:block;font-weight:400;font-size:.88rem;" +
+      "line-height:1.3;color:rgba(245,240,230,.92)}" +
+    ".fm-perc .qd .m span{display:block;font-family:'Cormorant Garamond',serif;" +
+      "font-size:.82rem;line-height:1.35;color:rgba(245,240,230,.44);margin-top:.05rem}" +
+
+    ".fm-perc .sbl{border:1px solid rgba(200,160,85,.3);border-radius:.8rem;" +
+      "background:rgba(200,160,85,.05);padding:.7rem .85rem;margin:.2rem 0 1.4rem;" +
+      "font-size:.8rem;line-height:1.45;color:rgba(245,240,230,.5)}" +
+    ".fm-perc .sbl b{color:#D4AF6A;font-weight:400}" +
+
+    /* un gruppo */
+    ".fm-perc .gr{border:1px solid color-mix(in srgb,var(--c) 24%,transparent);" +
+      "border-left:3px solid color-mix(in srgb,var(--c) 58%,transparent);" +
+      "border-radius:.8rem;background:color-mix(in srgb,var(--c) 5%,rgba(2,4,12,.42));" +
+      "margin-bottom:.45rem;overflow:hidden;transition:border-color .2s}" +
+    ".fm-perc .gr .capo{display:flex;align-items:center;gap:.55rem;" +
+      "padding:.7rem .75rem;cursor:pointer}" +
+    ".fm-perc .gr .capo .num{flex:none;width:1.4rem;height:1.4rem;border-radius:50%;" +
+      "border:1px solid color-mix(in srgb,var(--c) 45%,transparent);color:var(--c);" +
+      "filter:brightness(1.3);display:grid;place-items:center;" +
+      "font-family:'Cinzel',serif;font-size:.66rem}" +
+    ".fm-perc .gr .capo .tx{flex:1;min-width:0}" +
+    ".fm-perc .gr .capo .tx b{display:block;font-family:'Cinzel',serif;" +
+      "font-weight:400;font-size:.95rem;color:var(--c);filter:brightness(1.3);line-height:1.2}" +
+    ".fm-perc .gr .capo .tx em{display:block;font-style:normal;" +
+      "font-family:'Cormorant Garamond',serif;font-size:.8rem;" +
+      "color:rgba(245,240,230,.4);margin-top:.05rem}" +
+    ".fm-perc .gr .capo .q{flex:none;font-size:.62rem;color:rgba(245,240,230,.3)}" +
+    ".fm-perc .gr .capo .fr{flex:none;color:rgba(245,240,230,.3);transition:transform .2s}" +
+    ".fm-perc .gr.on .capo .fr{transform:rotate(90deg)}" +
+    ".fm-perc .gr .dentro{display:none;padding:0 .75rem .65rem}" +
+    ".fm-perc .gr.on .dentro{display:block}" +
+
+    /* un talento, con la casella */
+    ".fm-perc .tl{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;" +
+      "cursor:pointer;border-top:1px solid color-mix(in srgb,var(--c) 12%,transparent)}" +
+    ".fm-perc .tl .s{flex:none;width:1.7rem;height:1.7rem;display:grid;place-items:center}" +
+    ".fm-perc .tl .s svg{width:1.5rem;height:1.5rem;color:var(--c);filter:brightness(1.3)}" +
+    ".fm-perc .tl .nn{flex:1;min-width:0}" +
+    ".fm-perc .tl .nn b{display:block;font-weight:400;font-size:.9rem;line-height:1.25}" +
+    ".fm-perc .tl .sp{flex:none;width:1.15rem;height:1.15rem;border-radius:.32rem;" +
+      "border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}" +
+    ".fm-perc .tl.presa .sp{background:var(--c);border-color:var(--c)}" +
+    ".fm-perc .tl.presa .sp::after{content:'\\2713';color:#0A0C1A;font-size:.72rem;" +
+      "display:grid;place-items:center;height:100%}" +
+    ".fm-perc .tl.presa .nn b{color:var(--c);filter:brightness(1.35)}" +
+
+    /* la barra in fondo — sticky, non copre il Megafono */
+    ".fm-perc .pi{position:sticky;bottom:0;z-index:5;transform:translateY(120%);" +
+      "background:#0A0C1A;border-top:1px solid #C8A055;" +
+      "padding:.8rem 1rem 1rem;transition:transform .3s;margin-top:1rem}" +
+    ".fm-perc .pi.su{transform:none}" +
+    ".fm-perc .pi .in{display:flex;align-items:center;gap:.6rem}" +
+    ".fm-perc .pi .q{font-family:'Cinzel',serif;font-size:1.15rem;color:#D4AF6A}" +
+    ".fm-perc .pi .t{flex:1;font-size:.76rem;line-height:1.3;color:rgba(245,240,230,.55)}" +
+    ".fm-perc .pi .t b{display:block;color:#F5F0E6;font-weight:400;font-size:.84rem}" +
+    ".fm-perc .pi button{background:#C8A055;color:#0A0C1A;border:0;" +
+      "border-radius:.65rem;padding:.6rem .85rem;font-family:'Cinzel',serif;" +
+      "font-size:.72rem;letter-spacing:.08em;cursor:pointer}";
+  document.head.appendChild(s);
+}
+
+/* ── lo stato del modulo ── */
+var percDati  = null;   /* {sezioni, gruppi, talenti, mosse} — letti una volta */
+var percPrese = {};     /* talento_id → 1: le mie radici vive */
+var percParti = null;   /* i pezzi del disegno corrente */
+var percInCorso = {};   /* la briglia sul doppio tocco, per talento */
+
+/* i tre quadranti: le parole del modello, i colori delle tre famiglie */
+var PERC_QUADRANTI = [
+  { famiglia: "fai",       nome: "Quello che fai",
+    riga: "la tua giornata, i tuoi luoghi, le tue squadre",      colore: "#AA8844" },
+  { famiglia: "condividi", nome: "Quello che condividi",
+    riga: "quello che esce da te e raggiunge gli altri",         colore: "#669944" },
+  { famiglia: "ricevi",    nome: "Quello che ricevi",
+    riga: "sostegno, formazione, e quello che ti viene pagato",  colore: "#CC6644" }
+];
+
+/* ── l'unica porta: la chiama il guscio da vai() ── */
+function percorsoDeiTalenti(c){
+  percVeste();
+
+  var r = document.createElement("div");
+  r.className = "fm-perc";
+  c.appendChild(r);
+  percParti = { radice: r, corpo: null, pi: null, q: null, t: null };
+
+  if(percDati){ percDisegna(); return; }
+  percLeggi();
+}
+
+/* ── la lettura: le quattro tavole, una volta — e le mie radici, sempre ── */
+function percLeggi(){
+  if(typeof db === "undefined" || !db){
+    console.warn("fm-talenti: il database non c’è — niente da disegnare");
+    return;
   }
-
-  /* ── stato ─────────────────────────────────────────────────────────── */
-
-  var saldo = 0, mioCodice = null, timer = null, trovato = null, flusso = null;
-
-  var BASE = location.origin + location.pathname;
-
-  /* ═══ LA VESTE ═══════════════════════════════════════════════════════ */
-
-  function veste(){
-    if(document.getElementById("v-talenti")) return;
-
-    var st = document.createElement("style");
-    st.textContent = [
-      "#v-talenti{position:fixed;inset:0;z-index:80;display:none;",
-      "  background:rgba(2,4,12,.95);overflow-y:auto;padding:22px 16px}",
-      "#v-talenti.on{display:block}",
-      ".tal-w{max-width:520px;margin:0 auto}",
-      ".tal-h{display:flex;align-items:center;gap:12px;margin-bottom:18px;",
-      "  padding-bottom:14px;border-bottom:1px solid rgba(184,150,62,.22)}",
-      ".tal-h b{font-family:'Cinzel',serif;font-weight:500;flex:1;",
-      "  font-size:calc(.76rem*var(--scala,1.4));color:var(--gold,#D4AF6A)}",
-      ".tal-x{background:none;border:1px solid rgba(184,150,62,.28);border-radius:999px;",
-      "  color:rgba(245,240,230,.6);padding:6px 14px;cursor:pointer;",
-      "  font-family:'DM Sans',sans-serif;font-size:calc(.58rem*var(--scala,1.4))}",
-      ".tal-x:hover{border-color:var(--gold,#D4AF6A);color:var(--gold,#D4AF6A)}",
-
-      ".tal-s{display:flex;gap:12px;align-items:center;border:1px solid rgba(184,150,62,.3);",
-      "  border-radius:12px;background:rgba(10,12,26,.6);padding:14px 16px;margin-bottom:18px}",
-      ".tal-s .n{flex:1}",
-      ".tal-s .k{font-size:calc(.58rem*var(--scala,1.4));letter-spacing:.13em;",
-      "  text-transform:uppercase;color:var(--gold,#D4AF6A)}",
-      ".tal-s .v{font-family:'Cinzel',serif;font-weight:500;",
-      "  font-size:calc(.9rem*var(--scala,1.4));color:#F5F0E6;margin-top:2px}",
-
-      ".tal-b{display:block;width:100%;background:none;cursor:pointer;text-align:left;",
-      "  border:1px solid rgba(184,150,62,.3);border-radius:12px;padding:15px 17px;",
-      "  margin-bottom:9px;color:#F5F0E6;font-family:'DM Sans',sans-serif;",
-      "  font-size:calc(.67rem*var(--scala,1.4));transition:border-color .18s}",
-      ".tal-b:hover{border-color:var(--gold,#D4AF6A)}",
-      ".tal-b i{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;",
-      "  font-size:calc(.58rem*var(--scala,1.4));color:rgba(245,240,230,.5);margin-top:3px}",
-
-      ".tal-c{display:block;width:100%;background:rgba(2,4,12,.5);color:#F5F0E6;",
-      "  border:1px solid rgba(184,150,62,.3);border-radius:9px;padding:12px 14px;",
-      "  font-family:'Cormorant Garamond',serif;margin-bottom:10px;",
-      "  font-size:calc(.67rem*var(--scala,1.4))}",
-      ".tal-c:focus{outline:0;border-color:var(--gold,#D4AF6A)}",
-      ".tal-e{font-size:calc(.58rem*var(--scala,1.4));letter-spacing:.1em;",
-      "  text-transform:uppercase;color:rgba(245,240,230,.42);margin-bottom:6px}",
-
-      ".tal-ok{background:var(--gold,#C8A055);color:#0A0C1A;border:0;border-radius:999px;",
-      "  padding:13px 24px;font-weight:500;cursor:pointer;width:100%;",
-      "  font-family:'DM Sans',sans-serif;font-size:calc(.67rem*var(--scala,1.4))}",
-      ".tal-no{background:none;border:1px solid rgba(184,150,62,.28);border-radius:999px;",
-      "  color:rgba(245,240,230,.55);padding:11px 20px;cursor:pointer;margin-top:9px;",
-      "  width:100%;font-family:'DM Sans',sans-serif;font-size:calc(.58rem*var(--scala,1.4))}",
-
-      /* il sigillo */
-      ".tal-sig{position:relative;width:260px;height:260px;margin:4px auto 14px;",
-      "  border-radius:50%;background:#F5F0E6;display:flex;align-items:center;",
-      "  justify-content:center;box-shadow:0 0 0 2px #C8A055, 0 0 0 12px rgba(2,4,12,0)}",
-      ".tal-sig canvas{width:190px;height:190px;image-rendering:pixelated}",
-      ".tal-sig .nx{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);",
-      "  width:52px;height:52px;background:#F5F0E6;border-radius:50%;",
-      "  display:flex;align-items:center;justify-content:center}",
-      ".tal-cod{font-family:'Cinzel',serif;font-size:calc(1.1rem*var(--scala,1.4));",
-      "  letter-spacing:.22em;color:var(--gold,#D4AF6A);text-align:center;margin-bottom:6px}",
-      ".tal-q{font-family:'Cormorant Garamond',serif;font-style:italic;text-align:center;",
-      "  color:rgba(245,240,230,.6);font-size:calc(.67rem*var(--scala,1.4));margin-bottom:16px}",
-      ".tal-att{text-align:center;color:rgba(245,240,230,.45);",
-      "  font-family:'Cormorant Garamond',serif;font-style:italic;",
-      "  font-size:calc(.58rem*var(--scala,1.4));line-height:1.6}",
-
-      "#tal-video{width:100%;max-width:400px;border-radius:12px;display:block;",
-      "  margin:0 auto 12px;border:1px solid rgba(184,150,62,.3)}",
-      ".tal-riga{display:flex;justify-content:space-between;gap:12px;padding:11px 0;",
-      "  border-top:1px solid rgba(184,150,62,.13);",
-      "  font-size:calc(.58rem*var(--scala,1.4));color:rgba(245,240,230,.82)}",
-      ".tal-riga:first-of-type{border-top:0}",
-      ".tal-riga b{color:var(--gold,#D4AF6A)}",
-      ".tal-box{border:1px solid rgba(184,150,62,.3);border-radius:12px;",
-      "  padding:15px 17px;margin-bottom:14px;background:rgba(10,12,26,.5)}",
-      ".tal-fat{text-align:center;padding:26px 10px}",
-      ".tal-fat .g{font-family:'Cinzel',serif;color:var(--gold,#D4AF6A);",
-      "  font-size:calc(.9rem*var(--scala,1.4));margin-bottom:8px}"
-    ].join("");
-    document.head.appendChild(st);
-
-    var d = document.createElement("div");
-    d.id = "v-talenti";
-    d.innerHTML =
-    '<div class="tal-w">'+
-      '<div class="tal-h"><b>talenti</b>'+
-        '<button class="tal-x" id="tal-chiudi">chiudi</button></div>'+
-
-      '<div class="tal-s">'+
-        '<svg viewBox="0 0 40 40" width="38" height="38" fill="none" stroke="#D4AF6A" '+
-        'stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">'+
-        '<circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="11.2"/>'+
-        '<path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"/>'+
-        '<path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"/></svg>'+
-        '<div class="n"><span class="k">i tuoi talenti</span>'+
-          '<div class="v"><span id="tal-saldo">—</span></div></div>'+
-      '</div>'+
-
-      /* ① la scelta */
-      '<div id="tal-scelta">'+
-        '<button class="tal-b" id="tal-vai-gen">Ho ricevuto qualcosa'+
-          '<i>generi il sigillo, e chi ti ha dato il servizio lo inquadra</i></button>'+
-        '<button class="tal-b" id="tal-vai-leg">Ho dato qualcosa'+
-          '<i>inquadri il sigillo, o scrivi il codice</i></button>'+
-        '<button class="tal-b" id="tal-vai-mov">I miei scambi'+
-          '<i>quello che è passato</i></button>'+
-      '</div>'+
-
-      /* ② genera */
-      '<div id="tal-genera" style="display:none">'+
-        '<div id="tal-gen-form">'+
-          '<div class="tal-e">quanti talenti</div>'+
-          '<input class="tal-c" id="tal-quanti" type="number" min="1" step="1" '+
-            'inputmode="numeric" placeholder="0">'+
-          '<div class="tal-e">cosa hai ricevuto</div>'+
-          '<input class="tal-c" id="tal-cosa" type="text" placeholder="">'+
-          '<button class="tal-ok" id="tal-fai">Genera il sigillo</button>'+
-          '<button class="tal-no" id="tal-gen-back">indietro</button>'+
-        '</div>'+
-        '<div id="tal-gen-esce" style="display:none">'+
-          '<div class="tal-sig"><canvas id="tal-canvas"></canvas>'+
-            '<div class="nx"><svg viewBox="0 0 40 40" width="40" height="40" fill="none" '+
-            'stroke="#0A0C1A" stroke-width="1.6" stroke-linejoin="round">'+
-            '<path d="M20 9 L29 14.5 L29 25.5 L20 31 L11 25.5 L11 14.5 Z"/>'+
-            '<path d="M20 9 L20 20 M20 20 L29 14.5 M20 20 L11 14.5 M20 20 L20 31"/>'+
-            '</svg></div></div>'+
-          '<div class="tal-cod" id="tal-cod">——————</div>'+
-          '<div class="tal-q"><span id="tal-q-n">0</span> talenti</div>'+
-          '<div class="tal-att" id="tal-att">Fallo inquadrare a chi ti ha dato il servizio.<br>'+
-            'Il sigillo vale trenta minuti.</div>'+
-          '<button class="tal-no" id="tal-annulla">annulla lo scambio</button>'+
-        '</div>'+
-      '</div>'+
-
-      /* ③ leggi */
-      '<div id="tal-leggi" style="display:none">'+
-        '<video id="tal-video" playsinline muted></video>'+
-        '<div class="tal-e">oppure scrivi il codice</div>'+
-        '<input class="tal-c" id="tal-inserito" type="text" maxlength="6" '+
-          'placeholder="——————" style="text-align:center;letter-spacing:.3em;'+
-          'text-transform:uppercase">'+
-        '<button class="tal-ok" id="tal-cerca">Cerca</button>'+
-        '<div id="tal-trovato" style="display:none;margin-top:16px">'+
-          '<div class="tal-box">'+
-            '<div class="tal-riga"><span>ti ha proposto</span><b id="tal-t-chi">—</b></div>'+
-            '<div class="tal-riga"><span>per</span><b id="tal-t-cosa">—</b></div>'+
-            '<div class="tal-riga"><span>talenti</span><b id="tal-t-q">—</b></div>'+
-          '</div>'+
-          '<button class="tal-ok" id="tal-conf">Conferma lo scambio</button>'+
-        '</div>'+
-        '<button class="tal-no" id="tal-leg-back">indietro</button>'+
-      '</div>'+
-
-      /* ④ movimenti */
-      '<div id="tal-mov" style="display:none">'+
-        '<div id="tal-mov-lista"></div>'+
-        '<button class="tal-no" id="tal-mov-back">indietro</button>'+
-      '</div>'+
-
-      /* ⑤ fatto */
-      '<div id="tal-fatto" style="display:none">'+
-        '<div class="tal-fat"><div class="g" id="tal-fat-t">Scambio confermato</div>'+
-          '<div class="tal-att" id="tal-fat-s"></div></div>'+
-        '<button class="tal-ok" id="tal-fat-ok">Torna</button>'+
-      '</div>'+
-
-    '</div>';
-    document.body.appendChild(d);
-    aggancia();
+  var colto = { sezioni: null, gruppi: null, talenti: null, mosse: null };
+  function forse(){
+    if(!colto.sezioni || !colto.gruppi || !colto.talenti || !colto.mosse) return;
+    percDati = colto;
+    percRadiciLeggi(function(){ percDisegna(); });
   }
-
-  function aggancia(){
-    var q = function(i){ return document.getElementById(i); };
-    q("tal-chiudi").onclick   = chiudi;
-    q("tal-vai-gen").onclick  = function(){ schermo("genera"); resetGen(); };
-    q("tal-vai-leg").onclick  = function(){ schermo("leggi"); avviaCamera(); };
-    q("tal-vai-mov").onclick  = function(){ schermo("mov"); movimenti(); };
-    q("tal-fai").onclick      = genera;
-    q("tal-gen-back").onclick = function(){ schermo("scelta"); };
-    q("tal-annulla").onclick  = annulla;
-    q("tal-cerca").onclick    = function(){ cerca(q("tal-inserito").value); };
-    q("tal-conf").onclick     = conferma;
-    q("tal-leg-back").onclick = function(){ fermaCamera(); schermo("scelta"); };
-    q("tal-mov-back").onclick = function(){ schermo("scelta"); };
-    q("tal-fat-ok").onclick   = function(){ schermo("scelta"); };
-    q("tal-inserito").addEventListener("keydown", function(e){
-      if(e.key === "Enter") cerca(this.value);
-    });
-  }
-
-  function schermo(n){
-    ["scelta","genera","leggi","mov","fatto"].forEach(function(x){
-      var e = document.getElementById("tal-"+x);
-      if(e) e.style.display = (x === n) ? "block" : "none";
-    });
-    if(n !== "leggi") fermaCamera();
-  }
-
-  /* ═══ IL SALDO ═══════════════════════════════════════════════════════ */
-
-  function leggiSaldo(poi){
-    db.from("persone").select("talenti").eq("id", io.id).single().then(function(r){
-      saldo = r.error ? 0 : Number(r.data.talenti || 0);
-      var s = document.getElementById("tal-saldo");
-      if(s) s.textContent = String(saldo).replace(/\.00$/,"");
-      if(poi) poi(saldo);
-    });
-  }
-
-  /* ═══ ① CHI RICEVE — genera il sigillo ═══════════════════════════════ */
-
-  function resetGen(){
-    document.getElementById("tal-gen-form").style.display = "block";
-    document.getElementById("tal-gen-esce").style.display = "none";
-    document.getElementById("tal-quanti").value = "";
-    document.getElementById("tal-cosa").value = "";
-  }
-
-  function genera(){
-    var q = parseFloat(document.getElementById("tal-quanti").value);
-    var c = document.getElementById("tal-cosa").value.trim();
-    if(!q || q <= 0){ parla("Scrivi quanti talenti."); return; }
-    if(!c){ parla("Scrivi cosa hai ricevuto."); return; }
-
-    leggiSaldo(function(s){
-      if(s < q){ parla("Hai " + s + " talenti, ne servono " + q + "."); return; }
-
-      var alf = "ACDEFGHJKLMNPQRTUVWXY3456789", cod = "";
-      for(var i=0;i<6;i++) cod += alf.charAt(Math.floor(Math.random()*alf.length));
-
-      db.from("talenti_movimenti").insert({
-        da_persona: io.id, a_persona: io.id,
-        quantita: q, motivo: c, stato: "proposto", codice: cod,
-        codice_scade_il: new Date(Date.now() + 30*60*1000).toISOString()
-      }).select("id,codice,quantita").single().then(function(r){
-        if(r.error){ parla("Non è stato creato: " + r.error.message); return; }
-        mioCodice = r.data;
-        document.getElementById("tal-gen-form").style.display = "none";
-        document.getElementById("tal-gen-esce").style.display = "block";
-        document.getElementById("tal-cod").textContent = cod;
-        document.getElementById("tal-q-n").textContent = q;
-        disegnaSigillo(cod);
-        timer = setInterval(controlla, 4000);
-      });
-    });
-  }
-
-  function disegnaSigillo(cod){
-    carica(LIB_QR, function(){
-      var cv = document.getElementById("tal-canvas");
-      window.QRCode.toCanvas(cv, BASE + "?t=" + cod, {
-        errorCorrectionLevel: "H",
-        margin: 1, width: 380,
-        color: { dark: "#C8A055", light: "#F5F0E6" }
-      }, function(err){ if(err) parla("Il sigillo non si è disegnato."); });
-    });
-  }
-
-  function controlla(){
-    if(!mioCodice) return;
-    db.from("talenti_movimenti").select("stato").eq("id", mioCodice.id).single()
+  function chiedi(tavola, campi, dove){
+    db.from(tavola).select(campi).order("ordine")
       .then(function(r){
-        if(r.error || !r.data) return;
-        if(r.data.stato === "confermato"){
-          clearInterval(timer); timer = null;
-          document.getElementById("tal-fat-t").textContent = "Scambio confermato";
-          document.getElementById("tal-fat-s").innerHTML =
-            "Sono passati <b>" + mioCodice.quantita + "</b> talenti.<br>Resta un'orma.";
-          schermo("fatto"); leggiSaldo(); mioCodice = null;
-          if(typeof caricaOrme === "function" && vista === "orme") caricaOrme();
-          else if(typeof contaOrme === "function") contaOrme();
+        if(!r || r.error){
+          console.warn("fm-talenti: `" + tavola + "` non risponde — " +
+            (r && r.error && r.error.message || "senza motivo"));
+          return;
         }
-      });
-  }
-
-  function annulla(){
-    if(!mioCodice){ schermo("scelta"); return; }
-    db.from("talenti_movimenti").update({ stato: "rifiutato" })
-      .eq("id", mioCodice.id).eq("stato","proposto").then(function(){
-        if(timer){ clearInterval(timer); timer = null; }
-        mioCodice = null; schermo("scelta"); parla("Scambio annullato.");
-      });
-  }
-
-  /* ═══ ② CHI DÀ — legge il sigillo ════════════════════════════════════ */
-
-  var stream = null, raf = null;
-
-  function avviaCamera(){
-    document.getElementById("tal-trovato").style.display = "none";
-    document.getElementById("tal-inserito").value = "";
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-
-    carica(LIB_LEGGI, function(){
-      navigator.mediaDevices.getUserMedia({ video:{ facingMode:"environment" } })
-      .then(function(s){
-        stream = s;
-        var v = document.getElementById("tal-video");
-        v.srcObject = s; v.setAttribute("playsinline", true); v.play();
-        var cv = document.createElement("canvas"), cx = cv.getContext("2d");
-
-        (function guarda(){
-          raf = requestAnimationFrame(guarda);
-          if(v.readyState !== v.HAVE_ENOUGH_DATA) return;
-          cv.width = v.videoWidth; cv.height = v.videoHeight;
-          cx.drawImage(v, 0, 0, cv.width, cv.height);
-          var d = cx.getImageData(0, 0, cv.width, cv.height);
-          var r = window.jsQR(d.data, d.width, d.height,
-                    { inversionAttempts: "dontInvert" });
-          if(r && r.data){
-            var m = r.data.match(/[?&]t=([A-Z0-9]{6})/i);
-            var cod = m ? m[1] : (r.data.length === 6 ? r.data : null);
-            if(cod){ fermaCamera(); cerca(cod); }
-          }
-        })();
+        colto[dove] = (r.data) || [];
+        forse();
       })
-      .catch(function(){ /* niente fotocamera: resta il codice a mano */ });
-    });
+      .catch(function(e){
+        console.warn("fm-talenti: `" + tavola + "` non risponde — " + (e && e.message));
+      });
   }
-
-  function fermaCamera(){
-    if(raf){ cancelAnimationFrame(raf); raf = null; }
-    if(stream){ stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; }
-    var v = document.getElementById("tal-video");
-    if(v) v.srcObject = null;
-  }
-
-  function cerca(cod){
-    cod = String(cod || "").trim().toUpperCase();
-    if(cod.length !== 6){ parla("Il codice ha sei caratteri."); return; }
-
-    db.from("talenti_movimenti")
-      .select("id,quantita,motivo,da_persona,stato,codice_scade_il")
-      .eq("codice", cod).single().then(function(r){
-
-      if(r.error || !r.data){ parla("Codice non trovato."); return; }
-      var m = r.data;
-      if(m.stato !== "proposto"){ parla("Questo sigillo è già stato usato."); return; }
-      if(m.da_persona === io.id){ parla("È il tuo sigillo: lo inquadra l'altra persona."); return; }
-      if(m.codice_scade_il && new Date(m.codice_scade_il) < new Date()){
-        parla("Il sigillo è scaduto."); return;
+  chiedi("talenti_famiglie", "id,chiave,nome,sottotitolo,colore,ordine", "sezioni");
+  chiedi("talenti_gruppi",   "id,sezione_id,nome,descrizione,ordine",    "gruppi");
+  chiedi("talenti_mosse",    "ordine,famiglia,testo,dettaglio",          "mosse");
+  db.from("talenti").select("id,gruppo_id,nome,svg,ordine")
+    .eq("attivo", true)
+    .then(function(r){
+      if(!r || r.error){
+        console.warn("fm-talenti: `talenti` non risponde — " +
+          (r && r.error && r.error.message || "senza motivo"));
+        return;
       }
+      colto.talenti = (r.data) || [];
+      forse();
+    })
+    .catch(function(e){
+      console.warn("fm-talenti: `talenti` non risponde — " + (e && e.message));
+    });
+}
 
-      db.from("persone").select("nome").eq("id", m.da_persona).single().then(function(p){
-        trovato = m;
-        document.getElementById("tal-inserito").value = cod;
-        document.getElementById("tal-trovato").style.display = "block";
-        document.getElementById("tal-t-chi").textContent  = p.error ? "—" : p.data.nome;
-        document.getElementById("tal-t-cosa").textContent = m.motivo || "—";
-        document.getElementById("tal-t-q").textContent    = m.quantita;
+/* le radici vive di chi guarda: il segno è `talento_id` pieno */
+function percRadiciLeggi(poi){
+  percPrese = {};
+  if(typeof ospite !== "undefined" && ospite){ poi(); return; }
+  if(typeof io === "undefined" || !io || !io.id){ poi(); return; }
+  db.from("orme").select("talento_id")
+    .eq("persona_id", io.id)
+    .not("talento_id", "is", null)
+    .then(function(r){
+      if(r && !r.error) ((r.data) || []).forEach(function(x){
+        if(x && x.talento_id != null) percPrese[x.talento_id] = 1;
+      });
+      poi();
+    })
+    .catch(function(){ poi(); });
+}
+
+/* ── il disegno: il modello, coi dati veri ── */
+function percDisegna(){
+  var p = percParti;
+  if(!p || !percDati) return;
+  var d = percDati;
+  var r = p.radice;
+  r.innerHTML = "";
+
+  var oc = document.createElement("div");
+  oc.className = "oc";
+  oc.textContent = "i simboli dell’esperienza";
+  r.appendChild(oc);
+  var h1 = document.createElement("h1");
+  h1.textContent = "Il percorso dei talenti";
+  r.appendChild(h1);
+  var sot = document.createElement("div");
+  sot.className = "sot";
+  sot.textContent = "Riconosci la radice della realizzazione.";
+  r.appendChild(sot);
+
+  /* il riquadro in cima: le parole del modello, esatte */
+  var base = document.createElement("div");
+  base.className = "base";
+  var b1 = document.createElement("p");
+  b1.innerHTML = "<b>Ciò che sceglierai formerà la radice delle orme</b> " +
+    "con cui traccerai il tuo percorso di crescita e sviluppo su Felicitas.";
+  var b2 = document.createElement("p");
+  b2.innerHTML = "<b>Riconosci il tuo talento ed evolvi col supporto delle squadre.</b>";
+  base.appendChild(b1); base.appendChild(b2);
+  r.appendChild(base);
+
+  /* i tre quadranti delle mosse: si aprono UNO PER VOLTA,
+     e il primo è aperto all'arrivo */
+  var quadranti = [];
+  PERC_QUADRANTI.forEach(function(f, i){
+    var mosse = d.mosse.filter(function(m){ return m.famiglia === f.famiglia; });
+    if(!mosse.length) return;   /* il vuoto non si disegna */
+    var qd = document.createElement("div");
+    qd.className = "qd" + (i === 0 ? " on" : "");
+    qd.style.setProperty("--c", f.colore);
+    quadranti.push(qd);
+    var capo = document.createElement("div");
+    capo.className = "capo";
+    var cb = document.createElement("b"); cb.textContent = f.nome;
+    var ce = document.createElement("em"); ce.textContent = f.riga;
+    var ci = document.createElement("i"); ci.textContent = String(mosse.length);
+    capo.appendChild(cb); capo.appendChild(ce); capo.appendChild(ci);
+    capo.addEventListener("click", function(){
+      var era = qd.classList.toggle("on");
+      if(era) quadranti.forEach(function(x){
+        if(x !== qd) x.classList.remove("on");
       });
     });
-  }
-
-  function conferma(){
-    if(!trovato) return;
-    db.from("talenti_movimenti")
-      .update({ a_persona: io.id, stato: "confermato" })
-      .eq("id", trovato.id).eq("stato","proposto")
-      .select("id,quantita,motivo").single().then(function(r){
-
-      if(r.error){ parla("Non è passato: " + r.error.message); return; }
-
-      db.from("orme").insert({
-        persona_id: io.id, contenuto: r.data.motivo,
-        tipo: "talenti", destinazione: "emporio",
-        visibilita: "vicinato", elemento: "acqua"
-      }).select("id").single().then(function(o){
-        if(!o.error){
-          db.from("talenti_movimenti").update({ orma_id: o.data.id })
-            .eq("id", trovato.id).then(function(){});
-        }
-        document.getElementById("tal-fat-t").textContent = "Ricevuti";
-        document.getElementById("tal-fat-s").innerHTML =
-          "<b>" + r.data.quantita + "</b> talenti sono tuoi.<br>Resta un'orma.";
-        schermo("fatto"); leggiSaldo(); trovato = null;
-        if(typeof caricaOrme === "function" && vista === "orme") caricaOrme();
-        else if(typeof contaOrme === "function") contaOrme();
-      });
+    qd.appendChild(capo);
+    var mm = document.createElement("div"); mm.className = "mm";
+    var dentro = document.createElement("div");
+    mosse.forEach(function(m){
+      var riga = document.createElement("div");
+      riga.className = "m";
+      var mb = document.createElement("b"); mb.textContent = m.testo;
+      riga.appendChild(mb);
+      if(m.dettaglio){
+        var ms = document.createElement("span"); ms.textContent = m.dettaglio;
+        riga.appendChild(ms);
+      }
+      dentro.appendChild(riga);
     });
-  }
-
-  /* ═══ ③ I MOVIMENTI ══════════════════════════════════════════════════ */
-
-  function movimenti(){
-    var l = document.getElementById("tal-mov-lista");
-    l.innerHTML = '<div class="tal-att">…</div>';
-
-    db.from("talenti_movimenti")
-      .select("id,quantita,motivo,stato,da_persona,a_persona,confermato_il,proposto_il")
-      .or("da_persona.eq." + io.id + ",a_persona.eq." + io.id)
-      .eq("stato","confermato")
-      .order("confermato_il", { ascending:false }).limit(40)
-      .then(function(r){
-        if(r.error || !r.data || !r.data.length){
-          l.innerHTML = '<div class="tal-att">Nessuno scambio, per ora.</div>'; return;
-        }
-        var h = '<div class="tal-box">';
-        r.data.forEach(function(m){
-          var esce = (m.da_persona === io.id);
-          var qd = new Date(m.confermato_il || m.proposto_il)
-                    .toLocaleDateString("it-IT",{day:"numeric",month:"long"});
-          h += '<div class="tal-riga"><span>' + (m.motivo || "—") +
-               '<br><span style="opacity:.45">' + qd + '</span></span>' +
-               '<b style="color:' + (esce ? "#E8A79E" : "#9CC177") + '">' +
-               (esce ? "−" : "+") + m.quantita + '</b></div>';
-        });
-        l.innerHTML = h + '</div>';
-      });
-  }
-
-  /* ═══ APRI E CHIUDI ══════════════════════════════════════════════════ */
-
-  function apri(){
-    if(typeof ospite !== "undefined" && ospite){
-      if(typeof chiediAccesso === "function")
-        chiediAccesso("Per scambiare talenti serve l'accesso");
-      return;
-    }
-    veste();
-    document.getElementById("v-talenti").classList.add("on");
-    leggiSaldo(); schermo("scelta");
-  }
-
-  function chiudi(){
-    var v = document.getElementById("v-talenti");
-    if(v) v.classList.remove("on");
-    if(timer){ clearInterval(timer); timer = null; }
-    fermaCamera(); mioCodice = null; trovato = null;
-  }
-
-  /* chi arriva da un sigillo inquadrato col telefono */
-  function daIndirizzo(){
-    var m = location.search.match(/[?&]t=([A-Za-z0-9]{6})/);
-    if(!m) return;
-    /* ⛔ IL GETTONE SPARISCE APPENA LETTO — si consuma una volta, e non
-       deve restare in un indirizzo che si manda in giro.
-       ⚠️ Ma sparisce SOLO LUI. Prima si azzerava l'indirizzo intero, e
-       così un sigillo si portava via anche `?p=`, la stanza in cui si è.
-       `p` e `n` sono del guscio: qui non si toccano. */
-    var coda = "";
-    try{
-      var q = new URLSearchParams(location.search);
-      q.delete("t");
-      coda = q.toString();
-    }catch(e){ coda = ""; }
-    history.replaceState({}, "", BASE + (coda ? "?" + coda : ""));
-    setTimeout(function(){
-      if(typeof ospite !== "undefined" && ospite) return;
-      apri(); schermo("leggi"); cerca(m[1]);
-    }, 1200);
-  }
-
-  document.addEventListener("keydown", function(e){
-    if(e.key === "Escape") chiudi();
+    mm.appendChild(dentro);
+    qd.appendChild(mm);
+    r.appendChild(qd);
   });
 
-  if(document.readyState === "loading")
-    document.addEventListener("DOMContentLoaded", daIndirizzo);
-  else daIndirizzo();
+  /* la riga d'avviso sotto il blocco: regola, non mossa — parole del modello */
+  var sbl = document.createElement("div");
+  sbl.className = "sbl";
+  sbl.innerHTML = "⛔ Le orme pubbliche, le squadre, il luogo sulla mappa, " +
+    "formazioni e prodotti <b>si aprono col karma yoga o col praticantato</b>.";
+  r.appendChild(sbl);
 
-  /* il Megafono chiama questa */
-  window.talentiApri = apri;
-  window.talentiChiudi = chiudi;
+  /* le sezioni, e dentro i gruppi ordinati */
+  var perSezione = {};
+  d.gruppi.forEach(function(g){
+    (perSezione[g.sezione_id] = perSezione[g.sezione_id] || []).push(g);
+  });
+  var perGruppo = {};
+  d.talenti.forEach(function(t){
+    if(t.gruppo_id == null) return;
+    (perGruppo[t.gruppo_id] = perGruppo[t.gruppo_id] || []).push(t);
+  });
 
-})();
+  d.sezioni.forEach(function(sz){
+    var gruppi = (perSezione[sz.id] || []).filter(function(g){
+      return (perGruppo[g.id] || []).length;
+    });
+    if(!gruppi.length) return;   /* una sezione vuota non si disegna */
+
+    /* ⛔ i gruppi in ordine alfabetico — il cammino no: è una sequenza */
+    if(sz.chiave === "nexus"){
+      gruppi.sort(function(a, b){ return a.ordine - b.ordine; });
+    } else {
+      gruppi.sort(function(a, b){
+        return String(a.nome).localeCompare(String(b.nome), "it");
+      });
+    }
+
+    var h2 = document.createElement("h2");
+    h2.textContent = sz.nome || "";
+    if(sz.sottotitolo){
+      var sm = document.createElement("small");
+      sm.textContent = sz.sottotitolo;
+      h2.appendChild(sm);
+    }
+    r.appendChild(h2);
+
+    gruppi.forEach(function(g, gi){
+      var talenti = perGruppo[g.id].slice().sort(function(a, b){
+        return String(a.nome).localeCompare(String(b.nome), "it");
+      });
+      var gr = document.createElement("div");
+      gr.className = "gr";
+      if(sz.colore) gr.style.setProperty("--c", sz.colore);
+      var capo = document.createElement("div");
+      capo.className = "capo";
+      var num = document.createElement("span");
+      num.className = "num"; num.textContent = String(gi + 1);
+      var tx = document.createElement("span");
+      tx.className = "tx";
+      var tb = document.createElement("b"); tb.textContent = g.nome || "";
+      tx.appendChild(tb);
+      if(g.descrizione){
+        var te = document.createElement("em"); te.textContent = g.descrizione;
+        tx.appendChild(te);
+      }
+      var q = document.createElement("span");
+      q.className = "q"; q.textContent = String(talenti.length);
+      var fr = document.createElement("span");
+      fr.className = "fr"; fr.textContent = "›";
+      capo.appendChild(num); capo.appendChild(tx);
+      capo.appendChild(q); capo.appendChild(fr);
+      capo.addEventListener("click", function(){ gr.classList.toggle("on"); });
+      gr.appendChild(capo);
+
+      var dentro = document.createElement("div");
+      dentro.className = "dentro";
+      talenti.forEach(function(t){ dentro.appendChild(percTalento(t)); });
+      gr.appendChild(dentro);
+      r.appendChild(gr);
+    });
+  });
+
+  /* la barra in fondo: sale solo quando si è preso qualcosa */
+  var pi = document.createElement("div");
+  pi.className = "pi";
+  var pin = document.createElement("div"); pin.className = "in";
+  var pq = document.createElement("span"); pq.className = "q";
+  var pt = document.createElement("span"); pt.className = "t";
+  var ptb = document.createElement("b");
+  pt.appendChild(ptb);
+  pt.appendChild(document.createTextNode("si consigliano cinque o dieci"));
+  var pb = document.createElement("button");
+  pb.type = "button";
+  pb.textContent = "Apri le tue orme";
+  pb.addEventListener("click", function(){
+    if(typeof vai === "function") vai("orme");
+  });
+  pin.appendChild(pq); pin.appendChild(pt); pin.appendChild(pb);
+  pi.appendChild(pin);
+  r.appendChild(pi);
+  p.pi = pi; p.q = pq; p.t = ptb;
+
+  percConta();
+}
+
+/* ── un talento: il segno, il nome, la casella ── */
+function percTalento(t){
+  var riga = document.createElement("div");
+  riga.className = "tl" + (percPrese[t.id] ? " presa" : "");
+  var s = document.createElement("span");
+  s.className = "s";
+  s.innerHTML = t.svg || "";   /* senza segno resta lo spazio: vuoto, non inventato */
+  var nn = document.createElement("span");
+  nn.className = "nn";
+  var nb = document.createElement("b"); nb.textContent = t.nome || "";
+  nn.appendChild(nb);
+  var sp = document.createElement("span");
+  sp.className = "sp";
+  riga.appendChild(s); riga.appendChild(nn); riga.appendChild(sp);
+  riga.addEventListener("click", function(e){
+    e.stopPropagation();
+    percTocco(t, riga);
+  });
+  return riga;
+}
+
+/* il conto nella barra: le parole del modello */
+function percConta(){
+  var p = percParti;
+  if(!p || !p.pi) return;
+  var n = Object.keys(percPrese).length;
+  p.q.textContent = String(n);
+  p.t.textContent = (n === 1) ? "un segno preso" : n + " segni presi";
+  p.pi.classList.toggle("su", n > 0);
+}
+
+/* ── il tocco sulla casella ──
+   ⭐ prendere apre l'orma radice, subito; togliere lascia l'orma e
+      stacca il talento. Da fuori il gesto passa la porta, come in
+      fm-radice.js: la scelta viaggia in `?scelta=` e al ritorno
+      quel file completa il gesto. */
+function percTocco(t, riga){
+  if(typeof ospite !== "undefined" && ospite){
+    var qui = "spazio-vivo.html?scelta=" + encodeURIComponent(t.nome);
+    location.href = "accesso.html?torna=" + encodeURIComponent(qui);
+    return;
+  }
+  if(typeof io === "undefined" || !io || !io.id) return;
+  if(percInCorso[t.id]) return;
+  percInCorso[t.id] = 1;
+
+  function fine(){ delete percInCorso[t.id]; }
+
+  if(percPrese[t.id]){
+    /* togliere: la riga resta, il talento si stacca */
+    db.from("orme").update({ talento_id: null })
+      .eq("persona_id", io.id)
+      .eq("talento_id", t.id)
+      .then(function(r){
+        fine();
+        if(r && r.error){
+          console.warn("fm-talenti: il talento non si è staccato — " + r.error.message);
+          return;
+        }
+        delete percPrese[t.id];
+        riga.classList.remove("presa");
+        percConta();
+      })
+      .catch(function(e){
+        fine();
+        console.warn("fm-talenti: il talento non si è staccato — " + (e && e.message));
+      });
+    return;
+  }
+
+  /* prendere: nasce l'orma radice — la stessa forma di fm-radice.js,
+     PUBBLICA per decisione del 2 settembre */
+  db.from("orme").insert({
+      persona_id: io.id, talento_id: t.id, contenuto: t.nome,
+      tipo: "talento_radice", visibilita: "pubblico"
+    })
+    .then(function(r){
+      fine();
+      if(r && r.error){
+        console.warn("fm-talenti: la radice non è nata — " + r.error.message);
+        return;
+      }
+      percPrese[t.id] = 1;
+      riga.classList.add("presa");
+      percConta();
+    })
+    .catch(function(e){
+      fine();
+      console.warn("fm-talenti: la radice non è nata — " + (e && e.message));
+    });
+}

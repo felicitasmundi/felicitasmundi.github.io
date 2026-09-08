@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Rubrica &middot; la matrice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--scala:1.2;--navy:#14172B;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+--line:rgba(184,150,62,.22);--nexus:#8C2F39;--terra:#AA8844;--acqua:#4488BB;
+--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--svil:#5A7A8C;--verde:#6E9E5A}
+html{font-size:calc(100% * var(--scala))}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#0C0E1C}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+display:flex;justify-content:center;min-height:100vh}
+.f{width:100%;max-width:30rem;background:var(--navy);min-height:100vh;
+padding:1.5rem 1rem 3rem;position:relative;overflow:hidden}
+.f::before{content:'';position:absolute;inset:0;pointer-events:none;
+background:radial-gradient(ellipse at 22% 4%,rgba(58,88,160,.3),transparent 54%),
+radial-gradient(ellipse at 82% 96%,rgba(70,52,120,.2),transparent 56%)}
+.f > *{position:relative}
+.oc{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--oro);margin-bottom:.3rem}
+h1{font-family:'Cinzel',serif;font-weight:400;font-size:1.42rem;line-height:1.2;margin-bottom:.25rem}
+.sot{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
+color:rgba(245,240,230,.6);line-height:1.5;margin-bottom:.9rem}
+
+.cerca{width:100%;background:rgba(245,240,230,.05);border:1px solid rgba(245,240,230,.13);
+border-radius:1.4rem;padding:.55rem .95rem;color:var(--ivory);
+font-family:'DM Sans',sans-serif;font-size:.92rem;margin-bottom:.6rem}
+.cerca::placeholder{color:rgba(245,240,230,.32)}
+.st{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1rem}
+.st button{font-family:'DM Sans',sans-serif;font-size:.78rem;padding:.32rem .75rem;
+border-radius:1.4rem;cursor:pointer;background:transparent;
+border:1px solid color-mix(in srgb,var(--c) 40%,rgba(245,240,230,.16));
+color:rgba(245,240,230,.6);display:inline-flex;align-items:center;gap:.35rem}
+.st button i{width:.4rem;height:.4rem;border-radius:50%;background:var(--c);display:block;flex:none}
+.st button.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 18%,transparent);
+color:var(--ivory);box-shadow:0 0 .5rem color-mix(in srgb,var(--c) 30%,transparent)}
+
+.gr{margin-bottom:1rem}
+.gr .capo{display:flex;align-items:baseline;gap:.5rem;margin:0 0 .4rem .1rem}
+.gr .capo b{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+color:var(--c);filter:brightness(1.35)}
+.gr .capo em{font-style:normal;font-size:.68rem;color:rgba(245,240,230,.34)}
+
+.ct{display:flex;align-items:center;gap:.7rem;
+border:1px solid color-mix(in srgb,var(--c) 24%,transparent);
+border-left:3px solid color-mix(in srgb,var(--c) 58%,transparent);border-radius:.75rem;
+background:color-mix(in srgb,var(--c) 7%,rgba(8,11,26,.42));padding:.6rem .75rem;margin-bottom:.35rem}
+.ct .av{width:2.2rem;height:2.2rem;border-radius:50%;flex:none;display:grid;place-items:center;
+font-size:.66rem;color:var(--ivory);
+border:1px solid color-mix(in srgb,var(--c) 50%,transparent);
+background:color-mix(in srgb,var(--c) 16%,transparent);position:relative}
+.ct .av.solo{border-style:dashed;opacity:.42;background:transparent}
+.ct .tx{flex:1;min-width:0}
+.ct .tx b{display:block;font-weight:400;font-size:.95rem;line-height:1.25}
+.ct .tx i{display:block;font-style:normal;font-size:.74rem;
+color:rgba(245,240,230,.44);margin-top:.1rem}
+.ct .ch{flex:none;width:2.1rem;height:2.1rem;border-radius:50%;display:grid;place-items:center;
+border:1px solid rgba(110,158,90,.5);background:rgba(110,158,90,.12);
+color:var(--verde);filter:brightness(1.2);font-size:.9rem;cursor:pointer;text-decoration:none}
+.vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;
+color:rgba(245,240,230,.3);padding:.5rem 0;text-align:center}
+
+.nota{border:1px solid var(--line);border-radius:.85rem;background:rgba(6,9,22,.5);
+padding:.9rem;margin:1.1rem 0 0;font-size:.9rem;line-height:1.55;color:rgba(245,240,230,.8)}
+.nota b{color:var(--oro-ch);font-weight:500}
+</style></head><body><div class="f">
+
+<div class="oc">i contatti, per elemento</div>
+<h1>Rubrica</h1>
+<div class="sot">[ la riga sotto il titolo ]</div>
+
+<input class="cerca" type="search" placeholder="cerca un nome" aria-label="cerca">
+
+<div class="st">
+  <button class="on" style="--c:var(--oro)" data-s="tutti">tutti <em style="font-style:normal;opacity:.5">[ n ]</em></button>
+  <button style="--c:var(--terra)" data-s="terra"><i></i>Vicinati</button>
+  <button style="--c:var(--acqua)" data-s="acqua"><i></i>Emporio</button>
+  <button style="--c:var(--fuoco)" data-s="fuoco"><i></i>Assistenza</button>
+  <button style="--c:var(--aria)" data-s="aria"><i></i>Edizione</button>
+  <button style="--c:var(--etere)" data-s="etere"><i></i>Scuola</button>
+</div>
+
+<div class="gr" style="--c:var(--terra)" data-s="terra">
+  <div class="capo"><b>Vicinati</b><em>[ la riga del gruppo ] &middot; [ n ]</em></div>
+  <div class="ct" style="--c:var(--terra)">
+    <span class="av">—</span>
+    <span class="tx"><b>[ nome e cognome ]</b><i>[ dove ] &middot; [ cosa vi lega ]</i></span>
+    <a class="ch" href="tel:">&#9742;</a>
+  </div>
+    <div class="ct" style="--c:var(--terra)">
+    <span class="av solo">—</span>
+    <span class="tx"><b>[ un nome e basta ]</b></span>
+  </div>
+</div>
+
+<div class="gr" style="--c:var(--acqua)" data-s="acqua">
+  <div class="capo"><b>Emporio</b><em>[ la riga del gruppo ] &middot; [ n ]</em></div>
+  <div class="ct" style="--c:var(--acqua)">
+    <span class="av">—</span>
+    <span class="tx"><b>[ nome e cognome ]</b><i>[ dove ] &middot; [ cosa vi lega ]</i></span>
+    <a class="ch" href="tel:">&#9742;</a>
+  </div>
+</div>
+
+<div class="gr" style="--c:var(--fuoco)" data-s="fuoco">
+  <div class="capo"><b>Assistenza</b><em>[ la riga del gruppo ] &middot; [ n ]</em></div>
+  <div class="vuoto">[ un gruppo senza nessuno non compare ]</div>
+</div>
+
+<div class="gr" style="--c:var(--aria)" data-s="aria">
+  <div class="capo"><b>Edizione</b><em>[ la riga del gruppo ] &middot; [ n ]</em></div>
+  <div class="ct" style="--c:var(--aria)">
+    <span class="av">—</span>
+    <span class="tx"><b>[ nome e cognome ]</b><i>[ dove ] &middot; [ cosa vi lega ]</i></span>
+    <a class="ch" href="tel:">&#9742;</a>
+  </div>
+</div>
+
+<div class="gr" style="--c:var(--etere)" data-s="etere">
+  <div class="capo"><b>Scuola</b><em>[ la riga del gruppo ] &middot; [ n ]</em></div>
+  <div class="ct" style="--c:var(--etere)">
+    <span class="av">—</span>
+    <span class="tx"><b>[ nome e cognome ]</b><i>[ dove ] &middot; [ cosa vi lega ]</i></span>
+    <a class="ch" href="tel:">&#9742;</a>
+  </div>
+</div>
+
+
+
+</div>
+<script>
+document.querySelectorAll(".st button").forEach(function (b) {
+  b.onclick = function () {
+    document.querySelectorAll(".st button").forEach(function (x) {
+      x.classList.remove("on");
+    });
+    b.classList.add("on");
+    var q = b.dataset.s;
+    document.querySelectorAll(".gr").forEach(function (g) {
+      g.style.display = (q === "tutti" || g.dataset.s === q) ? "" : "none";
+    });
+  };
+});
+var c = document.querySelector(".cerca");
+c.oninput = function () {
+  var v = c.value.trim().toLowerCase();
+  document.querySelectorAll(".ct").forEach(function (t) {
+    t.style.display = (!v || t.textContent.toLowerCase().indexOf(v) >= 0) ? "" : "none";
+  });
+  document.querySelectorAll(".gr").forEach(function (g) {
+    var n = [...g.querySelectorAll(".ct")].filter(function (t) {
+      return t.style.display !== "none";
+    }).length;
+    g.style.display = n ? "" : "none";
+  });
+};
+</script>
+</body></html>

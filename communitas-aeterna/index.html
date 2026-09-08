@@ -5141,7 +5141,8 @@
 <script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
 <script src="fm-annale.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑤ — l'Annale: la sesta finestra del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
-<script src="fm-talenti.js"></script>
+<script src="fm-talenti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — dall'8 settembre è IL PERCORSO DEI TALENTI, non più i crediti -->
+<script src="fm-crediti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — i crediti (saldo, sigillo, gettone ?t=): erano fm-talenti.js, interi e identici -->
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js"></script>
@@ -5953,6 +5954,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        Il disegno sta in fm-orma.js. Se il file non c'è la riga non esiste
        e si cade su attesa(), come per ogni stanza non ancora costruita. */
     else if(id==="orma" && typeof unaOrma === "function") unaOrma(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊵ — il percorso dei talenti, in fm-talenti.js.
+       Se il file non c'è la riga non esiste e si cade su attesa(). */
+    else if(id==="percorso" && typeof percorsoDeiTalenti === "function") percorsoDeiTalenti(c);
     else attesa(c, id);
     /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
     scriviIndirizzo();
@@ -7406,7 +7410,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma"];
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta */
 
   /* alzata mentre si legge la storia: allora l'indirizzo non si riscrive */
   var tornando = false;
