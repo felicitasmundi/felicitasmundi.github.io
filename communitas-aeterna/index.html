@@ -5238,7 +5238,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
           Design non l'ha disegnato. disegnaSegno() torna vuoto e la voce
           resta col nome e basta — nessun danno, solo un segno che manca.
        ⚠️ Questa riga e l'SQL vanno insieme: `database/stanze.sql`. */
-    {id:"squadre",    gruppo:"pagina",   ordine:3, nome:"Squadre",
+    /* ⭐ TOCCATO NEL GUSCIO ㊶ — Squadre a `riposo`, decisione dell'8
+       settembre 2026: la squadra è un'orma con più persone dentro, e sta
+       già dentro «La mia orma». Le parole restano, come per Gruppi e
+       Aziende: era gruppo:"pagina". Questa riga e l'SQL vanno insieme —
+       l'update sulla tavola è girato lo stesso giorno. */
+    {id:"squadre",    gruppo:"riposo",   ordine:3, nome:"Squadre",
      riga:null,
      elemento:null, segno:"squadre", rotta:"", chiusa:false, perche:null},
     {id:"nucleo",     gruppo:"pagina",   ordine:4, nome:"Il nucleo",
