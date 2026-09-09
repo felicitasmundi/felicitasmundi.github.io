@@ -5143,6 +5143,7 @@
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — dall'8 settembre è IL PERCORSO DEI TALENTI, non più i crediti -->
 <script src="fm-crediti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — i crediti (saldo, sigillo, gettone ?t=): erano fm-talenti.js, interi e identici -->
+<script src="fm-orma-mia.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊷ — la matrice de «la mia orma»: laMatriceDellOrma(c), sostituisce fm-mia-orma.js mai innestato -->
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js"></script>
@@ -5937,7 +5938,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var c=$("centro"); c.innerHTML=""; c.scrollTop=0;
     /* ⭐ TOCCATO NEL GUSCIO ㉛ — e il riquadro del tempo si riempie. */
     if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
-    else if(id==="orme") mieOrme(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊷ — «orme» ora è la matrice de «la mia orma».
+       Se fm-orma-mia.js manca si ricade su «Le mie orme» com'era. */
+    else if(id==="orme"){ if(typeof laMatriceDellOrma === "function") laMatriceDellOrma(c); else mieOrme(c); }
     else if(id==="incontro") incontro(c, sub);
     else if(id==="chat"){ chat(c); segnaLetto(); }
     /* ⭐ TOCCATO NEL GUSCIO ④ — tolta la riga «annale».
