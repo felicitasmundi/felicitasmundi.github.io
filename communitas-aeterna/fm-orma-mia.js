@@ -31,8 +31,47 @@
       Parole di Gab, 8 settembre: «ore e note non sono più
       necessarie, anche perché ogni orma di per sé è una nota».
 
-   ⚠️ [ in attesa ] LE SQUADRE non hanno ancora una tavola da cui
-      riempirsi: resta il riquadro del modello, con le sue parole.
+   ⭐ LE SQUADRE HANNO TRE GRADI — deciso da Gab il 9 settembre,
+      con le etichette fisse:
+        Nuclei   — i nuclei di ceppo a cui la persona partecipa
+        Nucleo   — il nucleo del suo micelio
+        Progetti — i gruppi che sviluppano un progetto
+      ⛔ Le parole «ceppo», «micelio» e «progetto elemento» non si
+         mostrano MAI: servono alla gerarchia. Sotto l'etichetta
+         sta il nome che la persona ha messo.
+      Le tavole: `nuclei` (livello micelio·ceppo·nucleo_centrale,
+      con `da_quando` e la `stanza` dei cinque posti) e `squadre`
+      via `appartenenze`. ⛔ Un gruppo di cui non fai parte non
+      compare — lo dicono già le regole di riga, e qui si chiede
+      solo il proprio.
+      Dentro una squadra: nome · data di attivazione · chi ne fa
+      parte (con la lucentezza del livello, da fm_livello) · le
+      stanze di riferimento. ⭐ La stanza di un progetto non si
+      sceglie: la determina l'orma — prodotti→Emporio, formazioni→
+      Scuola, consulenze→Assistenza — e il tag si accende quando
+      qualcosa viene pubblicato. Finché si progetta: nessun tag.
+      ⚠️ [ in attesa ] il legame squadra→orme non ha ancora una
+      colonna: quindi oggi nessun tag, ed è giusto così.
+      ⭐ IL NUCLEO CENTRALE compare sotto «Nucleo», col suo nome,
+         come qualsiasi altro — deciso da Gab il 9 settembre.
+         Niente quarto grado: chi non ne fa parte non lo vede.
+         ⚠️ [ in attesa ] il suo nome non ha una colonna in
+         `nuclei`: finché il database non dice dove vive, la
+         carta porta il segnaposto.
+      ⭐ I tre gradi organizzativi, per chiarezza (parole di Gab):
+         ceppo coordina più nazioni e segue i filamenti
+         linguistici · micelio opera nel territorio · vicinato è
+         dove le persone si incontrano, e lo attiva il micelio.
+
+   ⭐ LA PUBBLICAZIONE HA I SUOI DUE POSTI — deciso il 9 settembre:
+      l'ultima riga nella carta aperta del Progetto, e il piede
+      dell'orma accanto allo stadio. Il tasto è «Pubblica», la
+      parola già in uso nel guscio. Dal piede dell'orma passa per
+      `portaInEdizione()` del guscio, la strada viva; dalla carta
+      del Progetto ⚠️ [ in attesa ] la forma della pubblicazione
+      (prodotto · assistenza · libro · lezione): il tasto chiama
+      `SpazioVivo.pubblica({squadra_id})` quando il gancio esiste,
+      e fino ad allora lo dice in console.
 
    ⛔ La biografia NON sta qui: è il profilo pubblico.
    ⛔ Da ospite si vedono solo la data e il riquadro del tempo.
@@ -116,6 +155,10 @@ function matVeste(){
       "color:rgba(245,240,230,.85);transition:border-color .2s,background .2s,opacity .2s}" +
     ".fm-mat .segni .sg i{width:.48rem;height:.48rem;border-radius:50%;" +
       "background:var(--c,#C8A055);display:block}" +
+    /* ⭐ il segno del talento cambia col talento — corretto il 9 settembre */
+    ".fm-mat .segni .sg .sgn{width:1.15rem;height:1.15rem;display:block;" +
+      "color:var(--c,#C8A055);filter:brightness(1.3)}" +
+    ".fm-mat .segni .sg .sgn svg{width:100%;height:100%;display:block}" +
     ".fm-mat .segni .sg.on{border-color:#C8A055;background:rgba(200,160,85,.2);" +
       "color:#D4AF6A;box-shadow:0 0 .72rem rgba(200,160,85,.3)}" +
     ".fm-mat .segni .sg.vu{opacity:.45;border-style:dashed}" +
@@ -235,7 +278,33 @@ function matVeste(){
     ".fm-mat .sq .d{font-size:.98rem;color:rgba(245,240,230,.5);" +
       "margin-top:.24rem;line-height:1.4}" +
     ".fm-mat .sq.vuota{border-style:dashed;opacity:.65}" +
-    ".fm-mat .sq.vuota .d{font-family:'Cormorant Garamond',serif;font-style:italic}";
+    ".fm-mat .sq.vuota .d{font-family:'Cormorant Garamond',serif;font-style:italic}" +
+
+    /* i tre gradi delle squadre */
+    ".fm-mat .eti2{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;" +
+      "color:#C8A055;margin:1.02rem 0 .42rem}" +
+    ".fm-mat .sq.viva{cursor:pointer}" +
+    ".fm-mat .sq .den2{display:none;margin-top:.48rem;" +
+      "border-top:1px solid rgba(245,240,230,.08);padding-top:.48rem}" +
+    ".fm-mat .sq.on .den2{display:block}" +
+    ".fm-mat .sq .rga{display:flex;gap:.48rem;font-size:.94rem;" +
+      "color:rgba(245,240,230,.6);padding:.18rem 0;flex-wrap:wrap}" +
+    ".fm-mat .sq .rga .k{flex:none;width:10.2rem;" +
+      "color:rgba(245,240,230,.38);font-size:.86rem}" +
+    ".fm-mat .sq .rga .v{flex:1;min-width:0;line-height:1.6}" +
+    ".fm-mat .lucc{display:inline-block;font-size:.7rem;letter-spacing:.05em;" +
+      "padding:.08rem .48rem;border-radius:1.2rem;" +
+      "border:1px solid rgba(200,160,85,.4);color:#D4AF6A;margin-left:.36rem}" +
+    ".fm-mat .st2{display:inline-block;font-size:.74rem;padding:.1rem .54rem;" +
+      "border-radius:1.2rem;border:1px solid rgba(245,240,230,.16);" +
+      "color:rgba(245,240,230,.6);margin-right:.3rem}" +
+
+    /* il tasto della pubblicazione, nei suoi due posti */
+    ".fm-mat .pubblica{display:inline-flex;align-items:center;" +
+      "font-family:'DM Sans',sans-serif;font-size:.74rem;letter-spacing:.05em;" +
+      "padding:.1rem .6rem;border-radius:1.2rem;cursor:pointer;" +
+      "background:transparent;border:1px solid rgba(200,160,85,.45);" +
+      "color:#D4AF6A}";
   document.head.appendChild(s);
 }
 
@@ -371,13 +440,10 @@ function laMatriceDellOrma(c){
   sms.textContent = "i riquadri si riempiono in base a chi guarda";
   h2s.appendChild(sms);
   corpo.appendChild(h2s);
-  var sq = document.createElement("div");
-  sq.className = "sq vuota";
-  var sqd = document.createElement("div");
-  sqd.className = "d";
-  sqd.textContent = "Compare quando ti chiamano dentro.";
-  sq.appendChild(sqd);
-  corpo.appendChild(sq);
+  var squadreBox = document.createElement("div");
+  corpo.appendChild(squadreBox);
+  matParti.squadreBox = squadreBox;
+  matSquadreLeggi();
 
   matParti.segni = segni;
   matParti.orme = orme;
@@ -584,6 +650,27 @@ function matOrma(o, colore){
       piede.appendChild(pill);
     }
   }
+  /* ⭐ dall'orma si pubblica: il tasto nel piede, accanto allo stadio.
+     La strada è portaInEdizione() del guscio, la stessa della stanza
+     delle orme di prima. */
+  if(piede.children.length) piede.appendChild(matPunto());
+  var pub = document.createElement("button");
+  pub.type = "button";
+  pub.className = "pubblica";
+  pub.textContent = "Pubblica";
+  pub.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(typeof portaInEdizione === "function"){
+      portaInEdizione({
+        titolo: (o.titolo || String(o.contenuto || "").split("\n")[0]).slice(0, 60),
+        contenuto: o.contenuto || o.titolo || "",
+        orma_id: o.id,
+        da: "un'orma"
+      });
+    } else console.warn("fm-orma-mia: portaInEdizione non c'è — il guscio non è intorno");
+  });
+  piede.appendChild(pub);
+
   var nate = (matRighe || []).filter(function(x){
     return x.orma_madre_id === o.id;
   }).length;
@@ -659,12 +746,20 @@ function matDisegna(){
 
   /* ④ i filtri: «tutti», poi un segno per talento preso */
   p.segni.innerHTML = "";
-  function chip(testo, colore, chiave, vu){
+  function chip(testo, colore, chiave, vu, svg){
     var sg = document.createElement("span");
     sg.className = "sg" + (matFiltro === chiave ? " on" : "") + (vu ? " vu" : "");
     if(colore) sg.style.setProperty("--c", colore);
-    var i = document.createElement("i");
-    sg.appendChild(i);
+    if(svg){
+      /* ⭐ il segno del talento cambia col talento */
+      var sgn = document.createElement("span");
+      sgn.className = "sgn";
+      sgn.innerHTML = svg;
+      sg.appendChild(sgn);
+    } else {
+      var i = document.createElement("i");
+      sg.appendChild(i);
+    }
     sg.appendChild(document.createTextNode(testo));
     sg.addEventListener("click", function(){
       matFiltro = chiave;
@@ -672,11 +767,12 @@ function matDisegna(){
     });
     p.segni.appendChild(sg);
   }
-  chip("tutti", "#C8A055", "tutti", false);
+  chip("tutti", "#C8A055", "tutti", false, null);
   radici.forEach(function(rad){
     var t = matTalenti[rad.talento_id] || {};
     var senza = !(figlieDi[rad.id] || []).length;
-    chip(t.nome || rad.contenuto || "", t.colore, String(rad.talento_id), senza);
+    chip(t.nome || rad.contenuto || "", t.colore, String(rad.talento_id), senza,
+         t.svg || null);
   });
   var piu = document.createElement("span");
   piu.className = "piu";
@@ -758,4 +854,257 @@ function matDisegna(){
     fe.appendChild(fb); fe.appendChild(fs);
     p.orme.appendChild(fe);
   }
+}
+
+/* ═══ LE SQUADRE: I TRE GRADI ═══════════════════════════════════════
+   Nuclei · Nucleo · Progetti — etichette fisse, decise il 9
+   settembre. Un gruppo di cui non fai parte non compare. */
+
+var matGradi = null;      /* {ceppi, micelio, progetti} — i miei */
+var matLivelli = {};      /* persona_id → la parola di fm_livello */
+var MAT_STANZE_NOMI = {
+  vicinati: "Vicinati", emporio: "Emporio", assistenza: "Assistenza",
+  scuola: "Scuola", edizione: "Edizione"
+};
+
+function matSquadreLeggi(){
+  if(typeof db === "undefined" || !db) return;
+  var colto = { nuclei: null, progetti: null };
+  function forse(){
+    if(!colto.nuclei || !colto.progetti) return;
+    matGradi = {
+      ceppi: colto.nuclei.filter(function(n){ return n.livello === "ceppo"; }),
+      micelio: colto.nuclei.filter(function(n){ return n.livello === "micelio"; }),
+      centrale: colto.nuclei.filter(function(n){ return n.livello === "nucleo_centrale"; }),
+      progetti: colto.progetti
+    };
+    matSquadreDisegna();
+  }
+  db.from("nuclei").select("id,livello,micelio,ceppo,stanza,da_quando")
+    .eq("persona_id", io.id)
+    .then(function(r){
+      if(!r || r.error){
+        console.warn("fm-orma-mia: i nuclei non rispondono — " +
+          (r && r.error && r.error.message || "senza motivo"));
+        colto.nuclei = [];
+      } else colto.nuclei = (r.data) || [];
+      forse();
+    })
+    .catch(function(){ colto.nuclei = []; forse(); });
+  db.from("appartenenze").select("squadra_id,dal")
+    .eq("persona_id", io.id)
+    .not("squadra_id", "is", null)
+    .then(function(r){
+      var mie = (r && !r.error && r.data) || [];
+      var quando = {};
+      var ids = [];
+      mie.forEach(function(a){
+        if(!a.squadra_id) return;
+        quando[a.squadra_id] = a.dal || null;
+        if(ids.indexOf(a.squadra_id) < 0) ids.push(a.squadra_id);
+      });
+      if(!ids.length){ colto.progetti = []; forse(); return; }
+      db.from("squadre").select("id,nome,dal,stato").in("id", ids)
+        .then(function(rs){
+          colto.progetti = ((rs && !rs.error && rs.data) || []).map(function(s){
+            return { id: s.id, nome: s.nome, dal: s.dal || quando[s.id] || null };
+          });
+          forse();
+        })
+        .catch(function(){ colto.progetti = []; forse(); });
+    })
+    .catch(function(){ colto.progetti = []; forse(); });
+}
+
+function matSquadreDisegna(){
+  var p = matParti;
+  if(!p || !p.squadreBox || !matGradi) return;
+  p.squadreBox.innerHTML = "";
+
+  var vuotoTutto = !matGradi.ceppi.length && !matGradi.micelio.length &&
+                   !matGradi.centrale.length && !matGradi.progetti.length;
+  if(vuotoTutto){
+    /* il riquadro del modello: compare quando ti chiamano dentro */
+    var sq = document.createElement("div");
+    sq.className = "sq vuota";
+    var d = document.createElement("div");
+    d.className = "d";
+    d.textContent = "Compare quando ti chiamano dentro.";
+    sq.appendChild(d);
+    p.squadreBox.appendChild(sq);
+    return;
+  }
+
+  /* ⛔ le parole «ceppo» e «micelio» non si mostrano mai: le etichette
+     sono queste tre, fisse — sotto sta il nome che la persona ha messo */
+  matGrado("Nuclei", matGradi.ceppi.map(function(n){
+    return { nome: n.ceppo, dal: n.da_quando, tipo: "ceppo", chiave: n.ceppo };
+  }));
+  /* ⭐ il nucleo centrale sta sotto «Nucleo», come qualsiasi altro —
+     niente quarto grado. ⚠️ [ in attesa ] il suo nome: non ha una
+     colonna, e finché il database non la dà resta il segnaposto. */
+  matGrado("Nucleo", matGradi.micelio.map(function(n){
+    return { nome: n.micelio, dal: n.da_quando, tipo: "micelio",
+             chiave: n.micelio, stanza: n.stanza };
+  }).concat(matGradi.centrale.map(function(n){
+    return { nome: "[ in attesa ]", dal: n.da_quando,
+             tipo: "nucleo_centrale", chiave: null };
+  })));
+  matGrado("Progetti", matGradi.progetti.map(function(s){
+    return { nome: s.nome, dal: s.dal, tipo: "progetto", chiave: s.id };
+  }));
+}
+
+function matGrado(etichetta, voci){
+  if(!voci.length) return;   /* un grado vuoto non si disegna */
+  var p = matParti;
+  var eti = document.createElement("div");
+  eti.className = "eti2";
+  eti.textContent = etichetta;
+  p.squadreBox.appendChild(eti);
+  voci.forEach(function(v){ p.squadreBox.appendChild(matSquadra(v)); });
+}
+
+/* dentro una squadra: nome · data di attivazione · chi ne fa parte
+   (con la lucentezza del livello) · le stanze di riferimento */
+function matSquadra(v){
+  var sq = document.createElement("div");
+  sq.className = "sq viva";
+  var b = document.createElement("b");
+  b.textContent = v.nome || "";
+  sq.appendChild(b);
+  var den = document.createElement("div");
+  den.className = "den2";
+  sq.appendChild(den);
+  var aperta = false, letta = false;
+  sq.addEventListener("click", function(){
+    aperta = !aperta;
+    sq.classList.toggle("on", aperta);
+    if(aperta && !letta){ letta = true; matSquadraDentro(v, den); }
+  });
+  return sq;
+}
+
+function matSquadraDentro(v, den){
+  if(v.dal){
+    var r1 = matRigaDentro(den, "data di attivazione");
+    r1.textContent = new Date(v.dal + "T12:00:00")
+      .toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
+  }
+  var chi = matRigaDentro(den, "chi ne fa parte");
+
+  function versaMembri(righe){
+    /* righe: [{persona_id, stanza?}] — i nomi da persone_pubbliche,
+       mai da persone; la lucentezza da fm_livello */
+    var ids = [];
+    righe.forEach(function(x){
+      if(x.persona_id && ids.indexOf(x.persona_id) < 0) ids.push(x.persona_id);
+    });
+    if(!ids.length){ chi.parentNode.remove(); matCodaDentro(v, righe, den); return; }
+    db.from("persone_pubbliche").select("id,nome").in("id", ids)
+      .then(function(r){
+        var nomi = {};
+        ((r && r.data) || []).forEach(function(x){ nomi[x.id] = x.nome; });
+        ids.forEach(function(pid){
+          var riga = document.createElement("span");
+          riga.style.display = "inline-block";
+          riga.style.marginRight = ".72rem";
+          riga.appendChild(document.createTextNode(nomi[pid] || ""));
+          var pill = document.createElement("span");
+          pill.className = "lucc";
+          riga.appendChild(pill);
+          chi.appendChild(riga);
+          matLucentezza(pid, pill);
+        });
+        matCodaDentro(v, righe, den);
+      })
+      .catch(function(){ matCodaDentro(v, righe, den); });
+  }
+
+  if(v.tipo === "progetto"){
+    db.from("appartenenze").select("persona_id")
+      .eq("squadra_id", v.chiave)
+      .then(function(r){ versaMembri((r && !r.error && r.data) || []); })
+      .catch(function(){ versaMembri([]); });
+  } else if(v.tipo === "nucleo_centrale"){
+    db.from("nuclei").select("persona_id,stanza")
+      .eq("livello", "nucleo_centrale")
+      .then(function(r){ versaMembri((r && !r.error && r.data) || []); })
+      .catch(function(){ versaMembri([]); });
+  } else {
+    db.from("nuclei").select("persona_id,stanza")
+      .eq("livello", v.tipo)
+      .eq(v.tipo, v.chiave)
+      .then(function(r){ versaMembri((r && !r.error && r.data) || []); })
+      .catch(function(){ versaMembri([]); });
+  }
+}
+
+/* la coda della carta: le stanze, e — nei Progetti — la pubblicazione */
+function matCodaDentro(v, righe, den){
+  matStanzeDi(v, righe, den);
+  if(v.tipo !== "progetto") return;
+  /* ⭐ dalla parte interna si fa la squadra, e da lì si pubblica:
+     l'ultima riga della carta. ⚠️ [ in attesa ] la forma della
+     pubblicazione: il gancio è SpazioVivo.pubblica, quando esiste. */
+  var vv = matRigaDentro(den, "");
+  var pub = document.createElement("button");
+  pub.type = "button";
+  pub.className = "pubblica";
+  pub.textContent = "Pubblica";
+  pub.addEventListener("click", function(e){
+    e.stopPropagation();
+    var sv = window.SpazioVivo || {};
+    if(typeof sv.pubblica === "function") sv.pubblica({ squadra_id: v.chiave });
+    else console.warn("fm-orma-mia: la forma della pubblicazione non c'è ancora");
+  });
+  vv.appendChild(pub);
+}
+
+function matRigaDentro(den, nome){
+  var rga = document.createElement("div");
+  rga.className = "rga";
+  var k = document.createElement("span");
+  k.className = "k"; k.textContent = nome;
+  var v = document.createElement("span");
+  v.className = "v";
+  rga.appendChild(k); rga.appendChild(v);
+  den.appendChild(rga);
+  return v;
+}
+
+/* le stanze di riferimento.
+   ⭐ Nel nucleo del micelio sono i cinque posti (la colonna `stanza`).
+   ⭐ In un progetto la stanza non si sceglie: la determina l'orma —
+      prodotti→Emporio · formazioni→Scuola · consulenze→Assistenza —
+      e il tag si accende quando qualcosa viene pubblicato.
+      ⚠️ [ in attesa ] il legame squadra→orme non ha una colonna:
+      finché si progetta, nessun tag — ed è la regola. */
+function matStanzeDi(v, righe, den){
+  var stanze = [];
+  righe.forEach(function(x){
+    var n = x.stanza && MAT_STANZE_NOMI[x.stanza];
+    if(n && stanze.indexOf(n) < 0) stanze.push(n);
+  });
+  if(!stanze.length) return;   /* nessun tag: il riquadro non compare */
+  var vv = matRigaDentro(den, "le stanze di riferimento");
+  stanze.forEach(function(n){
+    var t = document.createElement("span");
+    t.className = "st2";
+    t.textContent = n;
+    vv.appendChild(t);
+  });
+}
+
+/* la lucentezza del livello: una parola da fm_livello, tenuta a mente */
+function matLucentezza(personaId, dove){
+  if(matLivelli[personaId]){ dove.textContent = matLivelli[personaId]; return; }
+  db.rpc("fm_livello", { p_persona: personaId })
+    .then(function(r){
+      if(r && !r.error && r.data){
+        matLivelli[personaId] = String(r.data);
+        dove.textContent = matLivelli[personaId];
+      } else dove.remove();
+    })
+    .catch(function(){ dove.remove(); });
 }

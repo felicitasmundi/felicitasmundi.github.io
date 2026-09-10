@@ -36,12 +36,46 @@
   #scheda-desc{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.05rem;
     line-height:1.6;color:rgba(245,240,230,0.86);margin:0.7rem 0 0;
     max-height:11rem;overflow-y:auto}
-  @media(max-width:34rem){ #scheda{bottom:4.2rem} }
+  /* la legenda dei ceppi: si apre col tasto, e dice chi è di che famiglia */
+  #legenda{position:fixed;left:0.9rem;top:0.9rem;z-index:40;width:13.5rem;
+    background:rgba(10,12,26,0.94);border:1px solid rgba(200,160,85,0.4);
+    border-radius:0.7rem;padding:0.6rem 0.7rem 0.7rem;color:#F5F0E6;
+    font-family:'DM Sans',system-ui,sans-serif;display:none}
+  #legenda.on{display:block}
+  #legenda h3{margin:0 0 0.5rem;font-family:'Cinzel',Georgia,serif;font-weight:400;
+    font-size:0.86rem;letter-spacing:0.06em;color:#D4AF6A;padding-right:1.2rem}
+  #legenda-chiudi{position:absolute;top:0.25rem;right:0.4rem;background:none;border:0;
+    color:rgba(245,240,230,0.6);font-size:1.2rem;line-height:1;cursor:pointer;padding:0.2rem 0.35rem}
+  #legenda-chiudi:hover{color:#D4AF6A}
+  .cp-r{display:flex;gap:0.4rem;align-items:flex-start;margin-bottom:0.38rem;
+    cursor:pointer;opacity:0.55;transition:opacity .15s}
+  .cp-r.viva{opacity:1}
+  .cp-r i{flex:none;width:0.62rem;height:0.62rem;border-radius:0.15rem;margin-top:0.22rem}
+  .cp-r b{display:block;font-weight:400;font-size:0.78rem;line-height:1.25}
+  .cp-r span.d{display:block;font-size:0.62rem;line-height:1.3;color:rgba(245,240,230,0.4)}
+  .cp-r em{font-style:normal;color:#D4AF6A;font-size:0.72rem}
+  #legenda .ecc{margin-top:0.5rem;padding-top:0.45rem;border-top:1px solid rgba(200,160,85,0.2)}
+  #legenda .ecc summary{font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;
+    color:#D4AF6A;cursor:pointer;list-style:none;opacity:0.8}
+  #legenda .ecc summary::-webkit-details-marker{display:none}
+  #legenda .ecc summary:hover{opacity:1}
+  #legenda .ecc p{margin:0.4rem 0 0;font-family:'Cormorant Garamond',Georgia,serif;
+    font-style:italic;font-size:0.72rem;line-height:1.4;color:rgba(245,240,230,0.42)}
+  @media(max-width:34rem){ #scheda{bottom:4.2rem}
+    #legenda{max-width:calc(100% - 1.8rem);max-height:60vh;overflow-y:auto} }
 </style>
 </head>
 <body>
 <svg id="m"></svg>
+<div id="legenda">
+  <button id="legenda-chiudi" aria-label="Chiudi la legenda">&times;</button>
+  <h3>I ceppi linguistici</h3>
+  <div id="legenda-righe"></div>
+  <details class="ecc"><summary>dove il colore non basta</summary><div id="legenda-ecc"></div></details>
+</div>
+
 <div id="cmd">
+  <button data-z="ceppi">Ceppi</button>
   <button data-z="italia">Italia</button>
   <button data-z="mondo">Mondo</button>
   <button data-z="meno">&minus;</button>
@@ -57,6 +91,43 @@
 
 <script>
 "use strict";
+/* ── I CEPPI LINGUISTICI ──
+   Sei famiglie coprono i cinque sesti dell'umanità; le altre 136 censite
+   tengono il resto. I numeri sono i codici ISO dei paesi nel topojson.
+   ⚠️ Il confine di una famiglia non è il confine di uno stato: qui si colora
+   il paese per la famiglia della sua lingua più parlata. L'India è
+   indoeuropea al nord e dravidica al sud, e per ora sta fra le eccezioni
+   scritte in fondo alla legenda. */
+var CEPPI = [
+  {id:"indo",  nome:"Indoeuropeo",        col:"#8C2F39", n:"3,4 mld",
+   dice:"italiano · spagnolo · inglese · hindi · russo · sardo · catalano",
+   paesi:[380,250,724,620,276,826,643,616,300,642,804,112,203,703,348,40,756,56,528,442,
+          372,352,208,578,752,246,233,428,440,70,191,705,688,807,499,8,20,470,
+          364,4,586,50,356,524,144,51,268,275,100,498,304,238,
+          840,124,484,76,32,170,604,152,862,68,218,600,858,192,332,214,388,780,84,320,340,
+          558,222,591,630,254,312,474,533,28,44,52,308,662,670,780,796,850,60,188,328,740,
+          710,516,72,748,
+          554,36,554]},
+  {id:"sino",  nome:"Sinotibetano",       col:"#4488BB", n:"1,4 mld",
+   dice:"mandarino · cantonese · wu · birmano · tibetano",
+   paesi:[156,104,64,158,344,446]},
+  {id:"niger", nome:"Niger-kordofaniano", col:"#AA8844", n:"700 mln",
+   dice:"swahili · yoruba · igbo · zulu · shona",
+   paesi:[566,180,404,834,288,800,24,508,716,894,120,384,686,466,854,204,562,270,624,430,
+          694,178,140,148,266,226,678,132,174,175,262,232,646,108,454,894,72,516,748,426,324,728,
+          768,768,204,854,562]},
+  {id:"afro",  nome:"Afroasiatico",       col:"#CC6644", n:"600 mln",
+   dice:"arabo · ebraico · amarico · hausa · tamasheq",
+   paesi:[818,12,504,788,434,729,682,368,760,376,231,706,887,400,784,414,634,48,275,
+          732,478,562,562,148,262,232,196,422,512]},
+  {id:"austro",nome:"Austronesiano",      col:"#9966CC", n:"400 mln",
+   dice:"indonesiano · tagalog · malese · giavanese · malgascio",
+   paesi:[360,608,458,450,598,242,90,548,776,882,296,584,583,520,585,626,96,158,540]},
+  {id:"altre", nome:"Le altre 136 famiglie", col:"#5A7A8C", n:"",
+   dice:"uralico · turco · giapponese · coreano · le lingue native",
+   paesi:[392,410,408,792,348,246,233,704,764,116,418,496,398,860,31,268,762,795,417,268]}
+];
+
 var SEGNI = {
   orma:'<path d="M24.5 20C24.5 22.54 22.54 24.5 20 24.5C17.46 24.5 15.5 22.54 15.5 20C15.5 17.46 17.46 15.5 20 15.5C22.54 15.5 24.5 17.46 24.5 20Z"/><path d="M31 20C31 26.21 26.21 31 20 31C13.79 31 9 26.21 9 20C9 13.79 13.79 9 20 9C26.21 9 31 13.79 31 20Z"/>',
   connessione:'<path d="M14 20C14 22.26 12.26 24 10 24C7.74 24 6 22.26 6 20C6 17.74 7.74 16 10 16C12.26 16 14 17.74 14 20Z"/><path d="M34 20C34 22.26 32.26 24 30 24C27.74 24 26 22.26 26 20C26 17.74 27.74 16 30 16C32.26 16 34 17.74 34 20Z"/><path d="M14 20L26 20"/>',
@@ -92,6 +163,31 @@ function leggiVicinati(){
       if(window.console) console.error("mappa: vicinati non letti —", err);
     });
 }
+
+/* paese → ceppo. Il primo che lo nomina vince: l'ordine di CEPPI conta.
+   Un paese non nominato resta senza colore, come il mare. */
+/* i codici nel topojson hanno lo zero davanti: "036", non "36".
+   Si normalizza a tre cifre da tutte e due le parti. */
+function tre(n){ return ("00" + n).slice(-3); }
+
+var DI_CHI = {};
+CEPPI.forEach(function (c) {
+  c.paesi.forEach(function (n) {
+    var k = tre(n);
+    if (!(k in DI_CHI)) DI_CHI[k] = c;
+  });
+});
+
+/* le eccezioni che il colore di un paese non sa dire */
+var ECCEZIONI = [
+  "L'India è indoeuropea al nord e dravidica al sud: qui è colorata di uno solo.",
+  "Il basco non ha parenti: vive dentro la Spagna e la Francia.",
+  "L'ungherese e il finlandese sono uralici, dentro un'Europa indoeuropea.",
+  "Nelle Americhe il colore dice la lingua parlata oggi, non quella nata lì."
+];
+
+var CEPPI_ACCESI = true;
+var legendaGiaAperta = false;
 
 var svg = d3.select("#m"), W = 0, H = 0, world = null;
 var VIVO = /vivo=1/.test(location.search);
@@ -139,10 +235,20 @@ function disegna(){
   gz.append("path").attr("d", path(d3.geoGraticule10()))
      .attr("fill","none").attr("stroke","rgba(184,150,62,0.10)").attr("stroke-width",0.5).attr("vector-effect","non-scaling-stroke");
 
-  gz.append("path").attr("d", path(world))
-     .attr("fill","rgba(245,240,230,0.07)")
-     .attr("stroke","rgba(200,160,85,0.30)").attr("stroke-width",0.6).attr("vector-effect","non-scaling-stroke")
-     .attr("stroke-linejoin","round");
+  /* i paesi, uno per uno: il colore è quello del ceppo della sua lingua
+     più parlata. Chi non è in tavola resta del grigio di prima. */
+  gz.append("g").attr("class","terre").selectAll("path")
+     .data(world.features).enter().append("path")
+     .attr("d", path)
+     .attr("fill", function(f){
+        var c = CEPPI_ACCESI && DI_CHI[tre(f.id)];
+        return c ? c.col : "rgba(245,240,230,0.07)";
+     })
+     .attr("fill-opacity", function(f){
+        return (CEPPI_ACCESI && DI_CHI[tre(f.id)]) ? 0.42 : 1;
+     })
+     .attr("stroke","rgba(200,160,85,0.30)").attr("stroke-width",0.6)
+     .attr("vector-effect","non-scaling-stroke").attr("stroke-linejoin","round");
 
   /* lo spessore visto da lontano: la zona si accende, non il puntino */
   var c = proj([9.6,41.4]);
@@ -176,6 +282,13 @@ function disegna(){
   });
   attaccaZoom(gz);
   posaSegni(d3.zoomIdentity);
+  scriviLegenda();
+  /* sullo schermo stretto la legenda coprirebbe la mappa: nasce chiusa,
+     e la si apre col tasto. I colori si vedono comunque. */
+  if(legenda && !legendaGiaAperta){
+    legenda.classList.toggle("on", W > 620);
+    legendaGiaAperta = true;
+  }
   apriDaIndirizzo();
 }
 
@@ -267,9 +380,62 @@ function vaiA(ll, k){
   );
 }
 
+/* ── la legenda ──
+   Ogni riga accende o spegne il proprio ceppo: si tocca per guardarne uno
+   alla volta. Il colore resta quello della famiglia. */
+var legenda   = document.getElementById("legenda");
+var legRighe  = document.getElementById("legenda-righe");
+var legEcc    = document.getElementById("legenda-ecc");
+var SPENTI    = {};
+
+function scriviLegenda(){
+  if(!legRighe) return;
+  legRighe.innerHTML = "";
+  CEPPI.forEach(function(c){
+    var r = document.createElement("div");
+    r.className = "cp-r" + (SPENTI[c.id] ? "" : " viva");
+    r.innerHTML = '<i style="background:' + c.col + '"></i>'
+      + '<span><b>' + c.nome + (c.n ? ' <em>' + c.n + '</em>' : '') + '</b>'
+      + '<span class="d">' + c.dice + '</span></span>';
+    r.addEventListener("click", function(){
+      SPENTI[c.id] = !SPENTI[c.id];
+      scriviLegenda();
+      tingi();
+    });
+    legRighe.appendChild(r);
+  });
+  if(legEcc && !legEcc.childNodes.length){
+    ECCEZIONI.forEach(function(t){
+      var p = document.createElement("p");
+      p.textContent = t;
+      legEcc.appendChild(p);
+    });
+  }
+}
+
+/* ridipinge i paesi senza ridisegnare la mappa: lo zoom resta dov'è */
+function tingi(){
+  svg.selectAll(".terre path")
+    .attr("fill", function(f){
+      var c = CEPPI_ACCESI && DI_CHI[tre(f.id)];
+      return (c && !SPENTI[c.id]) ? c.col : "rgba(245,240,230,0.07)";
+    })
+    .attr("fill-opacity", function(f){
+      var c = CEPPI_ACCESI && DI_CHI[tre(f.id)];
+      return (c && !SPENTI[c.id]) ? 0.42 : 1;
+    });
+}
+
+document.getElementById("legenda-chiudi").addEventListener("click", function(){
+  legenda.classList.remove("on");
+});
+
 document.getElementById("cmd").addEventListener("click", function(e){
   var b = e.target.closest("button"); if(!b || !zoom) return;
   var q = b.getAttribute("data-z");
+  /* il tasto apre e chiude la legenda. I colori restano accesi:
+     spegnerli si fa una famiglia alla volta, dalle righe. */
+  if(q === "ceppi"){ legenda.classList.toggle("on"); return; }
   if(q === "italia") vaiA([12.5, 42.0], 7);
   else if(q === "mondo") svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity);
   else svg.transition().duration(300).call(zoom.scaleBy, q === "piu" ? 1.6 : 1/1.6);
