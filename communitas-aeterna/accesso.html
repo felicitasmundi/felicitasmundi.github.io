@@ -195,6 +195,10 @@
   "use strict";
   // ── la destinazione dello Spazio Vivo vive QUI, in un punto solo ──
   var SPAZIO_VIVO = "index.html";
+  /* le due porte del bivio dei talenti — parola di Gab, 11 settembre.
+     ⚠️ In linea i nomi cambiano: il sed di /pubblica riscrive questa
+        riga come fa con SPAZIO_VIVO (mia-orma-matrice → matrice-orma). */
+  var MIA_ORMA = "matrice-orma.html";
 
   /* ══ DA DOVE SI VENIVA ═══════════════════════════════════════════
      Chi arriva da un'orma, da un articolo o da un invito deve tornare
@@ -235,6 +239,10 @@
       if(!/\.html$/i.test(u.pathname)) return "";                       // ⛔ non è una pagina
       var dentro = u.pathname.slice(cartella.pathname.length) + u.search + u.hash;
       if(!dentro || dentro.indexOf("accesso.html") === 0) return "";    // ⛔ non si torna qui
+      /* ⛔ la soglia non fa parte del giro di chi entra: è la pagina che
+         si manda alle persone da fuori. Il controllo sta QUI e non solo
+         nello scrivere, così spegne anche un ricordo vecchio già salvato. */
+      if(dentro.indexOf("soglia.html") === 0) return "";
       return dentro;
     }catch(e){ return ""; }
   }
@@ -242,7 +250,29 @@
   function dove(){
     var g = "";
     try{ g = sessionStorage.getItem(CHIAVE_TORNA) || ""; }catch(e){}
-    return soloPagineNostre(g) || SPAZIO_VIVO;
+    return soloPagineNostre(g);
+  }
+
+  /* ══ IL BIVIO DEI TALENTI — il giro dopo il Nexus ══════════════════
+     ⭐ Un ritorno chiesto vince: chi stava leggendo qualcosa ci torna.
+     Altrimenti si guarda se la persona ha già scelto un talento:
+       non ne ha → il percorso dei talenti, per sceglierli;
+       ne ha    → «La mia orma».
+     ⛔ Se la lettura di `orme` non riesce si va alla home: un errore
+        non diventa mai un muro.                                       */
+  function entraDentro(personaId){
+    var torna = dove();
+    if(torna){ location.replace(torna); return; }
+    db.from("orme").select("id")
+      .eq("persona_id", personaId)
+      .not("talento_id", "is", null)
+      .limit(1)
+      .then(function(r){
+        if(r && r.error){ location.replace(SPAZIO_VIVO); return; }
+        var neHa = !!(r && r.data && r.data.length);
+        location.replace(neHa ? MIA_ORMA : SPAZIO_VIVO + "?p=percorso");
+      })
+      .catch(function(){ location.replace(SPAZIO_VIVO); });
   }
 
   // ── la casa nuova: indirizzo e chiave pubblicabile (pubblici per natura) ──
@@ -277,7 +307,7 @@
         .then(function(p){
           var d = p && p.data;
           if(d && d.condizioni_accettate && d.condizioni_versione === PATTO_VERSIONE){
-            location.replace(dove()); return;
+            entraDentro(sess.user.id); return;
           }
           mostra("s-patto");
         });
@@ -298,7 +328,7 @@
         condizioni_versione:  PATTO_VERSIONE
       }).eq("id", sess.user.id).then(function(u){
         if(u.error) throw u.error;
-        location.replace(dove());
+        entraDentro(sess.user.id);
       });
     }).catch(function(){
       b.disabled = false; b.textContent = testoOrig;
