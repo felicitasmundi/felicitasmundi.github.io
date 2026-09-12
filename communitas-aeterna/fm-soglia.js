@@ -55,28 +55,7 @@ function sogVeste(){
   var s = document.createElement("style");
   s.id = "fm-sog-veste";
   s.textContent =
-    ".fm-sog{position:relative;min-height:100vh;display:grid;" +
-      "place-items:center;padding:2rem 1.2rem 3rem;overflow:hidden;" +
-      "font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}" +
-    ".fm-sog *{box-sizing:border-box}" +
-
-    /* il disegno, dietro tutto */
-    ".fm-sog .dis{position:absolute;left:50%;top:50%;width:142%;" +
-      "aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;" +
-      "z-index:0;opacity:.55}" +
-    ".fm-sog .alone{position:absolute;inset:-8%;pointer-events:none;z-index:0;" +
-      "background:radial-gradient(circle at 50% 50%," +
-      "rgba(212,175,106,.13),transparent 62%)}" +
-    ".fm-sog .ret{transform-origin:0 0;animation:sogGira 96s linear infinite}" +
-    "@keyframes sogGira{to{transform:rotate(360deg)}}" +
-    ".fm-sog .puls{animation:sogPuls 7s ease-in-out infinite}" +
-    "@keyframes sogPuls{0%,100%{opacity:.5}50%{opacity:.85}}" +
-    "@media (prefers-reduced-motion:reduce){" +
-      ".fm-sog .ret,.fm-sog .puls{animation:none}}" +
-
-    /* il testo, davanti */
-    ".fm-sog .col{position:relative;z-index:1;width:100%;max-width:30rem;" +
-      "display:flex;flex-direction:column;gap:2.2rem}" +
+    ".fm-sog{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:2rem;padding:3rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}.fm-sog *{box-sizing:border-box}.fm-sog .velo{position:absolute;inset:0;z-index:0;grid-area:1/1/2/3;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}.fm-sog .sin{position:relative;z-index:1;width:100%;max-width:30rem;margin:0 auto;justify-self:center}.fm-sog .alone{position:absolute;inset:-8%;pointer-events:none;background:radial-gradient(ellipse 60% 52% at 50% 50%,rgba(212,175,106,.14),transparent 70%)}.fm-sog .dis{position:absolute;left:50%;top:50%;width:142%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;overflow:visible}.fm-sog .col{position:relative;z-index:1;display:flex;flex-direction:column;gap:2.2rem;max-width:30rem;justify-self:start}@media (max-width:52rem){.fm-sog{grid-template-columns:1fr;padding:2rem 1.2rem 3rem}.fm-sog .sin{grid-row:1;max-width:22rem}.fm-sog .col{grid-row:2;justify-self:center}}" +
     ".fm-sog h1{margin:0;font-family:'Cinzel',serif;font-weight:400;" +
       "font-size:clamp(2rem,3.6vw,2.5rem);line-height:1.1;letter-spacing:.01em}" +
     ".fm-sog .capo{display:flex;flex-wrap:wrap;align-items:baseline;" +
@@ -192,11 +171,18 @@ function soglia(dove){
   box.className = "fm-sog";
   box.innerHTML = "";
 
+  var velo = document.createElement("div");
+  velo.className = "velo"; velo.setAttribute("aria-hidden","true");
+  box.appendChild(velo);
+
+  /* ⛔ a sinistra il disegno col suo alone — la colonna di Design */
+  var sin = document.createElement("div");
+  sin.className = "sin";
   var alone = document.createElement("div");
-  alone.className = "alone";
-  alone.setAttribute("aria-hidden", "true");
-  box.appendChild(alone);
-  box.appendChild(sogDisegno());
+  alone.className = "alone"; alone.setAttribute("aria-hidden","true");
+  sin.appendChild(alone);
+  sin.appendChild(sogDisegno());
+  box.appendChild(sin);
 
   var col = document.createElement("div");
   col.className = "col";

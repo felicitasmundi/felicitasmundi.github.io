@@ -35,26 +35,7 @@ function camVeste(){
   var s = document.createElement("style");
   s.id = "fm-cam-veste";
   s.textContent =
-    ".fm-cam{position:relative;min-height:100vh;display:grid;place-items:center;" +
-      "padding:2rem 1.2rem 3rem;overflow:hidden;" +
-      "font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}" +
-    ".fm-cam *{box-sizing:border-box}" +
-
-    ".fm-cam .dis{position:absolute;left:50%;top:50%;width:142%;aspect-ratio:1;" +
-      "transform:translate(-50%,-50%);pointer-events:none;z-index:0;opacity:.5}" +
-    ".fm-cam .alone{position:absolute;inset:-8%;pointer-events:none;z-index:0;" +
-      "background:radial-gradient(circle at 50% 50%," +
-      "rgba(212,175,106,.13),transparent 62%)}" +
-    ".fm-cam .ret{transform-origin:0 0;animation:camGira 96s linear infinite}" +
-    "@keyframes camGira{to{transform:rotate(360deg)}}" +
-    ".fm-cam .orma{transform-origin:0 0;animation:camResp 9s ease-in-out infinite}" +
-    "@keyframes camResp{0%,100%{opacity:.7;transform:scale(1)}" +
-      "50%{opacity:1;transform:scale(1.04)}}" +
-    "@media (prefers-reduced-motion:reduce){" +
-      ".fm-cam .ret,.fm-cam .orma{animation:none}}" +
-
-    ".fm-cam .col{position:relative;z-index:1;width:100%;max-width:30rem;" +
-      "display:flex;flex-direction:column;gap:1.6rem}" +
+    ".fm-cam{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:2rem;padding:3rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}.fm-cam *{box-sizing:border-box}.fm-cam .velo{position:absolute;inset:0;z-index:0;grid-area:1/1/2/3;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}.fm-cam .sin{position:relative;z-index:1;width:100%;max-width:30rem;margin:0 auto;justify-self:center}.fm-cam .alone{position:absolute;inset:-8%;pointer-events:none;background:radial-gradient(ellipse 60% 52% at 50% 50%,rgba(212,175,106,.14),transparent 70%)}.fm-cam .dis{position:absolute;left:50%;top:50%;width:142%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;overflow:visible}.fm-cam .col{position:relative;z-index:1;display:flex;flex-direction:column;gap:1.6rem;max-width:30rem;justify-self:start}@media (max-width:52rem){.fm-cam{grid-template-columns:1fr;padding:2rem 1.2rem 3rem}.fm-cam .sin{grid-row:1;max-width:22rem}.fm-cam .col{grid-row:2;justify-self:center}}" +
     ".fm-cam h1{margin:0;font-family:'Cinzel',serif;font-weight:400;" +
       "font-size:clamp(1.9rem,3.4vw,2.4rem);line-height:1.12}" +
     ".fm-cam .dentro{display:flex;flex-direction:column;gap:1.1rem;" +
@@ -81,7 +62,9 @@ function camVeste(){
       "font-weight:500;font-size:1rem;font-family:'DM Sans',sans-serif;" +
       "cursor:pointer;opacity:.28;pointer-events:none;transition:.25s;" +
       "box-shadow:0 .4rem 1.6rem rgba(200,160,85,.28)}" +
-    ".fm-cam .avanti.viva{opacity:1;pointer-events:auto}";
+    ".fm-cam .avanti.viva{opacity:1;pointer-events:auto}" +
+    ".fm-cam .piede{margin-top:.6rem;font-family:'Cinzel',serif;font-size:.84rem;" +
+      "letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,230,.34);line-height:1.6}";
   document.head.appendChild(s);
 }
 
@@ -208,10 +191,18 @@ function cammino(dove){
   box.className = "fm-cam";
   box.innerHTML = "";
 
+  var velo = document.createElement("div");
+  velo.className = "velo"; velo.setAttribute("aria-hidden","true");
+  box.appendChild(velo);
+
+  /* ⛔ a sinistra il disegno col suo alone — la colonna di Design */
+  var sin = document.createElement("div");
+  sin.className = "sin";
   var al = document.createElement("div");
   al.className = "alone"; al.setAttribute("aria-hidden","true");
-  box.appendChild(al);
-  box.appendChild(camDisegno());
+  sin.appendChild(al);
+  sin.appendChild(camDisegno());
+  box.appendChild(sin);
 
   var col = document.createElement("div");
   col.className = "col";
@@ -260,6 +251,11 @@ function cammino(dove){
       SpazioVivo.percorsoDeiTalenti(box);
   };
   col.appendChild(av);
+
+  var pi = document.createElement("div");
+  pi.className = "piede";
+  pi.textContent = "Ponte verso l\u2019Evoluzione della Specie Umana";
+  col.appendChild(pi);
 
   box.appendChild(col);
 }
