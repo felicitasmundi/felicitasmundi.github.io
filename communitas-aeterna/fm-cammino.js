@@ -246,7 +246,8 @@ function cammino(dove){
     if(!scelto) return;
     av.classList.remove("viva");
     await camScrivi(scelto);
-    if(typeof vai === "function") vai("talenti");
+    /* ⭐ 12 settembre, parola di Gab: dopo il cammino vengono LE STANZE */
+    if(typeof vai === "function") vai("stanze");
     else if(window.SpazioVivo && SpazioVivo.percorsoDeiTalenti)
       SpazioVivo.percorsoDeiTalenti(box);
   };
