@@ -256,7 +256,8 @@
   /* ══ IL BIVIO DEI TALENTI — il giro dopo il Nexus ══════════════════
      ⭐ Un ritorno chiesto vince: chi stava leggendo qualcosa ci torna.
      Altrimenti si guarda se la persona ha già scelto un talento:
-       non ne ha → il percorso dei talenti, per sceglierli;
+       non ne ha → la prima soglia di Antahkarana (fm-soglia.js nel
+                   guscio), e da lì il percorso dei talenti;
        ne ha    → «La mia orma».
      ⛔ Se la lettura di `orme` non riesce si va alla home: un errore
         non diventa mai un muro.                                       */
@@ -270,7 +271,7 @@
       .then(function(r){
         if(r && r.error){ location.replace(SPAZIO_VIVO); return; }
         var neHa = !!(r && r.data && r.data.length);
-        location.replace(neHa ? MIA_ORMA : SPAZIO_VIVO + "?p=percorso");
+        location.replace(neHa ? MIA_ORMA : SPAZIO_VIVO + "?p=soglia");
       })
       .catch(function(){ location.replace(SPAZIO_VIVO); });
   }

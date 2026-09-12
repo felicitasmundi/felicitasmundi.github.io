@@ -893,51 +893,9 @@
   #pl{flex:0 0 auto;position:relative;margin-left:var(--barra);z-index:65;
     background:var(--scafo);padding:0.55rem 2.6rem 0.6rem}
   #pl > *{max-width:56rem;margin:0 auto;min-width:0}
-  /* ── dove lo porti: un foglio che sale, con tutto dentro ── */
-  .vele{max-height:0;overflow:hidden;transition:max-height .3s ease;
-    background:var(--scafo);border-top:1px solid var(--line)}
-  .vele.su{max-height:var(--vele-max);box-shadow:0 -0.6rem 1.6rem rgba(0,0,0,.5)}
-  .vele-dentro{position:relative;max-width:56rem;margin:0 auto;padding:0 0.9rem 0.9rem;
-    max-height:calc(var(--vele-max) - 1rem);overflow-y:auto}
-  /* la × chiude il foglio senza scegliere niente */
-  #vele-x{position:absolute;top:0.5rem;right:0.6rem;z-index:2;background:none;border:0;
-    color:rgba(245,240,230,0.8);font-size:var(--t-scr);line-height:1;cursor:pointer;
-    padding:0.2rem 0.4rem}
-  #vele-x:hover{color:var(--ivory)}
-  .pista{padding:0.8rem 0 0}
-
-  /* le destinazioni, a riquadri affiancati */
-  .dest-griglia{display:grid;grid-template-columns:repeat(auto-fill,minmax(9.5rem,1fr));
-    gap:0.55rem}
-  .dest{display:flex;flex-direction:column;gap:0.2rem;text-align:left;cursor:pointer;
-    background:rgba(245,240,230,0.04);border:1px solid var(--line);
-    border-radius:0.6rem;padding:0.7rem 0.75rem;color:inherit;min-height:5.2rem}
-  .dest:hover{background:rgba(245,240,230,0.08);border-color:rgba(200,160,85,0.4)}
-  .dest.on{border-color:var(--dc);background:rgba(245,240,230,0.09);
-    box-shadow:inset 0 0 0 1px var(--dc)}
-  .dest.spenta{opacity:0.5;cursor:default}
-  .dest.spenta:hover{background:rgba(245,240,230,0.04);border-color:var(--line)}
-  .d-sg{display:block;width:1.15rem;height:1.15rem;color:var(--dc)}
-  .d-sg svg{width:100%;height:100%;display:block}
-  .d-sg img{width:100%;height:100%;object-fit:contain}
-  .dest b{font-family:'DM Sans',sans-serif;font-weight:500;font-size:var(--t-tas);
-    color:var(--ivory);line-height:1.25}
-  .dest i{font-family:'Cormorant Garamond',serif;font-style:normal;font-size:var(--t-eti);
-    color:rgba(245,240,230,0.8);line-height:1.35}
-
-  /* le sezioni del foglio */
-  .fg-sez{margin-top:0.9rem;padding-top:0.8rem;border-top:1px solid var(--line)}
-  .fg-dom{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);
-    color:rgba(245,240,230,0.82);margin-bottom:0.5rem}
-  .fg-due{display:grid;grid-template-columns:1fr 1fr;gap:0.55rem}
-  @media(max-width:30rem){ .fg-due{grid-template-columns:1fr} }
-  .fg-campo{text-align:left;background:rgba(245,240,230,0.04);border:1px solid var(--line);
-    border-radius:0.6rem;padding:0.6rem 0.75rem;cursor:pointer;color:inherit}
-  .fg-campo:hover{border-color:rgba(200,160,85,0.45);background:rgba(245,240,230,0.07)}
-  .fg-et{display:block;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
-    color:rgba(245,240,230,0.78);margin-bottom:0.15rem}
-  .fg-campo b{display:block;font-family:'DM Sans',sans-serif;font-weight:500;
-    font-size:var(--t-tas);color:var(--oro-ch);line-height:1.25}
+  /* ⭐ TOCCATO NEL GUSCIO ㊶ — la veste di «dove lo porti» (.vele, .dest,
+     .fg-*) se n'è andata col suo foglio: era già senza maniglia dal ㉓,
+     e il Megafono nuovo non la chiama. */
 
   .parola{max-width:56rem;margin:0 auto;padding:0 1.1rem;max-height:0;overflow:hidden;
     transition:max-height .3s ease}
@@ -947,7 +905,7 @@
   .onda{display:block;width:100%;height:1.6rem;margin-bottom:-1px;
     position:relative;z-index:2;pointer-events:none}
   .ponte{background:var(--scafo);padding:0.35rem 1.1rem calc(0.75rem + env(safe-area-inset-bottom))}
-  .dentro{max-width:56rem;margin:0 auto}
+  .dentro{max-width:56rem;margin:0 auto;position:relative}
   /* ⭐ TOCCATO NEL GUSCIO ⑩ — il campo misura sullo schermo vero.
      Il tetto era 26vh. I vh sono l'altezza della finestra e con la
      tastiera fuori non si accorciano: il campo restava alto come a
@@ -963,123 +921,91 @@
     max-height:calc(var(--schermo, 100dvh) * 0.26)}
   #campo::placeholder{color:rgba(245,240,230,0.34);font-style:italic}
 
-  /* ⭐ TOCCATO NEL GUSCIO ⑯ — LA VESTE DELLA FORMA A RIPOSO.
-     Dallo studio megafono-riposo.html. Le misure sono in rem: nello studio
-     erano in px, e qui i px nei caratteri non entrano.
-     ⛔ Ogni cosa che si tocca sta dentro 2.75rem × 2.75rem: i tasti erano
-        già più larghi, i cinque segni sono stati alzati fin lì — nello
-        studio stavano a 2rem, e sotto il dito 2rem non bastano. */
-  .mg-riga{display:flex;align-items:stretch;gap:0.8rem}
-  .mg-colonna{flex:1;min-width:0;display:flex;flex-direction:column}
-  .mg-fila{display:flex;align-items:flex-end;gap:0.5rem}
-  .mg-fila #campo{flex:1;min-width:0}
-  /* ⛔ i due tasti accanto al campo stanno dentro 2.75rem: la classe .s li
-     faceva 2.375rem, e sotto il dito non bastano */
-  .mg-fila #s-file,.mg-fila #s-invio{width:2.9rem;height:2.9rem;flex:0 0 auto}
-
-  /* ── il segno dell'orma, a sinistra del campo. A riposo sta al 72% e
-     aspetta; quando c'è del testo si accende e si allarga. ── */
-  .mg-orma{flex:none;position:relative;display:grid;place-items:center;cursor:pointer;
-    width:3rem;min-width:2.75rem;transition:width .35s ease;color:var(--terra);
-    opacity:0.72;transition:width .35s ease,opacity .6s ease,filter .6s ease}
-  .mg-orma svg{width:100%;height:auto;display:block}
-  body.mg-pieno .mg-orma{width:4.6rem;opacity:1;
-    filter:brightness(1.32) drop-shadow(0 0 0.7rem rgba(170,136,68,0.4))}
-
-  /* ── il tasto che manda: non c'è finché non c'è qualcosa da mandare ── */
-  .mg-fila #s-invio{opacity:0;transform:scale(.8);width:0;margin-left:-0.75rem;
-    overflow:hidden;pointer-events:none;border-color:var(--oro);
-    background:var(--oro);color:#0A0C1A;
-    transition:opacity .3s ease,transform .3s ease,width .3s ease,margin-left .3s ease}
-  body.mg-pieno .mg-fila #s-invio{opacity:1;transform:scale(1);width:2.9rem;
-    margin-left:0;pointer-events:auto}
-
-  /* ── A RIPOSO, SOTTO IL CAMPO NON C'È NIENTE ──
-     ⭐ TOCCATO NEL GUSCIO ㉓ — e questo ribalta il ⑰.
-        Al ⑰ «le cose aperte» e i talenti erano rimasti sempre visibili,
-        perché sono porte verso altro e non riguardano lo scrivere. Guardati
-        sul telefono non reggono: a campo vuoto restano due tondi muti sotto
-        il campo, senza niente che dica cosa sono. Adesso si nascondono come
-        tutto il resto, e la forma a riposo è il campo e basta.
-     ⛔ LA REGOLA, ADESSO: tutto quello che sta nella riga degli strumenti
-        prende `mg-scrivendo`. Non c'è più l'eccezione delle porte. */
-  .mg-segni{max-height:0;overflow:hidden;opacity:0;
-    margin-top:0;transition:opacity .45s ease,max-height .45s ease,margin-top .45s ease}
-  body.mg-pieno .mg-segni{opacity:1;max-height:12rem;margin-top:0.7rem}
-  /* ⭐ TOCCATO NEL GUSCIO ㉓ — a riposo la riga si chiude tutta.
-     Nascondere i tasti non basta: perdono la larghezza ma non l'altezza, e
-     sotto il campo restava una fascia vuota di quasi 3rem col filo del bordo
-     sopra. Si ritirano anche l'altezza, il margine, il cuscino e il filo.
-     ⛔ L'overflow non si tocca: sotto i 40rem e sotto i 55rem questa riga
-        scorre di lato, e quelle regole devono restare padrone. */
-  #mg .riga-strumenti{max-height:0;margin-top:0;padding-top:0;border-top-width:0;
-    transition:max-height .45s ease,margin-top .45s ease,
-               padding-top .45s ease,border-top-width .45s ease}
-  body.mg-pieno #mg .riga-strumenti{max-height:8rem;margin-top:0.55rem;
-    padding-top:0.55rem;border-top-width:1px}
-  #mg .mg-scrivendo{max-width:0;padding-left:0;padding-right:0;margin:0;
-    border-width:0;opacity:0;overflow:hidden;pointer-events:none;
-    transition:opacity .35s ease,max-width .35s ease}
-  body.mg-pieno #mg .mg-scrivendo{max-width:22rem;opacity:1;pointer-events:auto;
-    padding-left:0.7rem;padding-right:0.7rem;border-width:1px}
-  .mg-segni{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
-  /* ⭐ TOCCATO NEL GUSCIO ㉗ — OGNI PASTIGLIA SI PRENDE LA LARGHEZZA CHE LE
-     SERVE. Il difetto: sotto i 52rem «contatto» — la più lunga delle quattro
-     — usciva dal suo cerchio e finiva sopra «idea». Misurato sul telefono:
-     44 di larghezza, un tondo, con dentro una parola da 84.
-     Erano due cose insieme, e da sole non bastavano:
-       · `min-width:2.75rem` diceva quanto poteva stringersi. Un minimo
-         scritto a mano sostituisce quello che il testo si prenderebbe da sé,
-         e da lì in poi la parola non conta più.
-       · e le pastiglie sono figlie di un flex: senza dirglielo, si
-         RESTRINGONO per far stare la riga. Wrap e shrink lavorano insieme —
-         prima va a capo, poi schiaccia quello che resta sulla riga.
-     ⭐ La cura: nessuna larghezza e nessuna altezza imposte — comanda il
-        testo, con l'imbottitura ai lati. `flex:0 0 auto` toglie il
-        restringimento: una pastiglia non si stringe mai. Se la riga non ci
-        sta, `flex-wrap:wrap` su .mg-segni la manda a capo — che è l'unica
-        cosa che devono fare. `white-space:nowrap` tiene la parola intera.
-     ⚠️ Cade con `min-height` anche il bersaglio da 2.75rem: le pastiglie
-        passano da 44 a 34 di altezza. È quello che è stato chiesto — se il
-        dito lo vuole indietro, torna `min-height` da solo, che non c'entrava
-        col difetto. */
-  .mg-sg{display:flex;align-items:center;gap:0.4rem;padding:0.34rem 0.8rem;
-    border-radius:999px;border:1px solid var(--c);background:transparent;
-    cursor:pointer;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
-    letter-spacing:0.04em;color:rgba(245,240,230,0.8);
-    flex:0 0 auto;white-space:nowrap;transition:.25s}
-  .mg-sg:hover,.mg-sg.on{border-color:var(--c);color:var(--ivory);
-    background:rgba(245,240,230,0.07)}
-  /* ⭐ ogni segno ha una FORMA sua oltre al colore: il colore da solo non basta */
-  /* ⭐ TOCCATO NEL GUSCIO ㉗ — LE FORME PRENDONO UN NOME LORO: sg-tondo,
-     sg-quadro, sg-rombo, sg-pieno. Prima si chiamavano `tondo`, `quadro`,
-     `rombo`, `pieno` — nomi nudi, già di altri. `.tondo` in questo stesso
-     guscio è il TASTO ROTONDO, largo 2.5rem e alto 2.5rem: la pastiglia di
-     «contatto» se li prendeva addosso e diventava un cerchio da 40 con
-     dentro una parola da 84. Era quella, la larghezza fissa.
-     ⛔ Il nome è la forma del segno, non un tasto: adesso lo dice. */
-  .mg-sg i{width:0.72rem;height:0.72rem;flex:none;font-style:normal;
-    border:1.5px solid var(--c);display:block}
-  .mg-sg.sg-tondo i{border-radius:50%}
-  .mg-sg.sg-quadro i{border-radius:0.12rem}
-  .mg-sg.sg-rombo i{transform:rotate(45deg)}
-  .mg-sg.sg-pieno i{background:var(--c);border-radius:50%}
-
-  /* ── i tre dati: tre parole in grigio che si toccano ── */
-  .mg-dati{display:flex;align-items:center;gap:0.15rem;flex-wrap:wrap}
-  .mg-p{color:rgba(245,240,230,0.28);font-size:var(--t-eti);padding:0 0.15rem}
-  .mg-d{background:none;border:0;cursor:pointer;
+  /* ⭐ TOCCATO NEL GUSCIO ㊶ — LA VESTE DEL MEGAFONO NUOVO, dal modello di
+     Gab megafono-innesto.html · 15.951 byte · 082a37465a0ef33eb3ed9b9c39df1c30.
+     Un quadrante solo: il campo dentro un riquadro, i simboli sotto, fermi
+     — il tondino del tipo, i tre segni (quando · dove · con chi), la
+     graffa, la freccia. Quello che si apre sale SOPRA il quadrante in
+     .mg-pan: la pagina non viene mai schiacciata.
+     ⚠️ Le misure del modello stavano sotto --t-eti: qui nessun carattere
+        scende sotto --t-eti, come da canone. E i tocchi stanno a 2.75rem
+        — la regola ⑯ del guscio, confermata da Gab il 10 settembre. */
+  .mg-box{background:rgba(245,240,230,0.05);border:1px solid rgba(245,240,230,0.14);
+    border-radius:1.4rem;padding:0.75rem 0.75rem 0.6rem;transition:border-color .2s}
+  .mg-box:focus-within{border-color:rgba(200,160,85,0.45)}
+  .mg-box #campo{background:transparent;border:0;border-radius:0;
+    min-height:2.4rem;padding:0.1rem 0.4rem 0.35rem;font-style:italic}
+  .mg-sotto{display:flex;align-items:center;gap:0.4rem;margin-top:0.35rem;height:2.75rem}
+  .mg-vuoto{flex:1}
+  .mg-tipo{--c:var(--oro);flex:none;height:2.75rem;min-width:6.2rem;
     font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
-    color:rgba(245,240,230,0.62);padding:0.5rem 0.5rem;
-    min-height:2.75rem;border-bottom:1px solid transparent;border-radius:0.4rem}
-  .mg-d:hover{color:var(--ivory);border-bottom-color:rgba(200,160,85,0.4)}
-  .mg-d.vuota{color:rgba(245,240,230,0.38);font-style:italic}
-  .mg-d.scelta{color:var(--oro-ch);border-bottom-color:rgba(200,160,85,0.45)}
-  /* ⛔ la riga del canone, quando un nome aspetta ancora */
-  .mg-attesa{font-family:'Cormorant Garamond',serif;font-style:italic;
-    font-size:var(--t-eti);color:var(--oro-ch);padding:0.35rem 0.5rem 0}
-  /* i tre tasti della visibilità si spengono, e si vede che sono spenti */
-  .v-t.chiusa{opacity:0.4;cursor:not-allowed}
+    padding:0 0.85rem;border-radius:1.2rem;display:inline-flex;align-items:center;
+    justify-content:center;cursor:pointer;white-space:nowrap;
+    border:1px solid color-mix(in srgb,var(--c) 55%,transparent);
+    background:color-mix(in srgb,var(--c) 16%,transparent);
+    color:var(--c);filter:brightness(1.25);transition:border-color .2s,background .2s}
+  .mg-vsg,.mg-gf,.mg-inv{width:2.75rem;height:2.75rem;border-radius:50%;flex:none;
+    display:grid;place-items:center;cursor:pointer;
+    border:1px solid rgba(245,240,230,0.16);background:transparent;
+    color:rgba(245,240,230,0.5);
+    transition:border-color .18s,background .18s,color .18s}
+  .mg-vsg svg{width:1.05rem;height:1.05rem;display:block}
+  .mg-vsg.on{border-color:var(--oro);background:rgba(200,160,85,0.2);color:var(--oro-ch)}
+  .mg-gf{border-color:rgba(200,160,85,0.35);color:var(--oro-ch);font-size:0.95rem}
+  .mg-gf.on{border-color:var(--oro);background:rgba(200,160,85,0.2)}
+  .mg-inv{background:var(--oro);border-color:var(--oro);color:#0A0C1A;font-size:1.05rem}
+  .mg-inv.pronto{box-shadow:0 0 0.7rem rgba(200,160,85,0.5)}
+  .mg-inv:not(.pronto){opacity:0.35}
+
+  /* quello che si apre — il tipo, il calendarietto, i comuni, i nomi */
+  .mg-pan{position:absolute;left:0.65rem;right:0.65rem;bottom:calc(100% + 0.4rem);
+    background:#0E1224;border:1px solid rgba(200,160,85,0.35);border-radius:1rem;
+    padding:0.5rem;display:none;max-height:15rem;overflow-y:auto;
+    box-shadow:0 -0.5rem 1.4rem rgba(0,0,0,0.5);z-index:3}
+  .mg-pan.si{display:block}
+  .mg-pan .et2{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    letter-spacing:0.14em;text-transform:uppercase;
+    color:rgba(245,240,230,0.35);padding:0.2rem 0.5rem 0.35rem}
+  .mg-pan .campoP{width:100%;background:rgba(245,240,230,0.05);
+    border:1px solid rgba(245,240,230,0.14);border-radius:0.7rem;
+    padding:0.45rem 0.7rem;color:var(--ivory);font-family:'DM Sans',sans-serif;
+    font-size:0.9rem;outline:none;margin-bottom:0.3rem}
+  .mg-pan button{display:block;width:100%;text-align:left;background:transparent;
+    border:0;border-radius:0.6rem;padding:0.42rem 0.6rem;color:rgba(245,240,230,0.85);
+    font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer}
+  .mg-pan button:hover{background:rgba(200,160,85,0.14);color:var(--oro-ch)}
+  .mg-pan .due2{display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;padding:0.15rem}
+  .mg-pan .tb{display:flex;align-items:center;gap:0.5rem;width:100%;text-align:left;
+    border:1px solid color-mix(in srgb,var(--c) 32%,transparent);border-radius:0.7rem;
+    background:color-mix(in srgb,var(--c) 8%,transparent);padding:0.5rem 0.6rem;
+    color:rgba(245,240,230,0.85);font-size:var(--t-eti);cursor:pointer}
+  .mg-pan .tb:hover{background:color-mix(in srgb,var(--c) 18%,transparent)}
+  .mg-pan .tb.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 22%,transparent)}
+  .mg-pan .tb i{width:0.7rem;height:0.7rem;flex:none;font-style:normal;
+    border:1.5px solid var(--c);display:block;filter:brightness(1.3)}
+  .mg-pan .tb.nex i{width:1.45rem;height:1.45rem;border:0;background:none;margin:-0.3rem 0}
+  .mg-pan .tb.nex .nx{width:100%;height:100%;display:block}
+  .mg-pan .tb.cerchio i{border-radius:50%}
+  .mg-pan .tb.quadro i{border-radius:0.1rem}
+  .mg-pan .tb.rombo i{transform:rotate(45deg);border-radius:0.06rem}
+  .mg-pan .tb.tondo i{border-radius:50%;background:var(--c)}
+  .mg-pan .gg2{display:grid;grid-template-columns:repeat(7,1fr);gap:0.15rem;padding:0.2rem}
+  .mg-pan .gg2 b{text-align:center;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);font-weight:400;color:rgba(245,240,230,0.3);padding:0.2rem 0}
+  .mg-pan .gg2 span{text-align:center;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-eti);padding:0.35rem 0;border-radius:0.5rem;
+    cursor:pointer;color:rgba(245,240,230,0.75)}
+  .mg-pan .gg2 span:hover{background:rgba(200,160,85,0.18);color:var(--oro-ch)}
+  .mg-pan .gg2 span.oggi{border:1px solid rgba(200,160,85,0.5);color:var(--oro-ch)}
+
+  /* «è nata un'orma»: il cartiglio verde che sale e svanisce */
+  .mg-nato{position:absolute;left:0.9rem;right:0.9rem;bottom:calc(100% + 0.5rem);
+    border:1px solid rgba(102,153,68,0.5);border-radius:0.75rem;
+    background:rgba(102,153,68,0.14);padding:0.6rem 0.8rem;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:#8FBF6A;opacity:0;transform:translateY(0.4rem);
+    transition:opacity .25s,transform .25s;pointer-events:none;z-index:3}
+  .mg-nato.si{opacity:1;transform:none}
 
   /* le righe di «con chi» */
   .cc-riga{display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0;
@@ -1761,30 +1687,10 @@
 
 <!-- ══ IL MEGAFONO ══ -->
 <div id="mg">
-  <div class="vele" id="vele"><div class="vele-dentro">
-    <button class="x" id="vele-x">&times;</button>
-    <div class="pista" id="pista"></div>
-
-    <div class="fg-sez">
-      <div class="fg-dom">E chi la vede?</div>
-      <div class="vis" id="vis">
-        <button class="v-t on" data-v="solo_me">solo me</button>
-        <button class="v-t" data-v="vicinato">il mio vicinato</button>
-        <button class="v-t" data-v="pubblico">tutti</button>
-      </div>
-    </div>
-
-    <div class="fg-sez fg-due">
-      <button class="fg-campo" id="s-luogo">
-        <span class="fg-et">Dov&rsquo;&egrave; successo</span>
-        <b id="s-luogo-v">Dove sono io</b>
-      </button>
-      <button class="fg-campo" id="s-quando">
-        <span class="fg-et">Quando</span>
-        <b id="s-quando-v">Oggi</b>
-      </button>
-    </div>
-  </div></div>
+  <!-- ⭐ TOCCATO NEL GUSCIO ㊶ — il foglio «dove lo porti» (.vele) se n'è
+       andato: era già senza maniglia dal ㉓, e con lui i tre tasti della
+       visibilità e «Dov'è successo / Quando». La visibilità dell'orma
+       nuova è sempre `solo_me` alla nascita. -->
   <div class="parola" id="parola"><p id="parola-tx"></p></div>
   <!-- ⭐ TOCCATO NEL GUSCIO ⑮ — L'ONDA È UN SVG SOLO, quello dello studio.
        Prima la disegnava il guscio, riga per riga, da --onda-amp e --onda-len:
@@ -1808,569 +1714,33 @@
            · a riposo: il segno dell'orma a sinistra, il campo, la graffa
            · con del testo: il segno si accende, la freccia d'oro compare,
              e sotto il campo scendono i cinque segni e la riga di prima -->
-      <div class="mg-riga">
-        <span class="mg-orma" id="mg-orma" aria-hidden="true"></span>
-        <div class="mg-colonna">
-          <div class="mg-fila">
-      <textarea id="campo" rows="1" placeholder="scrivi la tua orma"></textarea>
-        <button class="s" id="s-file" title="Allegato">&#128206;&#xFE0E;</button>
-        <button class="s invia" id="s-invio" title="Manda">&#8594;</button>
-          </div>
-          <div class="mg-segni" id="mg-segni"></div>
-          <!-- ⭐ TOCCATO NEL GUSCIO ㉒ — I TRE DATI DELL'ORMA: quando, dove,
-               con chi. Non sono segni: i quattro segni dicono COS'È l'orma,
-               questi dicono DA DOVE VIENE. Portano già dentro la risposta —
-               si legge un valore, non una scelta da fare. -->
-          <!-- ⭐ TOCCATO NEL GUSCIO ㉔ — LA RIGA VECCHIA SI RITIRA, non se ne va.
-               Il canone dice: ① il nuovo esiste e risponde → ② si dirotta →
-               ③ si verifica → ④ solo allora si rimuove il vecchio. Qui siamo
-               a ①②③: la riga sparisce alla vista e il suo codice non tocca
-               più l'invio, ma resta scritta finché il pezzo nuovo non è stato
-               guardato. La rimozione è il giro dopo. -->
-          <div class="mg-dati" id="mg-dati" hidden style="display:none">
-            <button type="button" class="mg-d" id="d-quando">oggi</button>
-            <span class="mg-p" aria-hidden="true">&middot;</span>
-            <button type="button" class="mg-d vuota" id="d-dove">[ dove ]</button>
-            <span class="mg-p" aria-hidden="true">&middot;</span>
-            <button type="button" class="mg-d vuota" id="d-chi">[ con chi ]</button>
-          </div>
-          <!-- ⛔ la riga del canone: compare solo quando un nome non ha
-               ancora confermato, e dice chi si aspetta -->
-          <!-- ⭐ TOCCATO NEL GUSCIO ㉔ — I TRE VALORI, il pezzo di Design
-               valori-spazio-vivo.html · 21.471 byte · MD5 37d9d93f06b9a41cbd2cada932dff4f7
-               Sostituisce la riga «oggi · [ dove ] · [ con chi ]»: niente più
-               parentesi quadre. Sta sotto i quattro segni e si accende con loro.
-               ⛔ Del pezzo è caduta solo la veste .sv-valori-fondo: Design la dà
-                  per guardarlo da solo, e nel guscio il fondo è già suo.
-               ⛔ Il resto è verbatim: stile, corpo, foglio e codice.
-               Espone valori(pieno) · valoriLeggi() · valoriPulisci(). -->
-<style>
-  .sv-valori{--scala:1.4;
-    --t-eti:calc(0.64rem * var(--scala));
-    --oro-a:#D4AF6A;
-    display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;
-    margin-top:.55rem;
-    max-height:0;overflow:hidden;opacity:0;
-    transition:max-height .45s cubic-bezier(.16,.84,.28,1),
-               opacity .4s ease,margin .45s ease;
-    font-family:'DM Sans',system-ui,sans-serif}
-  .sv-valori.vivi{max-height:6rem;opacity:1}
-
-  .sv-valori .v{display:inline-flex;align-items:center;gap:.42rem;
-    min-height:2.1rem;padding:.28rem .8rem;border-radius:999px;
-    border:1px solid rgba(245,240,230,.16);background:transparent;
-    color:rgba(245,240,230,.6);cursor:pointer;
-    font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
-    letter-spacing:.04em;white-space:nowrap;
-    transition:border-color .25s ease,color .25s ease,
-               background .25s ease}
-  .sv-valori .v:hover{border-color:rgba(212,175,106,.5);
-    color:var(--oro-a)}
-  .sv-valori .v .sg{width:.9rem;height:.9rem;flex:none;
-    display:block;opacity:.7}
-  .sv-valori .v:hover .sg{opacity:1}
-
-  /* quando ha una risposta dentro */
-  .sv-valori .v.pieno{border-color:rgba(212,175,106,.44);
-    background:rgba(212,175,106,.1);color:#F5F0E6}
-  .sv-valori .v.pieno .sg{opacity:1;color:var(--oro-a)}
-  .sv-valori .v .via{display:none;margin-left:.1rem;
-    font-size:1.02em;line-height:1;color:rgba(245,240,230,.42)}
-  .sv-valori .v.pieno .via{display:inline}
-  .sv-valori .v .via:hover{color:var(--oro-a)}
-
-  /* il foglio che si apre */
-  .sv-valori-velo{position:fixed;inset:0;z-index:96;
-    background:rgba(5,7,16,.72);backdrop-filter:blur(6px);
-    display:none;align-items:flex-end;justify-content:center}
-  .sv-valori-velo.on{display:flex}
-  @media (min-width:52rem){
-    .sv-valori-velo{align-items:center}
-  }
-  .sv-valori-foglio{width:min(28rem,100%);
-    background:#0E1424;border:1px solid rgba(212,175,106,.3);
-    border-radius:1.1rem 1.1rem 0 0;padding:1.2rem 1.2rem 1.6rem;
-    font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}
-  @media (min-width:52rem){
-    .sv-valori-foglio{border-radius:1.1rem}
-  }
-  .sv-valori-foglio .capo{display:flex;align-items:center;
-    justify-content:space-between;gap:1rem;margin-bottom:1rem}
-  .sv-valori-foglio .capo b{font-family:'Cinzel',serif;font-weight:500;
-    font-size:1rem;letter-spacing:.1em}
-  .sv-valori-foglio .capo button{background:none;border:0;cursor:pointer;
-    font-family:'DM Sans',sans-serif;font-size:.78rem;letter-spacing:.18em;
-    text-transform:uppercase;color:rgba(245,240,230,.6)}
-  .sv-valori-foglio .capo button:hover{color:var(--oro-a)}
-
-  .sv-valori-foglio input[type="date"],
-  .sv-valori-foglio input[type="text"]{width:100%;min-height:2.9rem;
-    background:rgba(245,240,230,.05);color:#F5F0E6;
-    border:1px solid rgba(212,175,106,.26);border-radius:.7rem;
-    padding:.6rem .85rem;outline:none;
-    font-family:'Cormorant Garamond',serif;font-size:1.06rem}
-  .sv-valori-foglio input:focus{border-color:rgba(212,175,106,.55)}
-  .sv-valori-foglio input::placeholder{color:rgba(245,240,230,.34);
-    font-style:italic}
-
-  /* le proposte che scendono sotto il campo */
-  .sv-valori-foglio .campo-cerca{position:relative}
-  .sv-valori-foglio .proposte{position:absolute;left:0;right:0;top:100%;
-    z-index:2;margin-top:.3rem;border-radius:.7rem;overflow:hidden;
-    background:#131A2C;border:1px solid rgba(212,175,106,.24);
-    max-height:12rem;overflow-y:auto}
-  .sv-valori-foglio .proposte:empty{display:none}
-  .sv-valori-foglio .proposte button{display:block;width:100%;
-    text-align:left;min-height:2.5rem;padding:.4rem .85rem;
-    background:none;border:0;cursor:pointer;color:rgba(245,240,230,.84);
-    font-family:'Cormorant Garamond',serif;font-size:1.02rem;
-    border-bottom:1px solid rgba(245,240,230,.06)}
-  .sv-valori-foglio .proposte button:last-child{border-bottom:0}
-  .sv-valori-foglio .proposte button:hover{background:rgba(212,175,106,.14);
-    color:#F5F0E6}
-
-  .sv-valori-foglio .scorciatoie{display:flex;gap:.4rem;flex-wrap:wrap;
-    margin-top:.7rem}
-  .sv-valori-foglio .scorciatoie button{min-height:2.1rem;
-    padding:.24rem .8rem;border-radius:999px;cursor:pointer;
-    border:1px solid rgba(245,240,230,.16);background:transparent;
-    color:rgba(245,240,230,.66);font-family:'DM Sans',sans-serif;
-    font-size:.8rem;letter-spacing:.04em}
-  .sv-valori-foglio .scorciatoie button:hover{
-    border-color:rgba(212,175,106,.5);color:var(--oro-a)}
-
-  .sv-valori-foglio .nomi{display:flex;gap:.4rem;flex-wrap:wrap;
-    margin-top:.7rem}
-  .sv-valori-foglio .nomi span{display:inline-flex;align-items:center;
-    gap:.4rem;min-height:2.1rem;padding:.22rem .75rem;border-radius:999px;
-    background:rgba(204,102,68,.14);border:1px solid rgba(204,102,68,.4);
-    font-size:.86rem}
-  .sv-valori-foglio .nomi span i{cursor:pointer;font-style:normal;
-    color:rgba(245,240,230,.5)}
-  .sv-valori-foglio .nomi span i:hover{color:#F5F0E6}
-
-  .sv-valori-foglio .nota{margin-top:.9rem;
-    font-family:'Cormorant Garamond',serif;font-style:italic;
-    font-size:.94rem;line-height:1.5;color:rgba(245,240,230,.5)}
-
-  .sv-valori-foglio .fatto{width:100%;min-height:2.9rem;margin-top:1.1rem;
-    border-radius:999px;border:0;cursor:pointer;
-    background:var(--oro-a);color:#0A0C1A;
-    font-family:'DM Sans',sans-serif;font-size:.9rem;letter-spacing:.1em}
-
-  @media (max-width:52rem){ .sv-valori{--scala:1.15} }
-  @media (prefers-reduced-motion:reduce){
-    .sv-valori{transition:opacity .3s ease}
-  }
-</style>
-
-<div class="sv-valori" id="svValori">
-  <button type="button" class="v" data-v="quando">
-    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="5" width="18" height="16" rx="2.5"/>
-      <path d="M3 10h18M8 3v4M16 3v4"/></svg>
-    <span data-testo>oggi</span><span class="via" data-via>&times;</span>
-  </button>
-
-  <button type="button" class="v" data-v="dove">
-    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/>
-      <circle cx="12" cy="10" r="2.6"/></svg>
-    <span data-testo>dove</span><span class="via" data-via>&times;</span>
-  </button>
-
-  <button type="button" class="v" data-v="chi">
-    <svg class="sg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="9" cy="8" r="3.4"/>
-      <path d="M2.6 20c.6-3.4 3.3-5.4 6.4-5.4s5.8 2 6.4 5.4"/>
-      <path d="M17 8.4a3 3 0 0 1 0 5.6M18.6 20c-.2-1.5-.7-2.8-1.5-3.8"
-            opacity=".6"/></svg>
-    <span data-testo>con chi</span><span class="via" data-via>&times;</span>
-  </button>
-</div>
-
-<div class="sv-valori-velo" data-velo>
-  <div class="sv-valori-foglio" data-foglio></div>
-</div>
-
-<script>
-(function () {
-  "use strict";
-
-  var R = document.getElementById("svValori");
-  if (!R) return;
-
-  var velo   = document.querySelector("[data-velo]");
-  var foglio = document.querySelector("[data-foglio]");
-
-  /* i valori tenuti */
-  var stato = { accaduto_il: null, luogo: null, territorio_cod: null,
-                territorio_nome: null,
-                luogo_lat: null, luogo_lon: null, persone: [] };
-
-  var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno",
-              "luglio","agosto","settembre","ottobre","novembre","dicembre"];
-
-  function iso(d) {
-    return d.getFullYear() + "-" +
-           String(d.getMonth() + 1).padStart(2, "0") + "-" +
-           String(d.getDate()).padStart(2, "0");
-  }
-  function oggi() { return iso(new Date()); }
-
-  function tasto(nome) { return R.querySelector('[data-v="' + nome + '"]'); }
-
-  function scrivi(nome, testo, pieno) {
-    var t = tasto(nome);
-    t.querySelector("[data-testo]").textContent = testo;
-    t.classList.toggle("pieno", !!pieno);
-  }
-
-  function aggiorna() {
-    /* quando */
-    if (stato.accaduto_il && stato.accaduto_il !== oggi()) {
-      var d = new Date(stato.accaduto_il + "T12:00:00");
-      scrivi("quando", d.getDate() + " " + MESI[d.getMonth()], true);
-    } else {
-      scrivi("quando", "oggi", false);
-    }
-    /* dove: il nome del luogo se c'è, se no il comune */
-    var d2 = stato.luogo || stato.territorio_nome;
-    scrivi("dove", d2 || "dove", !!d2);
-    /* con chi */
-    var p = stato.persone;
-    if (!p.length)      scrivi("chi", "con chi", false);
-    else if (p.length === 1) scrivi("chi", "con " + p[0], true);
-    else if (p.length === 2) scrivi("chi", "con " + p[0] + " e " + p[1], true);
-    else scrivi("chi", "con " + p[0] + " e altri " + (p.length - 1), true);
-  }
-
-  /* ── il collegamento al database, se il guscio ce l'ha ── */
-  function db() {
-    return window.db || window.FM_DB || null;
-  }
-
-  /* ⭐ i comuni vengono da `territori`: 7.896 righe, caricate dall'ISTAT.
-     Senza questo, «dove» resterebbe una stringa che non trova niente. */
-  function cercaComune(q, prop, cCom, cLuo) {
-    var d = db();
-    if (!d) { prop.innerHTML = ""; return; }
-    d.from("territori")
-      .select("codice,nome")
-      .ilike("nome", q + "%")
-      .order("nome")
-      .limit(8)
-      .then(function (r) {
-        var righe = (r && r.data) || [];
-        prop.innerHTML = "";
-        righe.forEach(function (t) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.textContent = t.nome;
-          b.addEventListener("click", function () {
-            stato.territorio_cod = t.codice;
-            stato.territorio_nome = t.nome;
-            cCom.value = t.nome;
-            prop.innerHTML = "";
-            cLuo.focus();
-          });
-          prop.appendChild(b);
-        });
-      })
-      .catch(function () { prop.innerHTML = ""; });
-  }
-
-  /* ⭐ i nomi già usati: non una rubrica di amici, la tua memoria.
-     Se la tavola è vuota o chiusa, il campo funziona a mano. */
-  function cercaNome(q, prop, campo, dipingi) {
-    var d = db();
-    if (!d) { prop.innerHTML = ""; return; }
-    d.from("orma_persone")
-      .select("nome")
-      .ilike("nome", q + "%")
-      .limit(20)
-      .then(function (r) {
-        var visti = {}, righe = [];
-        ((r && r.data) || []).forEach(function (x) {
-          if (!visti[x.nome] && stato.persone.indexOf(x.nome) < 0) {
-            visti[x.nome] = 1; righe.push(x.nome);
-          }
-        });
-        prop.innerHTML = "";
-        righe.slice(0, 6).forEach(function (n) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.textContent = n;
-          b.addEventListener("click", function () {
-            stato.persone.push(n);
-            campo.value = "";
-            prop.innerHTML = "";
-            dipingi();
-            campo.focus();
-          });
-          prop.appendChild(b);
-        });
-      })
-      .catch(function () { prop.innerHTML = ""; });
-  }
-
-  /* ── il foglio che si apre ── */
-  function apri(nome) {
-    if (nome === "quando") {
-      foglio.innerHTML =
-        '<div class="capo"><b>Quando</b>' +
-        '<button type="button" data-chiudi>Chiudi</button></div>' +
-        '<input type="date" data-data min="1900-01-01" max="' + oggi() + '">' +
-        '<div class="scorciatoie">' +
-        '<button type="button" data-giorni="0">oggi</button>' +
-        '<button type="button" data-giorni="1">ieri</button>' +
-        '<button type="button" data-anni="1">un anno fa</button>' +
-        '<button type="button" data-anni="10">dieci anni fa</button>' +
-        '</div>' +
-        '<p class="nota">\u00C8 possibile registrare sia un fatto ' +
-        'accaduto oggi, che avvenimenti storici da collegare alle tue ' +
-        'orme.</p>' +
-        '<button type="button" class="fatto" data-fatto>Fatto</button>';
-
-      var campo = foglio.querySelector("[data-data]");
-      campo.value = stato.accaduto_il || oggi();
-      foglio.querySelectorAll("[data-giorni]").forEach(function (b) {
-        b.addEventListener("click", function () {
-          var d = new Date();
-          d.setDate(d.getDate() - parseInt(b.dataset.giorni, 10));
-          campo.value = iso(d);
-        });
-      });
-      foglio.querySelectorAll("[data-anni]").forEach(function (b) {
-        b.addEventListener("click", function () {
-          var d = new Date();
-          d.setFullYear(d.getFullYear() - parseInt(b.dataset.anni, 10));
-          campo.value = iso(d);
-          campo.focus();
-        });
-      });
-      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
-        stato.accaduto_il = campo.value || oggi();
-        aggiorna(); chiudi();
-      });
-    }
-
-    if (nome === "dove") {
-      foglio.innerHTML =
-        '<div class="capo"><b>Dove</b>' +
-        '<button type="button" data-chiudi>Chiudi</button></div>' +
-        '<div class="campo-cerca">' +
-        '<input type="text" data-comune placeholder="il comune" ' +
-        'autocomplete="off">' +
-        '<div class="proposte" data-proposte></div></div>' +
-        '<input type="text" data-luogo placeholder="il nome del luogo" ' +
-        'style="margin-top:.6rem">' +
-        '<div class="scorciatoie">' +
-        '<button type="button" data-qui>Usa la mia posizione</button>' +
-        '</div>' +
-        '<p class="nota" data-nota-dove>serve a far comparire ' +
-        'l\u2019orma sulla mappa</p>' +
-        '<button type="button" class="fatto" data-fatto>Fatto</button>';
-
-      var cCom  = foglio.querySelector("[data-comune]");
-      var cLuo  = foglio.querySelector("[data-luogo]");
-      var prop  = foglio.querySelector("[data-proposte]");
-      cCom.value = stato.territorio_nome || "";
-      cLuo.value = stato.luogo || "";
-
-      var attesa = null;
-      cCom.addEventListener("input", function () {
-        stato.territorio_cod = null;
-        clearTimeout(attesa);
-        var q = cCom.value.trim();
-        if (q.length < 2) { prop.innerHTML = ""; return; }
-        attesa = setTimeout(function () { cercaComune(q, prop, cCom, cLuo); },
-                            220);
-      });
-
-      var bQui = foglio.querySelector("[data-qui]");
-      var nQui = foglio.querySelector("[data-nota-dove]");
-
-      /* ⭐ Se la posizione è già stata negata, il tasto non la richiede:
-         il navigatore non lo permette. Porta alle impostazioni. */
-      function alleImpostazioni() {
-        bQui.textContent = "Vai alle impostazioni";
-        nQui.innerHTML = "la posizione \u00E8 spenta: si riaccende " +
-          "dalle impostazioni del tuo account";
-        bQui.onclick = function () {
-          chiudi();
-          if (window.SpazioVivo && window.SpazioVivo.impostazioni) {
-            window.SpazioVivo.impostazioni("posizione");
-          }
-        };
-      }
-
-      if (navigator.permissions && navigator.permissions.query) {
-        navigator.permissions.query({ name: "geolocation" })
-          .then(function (p) { if (p.state === "denied") alleImpostazioni(); })
-          .catch(function () {});
-      }
-
-      bQui.addEventListener("click", function () {
-        if (bQui.textContent === "Vai alle impostazioni") return;
-        if (!navigator.geolocation) { bQui.textContent = "non disponibile"; return; }
-        bQui.textContent = "un momento\u2026";
-        navigator.geolocation.getCurrentPosition(function (p) {
-          stato.luogo_lat = p.coords.latitude;
-          stato.luogo_lon = p.coords.longitude;
-          bQui.textContent = "posizione presa";
-          nQui.textContent = "l\u2019orma comparir\u00E0 sulla mappa";
-          if (!cLuo.value) cLuo.focus();
-        }, function (e) {
-          if (e && e.code === 1) alleImpostazioni();
-          else bQui.textContent = "non riuscito";
-        });
-      });
-
-      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
-        stato.luogo = cLuo.value.trim() || null;
-        if (!stato.territorio_cod) stato.territorio_nome = null;
-        aggiorna(); chiudi();
-      });
-      setTimeout(function () { cCom.focus(); }, 120);
-    }
-
-    if (nome === "chi") {
-      foglio.innerHTML =
-        '<div class="capo"><b>Con chi</b>' +
-        '<button type="button" data-chiudi>Chiudi</button></div>' +
-        '<div class="campo-cerca">' +
-        '<input type="text" data-nome placeholder="un nome, e invio" ' +
-        'autocomplete="off">' +
-        '<div class="proposte" data-proposte></div></div>' +
-        '<div class="nomi" data-nomi></div>' +
-        '<p class="nota">Chi era con te. Quando entra, l\u2019orma ' +
-        'diventa anche sua.</p>' +
-        '<button type="button" class="fatto" data-fatto>Fatto</button>';
-
-      var campo3 = foglio.querySelector("[data-nome]");
-      var elenco = foglio.querySelector("[data-nomi]");
-
-      function dipingi() {
-        elenco.innerHTML = "";
-        stato.persone.forEach(function (n, i) {
-          var s = document.createElement("span");
-          s.innerHTML = n + ' <i data-togli="' + i + '">&times;</i>';
-          elenco.appendChild(s);
-        });
-        elenco.querySelectorAll("[data-togli]").forEach(function (x) {
-          x.addEventListener("click", function () {
-            stato.persone.splice(parseInt(x.dataset.togli, 10), 1);
-            dipingi();
-          });
-        });
-      }
-      dipingi();
-
-      var prop3 = foglio.querySelector("[data-proposte]");
-      var attesa3 = null;
-      campo3.addEventListener("input", function () {
-        clearTimeout(attesa3);
-        var q = campo3.value.trim();
-        if (q.length < 2) { prop3.innerHTML = ""; return; }
-        attesa3 = setTimeout(function () {
-          cercaNome(q, prop3, campo3, dipingi);
-        }, 220);
-      });
-
-      campo3.addEventListener("keydown", function (e) {
-        if (e.key !== "Enter") return;
-        e.preventDefault();
-        var n = campo3.value.trim();
-        if (n && stato.persone.indexOf(n) < 0) stato.persone.push(n);
-        campo3.value = "";
-        prop3.innerHTML = "";
-        dipingi();
-      });
-      foglio.querySelector("[data-fatto]").addEventListener("click", function () {
-        var n = campo3.value.trim();
-        if (n && stato.persone.indexOf(n) < 0) stato.persone.push(n);
-        aggiorna(); chiudi();
-      });
-      setTimeout(function () { campo3.focus(); }, 120);
-    }
-
-    foglio.querySelector("[data-chiudi]").addEventListener("click", chiudi);
-    velo.classList.add("on");
-  }
-
-  function chiudi() { velo.classList.remove("on"); }
-
-  velo.addEventListener("click", function (e) {
-    if (e.target === velo) chiudi();
-  });
-
-  /* ── i tre tasti ── */
-  R.querySelectorAll(".v").forEach(function (t) {
-    var nome = t.dataset.v;
-    t.addEventListener("click", function (e) {
-      /* la × svuota invece di aprire */
-      if (e.target.closest("[data-via]")) {
-        if (nome === "quando") stato.accaduto_il = null;
-        if (nome === "dove") { stato.luogo = null;
-          stato.territorio_cod = null; stato.territorio_nome = null;
-          stato.luogo_lat = null; stato.luogo_lon = null; }
-        if (nome === "chi") stato.persone = [];
-        aggiorna();
-        return;
-      }
-      apri(nome);
-    });
-  });
-
-  aggiorna();
-
-  window.SpazioVivo = window.SpazioVivo || {};
-  window.SpazioVivo.valori = function (pieno) {
-    R.classList.toggle("vivi", !!pieno);
-  };
-  window.SpazioVivo.valoriLeggi = function () {
-    return {
-      accaduto_il: stato.accaduto_il || oggi(),
-      luogo: stato.luogo,
-      territorio_cod: stato.territorio_cod,
-      luogo_lat: stato.luogo_lat,
-      luogo_lon: stato.luogo_lon,
-      persone: stato.persone.slice()
-    };
-  };
-  window.SpazioVivo.valoriPulisci = function () {
-    stato = { accaduto_il: null, luogo: null, territorio_cod: null,
-              territorio_nome: null,
-              luogo_lat: null, luogo_lon: null, persone: [] };
-    aggiorna();
-  };
-})();
-</script>
-
-          <div class="mg-attesa" id="mg-attesa" hidden></div>
-      <!-- ⭐ TOCCATO NEL GUSCIO ㉕ — SOTTO IL CAMPO NON C'È PIÙ NIENTE.
-           La riga degli strumenti è tolta, non nascosta: a riposo il Megafono
-           è il campo e basta, e scrivendo compaiono soltanto i quattro segni,
-           i tre valori — oggi, dove, con chi — e la freccia che manda.
-           I quattro tasti che stavano qui, e dove sono finiti:
-             · la lente         non serve un altro posto: la ricerca ha già il
-                                suo campo dentro «Cosa incontro», .campo-cerca
-             · INTEGRATOR       non aveva gestore e non portava a nulla — la
-                                pagina la sta ancora facendo Design. Esce di
-                                qui e per ora non finisce da nessuna parte
-             · «le cose aperte» il foglio #v-aperte resta scritto e funziona,
-                                ma da oggi non ha più una maniglia
-             · i talenti        talentiApri() e fm-talenti.js restano interi,
-                                ma da oggi non hanno più una maniglia
-           ⛔ Gli ultimi due sono porte vere che perdono il pomello: sta
-              scritto in conversazione, e la strada per rimetterle è una riga
-              per ciascuna nella tavola `stanze`, con le parole che avevano
-              già addosso — «Le cose aperte» e «talenti».
-           ⚠️ `.riga-strumenti` resta nello stile: la usa anche altrove. -->
+      <!-- ⭐ TOCCATO NEL GUSCIO ㊶ — IL MEGAFONO NUOVO, dal modello di Gab
+           megafono-innesto.html · 15.951 byte · 082a37465a0ef33eb3ed9b9c39df1c30.
+           Sostituisce la riga vecchia, non la affianca. Un quadrante solo,
+           incollato in basso: il campo si alza man mano che aumentano le
+           frasi, i simboli sotto stanno fermi, e quello che si apre sale
+           SOPRA in .mg-pan — la pagina non viene mai schiacciata.
+           · il tondino dice che cosa è, e i tipi sono cinque, karma yoga
+             per primo: karma yoga · obiettivo · contatto · spesa · racconto.
+             `n` è quello che si legge, `d` quello che si scrive nella tavola.
+           · niente tasto «+», niente scelta di visibilità o destinazione:
+             quando detti stai catturando, non organizzando. L'orma nasce
+             `solo_me` e va da sé in «Da collegare».
+           ⛔ Il contenitore di prova del modello NON è stato copiato: la
+              pagina vera è il #centro qui sopra. -->
+      <div class="mg-nato" id="mg-nato"></div>
+      <div class="mg-pan" id="mg-pan"></div>
+      <div class="mg-box">
+        <textarea id="campo" rows="1" placeholder="scrivi la tua orma"></textarea>
+        <div class="mg-sotto">
+          <span class="mg-tipo" id="mg-tipo">karma yoga</span>
+          <button type="button" class="mg-vsg" data-p="quando" title="oggi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button>
+          <button type="button" class="mg-vsg" data-p="dove" title="dove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg></button>
+          <button type="button" class="mg-vsg" data-p="chi" title="con chi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 20c0-3.3 2.7-5.4 6-5.4s6 2.1 6 5.4"/><path d="M16 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.9c2 .7 3.5 2.5 3.5 5.1"/></svg></button>
+          <span class="mg-vuoto"></span>
+          <button type="button" class="mg-gf" id="mg-gf" title="Allegato">&#128206;&#xFE0E;</button>
+          <input type="file" id="mg-file" multiple hidden>
+          <button type="button" class="mg-inv" id="mg-inv" title="Manda">&#8594;</button>
         </div>
       </div>
     </div>
@@ -3659,7 +3029,7 @@
         "un posto, a un'ora, e qualcuno lo tiene",
       "\u2B50 In casa si vede solo quello che struttura il nucleo. Lo " +
         "specifico sta nel calendario del vicinato e sulla mappa",
-      "Un evento lo mette chi fa karma yoga, o chi paga la quota"
+      "Un evento nel calendario del vicinato lo mette chi ha ricevuto l'ok dal nucleo del proprio micelio. Il vaglio vale in tutto l'ecosistema, non solo dove è stato dato"
     ],
     puo:[
       "legge: chiunque, se l'evento \u00E8 aperto e ha un posto vero",
@@ -3974,7 +3344,7 @@
 
   /* ⭐ Le 67 regole, portate qui da le-regole.html il 28 agosto 2026.
      ⛔ Quel file non esiste più: la specifica è il contenitore. */
-  var REGOLE = [["Cosa puoi fare, e cosa ricevi", "--nexus", [["<b>Da fuori si vedono solo le orme che stanno sulla mappa.</b>", "Un evento, una lezione, una festa, una connessione fra vicinati: dicono che qualcosa sta accadendo, e portano alle stanze. &laquo;La mia orma&raquo; e &laquo;Squadre&raquo; chiedono di entrare, sempre.", ["canone", "28 agosto"]], ["<b>Chi si riconosce sa subito cosa pu&ograve; fare.</b>", "Si sceglie da &laquo;Simboli dell&rsquo;esperienza&raquo;, e da l&igrave; la comunit&agrave; risponde: cosa puoi fare, e cosa possiamo fare per te. Poi i simboli restano dentro la propria orma, e da quelli si capisce come funziona.", ["canone", "27 agosto"]], ["<b>Il karma yoga cambia forma per ognuno: si paga con quello che si ha.</b>", "Chi produce porta informazione, chi ospita apre la porta, chi custodisce si prende cura, chi viaggia risponde ai bisogni dei luoghi che lo ospitano.", ["canone", "27 agosto"]], ["<b>Il task &egrave; il bisogno del gruppo.</b>", "Non una lista che qualcuno compila: le cose da fare nascono dai gruppi, e chi partecipa ne prende una.", ["canone", "27 agosto"]], ["<b>Almeno un&rsquo;orma a settimana, in un gruppo.</b>", "&Egrave; quello che tiene vivi i propri team. Il karma yoga parte dal momento in cui si comincia a fare, non dall&rsquo;iscrizione. Lo vede il gruppo, che si autoregola.", ["canone", "27 agosto"]], ["<b>Il compito si chiude pubblicando un racconto o una testimonianza.</b>", "Non un tasto &laquo;fatto&raquo;: la cosa fatta che diventa un&rsquo;orma. La settimana riprende dal nuovo compito e dalla nuova pubblicazione.", ["canone", "27 agosto"]], ["<b>Il conto si azzera ogni settimana, e non si accumula.</b>", "Otto compiti in una settimana non coprono i due mesi dopo. Chi comincia luned&igrave; e finisce luned&igrave; ha l&rsquo;accesso per tutta la settimana. Il pagamento invece resta mensile.", ["canone", "27 agosto"]], ["<b>Il servizio vale pi&ugrave; dei ventisei euro.</b>", "Chi paga compra uno strumento; chi serve fa un&rsquo;esperienza. Sono due cose diverse che si trovano nello stesso posto.", ["canone", "27 agosto"]], ["<b>I team si addormentano, non si chiudono.</b>", "Chi smette di partecipare li ritrova dove li aveva lasciati: restano visibili, ma dentro non si scrive pi&ugrave;. Si risvegliano partecipando a un bisogno &mdash; nessuno deve chiedere il permesso di tornare.", ["canone", "27 agosto"]], ["<b>La partecipazione tiene aperti i team e tiene visibili sulla mappa.</b>", "Chi partecipa figura fra i segni della mappa. Chi smette non figura pi&ugrave; &mdash; o non &egrave; pi&ugrave; connettibile: questa parte va guardata meglio.", ["da guardare", "27 agosto"]], ["<b>Il team del vicinato &egrave; strutturale: non ha un costo.</b>", "Chi ci entra per fare un&rsquo;esperienza o una formazione non paga. Deve per&ograve; avere un conto ed essere conosciuto: non si pubblica un operatore qualunque.", ["canone", "27 agosto"]], ["<b>&Egrave; il team del vicinato a scrivere quale servizio sta dando una persona, e a segnarne lo stato d&rsquo;avanzamento.</b>", "Chi serve non tiene il conto delle proprie ore: lo vede chi gli sta accanto. Da quello si sa che il servizio c&rsquo;&egrave;.", ["canone", "27 agosto"]], ["<b>I gruppi si autogestiscono.</b>", "Le decisioni che riguardano un gruppo le prende il gruppo, non il nucleo.", ["canone", "27 agosto"]], ["<b>Chi non &egrave; autorizzato non pubblica: prepara.</b>", "Lo studente, il viaggiatore, il praticante possono allestire e modificare. Prodotti, insegnamenti, trattamenti e ricerche li pubblica sempre un account autorizzato.", ["canone", "27 agosto"]], ["<b>Il vaglio guarda anche i luoghi e le persone, non solo i prodotti.</b>", "Un luogo sacro lo vagliano gli assistenti spirituali. Chi ospita non pu&ograve; mettere in calendario un operatore che non &egrave; passato dal vaglio: ospitare qualcuno &egrave; metterci la faccia.", ["canone", "27 agosto"]], ["<b>Sulla mappa vanno solo i sette segni della scala dell&rsquo;orma.</b>", "Orma, connessione, scambio, vicinato, ritmo, incontro, tempio. I racconti e le testimonianze non ci vanno: la mappa &egrave; la sintesi visiva di ci&ograve; che si &egrave; mosso nel campo, e che nel tempo ha dato spessore al territorio.", ["canone", "27 agosto"]]]], ["Chi entra e cosa vede", "--nexus", [["<b>Un evento che porta il nome di FelicitasMundi &egrave; vegetariano.</b>", "Vale per il tour, per il praticantato, e per le cose fatte in un vicinato che si presentano come &laquo;questo &egrave; un evento FelicitasMundi&raquo;. Il vino e la birra ai pasti si accolgono, perch&eacute; in Italia sono cultura e abitudine; i superalcolici no. E non si promuovono grandi eventi dove i costi si coprono vendendo alcol e carne.", ["canone", "29 agosto"]], ["<b>Nei loro eventi, i vicinati e i team fanno le loro regole.</b>", "La linea qui sopra vale per chi porta il nome di FelicitasMundi. Dentro casa loro decidono loro: nel circuito c&rsquo;&egrave; gente che organizza eventi diversi, e non spetta al nucleo dettare come. Il canone lo dice gi&agrave;: i gruppi si autogestiscono, e il marchio non si compra &mdash; si passa.", ["canone", "29 agosto"]], ["<b>Quello che &egrave; scritto fuori vincola.</b>", "Se un evento &egrave; annunciato da un&rsquo;ora a un&rsquo;altra, quegli orari si tengono. Se poi chi partecipa decide insieme di fare diversamente, &egrave; cosa loro: ma chi legge l&rsquo;annuncio deve trovare quello che gli &egrave; stato detto.", ["canone", "29 agosto"]], ["<b>Nella griglia stanno insieme il nome preciso e il nome largo.</b>", "In Terra c&rsquo;erano fabbro, orafo e vasaio accanto a &laquo;Sono un artigiano&raquo;. Ma il 29 agosto l&rsquo;artigiano &egrave; uscito: il suo simbolo era un vaso, e accanto al vasaio faceva confusione. Quindi il nome largo non vale sempre: <b>dove i mestieri sono riconoscibili si nominano uno per uno</b>, e il nome largo resta solo dove serve davvero, come &laquo;Produco alimenti o rimedi&raquo;. E ognuno pu&ograve; prendere pi&ugrave; figure.", ["canone", "29 agosto"]], ["<b>Nel riquadro del tempo, in casa, si vedono solo le cose strutturate dal nucleo.</b>", "Gli eventi che mette una persona o una squadra &mdash; una festa, una lezione, un mercato &mdash; si vedono nel calendario del vicinato e sulla mappa, non in casa. Chi tocca Livorno sulla mappa vede gli eventi di quella zona, anche senza essere entrato.", ["canone", "29 agosto"]], ["<b>Un evento nel calendario del vicinato lo mette chi fa karma yoga, o chi paga la quota.</b>", "Non chiunque. Chi organizza usa il proprio team per segnare quella festa, ed &egrave; gi&agrave; scritto nelle figure.", ["canone", "29 agosto"]], ["<b>Il pagamento arriva per bonifico o sulla carta di Gab.</b>", "Niente Stripe, per ora. Fino a ottobre l&rsquo;azienda col codice ATECO non &egrave; attiva, e si parte con la base di entrate fuori partita IVA.", ["canone", "28 agosto"]], ["<b>Per fare acquisti o prenotare una festa o una lezione bisogna attivare l&rsquo;account.</b>", "Il pagamento della quota parte solo dal momento in cui uno non accetta gli incarichi del karma yoga e desidera usufruire dei servizi.", ["canone", "28 agosto"]], ["<b>Guardare è libero.</b> Per pubblicare, connettere o scambiare: prima paghi, o dai quattro ore alla comunità.", "Non è un muro commerciale: è un filtro. Chi passa a insultare non dà quattro ore di lavoro.", ["canone", "non ancora"]], ["<b>Con l&rsquo;account si possono acquistare le lezioni a pagamento</b> e riceverne il codice.", "Comprare non è partecipare: anche una lezione è una cosa che si acquista. Senza account non si può nemmeno comprare.", ["canone", "non ancora"]], ["<b>Il karma yoga paga la piattaforma, non il tempo di chi accompagna.</b> Quattro ore al mese valgono i 26 €. Gli incontri di ogni fase lunare si pagano in denaro, sempre.", "Se il tempo di chi guida si potesse comprare con le ore, bisognerebbe esserci per chiunque ne accumuli abbastanza.", ["canone", "nelle condizioni"]], ["<b>Gli incontri di ogni fase lunare: 50 € l'uno, 100 € al mese.</b> Sei lune 510 €, un anno 900 € — pagati subito, non a rate.", "A rate è uguale al mensile, ma con dodici scadenze da inseguire — e chi smette a metà lascia un debito da rincorrere.", ["canone", "non ancora"]], ["<b>Chi conduce non è un counselor né un terapeuta</b>, e non esercita professioni regolamentate: propone l'uso di strumenti propri.", "La scrittura, il metodo e l'impianto di FelicitasMundi sono opera dell'autore.", ["nelle condizioni"]], ["<b>Servire per almeno quattro ore dà accesso al praticantato e agli scambi.</b> Supportare in un bisogno pubblico è già servizio.", "Non è un pagamento in ore: è entrare facendo. E chi passa a insultare non prende un bisogno e non lo porta a termine.", ["canone", "non ancora"]], ["<b>I bisogni aperti si vedono anche da fuori</b>, prima di entrare.", "Altrimenti la porta non si vede: è la prima cosa che chi arriva può fare.", ["canone", "non ancora"]], ["<b>Chi non ha dato i due consensi non entra</b> in nessuna voce di Integrator.", "Dati e uso, con la data e la versione dei documenti.", ["nel database", "nelle condizioni"]], ["<b>Un consenso dato non si toglie</b> svuotando un campo: si revoca cancellando l&rsquo;account.", "Il database rifiuta chi ci prova.", ["nel database", "nelle condizioni"]]]], ["Chi vede cosa", "--terra", [["<b>I dati interni dei team sono privati.</b>", "Squadre, classi, aziende, associazioni, cooperative. Se un team smette di partecipare i dati restano registrati sul database: non si cancella ogni volta che qualcuno non partecipa pi&ugrave;. Si prende in considerazione che dopo cinque anni quei dati vengano cancellati.", ["canone", "28 agosto"]], ["<b>Il nucleo non entra nelle orme private o dei team.</b>", "Vede la quantit&agrave; di spazio consumato, il numero di squadre, quante orme madri e figlie sono associate. Non vede i dettagli, se non ci&ograve; che viene pubblicato. Pu&ograve; essere inserito un tasto di assistenza, con cui la squadra pu&ograve; dialogare col nucleo, che vedr&agrave; solo il contenuto della chat.", ["canone", "28 agosto"]], ["<b>Chi ha la chiave d&rsquo;amministratore pu&ograve; vedere i dati del database.</b>", "", ["canone", "28 agosto"]], ["<b>Un&rsquo;orma che nomina un&rsquo;altra persona resta privata finch&eacute; quella persona non conferma.</b> Il legame si propone, non si impone: chi lo riceve apre l&rsquo;invito e decide. Finch&eacute; non decide, il legame esiste solo dalla parte di chi l&rsquo;ha segnato, e non compare da nessun&rsquo;altra.", "Vale per le fotografie in cui compaiono altri e per ogni collegamento fra orme di persone diverse. Il consenso arriva quando quell&rsquo;orma viene connessa.", ["canone", "non ancora"]], ["<b>Il nucleo vede il metadato, non il contenuto.</b> Che una squadra esiste, quante persone, quanto lavoro si muove, e ciò che pubblica.", "Nessuno userebbe uno strumento dove il fornitore legge dentro.", ["nella privacy", "non ancora"]], ["<b>La chiave d&rsquo;amministratore non si dà</b> — nemmeno per una lettura.", "Se la prima volta che serve la si dà, la promessa nella privacy non vale niente.", ["canone", "in CLAUDE.md"]]]], ["I talenti", "--acqua", [["<b>I talenti sono crediti interni alla comunit&agrave;.</b>", "Attualmente non convertibili in euro. Un giorno lo saranno.", ["canone", "28 agosto"]], ["<b>Un movimento confermato non si modifica e non si cancella.</b> Un errore si corregge con un movimento contrario.", "È una garanzia per tutti: la storia resta leggibile.", ["nelle condizioni", "non ancora"]], ["<b>Nessuno si attribuisce talenti da solo.</b> Ogni movimento ha due gesti, di due persone diverse.", "", ["nel database", "nelle condizioni"]], ["<b>Non si va sotto zero.</b>", "", ["nel database"]], ["<b>Non tutto si paga in talenti.</b> Mettere le orme, invitare persone, unire chi si conosce: è il praticantato, non lavoro.", "Se ogni gesto paga, non è più una comunità: è un sistema a punti.", ["canone"]]]], ["Vendere e vagliare", "--acqua", [["<b>Il colloquio viene prima del pagamento.</b>", "", ["canone"]], ["<b>Il vaglio è un riconoscimento di coerenza, non una certificazione.</b> FelicitasMundi non è un ente di certificazione e non ne rilascia.", "Dire «certifichiamo» senza esserlo è contestabile. E se un cliente lo scambia per una certificazione, la responsabilità torna a noi.", ["nelle condizioni"]], ["<b>L'analisi non è la prova: è uno degli sguardi.</b> Insieme al colloquio, a chi lo fa, a dove sta, a come lavora.", "Trent'anni di certificazioni hanno insegnato a Vittorino che il bollino è una formalità pagata. Il vaglio nasce per non essere quello.", ["nelle condizioni"]], ["<b>Chi decide se un prodotto entra non guadagna dalla sua vendita.</b> Il vaglio si paga a campione.", "Se chi vaglia prendesse sul venduto, avrebbe interesse a far passare tutto — e il vaglio è ciò che ci distingue.", ["canone", "non ancora"]], ["<b>L&rsquo;erboristeria resta chiusa</b> finché non c&rsquo;è un responsabile erborista.", "Non è una formalità: è la condizione per aprire lo scaffale.", ["canone"]]]], ["Quello che si pubblica", "--aria", [["<b>I campi necessari:</b> nome, descrizione, foto, e a quale luogo appartiene. Per chi vende: prezzo e disponibilità. Per un libro: autore ed editore.", "Un prodotto senza foto e senza descrizione esiste, ma per un motore di ricerca no — e non lo compra nessuno.", ["canone", "non ancora"]], ["<b>La macchina misura, la persona giudica.</b> Sfocata, troppo piccola, storta: si blocca. «Asettica», «non c&rsquo;entra»: si segnala al vaglio.", "", ["canone", "non ancora"]], ["<b>Si guardano solo le foto pubbliche</b>, e quelle che qualcuno segnala. Mai il resto.", "", ["nella privacy"]], ["<b>Le foto di persone riconoscibili o di minori</b> non si pubblicano senza liberatoria firmata.", "È una regola ferma della piattaforma.", ["nella privacy", "nelle condizioni"]], ["<b>Un&rsquo;orma pubblica collegata a un luogo lo mostra sulla mappa.</b> Chi la rende pubblica lo sa.", "Una serie di orme nel tempo racconta dove sei stato e quando.", ["nella privacy"]]]], ["Insegnare e pubblicare", "--etere", [["<b>Pubblicare vuol dire far uscire una cosa DENTRO la piattaforma.</b>", "Nel calendario, nell&rsquo;Emporio, nella scuola: quello lo fa solo chi &egrave; autorizzato.", ["canone", "28 agosto"]], ["<b>Stampare &egrave; un servizio, e lo pu&ograve; usare chiunque.</b>", "Con la propria grafica, oppure chiedendo il nostro servizio, che ha un costo. Portare fuori un proprio contenuto stampandolo con FelicitasMundi &egrave; un altro discorso: non &egrave; pubblicare.", ["canone", "28 agosto"]], ["<b>I servizi di Edizione legati alla creazione dell&rsquo;opera sono trascrizione, editing e impaginazione.</b>", "", ["canone", "28 agosto"]], ["<b>&Egrave; l&rsquo;insegnante ad accettare l&rsquo;alunno a insegnamento iniziato.</b>", "Nel caso, potr&agrave; iscriversi alla lezione successiva o acquistare la lezione sull&rsquo;Emporio.", ["canone", "28 agosto"]], ["<b>70% all&rsquo;autore, 30% a FelicitasMundi</b> — lo stesso numero per la diretta e per la registrazione.", "Un numero solo si spiega in una riga e si ricorda: vale più della precisione.", ["nelle condizioni"]], ["<b>Senza codice non si entra</b> a una lezione. Non si entra e poi si chiede il codice.", "", ["nelle condizioni", "non ancora"]], ["<b>La registrazione resta all&rsquo;autore.</b> Se lascia la piattaforma, se la porta via.", "", ["nelle condizioni"]], ["<b>Un libro nato da lezioni resta dell&rsquo;autore.</b> Il lavoro editoriale non ce ne dà la proprietà.", "Le condizioni si concordano per iscritto prima di cominciare.", ["nelle condizioni"]]]], ["La radio", "--aria", [["<b>La diretta è libera per chiunque. L&rsquo;archivio no</b>: per riascoltare serve il karma yoga o il praticantato.", "", ["canone", "non ancora"]], ["<b>I canti restano accessibili sempre.</b>", "", ["canone"]], ["<b>La registrazione vuole il consenso.</b> Chi entra sa prima che si registra, e la puntata esce solo se chi ha parlato dice sì.", "", ["nella privacy", "non ancora"]], ["<b>I ruoli durano una diretta</b>: regia, ospite, in ascolto, co-regia. Chi ha la consolle comanda.", "", ["canone", "non ancora"]], ["<b>Le due dirette del ciclo lunare sono un servizio</b>, non un dono. Hanno un orario, e vanno tenute anche con due persone.", "Se fossero un dono, il praticantato non avrebbe più un contenuto.", ["canone"]]]], ["Come si costruisce", "--svil", [["<b>Le ricorrenze e gli eventi sono due cose diverse, e stanno in due posti.</b>", "Una ricorrenza cade ogni anno e non ha un luogo: Janmashti&agrave;, un santo, una festa di FelicitasMundi. Un evento invece si fa in un posto, a un&rsquo;ora, e qualcuno lo tiene. Le ricorrenze stanno in <code>feste_felicitas</code> e <code>feste_indiane</code>; gli eventi in <code>eventi</code>, con data, ora, luogo e chi lo organizza.", ["canone", "29 agosto"]], ["<b>La riga dei bisogni compare in tre posti, ma il conto si fa una volta sola.</b>", "La riga che dice quanti bisogni ci sono \"per te\" sta in cima a &laquo;La mia orma&raquo;, dentro una stanza e in fondo a una squadra. Se ognuna delle tre chiedesse al database quanti sono, la stessa domanda partirebbe tre volte per la stessa persona &mdash; e con duemila persone dentro si blocca. Quindi il conto si fa quando la persona entra e resta in memoria: la prima riga chiede, le altre due leggono quello che &egrave; gi&agrave; arrivato. Si ricalcola solo quando cambia qualcosa: si apre un bisogno, se ne prende uno, si entra in una squadra. La stessa cosa vale per qualunque altro pezzo che compaia in pi&ugrave; posti leggendo lo stesso dato.", ["canone", "29 agosto"]], ["<b>Si chiude quello che &egrave; aperto prima di aprire altro.</b>", "Un cantiere per volta. Un comando dato mentre un altro &egrave; a met&agrave; genera caos, e serve chiarezza.", ["canone", "28 agosto"]], ["<b>Prima il ciclo vivo, poi le persone dentro. Le cinque stanze dopo.</b>", "Le stanze disegnate oggi nascerebbero su come si immagina che verranno usate. Costruite dopo che qualcuno ha fatto orme vere, nascono su come sono usate davvero.", ["canone", "28 agosto"]], ["<b>Un comando &egrave; tutto quello che arriva.</b>", "Quello che deve sapere Code sta dentro il comando. Fuori resta solo quello che riguarda Gab, e in una riga: lui copia e incolla, e ci&ograve; che sta fuori dal riquadro non arriva a nessuno.", ["canone", "28 agosto"]], ["<b>Niente dati inventati nel codice, nemmeno come ripiego.</b>", "Se un campo non arriva, resta vuoto. Un valore plausibile messo al posto di un dato mancante viene preso per vero, e decide cose che non dovrebbe decidere.", ["canone", "28 agosto"]], ["<b>Gli errori vanno in console, non a schermo.</b>", "Chi legge la pagina non deve vedere un errore che non pu&ograve; risolvere. Chi costruisce s&igrave;.", ["canone", "28 agosto"]], ["<b>Le feste della comunit&agrave; le stabilisce il nucleo.</b>", "Si estraggono dal calendario, e valgono per tutti. Le feste dei santi e quelle della tradizione indiana restano quelle che sono; queste sono le nostre.", ["canone", "26 agosto"]], ["<b>I file nuovi li scrive la penna, le modifiche dentro file esistenti le fa Code.</b>", "Code vede il file vivo per intero; la penna no.", ["in CLAUDE.md"]], ["<b>Mai sostituzioni automatiche larghe</b> su un file esistente: ancorare a una stringa esatta.", "Una sostituzione su «Ultimo aggiornamento» si è mangiata il riferimento al Regolamento UE.", ["in CLAUDE.md"]], ["<b>Prima di un delete o un update senza where: fermarsi e chiedere.</b>", "Una riga cancellata per sbaglio non torna.", ["in CLAUDE.md"]], ["<b>Le copie di sicurezza in COPIE/, fuori da git.</b> Le parole d&rsquo;ordine non si scrivono nei file né si chiedono in chat.", "", ["in CLAUDE.md", "non ancora"]], ["<b>Le pagine legali vivono solo nel magazzino pubblico</b>, non nella cartella di lavoro.", "Due copie in due posti, con quella vecchia dove si pubblica, è come si perde il lavoro.", ["canone"]], ["<b>Ogni file consegnato porta byte e MD5</b>, nello stesso turno.", "", ["canone"]], ["<b>Nessun dato scritto a mano nelle pagine</b>: tutto dal database. E ogni pagina deve reggere il vuoto.", "", ["canone"]]]], ["Le parole", "--nexus", [["<b>Sono esclusi i termini militari o commerciali ordinari.</b>", "Non si parla di capo reparto n&eacute; di reparti.", ["canone", "28 agosto"]], ["<b>FelicitasMundi non è «un sito»</b>: è piattaforma, ecosistema, esperienza oltre la soglia.", "", ["canone"]], ["<b>Mai cura, terapia, diagnosi</b> o promesse cliniche.", "", ["canone"]], ["<b>Verbatim o segnaposto visibile.</b> Mai inventare prosa in nome di Gab.", "", ["canone"]], ["<b>Mai «non è X, è Y»</b>: affermare sempre in positivo.", "", ["canone"]], ["<b>Nei file consegnati non si parla a Gab.</b> Quei file vanno ai clienti.", "", ["canone"]]]]];
+  var REGOLE = [["Cosa puoi fare, e cosa ricevi", "--nexus", [["<b>Da fuori si vedono solo le orme che stanno sulla mappa.</b>", "Un evento, una lezione, una festa, una connessione fra vicinati: dicono che qualcosa sta accadendo, e portano alle stanze. &laquo;La mia orma&raquo; e &laquo;Squadre&raquo; chiedono di entrare, sempre.", ["canone", "28 agosto"]], ["<b>Chi si riconosce sa subito cosa pu&ograve; fare.</b>", "Si sceglie da &laquo;Simboli dell&rsquo;esperienza&raquo;, e da l&igrave; la comunit&agrave; risponde: cosa puoi fare, e cosa possiamo fare per te. Poi i simboli restano dentro la propria orma, e da quelli si capisce come funziona.", ["canone", "27 agosto"]], ["<b>Il karma yoga cambia forma per ognuno: si paga con quello che si ha.</b>", "Chi produce porta informazione, chi ospita apre la porta, chi custodisce si prende cura, chi viaggia risponde ai bisogni dei luoghi che lo ospitano.", ["canone", "27 agosto"]], ["<b>Il task &egrave; il bisogno del gruppo.</b>", "Non una lista che qualcuno compila: le cose da fare nascono dai gruppi, e chi partecipa ne prende una.", ["canone", "27 agosto"]], ["<b>Almeno un&rsquo;orma a settimana, in un gruppo.</b>", "&Egrave; quello che tiene vivi i propri team. Il karma yoga parte dal momento in cui si comincia a fare, non dall&rsquo;iscrizione. Lo vede il gruppo, che si autoregola.", ["canone", "27 agosto"]], ["<b>Il compito si chiude pubblicando un racconto o una testimonianza.</b>", "Non un tasto &laquo;fatto&raquo;: la cosa fatta che diventa un&rsquo;orma. La settimana riprende dal nuovo compito e dalla nuova pubblicazione.", ["canone", "27 agosto"]], ["<b>Il conto si azzera ogni settimana, e non si accumula.</b>", "Otto compiti in una settimana non coprono i due mesi dopo. Chi comincia luned&igrave; e finisce luned&igrave; ha l&rsquo;accesso per tutta la settimana. Il pagamento invece resta mensile.", ["canone", "27 agosto"]], ["<b>Il servizio vale pi&ugrave; dei ventisei euro.</b>", "Chi paga compra uno strumento; chi serve fa un&rsquo;esperienza. Sono due cose diverse che si trovano nello stesso posto.", ["canone", "27 agosto"]], ["<b>I team si addormentano, non si chiudono.</b>", "Chi smette di partecipare li ritrova dove li aveva lasciati: restano visibili, ma dentro non si scrive pi&ugrave;. Si risvegliano partecipando a un bisogno &mdash; nessuno deve chiedere il permesso di tornare.", ["canone", "27 agosto"]], ["<b>La partecipazione tiene aperti i team e tiene visibili sulla mappa.</b>", "Chi partecipa figura fra i segni della mappa. Chi smette non figura pi&ugrave; &mdash; o non &egrave; pi&ugrave; connettibile: questa parte va guardata meglio.", ["da guardare", "27 agosto"]], ["<b>Il team del vicinato &egrave; strutturale: non ha un costo.</b>", "Chi ci entra per fare un&rsquo;esperienza o una formazione non paga. Deve per&ograve; avere un conto ed essere conosciuto: non si pubblica un operatore qualunque.", ["canone", "27 agosto"]], ["<b>&Egrave; il team del vicinato a scrivere quale servizio sta dando una persona, e a segnarne lo stato d&rsquo;avanzamento.</b>", "Chi serve non tiene il conto delle proprie ore: lo vede chi gli sta accanto. Da quello si sa che il servizio c&rsquo;&egrave;.", ["canone", "27 agosto"]], ["<b>I gruppi si autogestiscono.</b>", "Le decisioni che riguardano un gruppo le prende il gruppo, non il nucleo.", ["canone", "27 agosto"]], ["<b>Chi non &egrave; autorizzato non pubblica: prepara.</b>", "Lo studente, il viaggiatore, il praticante possono allestire e modificare. Prodotti, insegnamenti, trattamenti e ricerche li pubblica sempre un account autorizzato.", ["canone", "27 agosto"]], ["<b>Il vaglio guarda anche i luoghi e le persone, non solo i prodotti.</b>", "Un luogo sacro lo vagliano gli assistenti spirituali. Chi ospita non pu&ograve; mettere in calendario un operatore che non &egrave; passato dal vaglio: ospitare qualcuno &egrave; metterci la faccia.", ["canone", "27 agosto"]], ["<b>Sulla mappa vanno solo i sette segni della scala dell&rsquo;orma.</b>", "Orma, connessione, scambio, vicinato, ritmo, incontro, tempio. I racconti e le testimonianze non ci vanno: la mappa &egrave; la sintesi visiva di ci&ograve; che si &egrave; mosso nel campo, e che nel tempo ha dato spessore al territorio.", ["canone", "27 agosto"]]]], ["Chi entra e cosa vede", "--nexus", [["<b>Un evento che porta il nome di FelicitasMundi &egrave; vegetariano.</b>", "Vale per il tour, per il praticantato, e per le cose fatte in un vicinato che si presentano come &laquo;questo &egrave; un evento FelicitasMundi&raquo;. Il vino e la birra ai pasti si accolgono, perch&eacute; in Italia sono cultura e abitudine; i superalcolici no. E non si promuovono grandi eventi dove i costi si coprono vendendo alcol e carne.", ["canone", "29 agosto"]], ["<b>Nei loro eventi, i vicinati e i team fanno le loro regole.</b>", "La linea qui sopra vale per chi porta il nome di FelicitasMundi. Dentro casa loro decidono loro: nel circuito c&rsquo;&egrave; gente che organizza eventi diversi, e non spetta al nucleo dettare come. Il canone lo dice gi&agrave;: i gruppi si autogestiscono, e il marchio non si compra &mdash; si passa.", ["canone", "29 agosto"]], ["<b>Quello che &egrave; scritto fuori vincola.</b>", "Se un evento &egrave; annunciato da un&rsquo;ora a un&rsquo;altra, quegli orari si tengono. Se poi chi partecipa decide insieme di fare diversamente, &egrave; cosa loro: ma chi legge l&rsquo;annuncio deve trovare quello che gli &egrave; stato detto.", ["canone", "29 agosto"]], ["<b>Nella griglia stanno insieme il nome preciso e il nome largo.</b>", "In Terra c&rsquo;erano fabbro, orafo e vasaio accanto a &laquo;Sono un artigiano&raquo;. Ma il 29 agosto l&rsquo;artigiano &egrave; uscito: il suo simbolo era un vaso, e accanto al vasaio faceva confusione. Quindi il nome largo non vale sempre: <b>dove i mestieri sono riconoscibili si nominano uno per uno</b>, e il nome largo resta solo dove serve davvero, come &laquo;Produco alimenti o rimedi&raquo;. E ognuno pu&ograve; prendere pi&ugrave; figure.", ["canone", "29 agosto"]], ["<b>Nel riquadro del tempo, in casa, si vedono solo le cose strutturate dal nucleo.</b>", "Gli eventi che mette una persona o una squadra &mdash; una festa, una lezione, un mercato &mdash; si vedono nel calendario del vicinato e sulla mappa, non in casa. Chi tocca Livorno sulla mappa vede gli eventi di quella zona, anche senza essere entrato.", ["canone", "29 agosto"]], ["<b>Un evento nel calendario del vicinato lo mette chi ha ricevuto l&rsquo;ok dal nucleo del proprio micelio.</b> Il vaglio vale in tutto l&rsquo;ecosistema, non solo dove &egrave; stato dato.", "Non chiunque. Chi organizza usa il proprio team per segnare quella festa, ed &egrave; gi&agrave; scritto nelle figure.", ["canone", "29 agosto"]], ["<b>Il pagamento arriva per bonifico o sulla carta di Gab.</b>", "Niente Stripe, per ora. Fino a ottobre l&rsquo;azienda col codice ATECO non &egrave; attiva, e si parte con la base di entrate fuori partita IVA.", ["canone", "28 agosto"]], ["<b>Per fare acquisti o prenotare una festa o una lezione bisogna attivare l&rsquo;account.</b>", "Il pagamento della quota parte solo dal momento in cui uno non accetta gli incarichi del karma yoga e desidera usufruire dei servizi.", ["canone", "28 agosto"]], ["<b>Guardare è libero.</b> Per pubblicare, connettere o scambiare: prima paghi, o dai quattro ore alla comunità.", "Non è un muro commerciale: è un filtro. Chi passa a insultare non dà quattro ore di lavoro.", ["canone", "non ancora"]], ["<b>Con l&rsquo;account si possono acquistare le lezioni a pagamento</b> e riceverne il codice.", "Comprare non è partecipare: anche una lezione è una cosa che si acquista. Senza account non si può nemmeno comprare.", ["canone", "non ancora"]], ["<b>Il karma yoga paga la piattaforma, non il tempo di chi accompagna.</b> Quattro ore al mese valgono i 26 €. Gli incontri di ogni fase lunare si pagano in denaro, sempre.", "Se il tempo di chi guida si potesse comprare con le ore, bisognerebbe esserci per chiunque ne accumuli abbastanza.", ["canone", "nelle condizioni"]], ["<b>Gli incontri di ogni fase lunare: 50 € l'uno, 100 € al mese.</b> Sei lune 510 €, un anno 900 € — pagati subito, non a rate.", "A rate è uguale al mensile, ma con dodici scadenze da inseguire — e chi smette a metà lascia un debito da rincorrere.", ["canone", "non ancora"]], ["<b>Chi conduce non è un counselor né un terapeuta</b>, e non esercita professioni regolamentate: propone l'uso di strumenti propri.", "La scrittura, il metodo e l'impianto di FelicitasMundi sono opera dell'autore.", ["nelle condizioni"]], ["<b>Servire per almeno quattro ore dà accesso al praticantato e agli scambi.</b> Supportare in un bisogno pubblico è già servizio.", "Non è un pagamento in ore: è entrare facendo. E chi passa a insultare non prende un bisogno e non lo porta a termine.", ["canone", "non ancora"]], ["<b>I bisogni aperti si vedono anche da fuori</b>, prima di entrare.", "Altrimenti la porta non si vede: è la prima cosa che chi arriva può fare.", ["canone", "non ancora"]], ["<b>Chi non ha dato i due consensi non entra</b> in nessuna voce di Integrator.", "Dati e uso, con la data e la versione dei documenti.", ["nel database", "nelle condizioni"]], ["<b>Un consenso dato non si toglie</b> svuotando un campo: si revoca cancellando l&rsquo;account.", "Il database rifiuta chi ci prova.", ["nel database", "nelle condizioni"]]]], ["Chi vede cosa", "--terra", [["<b>I dati interni dei team sono privati.</b>", "Squadre, classi, aziende, associazioni, cooperative. Se un team smette di partecipare i dati restano registrati sul database: non si cancella ogni volta che qualcuno non partecipa pi&ugrave;. Si prende in considerazione che dopo cinque anni quei dati vengano cancellati.", ["canone", "28 agosto"]], ["<b>Il nucleo non entra nelle orme private o dei team.</b>", "Vede la quantit&agrave; di spazio consumato, il numero di squadre, quante orme madri e figlie sono associate. Non vede i dettagli, se non ci&ograve; che viene pubblicato. Pu&ograve; essere inserito un tasto di assistenza, con cui la squadra pu&ograve; dialogare col nucleo, che vedr&agrave; solo il contenuto della chat.", ["canone", "28 agosto"]], ["<b>Chi ha la chiave d&rsquo;amministratore pu&ograve; vedere i dati del database.</b>", "", ["canone", "28 agosto"]], ["<b>Un&rsquo;orma che nomina un&rsquo;altra persona resta privata finch&eacute; quella persona non conferma.</b> Il legame si propone, non si impone: chi lo riceve apre l&rsquo;invito e decide. Finch&eacute; non decide, il legame esiste solo dalla parte di chi l&rsquo;ha segnato, e non compare da nessun&rsquo;altra.", "Vale per le fotografie in cui compaiono altri e per ogni collegamento fra orme di persone diverse. Il consenso arriva quando quell&rsquo;orma viene connessa.", ["canone", "non ancora"]], ["<b>Il nucleo vede il metadato, non il contenuto.</b> Che una squadra esiste, quante persone, quanto lavoro si muove, e ciò che pubblica.", "Nessuno userebbe uno strumento dove il fornitore legge dentro.", ["nella privacy", "non ancora"]], ["<b>La chiave d&rsquo;amministratore non si dà</b> — nemmeno per una lettura.", "Se la prima volta che serve la si dà, la promessa nella privacy non vale niente.", ["canone", "in CLAUDE.md"]]]], ["I talenti", "--acqua", [["<b>I talenti sono crediti interni alla comunit&agrave;.</b>", "Attualmente non convertibili in euro. Un giorno lo saranno.", ["canone", "28 agosto"]], ["<b>Un movimento confermato non si modifica e non si cancella.</b> Un errore si corregge con un movimento contrario.", "È una garanzia per tutti: la storia resta leggibile.", ["nelle condizioni", "non ancora"]], ["<b>Nessuno si attribuisce talenti da solo.</b> Ogni movimento ha due gesti, di due persone diverse.", "", ["nel database", "nelle condizioni"]], ["<b>Non si va sotto zero.</b>", "", ["nel database"]], ["<b>Non tutto si paga in talenti.</b> Mettere le orme, invitare persone, unire chi si conosce: è il praticantato, non lavoro.", "Se ogni gesto paga, non è più una comunità: è un sistema a punti.", ["canone"]]]], ["Vendere e vagliare", "--acqua", [["<b>Il colloquio viene prima del pagamento.</b>", "", ["canone"]], ["<b>Il vaglio è un riconoscimento di coerenza, non una certificazione.</b> FelicitasMundi non è un ente di certificazione e non ne rilascia.", "Dire «certifichiamo» senza esserlo è contestabile. E se un cliente lo scambia per una certificazione, la responsabilità torna a noi.", ["nelle condizioni"]], ["<b>L'analisi non è la prova: è uno degli sguardi.</b> Insieme al colloquio, a chi lo fa, a dove sta, a come lavora.", "Trent'anni di certificazioni hanno insegnato a Vittorino che il bollino è una formalità pagata. Il vaglio nasce per non essere quello.", ["nelle condizioni"]], ["<b>Chi decide se un prodotto entra non guadagna dalla sua vendita.</b> Il vaglio si paga a campione.", "Se chi vaglia prendesse sul venduto, avrebbe interesse a far passare tutto — e il vaglio è ciò che ci distingue.", ["canone", "non ancora"]], ["<b>L&rsquo;erboristeria resta chiusa</b> finché non c&rsquo;è un responsabile erborista.", "Non è una formalità: è la condizione per aprire lo scaffale.", ["canone"]]]], ["Quello che si pubblica", "--aria", [["<b>I campi necessari:</b> nome, descrizione, foto, e a quale luogo appartiene. Per chi vende: prezzo e disponibilità. Per un libro: autore ed editore.", "Un prodotto senza foto e senza descrizione esiste, ma per un motore di ricerca no — e non lo compra nessuno.", ["canone", "non ancora"]], ["<b>La macchina misura, la persona giudica.</b> Sfocata, troppo piccola, storta: si blocca. «Asettica», «non c&rsquo;entra»: si segnala al vaglio.", "", ["canone", "non ancora"]], ["<b>Si guardano solo le foto pubbliche</b>, e quelle che qualcuno segnala. Mai il resto.", "", ["nella privacy"]], ["<b>Le foto di persone riconoscibili o di minori</b> non si pubblicano senza liberatoria firmata.", "È una regola ferma della piattaforma.", ["nella privacy", "nelle condizioni"]], ["<b>Un&rsquo;orma pubblica collegata a un luogo lo mostra sulla mappa.</b> Chi la rende pubblica lo sa.", "Una serie di orme nel tempo racconta dove sei stato e quando.", ["nella privacy"]]]], ["Insegnare e pubblicare", "--etere", [["<b>Pubblicare vuol dire far uscire una cosa DENTRO la piattaforma.</b>", "Nel calendario, nell&rsquo;Emporio, nella scuola: quello lo fa solo chi &egrave; autorizzato.", ["canone", "28 agosto"]], ["<b>Stampare &egrave; un servizio, e lo pu&ograve; usare chiunque.</b>", "Con la propria grafica, oppure chiedendo il nostro servizio, che ha un costo. Portare fuori un proprio contenuto stampandolo con FelicitasMundi &egrave; un altro discorso: non &egrave; pubblicare.", ["canone", "28 agosto"]], ["<b>I servizi di Edizione legati alla creazione dell&rsquo;opera sono trascrizione, editing e impaginazione.</b>", "", ["canone", "28 agosto"]], ["<b>&Egrave; l&rsquo;insegnante ad accettare l&rsquo;alunno a insegnamento iniziato.</b>", "Nel caso, potr&agrave; iscriversi alla lezione successiva o acquistare la lezione sull&rsquo;Emporio.", ["canone", "28 agosto"]], ["<b>70% all&rsquo;autore, 30% a FelicitasMundi</b> — lo stesso numero per la diretta e per la registrazione.", "Un numero solo si spiega in una riga e si ricorda: vale più della precisione.", ["nelle condizioni"]], ["<b>Senza codice non si entra</b> a una lezione. Non si entra e poi si chiede il codice.", "", ["nelle condizioni", "non ancora"]], ["<b>La registrazione resta all&rsquo;autore.</b> Se lascia la piattaforma, se la porta via.", "", ["nelle condizioni"]], ["<b>Un libro nato da lezioni resta dell&rsquo;autore.</b> Il lavoro editoriale non ce ne dà la proprietà.", "Le condizioni si concordano per iscritto prima di cominciare.", ["nelle condizioni"]]]], ["La radio", "--aria", [["<b>La diretta è libera per chiunque. L&rsquo;archivio no</b>: per riascoltare serve il karma yoga o il praticantato.", "", ["canone", "non ancora"]], ["<b>I canti restano accessibili sempre.</b>", "", ["canone"]], ["<b>La registrazione vuole il consenso.</b> Chi entra sa prima che si registra, e la puntata esce solo se chi ha parlato dice sì.", "", ["nella privacy", "non ancora"]], ["<b>I ruoli durano una diretta</b>: regia, ospite, in ascolto, co-regia. Chi ha la consolle comanda.", "", ["canone", "non ancora"]], ["<b>Le due dirette del ciclo lunare sono un servizio</b>, non un dono. Hanno un orario, e vanno tenute anche con due persone.", "Se fossero un dono, il praticantato non avrebbe più un contenuto.", ["canone"]]]], ["Come si costruisce", "--svil", [["<b>Le ricorrenze e gli eventi sono due cose diverse, e stanno in due posti.</b>", "Una ricorrenza cade ogni anno e non ha un luogo: Janmashti&agrave;, un santo, una festa di FelicitasMundi. Un evento invece si fa in un posto, a un&rsquo;ora, e qualcuno lo tiene. Le ricorrenze stanno in <code>feste_felicitas</code> e <code>feste_indiane</code>; gli eventi in <code>eventi</code>, con data, ora, luogo e chi lo organizza.", ["canone", "29 agosto"]], ["<b>La riga dei bisogni compare in tre posti, ma il conto si fa una volta sola.</b>", "La riga che dice quanti bisogni ci sono \"per te\" sta in cima a &laquo;La mia orma&raquo;, dentro una stanza e in fondo a una squadra. Se ognuna delle tre chiedesse al database quanti sono, la stessa domanda partirebbe tre volte per la stessa persona &mdash; e con duemila persone dentro si blocca. Quindi il conto si fa quando la persona entra e resta in memoria: la prima riga chiede, le altre due leggono quello che &egrave; gi&agrave; arrivato. Si ricalcola solo quando cambia qualcosa: si apre un bisogno, se ne prende uno, si entra in una squadra. La stessa cosa vale per qualunque altro pezzo che compaia in pi&ugrave; posti leggendo lo stesso dato.", ["canone", "29 agosto"]], ["<b>Si chiude quello che &egrave; aperto prima di aprire altro.</b>", "Un cantiere per volta. Un comando dato mentre un altro &egrave; a met&agrave; genera caos, e serve chiarezza.", ["canone", "28 agosto"]], ["<b>Prima il ciclo vivo, poi le persone dentro. Le cinque stanze dopo.</b>", "Le stanze disegnate oggi nascerebbero su come si immagina che verranno usate. Costruite dopo che qualcuno ha fatto orme vere, nascono su come sono usate davvero.", ["canone", "28 agosto"]], ["<b>Un comando &egrave; tutto quello che arriva.</b>", "Quello che deve sapere Code sta dentro il comando. Fuori resta solo quello che riguarda Gab, e in una riga: lui copia e incolla, e ci&ograve; che sta fuori dal riquadro non arriva a nessuno.", ["canone", "28 agosto"]], ["<b>Niente dati inventati nel codice, nemmeno come ripiego.</b>", "Se un campo non arriva, resta vuoto. Un valore plausibile messo al posto di un dato mancante viene preso per vero, e decide cose che non dovrebbe decidere.", ["canone", "28 agosto"]], ["<b>Gli errori vanno in console, non a schermo.</b>", "Chi legge la pagina non deve vedere un errore che non pu&ograve; risolvere. Chi costruisce s&igrave;.", ["canone", "28 agosto"]], ["<b>Le feste della comunit&agrave; le stabilisce il nucleo.</b>", "Si estraggono dal calendario, e valgono per tutti. Le feste dei santi e quelle della tradizione indiana restano quelle che sono; queste sono le nostre.", ["canone", "26 agosto"]], ["<b>I file nuovi li scrive la penna, le modifiche dentro file esistenti le fa Code.</b>", "Code vede il file vivo per intero; la penna no.", ["in CLAUDE.md"]], ["<b>Mai sostituzioni automatiche larghe</b> su un file esistente: ancorare a una stringa esatta.", "Una sostituzione su «Ultimo aggiornamento» si è mangiata il riferimento al Regolamento UE.", ["in CLAUDE.md"]], ["<b>Prima di un delete o un update senza where: fermarsi e chiedere.</b>", "Una riga cancellata per sbaglio non torna.", ["in CLAUDE.md"]], ["<b>Le copie di sicurezza in COPIE/, fuori da git.</b> Le parole d&rsquo;ordine non si scrivono nei file né si chiedono in chat.", "", ["in CLAUDE.md", "non ancora"]], ["<b>Le pagine legali vivono solo nel magazzino pubblico</b>, non nella cartella di lavoro.", "Due copie in due posti, con quella vecchia dove si pubblica, è come si perde il lavoro.", ["canone"]], ["<b>Ogni file consegnato porta byte e MD5</b>, nello stesso turno.", "", ["canone"]], ["<b>Nessun dato scritto a mano nelle pagine</b>: tutto dal database. E ogni pagina deve reggere il vuoto.", "", ["canone"]]]], ["Le parole", "--nexus", [["<b>Sono esclusi i termini militari o commerciali ordinari.</b>", "Non si parla di capo reparto n&eacute; di reparti.", ["canone", "28 agosto"]], ["<b>FelicitasMundi non è «un sito»</b>: è piattaforma, ecosistema, esperienza oltre la soglia.", "", ["canone"]], ["<b>Mai cura, terapia, diagnosi</b> o promesse cliniche.", "", ["canone"]], ["<b>Verbatim o segnaposto visibile.</b> Mai inventare prosa in nome di Gab.", "", ["canone"]], ["<b>Mai «non è X, è Y»</b>: affermare sempre in positivo.", "", ["canone"]], ["<b>Nei file consegnati non si parla a Gab.</b> Quei file vanno ai clienti.", "", ["canone"]]]]];
 
   var lista = document.getElementById("specLista");
   var conto = document.getElementById("specConto");
@@ -5142,6 +4512,7 @@
 <script src="fm-annale.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑤ — l'Annale: la sesta finestra del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — dall'8 settembre è IL PERCORSO DEI TALENTI, non più i crediti -->
+<script src="fm-soglia.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊸ — la prima soglia di Antahkarana, scritta da Gab: rotta ?p=soglia -->
 <script src="fm-crediti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — i crediti (saldo, sigillo, gettone ?t=): erano fm-talenti.js, interi e identici -->
 <script src="fm-orma-mia.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊷ — la matrice de «la mia orma»: laMatriceDellOrma(c), sostituisce fm-mia-orma.js mai innestato -->
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
@@ -5674,6 +5045,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     {n:"Segnala", s:"un problema della piattaforma, o un reclamo"},
     {n:"Esci", s:""}
   ];
+  /* dentro l'app la voce «Notifiche» entra dopo «Autorizzazioni»: apre le impostazioni di sistema di Felicitas */
+  if(window.FelicitasApp){ ACCOUNT.splice(ACCOUNT.findIndex(function(o){return o.n==="Autorizzazioni";})+1, 0, {n:"Notifiche", s:"le impostazioni di sistema di Felicitas"}); }
 
   /* il ramo aperto, un posto per livello: aprirne uno chiude gli altri di pari
      livello e tutto quello che stava sotto */
@@ -5965,6 +5338,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ TOCCATO NEL GUSCIO ㊵ — il percorso dei talenti, in fm-talenti.js.
        Se il file non c'è la riga non esiste e si cade su attesa(). */
     else if(id==="percorso" && typeof percorsoDeiTalenti === "function") percorsoDeiTalenti(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊸ — la prima soglia di Antahkarana (fm-soglia.js).
+       Ci si arriva con `?p=soglia` dal bivio di accesso.html. La domanda
+       la fa il file di Gab: chi ha già i talenti non la vede mai, nemmeno
+       per indirizzo — va dritto a «La mia orma». */
+    else if(id==="soglia" && window.SpazioVivo && SpazioVivo.soglia){
+      SpazioVivo.sogliaServe().then(function(serve){ if(serve) SpazioVivo.soglia(c); else vai("orme"); });
+    }
+    /* ⭐ TOCCATO NEL GUSCIO ㊸ — «talenti» è la parola del bottone della
+       soglia: porta al percorso. Il file di Gab resta verbatim. */
+    else if(id==="talenti" && typeof percorsoDeiTalenti === "function") percorsoDeiTalenti(c);
     else attesa(c, id);
     /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
     scriviIndirizzo();
@@ -6633,7 +6016,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      conta anche il segnaposto, e il segnaposto va a capo quando il campo
      è stretto. Sul telefono, nel momento in cui si misura, il campo è
      largo 160 e non 242: `mg-pieno` è ancora addosso al corpo — cresci()
-     corre PRIMA di megafonoGuarda() — e il segno dell'orma e la freccia
+     corre PRIMA di mgAggiorna() — e il segno dell'orma e la freccia
      stanno ancora prendendo il loro posto. Lì «scrivi la tua orma» sta su
      tre righe: 98 invece di 62. Quei 98 finivano scritti nello stile del
      campo, e ci restavano anche dopo che la riga si era riallargata.
@@ -6651,50 +6034,276 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     campo.style.height="auto"; campo.style.height=campo.scrollHeight+"px";
   }
 
-  /* ⭐ TOCCATO NEL GUSCIO ⑯ — IL MEGAFONO A RIPOSO, E QUANDO SI SCRIVE.
-     A riposo il campo è nudo. Appena c'è del testo il segno dell'orma si
-     accende, la freccia d'oro compare, e sotto il campo scendono i cinque
-     segni e la riga degli strumenti.
-     Il segno è quello scelto — orma-simbolo-scelto.html,
-     77158e33c54f50acea03893800b805ff — preso verbatim, non ridisegnato. */
-  var ORMA_SEGNO = '<svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/><path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/><g transform="translate(-4,4) scale(0.9)"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(33,3) scale(0.5)" opacity=".45"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g><g transform="translate(20,-2) scale(0.3)" opacity=".2"><path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34 C26 29 21 27 21 24 C21 20 25 18 30 18 C35 18 39 20 39 24 C39 29 36 33 36 38 C36 44 34 51 28 51Z"/><circle cx="22" cy="12" r="3.2"/><circle cx="28.5" cy="9.6" r="2.4"/><circle cx="33.5" cy="10" r="2.1"/><circle cx="37.5" cy="11.6" r="1.8"/><circle cx="40.5" cy="14.2" r="1.5"/></g></svg>';
-  /* ⭐ i quattro segni, e il `tipo` che ciascuno scrive nella tavola `orme`.
-     Sono quattro, non cinque: nessun «altro», nessuna forma inventata. */
-  var MG_SEGNI = [
-    ["contatto",  "#AA8844", "sg-tondo",  "contatto"],
-    ["idea",      "#9966CC", "sg-quadro", "idea_nota"],
-    ["obiettivo", "#CC6644", "sg-rombo",  "obiettivo"],
-    ["racconto",  "#669944", "sg-pieno",  "racconto"]
+  /* ⭐ TOCCATO NEL GUSCIO ㊶ — IL MEGAFONO NUOVO. La forma è quella del
+     modello di Gab (megafono-innesto.html · 082a37465a0ef33eb3ed9b9c39df1c30);
+     i gesti sono quelli di sempre: l'insert su `orme`, le righe «proposto»
+     su `orma_persone`. I dati finti del modello qui sono le tavole vere:
+     `territori` per i comuni, `orma_persone` per i nomi già usati. */
+  /* ⭐ i cinque tipi del modello del 10 settembre (082a37465a0ef33eb3ed9b9c39df1c30):
+     karma yoga per primo, ed è lui il difetto. `n` è quello che si legge,
+     `d` quello che si scrive nella tavola. Il segno di karma yoga è il
+     Nexus della legenda — due cerchi e l'esagono col raggio — preso tale
+     e quale dal modello, non ridisegnato. */
+  var MG_TIPI = [
+    {n:"karma yoga", d:"karma_yoga", c:"var(--nexus)", f:"nex"},
+    {n:"obiettivo",  d:"obiettivo",  c:"var(--fuoco)", f:"rombo"},
+    {n:"contatto",   d:"contatto",   c:"var(--oro)",   f:"cerchio"},
+    {n:"spesa",      d:"spesa",      c:"var(--acqua)", f:"quadro"},
+    {n:"racconto",   d:"racconto",   c:"var(--aria)",  f:"tondo"}
   ];
-  (function(){
-    var g = $("mg-orma"); if(g) g.innerHTML = ORMA_SEGNO;
-    var box = $("mg-segni"); if(!box) return;
-    MG_SEGNI.forEach(function(x){
-      var e = document.createElement("button");
-      e.type = "button";
-      e.className = "mg-sg " + x[2];
-      e.setAttribute("data-tipo", x[3]);
-      e.style.setProperty("--c", x[1]);
-      e.innerHTML = '<i></i>' + x[0];
-      e.addEventListener("click", function(){
-        [].forEach.call(box.children, function(y){ if(y!==e) y.classList.remove("on"); });
-        e.classList.toggle("on");
-      });
-      box.appendChild(e);
-    });
-    if(g) g.addEventListener("click", function(){ campo.focus(); });
-  })();
+  var MG_NEX = '<svg class="nx" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg>';
+  var mgStato = {tipo:"karma yoga", quando:null, dove:null, persone:[], file:[]};
+  var mgPan = $("mg-pan"), mgTipo = $("mg-tipo"), mgInv = $("mg-inv"),
+      mgNato = $("mg-nato");
 
-  function megafonoGuarda(){
-    var pieno = campo.value.trim().length > 0;
-    document.body.classList.toggle("mg-pieno", pieno);
-    /* ⭐ TOCCATO NEL GUSCIO ㉔ — i tre valori si accendono coi quattro segni.
-       Il pezzo non guarda il campo da sé: glielo dice il guscio, qui, nel
-       punto solo dove `mg-pieno` cambia. */
-    if(window.SpazioVivo && window.SpazioVivo.valori) window.SpazioVivo.valori(pieno);
+  function mgChiudi(){
+    if(!mgPan) return;
+    mgPan.classList.remove("si"); mgPan.innerHTML=""; mgPan.dataset.q="";
   }
-  campo.addEventListener("input", function(){ cresci(); megafonoGuarda(); });
-  megafonoGuarda();
+  function mgApri(q){
+    mgPan.innerHTML=""; mgPan.classList.add("si"); mgPan.dataset.q=q;
+  }
+  function mgEtichetta(t){
+    var e=document.createElement("div"); e.className="et2"; e.textContent=t;
+    mgPan.appendChild(e); return e;
+  }
+
+  function mgAggiorna(){
+    if(mgInv) mgInv.classList.toggle("pronto", campo.value.trim().length>0);
+    var tt = MG_TIPI.filter(function(x){ return x.n===mgStato.tipo; })[0];
+    if(mgTipo){
+      mgTipo.textContent = mgStato.tipo;
+      mgTipo.style.setProperty("--c", tt ? tt.c : "var(--oro)");
+    }
+    var g = document.querySelectorAll("#mg .mg-vsg");
+    if(g.length === 3){
+      g[0].classList.toggle("on", !!mgStato.quando);
+      g[1].classList.toggle("on", !!mgStato.dove);
+      g[2].classList.toggle("on", mgStato.persone.length>0);
+      g[0].title = mgStato.quando ? inItaliano(mgStato.quando) : "oggi";
+      g[1].title = mgStato.dove ? mgStato.dove.nome : "dove";
+      g[2].title = mgStato.persone.length
+        ? mgStato.persone.map(function(x){ return x.nome; }).join(", ")
+        : "con chi";
+    }
+    var gf = $("mg-gf");
+    if(gf){
+      gf.classList.toggle("on", mgStato.file.length > 0);
+      gf.title = mgStato.file.length
+        ? mgStato.file.map(function(f){ return f.name; }).join(", ")
+        : "Allegato";
+    }
+  }
+  campo.addEventListener("input", function(){ cresci(); mgAggiorna(); });
+
+  /* il cartiglio verde — per gli errori resta parla() */
+  var mgNatoTempo = null;
+  function mgAvvisa(t){
+    if(!mgNato){ parla(t); return; }
+    mgNato.textContent = t; mgNato.classList.add("si");
+    clearTimeout(mgNatoTempo);
+    mgNatoTempo = setTimeout(function(){ mgNato.classList.remove("si"); }, 2600);
+  }
+
+  /* il tondino: che cosa è. ⛔ Niente tasto «+». */
+  if(mgTipo) mgTipo.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(mgPan.dataset.q === "tipo") return mgChiudi();
+    mgApri("tipo");
+    mgEtichetta("che cosa \u00e8");
+    var due=document.createElement("div"); due.className="due2";
+    MG_TIPI.forEach(function(t){
+      var b=document.createElement("button"); b.type="button";
+      b.className="tb "+t.f+(t.n===mgStato.tipo?" on":"");
+      b.style.setProperty("--c", t.c);
+      var i=document.createElement("i");
+      if(t.f==="nex") i.innerHTML = MG_NEX;   /* il Nexus della legenda, tale e quale */
+      b.appendChild(i);
+      b.appendChild(document.createTextNode(t.n));
+      b.addEventListener("click", function(){
+        mgStato.tipo = t.n; mgChiudi(); mgAggiorna();
+      });
+      due.appendChild(b);
+    });
+    mgPan.appendChild(due);
+  });
+
+  /* quando: il calendarietto del mese */
+  function mgQuando(){
+    if(mgPan.dataset.q === "quando") return mgChiudi();
+    mgApri("quando");
+    var o=new Date(), a=o.getFullYear(), m=o.getMonth();
+    var primo=new Date(a,m,1).getDay()||7, ultimo=new Date(a,m+1,0).getDate();
+    mgEtichetta(MESI_BREVI[m]+" "+a);
+    var g=document.createElement("div"); g.className="gg2";
+    ["lun","mar","mer","gio","ven","sab","dom"].forEach(function(x){
+      var b=document.createElement("b"); b.textContent=x; g.appendChild(b);
+    });
+    for(var k=1;k<primo;k++) g.appendChild(document.createElement("span"));
+    for(var d=1;d<=ultimo;d++)(function(d){
+      var s=document.createElement("span"); s.textContent=d;
+      if(d===o.getDate()) s.className="oggi";
+      s.addEventListener("click", function(){
+        mgStato.quando = a+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+        mgChiudi(); mgAggiorna();
+      });
+      g.appendChild(s);
+    })(d);
+    mgPan.appendChild(g);
+  }
+
+  /* dove: i comuni, dalla tavola `territori` — la strada di cercaComune */
+  function mgDove(){
+    if(mgPan.dataset.q === "dove") return mgChiudi();
+    mgApri("dove");
+    mgEtichetta("dove");
+    var q=document.createElement("input");
+    q.className="campoP"; q.placeholder="scrivi un comune";
+    q.autocomplete="off";
+    mgPan.appendChild(q);
+    var lista=document.createElement("div"); mgPan.appendChild(lista);
+    var attesa=null;
+    q.addEventListener("input", function(){
+      clearTimeout(attesa);
+      var v=q.value.trim();
+      lista.innerHTML="";
+      if(v.length<2) return;
+      attesa=setTimeout(function(){
+        db.from("territori").select("codice,nome")
+          .ilike("nome", v+"%").order("nome").limit(8)
+          .then(function(r){
+            lista.innerHTML="";
+            ((r&&r.data)||[]).forEach(function(t){
+              var b=document.createElement("button"); b.type="button";
+              b.textContent=t.nome;
+              b.addEventListener("click", function(){
+                mgStato.dove={codice:t.codice, nome:t.nome};
+                mgChiudi(); mgAggiorna();
+              });
+              lista.appendChild(b);
+            });
+          }).catch(function(){ lista.innerHTML=""; });
+      }, 220);
+    });
+    setTimeout(function(){ q.focus(); }, 60);
+  }
+
+  /* con chi: i nomi già usati in `orma_persone`; se non c'è, «+ nome · nuovo» */
+  function mgChi(){
+    if(mgPan.dataset.q === "chi") return mgChiudi();
+    mgApri("chi");
+    mgEtichetta("con chi"+(mgStato.persone.length
+      ? " \u00b7 "+mgStato.persone.map(function(x){ return x.nome; }).join(", ") : ""));
+    var q=document.createElement("input");
+    q.className="campoP"; q.placeholder="scrivi un nome";
+    q.autocomplete="off";
+    mgPan.appendChild(q);
+    var lista=document.createElement("div"); mgPan.appendChild(lista);
+    function giaPreso(n){
+      return mgStato.persone.some(function(x){ return x.nome===n; });
+    }
+    var attesa=null;
+    q.addEventListener("input", function(){
+      clearTimeout(attesa);
+      var v=q.value.trim();
+      lista.innerHTML="";
+      if(!v) return;
+      attesa=setTimeout(function(){
+        db.from("orma_persone").select("nome,persona_id")
+          .ilike("nome", v+"%").limit(20)
+          .then(function(r){
+            lista.innerHTML="";
+            var visti={}, righe=[];
+            ((r&&r.data)||[]).forEach(function(x){
+              if(visti[x.nome] || giaPreso(x.nome)) return;
+              visti[x.nome]=1; righe.push(x);
+            });
+            righe.slice(0,6).forEach(function(x){
+              var b=document.createElement("button"); b.type="button";
+              b.textContent=x.nome;
+              b.addEventListener("click", function(){
+                mgStato.persone.push({nome:x.nome, persona_id:x.persona_id||null});
+                mgChiudi(); mgAggiorna();
+              });
+              lista.appendChild(b);
+            });
+            var n=q.value.trim();
+            if(n && !giaPreso(n)){
+              var b2=document.createElement("button"); b2.type="button";
+              b2.appendChild(document.createTextNode("+ "+n+"  "));
+              var i2=document.createElement("i");
+              i2.style.cssText="color:rgba(245,240,230,.35);font-style:normal";
+              i2.textContent="nuovo";
+              b2.appendChild(i2);
+              b2.addEventListener("click", function(){
+                mgStato.persone.push({nome:n, persona_id:null});
+                mgChiudi(); mgAggiorna();
+              });
+              lista.appendChild(b2);
+            }
+          }).catch(function(){ lista.innerHTML=""; });
+      }, 220);
+    });
+    setTimeout(function(){ q.focus(); }, 60);
+  }
+
+  document.querySelectorAll("#mg .mg-vsg").forEach(function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(b.dataset.p==="quando") mgQuando();
+      else if(b.dataset.p==="dove") mgDove();
+      else mgChi();
+    });
+  });
+
+  /* il tocco fuori chiude quello che è aperto */
+  document.addEventListener("click", function(e){
+    if(mgPan && mgPan.classList.contains("si") && !mgPan.contains(e.target)) mgChiudi();
+  });
+
+  /* ⭐ TOCCATO NEL GUSCIO ㊶ — LA GRAFFA È CUCITA ALLA CATENA DEGLI
+     ALLEGATI (le parole di Gab, 10 settembre 2026). Il contenitore è
+     `riservato`, il percorso è `<orma_id>/<nome del file>` — quindi il
+     file scelto qui ASPETTA: sale solo quando l'orma è nata e ha un id.
+     La riga in `orma_file` si scrive con `da_conversazione:false` —
+     ⛔ solo false: il vero lo scrive il trigger della conversazione.
+     ⛔ il `tipo` non si manda: lo calcola il database con fm_famiglia_file().
+     I tre tetti (25 MB a file · 10 per orma · 500 MB a persona) li fa
+     rispettare il database: qui si traducono solo gli errori in parole. */
+  var MG_FILE_TETTO = 25 * 1024 * 1024;
+  function mgParoleFile(messaggio){
+    var m = String(messaggio || "");
+    if(/payload too large|too large|exceeded.*size|maximum.*size|25/i.test(m))
+      return "il file supera i 25 MB";
+    if(/10|dieci/i.test(m))
+      return "questa orma ha già dieci allegati";
+    if(/500/i.test(m))
+      return "hai finito lo spazio: i tuoi file occupano già 500 MB";
+    return "l'allegato non è passato";
+  }
+  if($("mg-gf")) $("mg-gf").addEventListener("click", function(){
+    var i = $("mg-file"); if(i) i.click();
+  });
+  if($("mg-file")) $("mg-file").addEventListener("change", function(){
+    var scelti = [].slice.call(this.files || []);
+    this.value = "";
+    if(!scelti.length) return;
+    for(var k = 0; k < scelti.length; k++){
+      if(scelti[k].size > MG_FILE_TETTO){
+        parla("il file supera i 25 MB · " + scelti[k].name);
+        return;
+      }
+    }
+    if(mgStato.file.length + scelti.length > 10){
+      parla("questa orma ha già dieci allegati");
+      return;
+    }
+    mgStato.file = mgStato.file.concat(scelti);
+    mgAggiorna();
+    mgAvvisa("📎  " + mgStato.file.map(function(f){ return f.name; }).join("  ·  "));
+  });
+
+  mgAggiorna();
 
   function parla(t){
     var p=$("parola"); $("parola-tx").textContent=t;
@@ -6760,7 +6369,6 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   db.from("vicinati").select("id,nome,territorio,lat,lon").order("nome")
     .then(function(r){ luoghi = (r.data)||[]; disegnaLuoghi(); });
 
-  $("s-luogo").addEventListener("click", function(){ $("v-luogo").classList.add("on"); });
 
   /* ── un luogo nuovo: lo può far nascere chiunque ──
      Il vicinato no: quello lo apre chi fa praticantato.                        */
@@ -7099,105 +6707,50 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* l'invito: parte dall'ultima orma scritta */
   var ultimaOrma = null;
 
-  $("s-invio").addEventListener("click", function(){
-    var t=campo.value.trim(); if(!t) return;
-    if(cerca){ vai("incontro"); return; }
+  /* ⭐ TOCCATO NEL GUSCIO ㊶ — LA FRECCIA DEL MEGAFONO NUOVO.
+     ⛔ L'orma nasce `solo_me` e senza `destinazione`: quando detti stai
+        catturando, non organizzando (Gab, 10 settembre 2026). La
+        visibilità si decide dopo, quando l'orma si apre e si collega —
+        e così la regola del canone è servita alla radice: un'orma che
+        nomina qualcuno nasce comunque privata.
+     ⭐ `talento_id` e `filo_id` restano vuoti: è il segno che la manda
+        in «Da collegare» — fm-orma-mia.js li guarda, non serve altro.
+     ⭐ il dove è un comune di `territori`: scrive `territorio_cod`, e il
+        nome del comune in `luogo` perché le schede lo mostrino. */
+  $("mg-inv").addEventListener("click", function(){
+    var t=campo.value.trim();
+    if(!t){ campo.focus(); return; }
     if(ospite){ chiediAccesso("Per lasciare un'orma serve l'accesso"); return; }
-    /* ⭐ TOCCATO NEL GUSCIO ⑳ — «DOVE LO PORTI» NON FERMA PIÙ NIENTE.
-       Bloccava l'invio finché non si sceglieva, per scrivere `destinazione`
-       — una colonna che nessuna query di questo Spazio Vivo rilegge, in
-       nessun file. Intanto il `tipo`, che invece si rilegge, lo decide il
-       segno. Era una scelta chiesta prima di scrivere, e non serviva.
-       ⛔ La voce resta dov'è e funziona come prima: se la si sceglie, la sua
-          destinazione vale. Solo, non ferma più nessuno.
-       ⭐ Senza scelta, la destinazione la dà il segno: la tavola DOVE le
-          accosta già ai tipi — contatto→contatti, idea_nota→note,
-          obiettivo→obiettivi, racconto→bacheca. Non si inventa niente,
-          si legge quello che c'è già. */
 
-    /* ⭐ TOCCATO NEL GUSCIO ⑱ — I QUATTRO SEGNI SCRIVONO DAVVERO.
-       Prima si accendevano e basta. Adesso il segno acceso dice il `tipo`
-       dell'orma; se nessuno è acceso il tipo è idea_nota, che è il posto
-       dove una cosa si tiene quando non si è ancora deciso cos'è.
-       ⭐ TOCCATO NEL GUSCIO ㉑ — LA VISIBILITÀ ARRIVA DAI TRE TASTI.
-          Il difetto è privata, e si vede: «solo me» è quello acceso quando
-          il Megafono si apre, e chi non tocca niente scrive un'orma privata.
-          Ma chi tocca «il mio vicinato» o «tutti» apre davvero: quella
-          scelta finisce in `visibilita`, e il messaggio dice cos'è successo.
-       ⚠️ `vicinato` è un valore che oggi NESSUNA query rilegge — solo
-          `pubblico` ha chi lo guarda, in fm-casa.js e in fm-edizione.js.
-          E senza «Dov'è successo» la riga non porta `vicinato_id`, quindi
-          non dice nemmeno A QUALE vicinato si apre. Si scrive lo stesso:
-          il valore è giusto, è chi legge che manca.
-       ⚠️ `accaduto_il` è oggi. Se qualcuno ha scelto una data con «Quando»
-          vale quella: è una cosa che ha detto lui, e non si butta via.
-       ⛔ Consenso e legami fra orme NON si toccano: le colonne non ci sono. */
-    var acceso = document.querySelector("#mg-segni .mg-sg.on");
-    var tipoScritto = acceso ? acceso.getAttribute("data-tipo") : "idea_nota";
-    var d = new Date();
-    var oggi = d.getFullYear() + "-"
-             + String(d.getMonth()+1).padStart(2,"0") + "-"
-             + String(d.getDate()).padStart(2,"0");
-
-    var qDest = DOVE.filter(function(x){ return x.tipo === tipoScritto; })[0];
-    var dovePorta = scelta ? scelta.dest : (qDest ? qDest.dest : null);
-
-    /* ⚠️ si tiene da parte: sotto, a orma conservata, `visibilita` torna al
-       difetto — e il messaggio deve dire quello che è successo ADESSO,
-       non quello che sarà la prossima volta. */
-    var apertaCosi = visibilita;
-
-    /* ⛔ LA REGOLA DEL CANONE, l'ultima parola. I tasti sono già spenti, ma
-       il controllo si rifà qui: fra il tocco e l'invio può essere entrato
-       un nome, e la regola non si affida a un tasto. */
-    /* ⭐ TOCCATO NEL GUSCIO ㉔ — I TRE VALORI ARRIVANO DAL PEZZO DI DESIGN.
-       Prima li tenevano tre variabili della riga vecchia — `quandoScelto`,
-       `luogoDato`, `conChi`. Adesso li chiede una funzione sola.
-       ⚠️ Se il pezzo non c'è, si torna alle variabili di prima e niente si
-          rompe: è la stessa rete che tiene su una pagina non aggiornata. */
-    var V = (window.SpazioVivo && window.SpazioVivo.valoriLeggi)
-      ? window.SpazioVivo.valoriLeggi()
-      : { accaduto_il: quandoScelto || oggi,
-          luogo: luogoDato && luogoDato.nome,
-          territorio_cod: luogoDato && luogoDato.cod,
-          luogo_lat: luogoDato && luogoDato.lat,
-          luogo_lon: luogoDato && luogoDato.lon,
-          persone: conChi.map(function(x){ return x.nome; }) };
-
-    /* ⛔ LA REGOLA DEL CANONE, l'ultima parola. Un'orma che nomina qualcuno
-       che non ha ancora confermato resta privata. La regola non cambia:
-       cambia solo da dove arrivano i nomi.
-       ⚠️ `valoriLeggi()` dà nomi nudi; qui tornano oggetti, perché
-          frasePerChiAspetta() e la scrittura su `orma_persone` leggono
-          `.nome` e non si toccano. */
-    var aspettano = (V.persone || []).map(function(n){ return {nome:n}; });
-    if(aspettano.length) apertaCosi = "solo_me";
-
+    var tt = MG_TIPI.filter(function(x){ return x.n===mgStato.tipo; })[0];
     var riga = {persona_id:io.id, contenuto:t,
-      tipo:tipoScritto, destinazione:dovePorta, visibilita:apertaCosi};
-    if(luogoScelto) riga.vicinato_id = luogoScelto.id;
-    riga.accaduto_il = V.accaduto_il || oggi;
+      tipo: tt ? tt.d : "karma_yoga",
+      visibilita:"solo_me",
+      accaduto_il: mgStato.quando || dataDiOggi()};
+    if(mgStato.dove){
+      riga.territorio_cod = mgStato.dove.codice;
+      riga.luogo = mgStato.dove.nome;
+    }
+    var nominati = mgStato.persone.slice();
+    var alleg = mgStato.file.slice();
+    var dettagli = [mgStato.tipo];
+    if(mgStato.quando) dettagli.push(inItaliano(mgStato.quando));
+    if(mgStato.dove) dettagli.push(mgStato.dove.nome);
+    if(nominati.length) dettagli.push("con "+nominati.map(function(x){ return x.nome; }).join(", "));
+    if(alleg.length) dettagli.push(alleg.length === 1 ? "un allegato" : alleg.length + " allegati");
 
-    /* ── il dove: il nome, il punto, il comune ── */
-    if(V.luogo)                riga.luogo          = V.luogo;
-    if(V.luogo_lat != null)    riga.luogo_lat      = V.luogo_lat;
-    if(V.luogo_lon != null)    riga.luogo_lon      = V.luogo_lon;
-    if(V.territorio_cod)       riga.territorio_cod = V.territorio_cod;
-
-    var conChiOra = aspettano.slice();
-    var doveOra = V.luogo ? {nome: V.luogo} : null;
     db.from("orme").insert(riga)
       .select("id,contenuto").single().then(function(r){
       if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
       ultimaOrma = r.data;
 
-      /* ── ③ le persone nominate: una riga a testa, stato «proposto» ──
-         ⛔ Il legame si propone, non si impone: nasce «proposto» e diventa
-            «confermato» solo per mano di chi è stato nominato.
+      /* le persone nominate: una riga a testa, stato «proposto».
+         ⛔ Il legame si propone, non si impone: diventa «confermato» solo
+            per mano di chi è stato nominato.
          ⚠️ Senza persona_id la riga vale lo stesso: il nome da solo basta, e
             diventerà un collegamento vero il giorno che quella persona entra. */
-      if(conChiOra.length && r.data && r.data.id){
-        db.from("orma_persone").insert(conChiOra.map(function(x){
+      if(nominati.length && r.data && r.data.id){
+        db.from("orma_persone").insert(nominati.map(function(x){
           return {orma_id:r.data.id, persona_id:x.persona_id || null,
                   nome:x.nome, stato:"proposto"};
         })).then(function(q){
@@ -7205,32 +6758,39 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         }).catch(function(){});
       }
 
-      campo.value=""; cresci(); megafonoGuarda();
-      [].forEach.call(($("mg-segni")||{children:[]}).children, function(y){ y.classList.remove("on"); });
-      /* ⭐ TOCCATO NEL GUSCIO ㉑ — e si torna al difetto: la PROSSIMA orma
-         nasce privata come questa. Senza, chi ne apre una a tutti aprirebbe
-         a tutti anche la successiva senza averlo chiesto. */
-      visibilita = "solo_me";
-      document.querySelectorAll(".v-t").forEach(function(x){
-        x.classList.toggle("on", x.dataset.v === "solo_me");
-      });
-      /* ⭐ e con lei i tre dati: la prossima orma è di oggi, senza luogo e
-         senza nomi. Restassero, si porterebbero dietro il luogo e le persone
-         di un'orma che non c'entra. */
-      /* ⭐ TOCCATO NEL GUSCIO ㉔ — a pulire adesso è il pezzo. Le tre
-         variabili vecchie si azzerano lo stesso finché la riga vecchia
-         resta scritta: il giorno che se ne va, se ne vanno con lei. */
-      if(window.SpazioVivo && window.SpazioVivo.valoriPulisci) window.SpazioVivo.valoriPulisci();
-      quandoScelto = null; luogoDato = null; conChi = [];
-      var sq = $("s-quando-v"); if(sq) sq.textContent = "Oggi";
-      aggiornaTreDati();
-      parla("Conservata · " + (apertaCosi==="solo_me" ? "solo tu la vedi"
-            : apertaCosi==="vicinato" ? "la vede il tuo vicinato" : "la vedono tutti")
-            + (aspettano.length ? " · " + frasePerChiAspetta(aspettano) : "")
-            + (doveOra && doveOra.nome ? " · " + doveOra.nome : "")
-            + (luogoScelto ? " · " + luogoScelto.nome : "")
-            + (V.accaduto_il && V.accaduto_il !== oggi ? " · " + new Date(V.accaduto_il+"T12:00:00")
-                 .toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"}) : ""));
+      /* ── gli allegati: prima il file in `riservato` al percorso
+         `<orma_id>/<nome>`, poi la riga in `orma_file`. In fila, uno
+         dopo l'altro; se uno non passa, si dice in parole e si va
+         avanti col prossimo. ── */
+      if(alleg.length && r.data && r.data.id){
+        var ormaId = r.data.id;
+        alleg.reduce(function(fila, f){
+          return fila.then(function(){
+            return db.storage.from("riservato")
+              .upload(ormaId + "/" + f.name, f)
+              .then(function(u){
+                if(u && u.error){
+                  parla("L'orma c'è, l'allegato no: " + mgParoleFile(u.error.message));
+                  return;
+                }
+                return db.from("orma_file").insert({
+                  orma_id: ormaId, nome: f.name,
+                  indirizzo: ormaId + "/" + f.name,
+                  dimensione: f.size,
+                  chi_lo_ha_messo: io.id,
+                  da_conversazione: false
+                }).then(function(q2){
+                  if(q2 && q2.error) parla("L'orma c'è, l'allegato no: " + mgParoleFile(q2.error.message));
+                });
+              });
+          }).catch(function(){});
+        }, Promise.resolve());
+      }
+
+      campo.value=""; cresci();
+      mgStato = {tipo:"karma yoga", quando:null, dove:null, persone:[], file:[]};
+      mgChiudi(); mgAggiorna();
+      mgAvvisa("\u2713  \u00e8 nata un\u2019orma  \u00b7  " + dettagli.join("  \u00b7  "));
       if(vista==="orme") caricaOrme(); else contaOrme();
     });
   });
@@ -7269,6 +6829,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       if(x.n==="Privacy e consensi"){ apriPrivacy();  return; }
       if(x.n==="Fatturazione")       { apriFatturazione(); return; }
       if(x.n==="Autorizzazioni")     { apriAutorizzazioni(); return; }
+      if(x.n==="Notifiche")          { try{ FelicitasApp.notifiche(); }catch(e){} return; } /* la voce esiste solo dentro l'app */
       if(x.n==="Segnala")            { apriSegnala(); return; }
       if(x.n==="Colore del sito")    { apriColore(); return; }
       parla("[ " + x.n + " — questa voce aspetta ]");
@@ -7334,14 +6895,6 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   });
   document.querySelectorAll(".velo").forEach(function(v){
     v.addEventListener("click", function(e){ if(e.target===v) v.classList.remove("on"); });
-  });
-  /* ── «dove lo porti»: la × la chiude, e il tocco fuori pure ── */
-  $("vele-x").addEventListener("click", chiudiVele);
-  document.addEventListener("click", function(e){
-    if(!veleSu) return;
-    if(e.target.closest("#vele")) return;     /* dentro il foglio si sceglie */
-    if(e.target.closest("#s-dove")) return;   /* è il tasto che l'ha aperto */
-    chiudiVele();
   });
   $("apri-barra").addEventListener("click", function(){
     /* una schermata alla volta: se la fascia della radio è una finestra,
@@ -7418,7 +6971,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana */
 
   /* alzata mentre si legge la storia: allora l'indirizzo non si riscrive */
   var tornando = false;
