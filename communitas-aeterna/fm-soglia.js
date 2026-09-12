@@ -16,7 +16,7 @@
    ⛔ E sono parole di Gab, verbatim. Non si riscrivono.
 
    Espone:  window.SpazioVivo.soglia(dove)      disegna
-            window.SpazioVivo.soglaServe()      vero se va mostrata
+            window.SpazioVivo.sogliaServe()     vero se va mostrata
    ═══════════════════════════════════════════════════════════════ */
 
 "use strict";
@@ -229,7 +229,8 @@ function soglia(dove){
   b.type = "button"; b.className = "avvia";
   b.textContent = "inizia il percorso dei talenti";
   b.onclick = function(){
-    if(typeof vai === "function") vai("talenti");
+    /* ⭐ 12 settembre, parola di Gab: prima dei talenti viene IL CAMMINO */
+    if(typeof vai === "function") vai("cammino");
     else if(window.SpazioVivo && SpazioVivo.percorsoDeiTalenti)
       SpazioVivo.percorsoDeiTalenti(box);
   };

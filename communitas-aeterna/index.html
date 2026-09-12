@@ -4513,6 +4513,7 @@
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <script src="fm-talenti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — dall'8 settembre è IL PERCORSO DEI TALENTI, non più i crediti -->
 <script src="fm-soglia.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊸ — la prima soglia di Antahkarana, scritta da Gab: rotta ?p=soglia -->
+<script src="fm-cammino.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊹ — il cammino («A che punto sei?»), scritto da Gab: fra la soglia e i talenti -->
 <script src="fm-crediti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — i crediti (saldo, sigillo, gettone ?t=): erano fm-talenti.js, interi e identici -->
 <script src="fm-orma-mia.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊷ — la matrice de «la mia orma»: laMatriceDellOrma(c), sostituisce fm-mia-orma.js mai innestato -->
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
@@ -5345,9 +5346,13 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="soglia" && window.SpazioVivo && SpazioVivo.soglia){
       SpazioVivo.sogliaServe().then(function(serve){ if(serve) SpazioVivo.soglia(c); else vai("orme"); });
     }
-    /* ⭐ TOCCATO NEL GUSCIO ㊸ — «talenti» è la parola del bottone della
-       soglia: porta al percorso. Il file di Gab resta verbatim. */
+    /* ⭐ TOCCATO NEL GUSCIO ㊸ — «talenti» è la parola dei bottoni di
+       Antahkarana: porta al percorso. ㊹ — ora la chiama l'«avanti»
+       del cammino; il bottone della soglia chiama «cammino». */
     else if(id==="talenti" && typeof percorsoDeiTalenti === "function") percorsoDeiTalenti(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊹ — il cammino, secondo momento di
+       Antahkarana (fm-cammino.js, file di Gab): soglia → cammino → talenti. */
+    else if(id==="cammino" && window.SpazioVivo && SpazioVivo.cammino) SpazioVivo.cammino(c);
     else attesa(c, id);
     /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
     scriviIndirizzo();
@@ -6971,7 +6976,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» */
 
   /* alzata mentre si legge la storia: allora l'indirizzo non si riscrive */
   var tornando = false;
