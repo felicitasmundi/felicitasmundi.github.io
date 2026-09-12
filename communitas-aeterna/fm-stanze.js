@@ -104,10 +104,11 @@ function stzVeste(){
       "background:radial-gradient(ellipse 60% 52% at 50% 50%," +
       "rgba(212,175,106,.14),transparent 70%)}" +
     ".fm-stz svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}" +
-    ".fm-stz .ret{transform-origin:0 0;animation:stzGira 120s linear infinite}" +
+    ".fm-stz .ret{transform-origin:0 0;animation:stzGira 150s linear infinite}" +
     "@keyframes stzGira{to{transform:rotate(360deg)}}" +
     ".fm-stz .sol{transform-origin:0 0;animation:stzSol 42s linear infinite}" +
     "@keyframes stzSol{to{transform:rotate(-360deg)}}" +
+    "@keyframes akPuls{0%,100%{opacity:.8}50%{opacity:1}}" +
     "@media (prefers-reduced-motion:reduce){" +
       ".fm-stz .ret,.fm-stz .sol{animation:none}}" +
 
@@ -237,8 +238,19 @@ function stzDisegno(st){
 
   var fuori = document.createElementNS(NS, "circle");
   fuori.setAttribute("r", "115"); fuori.setAttribute("stroke", "#D4AF6A");
-  fuori.setAttribute("stroke-width", ".55"); fuori.setAttribute("opacity", ".22");
+  fuori.setAttribute("stroke-width", "1");
+  fuori.setAttribute("opacity", ".5");
   g.appendChild(fuori);
+
+  /* ⛔ il quadrato tratteggiato, da Design: -115 -115, 230×230 */
+  var quad = document.createElementNS(NS, "rect");
+  quad.setAttribute("x", "-115"); quad.setAttribute("y", "-115");
+  quad.setAttribute("width", "230"); quad.setAttribute("height", "230");
+  quad.setAttribute("stroke-width", ".8");
+  quad.setAttribute("stroke-dasharray", "3 3.6");
+  quad.setAttribute("opacity", ".34");
+  g.appendChild(quad);
+  var _fatto = 1;
 
   svg.appendChild(g);
   return svg;
@@ -284,6 +296,12 @@ function stzDisegna(box){
   var velo = document.createElement("div");
   velo.className = "velo"; velo.setAttribute("aria-hidden","true");
   box.appendChild(velo);
+
+  /* ⭐ il cosmo di Design, dietro tutto */
+  var cos = document.createElement("ak-cosmo");
+  cos.setAttribute("aria-hidden", "true");
+  cos.style.cssText = "position:absolute;inset:0;z-index:0;grid-area:1/1/2/3;pointer-events:none";
+  box.insertBefore(cos, box.firstChild);
 
   /* sinistra: il solido, e sotto le cinque stanze */
   var sin = document.createElement("div");

@@ -16,10 +16,11 @@
    ⛔ E sono parole di Gab, verbatim. Non si riscrivono.
 
    Espone:  window.SpazioVivo.soglia(dove)      disegna
-            window.SpazioVivo.sogliaServe()     vero se va mostrata
+            window.SpazioVivo.soglaServe()      vero se va mostrata
    ═══════════════════════════════════════════════════════════════ */
 
 "use strict";
+
 
 /* le tre righe — parole di Gab, 12 settembre. ⛔ verbatim */
 var SOG_RIGHE = [
@@ -55,7 +56,11 @@ function sogVeste(){
   var s = document.createElement("style");
   s.id = "fm-sog-veste";
   s.textContent =
-    ".fm-sog{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:2rem;padding:3rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}.fm-sog *{box-sizing:border-box}.fm-sog .velo{position:absolute;inset:0;z-index:0;grid-area:1/1/2/3;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}.fm-sog .sin{position:relative;z-index:1;width:100%;max-width:30rem;margin:0 auto;justify-self:center}.fm-sog .alone{position:absolute;inset:-8%;pointer-events:none;background:radial-gradient(ellipse 60% 52% at 50% 50%,rgba(212,175,106,.14),transparent 70%)}.fm-sog .dis{position:absolute;left:50%;top:50%;width:142%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;overflow:visible}.fm-sog .col{position:relative;z-index:1;display:flex;flex-direction:column;gap:2.2rem;max-width:30rem;justify-self:start}@media (max-width:52rem){.fm-sog{grid-template-columns:1fr;padding:2rem 1.2rem 3rem}.fm-sog .sin{grid-row:1;max-width:22rem}.fm-sog .col{grid-row:2;justify-self:center}}" +
+    ".fm-sog{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:2rem;padding:3rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}.fm-sog *{box-sizing:border-box}.fm-sog .velo{position:absolute;inset:0;z-index:0;grid-area:1/1/2/3;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}.fm-sog .sin{position:relative;z-index:1;width:100%;max-width:30rem;margin:0 auto;justify-self:center}.fm-sog .alone{position:absolute;inset:-8%;pointer-events:none;animation:akPuls 14s ease-in-out infinite;background:radial-gradient(ellipse 60% 52% at 50% 50%,rgba(212,175,106,.14),transparent 70%)}.fm-sog .dis{position:absolute;left:50%;top:50%;width:142%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;overflow:visible}.fm-sog .col{position:relative;z-index:1;display:flex;flex-direction:column;gap:2.2rem;max-width:30rem;justify-self:start}@media (max-width:52rem){.fm-sog{grid-template-columns:1fr;padding:2rem 1.2rem 3rem}.fm-sog .sin{grid-row:1;max-width:22rem}.fm-sog .col{grid-row:2;justify-self:center}}" +
+    "@keyframes akGira{to{transform:rotate(360deg)}}" +
+    "@keyframes akPuls{0%,100%{opacity:.8}50%{opacity:1}}" +
+    ".fm-sog .ret{transform-origin:0 0;animation:akGira 150s linear infinite}" +
+    "@media (prefers-reduced-motion:reduce){.fm-sog .ret,.fm-sog .alone{animation:none}}" +
     ".fm-sog h1{margin:0;font-family:'Cinzel',serif;font-weight:400;" +
       "font-size:clamp(2rem,3.6vw,2.5rem);line-height:1.1;letter-spacing:.01em}" +
     ".fm-sog .capo{display:flex;flex-wrap:wrap;align-items:baseline;" +
@@ -133,8 +138,19 @@ function sogDisegno(){
   /* il cerchio grande, che respira */
   var fuori = document.createElementNS(NS, "circle");
   fuori.setAttribute("r", "115");
-  fuori.setAttribute("stroke-width", ".6");
-  fuori.setAttribute("opacity", ".3");
+  fuori.setAttribute("stroke-width", "1");
+  fuori.setAttribute("opacity", ".5");
+  g.appendChild(fuori);
+
+  /* ⛔ il quadrato tratteggiato, da Design: -115 -115, 230×230 */
+  var quad = document.createElementNS(NS, "rect");
+  quad.setAttribute("x", "-115"); quad.setAttribute("y", "-115");
+  quad.setAttribute("width", "230"); quad.setAttribute("height", "230");
+  quad.setAttribute("stroke-width", ".8");
+  quad.setAttribute("stroke-dasharray", "3 3.6");
+  quad.setAttribute("opacity", ".34");
+  g.appendChild(quad);
+  var _fatto = 1;
   fuori.setAttribute("class", "puls");
   g.appendChild(fuori);
 
@@ -175,6 +191,12 @@ function soglia(dove){
   velo.className = "velo"; velo.setAttribute("aria-hidden","true");
   box.appendChild(velo);
 
+  /* ⭐ il cosmo di Design, dietro tutto */
+  var cos = document.createElement("ak-cosmo");
+  cos.setAttribute("aria-hidden", "true");
+  cos.style.cssText = "position:absolute;inset:0;z-index:0;grid-area:1/1/2/3;pointer-events:none";
+  box.insertBefore(cos, box.firstChild);
+
   /* ⛔ a sinistra il disegno col suo alone — la colonna di Design */
   var sin = document.createElement("div");
   sin.className = "sin";
@@ -182,6 +204,13 @@ function soglia(dove){
   alone.className = "alone"; alone.setAttribute("aria-hidden","true");
   sin.appendChild(alone);
   sin.appendChild(sogDisegno());
+
+  /* ⭐ la figura di Design, accanto agli altri file in SPAZIO VIVO */
+  var fig = document.createElement("img");
+  fig.src = "ak-fig.webp"; fig.alt = "";
+  fig.setAttribute("aria-hidden", "true");
+  fig.style.cssText = "position:relative;z-index:1;display:block;width:100%;height:auto;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(ellipse 62% 74% at 50% 50%,#000 0,#000 52%,rgba(0,0,0,.55) 74%,transparent 92%);mask-image:radial-gradient(ellipse 62% 74% at 50% 50%,#000 0,#000 52%,rgba(0,0,0,.55) 74%,transparent 92%)";
+  sin.appendChild(fig);
   box.appendChild(sin);
 
   var col = document.createElement("div");
