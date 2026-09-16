@@ -4067,7 +4067,8 @@
 <script src="fm-emporio.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Emporio: SpazioVivo.emporio(dove) -->
 <script src="fm-assistenza.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Assistenza: SpazioVivo.assistenza(dove) -->
 <script src="fm-configuratore.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — il configuratore: SpazioVivo.configuratore(dove, ormaId) -->
-<!-- ⛔ ㊿ — fm-scuola.js NON è in cartella (consegna del 15 settembre incompleta): quando arriva, il suo richiamo va QUI e la rotta `scuola` smette di cadere su attesa() -->
+<script src="fm-scuola.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza della Scuola: SpazioVivo.scuola(dove). Arrivato il 16 settembre, a chiudere la consegna del 15 -->
+
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
 <script>
 "use strict";
@@ -4568,8 +4569,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ TOCCATO NEL GUSCIO ㊿ — le stanze della consegna del 15 settembre:
        Emporio, Assistenza, Scuola e il configuratore. Il configuratore
        prende l'orma per argomento, come fa `orma` con l'id.
-       ⛔ fm-scuola.js NON è ancora in cartella: la guardia lo sa, e la
-          rotta cade su attesa() finché il file non arriva. */
+       (fm-scuola.js è arrivato il 16 settembre, a chiudere la consegna.) */
     else if(id==="emporio" && window.SpazioVivo && SpazioVivo.emporio) SpazioVivo.emporio(c);
     else if(id==="assistenza" && window.SpazioVivo && SpazioVivo.assistenza) SpazioVivo.assistenza(c);
     else if(id==="scuola" && window.SpazioVivo && SpazioVivo.scuola) SpazioVivo.scuola(c);
