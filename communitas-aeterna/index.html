@@ -1219,332 +1219,11 @@
      perché: quella esiste, e non è aperta.
      ═══════════════════════════════════════════════════════════════ -->
 
-<style>
-  .sv-barra,.sv-barra *,.sv-barra *::before,.sv-barra *::after{box-sizing:border-box}
-  .sv-barra{--scala:1.4;--pannello:#101736;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
-    --riga:rgba(245,240,230,0.12);--line:rgba(184,150,62,0.2);
-    --t-eti:calc(0.8125rem * var(--scala));--t-tas:calc(0.9375rem * var(--scala));
-    --t-cor:calc(1.0625rem * var(--scala));
-    position:sticky;top:0;height:100vh;overflow-y:auto;flex:0 0 17.5rem;width:17.5rem;
-    background:var(--pannello);border-right:1px solid var(--line);
-    display:flex;flex-direction:column;padding:1.1rem 0 0.9rem;
-    color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;font-size:var(--t-eti);
-    -webkit-font-smoothing:antialiased}
+<!-- ⭐ TOCCATO NEL GUSCIO ㊽ — LA VESTE DELLA BARRA vive in fm-barra.js, con tutta la barra -->
 
-  .sv-barra a{text-decoration:none;color:inherit}
+<!-- ⭐ TOCCATO NEL GUSCIO ㊽ — LA BARRA (bottone, velo e nav) vive in fm-barra.js: si disegna da sé in testa al body -->
 
-  /* il capo: il Nexus non è un collegamento */
-  .sv-barra .capo{display:flex;gap:0.75rem;align-items:center;padding:0 1.05rem 1rem;
-    border-bottom:1px solid var(--riga);margin-bottom:0.4rem}
-  .sv-barra .capo .segno{flex:none;width:3rem;height:3rem;border-radius:0.75rem;
-    background:rgba(245,240,230,0.09);border:1px solid rgba(184,150,62,0.36);
-    display:grid;place-items:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-  .sv-barra .capo .segno img{width:1.9rem;height:1.9rem;object-fit:contain}
-  .sv-barra .capo b{display:block;font-family:'Cinzel',serif;font-weight:500;
-    font-size:var(--t-tas);line-height:1.2;letter-spacing:0.02em}
-  .sv-barra .capo span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;
-    font-size:var(--t-eti);color:rgba(212,175,106,0.75);margin-top:0.1rem}
-
-  /* le cinque pagine */
-  .sv-barra .pagine{flex:0 0 auto;padding:0.7rem 0 0;
-    display:flex;flex-direction:column;gap:0.35rem}
-  .sv-barra .pg{display:block;flex:0 0 auto;padding:0.85rem 1.05rem;border-left:2px solid transparent;
-    cursor:pointer;transition:background 0.15s;min-width:0}
-  .sv-barra .pg:hover{background:rgba(245,240,230,0.07)}
-  .sv-barra .pg.on{background:rgba(200,160,85,0.2);border-left-color:var(--oro)}
-  .sv-barra .pg .alto{display:flex;align-items:baseline;gap:0.55rem;min-width:0}
-  .sv-barra .pg .sg{flex:none;width:1.5rem;height:1.5rem;color:var(--c,#D4AF6A);
-    opacity:.82;transition:opacity .2s,filter .2s}
-  .sv-barra .pg .sg svg{width:100%;height:100%;display:block}
-  .sv-barra .pg:hover .sg{opacity:1}
-  .sv-barra .pg.on .sg{opacity:1;filter:brightness(1.25)}
-  .sv-barra .pg.chiusa .sg{opacity:.34}
-  .sv-barra .pg b{min-width:0;overflow-wrap:break-word;hyphens:auto}
-  .sv-barra .pg .n{flex:none;width:1.1rem;font-family:'Cinzel',serif;font-size:var(--t-tas);
-    color:var(--c,var(--oro-ch));line-height:1}
-  .sv-barra .pg b{flex:1;min-width:0;font-family:'Cinzel',serif;font-weight:500;
-    font-size:var(--t-tas);color:rgba(245,240,230,0.95);line-height:1.25}
-  .sv-barra .pg.on b{color:var(--ivory)}
-  /* il numero a destra: quanto è pieno quel posto */
-  .sv-barra .pg .vn{flex:none;font-family:'Cinzel',serif;font-size:var(--t-eti);
-    color:rgba(245,240,230,0.34)}
-  .sv-barra .pg .desc{display:block;font-family:'Cormorant Garamond',serif;
-    font-size:var(--t-eti);line-height:1.45;color:rgba(245,240,230,0.6);
-    margin-top:0.3rem;padding-left:calc(1.1rem + 0.55rem)}
-
-  /* una pagina chiusa: visibile e spenta, con la riga che dice perché */
-  .sv-barra .pg.chiusa{opacity:0.46;cursor:default}
-  .sv-barra .pg.chiusa:hover{background:none}
-  .sv-barra .pg.chiusa .perche a{color:var(--oro-ch)}
-  .sv-barra .pg.chiusa .perche{display:block;margin-top:0.3rem;
-    padding-left:calc(1.1rem + 0.55rem);font-size:var(--t-eti);
-    color:rgba(200,160,85,0.62);line-height:1.4}
-
-  /* il titolo del gruppo */
-  .sv-barra .gruppo{margin-top:auto;padding:1.5rem 1.05rem 0.7rem;font-size:var(--t-eti);
-    letter-spacing:0.16em;text-transform:uppercase;color:rgba(245,240,230,0.45);
-    border-top:1px solid rgba(245,240,230,0.05)}
-
-  /* cosa incontri: quadranti semitrasparenti, ognuno col suo colore */
-  .sv-barra .sotto{padding:0 0.75rem 0.6rem;display:flex;flex-direction:column;gap:0.6rem}
-  .sv-barra .pg.pic{padding:0.85rem 0.95rem;border-radius:0.7rem;border-left:0;
-    background:color-mix(in srgb,var(--c,var(--oro-ch)) 13%,rgba(245,240,230,0.05));
-    border:1px solid color-mix(in srgb,var(--c,var(--oro-ch)) 34%,transparent);
-    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-  .sv-barra .pg.pic:hover{background:color-mix(in srgb,var(--c,var(--oro-ch)) 24%,rgba(245,240,230,0.07));
-    border-color:color-mix(in srgb,var(--c,var(--oro-ch)) 58%,transparent)}
-  .sv-barra .pg.pic.on{background:color-mix(in srgb,var(--c,var(--oro-ch)) 30%,rgba(245,240,230,0.08));
-    border-color:var(--c,var(--oro-ch))}
-  .sv-barra .pg.pic b{font-family:'Cinzel',serif;letter-spacing:0.03em;
-    color:var(--c,var(--oro-ch));filter:brightness(1.25)}
-  .sv-barra .pg.pic .pt{flex:none;width:0.6rem;height:0.6rem;border-radius:50%;
-    background:var(--c,var(--oro-ch));align-self:center;
-    box-shadow:0 0 0.5rem color-mix(in srgb,var(--c,var(--oro-ch)) 70%,transparent)}
-  .sv-barra .pg.pic .vn{color:rgba(245,240,230,0.5)}
-  .sv-barra .pg.pic .desc{padding-left:1.15rem;margin-top:0.25rem;color:rgba(245,240,230,0.66)}
-
-  /* il piede: chi sei e il codice Nexus */
-  .sv-barra .piede{margin-top:auto;padding:0.9rem 1.05rem 0.2rem;border-top:1px solid var(--riga)}
-  .sv-barra .chi{display:flex;gap:0.65rem;align-items:center;margin-bottom:0.7rem;min-width:0}
-  .sv-barra .chi .es{flex:none;width:2.1rem;height:2.4rem;
-    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
-    background:linear-gradient(145deg,rgba(200,160,85,0.5),rgba(200,160,85,0.16));
-    display:grid;place-items:center;font-family:'Cinzel',serif;font-size:var(--t-eti)}
-  .sv-barra .chi b{display:block;font-size:var(--t-eti);font-weight:500;line-height:1.25}
-  .sv-barra .chi span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;
-    font-size:var(--t-eti);color:rgba(245,240,230,0.45);margin-top:0.1rem}
-  .sv-barra .codice{font-family:ui-monospace,monospace;font-size:var(--t-eti);
-    letter-spacing:0.1em;color:rgba(245,240,230,0.3)}
-  .sv-barra .codice em{font-style:normal;color:rgba(212,175,106,0.62)}
-
-  /* sotto 52rem la barra si chiude e si apre dall'hamburger */
-  #sv-apri-barra{display:none;position:fixed;top:0.9rem;left:0.9rem;z-index:70;
-    width:2.7rem;height:2.7rem;border-radius:0.7rem;background:rgba(12,16,32,0.9);
-    border:1px solid rgba(184,150,62,0.28);color:#D4AF6A;font-size:1.25rem;cursor:pointer;
-    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-  #sv-velo-barra{display:none;position:fixed;inset:0;z-index:64;
-    background:rgba(2,4,12,0.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-  #sv-velo-barra.on{display:block}
-  @media(max-width:52rem){
-    #sv-apri-barra{display:block}
-    .sv-barra{position:fixed;top:0;left:0;z-index:66;width:19rem;flex:none;
-      transform:translateX(-100%);transition:transform 0.22s ease}
-    .sv-barra.aperta{transform:none}
-  }
-</style>
-
-<button id="sv-apri-barra" type="button" aria-label="Apri la barra">&#9776;</button>
-<div id="sv-velo-barra"></div>
-
-<nav class="sv-barra" id="sv-barra" aria-label="Le pagine">
-
-  <div class="capo">
-    <span class="segno"><img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt=""></span>
-    <div>
-      <b>FelicitasMundi</b>
-      <span>Comunità Eterna</span>
-    </div>
-  </div>
-
-  <div class="pagine" id="sv-pagine"></div>
-
-  <div class="gruppo">Cosa incontri</div>
-  <div class="sotto" id="sv-incontri"></div>
-
-  <div class="piede">
-    <div class="chi">
-      <span class="es" id="sv-chi-es"></span>
-      <div>
-        <b id="sv-chi-nome"></b>
-        <span id="sv-chi-ruolo"></span>
-      </div>
-    </div>
-    <div class="codice">nexus <em id="sv-nexus"></em></div>
-  </div>
-
-</nav>
-
-<script>
-(function () {
-  "use strict";
-
-  var ATTESA = "[ in attesa ]";
-
-  /* l'impronta del passo, ripetuta a tre misure dentro il segno dell'orma */
-  var PASSO =
-    '<path d="M28 51 C22 51 19 47 20 43 C21 39 26 38 26 34' +
-    ' C26 29 21 27 21 24 C21 20 25 18 30 18' +
-    ' C35 18 39 20 39 24 C39 29 36 33 36 38' +
-    ' C36 44 34 51 28 51Z"/>' +
-    '<circle cx="22" cy="12" r="3.2"/>' +
-    '<circle cx="28.5" cy="9.6" r="2.4"/>' +
-    '<circle cx="33.5" cy="10" r="2.1"/>' +
-    '<circle cx="37.5" cy="11.6" r="1.8"/>' +
-    '<circle cx="40.5" cy="14.2" r="1.5"/>';
-
-  /* i segni delle voci: linea sola, stessa mano dei sette.
-     La chiave la dà il dato (segno), altrimenti si prende in ordine. */
-  var SEGNI = {
-    /* la mia orma — il passo che continua: verbatim dal simbolo scelto.
-       Riquadro 60, tratto 1,35 — non si ridisegna. */
-    orma: {vb: "0 0 60 60", w: "1.35", d:
-      '<path d="M2 50 C14 45 26 52 38 47 C46 44 52 48 58 45" opacity=".55"/>' +
-      '<path d="M2 56 C14 51 26 58 38 53 C46 50 52 54 58 51" opacity=".22"/>' +
-      '<g transform="translate(-4,4) scale(0.9)">' + PASSO + '</g>' +
-      '<g transform="translate(33,3) scale(0.5)" opacity=".45">' + PASSO + '</g>' +
-      '<g transform="translate(20,-2) scale(0.3)" opacity=".2">' + PASSO + '</g>'},
-    /* il praticantato — la scala: il passo che sale */
-    praticantato: '<path d="M8 33L8 25L16 25L16 17L24 17L24 9L34 9"/><path d="M8 33L34 33" opacity=".45"/>',
-    /* squadre — più orme che si tengono: da tre persone in su, e il lavoro
-       che le lega. Non un cerchio di comando: una maglia fra pari. */
-    squadre: '<path d="M13.4 12C13.4 13.44 12.24 14.6 10.8 14.6C9.36 14.6 8.2 13.44 8.2 12C8.2 10.56 9.36 9.4 10.8 9.4C12.24 9.4 13.4 10.56 13.4 12Z"/><path d="M31.8 12C31.8 13.44 30.64 14.6 29.2 14.6C27.76 14.6 26.6 13.44 26.6 12C26.6 10.56 27.76 9.4 29.2 9.4C30.64 9.4 31.8 10.56 31.8 12Z"/><path d="M22.6 29C22.6 30.44 21.44 31.6 20 31.6C18.56 31.6 17.4 30.44 17.4 29C17.4 27.56 18.56 26.4 20 26.4C21.44 26.4 22.6 27.56 22.6 29Z"/><path d="M13.4 12L26.6 12M12.4 14.4L18.4 26.6M27.6 14.4L21.6 26.6"/><path d="M20 12L20 20" opacity=".4"/><path d="M21.4 20C21.4 20.77 20.77 21.4 20 21.4C19.23 21.4 18.6 20.77 18.6 20C18.6 19.23 19.23 18.6 20 18.6C20.77 18.6 21.4 19.23 21.4 20Z" fill="currentColor" stroke="none" opacity=".6"/>',
-    /* edizione — il foglio piegato: l'opera che prende forma */
-    edizione: '<path d="M10 6L24 6L30 12L30 34L10 34Z"/><path d="M24 6L24 12L30 12" opacity=".7"/><path d="M15 20L25 20M15 25L25 25M15 15L20 15" opacity=".5"/>',
-    /* scuola — il seme che si apre: la conoscenza che germina */
-    scuola: '<path d="M20 34L20 20"/><path d="M20 20C20 14 15 9 8 9C8 16 13 20 20 20Z"/><path d="M20 20C20 14 25 9 32 9C32 16 27 20 20 20Z"/><path d="M14 34L26 34" opacity=".45"/>'
-  };
-  var ORDINE = ["orma", "praticantato", "squadre", "edizione", "scuola"];
-
-  function disegnaSegno(chiave) {
-    var v = SEGNI[chiave];
-    if (!v) return null;
-    var d  = (typeof v === "string") ? v : v.d;
-    var vb = (typeof v === "string") ? "0 0 40 40" : (v.vb || "0 0 40 40");
-    var w  = (typeof v === "string") ? "1.5" : (v.w || "1.5");
-    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    s.setAttribute("viewBox", vb);
-    s.setAttribute("fill", "none");
-    s.setAttribute("stroke", "currentColor");
-    s.setAttribute("stroke-width", w);
-    s.setAttribute("stroke-linecap", "round");
-    s.setAttribute("stroke-linejoin", "round");
-    s.innerHTML = d;
-    return s;
-  }
-  var barra = document.getElementById("sv-barra");
-  var velo  = document.getElementById("sv-velo-barra");
-  var apri  = document.getElementById("sv-apri-barra");
-
-  var vuoto = function (v) { return v === undefined || v === null || v === ""; };
-  var testo = function (v) { return vuoto(v) ? ATTESA : String(v); };
-  function svuota(n) { while (n && n.firstChild) n.removeChild(n.firstChild); }
-
-  function riga(cl, dentro) {
-    var e = document.createElement("span");
-    e.className = cl;
-    if (dentro !== undefined) e.textContent = dentro;
-    return e;
-  }
-
-  /* una pagina: numero, nome, quanto è pieno, la riga che dice cosa contiene */
-  function unaPagina(p, i, piccola) {
-    var chiusa = !!p.chiusa;
-    var e = document.createElement(chiusa ? "div" : "a");
-    e.className = "pg" + (piccola ? " pic" : "") + (chiusa ? " chiusa" : "");
-    if (p.colore) e.style.setProperty("--c", p.colore);
-    if (!chiusa) {
-      e.setAttribute("href", vuoto(p.rotta) ? "#" : p.rotta);
-      if (p.id) e.setAttribute("data-pg", p.id);
-    }
-
-    var alto = riga("alto");
-    if (piccola) alto.appendChild(riga("pt"));
-    else {
-      var sg = riga("sg");
-      var ic = disegnaSegno(p.segno || ORDINE[i]);
-      if (ic) sg.appendChild(ic);
-      alto.appendChild(sg);
-    }
-
-    var b = document.createElement("b");
-    b.textContent = testo(p.nome);
-    alto.appendChild(b);
-
-    if (!vuoto(p.quante)) alto.appendChild(riga("vn", String(p.quante)));
-    e.appendChild(alto);
-
-    if (chiusa) e.appendChild(riga("perche", testo(p.perche)));
-    return e;
-  }
-
-  function riempi(dati) {
-    dati = dati || {};
-
-    /* ⭐ le voci che uno non ha non si vedono: una voce senza nome non è
-       in attesa, è una cosa che per lui non esiste ancora — Squadre compare
-       il giorno che ne nasce una */
-    var pg = document.getElementById("sv-pagine");
-    svuota(pg);
-    (dati.pagine || [])
-      .filter(function (p) { return p && !vuoto(p.nome); })
-      .forEach(function (p, i) { pg.appendChild(unaPagina(p, i, false)); });
-
-    var inc = document.getElementById("sv-incontri");
-    svuota(inc);
-    (dati.incontri || []).forEach(function (p, i) { inc.appendChild(unaPagina(p, i, true)); });
-
-    /* ⭐ il piede segue la stessa regola: quello che non c'è non si vede.
-       Un nome vuoto non è «in attesa» — è qualcuno che non ha ancora firmato. */
-    var chi = dati.chi || {};
-    var pd = document.querySelector(".sv-barra .piede");
-    var nome = document.getElementById("sv-chi-nome");
-    var ruolo = document.getElementById("sv-chi-ruolo");
-    var es = document.getElementById("sv-chi-es");
-    var nx = document.getElementById("sv-nexus");
-    var cod = nx ? nx.parentNode : null;
-
-    function metti(n, v) {
-      if (!n) return false;
-      var t = vuoto(v) ? "" : String(v).trim();
-      n.textContent = t;
-      n.hidden = !t;
-      return !!t;
-    }
-
-    var haNome  = metti(nome, chi.nome);
-    var haRuolo = metti(ruolo, chi.ruolo);
-    if (es) {
-      es.textContent = haNome ? String(chi.nome).trim().charAt(0).toUpperCase() : "";
-      es.hidden = !haNome;
-    }
-    var haNexus = metti(nx, dati.nexus);
-    if (cod) cod.hidden = !haNexus;
-    var riga = document.querySelector(".sv-barra .chi");
-    if (riga) riga.hidden = !(haNome || haRuolo);
-    if (pd) pd.hidden = !(haNome || haRuolo || haNexus);
-
-    collega();
-  }
-
-  /* la pagina in cui si è */
-  function qui(id) {
-    [].forEach.call(barra.querySelectorAll(".pg"), function (x) { x.classList.remove("on"); });
-    if (vuoto(id)) return;
-    var e = barra.querySelector('[data-pg="' + id + '"]');
-    if (e) e.classList.add("on");
-  }
-
-  function apriBarra()   { barra.classList.add("aperta"); velo.classList.add("on"); }
-  function chiudiBarra() { barra.classList.remove("aperta"); velo.classList.remove("on"); }
-
-  function collega() {
-    [].forEach.call(barra.querySelectorAll(".pg:not(.chiusa)"), function (a) {
-      a.addEventListener("click", function () { chiudiBarra(); });
-    });
-  }
-
-  apri.addEventListener("click", apriBarra);
-  velo.addEventListener("click", chiudiBarra);
-
-  /* a vuoto la forma si legge lo stesso */
-
-  window.SpazioVivo = window.SpazioVivo || {};
-  window.SpazioVivo.barra       = riempi;
-  window.SpazioVivo.barraQui    = qui;
-  window.SpazioVivo.apriBarra   = apriBarra;
-  window.SpazioVivo.chiudiBarra = chiudiBarra;
-})();
-</script>
+<!-- ⭐ TOCCATO NEL GUSCIO ㊽ — lo script del cassetto della barra vive in fm-barra.js -->
 
 <!-- ⭐ L'UNICA MANO SULLA BARRA DI DESIGN, e sta tutta qui.
      Il file di Design resta com'è: Design la fa colonna di un flex,
@@ -4363,6 +4042,8 @@
 <script src="fm-edizione.js"></script>
 <script src="fm-consolle.js"></script>
 <script src="fm-account.js"></script>
+<script src="fm-account-mio.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Il tuo account» dal piede della barra: SpazioVivo.account(dove). I cinque pannelli del 7 agosto restano in fm-account.js -->
+
 <script src="fm-casa.js"></script>
 <script src="fm-praticantato.js"></script>
 <script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
@@ -4373,12 +4054,20 @@
 <script src="fm-soglia.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊸ — la prima soglia di Antahkarana, scritta da Gab: rotta ?p=soglia -->
 <script src="fm-cammino.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊹ — il cammino («A che punto sei?»), scritto da Gab: fra la soglia e i talenti -->
 <script src="fm-stanze.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊻ — le stanze coi cinque solidi, scritte da Gab: dopo il cammino -->
+<script src="fm-antahkarana.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — Antaḥkaraṇa: SpazioVivo.antahkarana(dove). Dopo il cosmo, come i tre momenti -->
 <script src="fm-crediti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — i crediti (saldo, sigillo, gettone ?t=): erano fm-talenti.js, interi e identici -->
 <script src="fm-orma-mia.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊷ — la matrice de «la mia orma»: laMatriceDellOrma(c), sostituisce fm-mia-orma.js mai innestato -->
-<script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` -->
+<script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` · ㊾ resta SOLO per l'ospite col codice `?c=`: il resto passa da fm-orma-dentro.js -->
+<script src="fm-orma-dentro.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — dentro un'orma: SpazioVivo.ormaDentro(dove, id). La base di OGNI orma, per regola di Gab del 15 settembre -->
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
+<script src="fm-invito.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Invita chi risuona»: SpazioVivo.invito(), finestra, non rotta -->
+<script src="fm-strumenti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — rubrica · calendario · costi, in un file: SpazioVivo.rubrica/calendario/costi(dove) -->
+<script src="fm-emporio.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Emporio: SpazioVivo.emporio(dove) -->
+<script src="fm-assistenza.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Assistenza: SpazioVivo.assistenza(dove) -->
+<script src="fm-configuratore.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — il configuratore: SpazioVivo.configuratore(dove, ormaId) -->
+<!-- ⛔ ㊿ — fm-scuola.js NON è in cartella (consegna del 15 settembre incompleta): quando arriva, il suo richiamo va QUI e la rotta `scuola` smette di cadere su attesa() -->
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
 <script>
 "use strict";
@@ -4424,184 +4113,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     d.style.cssText="position:absolute;visibility:hidden;width:"+v;
     document.body.appendChild(d); var n=d.getBoundingClientRect().width; d.remove(); return n; }
 
-  /* ══ LA BARRA ══
-     `sotto` è il ramo, e si annida quanto serve.
-     `va` dice a quale porta si arriva quando la voce non ne ha una propria. */
-  /* ⭐ LE VOCI NON STANNO PIÙ QUI: escono dalla tabella `stanze`.
-     BARRA resta il vocabolario piatto — id, nome, riga — che attesa()
-     e l'indirizzo ?p= interrogano. Si riempie a ogni avvio. */
-  var BARRA  = [];
-  var ROTTE  = {};
-  var STANZE = { pagine:[], incontri:[], annale:{} };
-
-  /* ⭐ IL SEME — le stesse righe che stanno in `stanze`, nello stesso
-     ordine e con le stesse parole. `database/stanze.sql` ne è lo specchio.
-     Serve a un solo scopo: la barra si disegna al primo istante, senza
-     aspettare la risposta del database. Chi apre non vede mai una barra
-     vuota. Appena la risposta arriva, versa() ridisegna sopra e da lì in
-     poi comanda il database — il seme non ha più voce in capitolo.
-     ⚠️ Se una parola cambia là, va cambiata anche qui: per un istante
-        si vedrebbe quella vecchia. */
-  var SEME = [
-    {id:"orme",       gruppo:"pagina",   ordine:1, nome:"La mia orma",
-     riga:null,
-     elemento:null, segno:"orma", rotta:"orme", chiusa:false, perche:null},
-    {id:"sentiero",   gruppo:"pagina",   ordine:2, nome:"Praticantato",
-     riga:null,
-     elemento:null, segno:"praticantato", rotta:"sentiero", chiusa:false, perche:null},
-    /* ⭐ TOCCATO NEL GUSCIO ㉝ — il seme segue `stanze`, come dice la
-       nota in cima. Tre cambi, il 27 agosto 2026:
-         · «Squadre» è una voce NUOVA — non «Gruppi Cooperativi»
-           rinominata. Porta le squadre di lavoro e i team che nascono
-           da un fatto. La sua stanza non esiste ancora: rotta vuota.
-         · «Gruppi Cooperativi» passa nel nucleo — gruppo `riposo`.
-         · «Aziende, team e classi» aspetta la sua tavola — `riposo`.
-       ⭐ «Squadre» si vede SEMPRE, anche a rotta vuota: il Praticantato
-          è la squadra automatica, e nessuno ne ha zero.
-       ⭐ E `riga` è vuota per Squadre, non «[ in attesa ]»: le descrizioni
-          sono uscite da tutta la barra, che porta il nome e il segno. Un
-          segnaposto visibile ha senso dove qualcosa si vede; qui no.
-          Le righe delle altre voci restano dove sono — non le disegna
-          più la barra, ma le legge ancora attesa().
-       ⭐ E `segno` sta anche qui, non solo in `stanze`: il seme disegna
-          il primo istante, e se non lo portasse la barra ricadrebbe sulla
-          posizione — proprio la cosa da cui il ㉞ toglie il piede.
-       ⚠️ `segno:"nucleo"` è una chiave che la barra ancora non conosce:
-          Design non l'ha disegnato. disegnaSegno() torna vuoto e la voce
-          resta col nome e basta — nessun danno, solo un segno che manca.
-       ⚠️ Questa riga e l'SQL vanno insieme: `database/stanze.sql`. */
-    /* ⭐ TOCCATO NEL GUSCIO ㊶ — Squadre a `riposo`, decisione dell'8
-       settembre 2026: la squadra è un'orma con più persone dentro, e sta
-       già dentro «La mia orma». Le parole restano, come per Gruppi e
-       Aziende: era gruppo:"pagina". Questa riga e l'SQL vanno insieme —
-       l'update sulla tavola è girato lo stesso giorno. */
-    {id:"squadre",    gruppo:"riposo",   ordine:3, nome:"Squadre",
-     riga:null,
-     elemento:null, segno:"squadre", rotta:"", chiusa:false, perche:null},
-    {id:"nucleo",     gruppo:"pagina",   ordine:4, nome:"Il nucleo",
-     riga:null,
-     elemento:null, segno:"nucleo", rotta:"nucleo", chiusa:true, perche:"Ci entra chi fa parte del nucleo."},
-    {id:"gruppi",     gruppo:"riposo",   ordine:1, nome:"Gruppi Cooperativi",
-     riga:null,
-     elemento:null, rotta:"", chiusa:false, perche:null},
-    {id:"aziende",    gruppo:"riposo",   ordine:2, nome:"Aziende, team e classi",
-     riga:null,
-     elemento:null, rotta:"", chiusa:false, perche:null},
-
-    {id:"vicinati",   gruppo:"incontro", ordine:1, nome:"Vicinati",
-     riga:"i luoghi e le persone vicine a te, e quello di cui c’è bisogno",
-     elemento:"terra", rotta:"incontro:vicinati", chiusa:false, perche:null},
-    {id:"emporio",    gruppo:"incontro", ordine:2, nome:"Emporio",
-     riga:"quello che si compra, si scambia e si dona, e chi lo porta",
-     elemento:"acqua", rotta:"incontro:emporio", chiusa:false, perche:null},
-    {id:"assistenza", gruppo:"incontro", ordine:3, nome:"Assistenza",
-     riga:"chi risponde a un bisogno: spiritualità, trattamenti, consulenze, mutuo aiuto",
-     elemento:"fuoco", rotta:"incontro:assistenza", chiusa:false, perche:null},
-    {id:"edizione",   gruppo:"incontro", ordine:4, nome:"Edizione",
-     riga:"le opere, la radio, e quello che si stampa e si distribuisce",
-     elemento:"aria", rotta:"edizione", chiusa:false, perche:null},
-    {id:"scuola",     gruppo:"incontro", ordine:5, nome:"Scuola",
-     riga:"le lezioni, le formazioni, e la ricerca che le accompagna",
-     elemento:"etere", rotta:"incontro:scuola", chiusa:false, perche:null},
-
-    /* ⭐ TOCCATO NEL GUSCIO ⑥ — il seme segue `stanze`, come dice la nota
-       qui sopra. L'Annale non è più una stanza: la rotta è vuota, e la
-       voce non si accende. Le parole restano, intere, dove sono sempre
-       state: il giorno che l'Annale torna a essere una stanza si rimette
-       «annale» qui e nella tavola, e la voce riappare.
-       ⚠️ Questa riga e l'SQL vanno insieme. Finché la tavola dice ancora
-          «annale», la voce si spegne per un istante e poi torna. */
-    {id:"annale",     gruppo:"annale",   ordine:1, nome:"L’Annale",
-     riga:"la memoria: tutto quello che è stato scritto, in ordine di tempo",
-     elemento:null, rotta:"", chiusa:false, perche:null}
-  ];
-
-  /* le righe — del seme o del database, è la stessa forma — diventano
-     quello che la barra, l’indirizzo e attesa() sanno leggere */
-  function versa(righe){
-    function forma(x){
-      /* ⭐ TOCCATO NEL GUSCIO ② — `elemento` passa intero, non solo cotto
-         dentro `colore`. Le porte di «Cosa incontro» hanno bisogno del
-         nome dell'elemento per due cose: il colore E il segno. Il colore
-         si potrebbe ricavare da `colore`; il segno no — sg() vuole il
-         nome nudo. La colonna `stanze.elemento` esiste già ed è quella
-         da cui `colore` viene calcolato: qui non si aggiunge un dato, si
-         smette di buttarlo via. La barra di Design ignora i campi che
-         non conosce, quindi non cambia niente di quello che disegna. */
-      /* ⭐ TOCCATO NEL GUSCIO ㉞ — E ANCHE `segno` PASSA INTERO.
-         La barra nuova disegna il segno accanto al nome e la chiave gliela
-         dà il dato: `p.segno`. Se non arriva si prende quello che tocca
-         alla POSIZIONE, e la posizione è la cosa più fragile che ci sia —
-         basta che una voce non si veda perché non ce l'hai, e tutte quelle
-         sotto scalano di un segno. La colonna `stanze.segno` esiste per
-         questo: i segni li decide il dato, non l'ordine. */
-      return { id:x.id, nome:x.nome, riga:x.riga, elemento: x.elemento || "",
-               colore: x.elemento ? "var(--"+x.elemento+")" : "",
-               segno: x.segno || "",
-               rotta: "#"+x.id, chiusa: !!x.chiusa, perche: x.perche };
-    }
-    var delGruppo = function(g){
-      return righe.filter(function(x){ return x.gruppo === g; }).map(forma);
-    };
-    STANZE.pagine   = delGruppo("pagina");
-    STANZE.incontri = delGruppo("incontro");
-    STANZE.annale   = delGruppo("annale")[0] || {};
-    BARRA = righe.map(function(x){ return {id:x.id, n:x.nome, s:x.riga}; });
-    ROTTE = {};
-    righe.forEach(function(x){ ROTTE[x.id] = x.rotta || ""; });
-  }
-
-  versa(SEME);   /* ⭐ la barra ha già le sue voci prima di ogni domanda */
-
-  /* ⭐ IL SEME DICE QUANDO NON COMBACIA PIÙ.
-     Il seme è una copia, e una copia invecchia in silenzio. Qui non può:
-     appena `stanze` risponde, i nomi si confrontano e ogni scarto finisce
-     in console. Chi apre la consolle lo trova scritto, invece di scoprirlo
-     mesi dopo davanti a una barra che per un istante dice la parola vecchia.
-     ⛔ Solo in console. In pagina non cambia niente, e nessuno vede un avviso.
-     `[ manca ]` sta per una riga che c'è di qua e non di là. */
-  function confrontaColSeme(righe){
-    if(!window.console || !console.warn) return;
-    var MANCA = "[ manca ]";
-    var daDb = {}, daSeme = {}, id;
-    righe.forEach(function(x){ daDb[x.id] = x.nome; });
-    SEME.forEach(function(x){ daSeme[x.id] = x.nome; });
-    for(id in daSeme){
-      if(!daSeme.hasOwnProperty(id)) continue;
-      var db_ = daDb.hasOwnProperty(id) ? daDb[id] : MANCA;
-      if(db_ !== daSeme[id]){
-        console.warn("seme disallineato: \u00ab" + daSeme[id] + "\u00bb \u2192 \u00ab" + db_ + "\u00bb");
-      }
-    }
-    for(id in daDb){
-      if(!daDb.hasOwnProperty(id)) continue;
-      if(!daSeme.hasOwnProperty(id)){
-        console.warn("seme disallineato: \u00ab" + MANCA + "\u00bb \u2192 \u00ab" + daDb[id] + "\u00bb");
-      }
-    }
-  }
-
-  function leggiLeStanze(){
-    return db.from("stanze")
-      .select("id,gruppo,ordine,nome,riga,elemento,segno,rotta,chiusa,perche")
-      .order("ordine")
-      .then(function(r){
-        var righe = (r && r.data) || [];
-        /* nessuna riga o database muto: resta il seme, che è meglio del vuoto */
-        if(!righe.length) return;
-        confrontaColSeme(righe);
-        versa(righe);
-        /* ⭐ TOCCATO NEL GUSCIO ㉘ — e si ridisegna QUI, appena il dato c'è.
-           Prima versa() cambiava i dati e basta: a portarli in pagina era
-           il primo disegnaBarra() che passava di lì, e quello arrivava con
-           la sessione. Se `stanze` rispondeva prima — e risponde quasi
-           sempre prima, perché non aspetta nessun rinnovo di gettone — la
-           sua risposta restava ferma ad aspettarne un'altra.
-           Ogni pezzo si disegna quando arriva il suo. */
-        disegnaBarra();
-      })
-      .catch(function(){ /* senza tabella la barra resta quella del seme */ });
-  }
+  /* ⭐ TOCCATO NEL GUSCIO ㊽ — ══ LA BARRA ══ (ROTTE·STANZE·SEME·versa) vive in fm-barra.js */
 
   /* le destinazioni: colore e simbolo, mai il nome dell'elemento */
   /* ══ i messaggi non letti · le orme di oggi ══ */
@@ -4929,211 +4441,25 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     return !!(e.target && e.target.closest && e.target.closest(".chev"));
   }
 
-  /* ══ LA BARRA LA DISEGNA DESIGN ══
-     Il guscio le passa i dati e le dice dove si è. Il disegno è suo,
-     i dati sono del database: qui non si scrive nessuna parola. */
-  /* ⭐ TOCCATO NEL GUSCIO ㉚ — LE VOCI CHE UNO NON HA NON SI VEDONO.
-     Fin qui una stanza chiusa restava in barra, spenta, con sotto la riga
-     che diceva perché. Decisione di Gab: sparisce. Una porta che non si
-     apre non è una porta — è una cosa che occupa lo sguardo.
-     ⭐ Non si tolgono le parole: `chiusa` e `perche` restano in `stanze`
-        con tutto quello che c'è scritto. Cade solo il disegnarla.
-     ⛔ E QUI IL LAVORO NON È FINITO — va detto invece di far finta.
-        Oggi la sola cosa che il guscio SA di una persona è `io.grado`, e
-        l'unica porta che sa riconoscere è il nucleo. `stanze.chiusa` è un
-        segno UGUALE PER TUTTI: dice «questa è chiusa», non dice «chiusa
-        a TE». Quindi:
-          · il nucleo si comporta bene: lo vede chi è del nucleo
-          · «le aziende se non ne hai» NON si può ancora fare: nessuno
-            chiede se ne hai, e non me lo invento
-        Da dieci voci si scende a nove per chi non è del nucleo. Per
-        arrivare a quattro serve che sia il DATABASE a dire cosa chiede
-        ogni stanza — una colonna in `stanze` — non un elenco scritto qui.
-        L'SQL è pronto e aspetta la decisione di Gab. */
-  /* ci entro? */
-  function possoEntrare(x){
-    if(!x || !x.chiusa) return true;
-    /* ⛔ L'UNICA PORTA CHE IL GUSCIO OGGI SA RICONOSCERE, e la riconosce
-       con la STESSA colonna che sorveglia la stanza: nucleo(), in
-       fm-nucleo.js, legge `persone.nucleo`. Non `grado`: sono due fatti
-       diversi, e la barra che dice una cosa e la stanza un'altra è peggio
-       di una barra che non filtra. */
-    if(x.id === "nucleo") return !!(io && io.nucleo === true);
-    return false;
-  }
+  /* ⭐ TOCCATO NEL GUSCIO ㊽ — ══ LA BARRA LA DISEGNA DESIGN ══ vive in fm-barra.js */
 
-  /* ⭐ e chi entra la trova APERTA. `stanze.chiusa` dice «questa stanza è
-     chiusa», non «chiusa a te»: era un segno uguale per tutti, e Design lo
-     disegna come una voce spenta senza `data-pg` — cioè senza il gancio
-     che la fa aprire. Risultato, fin qui: chi è del nucleo vedeva la sua
-     voce e toccandola non succedeva niente. Adesso o non la vede, o la
-     vede viva. Con `chiusa:false` cade anche la riga del `perche`, ed è
-     giusto: spiegava perché NON si entra. */
-  /* ⭐ TOCCATO NEL GUSCIO ㉟ — LA ROTTA NON DICE PIÙ SE UNA VOCE SI VEDE.
-     Il ㉝ le faceva dire due cose insieme: «non si apre» e «non si vede».
-     Reggeva finché le due combaciavano, e ha smesso di reggere subito:
-     «Squadre» si deve vedere sempre — il Praticantato È la squadra
-     automatica, chi entra ne ha già una e nessuno ne ha zero — ma la sua
-     stanza non c'è ancora, quindi la rotta è vuota. Una voce sola con le
-     due cose separate, e la regola vecchia non sa più dove stare.
-     ⭐ Adesso: la ROTTA dice solo se si apre — e collegaLeVoci() lo sa già
-        da sé, sul clic di una voce senza rotta non fa niente. A dire se
-        una voce sta in barra è il GRUPPO, che è la colonna fatta apposta:
-        `pagina` sta in alto, `incontro` sotto, `riposo` da nessuna parte.
-     ⚠️ Perché funzioni, in `stanze` le righe che non sono più voci —
-        Gruppi Cooperativi, che è passata nel nucleo, e Aziende, che
-        aspetta la sua tavola — devono stare nel gruppo `riposo`. Finché
-        dicono ancora `pagina`, tornano a disegnarsi in barra.
-        Le parole non si perdono lo stesso: BARRA le porta tutte, gruppo
-        per gruppo, e le legge attesa(). */
-  function vociPerMe(elenco){
-    return (elenco || []).filter(possoEntrare).map(function(x){
-      if(!x.chiusa) return x;
-      var c = {}; for(var k in x){ if(x.hasOwnProperty(k)) c[k] = x[k]; }
-      c.chiusa = false; c.perche = null;
-      return c;
-    });
-  }
-
-  function disegnaBarra(){
-    if(!window.SpazioVivo || !window.SpazioVivo.barra) return;
-    var nome = (io && io.nome) || "";
-    window.SpazioVivo.barra({
-      pagine:   vociPerMe(STANZE.pagine),
-      incontri: vociPerMe(STANZE.incontri),
-      annale:   STANZE.annale,
-      chi: {
-        nome:     ospite ? "Entra" : nome,
-        ruolo:    ospite ? "email e sei cifre, nessuna password"
-                         : ((io && io.grado) || "").replace(/_/g," "),
-        iniziale: ospite ? "\u00b7"
-                         : (nome || "\u00b7").trim().charAt(0).toUpperCase() || "\u00b7"
-      },
-      nexus: (io && io.anthakarana) || ""
-    });
-    window.SpazioVivo.barraQui(vista);
-    /* ⭐ TOCCATO NEL GUSCIO ㉞ — VIA IL ③, ERA CODICE MORTO.
-       Il ③ spegneva a mano il contenitore `#sv-annale`, perché la barra
-       vecchia disegnava quella riga SEMPRE, anche a mani vuote. Nella
-       barra nuova quel contenitore non esiste più: l'Annale è una
-       finestra del nucleo e ci si arriva da lì.
-       ⭐ La regola però non si perde, è solo salita di un piano: una voce
-          senza rotta non si disegna, e lo decide vociPerMe() — vale per
-          tutte, non per la sola riga dell'Annale. */
-    /* ⭐ TOCCATO NEL GUSCIO ㉘ — FINCHÉ NON SI SA CHI GUARDA, IL PIEDE RESTA
-       VUOTO. Ed è QUESTA la scritta che Gab ha visto nella prova.
-       La barra si disegna già al primo istante col seme, e in quel primo
-       passaggio `io` è ancora null: Design, su un campo che manca, scrive
-       «[ in attesa ]». Giusto per una parola che non c'è, sbagliato per una
-       che sta arrivando — e nel piede ne scriveva tre, nome, ruolo e nexus.
-       Misurato: comparivano a 611 ms e restavano fino a 2.471.
-       `io === null` dura solo quel tratto: lo pongono daOspite() ed entra(),
-       e da lì in poi questo ramo non passa più. Design non si corregge nel
-       suo file: si spegne il campo da qui, come già per la voce dell'Annale. */
-    if(io === null){
-      var vn = $("sv-chi-nome");  if(vn) vn.textContent = "";
-      var vr = $("sv-chi-ruolo"); if(vr) vr.textContent = "";
-      var vx = $("sv-nexus");     if(vx) vx.textContent = "";
-    }
-    collegaLeVoci();
-  }
-
-  /* ⭐ le voci portano DENTRO il guscio, non a un indirizzo: Design mette
-     un href, il guscio lo intercetta e chiama vai() — la stessa strada
-     che faceva il vecchio tasto. La rotta viene dal database:
-     «incontro:emporio» vuol dire vai("incontro","emporio"). */
-  function collegaLeVoci(){
-    var n = document.getElementById("sv-barra");
-    if(!n) return;
-
-    [].forEach.call(n.querySelectorAll("[data-pg]"), function(a){
-      a.addEventListener("click", function(e){
-        e.preventDefault();
-        var r = ROTTE[a.getAttribute("data-pg")] || "";
-        if(!r) return;                 /* una stanza senza rotta non porta da nessuna parte */
-        document.body.classList.remove("barra-aperta");
-        misuraPlancia();
-        var due = r.split(":");
-        if(due.length > 1){ sottoRichiesta = due[1]; vai(due[0], due[1]); }
-        else vai(r);
-      });
+  /* ⭐ TOCCATO NEL GUSCIO ㊿ — ══ IL VOCABOLARIO DELLE STANZE ══
+     L'estrazione della barra (㊽) ha portato via anche BARRA e ROTTE,
+     ma tre punti del guscio le usano ancora: conosciuta() per dire se
+     una rotta `?p=` esiste, attesa() per il nome della stanza che
+     aspetta, scriviTesta() per il titolo della finestra. Qui torna il
+     SOLO DATO — il disegno resta in fm-barra.js — e si riempie dalla
+     tavola `stanze`, come prima dell'estrazione. */
+  var BARRA = [], ROTTE = {};
+  db.from("stanze").select("id,nome,riga,rotta").order("ordine")
+    .then(function(r){
+      var righe = (r && r.data) || [];
+      if(!righe.length) return;
+      BARRA = righe.map(function(x){ return {id:x.id, n:x.nome, s:x.riga}; });
+      ROTTE = {};
+      righe.forEach(function(x){ ROTTE[x.id] = x.rotta || ""; });
     });
 
-    /* ⭐ IL NOME IN ALTO A SINISTRA RIPORTA A CASA.
-       È il gesto che tutti si aspettano da un nome in cima a sinistra.
-       Il segno resta di Design: il guscio gli mette solo la mano sopra. */
-    var capo = n.querySelector(".capo");
-    if(capo && !capo.getAttribute("data-legato")){
-      capo.setAttribute("data-legato","1");
-      capo.setAttribute("role","link");
-      capo.setAttribute("tabindex","0");
-      capo.setAttribute("aria-label","Torna a casa");
-      var aCasa = function(){
-        document.body.classList.remove("barra-aperta");
-        misuraPlancia();
-        vai("spazio");
-      };
-      capo.addEventListener("click", aCasa);
-      capo.addEventListener("keydown", function(e){
-        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); aCasa(); }
-      });
-    }
-
-    /* il piede apre l'account: Design lo mostra, il guscio lo apre */
-    var chi = n.querySelector(".chi");
-    if(chi && !chi.getAttribute("data-legato")){
-      chi.setAttribute("data-legato","1");
-      chi.addEventListener("click", function(){
-        if(ospite){ location.href = "accesso.html"; return; }
-        $("v-acc").classList.add("on");
-      });
-    }
-  }
-
-  /* un livello del ramo. Si richiama da sé per quelli più sotto: i figli si
-     disegnano sempre, non c'è niente da aprire e quindi niente chevron.
-     Il rientro lo dà il CSS.
-     La riga `s` resta nei dati — la scrive incontro() sotto le quattro porte —
-     ma nella barra non compare: qui le parole sono le voci. */
-  function disegnaRamo(voci, liv){
-    var d=document.createElement("div"); d.className="sotto-voci";
-    voci.forEach(function(x){
-      /* il segno lo portano le quattro sezioni, e nessun altro. È elementale,
-         quindi porta il colore dell'elemento */
-      var segno = (liv===1 && x.el && ELEMENTI.indexOf(x.el) >= 0);
-      var sb=document.createElement("button");
-      sb.className="sotto-voce"+(sottoVista===x.id?" on":"");
-      sb.innerHTML='<span class="sg">'+(segno ? sg(x.el) : '')+'</span>'
-                 + '<span class="tt"><b></b></span>';
-      if(segno){ sb.querySelector(".sg").style.color = "var(--"+x.el+")"; }
-      sb.querySelector("b").textContent=x.n;
-      sb.addEventListener("click", function(e){
-        e.stopPropagation();
-        sottoRichiesta = x.id;          /* si accende la voce toccata */
-        vai("incontro", x.va || x.id);
-      });
-      d.appendChild(sb);
-      if(x.sotto){ d.appendChild(disegnaRamo(x.sotto, liv+1)); }
-    });
-    return d;
-  }
-
-
-  /* porta al blocco della home, o apre la mappa a tutto schermo */
-  function vaiAlBlocco(quale){
-    if(quale === "consolle"){ vai("consolle"); return; }
-    if(quale === "home"){ $("centro").scrollTo({top:0, behavior:"smooth"}); return; }
-    if(quale === "mappa"){
-      var mv = $("mappa-velo");
-      if(mv){ mv.click(); return; }
-    }
-    var e = $("blocco-" + quale);
-    if(e) e.scrollIntoView({behavior:"smooth", block:"start"});
-  }
-
-  /* ── le finestre del Megafono si chiudono tutte insieme ──
-     Il foglio di «dove lo porti» e i dieci veli. Nessuno resta appeso
-     sopra una stanza che non è più quella dove era stato aperto. */
   function chiudiVele(){
     var v=$("vele"); if(!v) return;
     v.classList.remove("su"); veleSu=false;
@@ -5173,7 +4499,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
     /* ⭐ TOCCATO NEL GUSCIO ㊷ — «orme» ora è la matrice de «la mia orma».
        Se fm-orma-mia.js manca si ricade su «Le mie orme» com'era. */
-    else if(id==="orme"){ if(typeof laMatriceDellOrma === "function") laMatriceDellOrma(c); else mieOrme(c); }
+    /* ⭐ TOCCATO NEL GUSCIO ㊾ — «orme» è SpazioVivo.ormaMia (fm-orma-mia.js
+       del 14 settembre): laMatriceDellOrma non esiste più. Senza il file
+       si cade su mieOrme, come prima. */
+    else if(id==="orme"){ if(window.SpazioVivo && SpazioVivo.ormaMia) SpazioVivo.ormaMia(c); else mieOrme(c); }
     else if(id==="incontro") incontro(c, sub);
     else if(id==="chat"){ chat(c); segnaLetto(); }
     /* ⭐ TOCCATO NEL GUSCIO ④ — tolta la riga «annale».
@@ -5194,6 +4523,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma, quella di `?o=<id>`.
        Il disegno sta in fm-orma.js. Se il file non c'è la riga non esiste
        e si cade su attesa(), come per ogni stanza non ancora costruita. */
+    /* ⭐ TOCCATO NEL GUSCIO ㊾ — dentro un'orma ora si va con
+       SpazioVivo.ormaDentro(dove, id): la base di OGNI orma, per regola
+       di Gab del 15 settembre. L'id arriva da vai("orma",{id}) o, per i
+       collegamenti `?o=`, da window.ormaChiesta.
+       ⛔ L'OSPITE COL CODICE `?c=` RESTA SULLA STRADA VECCHIA: il nuovo
+          file non conosce il codice (niente ormaColCodice), e i link già
+          condivisi — anche quelli delle anteprime — passano di lì. Quando
+          fm-orma-dentro saprà il codice, questa riga si toglie. */
+    else if(id==="orma" && window.codiceChiesto && typeof unaOrma === "function") unaOrma(c);
+    else if(id==="orma" && window.SpazioVivo && SpazioVivo.ormaDentro) SpazioVivo.ormaDentro(c, (sub && sub.id) || window.ormaChiesta);
     else if(id==="orma" && typeof unaOrma === "function") unaOrma(c);
     /* ⭐ TOCCATO NEL GUSCIO ㊵ — il percorso dei talenti, in fm-talenti.js.
        Se il file non c'è la riga non esiste e si cade su attesa(). */
@@ -5216,6 +4555,25 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        file di Gab): il giro è soglia → cammino → stanze. La vecchia rotta
        `talenti` resta finché Gab non decide cosa farne. */
     else if(id==="stanze" && window.SpazioVivo && SpazioVivo.stanze) SpazioVivo.stanze(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊾ — le cinque rotte nuove del 15 settembre:
+       l'account dal piede della barra, Antaḥkaraṇa dalla sua voce
+       (la rotta si scrive «anthakarana», come nel seme della barra),
+       e i tre strumenti della matrice. Senza il file: attesa(), come
+       per ogni stanza non ancora costruita. */
+    else if(id==="account" && window.SpazioVivo && SpazioVivo.account) SpazioVivo.account(c);
+    else if(id==="anthakarana" && window.SpazioVivo && SpazioVivo.antahkarana) SpazioVivo.antahkarana(c);
+    else if(id==="rubrica" && window.SpazioVivo && SpazioVivo.rubrica) SpazioVivo.rubrica(c);
+    else if(id==="calendario" && window.SpazioVivo && SpazioVivo.calendario) SpazioVivo.calendario(c);
+    else if(id==="costi" && window.SpazioVivo && SpazioVivo.costi) SpazioVivo.costi(c);
+    /* ⭐ TOCCATO NEL GUSCIO ㊿ — le stanze della consegna del 15 settembre:
+       Emporio, Assistenza, Scuola e il configuratore. Il configuratore
+       prende l'orma per argomento, come fa `orma` con l'id.
+       ⛔ fm-scuola.js NON è ancora in cartella: la guardia lo sa, e la
+          rotta cade su attesa() finché il file non arriva. */
+    else if(id==="emporio" && window.SpazioVivo && SpazioVivo.emporio) SpazioVivo.emporio(c);
+    else if(id==="assistenza" && window.SpazioVivo && SpazioVivo.assistenza) SpazioVivo.assistenza(c);
+    else if(id==="scuola" && window.SpazioVivo && SpazioVivo.scuola) SpazioVivo.scuola(c);
+    else if(id==="configuratore" && window.SpazioVivo && SpazioVivo.configuratore) SpazioVivo.configuratore(c, sub && sub.ormaId);
     else attesa(c, id);
     /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
     scriviIndirizzo();
@@ -6015,7 +5373,15 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» */
+
+  /* ⭐ TOCCATO NEL GUSCIO ㊿ — LE PORTE DELLA BARRA SI CONOSCONO SUBITO.
+     ROTTE si riempie dalla tavola `stanze` (il vocabolario, sopra), ma la
+     risposta arriva DOPO che apriRotta() ha già letto l'indirizzo: un
+     `?p=orme` — l'atterraggio di accesso.html — cadrebbe a casa. Queste
+     sono le stesse porte che vai() sa aprire, e non aspettano nessuno. */
+  var PORTE_DELLA_BARRA = ["orme", "sentiero", "vicinati", "emporio",
+    "assistenza", "edizione", "scuola", "gruppi", "nucleo", "incontro"];
 
   /* alzata mentre si legge la storia: allora l'indirizzo non si riscrive */
   var tornando = false;
@@ -6041,6 +5407,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   function conosciuta(rotta){
     if(!rotta) return false;
     if(VISTE_SENZA_VOCE.indexOf(rotta) >= 0) return true;
+    /* ⭐ TOCCATO NEL GUSCIO ㊿ — le porte della barra, senza aspettare `stanze` */
+    if(PORTE_DELLA_BARRA.indexOf(rotta.split(":")[0]) >= 0) return true;
     for(var id in ROTTE){
       if(!ROTTE.hasOwnProperty(id) || !ROTTE[id]) continue;
       if(ROTTE[id] === rotta) return true;
@@ -6292,6 +5660,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     try{ sessionStorage.setItem("fm_ritorno", dove || ""); }catch(e){}
     location.href = "accesso.html";
   }
+  /* ⭐ TOCCATO NEL GUSCIO ㊽ — qui passa fm-barra.js: dopo le dichiarazioni che legge, prima del primo disegno */
+</script><script src="fm-barra.js"></script><script>
+  "use strict"; /* ⭐ ㊽ — la ripresa dello script grande resta rigorosa come il suo inizio */
 
   /* ⭐ LA BARRA SI DISEGNA SUBITO, col seme. Non aspetta né la sessione né
      `stanze`: chi apre trova le voci già lì. Quando la risposta arriva,

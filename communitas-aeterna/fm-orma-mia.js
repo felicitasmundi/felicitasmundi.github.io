@@ -1,1110 +1,595 @@
 /* ═══════════════════════════════════════════════════════════════
-   Comunità Eterna FelicitasMundi · LA MIA ORMA — la matrice
+   LA MIA ORMA — le tre soglie, il micelio, gli strumenti.
 
-   Il disegno è quello di `matrice-orma.html` (in linea, MD5
-   abe8939c08b5939fee81d4c4a7d0c3b8, verificato prima di leggere):
-   qui si riproduce leggendo i dati veri. Sostituisce la home di
-   fm-mia-orma.js (3 settembre), che è intera in PRECEDENTI.
+   ⛔ Disegno di Design del 14 settembre, preso riga per riga:
+      la data col santo e la luna · il cubo di Metatron col micelio
+      · «invita chi risuona» e «dove sei?» · le tre soglie
+      · l'orma d'esempio · «Da collegare» · i quattro strumenti.
 
-   DALL'ALTO: il riquadro del tempo (data · luna · santo) · la
-   testa col cerchio, il livello da fm_livello e il vicinato
-   radice · i tre gesti · i talenti presi che SONO I FILTRI ·
-   Antahkarana, tasto fisso · LE MIE ORME · le squadre.
+   ⭐ IL COLORE DEI NODI viene dall'ORMA che lega, non dalla
+      persona: una persona può avere tre elementi, e ne mostreresti
+      uno a caso. Se lavoriamo nei Vicinati il punto è ambra.
 
-   ⭐ IL FILO — versato dal ⑤ e dal database:
-      la radice ha `talento_id` pieno e `filo_id` vuoto;
-      ogni figlia ha `talento_id` vuoto e `filo_id` = radice.
-      `orma_madre_id` è la madre immediata: dà «↳ nata da …»
-      e il conto «[ n ] dentro». ⛔ Le orme NON si annidano:
-      sotto ogni radice stanno in fila.
+   ⭐ LA MATRICE: una radice per talento, e sotto le orme. Ogni
+      scheda dice chi c'è dentro, dove, la stanza, lo stadio,
+      quante ne sono nate, e le relazioni — nata da, ancorata a.
 
-   ⚠️ [ in attesa ] L'ÀNCORA DEL SECONDO TALENTO — «⚓ ancorata
-      anche a …» — non ha ancora una colonna nel database:
-      scritto al database, la cucitura è UNA (ormaAncoraDi).
+   ⚠️ LA MAPPA È VUOTA finché nessuno dichiara il comune: il tasto
+      «dove sei?» lo posa, e da lì ogni orma nasce col suo punto.
 
-   ⛔ I GESTI SONO DUE, e portano a due pagine — non aprono campi.
-      «+ nuova orma» NON c'è: il Megafono è fisso in basso e si vede
-      sempre — scrivere dentro è già fare un'orma, e un tasto che
-      apre una seconda strada per la stessa cosa è un doppione.
-      · «contatto» → matrice-rubrica.html
-      · «costi» → la pagina dei costi (fm-costi.js, rotta «costi»).
-      Parole di Gab, 8 settembre: «ore e note non sono più
-      necessarie, anche perché ogni orma di per sé è una nota».
+   ⭐ I QUATTRO STRUMENTI chiamano i file che esistono già:
+      fm-antahkarana.js e fm-strumenti.js.
 
-   ⭐ LE SQUADRE HANNO TRE GRADI — deciso da Gab il 9 settembre,
-      con le etichette fisse:
-        Nuclei   — i nuclei di ceppo a cui la persona partecipa
-        Nucleo   — il nucleo del suo micelio
-        Progetti — i gruppi che sviluppano un progetto
-      ⛔ Le parole «ceppo», «micelio» e «progetto elemento» non si
-         mostrano MAI: servono alla gerarchia. Sotto l'etichetta
-         sta il nome che la persona ha messo.
-      Le tavole: `nuclei` (livello micelio·ceppo·nucleo_centrale,
-      con `da_quando` e la `stanza` dei cinque posti) e `squadre`
-      via `appartenenze`. ⛔ Un gruppo di cui non fai parte non
-      compare — lo dicono già le regole di riga, e qui si chiede
-      solo il proprio.
-      Dentro una squadra: nome · data di attivazione · chi ne fa
-      parte (con la lucentezza del livello, da fm_livello) · le
-      stanze di riferimento. ⭐ La stanza di un progetto non si
-      sceglie: la determina l'orma — prodotti→Emporio, formazioni→
-      Scuola, consulenze→Assistenza — e il tag si accende quando
-      qualcosa viene pubblicato. Finché si progetta: nessun tag.
-      ⚠️ [ in attesa ] il legame squadra→orme non ha ancora una
-      colonna: quindi oggi nessun tag, ed è giusto così.
-      ⭐ IL NUCLEO CENTRALE compare sotto «Nucleo», col suo nome,
-         come qualsiasi altro — deciso da Gab il 9 settembre.
-         Niente quarto grado: chi non ne fa parte non lo vede.
-         ⚠️ [ in attesa ] il suo nome non ha una colonna in
-         `nuclei`: finché il database non dice dove vive, la
-         carta porta il segnaposto.
-      ⭐ I tre gradi organizzativi, per chiarezza (parole di Gab):
-         ceppo coordina più nazioni e segue i filamenti
-         linguistici · micelio opera nel territorio · vicinato è
-         dove le persone si incontrano, e lo attiva il micelio.
-
-   ⭐ LA PUBBLICAZIONE HA I SUOI DUE POSTI — deciso il 9 settembre:
-      l'ultima riga nella carta aperta del Progetto, e il piede
-      dell'orma accanto allo stadio. Il tasto è «Pubblica», la
-      parola già in uso nel guscio. Dal piede dell'orma passa per
-      `portaInEdizione()` del guscio, la strada viva; dalla carta
-      del Progetto ⚠️ [ in attesa ] la forma della pubblicazione
-      (prodotto · assistenza · libro · lezione): il tasto chiama
-      `SpazioVivo.pubblica({squadra_id})` quando il gancio esiste,
-      e fino ad allora lo dice in console.
-
-   ⛔ La biografia NON sta qui: è il profilo pubblico.
-   ⛔ Da ospite si vedono solo la data e il riquadro del tempo.
-
-   ⚠️ Le misure: il modello scala l'intera pagina a 1.2 — qui i
-      rem sono scritti già moltiplicati, così la resa è identica
-      al modello in linea. Zero px nei caratteri.
-
-   Il guscio chiama `laMatriceDellOrma(contenitore)` da vai().
-
-   ⛔ Niente involucro (function(){ … })(): il guscio mette tutto
-      in comune e questo file legge da lì.
+   Espone: SpazioVivo.ormaMia(dove)
    ═══════════════════════════════════════════════════════════════ */
 
 "use strict";
 
-/* i cinque elementi → la stanza e il colore: la mappa versata
-   (memoria del Cruscotto, la stessa di fm-ordinamenti.js) */
-var MAT_STANZE = {
-  terra: { stanza: "Vicinati",   colore: "#AA8844" },
-  acqua: { stanza: "Emporio",    colore: "#4488BB" },
-  aria:  { stanza: "Edizione",   colore: "#669944" },
-  etere: { stanza: "Scuola",     colore: "#9966CC" },
-  fuoco: { stanza: "Assistenza", colore: "#CC6644" }
-};
-var MAT_SVIL = "#5A7A8C";
+var EL = { terra:"#AA8844", acqua:"#4488BB", fuoco:"#CC6644",
+           aria:"#669944", etere:"#9966CC", svil:"#5A7A8C" };
+var STANZA_EL = { vicinati:"terra", emporio:"acqua", assistenza:"fuoco",
+                  edizione:"aria", scuola:"etere" };
+var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio",
+            "agosto","settembre","ottobre","novembre","dicembre"];
+var LUNE = ["\ud83c\udf11 luna nuova","\ud83c\udf12 crescente","\ud83c\udf13 primo quarto",
+            "\ud83c\udf14 gibbosa","\ud83c\udf15 luna piena","\ud83c\udf16 calante",
+            "\ud83c\udf17 ultimo quarto","\ud83c\udf18 calante"];
 
-/* ── la veste: quella del modello, sotto il nome .fm-mat ── */
-function matVeste(){
-  if(document.getElementById("fm-mat-veste")) return;
+var omBox = null, omSoglia = "talenti", omIo = null,
+    omTalenti = [], omAttese = [], omSquadre = [], omMicelio = [], omGiorno = null;
+
+function omVeste(){
+  if(document.getElementById("fm-om-veste")) return;
   var s = document.createElement("style");
-  s.id = "fm-mat-veste";
+  s.id = "fm-om-veste";
   s.textContent =
-    ".fm-mat{width:100%;max-width:36rem;margin:0 auto;position:relative;" +
-      "padding:0 0 2.4rem;font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6}" +
-    ".fm-mat *{box-sizing:border-box}" +
-    ".fm-mat .corpo{padding:0 1.2rem}" +
+    ".fm-om{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));" +
+      "align-items:start;gap:2rem 3rem;padding:2rem clamp(1.25rem,5vw,5rem);" +
+      "min-height:100vh;font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6;" +
+      "background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%)," +
+      "radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%)," +
+      "radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}" +
+    ".fm-om *{box-sizing:border-box}" +
 
-    /* il riquadro del tempo */
-    ".fm-mat .tempo{display:flex;gap:.66rem;padding:1.68rem 1.2rem .36rem}" +
-    ".fm-mat .tempo .q{flex:1;border:1px solid rgba(184,150,62,.22);" +
-      "border-radius:.9rem;background:rgba(8,11,26,.4);" +
-      "padding:.66rem .6rem;text-align:center}" +
-    ".fm-mat .tempo .q b{display:block;font-family:'Cinzel',serif;font-weight:400;" +
-      "font-size:.98rem;color:#D4AF6A;line-height:1.2}" +
-    ".fm-mat .tempo .q span{display:block;font-size:.74rem;" +
-      "color:rgba(245,240,230,.4);margin-top:.24rem}" +
-    ".fm-mat .tempo .q .lu{font-size:1.38rem;line-height:1}" +
+    /* ── il tempo: giorno, luna, santo ── */
+    ".fm-om .tempo{display:flex;gap:.5rem;margin-bottom:1.4rem}" +
+    ".fm-om .tempo .q{flex:1;border:1px solid rgba(212,175,106,.24);border-radius:.8rem;" +
+      "background:rgba(4,8,20,.55);padding:.65rem .4rem;text-align:center}" +
+    ".fm-om .tempo .q b{display:block;font-family:'Cinzel',serif;font-weight:400;" +
+      "font-size:1.18rem;line-height:1.1;color:#D4AF6A}" +
+    ".fm-om .tempo .q span{display:block;font-size:.66rem;letter-spacing:.06em;" +
+      "color:rgba(245,240,230,.4);margin-top:.22rem}" +
 
-    /* la testa: chi sei, e a che livello */
-    ".fm-mat .io{display:flex;align-items:center;gap:.72rem;padding:1.08rem 1.2rem .36rem}" +
-    ".fm-mat .io .av{width:3.6rem;height:3.6rem;border-radius:50%;flex:none;" +
-      "display:grid;place-items:center;font-family:'Cinzel',serif;font-size:1.14rem;" +
-      "color:#D4AF6A;border:2px solid #C8A055;background:rgba(200,160,85,.2);" +
-      "position:relative;box-shadow:0 0 1.2rem rgba(200,160,85,.45)," +
-      "0 0 0 .3rem rgba(200,160,85,.12)}" +
-    ".fm-mat .io .av::after{content:'\\2726';position:absolute;top:-.36rem;" +
-      "right:-.36rem;font-size:.74rem;color:#C8A055}" +
-    ".fm-mat .io .nm b{display:block;font-family:'Cinzel',serif;font-weight:400;" +
-      "font-size:1.32rem;color:#D4AF6A}" +
-    ".fm-mat .io .nm span{display:block;font-size:.89rem;" +
-      "color:rgba(245,240,230,.45);margin-top:.12rem}" +
+    /* ── il cubo di Metatron, col micelio ── */
+    ".fm-om .cubo{position:relative;width:100%;max-width:24rem;margin:0 auto}" +
+    ".fm-om .cubo svg{width:100%;height:auto;display:block}" +
+    ".fm-om .gesti{display:flex;flex-direction:column;gap:.5rem;width:100%;" +
+      "max-width:24rem;margin:1rem auto 0}" +
+    ".fm-om .gesti a,.fm-om .gesti button{display:flex;align-items:center;" +
+      "justify-content:space-between;gap:.6rem;min-height:3.5rem;padding:0 1.1rem;" +
+      "border-radius:1.75rem;cursor:pointer;text-decoration:none;" +
+      "font-family:'Cormorant Garamond',serif;font-size:1.06rem;letter-spacing:.06em;" +
+      "border:1px solid rgba(212,175,106,.42);background:rgba(4,8,20,.55);" +
+      "color:#F5F0E6;transition:border-color .3s,background .3s}" +
+    ".fm-om .gesti a:hover,.fm-om .gesti button:hover{border-color:#D4AF6A;" +
+      "background:rgba(212,175,106,.1)}" +
+    ".fm-om .gesti .fr{flex:none;color:#D4AF6A;font-size:1.1rem}" +
+    ".fm-om .sotto{font-family:'Cormorant Garamond',serif;font-style:italic;" +
+      "font-size:.94rem;color:rgba(245,240,230,.38);text-align:center;" +
+      "margin-top:.6rem;line-height:1.45}" +
 
-    /* i tre gesti */
-    ".fm-mat .gesti{display:flex;gap:.48rem;padding:.84rem 1.2rem .24rem;flex-wrap:wrap}" +
-    ".fm-mat .ge{display:inline-flex;align-items:center;gap:.42rem;" +
-      "font-family:'DM Sans',sans-serif;font-size:.96rem;padding:.48rem .96rem;" +
-      "border-radius:1.68rem;cursor:pointer;background:transparent;" +
-      "border:1px solid rgba(245,240,230,.16);color:rgba(245,240,230,.7)}" +
-    ".fm-mat .ge i{font-style:normal;font-size:1.08rem;line-height:1;" +
-      "color:rgba(245,240,230,.5)}" +
-
-    /* i talenti presi: i filtri */
-    ".fm-mat .et3{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;" +
-      "color:rgba(245,240,230,.35);margin:.84rem 1.2rem .42rem}" +
-    ".fm-mat .segni{display:flex;gap:.42rem;flex-wrap:wrap;padding:0 1.2rem .24rem}" +
-    ".fm-mat .segni .sg{display:inline-flex;align-items:center;gap:.38rem;" +
-      "font-size:.91rem;padding:.26rem .72rem;border-radius:1.2rem;cursor:pointer;" +
-      "border:1px solid color-mix(in srgb,var(--c,#C8A055) 45%,transparent);" +
-      "background:color-mix(in srgb,var(--c,#C8A055) 12%,transparent);" +
-      "color:rgba(245,240,230,.85);transition:border-color .2s,background .2s,opacity .2s}" +
-    ".fm-mat .segni .sg i{width:.48rem;height:.48rem;border-radius:50%;" +
-      "background:var(--c,#C8A055);display:block}" +
-    /* ⭐ il segno del talento cambia col talento — corretto il 9 settembre */
-    ".fm-mat .segni .sg .sgn{width:1.15rem;height:1.15rem;display:block;" +
-      "color:var(--c,#C8A055);filter:brightness(1.3)}" +
-    ".fm-mat .segni .sg .sgn svg{width:100%;height:100%;display:block}" +
-    ".fm-mat .segni .sg.on{border-color:#C8A055;background:rgba(200,160,85,.2);" +
-      "color:#D4AF6A;box-shadow:0 0 .72rem rgba(200,160,85,.3)}" +
-    ".fm-mat .segni .sg.vu{opacity:.45;border-style:dashed}" +
-    ".fm-mat .segni .piu{font-size:.91rem;padding:.26rem .72rem;border-radius:1.2rem;" +
-      "border:1px dashed rgba(245,240,230,.2);color:rgba(245,240,230,.35);cursor:pointer}" +
-
-    ".fm-mat h2{font-family:'Cinzel',serif;font-weight:400;font-size:1.14rem;" +
-      "color:#D4AF6A;margin:1.8rem 0 .6rem;padding-top:1.08rem;" +
-      "border-top:1px solid rgba(184,150,62,.22)}" +
-    ".fm-mat h2 small{display:block;font-family:'Cormorant Garamond',serif;" +
-      "font-style:italic;font-size:.98rem;color:rgba(245,240,230,.4);" +
-      "margin-top:.12rem;letter-spacing:0}" +
-
-    /* Antahkarana: il tasto fisso */
-    ".fm-mat .prat{display:flex;align-items:center;gap:.72rem;" +
-      "border:1px solid rgba(200,160,85,.5);border-radius:1.02rem;" +
-      "background:rgba(200,160,85,.09);padding:.96rem 1.02rem;margin:.72rem 0;" +
-      "cursor:pointer}" +
-    ".fm-mat .prat .sg{width:2.64rem;height:2.64rem;border-radius:50%;flex:none;" +
-      "display:grid;place-items:center;border:1px solid #C8A055;" +
-      "color:#D4AF6A;font-size:1.2rem}" +
-    ".fm-mat .prat .tx{flex:1}" +
-    ".fm-mat .prat .tx b{display:block;font-family:'Cinzel',serif;font-weight:400;" +
-      "font-size:1.1rem;color:#D4AF6A}" +
-    ".fm-mat .prat .tx span{display:block;font-size:.94rem;" +
-      "color:rgba(245,240,230,.5);margin-top:.12rem}" +
-
-    /* un'orma: la forma fissata */
-    ".fm-mat .orma{border:1px solid color-mix(in srgb,var(--c,#C8A055) 26%,transparent);" +
-      "border-left:3px solid color-mix(in srgb,var(--c,#C8A055) 60%,transparent);" +
-      "border-radius:1.08rem;background:color-mix(in srgb,var(--c,#C8A055) 9%,rgba(8,11,26,.5));" +
-      "margin-bottom:.6rem;cursor:pointer;transition:transform .22s,border-color .22s}" +
-    ".fm-mat .orma:hover{transform:translateX(3px);" +
-      "border-color:color-mix(in srgb,var(--c,#C8A055) 56%,transparent)}" +
-    ".fm-mat .orma > .den{padding:1.02rem}" +
-    ".fm-mat .testa{display:flex;align-items:center;gap:.48rem;margin-bottom:.54rem}" +
-    ".fm-mat .ce{width:1.8rem;height:1.8rem;border-radius:50%;flex:none;" +
-      "display:grid;place-items:center;font-size:.67rem;color:#F5F0E6;" +
-      "border:1px solid color-mix(in srgb,var(--c,#C8A055) 55%,transparent);" +
-      "background:color-mix(in srgb,var(--c,#C8A055) 18%,transparent)}" +
-    ".fm-mat .ce+.ce{margin-left:-.62rem}" +
-    ".fm-mat .ce.osp{border-style:dashed;opacity:.65}" +
-    ".fm-mat .testa .nn{font-size:.98rem;color:rgba(245,240,230,.72);" +
-      "margin-left:.3rem;flex:1;min-width:0;overflow:hidden;" +
-      "text-overflow:ellipsis;white-space:nowrap}" +
-    ".fm-mat .testa .qd{flex:none;font-size:.84rem;color:rgba(245,240,230,.44)}" +
-    ".fm-mat .ti{font-family:'Cormorant Garamond',serif;font-size:1.34rem;line-height:1.32}" +
-    ".fm-mat .sub{font-family:'Cormorant Garamond',serif;font-style:italic;" +
-      "font-size:1.1rem;color:rgba(245,240,230,.48);margin-top:.14rem;line-height:1.35}" +
-    ".fm-mat .piede{display:flex;gap:.38rem;align-items:center;flex-wrap:wrap;" +
-      "margin-top:.6rem;font-size:.9rem;color:rgba(245,240,230,.52)}" +
-    ".fm-mat .st{display:inline-flex;align-items:center;gap:.36rem;font-size:.72rem;" +
-      "letter-spacing:.05em;padding:.11rem .58rem;border-radius:1.2rem;" +
-      "border:1px solid rgba(245,240,230,.16);color:rgba(245,240,230,.8)}" +
-    ".fm-mat .st i{width:.43rem;height:.43rem;border-radius:50%;display:block}" +
-    ".fm-mat .st.coda i{background:rgba(245,240,230,.4)}" +
-    ".fm-mat .st.avanz{border-color:rgba(170,136,68,.55)}" +
-    ".fm-mat .st.avanz i{background:#AA8844}" +
-    ".fm-mat .st.svil{border-color:rgba(110,158,90,.55);color:#6E9E5A}" +
-    ".fm-mat .st.svil i{background:#6E9E5A}" +
-    ".fm-mat .piede .fr{margin-left:auto;color:rgba(245,240,230,.3);flex:none}" +
-    ".fm-mat .piede .dentro2{color:#D4AF6A}" +
-    ".fm-mat .orma .da{margin-top:.48rem;font-size:.91rem;" +
-      "color:rgba(245,240,230,.42);line-height:1.4}" +
-    ".fm-mat .orma .da b{color:rgba(245,240,230,.74);font-weight:400}" +
-    ".fm-mat .da.vuoto2{color:" + MAT_SVIL + ";filter:brightness(1.35);" +
-      "border:1px dashed rgba(90,122,140,.5);border-radius:1.2rem;" +
-      "padding:.17rem .66rem;display:inline-block}" +
-
-    /* «da collegare», e la radice con le orme in fila */
-    ".fm-mat .collegare,.fm-mat .radice{margin-bottom:.72rem}" +
-    ".fm-mat .collegare > .capo{display:flex;align-items:center;gap:.6rem;" +
-      "border:1px dashed rgba(90,122,140,.6);border-radius:.96rem;" +
-      "background:rgba(90,122,140,.1);padding:.72rem .96rem}" +
-    ".fm-mat .collegare > .capo i{width:.54rem;height:.54rem;border-radius:50%;" +
-      "background:" + MAT_SVIL + ";display:block;flex:none}" +
-    ".fm-mat .collegare > .capo b{font-family:'Cinzel',serif;font-weight:400;" +
-      "font-size:1.08rem;color:" + MAT_SVIL + ";filter:brightness(1.4);flex:1}" +
-    ".fm-mat .collegare > .capo em{font-style:normal;font-size:.82rem;" +
-      "color:rgba(245,240,230,.4)}" +
-    ".fm-mat .radice > .capo{display:flex;align-items:center;gap:.6rem;" +
-      "border:2px solid color-mix(in srgb,var(--c,#C8A055) 55%,transparent);" +
-      "border-radius:.96rem;" +
-      "background:color-mix(in srgb,var(--c,#C8A055) 14%,rgba(8,11,26,.5));" +
-      "padding:.72rem .96rem;" +
-      "box-shadow:0 0 .96rem color-mix(in srgb,var(--c,#C8A055) 22%,transparent)}" +
-    ".fm-mat .radice > .capo .sgt{width:2.88rem;height:2.88rem;flex:none;" +
-      "color:var(--c,#C8A055);filter:brightness(1.25) " +
-      "drop-shadow(0 0 .6rem color-mix(in srgb,var(--c,#C8A055) 40%,transparent))}" +
-    ".fm-mat .radice > .capo .sgt svg{width:100%;height:100%;display:block}" +
-    ".fm-mat .radice > .capo b{font-family:'Cinzel',serif;font-weight:400;" +
-      "font-size:1.1rem;color:var(--c,#C8A055);filter:brightness(1.35);flex:1}" +
-    ".fm-mat .radice > .capo em{font-style:normal;font-size:.82rem;" +
-      "color:rgba(245,240,230,.4)}" +
-    ".fm-mat .sotto{position:relative;padding-left:1.62rem;margin:.48rem 0 0 1.08rem}" +
-    ".fm-mat .sotto::before{content:'';position:absolute;left:.48rem;top:-.24rem;" +
-      "bottom:1.2rem;width:1px;" +
-      "background:color-mix(in srgb,var(--c,#C8A055) 45%,transparent)}" +
-    ".fm-mat .sotto > .orma{position:relative}" +
-    ".fm-mat .sotto > .orma::before{content:'';position:absolute;left:-1.18rem;" +
-      "top:1.38rem;width:.74rem;height:1px;" +
-      "background:color-mix(in srgb,var(--c,#C8A055) 45%,transparent)}" +
-    ".fm-mat .collegare .sotto::before," +
-    ".fm-mat .collegare .sotto > .orma::before{background:rgba(90,122,140,.5)}" +
-
-    /* i talenti che aspettano, le squadre, il vuoto */
-    ".fm-mat .ferme{border:1px dashed rgba(245,240,230,.16);border-radius:.96rem;" +
-      "background:rgba(8,11,26,.35);padding:.72rem .96rem;margin-bottom:.6rem}" +
-    ".fm-mat .ferme b{display:block;font-weight:400;font-size:1.02rem;" +
-      "color:rgba(245,240,230,.55)}" +
-    ".fm-mat .ferme span{display:block;font-family:'Cormorant Garamond',serif;" +
-      "font-size:1.02rem;color:rgba(245,240,230,.32);margin-top:.18rem;line-height:1.4}" +
-    ".fm-mat .sq{border:1px solid rgba(184,150,62,.22);border-radius:1.02rem;" +
-      "background:rgba(8,11,26,.45);padding:.9rem 1.02rem;margin-bottom:.54rem}" +
-    ".fm-mat .sq b{font-family:'Cinzel',serif;font-weight:400;font-size:1.08rem;" +
+    /* ── la testa: nome e soglie ── */
+    ".fm-om h1{font-family:'Cinzel',serif;font-weight:400;font-size:1.5rem;" +
+      "line-height:1.2;margin:0 0 .12rem}" +
+    ".fm-om .mio{font-family:'Cormorant Garamond',serif;font-style:italic;" +
+      "font-size:1.06rem;color:#C8A055;opacity:.85;margin-bottom:1rem}" +
+    ".fm-om .soglie{display:flex;gap:.4rem;margin-bottom:1.2rem;flex-wrap:wrap}" +
+    ".fm-om .soglie button{min-height:2.5rem;padding:0 1.1rem;border-radius:1.4rem;" +
+      "cursor:pointer;font-family:inherit;font-size:.92rem;background:transparent;" +
+      "border:1px solid rgba(245,240,230,.16);color:rgba(245,240,230,.55);transition:.18s}" +
+    ".fm-om .soglie button.su{border-color:#C8A055;background:rgba(200,160,85,.16);" +
       "color:#D4AF6A}" +
-    ".fm-mat .sq .d{font-size:.98rem;color:rgba(245,240,230,.5);" +
-      "margin-top:.24rem;line-height:1.4}" +
-    ".fm-mat .sq.vuota{border-style:dashed;opacity:.65}" +
-    ".fm-mat .sq.vuota .d{font-family:'Cormorant Garamond',serif;font-style:italic}" +
 
-    /* i tre gradi delle squadre */
-    ".fm-mat .eti2{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;" +
-      "color:#C8A055;margin:1.02rem 0 .42rem}" +
-    ".fm-mat .sq.viva{cursor:pointer}" +
-    ".fm-mat .sq .den2{display:none;margin-top:.48rem;" +
-      "border-top:1px solid rgba(245,240,230,.08);padding-top:.48rem}" +
-    ".fm-mat .sq.on .den2{display:block}" +
-    ".fm-mat .sq .rga{display:flex;gap:.48rem;font-size:.94rem;" +
-      "color:rgba(245,240,230,.6);padding:.18rem 0;flex-wrap:wrap}" +
-    ".fm-mat .sq .rga .k{flex:none;width:10.2rem;" +
-      "color:rgba(245,240,230,.38);font-size:.86rem}" +
-    ".fm-mat .sq .rga .v{flex:1;min-width:0;line-height:1.6}" +
-    ".fm-mat .lucc{display:inline-block;font-size:.7rem;letter-spacing:.05em;" +
-      "padding:.08rem .48rem;border-radius:1.2rem;" +
-      "border:1px solid rgba(200,160,85,.4);color:#D4AF6A;margin-left:.36rem}" +
-    ".fm-mat .st2{display:inline-block;font-size:.74rem;padding:.1rem .54rem;" +
-      "border-radius:1.2rem;border:1px solid rgba(245,240,230,.16);" +
-      "color:rgba(245,240,230,.6);margin-right:.3rem}" +
+    /* ── la nota di Antahkarana ── */
+    ".fm-om .nota{border:1px dashed rgba(212,175,106,.32);border-radius:.9rem;" +
+      "background:rgba(212,175,106,.05);padding:1rem 1.1rem;margin-bottom:.9rem}" +
+    ".fm-om .nota .et{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;" +
+      "color:#C8A055;margin-bottom:.3rem}" +
+    ".fm-om .nota p{font-family:'Cormorant Garamond',serif;font-size:1.06rem;" +
+      "line-height:1.5;color:rgba(245,240,230,.7)}" +
 
-    /* il tasto della pubblicazione, nei suoi due posti */
-    ".fm-mat .pubblica{display:inline-flex;align-items:center;" +
-      "font-family:'DM Sans',sans-serif;font-size:.74rem;letter-spacing:.05em;" +
-      "padding:.1rem .6rem;border-radius:1.2rem;cursor:pointer;" +
-      "background:transparent;border:1px solid rgba(200,160,85,.45);" +
-      "color:#D4AF6A}";
+    /* ── i talenti, e le orme dentro ── */
+    ".fm-om .rad{margin-bottom:1.3rem}" +
+    ".fm-om .rad .cap{display:flex;align-items:baseline;gap:.5rem;margin-bottom:.5rem;" +
+      "padding-bottom:.35rem;border-bottom:1px solid color-mix(in srgb,var(--c) 28%,transparent)}" +
+    ".fm-om .rad .cap b{flex:1;min-width:0;font-family:'Cormorant Garamond',serif;" +
+      "font-weight:400;font-size:1.14rem;line-height:1.3;color:var(--c);filter:brightness(1.3)}" +
+    ".fm-om .rad .cap .st{flex:none;font-size:.74rem;color:rgba(245,240,230,.34)}" +
+    ".fm-om .rad .cap .n{flex:none;font-family:'Cinzel',serif;font-size:.86rem;" +
+      "color:rgba(245,240,230,.42)}" +
+
+    ".fm-om .orma{display:block;width:100%;text-align:left;cursor:pointer;" +
+      "border-radius:.8rem;padding:.7rem .85rem;margin-bottom:.4rem;font-family:inherit;" +
+      "color:inherit;transition:.18s;" +
+      "border:1px solid color-mix(in srgb,var(--c) 24%,transparent);" +
+      "border-left:3px solid color-mix(in srgb,var(--c) 58%,transparent);" +
+      "background:color-mix(in srgb,var(--c) 7%,rgba(4,8,20,.5))}" +
+    ".fm-om .orma:hover{background:color-mix(in srgb,var(--c) 15%,rgba(4,8,20,.5));" +
+      "border-color:color-mix(in srgb,var(--c) 52%,transparent)}" +
+    ".fm-om .orma .alto{display:flex;align-items:center;gap:.5rem;" +
+      "font-size:.78rem;color:rgba(245,240,230,.42);margin-bottom:.15rem}" +
+    ".fm-om .orma .alto .v{display:flex;gap:-.3rem}" +
+    ".fm-om .orma .alto .vv{width:1.2rem;height:1.2rem;border-radius:50%;flex:none;" +
+      "display:grid;place-items:center;font-size:.58rem;margin-right:-.3rem;" +
+      "border:1px solid color-mix(in srgb,var(--c) 45%,transparent);" +
+      "background:color-mix(in srgb,var(--c) 18%,#0a1428);color:#F5F0E6}" +
+    ".fm-om .orma .tit{font-family:'Cormorant Garamond',serif;font-size:1.12rem;" +
+      "line-height:1.3;color:rgba(245,240,230,.92)}" +
+    ".fm-om .orma .sub{font-family:'Cormorant Garamond',serif;font-style:italic;" +
+      "font-size:.94rem;color:rgba(245,240,230,.42);margin-top:.05rem}" +
+    ".fm-om .orma .basso{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;" +
+      "margin-top:.35rem;font-size:.78rem;color:rgba(245,240,230,.4)}" +
+    ".fm-om .orma .basso .sz{color:var(--c);filter:brightness(1.3)}" +
+    ".fm-om .orma .basso .fr{margin-left:auto;color:rgba(245,240,230,.28)}" +
+    ".fm-om .orma .da{font-family:'Cormorant Garamond',serif;font-style:italic;" +
+      "font-size:.88rem;color:rgba(245,240,230,.34);margin-top:.3rem;" +
+      "padding-top:.3rem;border-top:1px solid rgba(245,240,230,.07)}" +
+    ".fm-om .orma.spenta{opacity:.42;filter:grayscale(.5)}" +
+    ".fm-om .cosi{font-family:'Cormorant Garamond',serif;font-style:italic;" +
+      "font-size:.9rem;color:rgba(245,240,230,.3);margin:.2rem 0 .3rem .2rem}" +
+    /* \u26d4 la veste di Design, verbatim: il filo tratteggiato a
+       sinistra, il corsivo, le misure sue. */
+    ".fm-om .filo{position:relative;padding-left:1.4rem;margin-left:.9rem;" +
+      "display:flex;flex-direction:column;gap:.45rem}" +
+    ".fm-om .filo.vuoto{border-left:1px dashed color-mix(in srgb,var(--c) 40%,transparent)}" +
+    ".fm-om .filo.pieno{border-left:1px solid color-mix(in srgb,var(--c) 40%,transparent)}" +
+    ".fm-om .apri{display:flex;align-items:center;gap:.8rem;min-height:3rem;" +
+      "padding:.6rem .9rem;border-radius:.9rem;text-align:left;cursor:pointer;" +
+      "border:1px dashed rgba(212,175,106,.45);background:transparent;" +
+      "color:rgba(212,175,106,.9);font-family:'Cormorant Garamond',serif;" +
+      "font-style:italic;font-size:1.15rem}" +
+    ".fm-om .apri:hover{border-color:#D4AF6A;background:rgba(212,175,106,.06)}" +
+    ".fm-om .apri .pi{flex:none;width:1.7rem;height:1.7rem;border-radius:50%;" +
+      "display:grid;place-items:center;font-style:normal;font-size:1rem;" +
+      "font-family:'DM Sans',system-ui,sans-serif;color:#D4AF6A;" +
+      "border:1px solid rgba(212,175,106,.6)}" +
+    ".fm-om .altre{font-size:.84rem;color:rgba(245,240,230,.34);" +
+      "padding:.3rem .2rem;cursor:pointer;background:none;border:0;font-family:inherit}" +
+
+    ".fm-om .vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;" +
+      "font-size:1rem;color:rgba(245,240,230,.32);padding:1.2rem .2rem;line-height:1.5}" +
+    ".fm-om .tasto{display:block;width:100%;min-height:3rem;margin-top:.6rem;" +
+      "border-radius:1.5rem;cursor:pointer;font-family:inherit;font-size:.98rem;" +
+      "border:1px solid rgba(212,175,106,.45);background:rgba(212,175,106,.13);color:#D4AF6A}" +
+
+    /* ── gli strumenti ── */
+    ".fm-om .stru{display:flex;flex-direction:column;gap:.9rem}" +
+    ".fm-om .stru a{display:flex;flex-direction:column;gap:.35rem;min-height:5.5rem;" +
+      "padding:1rem 1.2rem;border-radius:1rem;text-decoration:none;color:#F5F0E6;" +
+      "border:1px solid rgba(212,175,106,.35);background:rgba(8,11,26,.5);" +
+      "transition:border-color .25s,background .25s;cursor:pointer}" +
+    ".fm-om .stru a:hover{border-color:rgba(212,175,106,.8);background:rgba(212,175,106,.08)}" +
+    ".fm-om .stru .n{display:flex;align-items:center;gap:.5rem;font-family:'Cinzel',serif;" +
+      "font-size:1rem;letter-spacing:.14em;text-transform:uppercase;color:#D4AF6A}" +
+    ".fm-om .stru .n i{font-style:normal;font-size:1.1rem;line-height:1;" +
+      "color:rgba(212,175,106,.8)}" +
+    ".fm-om .stru .d{font-family:'Cormorant Garamond',serif;font-size:1.45rem;" +
+      "line-height:1.25;margin-top:auto}" +
+    ".fm-om .stru .s{font-size:.84rem;color:rgba(245,240,230,.45)}" +
+    "@media (prefers-reduced-motion:reduce){.fm-om *{transition:none}}";
   document.head.appendChild(s);
 }
 
-/* ── lo stato del modulo ── */
-var matParti = null;
-var matFiltro = "tutti";
+/* ── leggere ────────────────────────────────────────────────────── */
+async function omLeggi(){
+  var d = { io:null, talenti:[], attese:[], squadre:[], micelio:[], giorno:null };
+  try{
+    var u = await db.auth.getUser();
+    var id = u && u.data && u.data.user && u.data.user.id;
+    if(!id) return d;
 
-function matGiornoDi(o){
-  if(typeof giornoDi === "function") return giornoDi(o);
-  if(o && o.accaduto_il) return String(o.accaduto_il).slice(0,10);
-  return String(o && o.momento || "").slice(0,10);
-}
-function matIniziali(nome){
-  var p = String(nome || "").trim().split(/\s+/);
-  var due = (p[0] ? p[0][0] : "") + (p[1] ? p[1][0] : "");
-  return due.toUpperCase() || "—";
-}
-function matElemento(o){
-  if(typeof DOVE === "undefined" || !DOVE || !o || !o.tipo) return null;
-  var q = DOVE.filter(function(x){ return x.tipo === o.tipo; })[0];
-  return (q && q.el) || null;
-}
+    var p = await db.from("persone")
+      .select("id,nome,grado,livello_n,talenti,foto_url,comune_cod,vicinato_id")
+      .eq("id", id).single();
+    if(!p.error) d.io = p.data;
 
-/* ⚠️ [ in attesa ] l'àncora del secondo talento: quando il database
-   le darà una casa, si legge qui — un punto solo */
-function ormaAncoraDi(o){ return null; }
+    /* ⭐ le orme: le mie, colle relazioni e lo stadio */
+    var o = await db.from("orme")
+      .select("id,titolo,contenuto,sottotitolo,elemento,stadio,luogo,accaduto_il," +
+              "entro_il,talento_id,orma_madre_id,destinazione")
+      .eq("persona_id", id).order("momento", { ascending:false }).limit(120);
+    var orme = o.error ? [] : (o.data || []);
 
-/* ── l'unica porta: la chiama il guscio da vai() ── */
-function laMatriceDellOrma(c){
-  matVeste();
-  var r = document.createElement("div");
-  r.className = "fm-mat";
-  c.appendChild(r);
-  matParti = { radice: r, caselle: null };
-
-  /* ① il riquadro del tempo: la data, la luna, il santo */
-  var tempo = document.createElement("div");
-  tempo.className = "tempo";
-  var caselle = {};
-  [["data"],["luna"],["santo"]].forEach(function(k){
-    var q = document.createElement("div"); q.className = "q";
-    var b = document.createElement("b");
-    var s = document.createElement("span");
-    q.appendChild(b); q.appendChild(s); tempo.appendChild(q);
-    caselle[k[0]] = { b: b, s: s };
-  });
-  caselle.luna.b.className = "lu";
-  r.appendChild(tempo);
-  matParti.caselle = caselle;
-
-  var oggi = new Date();
-  caselle.data.b.textContent = String(oggi.getDate());
-  caselle.data.s.textContent = oggi.toLocaleDateString("it-IT", { month: "long" });
-  matTempo(typeof GIORNO !== "undefined" ? GIORNO : null);
-  matAscoltaIlGiorno();
-
-  /* ⛔ da ospite si vedono solo la data e il riquadro del tempo */
-  if(typeof ospite !== "undefined" && ospite) return;
-  if(typeof io === "undefined" || !io || !io.id) return;
-
-  /* ② la testa: il cerchio, il nome, il livello, il vicinato radice */
-  var testa = document.createElement("div");
-  testa.className = "io";
-  var av = document.createElement("span"); av.className = "av"; av.textContent = "—";
-  var nm = document.createElement("span"); nm.className = "nm";
-  var nmb = document.createElement("b");
-  var nms = document.createElement("span");
-  nm.appendChild(nmb); nm.appendChild(nms);
-  testa.appendChild(av); testa.appendChild(nm);
-  r.appendChild(testa);
-  matTesta(av, nmb, nms);
-
-  /* ③ i due gesti: portano a due pagine, non aprono campi.
-     «+ nuova orma» non c'è — il Megafono in basso è già quella strada */
-  var gesti = document.createElement("div");
-  gesti.className = "gesti";
-  [ ["☉", "contatto", "", function(){
-       if(typeof location !== "undefined") location.href = "matrice-rubrica.html";
-     }],
-    ["€", "costi", "", function(){
-       /* la pagina dei costi ora c'è: fm-costi.js, rotta del guscio */
-       if(typeof vai === "function") vai("costi");
-     }] ].forEach(function(g){
-    var b = document.createElement("button");
-    b.type = "button";
-    b.className = "ge" + (g[2] ? " " + g[2] : "");
-    var i = document.createElement("i"); i.textContent = g[0];
-    b.appendChild(i);
-    b.appendChild(document.createTextNode(g[1]));
-    b.addEventListener("click", g[3]);
-    gesti.appendChild(b);
-  });
-  r.appendChild(gesti);
-
-  /* ④ i filtri, ⑤ Antahkarana, ⑥ le orme, ⑦ le squadre: coi dati */
-  var et3 = document.createElement("div");
-  et3.className = "et3";
-  et3.textContent = "i miei talenti · toccane uno per filtrare";
-  r.appendChild(et3);
-  var segni = document.createElement("div"); segni.className = "segni";
-  r.appendChild(segni);
-
-  var corpo = document.createElement("div"); corpo.className = "corpo";
-  r.appendChild(corpo);
-
-  var prat = document.createElement("div");
-  prat.className = "prat";
-  var psg = document.createElement("span"); psg.className = "sg"; psg.textContent = "✦";
-  var ptx = document.createElement("span"); ptx.className = "tx";
-  var ptb = document.createElement("b"); ptb.textContent = "Antahkarana";
-  ptx.appendChild(ptb);
-  var pfr = document.createElement("span");
-  pfr.style.color = "rgba(245,240,230,.3)"; pfr.textContent = "›";
-  prat.appendChild(psg); prat.appendChild(ptx); prat.appendChild(pfr);
-  prat.addEventListener("click", function(){
-    if(typeof vai === "function") vai("sentiero");
-  });
-  corpo.appendChild(prat);
-
-  var h2 = document.createElement("h2");
-  h2.textContent = "Le mie orme";
-  var sm = document.createElement("small");
-  sm.textContent = "una radice per talento, e sotto tutto quello che ne è venuto";
-  h2.appendChild(sm);
-  corpo.appendChild(h2);
-
-  var orme = document.createElement("div");
-  corpo.appendChild(orme);
-
-  var h2s = document.createElement("h2");
-  h2s.textContent = "Le squadre";
-  var sms = document.createElement("small");
-  sms.textContent = "i riquadri si riempiono in base a chi guarda";
-  h2s.appendChild(sms);
-  corpo.appendChild(h2s);
-  var squadreBox = document.createElement("div");
-  corpo.appendChild(squadreBox);
-  matParti.squadreBox = squadreBox;
-  matSquadreLeggi();
-
-  matParti.segni = segni;
-  matParti.orme = orme;
-  matFiltro = "tutti";
-  matLeggi();
-}
-
-/* ── il riquadro del tempo si riempie: la stessa strada della home ── */
-function matTempo(g){
-  var p = matParti;
-  if(!p || !p.caselle) return;
-  p.caselle.luna.b.textContent = "🌑";
-  p.caselle.luna.s.textContent = (g && g.fase) || "—";
-  p.caselle.santo.b.textContent = (g && g.santo) || "—";
-  p.caselle.santo.s.textContent = "il santo";
-}
-function matAscoltaIlGiorno(){
-  window.SpazioVivo = window.SpazioVivo || {};
-  var prima = window.SpazioVivo.oggi;
-  if(!prima || !prima.fmMat){
-    var mio = function(g){
-      if(typeof prima === "function") prima(g);
-      matTempo(g);
-    };
-    mio.fmMat = true;
-    window.SpazioVivo.oggi = mio;
-  }
-  if(typeof riempiIlGiorno === "function") riempiIlGiorno();
-}
-
-/* ── la testa: nome da persone_pubbliche, livello da fm_livello,
-   vicinato dalla propria riga ── */
-function matTesta(av, nmb, nms){
-  var pezzi = { livello: null, vicinato: null };
-  function versa(){
-    var riga = [];
-    if(pezzi.livello) riga.push(pezzi.livello);
-    if(pezzi.vicinato) riga.push(pezzi.vicinato);
-    nms.textContent = riga.join(" · ");
-  }
-  db.from("persone_pubbliche").select("nome").eq("id", io.id).maybeSingle()
-    .then(function(r){
-      var nome = r && r.data && r.data.nome;
-      if(nome){ nmb.textContent = nome; av.textContent = matIniziali(nome); }
-    })
-    .catch(function(){});
-  db.rpc("fm_livello", { p_persona: io.id })
-    .then(function(r){
-      if(r && !r.error && r.data){ pezzi.livello = String(r.data); versa(); }
-    })
-    .catch(function(){});
-  db.from("persone").select("vicinato_id").eq("id", io.id).maybeSingle()
-    .then(function(r){
-      var vid = r && r.data && r.data.vicinato_id;
-      if(!vid) return;
-      db.from("vicinati").select("nome").eq("id", vid).maybeSingle()
-        .then(function(v){
-          if(v && v.data && v.data.nome){ pezzi.vicinato = v.data.nome; versa(); }
-        })
-        .catch(function(){});
-    })
-    .catch(function(){});
-}
-
-/* ── le letture della matrice ── */
-var matRighe = null;      /* le mie orme */
-var matTalenti = null;    /* id → {nome, svg, colore} dei talenti presi */
-var matGente = {};        /* orma_id → [righe di orma_persone] */
-
-function matLeggi(){
-  if(typeof db === "undefined" || !db) return;
-  db.from("orme")
-    .select("id,titolo,sottotitolo,contenuto,tipo,destinazione,momento," +
-            "accaduto_il,luogo,stadio,talento_id,filo_id,orma_madre_id")
-    .eq("persona_id", io.id)
-    .order("momento", { ascending: false })
-    .limit(300)
-    .then(function(r){
-      if(!r || r.error){
-        console.warn("fm-orma-mia: le orme non rispondono — " +
-          (r && r.error && r.error.message || "senza motivo"));
-        return;
-      }
-      matRighe = (r.data) || [];
-      matTalentiLeggi(function(){
-        matGenteLeggi(function(){ matDisegna(); });
-      });
-    })
-    .catch(function(e){
-      console.warn("fm-orma-mia: le orme non rispondono — " + (e && e.message));
+    /* i talenti scelti */
+    var t = await db.from("orme")
+      .select("talento_id,talenti(id,nome,stanza,elemento)")
+      .eq("persona_id", id).not("talento_id","is",null);
+    var visti = {};
+    (t.error ? [] : t.data || []).forEach(function(r){
+      if(r.talenti && !visti[r.talenti.id]) visti[r.talenti.id] = r.talenti;
     });
-}
-
-function matTalentiLeggi(poi){
-  var ids = [];
-  (matRighe || []).forEach(function(o){
-    if(o.talento_id != null && ids.indexOf(o.talento_id) < 0) ids.push(o.talento_id);
-  });
-  if(!ids.length){ matTalenti = {}; poi(); return; }
-  db.from("talenti").select("id,nome,svg,gruppo_id").in("id", ids)
-    .then(function(rt){
-      var talenti = {};
-      ((rt && rt.data) || []).forEach(function(t){
-        talenti[t.id] = { nome: t.nome, svg: t.svg || "", colore: null };
+    Object.keys(visti).forEach(function(k){
+      var tl = visti[k];
+      d.talenti.push({
+        id: tl.id, nome: tl.nome,
+        stanza: tl.stanza || "",
+        el: tl.elemento || STANZA_EL[(tl.stanza||"").toLowerCase()] || "terra",
+        orme: orme.filter(function(x){ return x.talento_id === tl.id; })
       });
-      db.from("talenti_gruppi").select("id,sezione_id")
-        .then(function(rg){
-          var sez = {};
-          ((rg && rg.data) || []).forEach(function(g){ sez[g.id] = g.sezione_id; });
-          db.from("talenti_famiglie").select("id,colore")
-            .then(function(rf){
-              var col = {};
-              ((rf && rf.data) || []).forEach(function(f){ col[f.id] = f.colore; });
-              ((rt && rt.data) || []).forEach(function(t){
-                talenti[t.id].colore = col[sez[t.gruppo_id]] || null;
-              });
-              matTalenti = talenti; poi();
-            })
-            .catch(function(){ matTalenti = talenti; poi(); });
-        })
-        .catch(function(){ matTalenti = talenti; poi(); });
-    })
-    .catch(function(){ matTalenti = {}; poi(); });
-}
+    });
+    /* ⚠️ le orme senza talento: quelle da collegare */
+    d.attese = orme.filter(function(x){ return !x.talento_id; });
 
-function matGenteLeggi(poi){
-  matGente = {};
-  var ids = (matRighe || []).map(function(o){ return o.id; });
-  if(!ids.length){ poi(); return; }
-  db.from("orma_persone").select("orma_id,nome,stato").in("orma_id", ids)
-    .then(function(r){
-      ((r && r.data) || []).forEach(function(x){
-        (matGente[x.orma_id] = matGente[x.orma_id] || []).push(x);
+    /* le squadre vive */
+    try{
+      var sq = await db.rpc("fm_mie_squadre");
+      if(!sq.error) d.squadre = sq.data || [];
+    }catch(e){}
+
+    /* ⭐ il micelio: chi lavora colle mie orme, col colore dell'ORMA */
+    var ids = orme.map(function(x){ return x.id; }).slice(0, 60);
+    if(ids.length){
+      var op = await db.from("orma_persone")
+        .select("persona_id,orma_id").in("orma_id", ids).is("lasciato_il", null);
+      var per = {};
+      (op.error ? [] : op.data || []).forEach(function(r){
+        if(r.persona_id === id) return;
+        var orm = orme.filter(function(x){ return x.id === r.orma_id; })[0];
+        if(!per[r.persona_id])
+          per[r.persona_id] = { id:r.persona_id, el: (orm && orm.elemento) || "terra", orme:[] };
+        per[r.persona_id].orme.push(r.orma_id);
       });
-      poi();
-    })
-    .catch(function(){ poi(); });
-}
-
-/* ── la forma fissata di un'orma: testa · titolo · riga · piede ── */
-function matOrma(o, colore){
-  var d = document.createElement("div");
-  d.className = "orma";
-  if(colore) d.style.setProperty("--c", colore);
-  var den = document.createElement("div");
-  den.className = "den";
-
-  var testa = document.createElement("div");
-  testa.className = "testa";
-  var gente = matGente[o.id] || [];
-  gente.slice(0, 4).forEach(function(x){
-    var ce = document.createElement("span");
-    ce.className = "ce" + (x.stato === "confermato" ? "" : " osp");
-    ce.textContent = matIniziali(x.nome);
-    testa.appendChild(ce);
-  });
-  if(gente.length){
-    var nn = document.createElement("span");
-    nn.className = "nn";
-    nn.textContent = gente.map(function(x){ return x.nome; }).join(" · ");
-    testa.appendChild(nn);
-  }
-  var qd = document.createElement("span");
-  qd.className = "qd";
-  qd.textContent = o.luogo ||
-    (typeof nomeDelGiorno === "function" ? nomeDelGiorno(matGiornoDi(o)) : matGiornoDi(o));
-  testa.appendChild(qd);
-  den.appendChild(testa);
-
-  var ti = document.createElement("div");
-  ti.className = "ti";
-  ti.textContent = o.titolo || String(o.contenuto || "").split("\n")[0].slice(0, 80);
-  den.appendChild(ti);
-  if(o.sottotitolo){
-    var sub = document.createElement("div");
-    sub.className = "sub";
-    sub.textContent = o.sottotitolo;
-    den.appendChild(sub);
-  }
-
-  var piede = document.createElement("div");
-  piede.className = "piede";
-  var el = matElemento(o);
-  var stanza = el && MAT_STANZE[el];
-  if(stanza){
-    var st = document.createElement("span");
-    st.style.color = stanza.colore;
-    st.style.filter = "brightness(1.3)";
-    st.textContent = stanza.stanza;
-    piede.appendChild(st);
-  }
-  if(o.stadio){
-    var mappa = { in_coda: ["in coda", "coda"],
-                  in_avanzamento: ["in avanzamento", "avanz"],
-                  sviluppato: ["sviluppato", "svil"] };
-    var m = mappa[o.stadio];
-    if(m){
-      if(piede.children.length) piede.appendChild(matPunto());
-      var pill = document.createElement("span");
-      pill.className = "st " + m[1];
-      var i = document.createElement("i");
-      pill.appendChild(i);
-      pill.appendChild(document.createTextNode(m[0]));
-      piede.appendChild(pill);
+      d.micelio = Object.keys(per).map(function(k){ return per[k]; });
     }
-  }
-  /* ⭐ dall'orma si pubblica: il tasto nel piede, accanto allo stadio.
-     La strada è portaInEdizione() del guscio, la stessa della stanza
-     delle orme di prima. */
-  if(piede.children.length) piede.appendChild(matPunto());
-  var pub = document.createElement("button");
-  pub.type = "button";
-  pub.className = "pubblica";
-  pub.textContent = "Pubblica";
-  pub.addEventListener("click", function(e){
-    e.stopPropagation();
-    if(typeof portaInEdizione === "function"){
-      portaInEdizione({
-        titolo: (o.titolo || String(o.contenuto || "").split("\n")[0]).slice(0, 60),
-        contenuto: o.contenuto || o.titolo || "",
-        orma_id: o.id,
-        da: "un'orma"
-      });
-    } else console.warn("fm-orma-mia: portaInEdizione non c'è — il guscio non è intorno");
-  });
-  piede.appendChild(pub);
 
-  var nate = (matRighe || []).filter(function(x){
-    return x.orma_madre_id === o.id;
-  }).length;
-  if(nate){
-    if(piede.children.length) piede.appendChild(matPunto());
-    var den2 = document.createElement("span");
-    den2.className = "dentro2";
-    den2.textContent = nate + " dentro";
-    piede.appendChild(den2);
-  }
-  var fr = document.createElement("span");
-  fr.className = "fr"; fr.textContent = "›";
-  piede.appendChild(fr);
-  den.appendChild(piede);
-
-  /* le righe sotto il piede: nata da · ancorata · da collegare */
-  if(o.orma_madre_id){
-    var madre = (matRighe || []).filter(function(x){ return x.id === o.orma_madre_id; })[0];
-    if(madre){
-      var da = document.createElement("div");
-      da.className = "da";
-      da.appendChild(document.createTextNode("↳ nata da "));
-      var b = document.createElement("b");
-      b.textContent = madre.titolo || String(madre.contenuto || "").split("\n")[0].slice(0, 60);
-      da.appendChild(b);
-      den.appendChild(da);
-    }
-  }
-  var ancora = ormaAncoraDi(o);
-  if(ancora){
-    var an = document.createElement("div");
-    an.className = "da";
-    an.appendChild(document.createTextNode("⚓ ancorata anche a "));
-    var ab = document.createElement("b"); ab.textContent = ancora;
-    an.appendChild(ab);
-    den.appendChild(an);
-    d.style.borderStyle = "dashed";
-  }
-  if(o.talento_id == null && o.filo_id == null){
-    var vu = document.createElement("div");
-    vu.className = "da vuoto2";
-    vu.textContent = "↳ da collegare a un talento";
-    den.appendChild(vu);
-  }
-
-  d.appendChild(den);
-  d.addEventListener("click", function(){
-    window.ormaChiesta = o.id;
-    if(typeof vai === "function") vai("orma");
-  });
+    /* il santo e la luna */
+    try{
+      var oggi = new Date();
+      var mm = String(oggi.getMonth()+1).padStart(2,"0");
+      var gg = String(oggi.getDate()).padStart(2,"0");
+      var sa = await db.from("santi").select("nome").eq("giorno", mm+"-"+gg).limit(1);
+      d.giorno = { santo: (!sa.error && sa.data && sa.data[0]) ? sa.data[0].nome : null };
+    }catch(e){}
+  }catch(e){ console.warn("la mia orma:", e); }
   return d;
 }
-function matPunto(){
-  var s = document.createElement("span");
-  s.textContent = "·";
-  return s;
+
+/* ── il cubo di Metatron, col micelio dentro ────────────────────── */
+function omCubo(){
+  var d = 46, C = [[0,0]];
+  for(var k = 0; k < 6; k++){
+    var a = (-90 + k*60) * Math.PI/180;
+    C.push([+(d*Math.cos(a)).toFixed(2), +(d*Math.sin(a)).toFixed(2)]);
+  }
+  for(var k2 = 0; k2 < 6; k2++){
+    var a2 = (-90 + k2*60) * Math.PI/180;
+    C.push([+(2*d*Math.cos(a2)).toFixed(2), +(2*d*Math.sin(a2)).toFixed(2)]);
+  }
+  var lin = "";
+  for(var i = 0; i < C.length; i++)
+    for(var j = i+1; j < C.length; j++)
+      lin += '<line x1="'+C[i][0]+'" y1="'+C[i][1]+'" x2="'+C[j][0]+'" y2="'+C[j][1]+'"/>';
+
+  /* ⭐ i nodi: io al centro, ognuno col colore dell'orma che ci lega */
+  var nodi = '<circle cx="0" cy="0" r="4.2" fill="#D4AF6A"' +
+    ' style="filter:drop-shadow(0 0 6px rgba(212,175,106,.8))"/>';
+  var fili = "";
+  omMicelio.slice(0, 12).forEach(function(p, n){
+    var c = C[1 + (n % 12)];
+    var col = EL[p.el] || EL.terra;
+    fili += '<line x1="0" y1="0" x2="'+c[0]+'" y2="'+c[1]+'" stroke="'+col+
+      '" stroke-width=".7" opacity=".4"/>';
+    nodi += '<circle cx="'+c[0]+'" cy="'+c[1]+'" r="3" fill="'+col+
+      '" opacity=".9" style="filter:drop-shadow(0 0 4px '+col+'99)"/>';
+  });
+
+  return '<svg viewBox="-115 -115 230 230" fill="none" stroke-linejoin="round"' +
+    ' aria-hidden="true">' +
+    '<g stroke="#D4AF6A" stroke-width=".5" opacity="' +
+      (omMicelio.length ? ".2" : ".13") + '">' + lin + '</g>' +
+    '<circle r="104" stroke="#D4AF6A" stroke-width=".9" opacity="' +
+      (omMicelio.length ? ".3" : ".2") + '"/>' +
+    '<g>' + fili + '</g><g>' + nodi + '</g></svg>';
 }
 
-/* ── il disegno delle orme e dei filtri ── */
-function matDisegna(){
-  var p = matParti;
-  if(!p || !matRighe || !matTalenti) return;
-
-  var radici = matRighe.filter(function(o){ return o.talento_id != null; });
-  var daCollegare = matRighe.filter(function(o){
-    return o.talento_id == null && o.filo_id == null;
-  });
-  var figlieDi = {};
-  matRighe.forEach(function(o){
-    if(o.filo_id != null)
-      (figlieDi[o.filo_id] = figlieDi[o.filo_id] || []).push(o);
-  });
-
-  /* ④ i filtri: «tutti», poi un segno per talento preso */
-  p.segni.innerHTML = "";
-  function chip(testo, colore, chiave, vu, svg){
-    var sg = document.createElement("span");
-    sg.className = "sg" + (matFiltro === chiave ? " on" : "") + (vu ? " vu" : "");
-    if(colore) sg.style.setProperty("--c", colore);
-    if(svg){
-      /* ⭐ il segno del talento cambia col talento */
-      var sgn = document.createElement("span");
-      sgn.className = "sgn";
-      sgn.innerHTML = svg;
-      sg.appendChild(sgn);
-    } else {
-      var i = document.createElement("i");
-      sg.appendChild(i);
-    }
-    sg.appendChild(document.createTextNode(testo));
-    sg.addEventListener("click", function(){
-      matFiltro = chiave;
-      matDisegna();
-    });
-    p.segni.appendChild(sg);
+/* ── i mattoni ──────────────────────────────────────────────────── */
+function omEl(t, c, x){
+  var n = document.createElement(t);
+  if(c) n.className = c;
+  if(x !== undefined) n.innerHTML = x;
+  return n;
+}
+function omStadio(s){
+  return s === "sviluppato" ? "chiusa" :
+         s === "in_avanzamento" ? "in corso" : "in coda";
+}
+function omQuando(o){
+  if(o.luogo) return o.luogo;
+  if(o.accaduto_il){
+    var g = new Date(o.accaduto_il);
+    return g.getDate() + " " + MESI[g.getMonth()].slice(0,3);
   }
-  chip("tutti", "#C8A055", "tutti", false, null);
-  radici.forEach(function(rad){
-    var t = matTalenti[rad.talento_id] || {};
-    var senza = !(figlieDi[rad.id] || []).length;
-    chip(t.nome || rad.contenuto || "", t.colore, String(rad.talento_id), senza,
-         t.svg || null);
-  });
-  var piu = document.createElement("span");
-  piu.className = "piu";
-  piu.textContent = "+ aggiungi";
-  piu.addEventListener("click", function(){
-    if(typeof vai === "function") vai("percorso");
-  });
-  p.segni.appendChild(piu);
-
-  /* ⑥ le mie orme */
-  p.orme.innerHTML = "";
-
-  /* «Da collegare» in cima, se ce ne sono — e solo su «tutti» */
-  if(daCollegare.length && matFiltro === "tutti"){
-    var col = document.createElement("div");
-    col.className = "collegare";
-    var capo = document.createElement("div");
-    capo.className = "capo";
-    var ci = document.createElement("i");
-    var cb = document.createElement("b"); cb.textContent = "Da collegare";
-    var ce = document.createElement("em"); ce.textContent = String(daCollegare.length);
-    capo.appendChild(ci); capo.appendChild(cb); capo.appendChild(ce);
-    col.appendChild(capo);
-    var sotto = document.createElement("div");
-    sotto.className = "sotto";
-    daCollegare.forEach(function(o){ sotto.appendChild(matOrma(o, MAT_SVIL)); });
-    col.appendChild(sotto);
-    p.orme.appendChild(col);
-  }
-
-  /* una radice per talento, col segno; sotto le sue orme IN FILA */
-  var ferme = [];
-  radici.forEach(function(rad){
-    var t = matTalenti[rad.talento_id] || {};
-    var figlie = figlieDi[rad.id] || [];
-    if(!figlie.length){ ferme.push(t.nome || rad.contenuto || ""); return; }
-    if(matFiltro !== "tutti" && matFiltro !== String(rad.talento_id)) return;
-
-    var blocco = document.createElement("div");
-    blocco.className = "radice";
-    if(t.colore) blocco.style.setProperty("--c", t.colore);
-    var capo = document.createElement("div");
-    capo.className = "capo";
-    var sgt = document.createElement("span");
-    sgt.className = "sgt";
-    sgt.innerHTML = t.svg || "";
-    var b = document.createElement("b");
-    b.textContent = t.nome || rad.contenuto || "";
-    var em = document.createElement("em");
-    em.textContent = figlie.length === 1 ? "un’orma" : figlie.length + " orme";
-    capo.appendChild(sgt); capo.appendChild(b); capo.appendChild(em);
-    blocco.appendChild(capo);
-
-    var sotto = document.createElement("div");
-    sotto.className = "sotto";
-    figlie.forEach(function(o){
-      var el = matElemento(o);
-      var colore = (el && MAT_STANZE[el] && MAT_STANZE[el].colore) || t.colore;
-      sotto.appendChild(matOrma(o, colore));
-    });
-    blocco.appendChild(sotto);
-    p.orme.appendChild(blocco);
-  });
-
-  /* le radici senza orme: una riga sola, che non occupa spazio */
-  var fermeViste = (matFiltro === "tutti") ||
-    ferme.length && radici.some(function(rad){
-      return String(rad.talento_id) === matFiltro && !(figlieDi[rad.id] || []).length;
-    });
-  if(ferme.length && fermeViste){
-    var fe = document.createElement("div");
-    fe.className = "ferme";
-    var fb = document.createElement("b");
-    fb.textContent = ferme.length === 1
-      ? "un talento non ha ancora un’orma"
-      : ferme.length + " talenti non hanno ancora un’orma";
-    var fs = document.createElement("span");
-    fs.textContent = ferme.join(" · ");
-    fe.appendChild(fb); fe.appendChild(fs);
-    p.orme.appendChild(fe);
-  }
+  return "";
 }
 
-/* ═══ LE SQUADRE: I TRE GRADI ═══════════════════════════════════════
-   Nuclei · Nucleo · Progetti — etichette fisse, decise il 9
-   settembre. Un gruppo di cui non fai parte non compare. */
+/* ⭐ la scheda dell'orma: lo schema di Gab, riga per riga */
+function omOrma(o, el, spenta){
+  var b = omEl("button", "orma" + (spenta ? " spenta" : ""));
+  b.type = "button";
+  b.style.setProperty("--c", "var(--" + (el || "terra") + ", " + (EL[el]||EL.terra) + ")");
+  b.style.setProperty("--c", EL[el] || EL.terra);
 
-var matGradi = null;      /* {ceppi, micelio, progetti} — i miei */
-var matLivelli = {};      /* persona_id → la parola di fm_livello */
-var MAT_STANZE_NOMI = {
-  vicinati: "Vicinati", emporio: "Emporio", assistenza: "Assistenza",
-  scuola: "Scuola", edizione: "Edizione"
-};
-
-function matSquadreLeggi(){
-  if(typeof db === "undefined" || !db) return;
-  var colto = { nuclei: null, progetti: null };
-  function forse(){
-    if(!colto.nuclei || !colto.progetti) return;
-    matGradi = {
-      ceppi: colto.nuclei.filter(function(n){ return n.livello === "ceppo"; }),
-      micelio: colto.nuclei.filter(function(n){ return n.livello === "micelio"; }),
-      centrale: colto.nuclei.filter(function(n){ return n.livello === "nucleo_centrale"; }),
-      progetti: colto.progetti
-    };
-    matSquadreDisegna();
+  var alto = omEl("div", "alto");
+  var quanti = o.quanti_dentro || 0;
+  if(quanti){
+    var v = omEl("span", "v");
+    for(var i = 0; i < Math.min(3, quanti); i++)
+      v.appendChild(omEl("span", "vv", "\u2014"));
+    alto.appendChild(v);
+    alto.appendChild(omEl("span", null,
+      quanti === 1 ? "una persona" : quanti + " persone"));
   }
-  db.from("nuclei").select("id,livello,micelio,ceppo,stanza,da_quando")
-    .eq("persona_id", io.id)
-    .then(function(r){
-      if(!r || r.error){
-        console.warn("fm-orma-mia: i nuclei non rispondono — " +
-          (r && r.error && r.error.message || "senza motivo"));
-        colto.nuclei = [];
-      } else colto.nuclei = (r.data) || [];
-      forse();
-    })
-    .catch(function(){ colto.nuclei = []; forse(); });
-  db.from("appartenenze").select("squadra_id,dal")
-    .eq("persona_id", io.id)
-    .not("squadra_id", "is", null)
-    .then(function(r){
-      var mie = (r && !r.error && r.data) || [];
-      var quando = {};
-      var ids = [];
-      mie.forEach(function(a){
-        if(!a.squadra_id) return;
-        quando[a.squadra_id] = a.dal || null;
-        if(ids.indexOf(a.squadra_id) < 0) ids.push(a.squadra_id);
-      });
-      if(!ids.length){ colto.progetti = []; forse(); return; }
-      db.from("squadre").select("id,nome,dal,stato").in("id", ids)
-        .then(function(rs){
-          colto.progetti = ((rs && !rs.error && rs.data) || []).map(function(s){
-            return { id: s.id, nome: s.nome, dal: s.dal || quando[s.id] || null };
-          });
-          forse();
-        })
-        .catch(function(){ colto.progetti = []; forse(); });
-    })
-    .catch(function(){ colto.progetti = []; forse(); });
+  var q = omQuando(o);
+  if(q){
+    if(quanti) alto.appendChild(omEl("span", null, "\u00b7"));
+    alto.appendChild(omEl("span", null, q));
+  }
+  if(alto.children.length) b.appendChild(alto);
+
+  var t = omEl("div", "tit");
+  t.textContent = o.titolo || o.contenuto || "";
+  b.appendChild(t);
+  if(o.sottotitolo){
+    var s = omEl("div", "sub"); s.textContent = o.sottotitolo; b.appendChild(s);
+  }
+
+  var basso = omEl("div", "basso");
+  if(o.destinazione){
+    var sz = omEl("span", "sz"); sz.textContent = o.destinazione; basso.appendChild(sz);
+    basso.appendChild(omEl("span", null, "\u00b7"));
+  }
+  basso.appendChild(omEl("span", null, omStadio(o.stadio)));
+  if(o.nate){
+    basso.appendChild(omEl("span", null, "\u00b7"));
+    basso.appendChild(omEl("span", null, o.nate + " dentro"));
+  }
+  if(o.entro_il){
+    var e = new Date(o.entro_il);
+    basso.appendChild(omEl("span", null, "\u00b7"));
+    basso.appendChild(omEl("span", null,
+      "entro " + e.getDate() + " " + MESI[e.getMonth()].slice(0,3)));
+  }
+  basso.appendChild(omEl("span", "fr", "\u203a"));
+  b.appendChild(basso);
+
+  if(o.da){
+    var da = omEl("div", "da"); da.textContent = o.da; b.appendChild(da);
+  }
+  b.onclick = function(){
+    if(spenta || typeof vai !== "function") return;
+    vai("orma", { id: o.id });
+  };
+  return b;
 }
 
-function matSquadreDisegna(){
-  var p = matParti;
-  if(!p || !p.squadreBox || !matGradi) return;
-  p.squadreBox.innerHTML = "";
+/* ── le tre soglie ──────────────────────────────────────────────── */
+function omTalentiSoglia(box){
+  /* ⚠️ le orme senza talento vanno in cima: sono quelle da collegare */
+  if(omAttese.length){
+    var r = omEl("div", "rad");
+    r.style.setProperty("--c", EL.svil);
+    var c = omEl("div", "cap");
+    c.appendChild(omEl("b", null, "Da collegare"));
+    c.appendChild(omEl("span", "n", String(omAttese.length)));
+    r.appendChild(c);
+    omAttese.slice(0, 3).forEach(function(o){
+      o.da = "\u21b3 da collegare a un talento";
+      r.appendChild(omOrma(o, "svil"));
+    });
+    if(omAttese.length > 3)
+      r.appendChild(omEl("button", "altre", (omAttese.length - 3) + " altre"));
+    box.appendChild(r);
+  }
 
-  var vuotoTutto = !matGradi.ceppi.length && !matGradi.micelio.length &&
-                   !matGradi.centrale.length && !matGradi.progetti.length;
-  if(vuotoTutto){
-    /* il riquadro del modello: compare quando ti chiamano dentro */
-    var sq = document.createElement("div");
-    sq.className = "sq vuota";
-    var d = document.createElement("div");
-    d.className = "d";
-    d.textContent = "Compare quando ti chiamano dentro.";
-    sq.appendChild(d);
-    p.squadreBox.appendChild(sq);
+  /* ⭐ QUANTE ORME HO IN TUTTO: l'esempio sparisce colla prima orma
+     vera, non col primo talento. Chi sceglie un talento e non ha
+     ancora scritto niente è il primo giorno di TUTTI, non un caso
+     raro: deve trovare com'è fatta un'orma, non un buco. */
+  var quante = omAttese.length;
+  omTalenti.forEach(function(t){ quante += t.orme.length; });
+
+  if(!omTalenti.length){
+    /* ⭐ la nota, e l'orma d'esempio spenta */
+    var n = omEl("div", "nota");
+    n.appendChild(omEl("div", "et", "una nota da Anta\u1e25kara\u1e47a"));
+    n.appendChild(omEl("p", null,
+      "Per scrivere la tua prima orma usa lo spazio in basso."));
+    box.appendChild(n);
+    box.appendChild(omEl("div", "cosi", "cos\u00ec sar\u00e0 la tua"));
+    box.appendChild(omOrma({
+      titolo:"Mercatino di dicembre",
+      luogo:"piazza del paese \u00b7 sabato 14 dicembre, dalle 10 alle 19",
+      quanti_dentro:6, destinazione:"I Vicinati", stadio:"in_avanzamento", nate:4
+    }, "terra", true));
     return;
   }
 
-  /* ⛔ le parole «ceppo» e «micelio» non si mostrano mai: le etichette
-     sono queste tre, fisse — sotto sta il nome che la persona ha messo */
-  matGrado("Nuclei", matGradi.ceppi.map(function(n){
-    return { nome: n.ceppo, dal: n.da_quando, tipo: "ceppo", chiave: n.ceppo };
-  }));
-  /* ⭐ il nucleo centrale sta sotto «Nucleo», come qualsiasi altro —
-     niente quarto grado. ⚠️ [ in attesa ] il suo nome: non ha una
-     colonna, e finché il database non la dà resta il segnaposto. */
-  matGrado("Nucleo", matGradi.micelio.map(function(n){
-    return { nome: n.micelio, dal: n.da_quando, tipo: "micelio",
-             chiave: n.micelio, stanza: n.stanza };
-  }).concat(matGradi.centrale.map(function(n){
-    return { nome: "[ in attesa ]", dal: n.da_quando,
-             tipo: "nucleo_centrale", chiave: null };
-  })));
-  matGrado("Progetti", matGradi.progetti.map(function(s){
-    return { nome: s.nome, dal: s.dal, tipo: "progetto", chiave: s.id };
-  }));
-}
-
-function matGrado(etichetta, voci){
-  if(!voci.length) return;   /* un grado vuoto non si disegna */
-  var p = matParti;
-  var eti = document.createElement("div");
-  eti.className = "eti2";
-  eti.textContent = etichetta;
-  p.squadreBox.appendChild(eti);
-  voci.forEach(function(v){ p.squadreBox.appendChild(matSquadra(v)); });
-}
-
-/* dentro una squadra: nome · data di attivazione · chi ne fa parte
-   (con la lucentezza del livello) · le stanze di riferimento */
-function matSquadra(v){
-  var sq = document.createElement("div");
-  sq.className = "sq viva";
-  var b = document.createElement("b");
-  b.textContent = v.nome || "";
-  sq.appendChild(b);
-  var den = document.createElement("div");
-  den.className = "den2";
-  sq.appendChild(den);
-  var aperta = false, letta = false;
-  sq.addEventListener("click", function(){
-    aperta = !aperta;
-    sq.classList.toggle("on", aperta);
-    if(aperta && !letta){ letta = true; matSquadraDentro(v, den); }
-  });
-  return sq;
-}
-
-function matSquadraDentro(v, den){
-  if(v.dal){
-    var r1 = matRigaDentro(den, "data di attivazione");
-    r1.textContent = new Date(v.dal + "T12:00:00")
-      .toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
-  }
-  var chi = matRigaDentro(den, "chi ne fa parte");
-
-  function versaMembri(righe){
-    /* righe: [{persona_id, stanza?}] — i nomi da persone_pubbliche,
-       mai da persone; la lucentezza da fm_livello */
-    var ids = [];
-    righe.forEach(function(x){
-      if(x.persona_id && ids.indexOf(x.persona_id) < 0) ids.push(x.persona_id);
+  var giaMostrato = false;
+  omTalenti.forEach(function(t){
+    var r = omEl("div", "rad");
+    r.style.setProperty("--c", EL[t.el] || EL.terra);
+    var c = omEl("div", "cap");
+    c.appendChild(omEl("b", null, t.nome));
+    if(t.stanza) c.appendChild(omEl("span", "st", t.stanza));
+    c.appendChild(omEl("span", "n", String(t.orme.length)));
+    r.appendChild(c);
+    /* ⚠️ al massimo tre, le ultime — dentro il filo */
+    var fl = omEl("div", "filo " + (t.orme.length ? "pieno" : "vuoto"));
+    t.orme.slice(0, 3).forEach(function(o){
+      if(o.orma_madre_id) o.da = "\u21b3 nata da un\u2019altra orma";
+      fl.appendChild(omOrma(o, o.elemento || t.el));
     });
-    if(!ids.length){ chi.parentNode.remove(); matCodaDentro(v, righe, den); return; }
-    db.from("persone_pubbliche").select("id,nome").in("id", ids)
-      .then(function(r){
-        var nomi = {};
-        ((r && r.data) || []).forEach(function(x){ nomi[x.id] = x.nome; });
-        ids.forEach(function(pid){
-          var riga = document.createElement("span");
-          riga.style.display = "inline-block";
-          riga.style.marginRight = ".72rem";
-          riga.appendChild(document.createTextNode(nomi[pid] || ""));
-          var pill = document.createElement("span");
-          pill.className = "lucc";
-          riga.appendChild(pill);
-          chi.appendChild(riga);
-          matLucentezza(pid, pill);
-        });
-        matCodaDentro(v, righe, den);
-      })
-      .catch(function(){ matCodaDentro(v, righe, den); });
+    if(!t.orme.length){
+      if(!quante && !giaMostrato){
+        giaMostrato = true;
+        r.appendChild(omEl("div", "cosi", "cos\u00ec sar\u00e0 la tua"));
+        /* ⭐ il primo giorno: si vede com'è fatta un'orma */
+        fl.appendChild(omOrma({
+          titolo:"Mercatino di dicembre",
+          luogo:"piazza del paese \u00b7 sabato 14 dicembre, dalle 10 alle 19",
+          quanti_dentro:6, destinazione:"I Vicinati",
+          stadio:"in_avanzamento", nate:4
+        }, "terra", true));
+      }
+      /* ⭐ e il posto dove cominciare */
+      var n = omEl("button", "apri");
+      n.type = "button";
+      n.innerHTML = '<span class="pi">+</span>';
+      var sp = document.createElement("span");
+      sp.textContent = "Apri la prima orma di questo talento";
+      n.appendChild(sp);
+      n.onclick = function(){
+        if(typeof vai === "function") vai("orma-nuova", { talento: t.id });
+      };
+      fl.appendChild(n);
+    }
+    else if(t.orme.length > 3)
+      fl.appendChild(omEl("button", "altre", (t.orme.length - 3) + " altre"));
+    r.appendChild(fl);
+    box.appendChild(r);
+  });
+}
+
+function omSquadreSoglia(box){
+  if(!omSquadre.length){
+    var n = omEl("div", "nota");
+    n.appendChild(omEl("div", "et", "una nota da Anta\u1e25kara\u1e47a"));
+    n.appendChild(omEl("p", null,
+      "Qua vengono segnate le squadre a cui partecipi."));
+    box.appendChild(n);
+    return;
   }
-
-  if(v.tipo === "progetto"){
-    db.from("appartenenze").select("persona_id")
-      .eq("squadra_id", v.chiave)
-      .then(function(r){ versaMembri((r && !r.error && r.data) || []); })
-      .catch(function(){ versaMembri([]); });
-  } else if(v.tipo === "nucleo_centrale"){
-    db.from("nuclei").select("persona_id,stanza")
-      .eq("livello", "nucleo_centrale")
-      .then(function(r){ versaMembri((r && !r.error && r.data) || []); })
-      .catch(function(){ versaMembri([]); });
-  } else {
-    db.from("nuclei").select("persona_id,stanza")
-      .eq("livello", v.tipo)
-      .eq(v.tipo, v.chiave)
-      .then(function(r){ versaMembri((r && !r.error && r.data) || []); })
-      .catch(function(){ versaMembri([]); });
-  }
-}
-
-/* la coda della carta: le stanze, e — nei Progetti — la pubblicazione */
-function matCodaDentro(v, righe, den){
-  matStanzeDi(v, righe, den);
-  if(v.tipo !== "progetto") return;
-  /* ⭐ dalla parte interna si fa la squadra, e da lì si pubblica:
-     l'ultima riga della carta. ⚠️ [ in attesa ] la forma della
-     pubblicazione: il gancio è SpazioVivo.pubblica, quando esiste. */
-  var vv = matRigaDentro(den, "");
-  var pub = document.createElement("button");
-  pub.type = "button";
-  pub.className = "pubblica";
-  pub.textContent = "Pubblica";
-  pub.addEventListener("click", function(e){
-    e.stopPropagation();
-    var sv = window.SpazioVivo || {};
-    if(typeof sv.pubblica === "function") sv.pubblica({ squadra_id: v.chiave });
-    else console.warn("fm-orma-mia: la forma della pubblicazione non c'è ancora");
-  });
-  vv.appendChild(pub);
-}
-
-function matRigaDentro(den, nome){
-  var rga = document.createElement("div");
-  rga.className = "rga";
-  var k = document.createElement("span");
-  k.className = "k"; k.textContent = nome;
-  var v = document.createElement("span");
-  v.className = "v";
-  rga.appendChild(k); rga.appendChild(v);
-  den.appendChild(rga);
-  return v;
-}
-
-/* le stanze di riferimento.
-   ⭐ Nel nucleo del micelio sono i cinque posti (la colonna `stanza`).
-   ⭐ In un progetto la stanza non si sceglie: la determina l'orma —
-      prodotti→Emporio · formazioni→Scuola · consulenze→Assistenza —
-      e il tag si accende quando qualcosa viene pubblicato.
-      ⚠️ [ in attesa ] il legame squadra→orme non ha una colonna:
-      finché si progetta, nessun tag — ed è la regola. */
-function matStanzeDi(v, righe, den){
-  var stanze = [];
-  righe.forEach(function(x){
-    var n = x.stanza && MAT_STANZE_NOMI[x.stanza];
-    if(n && stanze.indexOf(n) < 0) stanze.push(n);
-  });
-  if(!stanze.length) return;   /* nessun tag: il riquadro non compare */
-  var vv = matRigaDentro(den, "le stanze di riferimento");
-  stanze.forEach(function(n){
-    var t = document.createElement("span");
-    t.className = "st2";
-    t.textContent = n;
-    vv.appendChild(t);
+  omSquadre.forEach(function(q){
+    var r = omEl("div", "rad");
+    r.style.setProperty("--c", EL[q.elemento] || EL.terra);
+    var c = omEl("div", "cap");
+    c.appendChild(omEl("b", null, q.nome || ""));
+    if(q.quante) c.appendChild(omEl("span", "n", String(q.quante)));
+    r.appendChild(c);
+    box.appendChild(r);
   });
 }
 
-/* la lucentezza del livello: una parola da fm_livello, tenuta a mente */
-function matLucentezza(personaId, dove){
-  if(matLivelli[personaId]){ dove.textContent = matLivelli[personaId]; return; }
-  db.rpc("fm_livello", { p_persona: personaId })
-    .then(function(r){
-      if(r && !r.error && r.data){
-        matLivelli[personaId] = String(r.data);
-        dove.textContent = matLivelli[personaId];
-      } else dove.remove();
-    })
-    .catch(function(){ dove.remove(); });
+/* ⭐ i quattro strumenti: chiamano i file che esistono già */
+function omStrumenti(box){
+  var io = omIo || {};
+  var S = [
+    { n:"Anta\u1e25kara\u1e47a", sg:"\u2726", d: io.grado || "\u2014",
+      s: io.talenti ? io.talenti + " talenti" : "", r:"anthakarana" },
+    { n:"Conti", sg:"\u20ac", d:"\u2014", s:"le spese e le entrate", r:"costi" },
+    { n:"Calendario", sg:"\u25a4", d:"\u2014", s:"le orme che hanno un giorno", r:"calendario" },
+    { n:"Rubrica", sg:"\u2609", d:"\u2014", s:"le persone che incontri", r:"rubrica" }
+  ];
+  var w = omEl("div", "stru");
+  S.forEach(function(x){
+    var a = omEl("a");
+    a.href = "#" + x.r;
+    a.innerHTML = '<span class="n"><i>'+x.sg+'</i>'+x.n+'</span>' +
+      '<span class="d"></span><span class="s"></span>';
+    a.querySelector(".d").textContent = x.d;
+    a.querySelector(".s").textContent = x.s;
+    a.onclick = function(e){
+      e.preventDefault();
+      if(typeof vai === "function") vai(x.r);
+    };
+    w.appendChild(a);
+  });
+  box.appendChild(w);
 }
+
+/* ── il disegno ─────────────────────────────────────────────────── */
+function omDisegna(){
+  var box = omBox;
+  if(!box) return;
+  box.className = "fm-om";
+  box.innerHTML = "";
+
+  /* ══ colonna di sinistra ══ */
+  var sx = omEl("div");
+  var oggi = new Date();
+  var tp = omEl("div", "tempo");
+  tp.innerHTML =
+    '<div class="q"><b>'+oggi.getDate()+'</b><span>'+MESI[oggi.getMonth()]+'</span></div>' +
+    '<div class="q"><b>'+LUNE[0].slice(0,2)+'</b><span>'+LUNE[0].slice(3)+'</span></div>' +
+    '<div class="q"><b class="sn"></b><span>il santo</span></div>';
+  tp.querySelector(".sn").textContent =
+    (omGiorno && omGiorno.santo) ? omGiorno.santo : "\u2014";
+  sx.appendChild(tp);
+
+  var cb = omEl("div", "cubo", omCubo());
+  sx.appendChild(cb);
+
+  var g = omEl("div", "gesti");
+  /* ⭐ dove sei: posa il comune, e da lì le orme nascono col punto */
+  var dv = omEl("button");
+  dv.type = "button";
+  dv.innerHTML = '<span class="tx"></span><span class="fr">\u2192</span>';
+  dv.querySelector(".tx").textContent =
+    (omIo && omIo.comune_cod) ? "sei nel tuo comune" : "dove sei?";
+  dv.onclick = function(){
+    if(window.SpazioVivo && SpazioVivo.doveSei) SpazioVivo.doveSei();
+    else if(typeof vai === "function") vai("account");
+  };
+  g.appendChild(dv);
+
+  var iv = omEl("button");
+  iv.type = "button";
+  iv.innerHTML = '<span>invita chi risuona</span><span class="fr">\u2192</span>';
+  iv.onclick = function(){
+    if(window.SpazioVivo && SpazioVivo.invito) SpazioVivo.invito();
+  };
+  g.appendChild(iv);
+  sx.appendChild(g);
+  sx.appendChild(omEl("div", "sotto",
+    "Inizi a scrivere le orme e attivarti nel vicinato"));
+  box.appendChild(sx);
+
+  /* ══ colonna di destra ══ */
+  var dx = omEl("div");
+  dx.appendChild(omEl("h1", null, "La mia orma"));
+  dx.appendChild(omEl("div", "mio",
+    (omIo && omIo.nome) ? omIo.nome : ""));
+
+  var sg = omEl("div", "soglie");
+  [["talenti","Talenti"],["squadre","Squadre"],["strumenti","Strumenti"]]
+    .forEach(function(x){
+      var b = omEl("button");
+      b.type = "button"; b.textContent = x[1];
+      if(omSoglia === x[0]) b.className = "su";
+      b.onclick = function(){ omSoglia = x[0]; omDisegna(); };
+      sg.appendChild(b);
+    });
+  dx.appendChild(sg);
+
+  var d = omEl("div");
+  if(omSoglia === "talenti") omTalentiSoglia(d);
+  if(omSoglia === "squadre") omSquadreSoglia(d);
+  if(omSoglia === "strumenti") omStrumenti(d);
+  dx.appendChild(d);
+  box.appendChild(dx);
+}
+
+async function ormaMia(dove){
+  var box = typeof dove === "string" ? document.querySelector(dove) : dove;
+  if(!box) return;
+  omVeste();
+  omBox = box;
+  omDisegna();
+  var d = await omLeggi();
+  omIo = d.io; omTalenti = d.talenti; omAttese = d.attese;
+  omSquadre = d.squadre; omMicelio = d.micelio; omGiorno = d.giorno;
+  omDisegna();
+}
+
+window.SpazioVivo = window.SpazioVivo || {};
+window.SpazioVivo.ormaMia = ormaMia;
