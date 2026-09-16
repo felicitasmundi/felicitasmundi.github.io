@@ -58,7 +58,7 @@ function cfTesto(t, d){
   });
 }
 
-function cfNodo(n, d, doc){
+function cfNodo(n, d, doc, dentroSvg){
   /* il testo */
   if(n.nodeType === 3){
     var t = cfTesto(n.nodeValue, d);
@@ -78,7 +78,7 @@ function cfNodo(n, d, doc){
       var d2 = Object.create(d);
       d2[nome] = voce;
       for(var i = 0; i < n.childNodes.length; i++){
-        var c = cfNodo(n.childNodes[i], d2, doc);
+        var c = cfNodo(n.childNodes[i], d2, doc, dentroSvg || tag === "svg");
         if(c) f.appendChild(c);
       }
     });
@@ -91,16 +91,24 @@ function cfNodo(n, d, doc){
     if(!v) return null;
     var f2 = doc.createDocumentFragment();
     for(var j = 0; j < n.childNodes.length; j++){
-      var c2 = cfNodo(n.childNodes[j], d, doc);
+      var c2 = cfNodo(n.childNodes[j], d, doc, dentroSvg || tag === "svg");
       if(c2) f2.appendChild(c2);
     }
     return f2;
   }
 
   /* un nodo vero */
-  var el = (n.namespaceURI === "http://www.w3.org/2000/svg" ||
+  /* \u2b50 dentro un <svg> TUTTO \u00e8 SVG: un <symbol> o un <image>
+     creati come HTML non si disegnano mai. */
+  var el = (dentroSvg || tag === "svg" ||
+            n.namespaceURI === "http://www.w3.org/2000/svg" ||
             ["svg","g","line","circle","path","rect","text","polygon",
-             "polyline","ellipse","defs","use","clipPath"].indexOf(tag) > -1)
+             "polyline","ellipse","defs","use","clipPath","symbol","image",
+             "marker","pattern","mask","filter","linearGradient",
+             "radialGradient","stop","tspan","textPath","foreignObject",
+             "animate","animateTransform","desc","title","switch","view",
+             "feGaussianBlur","feOffset","feMerge","feMergeNode","feBlend",
+             "feColorMatrix","feFlood","feComposite"].indexOf(tag) > -1)
     ? doc.createElementNS("http://www.w3.org/2000/svg", tag)
     : doc.createElement(tag);
 
@@ -123,7 +131,7 @@ function cfNodo(n, d, doc){
     el.setAttribute(nome2, cfTesto(val, d));
   }
   for(var m = 0; m < n.childNodes.length; m++){
-    var c4 = cfNodo(n.childNodes[m], d, doc);
+    var c4 = cfNodo(n.childNodes[m], d, doc, dentroSvg || tag === "svg");
     if(c4) el.appendChild(c4);
   }
   return el;
@@ -193,9 +201,24 @@ function cfDisegna(){
   var tmp = document.createElement("div");
   tmp.innerHTML = CF_CORPO;
   cfBox.innerHTML = "";
+  /* \u26d4 la griglia sta sul div di Design, ma dentro il guscio quel
+     div perde il posto: la si porta sul nodo che la contiene, cos\u00ec
+     le due colonne restano affiancate sul computer e una sopra
+     l\u2019altra sul telefono. */
   for(var i = 0; i < tmp.childNodes.length; i++){
     var n = cfNodo(tmp.childNodes[i], d, document);
     if(n) cfBox.appendChild(n);
+  }
+  /* \u26d4 la griglia sta sul div di Design, ma dentro il guscio quel div
+     si ritrova in un contenitore che gliela toglie, e le due colonne
+     finiscono una sopra l\u2019altra. Si porta la griglia sul nodo che lo
+     contiene e il div dentro sparisce: i suoi figli diventano le
+     colonne vere. Sul computer affiancate, sul telefono in fila. */
+  var d1 = cfBox.firstElementChild;
+  if(d1 && d1.getAttribute && (d1.getAttribute("style") || "").indexOf("grid") > -1){
+    cfBox.setAttribute("style", d1.getAttribute("style"));
+    while(d1.firstChild) cfBox.appendChild(d1.firstChild);
+    cfBox.removeChild(d1);
   }
 }
 

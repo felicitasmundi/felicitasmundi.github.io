@@ -1,7 +1,7 @@
 {
   "name": "Comunità Eterna FelicitasMundi",
   "short_name": "Felicitas",
-  "start_url": "./index.html",
+  "start_url": "./accesso.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0A0C1A",
