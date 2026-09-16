@@ -5643,6 +5643,42 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     vai(torna || "spazio");
   }
 
+  /* ⭐ TOCCATO NEL GUSCIO 51 — IL MURO COL NEXUS, comando di Gab del
+     16 settembre. Chi non ha sessione non guarda più la struttura: va
+     ad accesso.html, passa il Nexus, e torna dove aveva chiesto.
+     La regola vecchia — «da ospite si guarda» — è rovesciata: chi
+     arriva oggi arriva da un invito o da un evento, e il racconto
+     gliel'ha già fatto chi lo ha chiamato. Le informazioni gratuite
+     stanno sulla landing, non dentro la piattaforma.
+
+     ⭐ I TRE SPIRAGLI — i collegamenti di contenuto già in giro
+        continuano ad aprirsi da ospite:
+          ?o=   un'orma condivisa
+          ?c=   l'ospite col codice (le anteprime passano di qui)
+          ?p=pagina&n=   una pagina di contenuto
+        Su questi tre l'ospite esiste ancora, e con lui la radio.
+
+     ⛔ IL RIMANDO SOLO DOPO LA RISPOSTA VERA di getSession, mai allo
+        scadere della briglia: chi ha rete lenta aspetta da ospite e
+        poi entra — non deve finire all'accesso con la sessione in
+        tasca. E l'errore resta fuori dal muro: se getSession si rompe
+        si guarda da ospite, perché un guasto non è una risposta. */
+  function spiraglio(){
+    var q = parametri();
+    if(!q) return false;
+    if(q.get("o") || q.get("c")) return true;
+    if(q.get("p") === "pagina" && q.get("n")) return true;
+    return false;
+  }
+  function muro(){
+    /* la richiesta viaggia col rimando: dopo il Nexus si torna qui.
+       L'indirizzo nudo non la porta: chi arriva da solo finisce sul
+       bivio di accesso.html, che lo posa su «La mia orma». */
+    var qui  = location.pathname.split("/").pop() || "index.html";
+    var dove = location.search ? (qui + location.search) : "";
+    location.replace("accesso.html" + (dove ? "?torna=" + encodeURIComponent(dove) : ""));
+  }
+
   function daOspite(){
     ospite = true;
     io = { id:null, nome:"", grado:"ospite" };
@@ -5806,6 +5842,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
       pronto.then(function(r){
         var s = r && r.data && r.data.session;
         if(s) return entra(s);
+        /* ⭐ 51 — la risposta vera è arrivata, e dice «nessuno»: qui il
+           muro vale anche se la briglia aveva già aperto da ospite */
+        if(!spiraglio()){ muro(); return; }
         disegnaBarra();      /* nessuna sessione: la barra dice «Entra» */
       }).catch(function(){});
       return;
@@ -5813,7 +5852,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
     var r    = g.dato;
     var sess = r && r.data && r.data.session;
-    if(!sess){ daOspite(); return; }
+    /* ⭐ 51 — risposta vera, nessuna sessione: il muro, coi tre spiragli */
+    if(!sess){ if(!spiraglio()){ muro(); return; } daOspite(); return; }
     return entra(sess);
   }).catch(function(){ daOspite(); });
 
