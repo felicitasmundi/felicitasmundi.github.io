@@ -290,7 +290,18 @@
   function entraDentro(personaId){
     var giro = function(){
       var torna = dove();
-      if(torna){ location.replace(torna); return; }
+      /* ⭐ 17 settembre — LA SOGLIA VIENE PRIMA DEL RITORNO, per chi non ha
+         mai scelto un talento. Col muro (16 settembre) ogni ospite rimbalza
+         qui dal guscio, e il guscio diventa il `document.referrer` — cioè un
+         «ritorno» che nessuno ha chiesto. Se il ritorno vincesse sempre, chi
+         entra per la prima volta atterrerebbe dentro senza aver scelto niente,
+         scavalcando Antaḥkaraṇa e le stanze dei talenti. Ora il ritorno vince
+         solo DOPO che i talenti ci sono.
+         ⭐ L'unica eccezione è l'evento: chi arriva da una festa ci torna
+            anche senza talenti — li sceglierà dopo, dalla sua orma. È la
+            porta che Gab ha voluto per chi arriva da fuori. */
+      var versoEvento = !!torna && /[?&]p=evento(?:&|$)/.test(torna);
+      if(versoEvento){ location.replace(torna); return; }
       db.from("orme").select("id")
         .eq("persona_id", personaId)
         .not("talento_id", "is", null)
@@ -298,7 +309,9 @@
         .then(function(r){
           if(r && r.error){ location.replace(SPAZIO_VIVO); return; }
           var neHa = !!(r && r.data && r.data.length);
-          location.replace(SPAZIO_VIVO + (neHa ? "?p=orme" : "?p=soglia"));
+          if(!neHa){ location.replace(SPAZIO_VIVO + "?p=soglia"); return; }
+          /* i talenti ci sono: ora il ritorno vince, e in mancanza «La mia orma» */
+          location.replace(torna || (SPAZIO_VIVO + "?p=orme"));
         })
         .catch(function(){ location.replace(SPAZIO_VIVO); });
     };
