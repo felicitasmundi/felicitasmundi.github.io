@@ -70,7 +70,14 @@ function invChiudi(){
   if(f) f.classList.remove("si");
 }
 
-async function invito(){
+/* ⭐ L’INVITO PUÒ PORTARE A UN EVENTO: chiamato da un evento, il
+   collegamento porta lo slug di chi invita E l’id della festa, così
+   chi arriva entra col tuo nome e su quella festa.
+   ⛔ Senza, l’invito manda alla casa e l’evento si perde. */
+var invEvento = null;
+
+async function invito(cosa){
+  invEvento = (cosa && cosa.evento) || null;
   invVeste();
   var v = document.getElementById("fm-inv-velo");
   if(!v){
@@ -129,7 +136,8 @@ async function invito(){
     /* ⭐ il collegamento porta ad accesso.html, non alla casa: chi
        arriva deve entrare, e accesso.html chiama fm_accetta_invito
        col nome_url che trova nell’indirizzo. */
-    u.textContent = "felicitasmundi.com/accesso.html?invito=" + invIo.nome_url;
+    u.textContent = "felicitasmundi.com/accesso.html?invito=" + invIo.nome_url +
+      (invEvento ? "&evento=" + invEvento : "");
     if(m) m.style.display = "";
   }else{
     /* ⚠️ senza slug non c'è maniglia: si dice, non si finge */

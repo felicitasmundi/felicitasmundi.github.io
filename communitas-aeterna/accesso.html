@@ -253,6 +253,32 @@
     return soloPagineNostre(g);
   }
 
+  /* ══ L'INVITO E LA FESTA — 16 settembre ════════════════════════════
+     L'invito da una persona porta `?invito=<slug>` (persone.nome_url);
+     quello da una festa porta anche `&evento=<id>`: chi arriva entra
+     col nome di chi invita E su quella festa.
+     ⭐ Si conservano subito, come il ritorno: il Nexus di sei cifre
+        cambia l'indirizzo, e senza conservarli si perderebbero proprio
+        nel momento in cui servono.
+     ⭐ L'evento diventa la meta del giro solo se un ritorno non c'è
+        già: chi arriva dalla pagina dell'evento ha già il suo. */
+  function ricordaInvito(){
+    var q = null;
+    try{ q = new URLSearchParams(location.search); }catch(e){ return; }
+    var slug = q.get("invito") || "";
+    if(slug && /^[a-z0-9-]{1,80}$/.test(slug)){
+      try{ sessionStorage.setItem("fm_invito", slug); }catch(e){}
+    }
+    var ev = q.get("evento") || "";
+    if(ev && /^[A-Za-z0-9_-]{1,80}$/.test(ev)){
+      var ha = "";
+      try{ ha = sessionStorage.getItem(CHIAVE_TORNA) || ""; }catch(e){}
+      if(!ha){
+        try{ sessionStorage.setItem(CHIAVE_TORNA, SPAZIO_VIVO + "?p=evento&e=" + encodeURIComponent(ev)); }catch(e){}
+      }
+    }
+  }
+
   /* ══ IL BIVIO DEI TALENTI — il giro dopo il Nexus ══════════════════
      ⭐ Un ritorno chiesto vince: chi stava leggendo qualcosa ci torna.
      Altrimenti si guarda se la persona ha già scelto un talento:
@@ -262,18 +288,29 @@
      ⛔ Se la lettura di `orme` non riesce si va alla home: un errore
         non diventa mai un muro.                                       */
   function entraDentro(personaId){
-    var torna = dove();
-    if(torna){ location.replace(torna); return; }
-    db.from("orme").select("id")
-      .eq("persona_id", personaId)
-      .not("talento_id", "is", null)
-      .limit(1)
-      .then(function(r){
-        if(r && r.error){ location.replace(SPAZIO_VIVO); return; }
-        var neHa = !!(r && r.data && r.data.length);
-        location.replace(SPAZIO_VIVO + (neHa ? "?p=orme" : "?p=soglia"));
-      })
-      .catch(function(){ location.replace(SPAZIO_VIVO); });
+    var giro = function(){
+      var torna = dove();
+      if(torna){ location.replace(torna); return; }
+      db.from("orme").select("id")
+        .eq("persona_id", personaId)
+        .not("talento_id", "is", null)
+        .limit(1)
+        .then(function(r){
+          if(r && r.error){ location.replace(SPAZIO_VIVO); return; }
+          var neHa = !!(r && r.data && r.data.length);
+          location.replace(SPAZIO_VIVO + (neHa ? "?p=orme" : "?p=soglia"));
+        })
+        .catch(function(){ location.replace(SPAZIO_VIVO); });
+    };
+    /* ⭐ 16 settembre — prima del giro si accoglie l'invito, se c'è:
+       fm_accetta_invito scrive il legame (persone.invitato_da) e fa
+       nascere chi arriva nella rubrica di chi invita. È una volta sola,
+       richiamarla non raddoppia (parola del ② DATABASE, 13 settembre).
+       ⛔ Se fallisce si entra lo stesso: il legame non è un muro. */
+    var slug = "";
+    try{ slug = sessionStorage.getItem("fm_invito") || ""; sessionStorage.removeItem("fm_invito"); }catch(e){}
+    if(!slug){ giro(); return; }
+    db.rpc("fm_accetta_invito", { p_slug: slug }).then(giro, giro);
   }
 
   // ── la casa nuova: indirizzo e chiave pubblicabile (pubblici per natura) ──
@@ -347,6 +384,7 @@
   // ── 2 · all'apertura ──
   function avvio(){
     ricordaDaDoveSiViene();     /* ⭐ per primo: l'indirizzo cambia dopo */
+    ricordaInvito();            /* ⭐ 16 settembre — e con lui l'invito e la festa */
     var t = tokenDaUrl();
 
     // il Nexus di promozione si conserva per dopo

@@ -4067,6 +4067,7 @@
 <script src="fm-emporio.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Emporio: SpazioVivo.emporio(dove) -->
 <script src="fm-assistenza.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Assistenza: SpazioVivo.assistenza(dove) -->
 <script src="fm-configuratore.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — il configuratore: SpazioVivo.configuratore(dove, ormaId) -->
+<script src="fm-evento.js"></script><!-- ⭐ TOCCATO NEL GUSCIO 52 — l'evento pubblico: SpazioVivo.evento(dove, id), rotta ?p=evento&e=. Dopo fm-cosmo, che gli dà <ak-cosmo> e <ak-solido> -->
 <script src="fm-scuola.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza della Scuola: SpazioVivo.scuola(dove). Arrivato il 16 settembre, a chiudere la consegna del 15 -->
 
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
@@ -4483,6 +4484,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        ⛔ Il codice è la chiave di quell'orma: non deve sopravvivere in
           memoria a una stanza che non lo riguarda. */
     if(id !== "orma") window.codiceChiesto = null;
+    /* ⭐ 52 — e uscendo da un evento si dimentica QUALE, come per l'orma */
+    if(id !== "evento") window.eventoChiesto = null;
     vista=id;
     chiudiFinestre();
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
@@ -4574,6 +4577,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="assistenza" && window.SpazioVivo && SpazioVivo.assistenza) SpazioVivo.assistenza(c);
     else if(id==="scuola" && window.SpazioVivo && SpazioVivo.scuola) SpazioVivo.scuola(c);
     else if(id==="configuratore" && window.SpazioVivo && SpazioVivo.configuratore) SpazioVivo.configuratore(c, sub && sub.ormaId);
+    /* ⭐ TOCCATO NEL GUSCIO 52 — L'EVENTO PUBBLICO (fm-evento.js): la
+       pagina che vede chi riceve il collegamento, `?p=evento&e=<id>`.
+       È uno dei modi in cui oggi la gente arriva: passa per gli
+       spiragli del muro, chi la apre non ha ancora un account. */
+    else if(id==="evento" && window.SpazioVivo && SpazioVivo.evento){
+      if(sub && sub.id) window.eventoChiesto = sub.id;
+      SpazioVivo.evento(c, (sub && sub.id) || window.eventoChiesto);
+    }
     else attesa(c, id);
     /* ⭐ ULTIMO: l'indirizzo segue la stanza, quando la stanza ne ha uno */
     scriviIndirizzo();
@@ -5368,12 +5379,12 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* ⭐ TOCCATO NEL GUSCIO ㊳ — `c` sta qui perché DEVE sparire dall'indirizzo
      appena si esce dall'orma: ⛔ il codice non finisce mai in un indirizzo che
      porta a una pagina pubblica, né resta nella barra a farsi copiare. */
-  var MIEI_PARAMETRI = ["p", "n", "o", "c"];
+  var MIEI_PARAMETRI = ["p", "n", "o", "c", "e"]; /* ⭐ 52 — `e` è l'evento */
 
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore", "evento"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» */
 
   /* ⭐ TOCCATO NEL GUSCIO ㊿ — LE PORTE DELLA BARRA SI CONOSCONO SUBITO.
      ROTTE si riempie dalla tavola `stanze` (il vocabolario, sopra), ma la
@@ -5431,6 +5442,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
          rotta è quella. È la coppia esatta di `n`. */
       if(rotta === "orma" && window.ormaChiesta)
         q.set("o", window.ormaChiesta);
+      /* ⭐ 52 — e per un evento il suo id, la coppia esatta di `o` */
+      if(rotta === "evento" && window.eventoChiesto)
+        q.set("e", window.eventoChiesto);
     }
     var coda = q.toString();
     return BASE_INDIRIZZO + (coda ? "?" + coda : "");
@@ -5567,6 +5581,11 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
          restasse, il tasto indietro riaprirebbe l'orma di prima. */
       window.codiceChiesto = (qo && qo.get("c")) || null;
     }
+    /* ⭐ 52 — quale evento: stessa rilettura di `o`, per la stessa ragione */
+    if(id === "evento"){
+      var qe = parametri();
+      window.eventoChiesto = (qe && qe.get("e")) || null;
+    }
     if(sub) sottoRichiesta = sub;
     vai(id, sub);
     return true;
@@ -5668,6 +5687,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(!q) return false;
     if(q.get("o") || q.get("c")) return true;
     if(q.get("p") === "pagina" && q.get("n")) return true;
+    /* ⭐ 52 — il quarto spiraglio: l'evento pubblico. È la porta di chi
+       arriva da fuori — chi la apre non ha ancora un account. */
+    if(q.get("p") === "evento" && q.get("e")) return true;
     return false;
   }
   function muro(){
