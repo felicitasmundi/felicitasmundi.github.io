@@ -98,11 +98,10 @@
   function percheCodice(err) {
     var m = String((err && (err.message || err.error_description)) || "").toLowerCase();
     if (m.indexOf("expired") >= 0)
-      return "Quel codice \u00e8 scaduto: vale quindici minuti. Fattene mandare un altro.";
+      return "Quel codice \u00e8 scaduto. Tocca \u00abmandane un altro\u00bb qui sopra.";
     if (m.indexOf("invalid") >= 0 || m.indexOf("not found") >= 0)
-      return "Quel codice non vale pi\u00f9: si spende una volta sola. " +
-             "Se hai gi\u00e0 toccato il collegamento nella mail, sei entrato l\u00ec. " +
-             "Fattene mandare un altro.";
+      return "Quel codice non vale pi\u00f9: vale solo l\u2019ultimo arrivato. " +
+             "Tocca \u00abmandane un altro\u00bb qui sopra e usa quello nuovo.";
     if (m.indexOf("rate") >= 0 || (err && err.status === 429))
       return "Troppi tentativi: aspetta qualche minuto.";
     if (!navigator.onLine) return "Il telefono non \u00e8 in rete.";
@@ -221,8 +220,11 @@
         if (r.error) throw r.error;
         P.riempi(R, { accesso: { email: email } });
         P.stato(R, "codice-mandato", true);
+        /* ⭐ il tasto resta, e cambia parola: da qui si chiede un altro codice */
+        b.textContent = "mandane un altro";
         var c = R.querySelector('[data-c="accesso.codice"]');
-        if (c && c.focus) c.focus();
+        if (c) { c.value = ""; if (c.focus) c.focus(); }
+        errore(R, "");
       } catch (err) {
         errore(R, perche(err));
         console.warn("accesso:", err);
@@ -257,8 +259,16 @@
       b.disabled = true;
       var era = b.textContent; b.textContent = "un momento\u2026";
       try {
+        /* ⭐ il codice si verifica di due tipi: "email" per chi torna,
+           "signup" per chi entra la prima volta e deve confermare la mail.
+           Si prova il primo; se lo rifiuta, si prova il secondo. Così
+           l'ingresso funziona con o senza «Confirm email» acceso. */
         var r = await db.auth.verifyOtp({ email: email, token: codice, type: "email" });
-        if (r.error) throw r.error;
+        if (r.error) {
+          var r2 = await db.auth.verifyOtp({ email: email, token: codice, type: "signup" });
+          if (r2.error) throw r.error;   /* si riporta il primo errore, più chiaro */
+          r = r2;
+        }
         if (invito) {
           try {
             var p = {}; p[INVITO_P] = invito;
