@@ -72,6 +72,19 @@
     return "Il codice non \u00e8 partito" + (m ? " (" + m.slice(0, 80) + ")" : "") + ".";
   }
 
+  /* ⭐ perché il codice non torna: le ragioni sono diverse, e si dicono */
+  function percheCodice(err) {
+    var m = String((err && (err.message || err.error_description)) || "").toLowerCase();
+    if (m.indexOf("expired") >= 0)
+      return "Quel codice \u00e8 scaduto: vale quindici minuti. Fattene mandare un altro.";
+    if (m.indexOf("invalid") >= 0 || m.indexOf("not found") >= 0)
+      return "Quel codice non vale pi\u00f9. Se ne hai chiesti due, vale solo l\u2019ultimo arrivato.";
+    if (m.indexOf("rate") >= 0 || (err && err.status === 429))
+      return "Troppi tentativi: aspetta qualche minuto.";
+    if (!navigator.onLine) return "Il telefono non \u00e8 in rete.";
+    return "Il codice non torna" + (m ? " (" + m.slice(0, 80) + ")" : "") + ".";
+  }
+
   /* il patto: true se è accettato nella versione di oggi.
      ⛔ in caso di dubbio torna false — non si entra al buio. */
   async function pattoFatto() {
@@ -186,6 +199,12 @@
     P.gesto(R, "entra", async function (e, b) {
       var email = vale(R, "accesso.email"), codice = vale(R, "accesso.codice");
       errore(R, "");
+      /* ⭐ il codice incollato si porta dietro spazi e segni: si ripulisce */
+      codice = String(codice || "").replace(/[^0-9]/g, "");
+      /* ⛔ se la pagina è stata ricaricata, la mail è sparita: il codice
+         verrebbe verificato contro nessuno */
+      if (!email || email.indexOf("@") < 0)
+        return errore(R, "Riscrivi la tua mail qui sopra: serve per riconoscere il codice.");
       if (!/^[0-9]{6}$/.test(codice)) return errore(R, "Il codice \u00e8 di sei cifre.");
 
       b.disabled = true;
@@ -207,7 +226,7 @@
         }
         await dentro(R, torna);
       } catch (err) {
-        errore(R, "Il codice non torna. Controlla la posta, o fattene mandare un altro.");
+        errore(R, percheCodice(err));
         console.warn("accesso:", err);
         b.textContent = era; b.disabled = false;
       }
