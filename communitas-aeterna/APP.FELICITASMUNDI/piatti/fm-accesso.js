@@ -11,6 +11,10 @@
    chi ti ha invitato e ti mette nella sua rubrica.
    IL RITORNO: ?torna=<dove si era> — dopo l'ingresso si torna lì.
 
+   ⭐ I TRE COLLEGAMENTI del patto portano alle pagine della casa:
+      condizioni.html · privacy.html · cookie.html, in una scheda nuova,
+      così non si perde quello che si è scritto.
+
    ⚠️ IL NOME DEL PARAMETRO DI fm_accetta_invito non l'ho verificato:
       qui è p_slug. Se il database lo chiama in un altro modo, è una
       riga sola — la costante INVITO_P qui sotto.
@@ -33,7 +37,7 @@
   /* ⭐ dopo l'ingresso, se non si torna da nessuna parte:
      chi non ha ancora un talento va alla SOGLIA, non alla home —
      se no si trova una pagina che non gli dice cosa fare. */
-  var PATTO_VERSIONE = "2026-07-31";    /* la versione delle condizioni */
+  var PATTO_VERSIONE = "2026-09-23";    /* la versione delle condizioni */
   var SOGLIA = "index.html?p=soglia";
   var ORME   = "index.html?p=orme";
 
@@ -50,6 +54,22 @@
   function errore(R, t) {
     var el = R.querySelector('[data-stato="errore"]');
     if (el) { el.textContent = t || ""; el.hidden = !t; }
+  }
+
+  /* ⭐ dire cosa è successo davvero: «riprova» da solo non aiuta nessuno */
+  function perche(err) {
+    var m = String((err && (err.message || err.error_description)) || "").toLowerCase();
+    var n = (err && err.status) || 0;
+    if (n === 429 || m.indexOf("rate limit") >= 0 || m.indexOf("too many") >= 0)
+      return "Troppe richieste in poco tempo: aspetta qualche minuto e riprova.";
+    if (m.indexOf("invalid") >= 0 && m.indexOf("email") >= 0)
+      return "Quella mail non sembra valida: controllala.";
+    if (m.indexOf("signups not allowed") >= 0 || m.indexOf("disabled") >= 0)
+      return "Le nuove iscrizioni sono chiuse in questo momento.";
+    if (m.indexOf("smtp") >= 0 || m.indexOf("send") >= 0 || m.indexOf("mail") >= 0)
+      return "La posta non \u00e8 partita dal nostro lato. Riprova fra qualche minuto.";
+    if (!navigator.onLine) return "Il telefono non \u00e8 in rete.";
+    return "Il codice non \u00e8 partito" + (m ? " (" + m.slice(0, 80) + ")" : "") + ".";
   }
 
   /* il patto: true se è accettato nella versione di oggi.
@@ -103,6 +123,12 @@
 
     var invito = param("invito"), torna = param("torna");
 
+    /* ⭐ i tre collegamenti del patto: le pagine vere della casa */
+    P.riempi(R, { patto: { condizioni: "condizioni.html", privacy: "privacy.html",
+                           cookie: "cookie.html" } });
+    Array.prototype.forEach.call(
+      R.querySelectorAll('[data-c^="patto."]'), function (a) { a.target = "_blank"; });
+
     /* chi ti ha invitato: il nome si vede anche senza account */
     if (invito) {
       P.stato(R, "da-invito", true);
@@ -138,7 +164,7 @@
         var c = R.querySelector('[data-c="accesso.codice"]');
         if (c && c.focus) c.focus();
       } catch (err) {
-        errore(R, "Il codice non \u00e8 partito. Riprova fra un momento.");
+        errore(R, perche(err));
         console.warn("accesso:", err);
       }
       b.textContent = era; b.disabled = false;
