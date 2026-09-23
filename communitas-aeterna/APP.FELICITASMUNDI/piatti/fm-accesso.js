@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════════════════════
+   FM-ACCESSO — l'ingresso, dalla versione piatta di Design.
+
+   ⭐ Disegno di Design: accesso-piatto.html.
+   ⭐ Si entra colla mail e un codice di sei cifre. NOME e COGNOME sono
+      obbligatori e viaggiano coll'invio del codice: il database li
+      raccoglie quando la persona nasce. ⛔ Prima nascevano senza nome.
+
+   L'INVITO: ?invito=<il nome-indirizzo di chi invita>. Si mostra chi ti
+   aspetta, e dopo l'ingresso si chiama fm_accetta_invito, che scrive
+   chi ti ha invitato e ti mette nella sua rubrica.
+   IL RITORNO: ?torna=<dove si era> — dopo l'ingresso si torna lì.
+
+   ⚠️ IL NOME DEL PARAMETRO DI fm_accetta_invito non l'ho verificato:
+      qui è p_slug. Se il database lo chiama in un altro modo, è una
+      riga sola — la costante INVITO_P qui sotto.
+
+   ⭐ IL PATTO sta FRA l'ingresso e il bivio: si guardano le due colonne
+      di `persone` — condizioni_accettate e condizioni_versione — e si
+      entra solo se la versione accettata è quella di oggi. Quando la
+      versione cambia, tutti riaccettano.
+      ⛔ Se la verifica non riesce, NON si entra al buio: si chiede il patto.
+
+   Vuole:   fm-piatto.js prima · `db` (Supabase)
+   Espone:  SpazioVivo.accesso(dove)
+   ═══════════════════════════════════════════════════════════════ */
+
+(function () {
+  "use strict";
+
+  var INDIRIZZO = "APP.FELICITASMUNDI/piatti/accesso-piatto.html";
+  var INVITO_P = "p_slug";              /* ⚠️ da confermare col database */
+  /* ⭐ dopo l'ingresso, se non si torna da nessuna parte:
+     chi non ha ancora un talento va alla SOGLIA, non alla home —
+     se no si trova una pagina che non gli dice cosa fare. */
+  var PATTO_VERSIONE = "2026-07-31";    /* la versione delle condizioni */
+  var SOGLIA = "index.html?p=soglia";
+  var ORME   = "index.html?p=orme";
+
+  var F = function () { return window.FMPiatto; };
+
+  function param(n) {
+    try { return new URLSearchParams(location.search).get(n) || ""; }
+    catch (e) { return ""; }
+  }
+  function vale(R, nome) {
+    var el = R.querySelector('[data-c="' + nome + '"]');
+    return el ? String(el.value || "").trim() : "";
+  }
+  function errore(R, t) {
+    var el = R.querySelector('[data-stato="errore"]');
+    if (el) { el.textContent = t || ""; el.hidden = !t; }
+  }
+
+  /* il patto: true se è accettato nella versione di oggi.
+     ⛔ in caso di dubbio torna false — non si entra al buio. */
+  async function pattoFatto() {
+    try {
+      var u = await db.auth.getUser();
+      var id = u && u.data && u.data.user && u.data.user.id;
+      if (!id) return false;
+      var r = await db.from("persone")
+        .select("condizioni_accettate,condizioni_versione").eq("id", id).maybeSingle();
+      if (r.error) return false;
+      var d = r.data;
+      return !!(d && d.condizioni_accettate && d.condizioni_versione === PATTO_VERSIONE);
+    } catch (e) { return false; }
+  }
+  async function accettaPatto() {
+    var u = await db.auth.getUser();
+    var id = u && u.data && u.data.user && u.data.user.id;
+    if (!id) throw new Error("nessuna sessione");
+    var r = await db.from("persone").update({
+      condizioni_accettate: new Date().toISOString(),
+      condizioni_versione: PATTO_VERSIONE
+    }).eq("id", id);
+    if (r.error) throw r.error;
+  }
+
+  /* vero se chi è appena entrato non ha ancora nessun talento */
+  async function primaVolta() {
+    try {
+      var u = await db.auth.getUser();
+      var id = u && u.data && u.data.user && u.data.user.id;
+      if (!id) return true;
+      var r = await db.from("orme").select("id", { count: "exact", head: true })
+        .eq("persona_id", id).not("talento_id", "is", null);
+      return !r.count;
+    } catch (e) { return true; }
+  }
+
+  /* dopo il patto: chi non ha talenti va alla soglia */
+  async function dentro(R, torna) {
+    location.href = torna || (await primaVolta() ? SOGLIA : ORME);
+  }
+
+  async function accesso(dove) {
+    var box = typeof dove === "string" ? document.querySelector(dove) : dove;
+    if (!box || !window.FMPiatto) return;
+    var R = await F().monta(box, INDIRIZZO);
+    if (R && R.body) R = R.body;
+    var P = F();
+
+    var invito = param("invito"), torna = param("torna");
+
+    /* chi ti ha invitato: il nome si vede anche senza account */
+    if (invito) {
+      P.stato(R, "da-invito", true);
+      try {
+        var q = await db.from("persone_pubbliche").select("nome")
+          .eq("nome_url", invito).limit(1);
+        var chi = (!q.error && q.data && q.data[0] && q.data[0].nome) || "";
+        var n = R.querySelector('[data-stato="da-invito"]');
+        if (n && chi) n.textContent = chi + " ti aspetta: nome e cognome servono anche a te.";
+      } catch (e) {}
+    }
+
+    /* ── manda il codice ── */
+    P.gesto(R, "manda-codice", async function (e, b) {
+      var email = vale(R, "accesso.email"),
+          nome = vale(R, "persona.nome"),
+          cognome = vale(R, "persona.cognome");
+      errore(R, "");
+      if (!email || email.indexOf("@") < 0) return errore(R, "Serve una mail che funziona.");
+      if (!nome) return errore(R, "Serve il nome.");
+      if (!cognome) return errore(R, "Serve il cognome.");
+
+      b.disabled = true;
+      var era = b.textContent; b.textContent = "un momento\u2026";
+      try {
+        var r = await db.auth.signInWithOtp({
+          email: email,
+          options: { shouldCreateUser: true, data: { nome: nome, cognome: cognome } }
+        });
+        if (r.error) throw r.error;
+        P.riempi(R, { accesso: { email: email } });
+        P.stato(R, "codice-mandato", true);
+        var c = R.querySelector('[data-c="accesso.codice"]');
+        if (c && c.focus) c.focus();
+      } catch (err) {
+        errore(R, "Il codice non \u00e8 partito. Riprova fra un momento.");
+        console.warn("accesso:", err);
+      }
+      b.textContent = era; b.disabled = false;
+    });
+
+    /* ── il patto: si accetta e si entra ── */
+    P.gesto(R, "accetto", async function (e, b) {
+      errore(R, "");
+      b.disabled = true;
+      var era = b.textContent; b.textContent = "un momento\u2026";
+      try { await accettaPatto(); await dentro(R, torna); }
+      catch (err) {
+        errore(R, "Non \u00e8 stato possibile registrare l\u2019accettazione. Riprova.");
+        b.textContent = era; b.disabled = false;
+      }
+    });
+
+    /* ── entra ── */
+    P.gesto(R, "entra", async function (e, b) {
+      var email = vale(R, "accesso.email"), codice = vale(R, "accesso.codice");
+      errore(R, "");
+      if (!/^[0-9]{6}$/.test(codice)) return errore(R, "Il codice \u00e8 di sei cifre.");
+
+      b.disabled = true;
+      var era = b.textContent; b.textContent = "un momento\u2026";
+      try {
+        var r = await db.auth.verifyOtp({ email: email, token: codice, type: "email" });
+        if (r.error) throw r.error;
+        if (invito) {
+          try {
+            var p = {}; p[INVITO_P] = invito;
+            await db.rpc("fm_accetta_invito", p);
+          } catch (e2) { console.warn("invito:", e2); }
+        }
+        /* ⭐ prima il patto, poi il bivio */
+        if (!(await pattoFatto())) {
+          P.stato(R, "patto", true);
+          b.textContent = era; b.disabled = false;
+          return;
+        }
+        await dentro(R, torna);
+      } catch (err) {
+        errore(R, "Il codice non torna. Controlla la posta, o fattene mandare un altro.");
+        console.warn("accesso:", err);
+        b.textContent = era; b.disabled = false;
+      }
+    });
+  }
+
+  window.SpazioVivo = window.SpazioVivo || {};
+  window.SpazioVivo.accesso = accesso;
+  window.FMAccesso = { accesso: accesso };
+})();

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il percorso dei talenti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Il percorso dei talenti · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--terra:#AA8844;--acqua:#4A88B8;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--nexus:#8C2F39}
+body{margin:0;background:#02040c}
+a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
+[hidden]{display:none!important}
+@keyframes ak-gira{to{transform:rotate(360deg)}}
+@keyframes ak-puls{0%,100%{opacity:.8}50%{opacity:1}}
+@keyframes ak-alza{from{opacity:0;transform:translateY(.5rem)}to{opacity:1;transform:none}}
+.ak-ret{transform-origin:0 0;animation:ak-gira 150s linear infinite}
+.ak-alone{animation:ak-puls 14s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.ak-ret,.ak-alone{animation:none}}
+.ak{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));align-items:center;gap:2rem 3rem;padding:3rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+.ak-cosmo{position:absolute;inset:0;z-index:0;pointer-events:none}
+.ak-velo{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}
+.ak-sx{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:1.2rem;width:100%;justify-self:center}
+.ak-cubo{position:relative;width:100%;max-width:min(24rem,56vh);aspect-ratio:1}
+.ak-cubo .alone{position:absolute;inset:8%;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(212,175,106,.16),transparent 70%)}
+.ak-cubo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ak-dx{position:relative;z-index:1;display:flex;flex-direction:column;gap:2.2rem;max-width:32rem;width:100%;min-width:0;justify-self:start}
+.ak-capo{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.4rem}
+.ak-capo h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:.06em;color:var(--ivory)}
+.ak-occ{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,175,106,.72)}
+.ak-colonna{display:flex;flex-direction:column;gap:1.1rem;border-left:1px solid rgba(212,175,106,.28);padding-left:1.4rem}
+.ak-corsivo{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;line-height:1.4;color:rgba(245,240,230,.78);text-wrap:pretty}
+.ak-btn{display:inline-flex;align-items:center;justify-content:center;min-height:3.25rem;padding:0 2.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.7);background:linear-gradient(180deg,rgba(212,175,106,.18),rgba(212,175,106,.06));color:var(--ivory);font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:box-shadow .5s,background .5s}
+.ak-btn:hover{background:linear-gradient(180deg,rgba(212,175,106,.32),rgba(212,175,106,.12));box-shadow:0 0 1.6rem rgba(212,175,106,.28);color:var(--ivory)}
+.ak-btn:disabled{opacity:.45;cursor:default;box-shadow:none}
+.ak-pill{font-family:'Cinzel',serif;font-size:.98rem;letter-spacing:.14em;text-transform:uppercase;min-height:2.9rem;padding:0 1.5rem;border-radius:999px;border:1px solid rgba(212,175,106,.45);background:rgba(4,8,20,.72);color:var(--ivory);cursor:pointer;transition:background .5s,border-color .5s,box-shadow .5s}
+.ak-pill:hover{background:rgba(212,175,106,.18);box-shadow:0 0 1.2rem rgba(212,175,106,.3)}
+.ak-pill[aria-pressed="true"]{border-color:rgba(212,175,106,.95);background:rgba(212,175,106,.24);box-shadow:0 0 1.4rem rgba(212,175,106,.45)}
+.ak-eco{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(212,175,106,.85);animation:ak-alza .8s ease both}
+.ak-errore{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#E0A0A8;border-left:2px solid rgba(201,112,122,.7);padding-left:.8rem}
+
+.ak{align-items:start}
+.ak-sx{position:sticky;top:2rem}
+.ak-cubo{max-width:min(22rem,52vh)}
+.ak-cubo .alone{background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--c,var(--oro)) 20%,transparent),transparent 70%);transition:background 1s}
+.ak-solido{transition:stroke 1s}
+.ak-stanze{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem .6rem;max-width:26rem}
+.ak-stanza{display:flex;flex-direction:column;align-items:center;gap:.1rem;min-height:3.3rem;padding:.4rem 1.2rem;border-radius:999px;cursor:pointer;font-family:'Cinzel',serif;font-size:1.05rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ivory);border:1px solid rgba(212,175,106,.35);background:rgba(4,8,20,.6);transition:background .4s,border-color .4s,box-shadow .4s}
+.ak-stanza i{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;letter-spacing:0;text-transform:none;color:rgba(245,240,230,.5)}
+.ak-stanza:hover{background:rgba(212,175,106,.16)}
+.ak-stanza[aria-pressed="true"]{border-color:color-mix(in srgb,var(--c) 95%,transparent);background:color-mix(in srgb,var(--c) 22%,transparent);box-shadow:0 0 1.2rem color-mix(in srgb,var(--c) 40%,transparent)}
+.ak-dx{max-height:calc(100vh - 4rem);gap:1.4rem}
+.ak-capo h1{font-size:clamp(2.2rem,3.8vw,3.1rem)}
+.ak-lista{overflow:auto;padding-right:.6rem;display:flex;flex-direction:column;gap:1.3rem;border-left:1px solid rgba(212,175,106,.28);padding-left:1.4rem;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(212,175,106,.35) transparent}
+.ak-gruppo{display:flex;flex-direction:column;gap:.45rem}
+.ak-gruppo .capo{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap}
+.ak-gruppo .capo b{font-family:'Cinzel',serif;font-weight:400;font-size:1.4rem;letter-spacing:.1em;color:var(--ivory)}
+.ak-gruppo .capo i{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:rgba(245,240,230,.55)}
+.ak-tal{display:flex;align-items:center;gap:1rem;min-height:3.5rem;padding:.4rem .6rem;margin:0 -.6rem;border:0;border-radius:.6rem;background:transparent;color:rgba(245,240,230,.82);text-align:left;cursor:pointer;font-family:'DM Sans',system-ui,sans-serif;font-size:1.3rem;line-height:1.3;transition:background .3s,color .3s;animation:ak-alza .5s ease both;width:calc(100% + 1.2rem)}
+.ak-tal:hover{background:rgba(212,175,106,.1)}
+.ak-tal .seg{flex:none;width:2.8rem;height:2.8rem;display:grid;place-items:center;color:var(--c,var(--oro));filter:brightness(1.3)}
+.ak-tal .seg svg{width:2.65rem;height:2.65rem}
+.ak-tal .nome{flex:1;min-width:0}
+.ak-tal .punto{flex:none;width:1.1rem;height:1.1rem;border-radius:50%;border:1.5px solid rgba(212,175,106,.4);background:transparent;transition:background .3s,border-color .3s}
+.ak-tal[aria-pressed="true"]{background:color-mix(in srgb,var(--c,var(--oro)) 16%,transparent);color:var(--ivory)}
+.ak-tal[aria-pressed="true"] .punto{background:var(--c,var(--oro));border-color:var(--c,var(--oro))}
+.ak-conto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:rgba(212,175,106,.85)}
+.ak-fine{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+</style>
+<script src="./ak-cosmo.js"></script>
+</head>
+<body>
+<div class="ak" data-screen-label="I cinque solidi" style="--c:var(--terra)">
+  <ak-cosmo class="ak-cosmo" aria-hidden="true"></ak-cosmo>
+  <div class="ak-velo" aria-hidden="true"></div>
+  <div class="ak-sx">
+    <div class="ak-cubo"><div class="alone ak-alone"></div>
+      <svg viewBox="-125 -125 250 250" aria-hidden="true"><g fill="none" stroke="#D4AF6A" stroke-linejoin="round"><g class="ak-ret"><g stroke-width=".7" opacity=".42"><line x1="0" y1="0" x2="0" y2="-46"></line><line x1="0" y1="0" x2="39.84" y2="-23"></line><line x1="0" y1="0" x2="39.84" y2="23"></line><line x1="0" y1="0" x2="0" y2="46"></line><line x1="0" y1="0" x2="-39.84" y2="23"></line><line x1="0" y1="0" x2="-39.84" y2="-23"></line><line x1="0" y1="0" x2="0" y2="-92"></line><line x1="0" y1="0" x2="79.67" y2="-46"></line><line x1="0" y1="0" x2="79.67" y2="46"></line><line x1="0" y1="0" x2="0" y2="92"></line><line x1="0" y1="0" x2="-79.67" y2="46"></line><line x1="0" y1="0" x2="-79.67" y2="-46"></line><line x1="0" y1="-46" x2="39.84" y2="-23"></line><line x1="0" y1="-46" x2="39.84" y2="23"></line><line x1="0" y1="-46" x2="0" y2="46"></line><line x1="0" y1="-46" x2="-39.84" y2="23"></line><line x1="0" y1="-46" x2="-39.84" y2="-23"></line><line x1="0" y1="-46" x2="0" y2="-92"></line><line x1="0" y1="-46" x2="79.67" y2="-46"></line><line x1="0" y1="-46" x2="79.67" y2="46"></line><line x1="0" y1="-46" x2="0" y2="92"></line><line x1="0" y1="-46" x2="-79.67" y2="46"></line><line x1="0" y1="-46" x2="-79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="39.84" y2="23"></line><line x1="39.84" y1="-23" x2="0" y2="46"></line><line x1="39.84" y1="-23" x2="-39.84" y2="23"></line><line x1="39.84" y1="-23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="-23" x2="0" y2="-92"></line><line x1="39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="79.67" y2="46"></line><line x1="39.84" y1="-23" x2="0" y2="92"></line><line x1="39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="39.84" y1="23" x2="0" y2="46"></line><line x1="39.84" y1="23" x2="-39.84" y2="23"></line><line x1="39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="23" x2="0" y2="-92"></line><line x1="39.84" y1="23" x2="79.67" y2="-46"></line><line x1="39.84" y1="23" x2="79.67" y2="46"></line><line x1="39.84" y1="23" x2="0" y2="92"></line><line x1="39.84" y1="23" x2="-79.67" y2="46"></line><line x1="39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="0" y1="46" x2="-39.84" y2="23"></line><line x1="0" y1="46" x2="-39.84" y2="-23"></line><line x1="0" y1="46" x2="0" y2="-92"></line><line x1="0" y1="46" x2="79.67" y2="-46"></line><line x1="0" y1="46" x2="79.67" y2="46"></line><line x1="0" y1="46" x2="0" y2="92"></line><line x1="0" y1="46" x2="-79.67" y2="46"></line><line x1="0" y1="46" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="-39.84" y1="23" x2="0" y2="-92"></line><line x1="-39.84" y1="23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="79.67" y2="46"></line><line x1="-39.84" y1="23" x2="0" y2="92"></line><line x1="-39.84" y1="23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="0" y2="-92"></line><line x1="-39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="0" y2="92"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="46"></line><line x1="0" y1="-92" x2="0" y2="92"></line><line x1="0" y1="-92" x2="-79.67" y2="46"></line><line x1="0" y1="-92" x2="-79.67" y2="-46"></line><line x1="79.67" y1="-46" x2="79.67" y2="46"></line><line x1="79.67" y1="-46" x2="0" y2="92"></line><line x1="79.67" y1="-46" x2="-79.67" y2="46"></line><line x1="79.67" y1="-46" x2="-79.67" y2="-46"></line><line x1="79.67" y1="46" x2="0" y2="92"></line><line x1="79.67" y1="46" x2="-79.67" y2="46"></line><line x1="79.67" y1="46" x2="-79.67" y2="-46"></line><line x1="0" y1="92" x2="-79.67" y2="46"></line><line x1="0" y1="92" x2="-79.67" y2="-46"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46"></line></g><g stroke-width="1" opacity=".38" stroke="#C9A6E0"><circle cx="0" cy="0" r="23"></circle><circle cx="0" cy="-46" r="23"></circle><circle cx="39.84" cy="-23" r="23"></circle><circle cx="39.84" cy="23" r="23"></circle><circle cx="0" cy="46" r="23"></circle><circle cx="-39.84" cy="23" r="23"></circle><circle cx="-39.84" cy="-23" r="23"></circle><circle cx="0" cy="-92" r="23"></circle><circle cx="79.67" cy="-46" r="23"></circle><circle cx="79.67" cy="46" r="23"></circle><circle cx="0" cy="92" r="23"></circle><circle cx="-79.67" cy="46" r="23"></circle><circle cx="-79.67" cy="-46" r="23"></circle></g></g><circle r="115" stroke-width="1" opacity=".5"></circle><rect x="-115" y="-115" width="230" height="230" stroke-width=".8" stroke-dasharray="3 3.6" opacity=".34"></rect></g>
+        <!-- il solido della stanza scelta, che si accende dentro il cubo -->
+        <g class="ak-solido" data-stanza="terra" fill="none" stroke="var(--terra)" stroke-width="1.6" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px var(--terra))"><line x1="0" y1="-92" x2="79.67" y2="-46" opacity="0.9"></line><line x1="79.67" y1="-46" x2="79.67" y2="46" opacity="0.9"></line><line x1="79.67" y1="46" x2="0" y2="92" opacity="0.9"></line><line x1="0" y1="92" x2="-79.67" y2="46" opacity="0.9"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46" opacity="0.9"></line><line x1="-79.67" y1="-46" x2="0" y2="-92" opacity="0.9"></line><line x1="0" y1="0" x2="79.67" y2="-46" opacity="0.9"></line><line x1="0" y1="0" x2="0" y2="92" opacity="0.9"></line><line x1="0" y1="0" x2="-79.67" y2="-46" opacity="0.9"></line><line x1="0" y1="-92" x2="0" y2="-46" opacity="0.45"></line><line x1="79.67" y1="46" x2="39.84" y2="23" opacity="0.45"></line><line x1="-79.67" y1="46" x2="-39.84" y2="23" opacity="0.45"></line></g>
+        <g class="ak-solido" data-stanza="acqua" fill="none" stroke="var(--acqua)" stroke-width="1.6" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px var(--acqua))" hidden><line x1="0" y1="-92" x2="79.67" y2="-46" opacity="0.9"></line><line x1="79.67" y1="-46" x2="79.67" y2="46" opacity="0.9"></line><line x1="79.67" y1="46" x2="0" y2="92" opacity="0.9"></line><line x1="0" y1="92" x2="-79.67" y2="46" opacity="0.9"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46" opacity="0.9"></line><line x1="-79.67" y1="-46" x2="0" y2="-92" opacity="0.9"></line><line x1="0" y1="-46" x2="39.84" y2="-23" opacity="0.7"></line><line x1="39.84" y1="-23" x2="39.84" y2="23" opacity="0.7"></line><line x1="39.84" y1="23" x2="0" y2="46" opacity="0.7"></line><line x1="0" y1="46" x2="-39.84" y2="23" opacity="0.7"></line><line x1="-39.84" y1="23" x2="-39.84" y2="-23" opacity="0.7"></line><line x1="-39.84" y1="-23" x2="0" y2="-46" opacity="0.7"></line><line x1="0" y1="-92" x2="0" y2="-46" opacity="0.6"></line><line x1="79.67" y1="-46" x2="39.84" y2="-23" opacity="0.6"></line><line x1="79.67" y1="46" x2="39.84" y2="23" opacity="0.6"></line><line x1="0" y1="92" x2="0" y2="46" opacity="0.6"></line><line x1="-79.67" y1="46" x2="-39.84" y2="23" opacity="0.6"></line><line x1="-79.67" y1="-46" x2="-39.84" y2="-23" opacity="0.6"></line><line x1="0" y1="-92" x2="39.84" y2="-23" opacity="0.4"></line><line x1="79.67" y1="-46" x2="39.84" y2="23" opacity="0.4"></line><line x1="79.67" y1="46" x2="0" y2="46" opacity="0.4"></line><line x1="0" y1="92" x2="-39.84" y2="23" opacity="0.4"></line><line x1="-79.67" y1="46" x2="-39.84" y2="-23" opacity="0.4"></line><line x1="-79.67" y1="-46" x2="0" y2="-46" opacity="0.4"></line></g>
+        <g class="ak-solido" data-stanza="fuoco" fill="none" stroke="var(--fuoco)" stroke-width="1.6" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px var(--fuoco))" hidden><line x1="0" y1="-92" x2="79.67" y2="46" opacity="1"></line><line x1="79.67" y1="46" x2="-79.67" y2="46" opacity="1"></line><line x1="-79.67" y1="46" x2="0" y2="-92" opacity="1"></line><line x1="0" y1="-92" x2="0" y2="0" opacity="0.55"></line><line x1="79.67" y1="46" x2="0" y2="0" opacity="0.55"></line><line x1="-79.67" y1="46" x2="0" y2="0" opacity="0.55"></line></g>
+        <g class="ak-solido" data-stanza="aria" fill="none" stroke="var(--aria)" stroke-width="1.6" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px var(--aria))" hidden><line x1="0" y1="-92" x2="79.67" y2="-46" opacity="0.9"></line><line x1="79.67" y1="-46" x2="79.67" y2="46" opacity="0.9"></line><line x1="79.67" y1="46" x2="0" y2="92" opacity="0.9"></line><line x1="0" y1="92" x2="-79.67" y2="46" opacity="0.9"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46" opacity="0.9"></line><line x1="-79.67" y1="-46" x2="0" y2="-92" opacity="0.9"></line><line x1="0" y1="-92" x2="79.67" y2="46" opacity="0.55"></line><line x1="79.67" y1="46" x2="-79.67" y2="46" opacity="0.55"></line><line x1="-79.67" y1="46" x2="0" y2="-92" opacity="0.55"></line><line x1="79.67" y1="-46" x2="0" y2="92" opacity="0.55"></line><line x1="0" y1="92" x2="-79.67" y2="-46" opacity="0.55"></line><line x1="-79.67" y1="-46" x2="79.67" y2="-46" opacity="0.55"></line></g>
+        <g class="ak-solido" data-stanza="etere" fill="none" stroke="var(--etere)" stroke-width="1.6" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px var(--etere))" hidden><line x1="0" y1="-92" x2="79.67" y2="-46" opacity="0.9"></line><line x1="79.67" y1="-46" x2="79.67" y2="46" opacity="0.9"></line><line x1="79.67" y1="46" x2="0" y2="92" opacity="0.9"></line><line x1="0" y1="92" x2="-79.67" y2="46" opacity="0.9"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46" opacity="0.9"></line><line x1="-79.67" y1="-46" x2="0" y2="-92" opacity="0.9"></line><line x1="23.11" y1="-40.02" x2="46.21" y2="0" opacity="0.7"></line><line x1="46.21" y1="0" x2="23.11" y2="40.02" opacity="0.7"></line><line x1="23.11" y1="40.02" x2="-23.11" y2="40.02" opacity="0.7"></line><line x1="-23.11" y1="40.02" x2="-46.21" y2="0" opacity="0.7"></line><line x1="-46.21" y1="0" x2="-23.11" y2="-40.02" opacity="0.7"></line><line x1="-23.11" y1="-40.02" x2="23.11" y2="-40.02" opacity="0.7"></line><line x1="23.11" y1="-40.02" x2="39.84" y2="-69" opacity="0.55"></line><line x1="46.21" y1="0" x2="79.67" y2="0" opacity="0.55"></line><line x1="23.11" y1="40.02" x2="39.84" y2="69" opacity="0.55"></line><line x1="-23.11" y1="40.02" x2="-39.84" y2="69" opacity="0.55"></line><line x1="-46.21" y1="0" x2="-79.67" y2="0" opacity="0.55"></line><line x1="-23.11" y1="-40.02" x2="-39.84" y2="-69" opacity="0.55"></line><line x1="39.84" y1="-69" x2="0" y2="-92" opacity="0.55"></line><line x1="79.67" y1="0" x2="79.67" y2="-46" opacity="0.55"></line><line x1="39.84" y1="69" x2="79.67" y2="46" opacity="0.55"></line><line x1="-39.84" y1="69" x2="0" y2="92" opacity="0.55"></line><line x1="-79.67" y1="0" x2="-79.67" y2="46" opacity="0.55"></line><line x1="-39.84" y1="-69" x2="-79.67" y2="-46" opacity="0.55"></line><line x1="39.84" y1="-69" x2="79.67" y2="-46" opacity="0.55"></line><line x1="79.67" y1="0" x2="79.67" y2="46" opacity="0.55"></line><line x1="39.84" y1="69" x2="0" y2="92" opacity="0.55"></line><line x1="-39.84" y1="69" x2="-79.67" y2="46" opacity="0.55"></line><line x1="-79.67" y1="0" x2="-79.67" y2="-46" opacity="0.55"></line><line x1="-39.84" y1="-69" x2="0" y2="-92" opacity="0.55"></line></g>
+        <!-- i talenti presi accendono i vertici: un punto per talento, lo mette il codice -->
+        <g fill="#F5F0E6"><circle data-stampo="acceso" cx="0" cy="0" r="3" style="filter:drop-shadow(0 0 5px #D4AF6A)" hidden></circle></g>
+      </svg>
+    </div>
+    <div class="ak-stanze">
+      <button type="button" class="ak-stanza" data-g="scegli-stanza" data-stanza="terra" style="--c:var(--terra)" aria-pressed="true"><span>I Vicinati</span><i>cubo &middot; terra</i></button>
+      <button type="button" class="ak-stanza" data-g="scegli-stanza" data-stanza="acqua" style="--c:var(--acqua)" aria-pressed="false"><span>L’Emporio</span><i>icosaedro &middot; acqua</i></button>
+      <button type="button" class="ak-stanza" data-g="scegli-stanza" data-stanza="fuoco" style="--c:var(--fuoco)" aria-pressed="false"><span>Chi accompagna</span><i>tetraedro &middot; fuoco</i></button>
+      <button type="button" class="ak-stanza" data-g="scegli-stanza" data-stanza="aria" style="--c:var(--aria)" aria-pressed="false"><span>L’Edizione</span><i>ottaedro &middot; aria</i></button>
+      <button type="button" class="ak-stanza" data-g="scegli-stanza" data-stanza="etere" style="--c:var(--etere)" aria-pressed="false"><span>La Scuola</span><i>dodecaedro &middot; etere</i></button>
+    </div>
+  </div>
+  <div class="ak-dx">
+    <div class="ak-capo"><h1 data-c="stanza.nome">[ la stanza ]</h1><div class="ak-occ"><span data-c="conto.talenti">[ n ]</span> talenti</div></div>
+    <div class="ak-lista">
+      <div class="ak-gruppo" data-stampo="gruppo">
+        <div class="capo"><b data-c="gruppo.nome">[ il gruppo ]</b><i data-c="gruppo.sotto">[ chi sono ]</i></div>
+        <div style="display:flex;flex-direction:column">
+          <!-- uno stampo solo: i talenti li mette il codice -->
+          <button type="button" class="ak-tal" data-stampo="talento" data-g="prendi-talento" data-c="talento.elemento" aria-pressed="false">
+            <span class="seg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" data-c="talento.svg"><circle cx="30" cy="30" r="14" opacity=".5"></circle><path d="M30 12v36M12 30h36" opacity=".4"></path></svg></span>
+            <span class="nome" data-c="talento.nome">[ il talento ]</span>
+            <span class="punto"></span>
+            <span data-c="talento.stanza" hidden></span>
+          </button>
+        </div>
+      </div>
+      <div class="ak-conto" data-stato="stanza-vuota" hidden>[ in questa stanza i talenti arrivano ]</div>
+    </div>
+    <div class="ak-fine">
+      <div class="ak-conto"><span data-stato="nessun-talento">Ogni talento preso accende un punto del cubo.</span><span data-stato="ha-talenti" hidden><span data-c="conto.presi">[ n ]</span> talenti presi &middot; <span data-c="conto.presi">[ n ]</span> punti accesi</span></div>
+      <a class="ak-btn" data-g="avanti" href="la-mia-orma-piatto.html" data-stato="ha-talenti" hidden>vai alla mia orma</a>
+    </div>
+  </div>
+</div>
+<script>
+/* solo il passaggio fra le stanze (solido e colore): i talenti li mette il codice */
+var EL={terra:'--terra',acqua:'--acqua',fuoco:'--fuoco',aria:'--aria',etere:'--etere'};
+document.querySelectorAll('[data-g="scegli-stanza"]').forEach(function(b){b.addEventListener('click',function(){
+  var s=b.dataset.stanza;
+  document.querySelectorAll('[data-g="scegli-stanza"]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+  document.querySelectorAll('.ak-solido').forEach(function(g){g.hidden=g.dataset.stanza!==s});
+  document.querySelector('.ak').style.setProperty('--c','var('+EL[s]+')');
+})});
+</script>
+</body>
+</html>

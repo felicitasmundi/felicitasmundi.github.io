@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Nexus · taglia il cerchio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#02040c;color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:2rem;padding:2rem;box-sizing:border-box;align-items:center}
+h1{margin:0 0 1rem;font-family:'Cinzel',serif;font-weight:400;font-size:1.6rem;letter-spacing:.06em}
+.ce{position:relative;width:min(90vw,26rem);aspect-ratio:1;margin:0 auto;border-radius:50%;overflow:hidden;border:.45rem solid #8C2F39;box-shadow:0 0 2.4rem rgba(140,47,57,.45);background:#fff;cursor:grab;touch-action:none}
+.ce canvas{width:100%;height:100%;display:block}
+label{display:flex;flex-direction:column;gap:.3rem;margin:.9rem 0;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(212,175,106,.85)}
+input[type=range]{width:100%;accent-color:#D4AF6A}
+button{min-height:3rem;padding:0 1.6rem;border-radius:999px;border:1px solid rgba(212,175,106,.7);background:rgba(212,175,106,.14);color:#F5F0E6;font-family:'Cinzel',serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;margin-right:.6rem}
+button:hover{background:rgba(212,175,106,.3)}
+.n{font-size:.85rem;color:rgba(245,240,230,.5);margin-top:1rem;line-height:1.5}
+</style></head><body>
+<div class="ce" id="ce"><canvas id="cv" width="900" height="900"></canvas></div>
+<div>
+  <h1>Taglia il Nexus</h1>
+  <label>orizzontale <input id="x" type="range" min="0" max="1050" step="1" value="562"></label>
+  <label>verticale <input id="y" type="range" min="0" max="1140" step="1" value="485"></label>
+  <label>zoom (raggio) <input id="r" type="range" min="250" max="800" step="1" value="520"></label>
+  <label>rotazione <input id="a" type="range" min="-180" max="180" step="1" value="0"></label>
+  <div><button id="dl">scarica nexus-cerchio.png</button><button id="rs">torna ai valori</button></div>
+  <div class="n">Trascina il disegno nel cerchio col dito o col mouse; la rotella fa lo zoom. Il file scaricato è un PNG 900×900 col cerchio bianco: mettilo accanto ad <b>accesso-piatto.html</b> col nome <b>nexus-cerchio.png</b>.</div>
+</div>
+<script>
+var img=new Image();img.src='nexus.png';
+var X=document.getElementById('x'),Y=document.getElementById('y'),R=document.getElementById('r'),A=document.getElementById('a');
+var cv=document.getElementById('cv'),g=cv.getContext('2d'),S=900;
+function dis(){
+  var cx=+X.value,cy=+Y.value,r=+R.value,a=+A.value*Math.PI/180;
+  g.clearRect(0,0,S,S);g.fillStyle='#fff';g.beginPath();g.arc(S/2,S/2,S/2,0,Math.PI*2);g.fill();
+  g.save();g.beginPath();g.arc(S/2,S/2,S/2,0,Math.PI*2);g.clip();
+  g.translate(S/2,S/2);g.rotate(a);var k=S/(2*r);g.scale(k,k);g.drawImage(img,-cx,-cy);g.restore();
+}
+img.onload=dis;[X,Y,R,A].forEach(function(i){i.addEventListener('input',dis)});
+var ce=document.getElementById('ce'),drag=null;
+ce.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY,cx:+X.value,cy:+Y.value};ce.setPointerCapture(e.pointerId)});
+ce.addEventListener('pointermove',function(e){if(!drag)return;var k=(2*+R.value)/ce.clientWidth;X.value=Math.round(drag.cx-(e.clientX-drag.x)*k);Y.value=Math.round(drag.cy-(e.clientY-drag.y)*k);dis()});
+ce.addEventListener('pointerup',function(){drag=null});
+ce.addEventListener('wheel',function(e){e.preventDefault();R.value=Math.max(250,Math.min(800,+R.value+(e.deltaY>0?12:-12)));dis()},{passive:false});
+document.getElementById('dl').onclick=function(){var a=document.createElement('a');a.download='nexus-cerchio.png';a.href=cv.toDataURL('image/png');a.click()};
+document.getElementById('rs').onclick=function(){X.value=562;Y.value=485;R.value=520;A.value=0;dis()};
+</script>
+</body></html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La mia orma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* la-mia-orma · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--terra:#AA8844;--acqua:#4A88B8;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--nexus:#8C2F39}
+body{margin:0;background:#02040c}
+a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
+[hidden]{display:none!important}
+@keyframes ak-pulsa{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.9);opacity:1}}
+@keyframes ak-alza{from{opacity:0;transform:translateY(.5rem)}to{opacity:1;transform:none}}
+.ak-attesa{transform-box:fill-box;transform-origin:center;animation:ak-pulsa 2.6s ease-in-out infinite}
+.ak-attesa-p{animation:ak-pulsa 2.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.ak-attesa,.ak-attesa-p{animation:none}}
+.ak{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));align-items:start;gap:2rem 3rem;padding:2rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+.ak-cosmo{position:absolute;inset:0;z-index:0;pointer-events:none}
+.ak-velo{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}
+.ak-sx{position:sticky;top:2rem;z-index:1;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:1.2rem;width:100%;justify-self:center}
+.ak-giorno{display:flex;gap:.55rem;width:100%;max-width:24rem}
+.ak-giorno>div{flex:1;border:1px solid rgba(184,150,62,.22);border-radius:.75rem;background:rgba(8,11,26,.3);padding:.5rem;text-align:center}
+.ak-giorno b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:1rem;line-height:1.2;color:var(--oro)}
+.ak-giorno b.luna{font-size:1.4rem}
+.ak-giorno span{display:block;font-size:.84rem;color:rgba(245,240,230,.45);margin-top:.25rem}
+.ak-cubo{position:relative;width:100%;max-width:min(24rem,58vh);aspect-ratio:1}
+.ak-cubo .alone{position:absolute;inset:8%;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(212,175,106,.16),transparent 70%)}
+.ak-cubo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ak-due{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;width:100%;max-width:24rem}
+.ak-tasto{min-height:3.5rem;padding:.7rem 1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.45);background:rgba(8,11,26,.5);color:var(--ivory);cursor:pointer;text-align:left;font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.1em;line-height:1.3;display:flex;align-items:center;justify-content:space-between;gap:.6rem;transition:border-color .3s,background .3s;text-decoration:none}
+.ak-tasto:hover{border-color:var(--oro);background:rgba(212,175,106,.1);color:var(--ivory)}
+.ak-tasto>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ak-tasto svg{flex:none;width:1.5rem;height:1.5rem}
+.ak-inizio{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;line-height:1.4;color:rgba(245,240,230,.6);text-align:center;max-width:24rem;margin-top:-.4rem}
+.ak-dove{width:100%;max-width:24rem;display:flex;flex-direction:column;gap:.5rem;padding:.9rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.4);background:rgba(4,8,20,.85);animation:ak-alza .4s ease both}
+.ak-dove label{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.72)}
+.ak-dove input{width:100%;box-sizing:border-box;min-height:3rem;padding:.7rem .9rem;border-radius:.7rem;border:1px solid rgba(212,175,106,.5);background:rgba(8,11,26,.8);color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;font-size:1.05rem;outline:none}
+.ak-dove input:focus{border-color:var(--oro);box-shadow:0 0 .8rem rgba(212,175,106,.25)}
+.ak-dove-l{display:flex;flex-direction:column;max-height:13rem;overflow:auto}
+.ak-dove-l button{display:flex;justify-content:space-between;gap:1rem;min-height:2.75rem;padding:.5rem .7rem;border:0;border-radius:.5rem;background:transparent;color:var(--ivory);cursor:pointer;text-align:left;font-family:'DM Sans',system-ui,sans-serif;font-size:1rem}
+.ak-dove-l button:hover{background:rgba(212,175,106,.12)}
+.ak-dove-l .p{font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,230,.45)}
+.ak-dove .n{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.4)}
+.ak-dx{position:relative;z-index:1;display:flex;flex-direction:column;gap:1.4rem;max-width:34rem;width:100%;min-width:0;justify-self:start;max-height:calc(100vh - 4rem);overflow:hidden}
+.ak-capo{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.4rem}
+.ak-capo h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2.2rem,3.8vw,3.1rem);line-height:1.1;letter-spacing:.06em;color:var(--ivory)}
+.ak-capo nav{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.24em;text-transform:uppercase}
+.ak-sog{min-height:2.75rem;padding:0 .2rem;background:none;border:0;border-bottom:1px solid transparent;color:rgba(245,240,230,.5);font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+.ak-sog:hover{color:var(--ivory)}
+.ak-sog.on{border-bottom-color:rgba(212,175,106,.7);color:var(--oro)}
+.ak-pan{display:none;flex:1 1 auto;min-height:0;flex-direction:column}.ak-pan.on{display:flex}.ak-pan:not(.on){display:none!important}
+.ak-lista{overflow:auto;padding-right:.6rem;gap:1.6rem;border-left:1px solid rgba(212,175,106,.28);padding-left:1.4rem;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(212,175,106,.35) transparent}
+.ak-nota{display:flex;flex-direction:column;gap:.35rem;padding:1.1rem 1.2rem;margin-left:-1.4rem;padding-left:1.4rem;border:1px solid rgba(212,175,106,.35);border-radius:.9rem;background:rgba(212,175,106,.06);animation:ak-alza .6s ease both}
+.ak-nota.tratt{border-style:dashed;border-color:rgba(212,175,106,.3);background:rgba(212,175,106,.04)}
+.ak-notati{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(212,175,106,.8)}
+.ak-notatx{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.4rem;line-height:1.4;color:rgba(245,240,230,.82)}
+.ak-sez{display:flex;align-items:center;gap:.6rem;padding:.6rem .9rem;border:1px dashed rgba(90,122,140,.7);border-radius:.8rem;background:rgba(90,122,140,.1)}
+.ak-sez .pt{flex:none;width:.5rem;height:.5rem;border-radius:50%;background:#5A7A8C}
+.ak-sez b{flex:1;font-family:'Cinzel',serif;font-weight:400;font-size:1.05rem;letter-spacing:.06em;color:#8FB0C4}
+.ak-sez span{font-size:.84rem;color:rgba(245,240,230,.45)}
+.ak-ramo{position:relative;padding-left:1.4rem;margin-left:.9rem;display:flex;flex-direction:column;gap:.45rem;border-left:1px solid color-mix(in srgb,var(--c,var(--oro)) 30%,transparent)}
+.ak-ramo.tratt{border-left-style:dashed}
+.ak-orma{display:flex;flex-direction:column;gap:.35rem;padding:.85rem 1rem;border-radius:.9rem;border:1px solid color-mix(in srgb,var(--c,var(--oro)) 28%,transparent);border-left:3px solid color-mix(in srgb,var(--c,var(--oro)) 60%,transparent);background:color-mix(in srgb,var(--c,var(--oro)) 9%,transparent);color:inherit;text-decoration:none;transition:background .25s}
+.ak-orma:hover{background:color-mix(in srgb,var(--c,var(--oro)) 16%,transparent);color:inherit}
+.ak-orma .r1{display:flex;align-items:center;gap:.5rem}
+.ak-orma .ce{flex:none;width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid color-mix(in srgb,var(--c,var(--oro)) 60%,transparent);background:color-mix(in srgb,var(--c,var(--oro)) 9%,transparent);display:grid;place-items:center;font-size:.84rem;color:rgba(245,240,230,.8)}
+.ak-orma .chi{flex:1;min-width:0;font-size:.95rem;color:rgba(245,240,230,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ak-orma .dq{flex:none;font-size:.84rem;color:rgba(245,240,230,.45)}
+.ak-orma .ti{font-family:'Cormorant Garamond',serif;font-size:1.35rem;line-height:1.3;color:var(--ivory)}
+.ak-orma .so{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;line-height:1.35;color:rgba(245,240,230,.5)}
+.ak-orma .pie{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;margin-top:.3rem;font-size:.9rem;color:rgba(245,240,230,.55)}
+.ak-orma .pie .st{color:var(--c,var(--oro));filter:brightness(1.3)}
+.ak-orma .pie .sd{display:inline-flex;align-items:center;gap:.35rem;font-size:.84rem;letter-spacing:.05em;padding:.1rem .55rem;border-radius:1rem;border:1px solid color-mix(in srgb,var(--c,var(--oro)) 50%,transparent);color:rgba(245,240,230,.8)}
+.ak-orma .pie .sd i{width:.4rem;height:.4rem;border-radius:50%;background:var(--c,var(--oro))}
+.ak-orma .pie .fr{margin-left:auto;color:rgba(245,240,230,.3)}
+.ak-orma .da{margin-top:.3rem;font-size:.9rem;line-height:1.4;color:color-mix(in srgb,var(--c,var(--oro)) 80%,white);border:1px dashed color-mix(in srgb,var(--c,var(--oro)) 60%,transparent);border-radius:1rem;padding:.15rem .6rem;align-self:flex-start}
+.ak-orma.attesa{--c:#5A7A8C}
+.ak-orma.ex{border:1px dashed rgba(245,240,230,.22);border-left:3px solid rgba(170,136,68,.5);background:rgba(245,240,230,.04);opacity:.62}
+.ak-orma.ex:hover{opacity:.9}
+.ak-orma .volti{display:flex;flex:none}
+.ak-orma .volti span{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid;display:grid;place-items:center;font-size:.84rem;color:var(--ivory)}
+.ak-orma .volti span+span{margin-left:-.5rem}
+.ak-cosi{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,230,.4)}
+.ak-tal{display:flex;flex-direction:column;gap:.5rem}
+.ak-talcapo{display:flex;align-items:center;gap:.7rem;padding:.6rem .9rem;border:1.5px solid color-mix(in srgb,var(--c,var(--oro)) 30%,transparent);border-radius:.8rem;background:color-mix(in srgb,var(--c,var(--oro)) 5%,transparent)}
+.ak-talseg{flex:none;width:2.4rem;height:2.4rem;display:grid;place-items:center;color:var(--c,var(--oro));filter:brightness(1.25)}
+.ak-talseg svg{width:2.4rem;height:2.4rem}
+.ak-taltx{flex:1;min-width:0;display:flex;flex-direction:column}
+.ak-taltx b{font-family:'Cinzel',serif;font-weight:400;font-size:1.15rem;letter-spacing:.06em;color:var(--c,var(--oro));filter:brightness(1.35);line-height:1.2}
+.ak-taltx i{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(245,240,230,.5)}
+.ak-talcnt{flex:none;font-size:.84rem;color:rgba(245,240,230,.45)}
+.ak-altre{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.45);padding:.2rem 0}
+.ak-riga{display:flex;align-items:center;gap:.8rem;min-height:3rem;padding:.6rem .9rem;border-radius:.9rem;border:1px dashed rgba(212,175,106,.45);background:transparent;color:rgba(212,175,106,.9);cursor:pointer;text-align:left;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;width:100%}
+.ak-riga:hover{border-color:var(--oro);background:rgba(212,175,106,.06)}
+.ak-ripi{flex:none;width:1.7rem;height:1.7rem;border-radius:50%;border:1px solid rgba(212,175,106,.6);display:grid;place-items:center;font-style:normal;font-family:'DM Sans',system-ui,sans-serif;font-size:1rem;color:var(--oro)}
+.ak-ferme{padding:.7rem .9rem;border:1px dashed rgba(245,240,230,.18);border-radius:.8rem;background:rgba(8,11,26,.35)}
+.ak-ferme b{display:block;font-weight:400;font-size:1rem;color:rgba(245,240,230,.6)}
+.ak-ferme span{display:block;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(245,240,230,.35);margin-top:.15rem}
+.ak-btn{align-self:flex-start;display:inline-flex;align-items:center;min-height:3.25rem;padding:0 2.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.7);background:linear-gradient(180deg,rgba(212,175,106,.18),rgba(212,175,106,.06));color:var(--ivory);font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;text-decoration:none}
+.ak-btn:hover{background:linear-gradient(180deg,rgba(212,175,106,.32),rgba(212,175,106,.12));box-shadow:0 0 1.6rem rgba(212,175,106,.28);color:var(--ivory)}
+.ak-sq{--c:var(--oro)}
+.ak-sq .stanze{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.2rem}
+.ak-stanza{display:inline-flex;align-items:center;gap:.35rem;font-size:.84rem;padding:.1rem .55rem;border-radius:1rem;border:1px solid rgba(245,240,230,.14);color:var(--c,var(--oro));filter:brightness(1.3)}
+.ak-stanza i{width:.45rem;height:.45rem;border-radius:50%;background:currentColor}
+.ak-str{gap:.9rem;overflow:auto;padding-right:.6rem}
+.ak-strum{display:flex;flex-direction:column;gap:.35rem;min-height:5.5rem;padding:1rem 1.2rem;border-radius:1rem;border:1px solid rgba(212,175,106,.35);background:rgba(8,11,26,.5);color:var(--ivory);text-decoration:none;transition:border-color .25s,background .25s}
+.ak-strum:hover{border-color:rgba(212,175,106,.8);background:rgba(212,175,106,.08);color:var(--ivory)}
+.ak-strum .no{display:flex;align-items:center;gap:.5rem;font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.14em;text-transform:uppercase;color:var(--oro)}
+.ak-strum .no .sg{font-size:1.1rem;line-height:1;color:rgba(212,175,106,.8);display:inline-grid;place-items:center;width:1.3rem;height:1.3rem}
+.ak-strum .no .sg img{width:1.3rem;height:1.3rem}
+.ak-strum .da{font-family:'Cormorant Garamond',serif;font-size:1.45rem;line-height:1.25;color:var(--ivory);margin-top:auto}
+.ak-strum .so{font-size:.84rem;color:rgba(245,240,230,.45)}
+.ak-avatar{position:relative;width:2.8rem;height:2.8rem;border-radius:50%;display:grid;place-items:center;margin-top:auto;background:rgba(8,11,26,.7);border:1px solid rgba(245,240,230,.18);overflow:hidden;transition:box-shadow .6s,border-color .6s}
+.ak-avatar b{font-family:'Cinzel',serif;font-weight:400;font-size:1.1rem;color:rgba(245,240,230,.55)}
+/* le sei lucentezze · data-grado lo mette il codice · nessun numero */
+.ak-avatar[data-grado="ospite"]{border-color:rgba(245,240,230,.18);box-shadow:none}
+.ak-avatar[data-grado="karma_yoga"]{border-color:rgba(212,175,106,.35);box-shadow:0 0 6px rgba(212,175,106,.18)}
+.ak-avatar[data-grado="karma_yoga"] b{color:rgba(212,175,106,.7)}
+.ak-avatar[data-grado="studente"]{border-color:rgba(212,175,106,.6);box-shadow:0 0 10px rgba(212,175,106,.3)}
+.ak-avatar[data-grado="studente"] b{color:var(--oro)}
+.ak-avatar[data-grado="praticante"]{border-color:rgba(212,175,106,.75);box-shadow:0 0 0 2px rgba(212,175,106,.1),0 0 14px rgba(212,175,106,.4)}
+.ak-avatar[data-grado="praticante"] b{color:var(--oro)}
+.ak-avatar[data-grado="operatore"]{border-color:rgba(212,175,106,.9);box-shadow:0 0 0 3px rgba(212,175,106,.18),0 0 22px rgba(212,175,106,.55)}
+.ak-avatar[data-grado="operatore"] b{color:var(--oro)}
+.ak-avatar[data-grado="nucleo"]{border-color:var(--oro);background:rgba(212,175,106,.16);box-shadow:0 0 0 3px rgba(212,175,106,.3),0 0 28px rgba(212,175,106,.8),0 0 48px rgba(212,175,106,.35)}
+.ak-avatar[data-grado="nucleo"] b{color:var(--ivory)}
+.ak-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ak-avatar img:not([src]),.ak-avatar img[src=""]{display:none}
+</style>
+<script src="./ak-cosmo.js"></script>
+</head>
+<body>
+<div class="ak" data-screen-label="La mia orma">
+  <ak-cosmo class="ak-cosmo" aria-hidden="true"></ak-cosmo>
+  <div class="ak-velo" aria-hidden="true"></div>
+
+  <!-- SINISTRA: il giorno, il cubo (un radar, fermo), i due gesti -->
+  <div class="ak-sx">
+    <div class="ak-giorno">
+      <div><b data-c="giorno.data">[ giorno ] [ mese ]</b><span>il giorno</span></div>
+      <div><b class="luna">&#127761;</b><span data-c="giorno.luna">[ la luna ]</span></div>
+      <div><b data-c="giorno.santo">[ il santo ]</b><span>il santo</span></div>
+    </div>
+
+    <div class="ak-cubo">
+      <div class="alone"></div>
+      <svg viewBox="-128 -128 256 256" aria-hidden="true">
+        <g fill="none" stroke="#D4AF6A" stroke-linejoin="round">
+          <g stroke-width=".7" opacity="0.38">
+            <line x1="0" y1="0" x2="0" y2="-46"></line><line x1="0" y1="0" x2="39.84" y2="-23"></line><line x1="0" y1="0" x2="39.84" y2="23"></line><line x1="0" y1="0" x2="0" y2="46"></line><line x1="0" y1="0" x2="-39.84" y2="23"></line><line x1="0" y1="0" x2="-39.84" y2="-23"></line><line x1="0" y1="0" x2="0" y2="-92"></line><line x1="0" y1="0" x2="79.67" y2="-46"></line><line x1="0" y1="0" x2="79.67" y2="46"></line><line x1="0" y1="0" x2="0" y2="92"></line><line x1="0" y1="0" x2="-79.67" y2="46"></line><line x1="0" y1="0" x2="-79.67" y2="-46"></line><line x1="0" y1="-46" x2="39.84" y2="-23"></line><line x1="0" y1="-46" x2="39.84" y2="23"></line><line x1="0" y1="-46" x2="0" y2="46"></line><line x1="0" y1="-46" x2="-39.84" y2="23"></line><line x1="0" y1="-46" x2="-39.84" y2="-23"></line><line x1="0" y1="-46" x2="0" y2="-92"></line><line x1="0" y1="-46" x2="79.67" y2="-46"></line><line x1="0" y1="-46" x2="79.67" y2="46"></line><line x1="0" y1="-46" x2="0" y2="92"></line><line x1="0" y1="-46" x2="-79.67" y2="46"></line><line x1="0" y1="-46" x2="-79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="39.84" y2="23"></line><line x1="39.84" y1="-23" x2="0" y2="46"></line><line x1="39.84" y1="-23" x2="-39.84" y2="23"></line><line x1="39.84" y1="-23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="-23" x2="0" y2="-92"></line><line x1="39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="79.67" y2="46"></line><line x1="39.84" y1="-23" x2="0" y2="92"></line><line x1="39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="39.84" y1="23" x2="0" y2="46"></line><line x1="39.84" y1="23" x2="-39.84" y2="23"></line><line x1="39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="23" x2="0" y2="-92"></line><line x1="39.84" y1="23" x2="79.67" y2="-46"></line><line x1="39.84" y1="23" x2="79.67" y2="46"></line><line x1="39.84" y1="23" x2="0" y2="92"></line><line x1="39.84" y1="23" x2="-79.67" y2="46"></line><line x1="39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="0" y1="46" x2="-39.84" y2="23"></line><line x1="0" y1="46" x2="-39.84" y2="-23"></line><line x1="0" y1="46" x2="0" y2="-92"></line><line x1="0" y1="46" x2="79.67" y2="-46"></line><line x1="0" y1="46" x2="79.67" y2="46"></line><line x1="0" y1="46" x2="0" y2="92"></line><line x1="0" y1="46" x2="-79.67" y2="46"></line><line x1="0" y1="46" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="-39.84" y1="23" x2="0" y2="-92"></line><line x1="-39.84" y1="23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="79.67" y2="46"></line><line x1="-39.84" y1="23" x2="0" y2="92"></line><line x1="-39.84" y1="23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="0" y2="-92"></line><line x1="-39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="0" y2="92"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="46"></line><line x1="0" y1="-92" x2="0" y2="92"></line><line x1="0" y1="-92" x2="-79.67" y2="46"></line><line x1="0" y1="-92" x2="-79.67" y2="-46"></line><line x1="79.67" y1="-46" x2="79.67" y2="46"></line><line x1="79.67" y1="-46" x2="0" y2="92"></line><line x1="79.67" y1="-46" x2="-79.67" y2="46"></line><line x1="79.67" y1="-46" x2="-79.67" y2="-46"></line><line x1="79.67" y1="46" x2="0" y2="92"></line><line x1="79.67" y1="46" x2="-79.67" y2="46"></line><line x1="79.67" y1="46" x2="-79.67" y2="-46"></line><line x1="0" y1="92" x2="-79.67" y2="46"></line><line x1="0" y1="92" x2="-79.67" y2="-46"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46"></line>
+          </g>
+          <g stroke-width="1" opacity="0.34" stroke="#C9A6E0">
+            <circle cx="0" cy="0" r="23"></circle><circle cx="0" cy="-46" r="23"></circle><circle cx="39.84" cy="-23" r="23"></circle><circle cx="39.84" cy="23" r="23"></circle><circle cx="0" cy="46" r="23"></circle><circle cx="-39.84" cy="23" r="23"></circle><circle cx="-39.84" cy="-23" r="23"></circle><circle cx="0" cy="-92" r="23"></circle><circle cx="79.67" cy="-46" r="23"></circle><circle cx="79.67" cy="46" r="23"></circle><circle cx="0" cy="92" r="23"></circle><circle cx="-79.67" cy="46" r="23"></circle><circle cx="-79.67" cy="-46" r="23"></circle>
+          </g>
+          <circle r="115" stroke-width="1" opacity=".5"></circle>
+          <rect x="-115" y="-115" width="230" height="230" stroke-width=".8" stroke-dasharray="3 3.6" opacity=".34"></rect>
+        </g>
+        <!-- il micelio: chi lavora colle mie orme. Un nodo per persona, col colore dell'elemento dell'orma che ci lega -->
+        <g stroke-linecap="round">
+          <g data-stampo="micelio" data-c="micelio.elemento" style="color:var(--terra)" hidden>
+            <line x1="0" y1="0" x2="39.84" y2="-23" stroke="currentColor" stroke-width="1.2" opacity=".6"></line>
+            <circle cx="39.84" cy="-23" r="4.5" fill="currentColor" opacity=".95" style="filter:drop-shadow(0 0 5px currentColor)"></circle>
+          </g>
+        </g>
+        <!-- il centro: tu. Acceso quando c'è almeno un talento -->
+        <circle r="5" fill="#F5F0E6" data-stato="centro-acceso" style="filter:drop-shadow(0 0 8px #D4AF6A) drop-shadow(0 0 16px #D4AF6A)"></circle>
+        <!-- l'orma senza talento: pulsa fuori dalla figura -->
+        <circle class="ak-attesa" data-stato="ha-attese" cx="-84.85" cy="-84.85" r="3.2" fill="rgba(245,240,230,.85)" style="filter:drop-shadow(0 0 5px rgba(245,240,230,.9))" hidden></circle>
+      </svg>
+    </div>
+
+    <div class="ak-due">
+      <button type="button" class="ak-tasto" data-g="apri-comune">
+        <span data-c="persona.comune_cod">dove sei?</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D4AF6A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+      </button>
+      <a class="ak-tasto" data-g="invita" href="invito.html">
+        <span>invita chi risuona</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D4AF6A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="M13 5l7 7-7 7"></path></svg>
+      </a>
+    </div>
+    <div class="ak-inizio">Inizi a scrivere le orme e attivarti nel vicinato</div>
+
+    <div class="ak-dove" data-stato="comune-aperto" hidden>
+      <label for="ak-cerca">dove sei &middot; scegli il comune</label>
+      <div class="n">la mappa si attiva nel mese di ottobre</div>
+      <input id="ak-cerca" type="search" placeholder="scrivi il nome del comune">
+      <div class="ak-dove-l" role="listbox">
+        <button type="button" role="option" data-stampo="comune" data-g="scegli-comune"><span data-c="comune.nome">[ il comune ]</span><span class="p" data-c="comune.prov">[ prov ]</span></button>
+      </div>
+      <div class="n">7.896 comuni &middot; scrivi almeno due lettere</div>
+    </div>
+  </div>
+
+  <!-- DESTRA: le tre soglie -->
+  <div class="ak-dx">
+    <div class="ak-capo">
+      <h1>La mia orma</h1>
+      <nav>
+        <button type="button" class="ak-sog on" data-s="talenti" data-g="soglia-talenti">Talenti</button>
+        <button type="button" class="ak-sog" data-s="squadre" data-g="soglia-squadre">Squadre</button>
+        <button type="button" class="ak-sog" data-s="strumenti" data-g="soglia-strumenti">Strumenti</button>
+      </nav>
+    </div>
+
+    <!-- ⑥ TALENTI -->
+    <div class="ak-pan ak-lista on" id="ak-p-talenti">
+
+      <!-- vuota: nessun talento -->
+      <div data-stato="vuota" hidden style="display:flex;flex-direction:column;gap:1.2rem">
+        <button type="button" class="ak-btn" data-g="aggiungi-talento">scegli il primo talento</button>
+      </div>
+
+      <!-- appena scelti: talenti sì, orme no → la nota, e l'esempio sotto il primo talento -->
+      <div class="ak-nota" data-stato="appena-scelti">
+        <span class="ak-notati">una nota da Anta&#7717;kara&#7751;a</span>
+        <span class="ak-notatx" data-c="nota.testo">Per scrivere la tua prima orma usa lo spazio in basso.</span>
+      </div>
+
+      <!-- Da collegare: le orme scritte senza talento, fino a tre -->
+      <div data-stato="ha-attese" hidden style="display:flex;flex-direction:column;gap:.5rem">
+        <div class="ak-sez"><span class="pt ak-attesa-p"></span><b>Da collegare</b><span><span data-c="conto.attese">[ n ]</span> orme</span></div>
+        <div class="ak-ramo" style="--c:#5A7A8C">
+          <a class="ak-orma attesa" data-stampo="attesa" data-g="apri-orma" href="#">
+            <div class="r1"><span class="ce">&mdash;</span><span class="chi" data-c="orma.tipo">[ il tipo ]</span><span class="dq"><span data-c="orma.luogo">[ dove ]</span> &middot; <span data-c="orma.accaduto_il">[ quando ]</span></span></div>
+            <div class="ti" data-c="orma.titolo">[ il titolo ]</div>
+            <div class="so" data-c="orma.sottotitolo">[ il sottotitolo ]</div>
+            <div class="pie"><span class="sd"><i></i><span data-c="orma.stadio">[ stadio ]</span></span><span>&middot;</span><span><span data-c="conto.figlie">[ n ]</span> orme figlie</span><span class="fr">&rsaquo;</span></div>
+            <div class="da">&#8627; da collegare a un talento</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- il talento, e le sue orme sotto -->
+      <div class="ak-tal" data-stampo="talento" data-c="talento.elemento" style="--c:var(--terra)">
+        <div class="ak-talcapo">
+          <span class="ak-talseg" data-c="talento.svg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34 C14 44 21 50 30 52 C39 50 46 44 46 34" opacity=".55"></path><path d="M14 34 C14 28 17 25 20 28" opacity=".8"></path><path d="M46 34 C46 28 43 25 40 28" opacity=".8"></path><path d="M30 46 L30 22"></path><path d="M30 30 C25 30 22 26 22 21 C27 21 30 25 30 30Z"></path><path d="M30 26 C35 26 38 22 38 17 C33 17 30 21 30 26Z" opacity=".75"></path><path d="M27 50 C28 46 32 46 33 50" opacity=".35"></path></svg></span>
+          <span class="ak-taltx"><b data-c="talento.nome">[ il talento ]</b><i data-c="talento.stanza">[ la stanza ]</i></span>
+          <span class="ak-talcnt" data-c="conto.orme">senza orme</span>
+        </div>
+
+        <!-- l'esempio: una volta sola, sotto il primo talento, per chi comincia -->
+        <div class="ak-ramo tratt" data-stato="mostra-esempio">
+          <div class="ak-cosi">cos&igrave; sar&agrave; la tua</div>
+          <a class="ak-orma ex" href="dentro-orma-piatto.html" style="--c:var(--terra)">
+            <div class="r1"><span class="volti"><span style="border-color:rgba(170,136,68,.7);background:rgba(170,136,68,.3)">g</span><span style="border-color:rgba(68,136,187,.7);background:rgba(68,136,187,.3)">l</span><span style="border-color:rgba(204,102,68,.7);background:rgba(204,102,68,.3)">r</span><span style="border:1px dashed rgba(245,240,230,.35);font-size:.78rem;color:rgba(245,240,230,.6)">+3</span></span><span class="chi">sei persone</span></div>
+            <div class="dq" style="font-size:.95rem;line-height:1.4;color:rgba(245,240,230,.6)">piazza del paese &middot; sabato 14 dicembre, dalle 10 alle 19</div>
+            <div class="ti">Mercatino di dicembre</div>
+            <div class="so">le adesioni entro il 30 novembre</div>
+            <div class="pie"><span class="st">I Vicinati</span><span>&middot;</span><span class="sd"><i></i>in corso</span><span>&middot;</span><span>4 orme figlie</span><span class="fr">&rsaquo;</span></div>
+          </a>
+        </div>
+
+        <!-- talento senza orme: il gesto -->
+        <div class="ak-ramo tratt" data-stato="talento-vuoto">
+          <button type="button" class="ak-riga" data-g="apri-prima-orma"><span class="ak-ripi">+</span><span>Apri la prima orma di questo talento</span></button>
+        </div>
+
+        <!-- le orme di questo talento: le ultime tre, poi «[ n ] altre» -->
+        <div class="ak-ramo" data-stato="ha-orme" hidden>
+          <a class="ak-orma" data-stampo="orma" data-g="apri-orma" href="#">
+            <div class="r1"><span class="ce">&mdash;</span><span class="chi" data-c="orma.tipo">[ il tipo ]</span><span class="dq"><span data-c="orma.luogo">[ dove ]</span> &middot; <span data-c="orma.accaduto_il">[ quando ]</span></span></div>
+            <div class="ti" data-c="orma.titolo">[ il titolo ]</div>
+            <div class="so" data-c="orma.sottotitolo">[ il sottotitolo ]</div>
+            <div class="pie"><span class="st" data-c="talento.stanza">[ la stanza ]</span><span>&middot;</span><span class="sd"><i></i><span data-c="orma.stadio">[ stadio ]</span></span><span>&middot;</span><span><span data-c="conto.figlie">[ n ]</span> orme figlie</span><span class="fr">&rsaquo;</span></div>
+            <div class="da" data-stato="ha-da" hidden>&#8627; nata da <span data-c="orma.da">[ un&rsquo;orma ]</span></div>
+          </a>
+          <div class="ak-altre" data-stato="ha-altre" hidden><span data-c="conto.altre">[ n ]</span> altre</div>
+        </div>
+      </div>
+
+      <!-- i talenti fermi -->
+      <div class="ak-ferme" data-stato="ha-ferme" hidden>
+        <b data-c="conto.ferme">[ N talenti non hanno ancora un&rsquo;orma ]</b>
+        <span data-c="ferme.nomi">[ i nomi, separati da &middot; ]</span>
+      </div>
+
+      <button type="button" class="ak-btn" data-g="aggiungi-talento">aggiungi un talento</button>
+    </div>
+
+    <!-- ⑦ SQUADRE: solo quelle in cui sono dentro. Nessuna lucentezza. -->
+    <div class="ak-pan ak-lista" id="ak-p-squadre" style="gap:1.4rem">
+      <div class="ak-nota tratt" data-stato="senza-squadre">
+        <span class="ak-notati">una nota da Anta&#7717;kara&#7751;a</span>
+        <span class="ak-notatx">Qua vengono segnate le squadre a cui partecipi.</span>
+      </div>
+      <a class="ak-orma ak-sq" data-stampo="squadra" data-g="apri-squadra" href="#">
+        <div class="r1"><span class="ce">&#9737;</span><span class="chi"><span data-c="conto.dentro">[ n ]</span> persone</span><span class="dq"><span data-stato="ha-dal">dal <span data-c="squadra.dal">[ quando ]</span></span><span data-stato="squadra-senza-data" hidden>&mdash;</span></span></div>
+        <div class="ti" data-c="squadra.nome">[ la squadra ]</div>
+        <div class="so" data-c="squadra.progetto">[ il progetto ]</div>
+        <div class="pie"><span class="sd"><i></i><span data-c="squadra.stato">[ lo stato ]</span></span><span class="fr">&rsaquo;</span></div>
+        <div class="stanze"><span class="ak-stanza" data-stampo="stanza" data-c="stanza.elemento" style="--c:var(--terra)"><i></i><span data-c="stanza.nome">[ la stanza ]</span></span></div>
+      </a>
+    </div>
+
+    <!-- ⑧ STRUMENTI: un dato ciascuno -->
+    <div class="ak-pan ak-str" id="ak-p-strumenti">
+      <!-- Antahkarana: il dato è l'avatar colla sua lucentezza. ⛔ nessun numero -->
+      <a class="ak-strum" href="#antahkarana">
+        <span class="no"><span class="sg">&#10022;</span>Antahkarana</span>
+        <span style="display:flex;align-items:center;gap:.7rem;margin-top:auto"><span class="ak-avatar" data-c="persona.grado" data-grado="ospite" style="margin-top:0"><b data-c="persona.iniziale">g</b><img data-c="persona.foto_url" alt=""></span><span class="da" style="margin-top:0" data-c="persona.nome">[ il nome ]</span></span>
+        <span class="so" data-c="antahkarana.puntata">[ la prossima puntata ]</span>
+      </a>
+      <a class="ak-strum" href="#conti"><span class="no"><span class="sg">&euro;</span>Conti</span><span class="da"><span data-c="conto.entrate">[ entrate ]</span> &middot; <span data-c="conto.uscite">[ uscite ]</span></span><span class="so">aggiornato <span data-c="conto.aggiornato">[ quando ]</span></span></a>
+      <a class="ak-strum" href="#calendario"><span class="no"><span class="sg">&#9636;</span>Calendario</span><span class="da" data-c="calendario.data">[ la prossima data ]</span><span class="so" data-c="calendario.cosa">[ che cosa ]</span></a>
+      <a class="ak-strum" href="#rubrica"><span class="no"><span class="sg">&#9737;</span>Rubrica</span><span class="da" data-c="rubrica.contatto">[ l&rsquo;ultimo contatto ]</span><span class="so" data-c="rubrica.quando">[ quando ]</span></a>
+    </div>
+  </div>
+</div>
+<script>
+/* solo il passaggio fra le soglie e l'apertura del pannello «dove sei»: il resto lo fa il codice */
+document.querySelectorAll('.ak-sog').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.ak-sog').forEach(function(x){x.classList.toggle('on',x===b)});
+    document.querySelectorAll('.ak-pan').forEach(function(p){p.classList.toggle('on',p.id==='ak-p-'+b.dataset.s)});
+  });
+});
+document.querySelector('[data-g="apri-comune"]').addEventListener('click',function(){
+  var p=document.querySelector('[data-stato="comune-aperto"]'); p.hidden=!p.hidden; if(!p.hidden) p.querySelector('input').focus();
+});
+</script>
+</body>
+</html>

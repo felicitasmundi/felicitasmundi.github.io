@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L’Edizione</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#02040c}
+a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
+@keyframes ak-alza{from{opacity:0;transform:translateY(.5rem)}to{opacity:1;transform:none}}
+/* l-edizione · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--acqua:#4A88B8;--acqua-ch:#7FB4DC;--nexus:#8C2F39}
+[hidden]{display:none!important}
+.st{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));align-items:start;gap:2rem 3rem;padding:2rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+.st-cosmo{position:absolute;inset:0;z-index:0;pointer-events:none}
+.st-velo{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}
+.st-sx{position:sticky;top:2rem;z-index:1;display:grid;justify-items:center;gap:1.2rem;width:100%;justify-self:center}
+.st-giorno{display:flex;gap:.55rem;width:100%;max-width:24rem}
+.st-giorno>div{flex:1;border:1px solid rgba(184,150,62,.22);border-radius:.75rem;background:rgba(8,11,26,.4);padding:.65rem .5rem;text-align:center}
+.st-giorno b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:1rem;line-height:1.2;color:var(--oro)}
+.st-giorno b.luna{font-size:1.4rem}
+.st-giorno span{display:block;font-size:.84rem;color:rgba(245,240,230,.45);margin-top:.25rem}
+.st-cubo{position:relative;width:100%;max-width:min(24rem,58vh);aspect-ratio:1}
+.st-cubo .alone{position:absolute;inset:8%;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(74,136,184,.18),transparent 70%)}
+.st-cubo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.st-solido{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--acqua-ch);text-align:center;margin-top:-.4rem}
+.st-tasto{min-height:3.5rem;min-width:16rem;padding:.7rem 1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.45);background:rgba(8,11,26,.5);color:var(--ivory);text-decoration:none;font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.1em;line-height:1.3;display:flex;align-items:center;justify-content:space-between;gap:.6rem;transition:border-color .3s,background .3s}
+.st-tasto:hover{border-color:var(--oro);background:rgba(212,175,106,.1);color:var(--ivory)}
+.st-tasto svg{flex:none;width:1.5rem;height:1.5rem}
+.st-dx{position:relative;z-index:1;display:flex;flex-direction:column;gap:1.3rem;max-width:34rem;width:100%;min-width:0;justify-self:start}
+.st-capo{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.4rem}
+.st-capo h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:.06em;color:var(--ivory)}
+.st-occ{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acqua-ch)}
+
+.st-fam{position:relative;display:flex;flex-direction:column;gap:.35rem;min-height:5.5rem;padding:1rem 1rem .9rem;border-radius:.9rem;border:1px solid color-mix(in srgb,var(--c) 33%,transparent);border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);color:inherit;text-align:left;cursor:pointer;font:inherit;transition:border-color .3s,background .3s}
+.st-fam:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.st-fam b{font-family:'Cinzel',serif;font-weight:400;font-size:1rem;line-height:1.3;color:var(--ivory)}
+.st-fam span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.4;color:rgba(245,240,230,.65)}
+.st-sez{display:flex;align-items:center;gap:.7rem}
+.st-sez b{font-family:'Cinzel',serif;font-weight:400;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.85);white-space:nowrap}
+.st-sez i{flex:1;height:1px;background:rgba(212,175,106,.25)}
+.st-sez span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.45)}
+.st-opera{display:grid;grid-template-columns:4.2rem minmax(0,1fr) auto;gap:.9rem;align-items:center;padding:.6rem .8rem .6rem .6rem;border-radius:.9rem;border:1px solid rgba(102,153,68,.22);border-left:3px solid rgba(102,153,68,.65);background:rgba(102,153,68,.07);color:inherit;text-decoration:none}
+.st-opera:hover{background:rgba(245,240,230,.05);color:inherit}
+.st-opera .cop{position:relative;width:4.2rem;height:5.6rem;border-radius:.4rem;overflow:hidden;background:rgba(8,11,26,.6);border:1px solid rgba(245,240,230,.1);display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.8rem;color:rgba(245,240,230,.4)}
+.st-opera .cop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.st-opera .cop img:not([src]),.st-opera .cop img[src=""]{display:none}
+.st-opera .tx{min-width:0;display:flex;flex-direction:column;gap:.2rem}
+.st-opera .occ{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:#A6D07E}
+.st-opera .ti{font-family:'Cormorant Garamond',serif;font-size:1.35rem;line-height:1.25;color:var(--ivory)}
+.st-opera .chi{font-size:.95rem;color:rgba(245,240,230,.7)}
+.st-opera .dx{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;text-align:right}
+.st-opera .prezzo{font-family:'Cinzel',serif;font-size:1.05rem}
+.st-opera .gesto{border:0;background:transparent;padding:0;cursor:pointer;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#A6D07E}
+.st-pezzo{display:flex;flex-direction:column;gap:.5rem;padding:.9rem 1rem;border-radius:.8rem;border:1px solid rgba(102,153,68,.2);background:rgba(8,11,26,.4)}
+.st-pezzo .occ{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.7)}
+.st-pezzo b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.25rem;color:var(--ivory)}
+.st-pezzo p{margin:0;font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.45;color:rgba(245,240,230,.8)}
+.st-pezzo img{width:100%;border-radius:.5rem;display:block}
+.st-pezzo img:not([src]),.st-pezzo img[src=""]{display:none}
+.st-pezzo .did{font-size:.85rem;color:rgba(245,240,230,.5)}
+.st-torna{min-height:2.75rem;padding:0 .9rem 0 .5rem;border-radius:999px;border:1px solid rgba(212,175,106,.35);background:transparent;color:var(--oro);cursor:pointer;font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.1em;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;align-self:flex-start}
+.st-torna svg{width:1.2rem;height:1.2rem}
+.st-compra{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.8rem 1rem;border-radius:.9rem;border:1px solid rgba(102,153,68,.3);background:rgba(8,11,26,.5)}
+.st-compra .prezzo{font-family:'Cinzel',serif;font-size:1.4rem}
+.st-compra .b{min-height:2.75rem;padding:0 1.3rem;border-radius:999px;border:1px solid rgba(102,153,68,.9);background:rgba(102,153,68,.3);color:var(--ivory);cursor:pointer;font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase}
+.st-cuore{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;line-height:1.45;color:rgba(245,240,230,.85);padding:.9rem 1.1rem;border-left:2px solid rgba(102,153,68,.6);background:rgba(102,153,68,.06);border-radius:0 .8rem .8rem 0}
+.st-cubo .alone{background:radial-gradient(circle at 50% 50%,rgba(102,153,68,.18),transparent 70%)}
+.st-solido,.st-occ{color:#A6D07E}
+.st-autunno{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;line-height:1.4;color:rgba(245,240,230,.8);padding:.8rem 1rem;border:1px dashed rgba(212,175,106,.45);border-radius:.8rem;background:rgba(212,175,106,.05);animation:ak-alza .4s ease both}
+</style>
+<script src="./ak-cosmo.js"></script>
+<script src="./ak-solido.js"></script>
+
+</head>
+<body>
+<div class="st" data-screen-label="L'Edizione">
+  <ak-cosmo class="st-cosmo" aria-hidden="true"></ak-cosmo>
+  <div class="st-velo" aria-hidden="true"></div>
+  <div class="st-sx">
+    <div class="st-giorno">
+      <div><b data-c="giorno.data">[ giorno ] [ mese ]</b><span>il giorno</span></div>
+      <div><b class="luna">&#127761;</b><span data-c="giorno.luna">[ la luna ]</span></div>
+      <div><b data-c="giorno.santo">[ il santo ]</b><span>il santo</span></div>
+    </div>
+    <div class="st-cubo"><div class="alone"></div>
+      <svg viewBox="-128 -128 256 256" aria-hidden="true">
+        <g fill="none" stroke="#D4AF6A" stroke-linejoin="round">
+          <g stroke-width=".7" opacity=".34">
+            <line x1="0" y1="0" x2="0" y2="-46"></line><line x1="0" y1="0" x2="39.84" y2="-23"></line><line x1="0" y1="0" x2="39.84" y2="23"></line><line x1="0" y1="0" x2="0" y2="46"></line><line x1="0" y1="0" x2="-39.84" y2="23"></line><line x1="0" y1="0" x2="-39.84" y2="-23"></line><line x1="0" y1="0" x2="0" y2="-92"></line><line x1="0" y1="0" x2="79.67" y2="-46"></line><line x1="0" y1="0" x2="79.67" y2="46"></line><line x1="0" y1="0" x2="0" y2="92"></line><line x1="0" y1="0" x2="-79.67" y2="46"></line><line x1="0" y1="0" x2="-79.67" y2="-46"></line><line x1="0" y1="-46" x2="39.84" y2="-23"></line><line x1="0" y1="-46" x2="39.84" y2="23"></line><line x1="0" y1="-46" x2="0" y2="46"></line><line x1="0" y1="-46" x2="-39.84" y2="23"></line><line x1="0" y1="-46" x2="-39.84" y2="-23"></line><line x1="0" y1="-46" x2="0" y2="-92"></line><line x1="0" y1="-46" x2="79.67" y2="-46"></line><line x1="0" y1="-46" x2="79.67" y2="46"></line><line x1="0" y1="-46" x2="0" y2="92"></line><line x1="0" y1="-46" x2="-79.67" y2="46"></line><line x1="0" y1="-46" x2="-79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="39.84" y2="23"></line><line x1="39.84" y1="-23" x2="0" y2="46"></line><line x1="39.84" y1="-23" x2="-39.84" y2="23"></line><line x1="39.84" y1="-23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="-23" x2="0" y2="-92"></line><line x1="39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="79.67" y2="46"></line><line x1="39.84" y1="-23" x2="0" y2="92"></line><line x1="39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="39.84" y1="23" x2="0" y2="46"></line><line x1="39.84" y1="23" x2="-39.84" y2="23"></line><line x1="39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="23" x2="0" y2="-92"></line><line x1="39.84" y1="23" x2="79.67" y2="-46"></line><line x1="39.84" y1="23" x2="79.67" y2="46"></line><line x1="39.84" y1="23" x2="0" y2="92"></line><line x1="39.84" y1="23" x2="-79.67" y2="46"></line><line x1="39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="0" y1="46" x2="-39.84" y2="23"></line><line x1="0" y1="46" x2="-39.84" y2="-23"></line><line x1="0" y1="46" x2="0" y2="-92"></line><line x1="0" y1="46" x2="79.67" y2="-46"></line><line x1="0" y1="46" x2="79.67" y2="46"></line><line x1="0" y1="46" x2="0" y2="92"></line><line x1="0" y1="46" x2="-79.67" y2="46"></line><line x1="0" y1="46" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="-39.84" y1="23" x2="0" y2="-92"></line><line x1="-39.84" y1="23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="79.67" y2="46"></line><line x1="-39.84" y1="23" x2="0" y2="92"></line><line x1="-39.84" y1="23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="0" y2="-92"></line><line x1="-39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="0" y2="92"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="46"></line><line x1="0" y1="-92" x2="0" y2="92"></line><line x1="0" y1="-92" x2="-79.67" y2="46"></line><line x1="0" y1="-92" x2="-79.67" y2="-46"></line><line x1="79.67" y1="-46" x2="79.67" y2="46"></line><line x1="79.67" y1="-46" x2="0" y2="92"></line><line x1="79.67" y1="-46" x2="-79.67" y2="46"></line><line x1="79.67" y1="-46" x2="-79.67" y2="-46"></line><line x1="79.67" y1="46" x2="0" y2="92"></line><line x1="79.67" y1="46" x2="-79.67" y2="46"></line><line x1="79.67" y1="46" x2="-79.67" y2="-46"></line><line x1="0" y1="92" x2="-79.67" y2="46"></line><line x1="0" y1="92" x2="-79.67" y2="-46"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46"></line>
+          </g>
+          <g stroke-width="1" opacity=".3" stroke="#C9A6E0">
+            <circle cx="0" cy="0" r="23"></circle><circle cx="0" cy="-46" r="23"></circle><circle cx="39.84" cy="-23" r="23"></circle><circle cx="39.84" cy="23" r="23"></circle><circle cx="0" cy="46" r="23"></circle><circle cx="-39.84" cy="23" r="23"></circle><circle cx="-39.84" cy="-23" r="23"></circle><circle cx="0" cy="-92" r="23"></circle><circle cx="79.67" cy="-46" r="23"></circle><circle cx="79.67" cy="46" r="23"></circle><circle cx="0" cy="92" r="23"></circle><circle cx="-79.67" cy="46" r="23"></circle><circle cx="-79.67" cy="-46" r="23"></circle>
+          </g>
+          <circle r="115" stroke-width="1" opacity=".5"></circle>
+          <rect x="-115" y="-115" width="230" height="230" stroke-width=".8" stroke-dasharray="3 3.6" opacity=".34"></rect>
+        </g>
+      </svg>
+      <ak-solido tipo="ottaedro" colore="#669944" aria-hidden="true"></ak-solido>
+    </div>
+    <div class="st-solido">ottaedro &middot; aria</div>
+    <a class="st-tasto" data-g="invita" href="#invito"><span>invita chi scrive</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D4AF6A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="M13 5l7 7-7 7"></path></svg></a>
+  </div>
+
+  <div class="st-dx">
+    <!-- ① la stanza: le opere pubblicate, e le famiglie della stampa -->
+    <div data-stato="elenco" style="display:contents">
+      <div class="st-capo"><h1>L&rsquo;Edizione</h1><div class="st-occ">aria</div></div>
+      <div class="st-cuore" style="font-size:1.3rem">quello che fai, stampato e portato dove serve</div>
+
+      <div class="st-sez"><b>le opere</b><i></i><span><span data-c="conto.opere">[ n ]</span> pubblicate</span></div>
+      <div class="st-vuoto" data-stato="senza-opere" hidden>[ nessuna opera ancora ]</div>
+      <a class="st-opera" data-stampo="opera" data-g="apri-opera" href="#">
+        <span class="cop"><span data-stato="senza-copertina">[ copertina ]</span><img data-c="opera.copertina" alt=""></span>
+        <span class="tx"><span class="occ" data-c="opera.genere">[ il genere ]</span><span class="ti" data-c="opera.titolo">[ l&rsquo;opera ]</span><span class="chi"><span data-c="persona.nome">[ chi scrive ]</span> &middot; <span data-c="opera.pubblicata_il">[ quando ]</span></span></span>
+        <span class="dx"><span class="prezzo" data-stato="si-compra" data-c="opera.prezzo">[ prezzo ]</span><button type="button" class="gesto" data-g="vendi" data-stato="si-compra">vendi</button><span class="gesto" data-stato="dono" hidden>in dono</span></span>
+      </a>
+
+      <div class="st-sez" style="margin-top:.6rem"><b>stampa</b><i></i><span>e ti arriva a casa</span></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.5;color:rgba(245,240,230,.75);text-wrap:pretty;margin-top:-.6rem">Oltre alla stampa proponiamo supporti per l&rsquo;esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</div>
+      <!-- le otto famiglie sono fisse: aprono il configuratore, dentro un'orma nuova -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.7rem">
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="carta" style="--c:#669944"><b>Carta stampata</b><span>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="libri" style="--c:#669944"><b>Libri e cataloghi</b><span>libri, riviste, cataloghi, fascicoli</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="agende" style="--c:#AA8844"><b>Agende e calendari</b><span>agende, calendari, quaderni e taccuini</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="fiere" style="--c:#CC6644"><b>Esposizione e fiere</b><span>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="confezioni" style="--c:#AA8844"><b>Confezioni e imballaggi</b><span>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="gadget" style="--c:#4488BB"><b>Gadget e regali</b><span>penne, cordini, portabadge, borse, borracce</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="abiti" style="--c:#4488BB"><b>Abbigliamento</b><span>magliette, felpe, tessuti personalizzati</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="servizi" style="--c:#B87333"><b>I servizi</b><span>grafica, impaginazione, correzione, consegna</span></button>
+      </div>
+      <div class="st-autunno" data-stato="in-autunno" hidden>La stampa si attiva durante l&rsquo;autunno.</div>
+    </div>
+
+    <!-- ② l'opera aperta: i suoi pezzi -->
+    <div data-stato="opera" hidden style="display:contents">
+      <a class="st-torna" data-g="chiudi" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H5"></path><path d="M11 5l-7 7 7 7"></path></svg>l&rsquo;Edizione</a>
+      <div class="st-opera" style="grid-template-columns:7rem minmax(0,1fr);background:transparent;border:0;padding:0">
+        <span class="cop" style="width:7rem;height:9.5rem"><span data-stato="senza-copertina">[ copertina ]</span><img data-c="opera.copertina" alt=""></span>
+        <span class="tx"><span class="occ" data-c="opera.occhiello">[ l&rsquo;occhiello ]</span><h1 style="margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.5rem,2.6vw,2rem);line-height:1.15;letter-spacing:.04em" data-c="opera.titolo">[ l&rsquo;opera ]</h1><span class="chi"><a data-c="persona.nome_url" href="#" style="color:inherit"><span data-c="persona.nome">[ chi scrive ]</span></a> &middot; <span data-c="opera.genere">[ genere ]</span></span><span class="chi" style="font-size:.85rem;color:rgba(245,240,230,.5)">ISBN <span data-c="opera.isbn">[ isbn ]</span> &middot; <span data-c="opera.stato">[ stato ]</span> &middot; <span data-c="opera.pubblicata_il">[ quando ]</span></span></span>
+      </div>
+      <div class="st-cuore" data-c="opera.racconto">[ il racconto ]</div>
+      <div class="st-sez"><b>i pezzi</b><i></i><span data-c="conto.pezzi">[ n ]</span></div>
+      <div class="st-pezzo" data-stampo="pezzo">
+        <span class="occ" data-c="pezzo.tipo">[ il tipo ]</span>
+        <b data-c="pezzo.titolo">[ il pezzo ]</b>
+        <img data-c="pezzo.immagine" alt="">
+        <span class="did" data-stato="ha-didascalia" data-c="pezzo.didascalia" hidden>[ la didascalia ]</span>
+        <p data-c="pezzo.contenuto">[ il contenuto ]</p>
+      </div>
+      <div class="st-compra">
+        <span class="prezzo" data-stato="si-compra" data-c="opera.prezzo">[ prezzo ]</span>
+        <span class="prezzo" data-stato="dono" hidden style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,230,.75)">in dono</span>
+        <button type="button" class="b" data-g="vendi" data-stato="si-compra">vendi</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+/* solo per vedere: toccando una famiglia si accende la riga dell'autunno */
+document.querySelectorAll('[data-g="scegli-famiglia"]').forEach(function(b){b.onclick=function(){document.querySelector('[data-stato="in-autunno"]').hidden=false}});
+</script>
+</body>
+</html>
