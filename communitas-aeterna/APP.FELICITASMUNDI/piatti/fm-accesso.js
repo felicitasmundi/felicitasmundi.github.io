@@ -60,8 +60,13 @@
   function perche(err) {
     var m = String((err && (err.message || err.error_description)) || "").toLowerCase();
     var n = (err && err.status) || 0;
-    if (n === 429 || m.indexOf("rate limit") >= 0 || m.indexOf("too many") >= 0)
-      return "Troppe richieste in poco tempo: aspetta qualche minuto e riprova.";
+    if (n === 429 || m.indexOf("rate limit") >= 0 || m.indexOf("too many") >= 0 ||
+        m.indexOf("security purposes") >= 0) {
+      /* ⭐ Supabase dice quanti secondi mancano: si riportano */
+      var s = m.match(/after (\d+) second/);
+      return s ? "Un altro codice fra " + s[1] + " secondi: \u00e8 una pausa di sicurezza."
+               : "Aspetta un minuto prima di chiederne un altro.";
+    }
     if (m.indexOf("invalid") >= 0 && m.indexOf("email") >= 0)
       return "Quella mail non sembra valida: controllala.";
     if (m.indexOf("signups not allowed") >= 0 || m.indexOf("disabled") >= 0)
@@ -72,13 +77,32 @@
     return "Il codice non \u00e8 partito" + (m ? " (" + m.slice(0, 80) + ")" : "") + ".";
   }
 
+  /* ⭐ la sessione, se c'è. Chi arriva dal collegamento della mail porta il
+     gettone nell'indirizzo: Supabase lo raccoglie, ma non all'istante —
+     si guarda due volte, a un quarto di secondo di distanza. */
+  async function sessioneViva() {
+    for (var i = 0; i < 8; i++) {
+      try {
+        var s = await db.auth.getSession();
+        if (s && s.data && s.data.session) return true;
+      } catch (e) {}
+      /* se nell'indirizzo non c'è nessun gettone, non c'è niente da aspettare */
+      if (i === 0 && !/access_token|[?&]code=|type=magiclink|token_hash/.test(
+            location.hash + location.search)) return false;
+      await new Promise(function (ok) { setTimeout(ok, 250); });
+    }
+    return false;
+  }
+
   /* ⭐ perché il codice non torna: le ragioni sono diverse, e si dicono */
   function percheCodice(err) {
     var m = String((err && (err.message || err.error_description)) || "").toLowerCase();
     if (m.indexOf("expired") >= 0)
       return "Quel codice \u00e8 scaduto: vale quindici minuti. Fattene mandare un altro.";
     if (m.indexOf("invalid") >= 0 || m.indexOf("not found") >= 0)
-      return "Quel codice non vale pi\u00f9. Se ne hai chiesti due, vale solo l\u2019ultimo arrivato.";
+      return "Quel codice non vale pi\u00f9: si spende una volta sola. " +
+             "Se hai gi\u00e0 toccato il collegamento nella mail, sei entrato l\u00ec. " +
+             "Fattene mandare un altro.";
     if (m.indexOf("rate") >= 0 || (err && err.status === 429))
       return "Troppi tentativi: aspetta qualche minuto.";
     if (!navigator.onLine) return "Il telefono non \u00e8 in rete.";
@@ -154,6 +178,22 @@
       } catch (e) {}
     }
 
+    /* ⭐ CHI ARRIVA DAL COLLEGAMENTO DELLA MAIL è già entrato: Supabase
+       raccoglie il gettone dall'indirizzo e apre la sessione da sé. La
+       pagina non deve rifargli scrivere niente — prosegue il giro.
+       ⚠️ La sessione non compare all'istante: si aspetta un momento. */
+    var seiGiaDentro = await sessioneViva();
+    if (seiGiaDentro) {
+      if (invito) {
+        try {
+          var pi = {}; pi[INVITO_P] = invito;
+          await db.rpc("fm_accetta_invito", pi);
+        } catch (e3) { console.warn("invito:", e3); }
+      }
+      if (!(await pattoFatto())) P.stato(R, "patto", true);
+      else { await dentro(R, torna); return; }
+    }
+
     /* ── manda il codice ── */
     P.gesto(R, "manda-codice", async function (e, b) {
       var email = vale(R, "accesso.email"),
@@ -169,7 +209,14 @@
       try {
         var r = await db.auth.signInWithOtp({
           email: email,
-          options: { shouldCreateUser: true, data: { nome: nome, cognome: cognome } }
+          options: {
+            shouldCreateUser: true,
+            data: { nome: nome, cognome: cognome },
+            /* ⭐ se qualcuno tocca il collegamento nella mail, torna QUI —
+               non alla casa. ⛔ E quel collegamento BRUCIA il codice: è lo
+               stesso gettone, si spende una volta sola. */
+            emailRedirectTo: location.href
+          }
         });
         if (r.error) throw r.error;
         P.riempi(R, { accesso: { email: email } });
