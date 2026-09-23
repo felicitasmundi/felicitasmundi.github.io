@@ -13,7 +13,7 @@
    COSA FA COI BUCHI, a seconda di cosa sono:
      <img>              → cambia l'immagine; se manca, la toglie
                           (e il disegno mostra l'iniziale)
-     <a>                → cambia dove porta
+     <a href=…>        → cambia DOVE PORTA, mai il testo
      <input>, <textarea>→ cambia il valore scritto dentro
      campo «elemento»   → cambia il COLORE, non scrive la parola:
                           --c:var(--terra) o color:var(--terra),
@@ -100,8 +100,11 @@
       if (v) el.setAttribute("src", v); else el.removeAttribute("src");
       return;
     }
-    if (tag === "A" && /^(https?:|#|\?|\/)/.test(String(v || ""))) {
-      el.setAttribute("href", v);
+    /* ⭐ un collegamento che ha già un indirizzo: si cambia l'indirizzo,
+       mai il testo — vale anche per «condizioni.html», che non comincia
+       né con http né con la sbarra */
+    if (tag === "A" && el.hasAttribute("href")) {
+      if (v) el.setAttribute("href", v);
       return;
     }
     /* ⛔ un buco che contiene altri pezzi non si svuota MAI: su un
@@ -199,9 +202,24 @@
     document.head.appendChild(s);
   }
   /* #centro scrolla: si misura il box, e il piatto scrolla dentro */
+  /* ⭐ L'ALTEZZA DELLA FINESTRA.
+     Prima si prendeva quella del contenitore, e basta. ⛔ Ma sul telefono
+     il contenitore può valere ZERO nel momento in cui si monta — e allora
+     la finestra è alta zero e non si vede niente, pur essendo caricata.
+     Adesso si prende la più grande fra due: quella del contenitore e
+     QUELLA DEL CONTENUTO. Così la pagina si vede sempre, e cresce da sé
+     quando cresce dentro — che è quello che serve al Megafono. */
   function fmpAltezza(box, f) {
-    var h = box.clientHeight;
-    if (h > 0) f.style.height = h + "px";
+    var dentro = 0;
+    try {
+      var d = f.contentDocument;
+      if (d && d.body) dentro = Math.max(d.body.scrollHeight || 0,
+                                         (d.documentElement && d.documentElement.scrollHeight) || 0);
+    } catch (e) {}
+    var h = Math.max(box.clientHeight || 0, dentro);
+    /* ⛔ se ancora non si sa niente, meglio una finestra piena che una invisibile */
+    if (!h) h = Math.max(320, (window.innerHeight || 640) - 160);
+    f.style.height = h + "px";
   }
   /* un <a href> dentro la finestra la porterebbe via: si frena la fuga.
      I tasti veri li collega il codice delle pagine. */
@@ -246,6 +264,17 @@
         catch (e) { rifiuta(e); return; }
         if (!doc) { rifiuta(new Error("FMPiatto: la pagina non è leggibile")); return; }
         fmpFrenaLink(doc);
+        fmpAltezza(box, f);
+        /* ⭐ e si resta a guardare: se il contenuto cresce — un pannello che
+           si apre, una fila che si allunga — la finestra cresce con lui */
+        try {
+          if (window.ResizeObserver && doc.body) {
+            var ro2 = new ResizeObserver(function () { if (!chiuso) fmpAltezza(box, f); });
+            ro2.observe(doc.body);
+            var prima = f._fmpChiudi;
+            f._fmpChiudi = function () { ro2.disconnect(); prima(); };
+          }
+        } catch (e) {}
         risolvi(doc);
       });
       f.addEventListener("error", function () {
