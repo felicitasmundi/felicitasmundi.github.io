@@ -159,9 +159,14 @@
 
     var invito = param("invito"), torna = param("torna");
 
-    /* ⛔ il tasto «entra» è type=submit dentro un <form>: il primo clic
-       prova a inviare il modulo invece di eseguire il gesto. Si ferma
-       l'invio a monte, così il primo clic vale. */
+    /* ⛔ IL TASTO «entra» è type="submit" dentro un <form> con
+       onsubmit="return false": premendo, il browser tenta l'invio del
+       form, che viene annullato — e col form si annulla anche il click,
+       così il gesto non parte MAI (in Rete non compare verify). La cura:
+       togliere "submit" a quel tasto, farne un bottone normale. Da qui,
+       senza toccare la pagina di Design. */
+    Array.prototype.forEach.call(R.querySelectorAll('button[type="submit"]'),
+      function (b) { b.setAttribute("type", "button"); });
     Array.prototype.forEach.call(R.querySelectorAll("form"), function (f) {
       f.addEventListener("submit", function (e) { e.preventDefault(); });
     });
