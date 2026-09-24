@@ -159,6 +159,13 @@
 
     var invito = param("invito"), torna = param("torna");
 
+    /* ⛔ il tasto «entra» è type=submit dentro un <form>: il primo clic
+       prova a inviare il modulo invece di eseguire il gesto. Si ferma
+       l'invio a monte, così il primo clic vale. */
+    Array.prototype.forEach.call(R.querySelectorAll("form"), function (f) {
+      f.addEventListener("submit", function (e) { e.preventDefault(); });
+    });
+
     /* ⭐ i tre collegamenti del patto: le pagine vere della casa */
     P.riempi(R, { patto: { condizioni: "condizioni.html", privacy: "privacy.html",
                            cookie: "cookie.html" } });
@@ -259,16 +266,11 @@
       b.disabled = true;
       var era = b.textContent; b.textContent = "un momento\u2026";
       try {
-        /* ⭐ il codice si verifica di due tipi: "email" per chi torna,
-           "signup" per chi entra la prima volta e deve confermare la mail.
-           Si prova il primo; se lo rifiuta, si prova il secondo. Così
-           l'ingresso funziona con o senza «Confirm email» acceso. */
+        /* ⭐ un solo tipo: "email". I tipi "signup" e "magiclink" sono
+           deprecati da Supabase e danno 403. Il codice a sei cifre si
+           verifica sempre come "email". */
         var r = await db.auth.verifyOtp({ email: email, token: codice, type: "email" });
-        if (r.error) {
-          var r2 = await db.auth.verifyOtp({ email: email, token: codice, type: "signup" });
-          if (r2.error) throw r.error;   /* si riporta il primo errore, più chiaro */
-          r = r2;
-        }
+        if (r.error) throw r.error;
         if (invito) {
           try {
             var p = {}; p[INVITO_P] = invito;
