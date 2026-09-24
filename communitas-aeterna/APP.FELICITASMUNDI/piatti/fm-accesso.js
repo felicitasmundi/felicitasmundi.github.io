@@ -232,7 +232,7 @@
           await db.rpc("fm_accetta_invito", pi);
         } catch (e3) { console.warn("invito:", e3); }
       }
-      if (!(await pattoFatto())) P.stato(R, "patto", true);
+      if (!(await pattoFatto())) { P.stato(R, "patto", true); P.stato(R, "accesso", false); }
       else { await dentro(R, torna); return; }
     }
 
@@ -331,7 +331,7 @@
         dico("patto letto: " + (haPatto ? "gi\u00e0 accettato" : "da accettare"));
         if (!haPatto) {
           dico("mostro «Prima di entrare»");
-          P.stato(R, "patto", true);
+          P.stato(R, "patto", true); P.stato(R, "accesso", false);
           b.textContent = era; b.disabled = false;
           return;
         }
