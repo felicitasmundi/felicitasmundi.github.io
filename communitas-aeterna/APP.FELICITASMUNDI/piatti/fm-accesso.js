@@ -77,6 +77,18 @@
     var el = R.querySelector('[data-c="' + nome + '"]');
     return el ? String(el.value || "").trim() : "";
   }
+  /* ⭐ spegne una schermata per davvero: hidden da solo può essere
+     battuto da display:flex nel CSS. Si aggiunge display:none inline,
+     che nessuna regola CSS può superare. */
+  function spegni(R, nome) {
+    Array.prototype.forEach.call(R.querySelectorAll('[data-stato="' + nome + '"]'),
+      function (el) { el.hidden = true; el.style.display = "none"; });
+  }
+  function accendi(R, nome) {
+    Array.prototype.forEach.call(R.querySelectorAll('[data-stato="' + nome + '"]'),
+      function (el) { el.hidden = false; el.style.removeProperty("display"); });
+  }
+
   function errore(R, t) {
     var el = R.querySelector('[data-stato="errore"]');
     if (el) { el.textContent = t || ""; el.hidden = !t; }
@@ -232,7 +244,7 @@
           await db.rpc("fm_accetta_invito", pi);
         } catch (e3) { console.warn("invito:", e3); }
       }
-      if (!(await pattoFatto())) { P.stato(R, "patto", true); P.stato(R, "accesso", false); }
+      if (!(await pattoFatto())) { spegni(R, "accesso"); accendi(R, "patto"); }
       else { await dentro(R, torna); return; }
     }
 
@@ -331,7 +343,7 @@
         dico("patto letto: " + (haPatto ? "gi\u00e0 accettato" : "da accettare"));
         if (!haPatto) {
           dico("mostro «Prima di entrare»");
-          P.stato(R, "patto", true); P.stato(R, "accesso", false);
+          spegni(R, "accesso"); accendi(R, "patto");
           b.textContent = era; b.disabled = false;
           return;
         }
