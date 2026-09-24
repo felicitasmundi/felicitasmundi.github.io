@@ -266,27 +266,35 @@
       b.disabled = true;
       var era = b.textContent; b.textContent = "un momento\u2026";
       try {
-        /* ⭐ un solo tipo: "email". I tipi "signup" e "magiclink" sono
-           deprecati da Supabase e danno 403. Il codice a sei cifre si
-           verifica sempre come "email". */
         var r = await db.auth.verifyOtp({ email: email, token: codice, type: "email" });
         if (r.error) throw r.error;
+        /* ⭐ il codice è passato (verify 200). Da qui in poi, se qualcosa
+           va storto NON è «scaduto»: si mostra l'errore vero, così si vede
+           dov'è invece di dare la colpa al codice. */
         if (invito) {
           try {
             var p = {}; p[INVITO_P] = invito;
             await db.rpc("fm_accetta_invito", p);
           } catch (e2) { console.warn("invito:", e2); }
         }
-        /* ⭐ prima il patto, poi il bivio */
-        if (!(await pattoFatto())) {
+        var haPatto;
+        try { haPatto = await pattoFatto(); }
+        catch (ep) { errore(R, "dopo l'ingresso, non riesco a leggere il patto (" +
+                     String(ep && ep.message || ep).slice(0,90) + ")");
+                     b.textContent = era; b.disabled = false; return; }
+        if (!haPatto) {
           P.stato(R, "patto", true);
           b.textContent = era; b.disabled = false;
           return;
         }
-        await dentro(R, torna);
+        try { await dentro(R, torna); }
+        catch (ed) { errore(R, "sei entrato, ma non riesco a proseguire (" +
+                     String(ed && ed.message || ed).slice(0,90) + ")");
+                     b.textContent = era; b.disabled = false; }
       } catch (err) {
+        /* solo QUI è davvero il verify del codice */
         errore(R, percheCodice(err));
-        console.warn("accesso:", err);
+        console.warn("accesso verify:", err);
         b.textContent = era; b.disabled = false;
       }
     });
