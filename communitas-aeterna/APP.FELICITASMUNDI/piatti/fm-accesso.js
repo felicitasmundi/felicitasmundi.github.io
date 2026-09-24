@@ -47,6 +47,28 @@
 
   var F = function () { return window.FMPiatto; };
 
+  /* ⭐ L'OCCHIO: un pannello in fondo che racconta cosa succede, sullo
+     schermo, in chiaro. Nessuna Console. Si vede dove la catena si ferma.
+     Si toglie cambiando SPIA a false quando l'accesso funziona. */
+  var SPIA = true;
+  function dico(t) {
+    if (!SPIA) return;
+    try {
+      var box = document.getElementById("fm-spia");
+      if (!box) {
+        box = document.createElement("div");
+        box.id = "fm-spia";
+        box.style.cssText = "position:fixed;left:0;right:0;bottom:0;z-index:99999;" +
+          "background:#02040c;color:#7FB4DC;font:12px/1.5 monospace;padding:8px 12px;" +
+          "max-height:38vh;overflow:auto;border-top:1px solid #D4AF6A;white-space:pre-wrap";
+        document.body.appendChild(box);
+      }
+      var ora = new Date().toLocaleTimeString();
+      box.textContent += "\n" + ora + "  " + t;
+      box.scrollTop = box.scrollHeight;
+    } catch (e) {}
+  }
+
   function param(n) {
     try { return new URLSearchParams(location.search).get(n) || ""; }
     catch (e) { return ""; }
@@ -151,7 +173,12 @@
 
   /* dopo il patto: chi non ha talenti va alla soglia */
   async function dentro(R, torna) {
-    location.href = torna || (await primaVolta() ? SOGLIA : ORME);
+    var prima = await primaVolta();
+    var dove = torna || (prima ? SOGLIA : ORME);
+    dico("salto verso: " + dove);
+    location.href = dove;
+    /* ⛔ se dopo un istante siamo ancora qui, il salto è stato bloccato */
+    setTimeout(function () { dico("\u26a0 ancora qui: il salto non \u00e8 partito"); }, 700);
   }
 
   async function accesso(dove) {
@@ -275,23 +302,35 @@
       b.disabled = true;
       var era = b.textContent; b.textContent = "un momento\u2026";
       try {
+        dico("premuto entra, verifico il codice \u2026");
         var r = await db.auth.verifyOtp({ email: email, token: codice, type: "email" });
         if (r.error) throw r.error;
+        dico("\u2713 codice accettato (verify ok)");
         /* ⭐ il codice è passato (verify 200). Da qui in poi, se qualcosa
            va storto NON è «scaduto»: si mostra l'errore vero, così si vede
            dov'è invece di dare la colpa al codice. */
         if (invito) {
+          dico("accetto l'invito \u2026");
           try {
             var p = {}; p[INVITO_P] = invito;
-            await db.rpc("fm_accetta_invito", p);
-          } catch (e2) { console.warn("invito:", e2); }
+            /* ⛔ l'invito non deve appendere l'ingresso: se non risponde
+               entro 4 secondi, si prosegue lo stesso */
+            await Promise.race([
+              db.rpc("fm_accetta_invito", p),
+              new Promise(function (ok) { setTimeout(ok, 4000); })
+            ]);
+            dico("invito fatto (o saltato)");
+          } catch (e2) { dico("invito non riuscito, proseguo"); console.warn("invito:", e2); }
         }
+        dico("leggo il patto \u2026");
         var haPatto;
         try { haPatto = await pattoFatto(); }
         catch (ep) { errore(R, "dopo l'ingresso, non riesco a leggere il patto (" +
                      String(ep && ep.message || ep).slice(0,90) + ")");
                      b.textContent = era; b.disabled = false; return; }
+        dico("patto letto: " + (haPatto ? "gi\u00e0 accettato" : "da accettare"));
         if (!haPatto) {
+          dico("mostro «Prima di entrare»");
           P.stato(R, "patto", true);
           b.textContent = era; b.disabled = false;
           return;
