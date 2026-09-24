@@ -4128,7 +4128,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var NEXUS_IMG   = "nexus.png";   /* ⭐ il file accanto: WordPress non si sveglia */
   var MARCHIO_IMG = "FM_sigillo_corniceoro_HR.png";
-  var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" } });
 
   var io=null, permessi=[], scelta=null, nomi={}, vista="spazio", stanza="sviluppo";
   /* quale voce del ramo è accesa: `sottoRichiesta` la porta dentro a vai() */

@@ -18,7 +18,7 @@
      fm-accesso.js legge `db` da qui (globale, come ogni fm-*.js). */
   var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
   var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
-  var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" } });
 </script>
 
 <!-- ⭐ 23 settembre — ACCESSO come guscio minimo del piatto (ordine di Gab).
