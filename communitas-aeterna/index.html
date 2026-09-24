@@ -4068,7 +4068,7 @@
 </div>
 
 <script src="fm-incontro.js"></script>
-<script src="fm-edizione.js"></script>
+<!-- ⭐ TOCCATO NEL GUSCIO 56 — fm-edizione.js (vecchio) TOLTO: la stanza Edizione passa al piatto (piatti/fm-edizione.js, sotto) -->
 <script src="fm-consolle.js"></script>
 <script src="fm-account.js"></script>
 <script src="fm-account-mio.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Il tuo account» dal piede della barra: SpazioVivo.account(dove). I cinque pannelli del 7 agosto restano in fm-account.js -->
@@ -4095,13 +4095,21 @@
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
-<script src="fm-invito.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Invita chi risuona»: SpazioVivo.invito(), finestra, non rotta -->
-<script src="fm-strumenti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — rubrica · calendario · costi, in un file: SpazioVivo.rubrica/calendario/costi(dove) -->
-<script src="fm-emporio.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Emporio: SpazioVivo.emporio(dove) -->
-<script src="fm-assistenza.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza dell'Assistenza: SpazioVivo.assistenza(dove) -->
-<script src="fm-configuratore.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — il configuratore: SpazioVivo.configuratore(dove, ormaId) -->
-<script src="APP.FELICITASMUNDI/piatti/fm-evento.js"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — l'evento pubblico, piatto: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e=. Sostituisce il vecchio fm-evento.js (non più caricato); usa FMPiatto, caricato prima -->
-<script src="fm-scuola.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊿ — la stanza della Scuola: SpazioVivo.scuola(dove). Arrivato il 16 settembre, a chiudere la consegna del 15 -->
+<!-- ⭐ TOCCATO NEL GUSCIO 56 — TUTTE LE STANZE PASSANO AI PIATTI, da piatti/, dopo fm-piatto.js.
+     I vecchi fm-invito/fm-strumenti/fm-emporio/fm-assistenza/fm-configuratore/fm-scuola/fm-edizione non si caricano più.
+     ⚠️ fm-invito.js DOPO le stanze: emporio/assistenza/scuola/edizione ridefiniscono SpazioVivo.invito, e deve vincere il suo. -->
+<script src="APP.FELICITASMUNDI/piatti/fm-emporio.js"></script><!-- 56 — Emporio: SpazioVivo.emporio(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-assistenza.js"></script><!-- 56 — Assistenza: SpazioVivo.assistenza(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-scuola.js"></script><!-- 56 — Scuola: SpazioVivo.scuola(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-edizione.js"></script><!-- 56 — Edizione: SpazioVivo.edizione(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-configuratore.js"></script><!-- 56 — il configuratore: SpazioVivo.configuratore(box, ormaId) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-carrello.js"></script><!-- 56 — il carrello: SpazioVivo.carrello(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-calendario.js"></script><!-- 56 — il calendario: SpazioVivo.calendario(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-costi.js"></script><!-- 56 — i costi: SpazioVivo.costi(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-rubrica.js"></script><!-- 56 — la rubrica: SpazioVivo.rubrica(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-invito.js"></script><!-- 56 — «Invita chi risuona»: SpazioVivo.invito(). DOPO le stanze, così vince il suo -->
+<script src="APP.FELICITASMUNDI/piatti/fm-evento.js"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
+<!-- ⛔ 56 — il Megafono-piatto NON è cablato qui: il vecchio fm-megafono.js resta (fornisce parla() e il Megafono in fondo). Il piatto megafono-piatto.html è full-viewport e va chiarito con Gab prima di sostituirlo. -->
 
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
 <script>
@@ -4549,7 +4557,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        Il disegno sta in fm-annale.js; fm-incontro.js non ha più una
        funzione annale(), e questa riga la nominava. */
     else if(id==="consolle") consolle(c);
-    else if(id==="edizione") edizione(c);
+    /* ⭐ TOCCATO NEL GUSCIO 56 — Edizione dal piatto (piatti/fm-edizione.js) */
+    else if(id==="edizione" && window.SpazioVivo && SpazioVivo.edizione) SpazioVivo.edizione(c);
+    /* ⭐ TOCCATO NEL GUSCIO 56 — il carrello, dal piatto: rotta vai("carrello") della testata */
+    else if(id==="carrello" && window.SpazioVivo && SpazioVivo.carrello) SpazioVivo.carrello(c);
     /* ⭐ le due stanze del lavoro dell'Edizione, dietro le porte del disegno */
     else if(id==="raccogli") raccogli(c);
     else if(id==="cura") cura(c);
@@ -5422,7 +5433,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore", "evento"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore", "evento", "carrello"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» · 56 — e «carrello» */
 
   /* ⭐ TOCCATO NEL GUSCIO ㊿ — LE PORTE DELLA BARRA SI CONOSCONO SUBITO.
      ROTTE si riempie dalla tavola `stanze` (il vocabolario, sopra), ma la

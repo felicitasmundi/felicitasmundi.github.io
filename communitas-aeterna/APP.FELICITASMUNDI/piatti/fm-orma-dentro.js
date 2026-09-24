@@ -10,8 +10,12 @@
    I GESTI: prendo · lascio · chiudo colle ore · chiamo qualcuno ·
    allego un file · scrivo nella conversazione · torno a «La mia orma».
 
-   ⛔ LA VETRINA NON È IN QUESTO GIRO: sabato non si vende niente, ed è
-      la parte più grossa. La sua parte di pagina resta com'è.
+   ⭐ LA VETRINA la scrive fm-vetrina.js, che va caricato dopo questo.
+
+   ⭐ CHI HA APERTO L'ORMA può fare tre cose, e nessun altro: cambiare chi
+      la vede · CHIUDERLA, e allora resta scritta ma esce dalla vista ·
+      CANCELLARLA davvero — ⛔ e il database rifiuta se qualcun altro ci ha
+      lavorato: in quel caso si chiude, non si cancella.
    ⭐ La vetrina si vede solo a chi può pubblicare (fm_puo_pubblicare):
       l'interruttore sta sulla sola vetrina, spostato da Design il 23.
    ⭐ GLI ARGOMENTI: si ricavano dai messaggi, raccogliendo quelli che
@@ -77,7 +81,8 @@
 
       var o = await db.from("orme")
         .select("id,titolo,sottotitolo,contenuto,tipo,elemento,stadio,luogo," +
-                "accaduto_il,inizio_il,entro_il,destinazione,persona_id,quanti_servono")
+                "accaduto_il,inizio_il,entro_il,destinazione,persona_id,quanti_servono," +
+                "visibilita,dorme_dal")
         .eq("id", id).single();
       if (o.error) return d;
       d.orma = o.data;
@@ -152,8 +157,9 @@
   }
 
   /* ── disegnare ─────────────────────────────────────────────────── */
-  function disegna(R, d, id, ricarica) {
+  function disegna(R, d, id, ricarica, stato) {
     var P = F(), o = d.orma || {};
+    stato = stato || {};
     var io = d.io;
     var mia = d.dentro.filter(function (x) { return x.persona_id === io && x.preso_il; })[0];
     var presenti = d.dentro.filter(function (x) { return x.preso_il; });
@@ -180,11 +186,25 @@
       b.textContent = o.tipo === "obiettivo" ? "me ne occupo io" : "lo prendo";
     });
 
+    /* ⭐ chi ha aperto l'orma: le tre cose che può fare */
+    var padrone = !!(io && o.persona_id === io);
+    var dorme = !!o.dorme_dal;
+    P.stato(R, "sono-io", padrone && !dorme);
+    P.stato(R, "chiusa-da-me", padrone && dorme);
+    P.stato(R, "conferma-cancella", !!stato.confermaCancella);
+    Array.prototype.forEach.call(R.querySelectorAll('[data-g="cambia-visibilita"]'), function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-v") === (o.visibilita || "solo_me")
+        ? "true" : "false");
+    });
+
     P.stato(R, "sono-dentro", !!mia);
     P.stato(R, "non-sono-dentro", !mia && o.stadio !== "sviluppato");
     P.stato(R, "chiusa", o.stadio === "sviluppato");
     P.stato(R, "scaduta", !!scaduta);
     P.stato(R, "posso-pubblicare", !!d.puoPubblicare);
+    /* ⭐ la vetrina: la costruisce Design, la scrive fm-vetrina.js */
+    if (window.SpazioVivo && typeof window.SpazioVivo.vetrina === "function")
+      window.SpazioVivo.vetrina(R, id, ricarica);
 
     /* chi c'è dentro */
     P.stampa(R, "dentro", d.dentro, function (c, x) {
@@ -339,6 +359,44 @@
     });
     P.gesto(R, "torna", function () { vaiA("orme"); });
 
+    /* ─ le tre cose di chi ha aperto l'orma ─ */
+    P.gesto(R, "cambia-visibilita", async function (e, b) {
+      try {
+        var r = await db.from("orme").update({ visibilita: b.getAttribute("data-v") }).eq("id", id);
+        if (r.error) throw r.error;
+        await ricarica();
+      } catch (err) { console.warn("visibilit\u00e0:", err); }
+    });
+    P.gesto(R, "chiudi-questa-orma", function (e, b) {
+      occupato(b, async function () {
+        var r = await db.rpc("fm_chiudi_questa_orma", { p_orma: id });
+        if (r.error) throw r.error;
+      })();
+    });
+    P.gesto(R, "riapri-orma", function (e, b) {
+      occupato(b, async function () {
+        var r = await db.rpc("fm_riapri_orma", { p_orma: id });
+        if (r.error) throw r.error;
+      })();
+    });
+    /* ⭐ il primo tocco chiede conferma, il secondo cancella */
+    P.gesto(R, "cancella-orma", function (e, b) {
+      if (!stato.confermaCancella) {
+        stato.confermaCancella = true;
+        P.stato(R, "conferma-cancella", true);
+        return;
+      }
+      occupato(b, async function () {
+        var r = await db.rpc("fm_cancella_orma", { p_orma: id });
+        if (r.error) throw r.error;     /* ⛔ altri ci hanno lavorato: si chiude, non si cancella */
+        vaiA("orme");
+      })();
+    });
+    P.gesto(R, "annulla-cancella", function () {
+      stato.confermaCancella = false;
+      P.stato(R, "conferma-cancella", false);
+    });
+
     /* la conversazione: si scrive e si manda con Invio */
     var scrivi = R.querySelector('input[type="text"]');
     if (scrivi) {
@@ -360,7 +418,8 @@
     if (!box || !id || !window.FMPiatto) return;
     var R = await F().monta(box, INDIRIZZO);
     if (R && R.body) R = R.body;           /* monta torna il documento: si lavora sul corpo */
-    async function ricarica() { disegna(R, await leggi(id), id, ricarica); }
+    var stato = {};
+    async function ricarica() { disegna(R, await leggi(id), id, ricarica, stato); }
     await ricarica();
   }
 

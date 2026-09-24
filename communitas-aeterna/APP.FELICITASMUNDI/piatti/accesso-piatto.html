@@ -39,6 +39,11 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
 .ak-pill[aria-pressed="true"]{border-color:rgba(212,175,106,.95);background:rgba(212,175,106,.24);box-shadow:0 0 1.4rem rgba(212,175,106,.45)}
 .ak-eco{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(212,175,106,.85);animation:ak-alza .8s ease both}
 .ak-errore{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#E0A0A8;border-left:2px solid rgba(201,112,122,.7);padding-left:.8rem}
+.ak-patto{display:flex;flex-direction:column;gap:.7rem}
+.ak-patto p{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;line-height:1.45;color:rgba(245,240,230,.82);text-wrap:pretty}
+.ak-leggi{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
+.ak-leggi a{min-height:2.75rem;display:inline-flex;align-items:center;font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.08em;color:var(--oro);border-bottom:1px solid rgba(212,175,106,.35)}
+.ak-leggi a:hover{color:var(--ivory);border-bottom-color:var(--ivory)}
 
 .ak-campo{display:flex;flex-direction:column;gap:.35rem}
 .ak-campo label{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.72)}
@@ -83,6 +88,26 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
       <button type="submit" class="ak-btn" data-g="entra" data-stato="codice-mandato" hidden>entra</button>
     </div>
   </form>
+
+  <!-- il patto: dopo l'ingresso, se le condizioni non sono accettate -->
+  <div class="ak-dx" data-stato="patto" hidden>
+    <div class="ak-capo"><h1>Prima di entrare</h1><div class="ak-occ">tre cose, e poi si comincia</div></div>
+    <div class="ak-colonna">
+      <div class="ak-patto">
+        <p>Qui dentro ci sono persone vere, e luoghi che esistono. Quello che scrivi lo leggono loro.</p>
+        <p>I tuoi dati restano tuoi: servono a farti incontrare chi risuona.</p>
+        <p>Quello che porti &mdash; un&rsquo;orma, un prodotto, una lezione &mdash; resta tuo, e sei tu a risponderne.</p>
+      </div>
+      <div class="ak-leggi">
+        <a data-c="patto.condizioni" href="#">le condizioni d&rsquo;uso</a>
+        <a data-c="patto.privacy" href="#">la privacy</a>
+        <a data-c="patto.cookie" href="#">i cookie</a>
+      </div>
+      <div class="ak-nota">Entrando accetti le condizioni d&rsquo;uso e l&rsquo;informativa sulla privacy.</div>
+      <div class="ak-errore" data-stato="errore" hidden>[ cosa non &egrave; andato ]</div>
+      <button type="button" class="ak-btn" data-g="accetto" style="align-self:flex-start">accetto</button>
+    </div>
+  </div>
 </div>
 </body>
 </html>

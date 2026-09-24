@@ -573,6 +573,10 @@ border:1px solid color-mix(in srgb,var(--c) 70%,transparent);
 background:linear-gradient(180deg,color-mix(in srgb,var(--c) 26%,transparent),color-mix(in srgb,var(--c) 10%,transparent));
 color:var(--ivory)}
 .vetr-f .esce:hover{box-shadow:0 0 1.6rem color-mix(in srgb,var(--c) 40%,transparent);border-color:var(--c)}
+.vetr-f .esce:disabled{opacity:.4;cursor:default;box-shadow:none}
+.vetr-f .diritti{display:flex;align-items:flex-start;gap:.7rem;margin-top:1.1rem;padding:.8rem .9rem;border-radius:.8rem;border:1px dashed rgba(212,175,106,.45);background:rgba(212,175,106,.04);cursor:pointer;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.4;color:rgba(245,240,230,.8)}
+.vetr-f .diritti[data-stato="dichiarato"]{border-style:solid;border-color:rgba(212,175,106,.6)}
+.vetr-f .diritti input{flex:none;width:1.25rem;height:1.25rem;margin:.1rem 0 0;accent-color:#D4AF6A;cursor:pointer}
 
 /* ── a destra: la vetrina ────────────────────────────────────── */
 .vetr-f .vetrina{border-radius:1rem;overflow:hidden;position:sticky;top:1.2rem;
@@ -693,6 +697,22 @@ border:1px solid color-mix(in srgb,var(--c) 35%,transparent);background:color-mi
 .chiama{display:flex;align-items:center;gap:.7rem;width:100%;text-align:left;border:1px dashed rgba(200,160,85,.45);border-radius:.7rem;background:transparent;padding:.55rem .7rem;cursor:pointer;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(212,175,106,.85)}
 .chiama .pi{width:1.75rem;height:1.75rem;border-radius:50%;flex:none;display:grid;place-items:center;border:1px dashed rgba(212,175,106,.6);font-style:normal;font-family:'DM Sans',sans-serif}
 .chiama:hover{border-color:var(--oro-ch);background:rgba(212,175,106,.06)}
+.mia{display:flex;flex-direction:column;gap:.7rem;margin:0 0 1.2rem;padding:.8rem .9rem;border-radius:.9rem;border:1px dashed rgba(212,175,106,.3);background:rgba(8,11,26,.35)}
+.mia .et{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.7);margin-right:.3rem}
+.mia-vis{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem}
+.mia-vis button{min-height:2.75rem;padding:0 .9rem;border-radius:999px;border:1px solid rgba(245,240,230,.16);background:transparent;color:rgba(245,240,230,.65);cursor:pointer;font:inherit;font-size:.9rem}
+.mia-vis button:hover{border-color:rgba(212,175,106,.6)}
+.mia-vis button[aria-pressed="true"]{border-color:rgba(212,175,106,.9);background:rgba(212,175,106,.16);color:var(--ivory)}
+.mia-gesti{display:flex;flex-wrap:wrap;gap:.4rem}
+.mia-gesti button{min-height:2.75rem;padding:0 1rem;border-radius:999px;border:1px solid rgba(245,240,230,.18);background:transparent;color:rgba(245,240,230,.7);cursor:pointer;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+.mia-gesti button:hover{border-color:rgba(212,175,106,.6);color:var(--ivory)}
+.mia-gesti .via{border-color:rgba(201,112,122,.45);color:#E0A0A8}
+.mia-gesti .via:hover{border-color:#C9707A;color:#F0B8BF}
+.mia-gesti .via.pieno{background:rgba(201,112,122,.22);border-color:#C9707A;color:var(--ivory)}
+.mia-conferma{display:flex;flex-direction:column;gap:.6rem;padding:.8rem .9rem;border-radius:.8rem;border:1px solid rgba(201,112,122,.5);background:rgba(201,112,122,.08)}
+.mia-conferma p{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;line-height:1.4;color:rgba(245,240,230,.85)}
+.mia-chiusa{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin:0 0 1.2rem;padding:.7rem .9rem;border-radius:.8rem;border:1px dashed rgba(245,240,230,.25);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.6)}
+.mia-chiusa button{min-height:2.75rem;padding:0 1rem;border-radius:999px;border:1px solid rgba(212,175,106,.55);background:rgba(212,175,106,.1);color:var(--ivory);cursor:pointer;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
 .gesti .principale{border-color:color-mix(in srgb,var(--c,var(--oro)) 70%,transparent);color:var(--ivory);background:color-mix(in srgb,var(--c,var(--oro)) 18%,transparent)}
 .gesti .ore-c{display:flex;align-items:center;gap:.5rem;width:100%;margin-top:.5rem;padding:.5rem .8rem;border-radius:.75rem;border:1px solid rgba(212,175,106,.3);background:rgba(8,11,26,.5)}
 .gesti .ore-c span{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.06em;color:rgba(245,240,230,.6);flex:1}
@@ -728,6 +748,30 @@ border:1px solid color-mix(in srgb,var(--c) 35%,transparent);background:color-mi
     <span class="vo" style="--c:var(--terra)"><span data-c="persona.iniziale">g</span><img data-c="persona.foto_url" alt=""></span>
     <span>aperta da <b data-c="persona.nome">[ chi l&rsquo;ha aperta ]</b></span>
   </a>
+
+  <!-- solo per chi l'ha aperta -->
+  <div class="mia" data-stato="sono-io" hidden>
+    <div class="mia-vis" role="radiogroup" aria-label="chi la vede" data-c="orma.visibilita">
+      <span class="et">chi la vede</span>
+      <button type="button" data-g="cambia-visibilita" data-v="solo_me" aria-pressed="true">solo me</button>
+      <button type="button" data-g="cambia-visibilita" data-v="vicinato" aria-pressed="false">il mio vicinato</button>
+      <button type="button" data-g="cambia-visibilita" data-v="pubblico" aria-pressed="false">pubblica</button>
+    </div>
+    <div class="mia-gesti">
+      <button type="button" data-g="chiudi-questa-orma">chiudi questa orma</button>
+      <button type="button" class="via" data-g="cancella-orma">cancella</button>
+    </div>
+    <div class="mia-conferma" data-stato="conferma-cancella" hidden>
+      <div class="mia-gesti">
+        <button type="button" data-g="annulla-cancella">no, tienila</button>
+        <button type="button" class="via pieno" data-g="cancella-orma">s&igrave;, cancella</button>
+      </div>
+    </div>
+  </div>
+  <div class="mia-chiusa" data-stato="chiusa-da-me" hidden>
+    <span>[ questa orma &egrave; fuori dalla tua vista ]</span>
+    <button type="button" data-g="riapri-orma">riaprila</button>
+  </div>
 
   <div class="dati">
     <span><span class="et">Quando</span><span class="vl"><span data-c="orma.accaduto_il">[ il giorno ]</span> <span data-c="orma.inizio_il">[ e l&rsquo;ora ]</span></span></span>
@@ -1056,6 +1100,16 @@ function sinistra(){
   var t=ora();
   var b=el("button","esce"); b.type="button"; b.textContent=t.gesto; b.setAttribute("data-g","vet-pubblica");
   b.style.setProperty("--c",col());
+  /* ⭐ i diritti sull'immagine: obbligatoria prima di pubblicare (non per la stampa: non si pubblica) */
+  if(tipo!=="stampa" && (dati.foto||[]).length){
+    var lb=el("label","diritti"); lb.setAttribute("data-stato", dati.dichiaro ? "dichiarato" : "serve-dichiarazione");
+    var cb=document.createElement("input"); cb.type="checkbox"; cb.setAttribute("data-c","diritti.dichiaro"); cb.checked=!!dati.dichiaro;
+    lb.appendChild(cb);
+    lb.appendChild(el("span",null,"Dichiaro di avere il diritto di pubblicare questa immagine, comprese le persone che vi compaiono."));
+    cb.onchange=function(){ dati.dichiaro=cb.checked; b.disabled=!cb.checked; lb.setAttribute("data-stato", cb.checked ? "dichiarato" : "serve-dichiarazione"); };
+    d.appendChild(lb);
+    b.disabled=!dati.dichiaro;
+  } else if(tipo!=="stampa"){ b.disabled=false; }
   /* ⭐ «stampa» apre il configuratore: la stessa forma dell'Edizione, due porte */
   if(tipo==="stampa") b.onclick=function(){ location.href="configuratore-stampa-piatto.html" + (fam!==null ? "?famiglia="+["carta","libri","agende","fiere","confezioni","gadget","abiti","servizi"][fam] : ""); };
   d.appendChild(b);
