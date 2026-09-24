@@ -38,8 +38,12 @@
      chi non ha ancora un talento va alla SOGLIA, non alla home —
      se no si trova una pagina che non gli dice cosa fare. */
   var PATTO_VERSIONE = "2026-09-23";    /* la versione delle condizioni */
-  var SOGLIA = "index.html?p=soglia";
-  var ORME   = "index.html?p=orme";
+  /* ⭐ indirizzi ASSOLUTI: da accesso.html «index.html» relativo può
+     puntare al posto sbagliato e il salto fallisce in silenzio. Si parte
+     dalla cartella della pagina d'accesso, che è quella del guscio. */
+  var CASA = location.href.replace(/accesso\.html.*$/, "").replace(/[^/]*$/, "");
+  var SOGLIA = CASA + "index.html?p=soglia";
+  var ORME   = CASA + "index.html?p=orme";
 
   var F = function () { return window.FMPiatto; };
 
