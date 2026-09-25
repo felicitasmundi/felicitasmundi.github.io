@@ -53,9 +53,9 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
 .ak-due{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:.9rem}
 .ak-nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.5)}
 .ak-nexus{position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;border:.45rem solid var(--nexus);box-shadow:0 0 0 .15rem rgba(140,47,57,.35),0 0 2.4rem rgba(140,47,57,.45),inset 0 0 2rem rgba(140,47,57,.35);background:#fff}
-.ak-nexus img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:ak-gira 90s linear infinite}
-@media (prefers-reduced-motion:reduce){.ak-nexus img{animation:none}}
+.ak-nexus img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 </style>
+<link rel="preload" as="image" href="nexus-cerchio.webp">
 <script src="./ak-cosmo.js"></script>
 </head>
 <body>
@@ -65,7 +65,7 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
   <div class="ak-sx">
     <div class="ak-cubo"><div class="alone ak-alone"></div>
       <svg viewBox="-125 -125 250 250" aria-hidden="true"><rect x="-115" y="-115" width="230" height="230" fill="none" stroke="#D4AF6A" stroke-width=".8" stroke-dasharray="3 3.6" opacity=".34"></rect></svg>
-      <div class="ak-nexus"><img src="nexus-cerchio.png" alt=""></div>
+      <div class="ak-nexus"><img src="nexus-cerchio.webp" alt="" width="480" height="480" fetchpriority="high" decoding="async"></div>
       
     </div>
     <div class="ak-occ" style="text-align:center">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
