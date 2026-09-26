@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FelicitasMundi — Comunità Eterna</title>
+<meta name="description" content="Uno strumento pratico per tenere traccia di ciò che si fa insieme. Lascia la tua mail: ti scrivo appena si può entrare.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="APP.FELICITASMUNDI/piatti/nexus-cerchio.webp">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --navy:#0A0C1A; --alto:#171C36; --oro:#D4AF6A; --oro-s:#C8A055;
+    --ivory:#F5F0E6; --linea:rgba(200,160,85,.28);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(ellipse at 22% 12%, rgba(38,64,120,.35), transparent 55%),
+      radial-gradient(ellipse at 82% 92%, rgba(70,52,120,.30), transparent 58%),
+      var(--navy);
+    color:var(--ivory);
+    font-family:'Cormorant Garamond',Georgia,serif;
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:2rem 1.2rem 3rem;
+  }
+  .carta{ width:100%; max-width:34rem; text-align:center; }
+  .nx{ width:6.4rem; height:6.4rem; object-fit:contain; margin:0 auto .9rem; display:block; }
+  .occhiello{
+    font-family:'DM Sans',system-ui,sans-serif; font-size:.72rem; letter-spacing:.24em;
+    text-transform:uppercase; color:rgba(245,240,230,.5); margin-bottom:.6rem;
+  }
+  h1{
+    font-family:'Cinzel',serif; font-weight:400; font-size:1.9rem; line-height:1.15;
+    color:var(--oro); margin:.2rem 0 .1rem;
+  }
+  h1 .cme{ display:block; font-size:1.15rem; color:var(--oro-s); opacity:.9; margin-top:.15rem; }
+  .sotto{
+    font-style:italic; font-size:1.25rem; line-height:1.5; color:rgba(245,240,230,.82);
+    margin:.9rem auto 0; max-width:28rem;
+  }
+  .riga{
+    font-size:1.14rem; line-height:1.6; color:rgba(245,240,230,.72);
+    margin:1.4rem auto 0; max-width:30rem;
+    padding-top:1.2rem; border-top:1px solid var(--linea);
+  }
+  form{ margin:1.8rem auto 0; max-width:26rem; text-align:left; }
+  .invito{
+    font-style:italic; font-size:1.12rem; line-height:1.55; color:rgba(245,240,230,.8);
+    text-align:center; margin-bottom:1.1rem;
+  }
+  label{ display:block; font-family:'DM Sans',system-ui,sans-serif; font-size:.82rem;
+    letter-spacing:.02em; color:rgba(245,240,230,.6); margin:.9rem 0 .3rem; }
+  input[type=text], input[type=email]{
+    width:100%; min-height:3rem; padding:.6rem .85rem; border-radius:.7rem;
+    border:1px solid var(--linea); background:rgba(8,11,26,.6); color:var(--ivory);
+    font-family:'DM Sans',system-ui,sans-serif; font-size:1rem;
+  }
+  input:focus{ outline:none; border-color:var(--oro); }
+  .spunta{ display:flex; gap:.6rem; align-items:flex-start; margin-top:1.2rem;
+    font-family:'DM Sans',system-ui,sans-serif; font-size:.98rem; line-height:1.4;
+    color:rgba(245,240,230,.85); cursor:pointer; }
+  .spunta input{ margin-top:.15rem; width:1.15rem; height:1.15rem; flex:none; accent-color:var(--oro); }
+  .spunta a{ color:var(--oro); text-decoration:underline; }
+  /* campo esca anti-automatismi: un umano lo lascia vuoto */
+  .esca{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  button{
+    width:100%; min-height:3.2rem; margin-top:1.6rem; border-radius:1.5rem; cursor:pointer;
+    border:1px solid var(--oro); background:rgba(200,160,85,.16); color:var(--oro);
+    font-family:'Cinzel',serif; font-size:1.02rem; letter-spacing:.1em;
+    transition:background .25s,border-color .25s;
+  }
+  button:hover{ background:rgba(200,160,85,.28); border-color:var(--oro); }
+  button:disabled{ opacity:.6; cursor:default; }
+  .msg{ font-family:'DM Sans',system-ui,sans-serif; font-size:.94rem; margin-top:.9rem; text-align:center; min-height:1.2rem; }
+  .msg.err{ color:#E0A9A9; }
+  .grazie{ display:none; margin-top:1.6rem; }
+  .grazie h2{ font-family:'Cinzel',serif; font-weight:400; font-size:1.4rem; color:var(--oro); }
+  .grazie p{ font-size:1.16rem; line-height:1.55; color:rgba(245,240,230,.8); }
+  .pie{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:.9rem;
+    color:rgba(245,240,230,.4); margin-top:2rem; }
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+<div class="carta">
+  <img class="nx" src="APP.FELICITASMUNDI/piatti/nexus-cerchio.webp" alt="" aria-hidden="true">
+  <div class="occhiello">Comunità Eterna</div>
+  <h1>FelicitasMundi<span class="cme">Comunità Eterna</span></h1>
+  <p class="sotto">uno strumento pratico per tenere traccia di ciò che si fa insieme</p>
+  <p class="riga">Sta per uscire, ed è con questo che costruiamo il Felicitas Festival: un cammino che parte dalla Sardegna e tocca i territori, uno per uno.</p>
+
+  <form id="modulo" novalidate>
+    <p class="invito">Lasciami la tua mail: ti scrivo appena si può entrare — così, se vuoi, ci sei anche tu da dove sei.</p>
+
+    <label for="nome">Il tuo nome</label>
+    <input type="text" id="nome" autocomplete="name" placeholder="Come ti chiami">
+
+    <label for="mail">La tua mail</label>
+    <input type="email" id="mail" inputmode="email" autocomplete="email" placeholder="nome@esempio.it">
+
+    <label class="spunta">
+      <input type="checkbox" id="organizzo">
+      <span>Voglio aiutare a organizzare il Felicitas Festival nel mio territorio</span>
+    </label>
+
+    <input class="esca" type="text" id="dolce" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+    <label class="spunta">
+      <input type="checkbox" id="privacy">
+      <span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa privacy</a> e acconsento al trattamento della mia mail per ricevere aggiornamenti su FelicitasMundi.</span>
+    </label>
+
+    <button type="submit" id="invia" disabled>Resta in contatto</button>
+    <div class="msg" id="msg"></div>
+  </form>
+
+  <div class="grazie" id="grazie">
+    <h2>La tua orma è segnata.</h2>
+    <p>Ti scrivo appena si può entrare — così, se vuoi, ci sei anche tu da dove sei.</p>
+  </div>
+
+  <div class="pie">Comunità Eterna FelicitasMundi</div>
+</div>
+
+<script>
+  "use strict";
+  var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
+  var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
+
+  var $ = function(id){ return document.getElementById(id); };
+  function dice(t, err){ var m = $("msg"); m.textContent = t || ""; m.className = "msg" + (err ? " err" : ""); }
+
+  /* il consenso privacy è obbligatorio: il tasto resta spento finché non è spuntato */
+  $("privacy").addEventListener("change", function(){ $("invia").disabled = !this.checked; });
+
+  $("modulo").addEventListener("submit", function(e){
+    e.preventDefault();
+    /* l'esca: se è piena, è un automatismo — si finge riuscito e non si scrive */
+    if($("dolce").value){ $("modulo").style.display = "none"; $("grazie").style.display = "block"; return; }
+
+    var nome = ($("nome").value || "").trim();
+    var mail = ($("mail").value || "").trim();
+    var organizzo = $("organizzo").checked;
+
+    if(!nome){ dice("Scrivi il tuo nome.", true); return; }
+    if(!mail || mail.indexOf("@") < 1){ dice("Scrivi una mail che funziona.", true); return; }
+
+    var b = $("invia"); b.disabled = true; var era = b.textContent; b.textContent = "un momento…";
+    dice("");
+
+    db.from("iscritti_newsletter").insert({ nome: nome, mail: mail, vuole_organizzare: organizzo })
+      .then(function(r){
+        if(r && r.error) throw r.error;
+        $("modulo").style.display = "none";
+        $("grazie").style.display = "block";
+      })
+      .catch(function(err){
+        b.disabled = false; b.textContent = era;
+        var m = (err && err.message) || "";
+        if(/duplicate|unique/i.test(m)) { $("modulo").style.display = "none"; $("grazie").style.display = "block"; return; }
+        dice("Non è partita: riprova tra poco.", true);
+        if(window.console) console.warn("iscrizione:", m);
+      });
+  });
+</script>
+</body>
+</html>

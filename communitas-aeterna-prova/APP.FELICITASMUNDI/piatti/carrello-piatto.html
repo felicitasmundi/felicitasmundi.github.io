@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il carrello</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#02040c}
+a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
+@keyframes ak-alza{from{opacity:0;transform:translateY(.5rem)}to{opacity:1;transform:none}}
+/* carrello · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--acqua:#4A88B8;--acqua-ch:#7FB4DC;--nexus:#8C2F39}
+[hidden]{display:none!important}
+.st{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));align-items:start;gap:2rem 3rem;padding:2rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+.st-cosmo{position:absolute;inset:0;z-index:0;pointer-events:none}
+
+.ca{position:relative;isolation:isolate;font-size:16px;min-height:100vh;padding:2rem clamp(1.25rem,5vw,5rem) 4rem;box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+.ca-col{position:relative;z-index:1;max-width:40rem;margin:0 auto;display:flex;flex-direction:column;gap:1.3rem}
+.ca h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:.06em}
+.ca-facce{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
+.ca-facce button{min-height:3rem;border-radius:.7rem;border:1px solid rgba(245,240,230,.14);background:rgba(4,8,20,.5);color:rgba(245,240,230,.6);cursor:pointer;font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.08em;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.ca-facce button:hover{border-color:rgba(212,175,106,.6)}
+.ca-facce button[aria-pressed="true"]{border-color:rgba(212,175,106,.9);background:rgba(212,175,106,.16);color:var(--ivory)}
+.ca-facce em{font-style:normal;font-family:'Cormorant Garamond',serif;font-size:1rem;opacity:.6}
+.ca-lista{display:flex;flex-direction:column;gap:.55rem}
+.ca-riga{display:grid;grid-template-columns:4.2rem minmax(0,1fr) auto;gap:.9rem;align-items:center;padding:.6rem .8rem .6rem .6rem;border-radius:.9rem;border:1px solid rgba(74,136,184,.22);border-left:3px solid rgba(74,136,184,.65);background:rgba(74,136,184,.07)}
+.ca-riga[data-stato~="esaurito"]{opacity:.55;border-left-color:rgba(201,112,122,.7)}
+.ca-foto{position:relative;width:4.2rem;height:4.2rem;border-radius:.6rem;overflow:hidden;background:rgba(8,11,26,.6);border:1px solid rgba(245,240,230,.1);display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.84rem;color:rgba(245,240,230,.4);text-decoration:none}
+.ca-foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ca-foto img:not([src]),.ca-foto img[src=""]{display:none}
+.ca-tx{min-width:0;display:flex;flex-direction:column;gap:.2rem;text-decoration:none;color:inherit}
+.ca-tx:hover{color:inherit}
+.ca-tx b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.3rem;line-height:1.25;color:var(--ivory)}
+.ca-tx span{font-size:.92rem;color:rgba(245,240,230,.65)}
+.ca-bollo{align-self:flex-start;font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.1em;padding:.05rem .55rem;border-radius:1rem;border:1px solid}
+.ca-bollo.es{color:#E0A0A8;border-color:rgba(201,112,122,.6)}
+.ca-bollo.ord{color:var(--oro);border-color:rgba(212,175,106,.55)}
+.ca-dx{display:flex;flex-direction:column;align-items:flex-end;gap:.35rem}
+.ca-tot{font-family:'Cinzel',serif;font-size:1.1rem;white-space:nowrap}
+.ca-un{font-size:.84rem;color:rgba(245,240,230,.5);white-space:nowrap}
+.ca-q{display:flex;align-items:center;gap:.35rem}
+.ca-q button{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid rgba(212,175,106,.5);background:transparent;color:var(--oro);cursor:pointer;font:inherit;font-size:1.1rem}
+.ca-q button:hover{background:rgba(212,175,106,.1)}
+.ca-q b{min-width:1.6rem;text-align:center;font-family:'Cinzel',serif;font-weight:400;font-size:1.05rem}
+.ca-togli{border:0;background:none;padding:0;cursor:pointer;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(245,240,230,.45);min-height:1.8rem}
+.ca-togli:hover{color:#E0A0A8}
+.ca-vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:rgba(245,240,230,.45);padding:1rem .2rem;border-top:1px dashed rgba(212,175,106,.2)}
+.ca-fondo{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1rem 1.1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.35);background:rgba(8,11,26,.55)}
+.ca-fondo .sx{display:flex;flex-direction:column;gap:.15rem}
+.ca-fondo .sx span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.6)}
+.ca-fondo .sx b{font-family:'Cinzel',serif;font-weight:400;font-size:1.5rem}
+.ca-paga{min-height:3.25rem;padding:0 1.8rem;border-radius:999px;border:1px solid rgba(212,175,106,.8);background:linear-gradient(180deg,rgba(212,175,106,.24),rgba(212,175,106,.08));color:var(--ivory);cursor:pointer;font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.16em;text-transform:uppercase}
+.ca-paga:hover{box-shadow:0 0 1.4rem rgba(212,175,106,.3)}
+.ca-nel{min-height:2.75rem;padding:0 1rem;border-radius:999px;border:1px solid rgba(74,136,184,.8);background:rgba(74,136,184,.22);color:var(--ivory);cursor:pointer;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.ca-nel:hover{filter:brightness(1.2)}
+</style>
+<script src="./ak-cosmo.js"></script>
+
+</head>
+<body>
+<div class="ca" data-screen-label="Il carrello">
+  <ak-cosmo class="st-cosmo" aria-hidden="true"></ak-cosmo>
+  <div class="ca-col">
+    <h1>Il carrello</h1>
+    <div class="ca-facce" role="tablist">
+      <button type="button" data-g="faccia-carrello" aria-pressed="true">Carrello <em data-c="conto.quante">[ n ]</em></button>
+      <button type="button" data-g="faccia-ricevuto" aria-pressed="false">Ricevuto</button>
+      <button type="button" data-g="faccia-desideri" aria-pressed="false">Lista desideri</button>
+    </div>
+
+    <!-- ① il carrello: una riga per cosa, il numero accanto -->
+    <div class="ca-lista" data-stato="faccia-carrello">
+      <div class="ca-vuoto" data-stato="carrello-vuoto" hidden>[ il carrello &egrave; vuoto ]</div>
+      <div class="ca-riga" data-stampo="riga">
+          <a class="ca-foto" data-g="apri-prodotto" href="#"><span>[ foto ]</span><img data-c="riga.foto" alt=""></a>
+          <a class="ca-tx" data-g="apri-prodotto" href="#">
+            <b data-c="riga.nome">[ la cosa ]</b>
+            <span data-c="persona.nome">[ chi lo fa ]</span>
+            <span class="ca-bollo es" data-stato="esaurito" hidden>esaurito</span>
+            <span class="ca-bollo ord" data-stato="su-ordinazione" hidden>su ordinazione</span>
+          </a>
+          <span class="ca-dx">
+            <span class="ca-tot" data-c="riga.totale">[ € ]</span>
+            <span class="ca-un"><span data-c="riga.prezzo">[ € ]</span> l&rsquo;uno</span>
+            <span class="ca-q"><button type="button" data-g="meno" aria-label="uno in meno">&minus;</button><b data-c="riga.quante">[ n ]</b><button type="button" data-g="piu" aria-label="uno in pi&ugrave;">+</button></span>
+            <button type="button" class="ca-togli" data-g="togli">togli</button>
+          </span>
+        </div>
+      <div class="ca-fondo">
+        <div class="sx"><span><span data-c="conto.quante">[ n ]</span> cose</span><b data-c="conto.totale">[ totale ]</b></div>
+        <button type="button" class="ca-paga" data-g="paga">paga</button>
+      </div>
+    </div>
+
+    <!-- ② ricevuto: le righe non si cambiano -->
+    <div class="ca-lista" data-stato="faccia-ricevuto" hidden>
+      <div class="ca-vuoto" data-stato="ricevuto-vuoto" hidden>[ non hai ancora ricevuto niente ]</div>
+      <div class="ca-riga" data-stampo="riga">
+          <a class="ca-foto" data-g="apri-prodotto" href="#"><span>[ foto ]</span><img data-c="riga.foto" alt=""></a>
+          <a class="ca-tx" data-g="apri-prodotto" href="#">
+            <b data-c="riga.nome">[ la cosa ]</b>
+            <span data-c="persona.nome">[ chi lo fa ]</span>
+            <span class="ca-bollo es" data-stato="esaurito" hidden>esaurito</span>
+            <span class="ca-bollo ord" data-stato="su-ordinazione" hidden>su ordinazione</span>
+          </a>
+          <span class="ca-dx">
+            <span class="ca-tot" data-c="riga.prezzo_pagato">[ € pagato ]</span>
+            <span class="ca-un"><b data-c="riga.quante" style="font-weight:400">[ n ]</b> &middot; arrivata il <span data-c="riga.arrivata_il">[ quando ]</span></span>
+          </span>
+        </div>
+    </div>
+
+    <!-- ③ la lista dei desideri -->
+    <div class="ca-lista" data-stato="faccia-desideri" hidden>
+      <div class="ca-vuoto" data-stato="desideri-vuoto" hidden>[ la lista dei desideri &egrave; vuota ]</div>
+      <div class="ca-riga" data-stampo="riga">
+          <a class="ca-foto" data-g="apri-prodotto" href="#"><span>[ foto ]</span><img data-c="riga.foto" alt=""></a>
+          <a class="ca-tx" data-g="apri-prodotto" href="#">
+            <b data-c="riga.nome">[ la cosa ]</b>
+            <span data-c="persona.nome">[ chi lo fa ]</span>
+            <span class="ca-bollo es" data-stato="esaurito" hidden>esaurito</span>
+            <span class="ca-bollo ord" data-stato="su-ordinazione" hidden>su ordinazione</span>
+          </a>
+          <span class="ca-dx">
+            <span class="ca-tot" data-c="riga.prezzo">[ € ]</span>
+            <button type="button" class="ca-nel" data-g="nel-carrello">nel carrello</button>
+            <button type="button" class="ca-togli" data-g="togli">togli</button>
+          </span>
+        </div>
+    </div>
+  </div>
+</div>
+<script>
+/* solo il passaggio fra le tre facce */
+document.querySelectorAll('.ca-facce button').forEach(function(b){b.onclick=function(){
+  document.querySelectorAll('.ca-facce button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+  var f=b.dataset.g;
+  document.querySelectorAll('.ca-lista').forEach(function(l){l.hidden=l.dataset.stato!==f});
+}});
+</script>
+</body>
+</html>

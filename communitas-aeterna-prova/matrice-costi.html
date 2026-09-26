@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>I costi &middot; la matrice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--scala:1.2;--navy:#14172B;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+--line:rgba(184,150,62,.22);--nexus:#8C2F39;--terra:#AA8844;--acqua:#4488BB;
+--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--verde:#6E9E5A;--rosso:#C9707A}
+html{font-size:calc(100% * var(--scala))}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#0C0E1C}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+display:flex;justify-content:center;min-height:100vh}
+.f{width:100%;max-width:31rem;background:var(--navy);min-height:100vh;
+padding:1.5rem 1rem 3rem;position:relative;overflow:hidden}
+.f::before{content:'';position:absolute;inset:0;pointer-events:none;
+background:radial-gradient(ellipse at 22% 4%,rgba(58,88,160,.3),transparent 54%),
+radial-gradient(ellipse at 82% 96%,rgba(70,52,120,.2),transparent 56%)}
+.f > *{position:relative}
+.oc{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--oro);margin-bottom:.3rem}
+h1{font-family:'Cinzel',serif;font-weight:400;font-size:1.42rem;line-height:1.2;margin-bottom:.25rem}
+.sot{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
+color:rgba(245,240,230,.6);line-height:1.5;margin-bottom:.9rem}
+.tit{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+color:var(--oro);margin:1.5rem 0 .5rem;padding-top:1rem;border-top:1px solid var(--line)}
+.tit span{color:rgba(245,240,230,.34);letter-spacing:.06em}
+
+/* i mesi */
+.mesi{display:flex;gap:.3rem;overflow-x:auto;margin-bottom:.9rem;padding-bottom:.2rem}
+.mesi button{font-family:'DM Sans',sans-serif;font-size:.78rem;padding:.3rem .8rem;
+border-radius:1.4rem;cursor:pointer;background:transparent;white-space:nowrap;
+border:1px solid rgba(245,240,230,.16);color:rgba(245,240,230,.55)}
+.mesi button.on{border-color:var(--oro);background:rgba(200,160,85,.18);color:var(--oro-ch)}
+
+/* il conto del mese */
+.conto{border:1px solid rgba(200,160,85,.4);border-radius:.9rem;
+background:linear-gradient(160deg,rgba(200,160,85,.12),rgba(8,11,26,.5));
+padding:1rem;margin-bottom:.6rem}
+.conto .rt{display:flex;justify-content:space-between;align-items:baseline;
+padding:.3rem 0;font-size:.9rem;color:rgba(245,240,230,.65)}
+.conto .rt b{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:400}
+.conto .rt.entrato b{color:var(--verde);filter:brightness(1.2)}
+.conto .rt.uscito b{color:var(--rosso);filter:brightness(1.15)}
+.conto .resta{display:flex;justify-content:space-between;align-items:baseline;
+margin-top:.5rem;padding-top:.6rem;border-top:1px solid rgba(200,160,85,.28)}
+.conto .resta span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+color:rgba(245,240,230,.42)}
+.conto .resta b{font-family:'Cinzel',serif;font-size:1.5rem;color:var(--oro-ch);font-weight:400}
+.conto .prima{font-size:.76rem;color:rgba(245,240,230,.42);margin-top:.35rem;text-align:right}
+
+/* quanto rende un talento */
+.tl{display:flex;align-items:center;gap:.6rem;
+border:1px solid color-mix(in srgb,var(--c) 26%,transparent);
+border-left:3px solid color-mix(in srgb,var(--c) 58%,transparent);border-radius:.75rem;
+background:color-mix(in srgb,var(--c) 7%,rgba(8,11,26,.42));padding:.6rem .75rem;margin-bottom:.35rem}
+.tl .sg{width:1.9rem;height:1.9rem;border-radius:50%;flex:none;display:grid;place-items:center;
+border:1px solid color-mix(in srgb,var(--c) 45%,transparent);color:var(--c);
+filter:brightness(1.3);font-size:.8rem}
+.tl .tx{flex:1;min-width:0}
+.tl .tx b{display:block;font-weight:400;font-size:.9rem;line-height:1.25}
+.tl .tx i{display:block;font-style:normal;font-size:.75rem;
+color:rgba(245,240,230,.44);margin-top:.08rem}
+.tl .nn{flex:none;text-align:right}
+.tl .nn b{display:block;font-family:'Cinzel',serif;font-size:.95rem;font-weight:400}
+.tl .nn.piu b{color:var(--verde);filter:brightness(1.2)}
+.tl .nn.meno b{color:var(--rosso);filter:brightness(1.15)}
+.tl .nn span{display:block;font-size:.68rem;color:rgba(245,240,230,.35)}
+
+/* le righe */
+.gg{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+color:rgba(245,240,230,.32);margin:.9rem 0 .35rem .1rem}
+.rg{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;margin-bottom:.3rem;
+border:1px solid rgba(245,240,230,.1);border-radius:.7rem;background:rgba(8,11,26,.4)}
+.rg .dd{flex:none;width:2.4rem;text-align:center}
+.rg .dd b{display:block;font-family:'Cinzel',serif;font-size:.95rem;line-height:1;font-weight:400}
+.rg .dd span{display:block;font-size:.6rem;color:rgba(245,240,230,.35);letter-spacing:.06em}
+.rg .tx{flex:1;min-width:0}
+.rg .tx b{display:block;font-weight:400;font-size:.9rem;line-height:1.25}
+.rg .tx .da{display:block;font-size:.74rem;color:rgba(245,240,230,.4);margin-top:.1rem;
+line-height:1.35}
+.rg .tx .da em{font-style:normal;color:rgba(245,240,230,.62)}
+.rg .im{flex:none;font-family:'Cinzel',serif;font-size:1rem}
+.rg .im.piu{color:var(--verde);filter:brightness(1.2)}
+.rg .im.meno{color:var(--rosso);filter:brightness(1.15)}
+.rg .ric{flex:none;font-size:.6rem;padding:.08rem .45rem;border-radius:1rem;
+border:1px solid rgba(245,240,230,.18);color:rgba(245,240,230,.4)}
+
+/* i ricorrenti */
+.ric-box{border:1px dashed rgba(245,240,230,.18);border-radius:.8rem;
+background:rgba(8,11,26,.35);padding:.7rem .8rem;margin-bottom:.4rem}
+.ric-box .cp{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem}
+.ric-box .cp b{font-size:.85rem;font-weight:400;color:rgba(245,240,230,.7)}
+.ric-box .cp em{font-style:normal;font-family:'Cinzel',serif;font-size:1rem;
+color:var(--rosso);filter:brightness(1.15)}
+.ric-box .r{display:flex;justify-content:space-between;font-size:.84rem;padding:.2rem 0;
+color:rgba(245,240,230,.55)}
+
+.vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;
+color:rgba(245,240,230,.3);padding:.6rem 0;text-align:center}
+</style></head><body><div class="f">
+
+<div class="oc">quello che esce e quello che entra</div>
+<h1>I costi</h1>
+<div class="sot">[ la riga sotto il titolo ]</div>
+
+<div class="mesi">
+  <button class="on">[ questo mese ]</button>
+  <button>[ mese ]</button>
+  <button>[ mese ]</button>
+  <button>[ l&rsquo;anno ]</button>
+</div>
+
+<div class="conto">
+  <div class="rt entrato"><span>entrato</span><b>[ + € ]</b></div>
+  <div class="rt uscito"><span>uscito</span><b>[ − € ]</b></div>
+  <div class="resta"><span>resta</span><b>[ € ]</b></div>
+  <div class="prima">[ quanto era il mese prima ]</div>
+</div>
+
+<div class="tit">Quanto rende un talento <span>&middot; [ n ]</span></div>
+
+<div class="tl" style="--c:var(--terra)">
+  <span class="sg">●</span>
+  <span class="tx"><b>[ il talento ]</b><i>[ quante orme &middot; quante spese ]</i></span>
+  <span class="nn piu"><b>[ + € ]</b><span>[ − € speso ]</span></span>
+</div>
+<div class="tl" style="--c:var(--acqua)">
+  <span class="sg">●</span>
+  <span class="tx"><b>[ un talento in perdita ]</b><i>[ quante orme &middot; quante spese ]</i></span>
+  <span class="nn meno"><b>[ − € ]</b><span>[ − € speso ]</span></span>
+</div>
+
+<div class="tit">Quello che torna ogni mese <span>&middot; [ n ]</span></div>
+
+<div class="ric-box">
+  <div class="cp"><b>[ n ] voci ricorrenti</b><em>[ − € al mese ]</em></div>
+  <div class="r"><span>[ una voce ricorrente ]</span><span>[ − € ]</span></div>
+  <div class="r"><span>[ un&rsquo;altra ]</span><span>[ − € ]</span></div>
+</div>
+
+<div class="tit">Le voci <span>&middot; in ordine di data</span></div>
+
+<div class="gg">[ il mese ]</div>
+
+<div class="rg">
+  <span class="dd"><b>[ g ]</b><span>[ mm ]</span></span>
+  <span class="tx"><b>[ cosa è ]</b>
+    <span class="da">↳ da <em>[ l&rsquo;orma madre ]</em> &middot; [ la stanza ]</span></span>
+  <span class="im meno">[ − € ]</span>
+</div>
+
+<div class="rg">
+  <span class="dd"><b>[ g ]</b><span>[ mm ]</span></span>
+  <span class="tx"><b>[ un’entrata ]</b>
+    <span class="da">↳ da <em>[ l&rsquo;orma madre ]</em> &middot; [ la stanza ]</span></span>
+  <span class="im piu">[ + € ]</span>
+</div>
+
+<div class="rg">
+  <span class="dd"><b>[ g ]</b><span>[ mm ]</span></span>
+  <span class="tx"><b>[ una voce ricorrente ]</b>
+    <span class="da">↳ da <em>[ l&rsquo;orma madre ]</em></span></span>
+  <span class="ric">ogni mese</span>
+  <span class="im meno">[ − € ]</span>
+</div>
+
+<div class="vuoto">[ un mese senza voci non mostra righe ]</div>
+
+</div></body></html>

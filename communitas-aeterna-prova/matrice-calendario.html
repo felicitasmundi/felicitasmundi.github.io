@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Il calendario &middot; la matrice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--scala:1.2;--navy:#14172B;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+--line:rgba(184,150,62,.22);--nexus:#8C2F39;--terra:#AA8844;--acqua:#4488BB;
+--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--verde:#6E9E5A}
+html{font-size:calc(100% * var(--scala))}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#0C0E1C}
+body{font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+display:flex;justify-content:center;min-height:100vh}
+.f{width:100%;max-width:31rem;background:var(--navy);min-height:100vh;
+padding:1.5rem 1rem 3rem;position:relative;overflow:hidden}
+.f::before{content:'';position:absolute;inset:0;pointer-events:none;
+background:radial-gradient(ellipse at 22% 4%,rgba(58,88,160,.3),transparent 54%),
+radial-gradient(ellipse at 82% 96%,rgba(70,52,120,.2),transparent 56%)}
+.f > *{position:relative}
+.oc{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--oro);margin-bottom:.3rem}
+h1{font-family:'Cinzel',serif;font-weight:400;font-size:1.42rem;line-height:1.2;margin-bottom:.25rem}
+.sot{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
+color:rgba(245,240,230,.6);line-height:1.5;margin-bottom:.9rem}
+.tit{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+color:var(--oro);margin:1.5rem 0 .5rem;padding-top:1rem;border-top:1px solid var(--line)}
+.tit span{color:rgba(245,240,230,.34);letter-spacing:.06em}
+
+/* il tempo di oggi, in cima */
+.tempo{display:flex;gap:.4rem;margin-bottom:.9rem}
+.tempo .q{flex:1;border:1px solid var(--line);border-radius:.75rem;
+background:rgba(8,11,26,.4);padding:.55rem .3rem;text-align:center}
+.tempo .q b{display:block;font-family:'Cinzel',serif;font-size:1rem;color:var(--oro-ch);line-height:1.1}
+.tempo .q span{display:block;font-size:.6rem;color:rgba(245,240,230,.42);margin-top:.2rem}
+
+/* il tasto verso il telefono */
+.tel{display:flex;align-items:center;gap:.7rem;
+border:1px solid rgba(110,158,90,.45);border-radius:.85rem;
+background:rgba(110,158,90,.1);padding:.7rem .85rem;margin-bottom:.5rem;cursor:pointer}
+.tel .sg{width:2.1rem;height:2.1rem;border-radius:50%;flex:none;display:grid;place-items:center;
+border:1px solid rgba(110,158,90,.5);color:var(--verde);filter:brightness(1.2);font-size:1rem}
+.tel .tx{flex:1}
+.tel .tx b{display:block;font-weight:400;font-size:.95rem}
+.tel .tx i{display:block;font-style:normal;font-size:.8rem;
+color:rgba(245,240,230,.5);margin-top:.1rem;line-height:1.4}
+.tel .fr{flex:none;color:rgba(245,240,230,.3)}
+.tel.spento{border-style:dashed;border-color:rgba(245,240,230,.18);
+background:rgba(8,11,26,.3);cursor:default}
+.tel.spento .sg{border-color:rgba(245,240,230,.2);color:rgba(245,240,230,.3);filter:none}
+.tel.spento .tx b{color:rgba(245,240,230,.45)}
+
+/* i mesi */
+.mesi{display:flex;gap:.3rem;overflow-x:auto;margin-bottom:.8rem;padding-bottom:.2rem}
+.mesi button{font-family:'DM Sans',sans-serif;font-size:.78rem;padding:.3rem .8rem;
+border-radius:1.4rem;cursor:pointer;background:transparent;white-space:nowrap;
+border:1px solid rgba(245,240,230,.16);color:rgba(245,240,230,.55)}
+.mesi button.on{border-color:var(--oro);background:rgba(200,160,85,.18);color:var(--oro-ch)}
+
+/* una data */
+.gg{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+color:rgba(245,240,230,.32);margin:1rem 0 .35rem .1rem}
+.dt{display:flex;align-items:stretch;gap:.7rem;margin-bottom:.35rem}
+.dt .qd{flex:none;width:2.8rem;border-radius:.65rem;display:flex;flex-direction:column;
+align-items:center;justify-content:center;padding:.4rem 0;
+border:1px solid color-mix(in srgb,var(--c) 35%,transparent);
+background:color-mix(in srgb,var(--c) 12%,transparent)}
+.dt .qd b{font-family:'Cinzel',serif;font-size:1.15rem;line-height:1;
+color:var(--c);filter:brightness(1.3);font-weight:400}
+.dt .qd span{font-size:.58rem;letter-spacing:.08em;color:rgba(245,240,230,.4);margin-top:.15rem}
+.dt .cr{flex:1;min-width:0;border:1px solid color-mix(in srgb,var(--c) 24%,transparent);
+border-left:3px solid color-mix(in srgb,var(--c) 55%,transparent);border-radius:.75rem;
+background:color-mix(in srgb,var(--c) 6%,rgba(8,11,26,.42));padding:.6rem .75rem}
+.dt .cr .et{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+color:var(--c);filter:brightness(1.3)}
+.dt .cr b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;
+font-size:1.08rem;line-height:1.3;margin-top:.05rem}
+.dt .cr .me{display:flex;gap:.35rem;align-items:center;flex-wrap:wrap;margin-top:.25rem;
+font-size:.76rem;color:rgba(245,240,230,.44)}
+.dt .cr .da{display:block;font-size:.74rem;color:rgba(245,240,230,.4);margin-top:.25rem;
+line-height:1.35}
+.dt .cr .da em{font-style:normal;color:rgba(245,240,230,.62)}
+
+/* una data chiusa, che non hai la soglia per vedere */
+.dt.chiusa .cr{border-style:dashed;background:rgba(8,11,26,.3)}
+.dt.chiusa .qd{border-style:dashed;opacity:.5}
+.dt.chiusa .cr b{color:rgba(245,240,230,.42)}
+.dt.chiusa .lucc{display:flex;align-items:center;gap:.4rem;margin-top:.3rem;
+font-size:.78rem;color:rgba(245,240,230,.38)}
+.dt.chiusa .lucc b{display:inline;font-family:'DM Sans',sans-serif;font-size:.78rem;
+color:var(--oro-ch)}
+
+.vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;
+color:rgba(245,240,230,.3);padding:.6rem 0;text-align:center}
+</style></head><body><div class="f">
+
+<div class="oc">le orme che hanno un giorno</div>
+<h1>Il calendario</h1>
+<div class="sot">[ la riga sotto il titolo ]</div>
+
+<div class="tempo">
+  <div class="q"><b>[ giorno ]</b><span>[ mese ]</span></div>
+  <div class="q"><b>&#127761;</b><span>[ la luna ]</span></div>
+  <div class="q"><b>[ il santo ]</b><span>il santo</span></div>
+</div>
+
+<div class="tel">
+  <span class="sg">⊕</span>
+  <span class="tx"><b>Porta le date nel telefono</b>
+    <i>[ l&rsquo;app le scrive nel calendario di sistema ]</i></span>
+  <span class="fr">&rsaquo;</span>
+</div>
+
+<div class="tel spento">
+  <span class="sg">⊕</span>
+  <span class="tx"><b>Porta le date nel telefono</b>
+    <i>[ da computer non si può: serve l&rsquo;app ]</i></span>
+</div>
+
+<div class="mesi">
+  <button class="on">[ questo mese ]</button>
+  <button>[ mese ]</button>
+  <button>[ mese ]</button>
+</div>
+
+<div class="gg">[ il mese ]</div>
+
+<div class="dt" style="--c:var(--terra)">
+  <span class="qd"><b>[ g ]</b><span>[ gio ]</span></span>
+  <span class="cr">
+    <span class="et">[ la stanza ]</span>
+    <b>[ il titolo dell&rsquo;orma ]</b>
+    <span class="me"><span>[ l&rsquo;ora ]</span><span>&middot;</span><span>[ dove ]</span></span>
+    <span class="da">↳ da <em>[ l&rsquo;orma madre ]</em></span>
+  </span>
+</div>
+
+<div class="dt" style="--c:var(--etere)">
+  <span class="qd"><b>[ g ]</b><span>[ gio ]</span></span>
+  <span class="cr">
+    <span class="et">[ la stanza ]</span>
+    <b>[ un&rsquo;orma senza madre ]</b>
+    <span class="me"><span>[ l&rsquo;ora ]</span></span>
+  </span>
+</div>
+
+<div class="dt chiusa" style="--c:var(--terra)">
+  <span class="qd"><b>[ g ]</b><span>[ gio ]</span></span>
+  <span class="cr">
+    <span class="et">[ la stanza ]</span>
+    <b>[ una data del vicinato ]</b>
+    <span class="lucc">☉ si apre <b>[ da che livello ]</b></span>
+  </span>
+</div>
+
+<div class="vuoto">[ un mese senza date non mostra righe ]</div>
+
+</div></body></html>

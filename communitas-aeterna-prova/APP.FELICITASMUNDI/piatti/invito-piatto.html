@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Invita &middot; FelicitasMundi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- ═══════════════════════════════════════════════════════════════
+     L'INVITO — la finestra che si apre da «invita su Felicitas».
+
+     ⭐ NON È UN'ORMA. Un invito non è lavoro: è una persona che
+        manca. Un'orma standard sarebbe rumore fra le cose da fare.
+
+     ⭐ NON CHIEDE CHE TIPO È. Amico, studente, produttore,
+        terapeuta, custode — sono già i talenti, e chi arriva li
+        sceglie da sé, come ha fatto chi invita.
+
+     ⛔ IL COLLEGAMENTO PORTA IL NOME, non un codice a caso:
+        ?invito=gabriele-dettori — è `persone.nome_url`, lo slug.
+
+     ⭐ COSA FA IL GESTO, in un colpo (fm_accetta_invito):
+        · scrive chi ha chiamato chi — persone.invitato_da
+        · mette chi arriva nella rubrica di chi invita — contatti
+        E chi arriva sa da subito chi l'ha chiamato.
+
+     ⚠️ La presentazione qui sotto è un segnaposto: le parole le
+        mette Gab. Possono venire da quella di Cesena.
+     ═══════════════════════════════════════════════════════════════ -->
+<style>
+:root{--navy:#0F1226;--alto:#1B2140;--ivory:#F5F0E6;--oro:#C8A055;--oro-ch:#D4AF6A;
+--line:rgba(184,150,62,.18);--nexus:#8C2F39;--terra:#AA8844;--acqua:#4488BB;
+--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--verde:#6E9E5A}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:#05060D;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+display:flex;align-items:flex-end;justify-content:center}
+
+.velo{position:fixed;inset:0;background:rgba(4,6,14,.62)}
+.fg{position:relative;width:100%;max-width:27rem;background:var(--alto);
+border-radius:1.1rem 1.1rem 0 0;padding:1rem 1.2rem 1.8rem;
+box-shadow:0 -.4rem 2rem rgba(0,0,0,.5);max-height:92vh;overflow-y:auto}
+.maniglia{width:2.6rem;height:.22rem;border-radius:1rem;
+background:rgba(245,240,230,.18);margin:0 auto 1rem}
+
+h1{font-family:'Cinzel',serif;font-weight:400;font-size:1.24rem;
+color:var(--oro-ch);line-height:1.2}
+.sot{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;
+color:rgba(245,240,230,.5);line-height:1.5;margin:.2rem 0 1.1rem}
+
+/* ── il collegamento ────────────────────────────────────────── */
+.link{display:flex;align-items:center;gap:.55rem;padding:.6rem .75rem;
+border-radius:.7rem;background:rgba(8,11,26,.6);
+border:1px solid rgba(200,160,85,.28)}
+.link code{flex:1;min-width:0;font-size:.86rem;color:rgba(245,240,230,.65);
+overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+font-family:'DM Sans',monospace}
+.link button{flex:none;min-height:2.5rem;padding:0 1rem;border-radius:1.2rem;
+cursor:pointer;font-family:inherit;font-size:.86rem;
+border:1px solid var(--oro);background:rgba(200,160,85,.16);color:var(--oro-ch)}
+.link button.fatto{border-color:rgba(110,158,90,.6);
+background:rgba(110,158,90,.15);color:var(--verde)}
+.dice{font-size:.84rem;color:rgba(245,240,230,.4);margin-top:.5rem;line-height:1.5}
+.dice b{color:var(--oro-ch);font-weight:400}
+
+/* ── i modi per mandarlo ────────────────────────────────────── */
+.modi{display:grid;grid-template-columns:repeat(auto-fit,minmax(7rem,1fr));
+gap:.45rem;margin-top:.8rem}
+.modi button{min-height:2.7rem;border-radius:1.2rem;cursor:pointer;
+font-family:inherit;font-size:.88rem;
+border:1px solid rgba(245,240,230,.14);background:rgba(245,240,230,.03);
+color:rgba(245,240,230,.75)}
+.modi button:hover{background:rgba(245,240,230,.07);border-color:rgba(200,160,85,.4)}
+.modi button.fatto{border-color:rgba(110,158,90,.55);
+background:rgba(110,158,90,.14);color:var(--verde)}
+
+/* ── l'anteprima: cosa vede chi arriva ──────────────────────── */
+.et{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+color:rgba(245,240,230,.3);margin:1.5rem 0 .5rem;
+padding-top:1.1rem;border-top:1px solid var(--line)}
+.ant{border:1px solid rgba(184,150,62,.22);border-radius:.9rem;font-size:1.02rem;
+background:linear-gradient(165deg,rgba(20,23,43,.9),rgba(8,11,26,.7));
+padding:1.3rem 1.15rem;position:relative;overflow:hidden}
+.ant::before{content:'';position:absolute;inset:0;pointer-events:none;
+background:radial-gradient(ellipse at 24% 8%,rgba(58,88,160,.22),transparent 56%),
+radial-gradient(ellipse at 84% 96%,rgba(70,52,120,.18),transparent 58%)}
+.ant > *{position:relative}
+.ant .nx{width:4.4rem;height:4.4rem;margin:0 auto .7rem;display:block;
+object-fit:contain;opacity:.92}
+.ant .chi{font-family:'Cormorant Garamond',serif;font-style:italic;
+font-size:1.06rem;color:var(--oro);text-align:center;margin-bottom:.15rem}
+.ant h2{font-family:'Cinzel',serif;font-weight:400;font-size:1.46rem;
+text-align:center;line-height:1.2;margin-bottom:.1rem}
+.ant h2 .cme{display:block;font-size:1.04rem;color:var(--oro);
+opacity:.85;margin-top:.1rem}
+.ant .occ{font-family:'Cormorant Garamond',serif;font-style:italic;
+font-size:1.04rem;color:rgba(245,240,230,.48);text-align:center;
+margin-bottom:.9rem;padding-bottom:.8rem;
+border-bottom:1px solid rgba(184,150,62,.16)}
+.ant p + p{margin-top:.55rem}
+/* ⭐ lo spazio dopo «luoghi che esistono»: la frase respira */
+.ant .respiro{margin-bottom:1.1rem}
+.ant p b{color:rgba(245,240,230,.85);font-weight:400}
+.ant .orma{margin-top:1rem;padding-top:.9rem;
+border-top:1px solid rgba(184,150,62,.16)}
+.ant .orma .oc2{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+color:rgba(245,240,230,.3);text-align:center}
+.ant .orma > b{display:block;font-family:'Cinzel',serif;font-weight:400;
+font-size:1.32rem;color:var(--oro-ch);text-align:center;margin:.1rem 0 .5rem}
+.ant .orma p{color:rgba(245,240,230,.58)}
+.ant p{font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.62;
+color:rgba(245,240,230,.7);text-align:center}
+.ant .cinque{display:flex;justify-content:center;flex-wrap:wrap;
+gap:.3rem;margin:.9rem 0 .8rem}
+.ant .cinque span{font-size:.84rem;padding:.3rem .8rem;border-radius:1rem;
+border:1px solid color-mix(in srgb,var(--c) 45%,transparent);
+color:var(--c);filter:brightness(1.3);
+background:color-mix(in srgb,var(--c) 10%,transparent)}
+.ant .entra{display:block;width:100%;min-height:2.8rem;border-radius:1.4rem;
+cursor:default;font-family:inherit;font-size:.94rem;
+border:1px solid rgba(200,160,85,.5);background:rgba(200,160,85,.14);
+color:var(--oro-ch)}
+.ant .pie2{font-family:'Cormorant Garamond',serif;font-style:italic;
+font-size:.84rem;color:rgba(245,240,230,.3);text-align:center;margin-top:.6rem}
+
+.nota{font-family:'Cormorant Garamond',serif;font-size:.92rem;line-height:1.55;
+color:rgba(245,240,230,.42);margin-top:.9rem}
+.nota b{color:rgba(245,240,230,.6);font-weight:400}
+
+.chiudi{display:block;width:100%;min-height:2.9rem;margin-top:1.2rem;
+border-radius:1.4rem;cursor:pointer;font-family:inherit;font-size:.94rem;
+border:1px solid rgba(245,240,230,.16);background:transparent;
+color:rgba(245,240,230,.6)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+
+<div class="velo" aria-hidden="true"></div>
+
+<div class="fg" role="dialog" aria-modal="true" aria-label="Invita qualcuno">
+  <div class="maniglia" aria-hidden="true"></div>
+
+  <h1>Invita chi risuona</h1>
+  <div class="sot">Espandi la rete con amici, vicini, produttori, operatori,
+    custodi di luoghi, famiglie, e chiunque possa trovarne beneficio</div>
+
+  <div class="link">
+    <code id="url" data-c="invito.url">felicitasmundi.com/?invito=[ il tuo nome ]</code>
+    <button type="button" id="copia" data-g="copia">copia</button>
+  </div>
+  <div class="dice">
+    Sono arrivate <b data-c="conto.invitati">[ n ]</b> persone dal tuo invito.
+    Chi entra da qui compare nella tua rubrica: da l&igrave; puoi metterlo nelle tue orme.
+  </div>
+
+  <!-- ⭐ i tre modi funzionano davvero: nessuno è un tasto morto.
+       «condividi» apre il pannello del telefono e copre tutto —
+       messaggi, posta, quello che uno ha. Gli altri due servono
+       sul computer, dove navigator.share spesso non c'è. -->
+  <div class="modi">
+    <button type="button" id="msg" data-g="manda-messaggio">manda per messaggio</button>
+    <button type="button" id="post" data-g="manda-posta">manda per posta</button>
+    <button type="button" id="cond" data-g="condividi">condividi</button>
+  </div>
+
+  <div class="et">Cosa vede chi arriva</div>
+
+  <div class="ant">
+    <!-- il Nexus: il segno che si vede per primo -->
+    <!-- ⛔ il Nexus è QUELLO, non ridisegnato a mano.
+         Stesso file che usa la barra. -->
+    <img class="nx" alt="" aria-hidden="true"
+      src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png">
+
+    <div class="chi">ti ha invitato <span data-c="persona.nome">[ nome ]</span></div>
+    <!-- ⭐ Le parole sono di Gab, verbatim: la presentazione scritta
+         per Cesena, accorciata da lui a quello che serve qui. -->
+    <h2>FelicitasMundi<span class="cme">Comunit&agrave; Eterna</span></h2>
+    <p class="occ">uno strumento pratico per tenere traccia di ci&ograve;
+      che si fa insieme</p>
+
+    <p>Viviamo un tempo di grande confusione, in cui parte della Comunit&agrave;
+      ha perso i propri valori umani e la capacit&agrave; di riconoscere
+      ci&ograve; che nutre.</p>
+    <p class="respiro"><b>FelicitasMundi &egrave; uno strumento pratico, oltre l&rsquo;idea:</b>
+      persone vere, che si trovano in luoghi che esistono.</p>
+
+
+    <p>&Egrave; uno strumento solo, fondato su conoscenze universali, che
+      appartengono alle radici dei popoli, e che facilita la connessione fra
+      gruppi di persone in territori distanti partendo dalla lingua &mdash;
+      dai ceppi linguistici che ci legano pi&ugrave; dei confini. E che
+      sostiene in concreto le assistenze terapeutiche, alimentari
+      ed educative.</p>
+
+    <div class="orma">
+      <div class="oc2">al centro c&rsquo;&egrave;</div>
+      <b>L&rsquo;Orma</b>
+      <p>&Egrave; il rendersi conto di far parte di un tracciato comune, di un
+        percorso collettivo verso l&rsquo;Evoluzione della Specie &mdash; e
+        insieme &egrave; lo strumento che ne tiene traccia.</p>
+      <p>Le orme aiutano le persone a stabilizzarsi, a sostenersi, a fare
+        gruppo, e a portare il proprio talento alla Comunit&agrave; Eterna.</p>
+    </div>
+
+    <div class="cinque">
+      <span style="--c:var(--terra)">Vicinati</span>
+      <span style="--c:var(--acqua)">Emporio</span>
+      <span style="--c:var(--fuoco)">Assistenza</span>
+      <span style="--c:var(--aria)">Edizione</span>
+      <span style="--c:var(--etere)">Scuola</span>
+    </div>
+
+    <button class="entra" type="button" tabindex="-1">entra</button>
+    <div class="pie2">riconosci i tuoi talenti</div>
+  </div>
+
+  <button class="chiudi" type="button" data-g="chiudi">Chiudi</button>
+</div>
+
+<script>
+/* ⭐ copiare il collegamento */
+document.getElementById("copia").onclick = function(){
+  var t = document.getElementById("url").textContent.trim();
+  var b = this;
+  function fatto(){
+    b.textContent = "copiato"; b.className = "fatto";
+    setTimeout(function(){ b.textContent = "copia"; b.className = ""; }, 1800);
+  }
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(fatto, fatto);
+  else fatto();
+};
+
+/* ⭐ il testo che accompagna il collegamento */
+function acc(){
+  var u = document.getElementById("url").textContent.trim();
+  if(u.indexOf("http") !== 0) u = "https://" + u;
+  return { url: u,
+    tit: "FelicitasMundi \u00b7 Comunit\u00e0 Eterna",
+    txt: "Ti invito su FelicitasMundi \u2014 uno strumento pratico per " +
+         "tenere traccia di ci\u00f2 che si fa insieme.\n\n" + u };
+}
+
+document.getElementById("msg").onclick = function(){
+  var a = acc();
+  location.href = "sms:?&body=" + encodeURIComponent(a.txt);
+};
+document.getElementById("post").onclick = function(){
+  var a = acc();
+  location.href = "mailto:?subject=" + encodeURIComponent(a.tit) +
+    "&body=" + encodeURIComponent(a.txt);
+};
+document.getElementById("cond").onclick = function(){
+  var a = acc(), b = this;
+  if(navigator.share){
+    navigator.share({ title: a.tit, text: a.txt, url: a.url })
+      .catch(function(){});
+  }else{
+    /* ⚠️ sul computer il pannello non c'è: si copia, e lo si dice */
+    if(navigator.clipboard) navigator.clipboard.writeText(a.txt);
+    b.textContent = "copiato"; b.className = "fatto";
+    setTimeout(function(){ b.textContent = "condividi"; b.className = ""; }, 1800);
+  }
+};
+</script>
+</body></html>

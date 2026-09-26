@@ -1,0 +1,21 @@
+PAGINE PIATTE — FelicitasMundi
+HTML che si apre da solo nel browser. Niente da interpretare.
+
+CONVENZIONI
+- [ segnaposto ] : testo da sostituire con il dato vero. La forma non si tocca.
+- data-stampo="nome" : la prima riga di una lista, da copiare e riempire.
+  data-esempio : le altre righe d'esempio, da cancellare quando c'è il dato vero.
+- data-stato="nome" : un blocco che compare in uno stato (es. elenco / scheda, passo1..passo4).
+  data-nascosto : lo stato non attivo all'apertura. Per mostrarlo si toglie l'attributo;
+  la regola [data-nascosto]{display:none} sta nello <style> in testa.
+- data-gesto="nome" : dove c'era un tocco (apri, vai, chiudi…). Il comportamento lo scrive chi collega.
+- data-h="n" : gli stati hover/focus del tasto, definiti nello <style> in testa.
+
+DIPENDENZE (stessa cartella)
+- ak-cosmo.js  : la rete neuronale del cosmo (<ak-cosmo>)
+- ak-solido.js : il solido che ruota sul cubo (<ak-solido tipo="…" colore="…">)
+- ak-talenti.js: i segni dei talenti (window.AK_STANZE) — la mia orma
+- caratteri da Google Fonts (Cinzel, Cormorant Garamond, DM Sans)
+- immagini: bhagavad-gita.jpg, nexus-mano.jpg, anima-vagabonda.jpg
+
+dentro-orma-esempio.html era già piatto: è quello corretto, non rigenerato.

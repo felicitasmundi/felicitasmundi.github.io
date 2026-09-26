@@ -1,0 +1,123 @@
+<!-- ═══════════════════════════════════════════════════════════════
+     IL NEXUS — la mail che porta il codice d'ingresso.
+     Va in Supabase → Authentication → Email Templates → Magic Link.
+
+     ⭐ {{ .Token }} è il codice di sei cifre.
+     ⭐ {{ .Data.nome }} è il nome, che viaggia coll'invio del codice.
+     ⭐ {{ .ConfirmationURL }} è il collegamento, per chi preferisce.
+
+     ⚠️ Nella posta i caratteri di Google non si caricano: qui si usano
+        quelli che ogni telefono ha già, scelti per somigliare —
+        Georgia al posto di Cinzel e Cormorant.
+     ⚠️ Tutto è scritto con le tabelle e gli stili in riga: è l'unico
+        modo perché si veda uguale in Gmail, Outlook e sul telefono.
+     ═══════════════════════════════════════════════════════════════ -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+       style="margin:0;padding:0;background:#02040c;">
+  <tr>
+    <td align="center" style="padding:32px 16px;">
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+             style="max-width:520px;background:#0F1226;border:1px solid rgba(212,175,106,.28);
+                    border-radius:14px;">
+
+        <!-- il Nexus -->
+        <tr>
+          <td align="center" style="padding:36px 28px 8px 28px;">
+            <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png"
+                 width="84" height="84" alt=""
+                 style="display:block;width:84px;height:84px;border:0;outline:none;">
+          </td>
+        </tr>
+
+        <!-- il titolo -->
+        <tr>
+          <td align="center" style="padding:14px 28px 0 28px;">
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;
+                        line-height:1.2;letter-spacing:.06em;color:#F5F0E6;">
+              Il tuo Nexus
+            </div>
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:13px;
+                        letter-spacing:.24em;text-transform:uppercase;color:#D4AF6A;
+                        padding-top:10px;">
+              FelicitasMundi &middot; Comunit&agrave; Eterna
+            </div>
+          </td>
+        </tr>
+
+        <!-- le parole -->
+        <tr>
+          <td style="padding:26px 34px 0 34px;">
+            <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:17px;
+                      line-height:1.55;color:rgba(245,240,230,.82);">
+              Ciao <b style="color:#F5F0E6;font-weight:normal;">{{ .Data.nome }}</b>,
+              con questo numero segni la tua orma nella Comunit&agrave; Eterna.
+            </p>
+          </td>
+        </tr>
+
+        <!-- il codice -->
+        <tr>
+          <td align="center" style="padding:24px 28px 8px 28px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0"
+                   style="border:1px solid rgba(212,175,106,.55);border-radius:12px;
+                          background:#080b1a;">
+              <tr>
+                <td align="center" style="padding:18px 34px;">
+                  <div style="font-family:Georgia,'Times New Roman',serif;font-size:38px;
+                              line-height:1.1;letter-spacing:.22em;color:#D4AF6A;">
+                    {{ .Token }}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- quanto vale -->
+        <tr>
+          <td align="center" style="padding:6px 34px 0 34px;">
+            <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-style:italic;
+                      font-size:15px;line-height:1.5;color:rgba(245,240,230,.5);">
+              Vale quindici minuti, e una volta sola.
+            </p>
+          </td>
+        </tr>
+
+        <!-- l'altra strada -->
+        <tr>
+          <td align="center" style="padding:24px 34px 0 34px;">
+            <a href="{{ .ConfirmationURL }}"
+               style="display:inline-block;padding:14px 30px;border-radius:999px;
+                      border:1px solid rgba(212,175,106,.7);background:#151936;
+                      font-family:Georgia,'Times New Roman',serif;font-size:14px;
+                      letter-spacing:.14em;text-transform:uppercase;color:#F5F0E6;
+                      text-decoration:none;">
+              oppure entra da qui
+            </a>
+          </td>
+        </tr>
+
+        <!-- il piede -->
+        <tr>
+          <td style="padding:30px 34px 34px 34px;">
+            <div style="border-top:1px solid rgba(212,175,106,.18);padding-top:18px;">
+              <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-style:italic;
+                        font-size:14px;line-height:1.55;color:rgba(245,240,230,.42);">
+                Se questo codice non l&rsquo;hai chiesto tu, lascia perdere questa mail:
+                non succede niente.
+              </p>
+              <p style="margin:12px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:11px;
+                        line-height:1.6;color:rgba(245,240,230,.3);">
+                Felicitas Omnia S.r.l.s. &middot; Via Tempio 70/A, 07100 Sassari &middot;
+                P.IVA 03075740906
+              </p>
+            </div>
+          </td>
+        </tr>
+
+      </table>
+
+    </td>
+  </tr>
+</table>

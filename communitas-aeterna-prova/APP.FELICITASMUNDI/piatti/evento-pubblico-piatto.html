@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#02040c}
+a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
+</style>
+<script src="./ak-cosmo.js"></script>
+<script src="./ak-solido.js"></script>
+<style>
+[hidden]{display:none!important}
+.ev-invita:hover{border-color:#D4AF6A;background:rgba(212,175,106,.1)}
+.ev-cisaro:hover{background:rgba(212,175,106,.32)}
+.ev-volto{width:1.7rem;height:1.7rem;border-radius:50%;border:1px solid #080b1a;background:#AA8844;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:.84rem;color:#0A0C1A;overflow:hidden;text-decoration:none}
+.ev-volto+.ev-volto{margin-left:-.5rem}
+.ev-volto img{width:100%;height:100%;object-fit:cover;display:block}
+.ev-volto img:not([src]),.ev-volto img[src=""]{display:none}
+.ev-volto:not([href]),.ev-volto[href=""],.ev-volto[href="#"]{cursor:default}
+.ev-organizza img:not([src]),.ev-organizza img[src=""]{display:none}
+</style>
+</head>
+<body>
+<div data-screen-label="Evento pubblico" style="position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));align-items:start;gap:2rem 3rem;padding:2rem clamp(1.25rem,5vw,5rem) 4rem;box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6;background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)">
+  <ak-cosmo aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none"></ak-cosmo>
+  <div aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)"></div>
+
+  <!-- sinistra: il cubo col solido terra -->
+  <div style="position:sticky;top:2rem;z-index:1;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:1.2rem;width:100%;justify-self:center">
+    <div style="position:relative;width:100%;max-width:min(24rem,58vh);aspect-ratio:1">
+      <div style="position:absolute;inset:8%;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(170,136,68,.18),transparent 70%)"></div>
+      <svg viewBox="-128 -128 256 256" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+        <g fill="none" stroke="#D4AF6A" stroke-linejoin="round">
+          <g stroke-width=".7" opacity=".34">
+            <line x1="0" y1="0" x2="0" y2="-46"></line><line x1="0" y1="0" x2="39.84" y2="-23"></line><line x1="0" y1="0" x2="39.84" y2="23"></line><line x1="0" y1="0" x2="0" y2="46"></line><line x1="0" y1="0" x2="-39.84" y2="23"></line><line x1="0" y1="0" x2="-39.84" y2="-23"></line><line x1="0" y1="0" x2="0" y2="-92"></line><line x1="0" y1="0" x2="79.67" y2="-46"></line><line x1="0" y1="0" x2="79.67" y2="46"></line><line x1="0" y1="0" x2="0" y2="92"></line><line x1="0" y1="0" x2="-79.67" y2="46"></line><line x1="0" y1="0" x2="-79.67" y2="-46"></line><line x1="0" y1="-46" x2="39.84" y2="-23"></line><line x1="0" y1="-46" x2="39.84" y2="23"></line><line x1="0" y1="-46" x2="0" y2="46"></line><line x1="0" y1="-46" x2="-39.84" y2="23"></line><line x1="0" y1="-46" x2="-39.84" y2="-23"></line><line x1="0" y1="-46" x2="0" y2="-92"></line><line x1="0" y1="-46" x2="79.67" y2="-46"></line><line x1="0" y1="-46" x2="79.67" y2="46"></line><line x1="0" y1="-46" x2="0" y2="92"></line><line x1="0" y1="-46" x2="-79.67" y2="46"></line><line x1="0" y1="-46" x2="-79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="39.84" y2="23"></line><line x1="39.84" y1="-23" x2="0" y2="46"></line><line x1="39.84" y1="-23" x2="-39.84" y2="23"></line><line x1="39.84" y1="-23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="-23" x2="0" y2="-92"></line><line x1="39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="79.67" y2="46"></line><line x1="39.84" y1="-23" x2="0" y2="92"></line><line x1="39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="39.84" y1="23" x2="0" y2="46"></line><line x1="39.84" y1="23" x2="-39.84" y2="23"></line><line x1="39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="23" x2="0" y2="-92"></line><line x1="39.84" y1="23" x2="79.67" y2="-46"></line><line x1="39.84" y1="23" x2="79.67" y2="46"></line><line x1="39.84" y1="23" x2="0" y2="92"></line><line x1="39.84" y1="23" x2="-79.67" y2="46"></line><line x1="39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="0" y1="46" x2="-39.84" y2="23"></line><line x1="0" y1="46" x2="-39.84" y2="-23"></line><line x1="0" y1="46" x2="0" y2="-92"></line><line x1="0" y1="46" x2="79.67" y2="-46"></line><line x1="0" y1="46" x2="79.67" y2="46"></line><line x1="0" y1="46" x2="0" y2="92"></line><line x1="0" y1="46" x2="-79.67" y2="46"></line><line x1="0" y1="46" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="-39.84" y1="23" x2="0" y2="-92"></line><line x1="-39.84" y1="23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="79.67" y2="46"></line><line x1="-39.84" y1="23" x2="0" y2="92"></line><line x1="-39.84" y1="23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="0" y2="-92"></line><line x1="-39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="0" y2="92"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="46"></line><line x1="0" y1="-92" x2="0" y2="92"></line><line x1="0" y1="-92" x2="-79.67" y2="46"></line><line x1="0" y1="-92" x2="-79.67" y2="-46"></line><line x1="79.67" y1="-46" x2="79.67" y2="46"></line><line x1="79.67" y1="-46" x2="0" y2="92"></line><line x1="79.67" y1="-46" x2="-79.67" y2="46"></line><line x1="79.67" y1="-46" x2="-79.67" y2="-46"></line><line x1="79.67" y1="46" x2="0" y2="92"></line><line x1="79.67" y1="46" x2="-79.67" y2="46"></line><line x1="79.67" y1="46" x2="-79.67" y2="-46"></line><line x1="0" y1="92" x2="-79.67" y2="46"></line><line x1="0" y1="92" x2="-79.67" y2="-46"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46"></line>
+          </g>
+          <g stroke-width="1" opacity=".3" stroke="#C9A6E0">
+            <circle cx="0" cy="0" r="23"></circle><circle cx="0" cy="-46" r="23"></circle><circle cx="39.84" cy="-23" r="23"></circle><circle cx="39.84" cy="23" r="23"></circle><circle cx="0" cy="46" r="23"></circle><circle cx="-39.84" cy="23" r="23"></circle><circle cx="-39.84" cy="-23" r="23"></circle><circle cx="0" cy="-92" r="23"></circle><circle cx="79.67" cy="-46" r="23"></circle><circle cx="79.67" cy="46" r="23"></circle><circle cx="0" cy="92" r="23"></circle><circle cx="-79.67" cy="46" r="23"></circle><circle cx="-79.67" cy="-46" r="23"></circle>
+          </g>
+          <circle r="115" stroke-width="1" opacity=".5"></circle>
+          <rect x="-115" y="-115" width="230" height="230" stroke-width=".8" stroke-dasharray="3 3.6" opacity=".34"></rect>
+        </g>
+      </svg>
+      <ak-solido tipo="cubo" colore="#AA8844" aria-hidden="true"></ak-solido>
+    </div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:rgba(170,136,68,.95);filter:brightness(1.25);text-align:center;margin-top:-.4rem">cubo &middot; terra &middot; i Vicinati</div>
+    <div style="display:flex;justify-content:center;width:100%;max-width:24rem">
+      <a href="invito.html" style="min-height:3.5rem;min-width:16rem;padding:.7rem 1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.45);background:rgba(8,11,26,.5);color:#F5F0E6;font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.1em;line-height:1.3;display:flex;align-items:center;justify-content:space-between;gap:.6rem;transition:border-color .3s,background .3s" class="ev-invita">
+        <span>invita chi risuona</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D4AF6A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;width:1.5rem;height:1.5rem"><path d="M4 12h15"></path><path d="M13 5l7 7-7 7"></path></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- destra: l'evento -->
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:1.3rem;max-width:34rem;width:100%;min-width:0;justify-self:start">
+    <!-- ① cosa si vede -->
+    <div style="position:relative;aspect-ratio:16/9;border-radius:.9rem;overflow:hidden;background:linear-gradient(135deg,rgba(170,136,68,.3),rgba(8,11,26,.6));border:1px solid rgba(245,240,230,.1)">
+      <img data-c="orma.immagine_url" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+      <div data-stato="senza-foto" hidden style="position:absolute;inset:0;display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.4)">[ senza immagine ]</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.5rem">
+      <span style="font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(170,136,68,.95);filter:brightness(1.25)"><span data-c="orma.tipo">[ tipo ]</span> &middot; i Vicinati</span>
+      <h1 style="margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:1.12;letter-spacing:.04em;color:#F5F0E6;text-wrap:pretty" data-c="orma.titolo">[ il titolo dell&rsquo;evento ]</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;font-size:1rem;color:rgba(245,240,230,.75)">
+        <span data-c="orma.accaduto_il">[ quando ]</span>
+        <span data-c="orma.luogo">[ dove ]</span>
+        <span data-stato="passato" hidden style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,230,.45)">&middot; [ è passata ]</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.4rem;font-size:.95rem;color:rgba(245,240,230,.7)">
+        <a class="ev-organizza" data-c="persona.nome_url" href="#" style="display:flex;align-items:center;gap:.6rem;color:inherit;text-decoration:none">
+          <span style="position:relative;width:2rem;height:2rem;flex:none;border-radius:50%;border:1px solid rgba(212,175,106,.6);background:rgba(212,175,106,.12);display:grid;place-items:center;font-family:'Cinzel',serif;font-size:.84rem;color:#D4AF6A;overflow:hidden">
+            <span data-c="persona.iniziale">g</span>
+            <img data-c="persona.foto_url" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </span>
+          <span>lo organizza <b style="font-weight:500;color:#F5F0E6"><span data-c="persona.nome">[ nome ]</span> <span data-c="persona.cognome">[ cognome ]</span></b></span>
+        </a>
+        <a data-c="organizzazione" href="#" style="align-self:flex-start;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:#D4AF6A;padding-left:2.6rem">[ il gruppo ]</a>
+      </div>
+    </div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;line-height:1.45;color:rgba(245,240,230,.85);text-wrap:pretty;padding:.9rem 1.1rem;border-left:2px solid rgba(170,136,68,.7);background:rgba(170,136,68,.07);border-radius:0 .8rem .8rem 0" data-c="orma.contenuto">[ il racconto, colle parole di chi l&rsquo;ha fatto ]</div>
+    <!-- chi ha aderito: i volti solo a chi ha l'account; da fuori resta il numero -->
+    <div style="display:flex;flex-direction:column;gap:.4rem;font-size:1rem;color:rgba(245,240,230,.7)">
+      <div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap">
+        <span data-stato="da-fuori" hidden style="display:flex"></span>
+        <span style="display:flex">
+          <a class="ev-volto" data-stampo="dentro" data-c="dentro.nome_url" href="#"><span data-c="dentro.iniziale">g</span><img data-c="dentro.foto_url" alt=""><span data-c="dentro.nome" hidden></span></a>
+        </span>
+        <span><b data-c="conto.aderenti" style="font-weight:500;color:#F5F0E6">[ n ]</b> &middot; Chi ha aderito all&rsquo;evento</span>
+        <span data-stato="nessuno" hidden style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,230,.5)">[ nessuno ancora ]</span>
+        <span data-stato="gia-dentro" hidden style="font-family:'Cormorant Garamond',serif;font-style:italic;color:#D4AF6A">[ ci sei anche tu ]</span>
+        <span data-stato="pieno" hidden style="font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,230,.4)">[ al completo ]</span>
+      </div>
+    </div>
+
+    <!-- ② il tasto, e ③ cosa si trova dentro -->
+    <div style="display:flex;flex-direction:column;gap:.9rem;padding:1.1rem 1.2rem;border-radius:.9rem;border:1px solid rgba(170,136,68,.45);background:rgba(8,11,26,.55)">
+      <a data-g="ci-saro" href="#" style="min-height:3.5rem;padding:.7rem 1.4rem;border-radius:.9rem;border:1px solid #D4AF6A;background:rgba(212,175,106,.18);color:#F5F0E6;font-family:'Cinzel',serif;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:.6rem;transition:background .3s" class="ev-cisaro">
+        <span>ci sar&ograve;</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D4AF6A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;width:1.5rem;height:1.5rem"><path d="M4 12h15"></path><path d="M13 5l7 7-7 7"></path></svg>
+      </a>
+      <div style="display:flex;flex-direction:column;gap:.35rem;font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.4;color:rgba(245,240,230,.75)">
+        <span>Toccando entri nell&rsquo;orma della festa. L&agrave; c&rsquo;&egrave;:</span>
+        <span>&middot; la conversazione, e quello che serve sapere</span>
+        <span>&middot; i bisogni aperti &mdash; e chi lo sente pu&ograve; dare una mano</span>
+        <span>&middot; gli aggiornamenti dalla squadra organizzativa</span>
+      </div>
+    </div>
+
+    <!-- ④ cos'è FelicitasMundi, piccolo -->
+    <div style="display:flex;flex-direction:column;gap:.4rem;padding-top:1rem;border-top:1px solid rgba(212,175,106,.22)">
+      <span style="font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.75)">FelicitasMundi</span>
+      <div style="display:flex;flex-direction:column;gap:.5rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;line-height:1.45;color:rgba(245,240,230,.65);text-wrap:pretty">
+        <span>Questa festa &egrave; un&rsquo;orma: qualcuno l&rsquo;ha aperta, e chi entra ci lavora dentro.</span>
+        <span>Toccando &laquo;ci sar&ograve;&raquo; entri dove si parla &mdash; chi viene, cosa portare, cosa serve ancora. E se qualcosa manca, lo puoi fare tu.</span>
+        <span>&Egrave; il modo in cui FelicitasMundi tiene traccia di quello che si fa insieme.</span>
+      </div>
+      <a href="antahkarana-soglia.html" style="align-self:flex-start;min-height:2.75rem;display:inline-flex;align-items:center;gap:.4rem;font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.1em;color:#D4AF6A">la soglia <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem"><path d="M4 12h15"></path><path d="M13 5l7 7-7 7"></path></svg></a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

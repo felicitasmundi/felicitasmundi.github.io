@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il configuratore della stampa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#02040c}
+a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
+@keyframes ak-alza{from{opacity:0;transform:translateY(.5rem)}to{opacity:1;transform:none}}
+/* il-configuratore-della-stampa · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--acqua:#4A88B8;--acqua-ch:#7FB4DC;--nexus:#8C2F39}
+[hidden]{display:none!important}
+.st{position:relative;isolation:isolate;font-size:16px;min-height:100vh;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr));align-items:start;gap:2rem 3rem;padding:2rem clamp(1.25rem,5vw,5rem);box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+.st-cosmo{position:absolute;inset:0;z-index:0;pointer-events:none}
+.st-velo{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 70% at 50% 50%,rgba(2,4,12,.55),transparent 100%)}
+.st-sx{position:sticky;top:2rem;z-index:1;display:grid;justify-items:center;gap:1.2rem;width:100%;justify-self:center}
+.st-giorno{display:flex;gap:.55rem;width:100%;max-width:24rem}
+.st-giorno>div{flex:1;border:1px solid rgba(184,150,62,.22);border-radius:.75rem;background:rgba(8,11,26,.4);padding:.65rem .5rem;text-align:center}
+.st-giorno b{display:block;font-family:'Cinzel',serif;font-weight:400;font-size:1rem;line-height:1.2;color:var(--oro)}
+.st-giorno b.luna{font-size:1.4rem}
+.st-giorno span{display:block;font-size:.84rem;color:rgba(245,240,230,.45);margin-top:.25rem}
+.st-cubo{position:relative;width:100%;max-width:min(24rem,58vh);aspect-ratio:1}
+.st-cubo .alone{position:absolute;inset:8%;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(74,136,184,.18),transparent 70%)}
+.st-cubo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.st-solido{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--acqua-ch);text-align:center;margin-top:-.4rem}
+.st-tasto{min-height:3.5rem;min-width:16rem;padding:.7rem 1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.45);background:rgba(8,11,26,.5);color:var(--ivory);text-decoration:none;font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.1em;line-height:1.3;display:flex;align-items:center;justify-content:space-between;gap:.6rem;transition:border-color .3s,background .3s}
+.st-tasto:hover{border-color:var(--oro);background:rgba(212,175,106,.1);color:var(--ivory)}
+.st-tasto svg{flex:none;width:1.5rem;height:1.5rem}
+.st-dx{position:relative;z-index:1;display:flex;flex-direction:column;gap:1.3rem;max-width:34rem;width:100%;min-width:0;justify-self:start}
+.st-capo{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.4rem}
+.st-capo h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2rem,3.6vw,2.9rem);line-height:1.1;letter-spacing:.06em;color:var(--ivory)}
+.st-occ{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acqua-ch)}
+
+.cf{position:relative;isolation:isolate;font-size:16px;min-height:100vh;padding:2rem clamp(1.25rem,5vw,5rem) 4rem;box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+.cf-col{position:relative;z-index:1;max-width:40rem;margin:0 auto;display:flex;flex-direction:column;gap:1.4rem}
+.cf-torna{min-height:2.75rem;padding:0 .9rem 0 .5rem;border-radius:999px;border:1px solid rgba(212,175,106,.35);background:transparent;color:var(--oro);font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.1em;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none}
+.cf-torna svg{width:1.2rem;height:1.2rem}
+.cf-occ{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,230,.45)}
+.cf h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.15;letter-spacing:.04em}
+.cf-passi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem}
+.cf-passo{min-height:2.75rem;padding:.4rem .3rem;border-radius:.6rem;border:1px solid rgba(245,240,230,.1);background:rgba(4,8,20,.5);color:rgba(245,240,230,.35);cursor:pointer;font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.06em;display:flex;flex-direction:column;align-items:center;gap:.1rem;line-height:1.2}
+.cf-passo[data-stato="fatto"]{border-color:rgba(102,153,68,.45);color:rgba(245,240,230,.75)}
+.cf-passo[aria-current="step"]{border-color:rgba(102,153,68,.95);background:rgba(102,153,68,.22);color:var(--ivory)}
+.cf-passo i{font-style:normal;opacity:.6}
+.cf-blocco{display:flex;flex-direction:column;gap:1.1rem;animation:ak-alza .3s ease both}
+.cf-et{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.8)}
+.cf-scelte{display:flex;flex-wrap:wrap;gap:.4rem}
+.cf-pill{min-height:2.75rem;padding:0 .9rem;border-radius:999px;border:1px solid rgba(245,240,230,.16);background:rgba(8,11,26,.4);color:rgba(245,240,230,.65);cursor:pointer;font-family:'DM Sans',system-ui,sans-serif;font-size:.95rem}
+.cf-pill:hover{border-color:rgba(102,153,68,.9)}
+.cf-pill[aria-pressed="true"]{border-color:rgba(102,153,68,.95);background:rgba(102,153,68,.22);color:var(--ivory)}
+.cf-nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.45)}
+.cf-riq{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.9rem 1.1rem;border-radius:.9rem;border:1px solid rgba(102,153,68,.4);background:rgba(8,11,26,.55)}
+.cf-riq .sx{display:flex;flex-direction:column;gap:.15rem}
+.cf-riq .prezzo{font-family:'Cinzel',serif;font-size:1.5rem}
+.cf-b{min-height:2.75rem;padding:0 1.3rem;border-radius:999px;border:1px solid rgba(102,153,68,.9);background:rgba(102,153,68,.3);color:var(--ivory);cursor:pointer;font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center}
+.cf-b:hover{filter:brightness(1.2)}
+.cf-b:disabled{opacity:.4;cursor:default}
+.cf-b.verde{min-height:3.25rem;padding:0 1.5rem;border-radius:.9rem;border-color:#6E9E5A;background:#6E9E5A;color:#0A0C1A;font-weight:500}
+.cf-b.oro{border-color:rgba(212,175,106,.5);background:rgba(212,175,106,.1);font-size:.84rem;letter-spacing:.1em}
+.cf-file{display:flex;align-items:center;gap:1rem;min-height:5rem;padding:1rem 1.1rem;border-radius:.9rem;border:1px dashed rgba(212,175,106,.45);background:rgba(8,11,26,.4);color:var(--ivory);cursor:pointer;text-align:left;font:inherit;width:100%}
+.cf-file .pdf{flex:none;width:3.2rem;height:3.2rem;border-radius:.55rem;border:1px dashed rgba(212,175,106,.5);display:grid;place-items:center;font-family:'Cinzel',serif;font-size:.84rem;color:var(--oro)}
+.cf-file b{font-family:'Cinzel',serif;font-weight:400;font-size:1rem;display:block}
+.cf-file i{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(245,240,230,.5)}
+.cf-ctrl{display:flex;flex-direction:column;gap:.6rem;padding:1rem 1.1rem;border-radius:.9rem;border:1px solid rgba(245,240,230,.15);background:rgba(8,11,26,.5)}
+.cf-ctrl .riga{display:flex;align-items:center;gap:.6rem}
+.cf-ctrl .pt{width:.7rem;height:.7rem;border-radius:50%;background:rgba(245,240,230,.4)}
+.cf-ctrl .nome{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.06em;color:rgba(245,240,230,.5)}
+.cf-ctrl .cosa{margin-left:auto;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.45)}
+@keyframes ak-pulsa{0%,100%{opacity:.4}50%{opacity:1}}
+.cf-ctrl[data-stato="in-attesa"] .pt{animation:ak-pulsa 1.6s ease-in-out infinite}
+.cf-ctrl[data-stato="va-bene"]{border-color:rgba(110,158,90,.5)}.cf-ctrl[data-stato="va-bene"] .pt{background:#6E9E5A}.cf-ctrl[data-stato="va-bene"] .nome{color:#8FBF7A}
+.cf-ctrl[data-stato="problemi"]{border-color:rgba(201,112,122,.5)}.cf-ctrl[data-stato="problemi"] .pt{background:#C9707A}.cf-ctrl[data-stato="problemi"] .nome{color:#E0A0A8}
+.cf-ctrl .lista{display:flex;flex-direction:column;gap:.3rem;padding-left:1.3rem;font-family:'Cormorant Garamond',serif;font-size:1.1rem;line-height:1.45;color:rgba(245,240,230,.8)}
+.cf-conf{display:flex;flex-direction:column;gap:.45rem;padding:1rem 1.1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.25);background:rgba(8,11,26,.5);font-size:.95rem;color:rgba(245,240,230,.75)}
+.cf-conf div{display:flex;justify-content:space-between;gap:1rem}
+.cf-conf .tot{padding-top:.5rem;margin-top:.2rem;border-top:1px solid rgba(212,175,106,.22);font-family:'Cinzel',serif;font-size:1.15rem;color:var(--ivory)}
+.cf-cons{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr));gap:.4rem}
+.cf-cons button{min-height:3.25rem;padding:.5rem .6rem;border-radius:.7rem;border:1px solid rgba(245,240,230,.14);background:rgba(8,11,26,.4);color:rgba(245,240,230,.65);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.1rem;font:inherit}
+.cf-cons button b{font-family:'Cinzel',serif;font-weight:400;font-size:.9rem}
+.cf-cons button span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;opacity:.7}
+.cf-cons button[aria-pressed="true"]{border-color:rgba(102,153,68,.95);background:rgba(102,153,68,.2);color:var(--ivory)}
+.cf input[type=text]{width:100%;box-sizing:border-box;min-height:2.75rem;padding:.6rem .9rem;border-radius:.7rem;border:1px solid rgba(212,175,106,.35);background:rgba(8,11,26,.6);color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;font-size:1rem;outline:none}
+.cf input[type=text]:focus{border-color:var(--oro)}
+.cf-stati{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.3rem;align-items:start}
+.cf-stato{display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center}
+.cf-stato .barra{width:100%;height:.35rem;border-radius:999px;background:rgba(245,240,230,.12)}
+.cf-stato b{font-family:'Cinzel',serif;font-weight:400;font-size:.84rem;letter-spacing:.04em;line-height:1.2;color:rgba(245,240,230,.35)}
+.cf-stato i{font-family:'Cormorant Garamond',serif;font-size:.95rem;color:rgba(245,240,230,.4)}
+.cf-stato[data-stato="fatto"] .barra{background:rgba(102,153,68,.8)}.cf-stato[data-stato="fatto"] b{color:var(--ivory)}
+.cf-stato[aria-current="step"] .barra{background:#8FBF7A}.cf-stato[aria-current="step"] b{color:var(--ivory)}
+.cf-pie{display:flex;align-items:center;gap:.8rem;padding-top:1rem;border-top:1px solid rgba(212,175,106,.22);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.45)}
+.cf-pie b{font-family:'Cinzel',serif;font-weight:400;font-style:normal;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.75)}
+</style>
+<script src="./ak-cosmo.js"></script>
+
+</head>
+<body>
+<div class="cf" data-screen-label="Dentro l'orma · stampa">
+  <ak-cosmo class="st-cosmo" aria-hidden="true"></ak-cosmo>
+  <div class="cf-col">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+      <a class="cf-torna" data-g="torna" href="#"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H5"></path><path d="M11 5l-7 7 7 7"></path></svg>la mia orma</a>
+      <span class="cf-occ" style="color:#A6D07E;letter-spacing:.24em">Edizione &middot; aria</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.4rem">
+      <span class="cf-occ">un&rsquo;orma &middot; <span data-c="orma.stadio">[ stadio ]</span></span>
+      <h1 data-c="orma.titolo">[ il titolo dell&rsquo;orma ]</h1>
+      <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:rgba(245,240,230,.6)"><span data-c="proposta.tipo">stampa</span> &middot; <span data-c="proposta.famiglia">[ la famiglia ]</span></span>
+    </div>
+
+    <!-- i quattro passi: aria-current="step" sul passo attivo, data-stato="fatto" su quelli passati -->
+    <div class="cf-passi">
+      <button type="button" class="cf-passo" data-g="passo-scegli" aria-current="step"><i>&#9312;</i><span>scegli</span></button>
+      <button type="button" class="cf-passo" data-g="passo-file"><i>&#9313;</i><span>il file</span></button>
+      <button type="button" class="cf-passo" data-g="passo-conferma"><i>&#9314;</i><span>la conferma</span></button>
+      <button type="button" class="cf-passo" data-g="passo-dove"><i>&#9315;</i><span>dove siamo</span></button>
+    </div>
+
+    <!-- ① scegliere: formato · carta · copie. Le voci le dà il configuratore di Flyeralarm: uno stampo per ognuna -->
+    <div class="cf-blocco" data-stato="passo-scegli">
+      <div style="display:flex;flex-direction:column;gap:.5rem"><span class="cf-et">formato</span><div class="cf-scelte" data-c="proposta.formato"><button type="button" class="cf-pill" data-stampo="formato" data-g="scegli-formato" aria-pressed="false" data-c="formato.nome">[ formato ]</button></div></div>
+      <div style="display:flex;flex-direction:column;gap:.5rem"><span class="cf-et">carta</span><div class="cf-scelte" data-c="proposta.carta"><button type="button" class="cf-pill" data-stampo="carta" data-g="scegli-carta" aria-pressed="false" data-c="carta.nome">[ carta ]</button></div></div>
+      <div style="display:flex;flex-direction:column;gap:.5rem" data-stato="ha-pagine" hidden><span class="cf-et">pagine</span><div class="cf-scelte" data-c="proposta.pagine"><button type="button" class="cf-pill" data-stampo="pagine" data-g="scegli-pagine" aria-pressed="false" data-c="pagine.n">[ n ]</button></div></div>
+      <div style="display:flex;flex-direction:column;gap:.5rem"><span class="cf-et">quante copie</span><div class="cf-scelte" data-c="proposta.copie"><button type="button" class="cf-pill" data-stampo="copie" data-g="scegli-copie" aria-pressed="false" data-c="copie.n">[ n ]</button></div></div>
+      <div class="cf-nota">le copie si scelgono fra quelle che si possono davvero fare</div>
+      <div class="cf-riq">
+        <div class="sx">
+          <span class="cf-nota" style="color:rgba(245,240,230,.55)"><span data-c="proposta.famiglia">[ famiglia ]</span> &middot; <span data-c="proposta.formato">[ formato ]</span> &middot; <span data-c="proposta.carta">[ carta ]</span> &middot; <span data-c="proposta.copie">[ n ]</span> copie</span>
+          <span class="prezzo" data-c="proposta.costo">[ costo ]</span>
+          <span class="cf-nota">[ IVA e trasporto a parte ]</span>
+        </div>
+        <button type="button" class="cf-b" data-g="avanti-file">il file</button>
+      </div>
+    </div>
+
+    <!-- ② il file, e il controllo: in attesa · va bene · problemi -->
+    <div class="cf-blocco" data-stato="passo-file" hidden>
+      <button type="button" class="cf-file" data-g="scegli-file"><span class="pdf">PDF</span><span style="min-width:0"><b data-c="file.nome">[ carica il PDF ]</b><i data-c="file.peso">un file solo, in PDF</i></span></button>
+      <div class="cf-ctrl" data-stato="in-attesa">
+        <div class="riga"><span class="pt"></span><span class="nome" data-c="controllo.esito">in attesa</span><span class="cosa">risoluzione &middot; margini &middot; colori</span></div>
+        <div class="lista" data-stato="problemi" hidden><span data-stampo="problema">&middot; <span data-c="problema.testo">[ cosa non va ]</span></span></div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button type="button" class="cf-b oro" data-g="controlla">controlla</button></div>
+      </div>
+      <div class="cf-nota">senza il file l&rsquo;ordine si annulla da s&eacute; dopo [ quanto ]</div>
+      <div style="display:flex;justify-content:flex-end"><button type="button" class="cf-b" data-g="avanti-conferma" data-stato="va-bene" disabled>la conferma</button></div>
+    </div>
+
+    <!-- ③ la conferma -->
+    <div class="cf-blocco" data-stato="passo-conferma" hidden>
+      <div class="cf-conf">
+        <div><span>cosa</span><span style="text-align:right"><span data-c="proposta.famiglia">[ famiglia ]</span> &middot; <span data-c="proposta.formato">[ formato ]</span> &middot; <span data-c="proposta.carta">[ carta ]</span> &middot; <span data-c="proposta.copie">[ n ]</span> copie</span></div>
+        <div><span>il file</span><span data-c="file.nome">[ il file ]</span></div>
+        <div><span>stampa</span><span data-c="proposta.costo">[ costo ]</span></div>
+        <div><span>trasporto</span><span data-c="consegna.prezzo">[ euro ]</span></div>
+        <div class="tot"><span>totale</span><span data-c="conto.totale">[ totale ]</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.5rem"><span class="cf-et">come te lo mandiamo</span>
+        <div class="cf-cons" data-c="consegna.modo">
+          <button type="button" data-stampo="consegna" data-g="scegli-consegna" aria-pressed="false"><b data-c="consegna.nome">[ modo ]</b><span data-c="consegna.quando">[ quando arriva ]</span></button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.5rem"><span class="cf-et">dove arriva</span><input type="text" data-c="consegna.indirizzo" placeholder="[ nome e indirizzo ]"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+        <span class="cf-nota" style="font-size:1.1rem;color:rgba(245,240,230,.6)">arriva <span data-c="consegna.quando">[ quando ]</span></span>
+        <button type="button" class="cf-b verde" data-g="stampa">stampa</button>
+      </div>
+    </div>
+
+    <!-- ④ dove siamo: l'ordine resta dentro l'orma -->
+    <div class="cf-blocco" data-stato="passo-dove" hidden>
+      <div class="cf-stati">
+        <div class="cf-stato" data-stampo="ordine-stato"><span class="barra"></span><b data-c="ordine.stato">[ stato ]</b><i data-c="ordine.quando">[ quando ]</i></div>
+      </div>
+      <div class="cf-conf">
+        <div><span>ordine</span><span data-c="ordine.numero">[ numero ]</span></div>
+        <div><span>cosa</span><span style="text-align:right"><span data-c="proposta.famiglia">[ famiglia ]</span> &middot; <span data-c="proposta.copie">[ n ]</span> copie</span></div>
+        <div><span>consegna</span><span><span data-c="consegna.nome">[ modo ]</span> &middot; <span data-c="consegna.quando">[ quando ]</span></span></div>
+        <div><span>tracciatura</span><span data-c="ordine.tracciatura" data-stato="ha-tracciatura" hidden>[ il numero ]</span><span data-stato="senza-tracciatura" style="color:rgba(245,240,230,.4)">quando c&rsquo;&egrave;</span></div>
+      </div>
+      <div class="cf-nota">l&rsquo;ordine resta dentro l&rsquo;orma da cui &egrave; partito</div>
+    </div>
+
+    <div class="cf-pie"><b>due porte</b><span>dall&rsquo;Edizione, o da &laquo;stampa&raquo; nella vetrina della tua orma &mdash; una forma sola</span></div>
+  </div>
+</div>
+</body>
+</html>

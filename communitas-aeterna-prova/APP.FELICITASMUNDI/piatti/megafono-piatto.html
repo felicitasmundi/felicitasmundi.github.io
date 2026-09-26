@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il Megafono</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* megafono · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g
+   ⭐ Il pezzo vero è #mg: il resto della pagina serve solo a vederlo in basso, come nel guscio. */
+:root{--oro:#D4AF6A;--oro-ch:#E6C98A;--ivory:#F5F0E6;--terra:#AA8844;--acqua:#4A88B8;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--nexus:#8C2F39;--t-eti:.84rem;--scafo:#0A0E1E}
+body{margin:0;background:#02040c;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory)}
+[hidden]{display:none!important}
+.fondo{min-height:100vh;box-sizing:border-box;padding:2rem 1.25rem 16rem;background:radial-gradient(ellipse at 22% 20%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 84%,rgba(60,44,110,.42),transparent 60%),radial-gradient(ellipse at 40% 45%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+
+/* ── il Megafono ── */
+#mg{position:fixed;left:0;right:0;bottom:0;z-index:10;pointer-events:none}
+#mg .onda{display:block;width:100%;height:1.6rem}
+#mg .ponte{background:var(--scafo);padding:.2rem 1rem 1rem;pointer-events:auto}
+#mg .dentro-mg{position:relative;max-width:40rem;margin:0 auto}
+.mg-box{background:rgba(245,240,230,.05);border:1px solid rgba(245,240,230,.14);border-radius:1.4rem;padding:.75rem .75rem .6rem;transition:border-color .2s}
+.mg-box:focus-within{border-color:rgba(200,160,85,.45)}
+/* dentro un'orma: il cartellino sopra il campo */
+.mg-madre{display:flex;align-items:center;gap:.5rem;margin:0 0 .45rem;padding:0 .2rem 0 .7rem;min-height:2.2rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--c,var(--oro)) 45%,transparent);background:color-mix(in srgb,var(--c,var(--oro)) 10%,transparent);align-self:flex-start;width:max-content;max-width:100%;font-size:var(--t-eti);color:rgba(245,240,230,.75)}
+.mg-madre b{font-weight:500;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mg-madre button{flex:none;width:2.2rem;height:2.2rem;border-radius:50%;border:0;background:transparent;color:rgba(245,240,230,.55);cursor:pointer;font-size:1rem}
+.mg-madre button:hover{color:var(--ivory);background:rgba(245,240,230,.08)}
+.mg-titolo{width:100%;box-sizing:border-box;background:transparent;border:0;outline:none;padding:.1rem .4rem .2rem;color:var(--ivory);font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.05em}
+.mg-titolo::placeholder{color:rgba(245,240,230,.3);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;letter-spacing:0}
+.mg-campo{display:block;width:100%;box-sizing:border-box;resize:none;background:transparent;border:0;outline:none;min-height:2.4rem;padding:.1rem .4rem .35rem;color:var(--ivory);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;line-height:1.4}
+.mg-campo::placeholder{color:rgba(245,240,230,.4)}
+.mg-sotto{display:flex;align-items:center;gap:.3rem;margin-top:.35rem;height:2.75rem;min-width:0}
+/* il tondino: dice il tipo, e il colore è il contesto; il segno del talento se c'è */
+.mg-tipo{--c:var(--oro);flex:1 1 auto;min-width:2.75rem;max-width:12rem;height:2.75rem;display:flex;align-items:center;gap:.4rem;padding:0 .8rem 0 .55rem;border-radius:1.2rem;cursor:pointer;white-space:nowrap;overflow:hidden;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:var(--t-eti)}
+.mg-tipo .pt{flex:none;width:.6rem;height:.6rem;border-radius:50%;background:var(--c);box-shadow:0 0 .4rem var(--c)}
+.mg-tipo .tsg{flex:none;width:1.2rem;height:1.2rem;color:var(--c);filter:brightness(1.3)}
+.mg-tipo .tsg svg{width:100%;height:100%}
+.mg-tipo .tx{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.mg-tipo .ch{flex:none;opacity:.55;font-size:.7rem;margin-left:auto}
+.mg-vsg,.mg-gf,.mg-inv{width:2.75rem;height:2.75rem;border-radius:50%;flex:none;display:grid;place-items:center;cursor:pointer;border:1px solid rgba(245,240,230,.16);background:transparent;color:rgba(245,240,230,.5);transition:border-color .18s,background .18s,color .18s;padding:0}
+.mg-vsg svg,.mg-gf svg{width:1.05rem;height:1.05rem;display:block}
+.mg-vsg:hover,.mg-gf:hover{border-color:rgba(200,160,85,.5);color:var(--oro-ch)}
+.mg-vsg[aria-pressed="true"]{border-color:var(--oro);background:rgba(200,160,85,.2);color:var(--oro-ch)}
+.mg-gf{border-color:rgba(200,160,85,.35);color:var(--oro-ch)}
+.mg-inv{background:var(--oro);border-color:var(--oro);color:#0A0C1A;font-size:1.05rem;box-shadow:0 0 .7rem rgba(200,160,85,.5)}
+.mg-inv:disabled{opacity:.35;box-shadow:none;cursor:default}
+.mg-inv{position:relative}
+.mg-pulsa{position:absolute;inset:-.2rem;border-radius:50%;border:2px solid var(--oro);animation:mg-manda 1s ease-in-out infinite;pointer-events:none}
+@keyframes mg-manda{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.5)}}
+@media (max-width:26.5rem){.mg-sotto{flex-wrap:wrap;height:auto;row-gap:.4rem}.mg-tipo{flex:0 0 100%;max-width:none;order:-1}}
+/* i file scelti, sotto il campo */
+.mg-file{display:flex;flex-wrap:wrap;gap:.3rem;margin:.1rem .2rem .2rem}
+.mg-file span{display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .6rem;border-radius:999px;border:1px solid rgba(200,160,85,.35);font-size:var(--t-eti);color:rgba(245,240,230,.75)}
+
+/* ── quello che si apre: sale SOPRA il quadrante ── */
+.mg-pan{position:absolute;left:.3rem;right:.3rem;bottom:calc(100% + .4rem);background:#0E1224;border:1px solid rgba(200,160,85,.35);border-radius:1rem;padding:.6rem;max-height:min(26rem,60vh);overflow-y:auto;box-shadow:0 -.5rem 1.4rem rgba(0,0,0,.5);display:flex;flex-direction:column;gap:.7rem;animation:mg-su .2s ease both}
+@keyframes mg-su{from{opacity:0;transform:translateY(.4rem)}to{opacity:1;transform:none}}
+.mg-sez{display:flex;flex-direction:column;gap:.35rem}
+.mg-sez+.mg-sez{padding-top:.7rem;border-top:1px solid rgba(245,240,230,.08)}
+.et2{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,230,.4);padding:0 .3rem}
+.et2 em{font-style:normal;text-transform:none;letter-spacing:0;color:rgba(245,240,230,.3)}
+.due2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.3rem}
+.tb{--c:var(--oro);display:flex;align-items:center;gap:.5rem;min-height:2.75rem;width:100%;text-align:left;border:1px solid color-mix(in srgb,var(--c) 32%,transparent);border-radius:.7rem;background:color-mix(in srgb,var(--c) 8%,transparent);padding:.4rem .6rem;color:rgba(245,240,230,.85);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);cursor:pointer;box-sizing:border-box}
+.tb:hover{background:color-mix(in srgb,var(--c) 18%,transparent)}
+.tb[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 24%,transparent);color:var(--ivory)}
+.tb i{width:.7rem;height:.7rem;flex:none;font-style:normal;border:1.5px solid var(--c);display:block;filter:brightness(1.3);color:var(--c)}
+.tb.nex i{width:1.45rem;height:1.45rem;border:0;margin:-.3rem 0}.tb.nex i svg{width:100%;height:100%;display:block}
+.tb.cerchio i{border-radius:50%}.tb.quadro i{border-radius:.1rem}.tb.rombo i{transform:rotate(45deg);border-radius:.06rem}.tb.tondo i{border-radius:50%;background:var(--c)}
+.tb .seg{flex:none;width:1.6rem;height:1.6rem;color:var(--c);filter:brightness(1.3)}
+.tb .seg svg{width:100%;height:100%}
+.tb .nm{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.uno2{display:flex;flex-direction:column;gap:.3rem}
+.tb.st{min-height:3.1rem}
+.tb.st i{width:.8rem;height:.8rem;border-radius:50%;background:var(--c)}
+.tb.st .nm{display:flex;flex-direction:column;gap:.05rem;white-space:normal}
+.tb.st .nm b{font-family:'Cinzel',serif;font-weight:400;font-size:.9rem;letter-spacing:.04em;color:var(--ivory)}
+.tb.st .nm small{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.6)}
+.mg-senza{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;padding:.5rem .6rem;border-radius:.7rem;border:1px dashed rgba(212,175,106,.35)}
+.mg-senza .mg-nota{padding:0;flex:1 1 12rem}
+.mg-senza button{min-height:2.75rem;padding:0 1rem;border-radius:999px;border:1px solid rgba(212,175,106,.6);background:rgba(212,175,106,.12);color:var(--ivory);cursor:pointer;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+.mg-senza button:hover{background:rgba(212,175,106,.24)}
+.tb.nessuno{border-style:dashed;border-color:rgba(245,240,230,.2);background:transparent;color:rgba(245,240,230,.6)}
+.mg-nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;line-height:1.35;color:rgba(245,240,230,.5);padding:0 .3rem}
+.campoP{width:100%;box-sizing:border-box;min-height:2.75rem;background:rgba(245,240,230,.05);border:1px solid rgba(245,240,230,.14);border-radius:.7rem;padding:.45rem .7rem;color:var(--ivory);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none}
+.campoP:focus{border-color:rgba(200,160,85,.5)}
+.riga-p{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%;min-height:2.75rem;text-align:left;background:transparent;border:0;border-radius:.6rem;padding:.3rem .6rem;color:rgba(245,240,230,.85);font-family:'DM Sans',sans-serif;font-size:.95rem;cursor:pointer}
+.riga-p:hover{background:rgba(200,160,85,.14);color:var(--oro-ch)}
+.riga-p .p{font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,230,.45)}
+.riga-p .vo{flex:none;width:1.8rem;height:1.8rem;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(212,175,106,.5);font-family:'Cinzel',serif;font-size:.8rem;color:var(--oro)}
+.riga-p .nome{flex:1;min-width:0}
+.gg2{display:grid;grid-template-columns:repeat(7,1fr);gap:.15rem}
+.gg2 b{text-align:center;font-size:var(--t-eti);font-weight:400;color:rgba(245,240,230,.3);padding:.2rem 0}
+.gg2 button{min-height:2.4rem;border:0;border-radius:.5rem;background:transparent;color:rgba(245,240,230,.75);font:inherit;font-size:var(--t-eti);cursor:pointer}
+.gg2 button:hover{background:rgba(200,160,85,.18);color:var(--oro-ch)}
+.gg2 button.oggi{outline:1px solid rgba(200,160,85,.5);color:var(--oro-ch)}
+/* il cartiglio verde: è nata un'orma */
+.mg-nato{position:absolute;left:.6rem;right:.6rem;bottom:calc(100% + .5rem);border:1px solid rgba(102,153,68,.5);border-radius:.75rem;background:rgba(102,153,68,.14);padding:.6rem .8rem;font-size:var(--t-eti);color:#8FBF6A}
+</style>
+<script src="./ak-cosmo.js"></script>
+</head>
+<body>
+<div class="fondo" data-screen-label="Il Megafono">
+  <ak-cosmo aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none"></ak-cosmo>
+</div>
+
+<div id="mg">
+  <svg class="onda" viewBox="0 0 1200 26" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,15 C120,4 210,24 330,16 C450,8 520,22 640,17 C760,12 840,3 960,11 C1080,19 1140,9 1200,13 L1200,26 L0,26 Z" fill="var(--scafo)" opacity=".96"></path>
+    <path d="M0,15 C120,4 210,24 330,16 C450,8 520,22 640,17 C760,12 840,3 960,11 C1080,19 1140,9 1200,13" fill="none" stroke="rgba(212,175,106,.34)" stroke-width="1"></path>
+  </svg>
+  <div class="ponte"><div class="dentro-mg">
+
+    <div class="mg-nato" data-stato="nata" hidden>&#10003; &egrave; nata un&rsquo;orma &middot; <span data-c="orma.tipo">[ il tipo ]</span></div>
+
+    <!-- ① IL PANNELLO DEL TIPO: il tipo, a quale talento appartiene, il contesto che dà il colore -->
+    <div class="mg-pan" id="pan-tipo" hidden>
+      <div class="mg-sez">
+        <div class="et2">che cosa &egrave;</div>
+        <div class="due2" data-c="orma.tipo">
+            <button type="button" class="tb nex" data-g="scegli-tipo" data-v="karma_yoga" style="--c:var(--nexus)" aria-pressed="true"><i><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg></i>karma yoga</button>
+            <button type="button" class="tb rombo" data-g="scegli-tipo" data-v="obiettivo" style="--c:var(--fuoco)" aria-pressed="false"><i></i>obiettivo</button>
+            <button type="button" class="tb cerchio" data-g="scegli-tipo" data-v="contatto" style="--c:var(--oro)" aria-pressed="false"><i></i>contatto</button>
+            <button type="button" class="tb quadro" data-g="scegli-tipo" data-v="spesa" style="--c:var(--acqua)" aria-pressed="false"><i></i>spesa</button>
+            <button type="button" class="tb tondo" data-g="scegli-tipo" data-v="racconto" style="--c:var(--aria)" aria-pressed="false"><i></i>racconto</button>
+        </div>
+      </div>
+
+      <div class="mg-sez">
+        <div class="et2">di quale tuo talento fa parte</div>
+        <div class="mg-nota">le tue orme si raccolgono sotto il talento a cui appartengono</div>
+        <div class="due2" data-stato="ha-talenti">
+          <button type="button" class="tb nessuno" data-g="scegli-talento" data-v="" aria-pressed="true"><span class="nm">nessuno &middot; va in Da collegare</span></button>
+          <button type="button" class="tb" data-stampo="talento" data-g="scegli-talento" data-c="talento.elemento" style="--c:var(--terra)" aria-pressed="false"><span class="seg" data-c="talento.svg"><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="30" cy="30" r="14" opacity=".6"></circle><path d="M30 12v36M12 30h36" opacity=".4"></path></svg></span><span class="nm" data-c="talento.nome">[ il talento ]</span></button>
+        </div>
+        <div class="mg-senza" data-stato="senza-talenti" hidden>
+          <div class="mg-nota">hai lasciato i tuoi talenti: quest&rsquo;orma nasce sciolta, e la ritrovi in Da collegare</div>
+          <button type="button" data-g="vai-talenti">i cinque solidi</button>
+        </div>
+        <div class="mg-senza" data-stato="mai-talenti" hidden>
+          <div class="mg-nota">i talenti si scelgono nei cinque solidi: quest&rsquo;orma intanto nasce sciolta, e la ritrovi in Da collegare</div>
+          <button type="button" data-g="vai-talenti">i cinque solidi</button>
+        </div>
+      </div>
+
+      <div class="mg-sez">
+        <div class="et2">dove va a finire</div>
+        <div class="mg-nota">la stanza decide dove potr&agrave; diventare qualcosa</div>
+        <div class="uno2" data-c="orma.elemento">
+          <button type="button" class="tb st" data-g="scegli-contesto" data-v="terra" style="--c:var(--terra)" aria-pressed="false"><i></i><span class="nm"><b>I Vicinati</b><small>un aiuto, un incontro, un luogo</small></span></button>
+          <button type="button" class="tb st" data-g="scegli-contesto" data-v="acqua" style="--c:var(--acqua)" aria-pressed="false"><i></i><span class="nm"><b>L&rsquo;Emporio</b><small>una cosa da scambiare o vendere</small></span></button>
+          <button type="button" class="tb st" data-g="scegli-contesto" data-v="fuoco" style="--c:var(--fuoco)" aria-pressed="false"><i></i><span class="nm"><b>L&rsquo;Assistenza</b><small>un trattamento, una consulenza</small></span></button>
+          <button type="button" class="tb st" data-g="scegli-contesto" data-v="aria" style="--c:var(--aria)" aria-pressed="false"><i></i><span class="nm"><b>L&rsquo;Edizione</b><small>un testo, un&rsquo;opera, una stampa</small></span></button>
+          <button type="button" class="tb st" data-g="scegli-contesto" data-v="etere" style="--c:var(--etere)" aria-pressed="false"><i></i><span class="nm"><b>La Scuola</b><small>una lezione, un corso</small></span></button>
+          <button type="button" class="tb st nex" data-g="scegli-contesto" data-v="nexus" style="--c:var(--nexus)" aria-pressed="false"><i><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg></i><span class="nm"><b>Organizzazione e sviluppo</b><small>il lavoro che tiene in piedi la casa</small></span></button>
+        </div>
+        <div class="mg-nota" data-stato="dentro" hidden>di partenza, quella di <span data-c="madre.titolo">[ la madre ]</span></div>
+      </div>
+    </div>
+
+    <!-- ② QUANDO · DOVE · CON CHI: ognuno il suo pannello -->
+    <div class="mg-pan" id="pan-quando" hidden>
+      <div class="et2" data-c="mese.nome">[ il mese ]</div>
+      <div class="gg2" id="gg2"><b>lun</b><b>mar</b><b>mer</b><b>gio</b><b>ven</b><b>sab</b><b>dom</b></div>
+    </div>
+    <div class="mg-pan" id="pan-dove" hidden>
+      <div class="et2">dove</div>
+      <input class="campoP" type="search" placeholder="scrivi un comune" autocomplete="off">
+      <button type="button" class="riga-p" data-stampo="comune" data-g="scegli-comune"><span class="nome" data-c="comune.nome">[ il comune ]</span><span class="p" data-c="comune.prov">[ prov ]</span></button>
+    </div>
+    <div class="mg-pan" id="pan-chi" hidden>
+      <div class="et2">con chi</div>
+      <input class="campoP" type="search" placeholder="scrivi un nome" autocomplete="off">
+      <button type="button" class="riga-p" data-stampo="dentro" data-g="scegli-persona"><span class="vo" data-c="dentro.iniziale">g</span><span class="nome" data-c="dentro.nome">[ il nome ]</span></button>
+      <button type="button" class="riga-p" data-g="nuova-persona"><span class="vo" style="border-style:dashed">+</span><span class="nome"><span data-c="dentro.nome">[ il nome scritto ]</span></span><span class="p">nuovo</span></button>
+    </div>
+
+    <div class="mg-box">
+      <!-- da dentro un'orma: la figlia nasce lì; la ✕ la rende sciolta -->
+      <div class="mg-madre" data-stato="dentro" hidden style="--c:var(--terra)">
+        <span>dentro</span><b data-c="madre.titolo">[ l&rsquo;orma madre ]</b>
+        <button type="button" data-g="esci-dalla-madre" aria-label="togli: l&rsquo;orma torna sciolta">&times;</button>
+      </div>
+      <div class="mg-madre" data-stato="non-puo-figlia" hidden style="--c:rgba(245,240,230,.4)">
+        <span>[ le figlie si aprono dal karma yoga in su: questa nasce sciolta ]</span>
+      </div>
+      <input class="mg-titolo" type="text" data-c="orma.titolo" placeholder="il titolo &middot; se lo lasci vuoto, la prima riga">
+      <textarea class="mg-campo" rows="1" data-c="orma.contenuto" placeholder="scrivi la tua orma" required></textarea>
+      <div class="mg-file" data-stato="ha-file" hidden><span data-stampo="file">&#128206;&#xFE0E; <span data-c="file.nome">[ il file ]</span></span></div>
+      <div class="mg-sotto">
+        <button type="button" class="mg-tipo" data-g="scegli-tipo" aria-controls="pan-tipo" aria-expanded="false" style="--c:var(--nexus)">
+          <span class="pt"></span>
+          <span class="tsg" data-stato="ha-talento" data-c="talento.svg" hidden><svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="2"><circle cx="30" cy="30" r="14"></circle></svg></span>
+          <span class="tx"><span data-c="orma.tipo">karma yoga</span><span data-stato="ha-contesto"> &middot; <span data-c="contesto.nome">[ la stanza ]</span></span></span>
+          <span class="ch">&#9650;</span>
+        </button>
+        <button type="button" class="mg-vsg" data-g="quando" aria-controls="pan-quando" aria-pressed="false" title="quando" data-c="orma.inizio_il"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></svg></button>
+        <button type="button" class="mg-vsg" data-g="dove" aria-controls="pan-dove" aria-pressed="false" title="dove" data-c="orma.luogo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.4"></circle></svg></button>
+        <button type="button" class="mg-vsg" data-g="chi" aria-controls="pan-chi" aria-pressed="false" title="con chi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"></circle><path d="M3 20c0-3.3 2.7-5.4 6-5.4s6 2.1 6 5.4"></path><path d="M16 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.9c2 .7 3.5 2.5 3.5 5.1"></path></svg></button>
+        <button type="button" class="mg-gf" data-g="allega" title="allega"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5l-7.8 7.8a5 5 0 0 1-7-7l8.2-8.2a3.3 3.3 0 0 1 4.7 4.7l-8.2 8.2a1.7 1.7 0 0 1-2.4-2.4l7.5-7.5"></path></svg></button>
+        <button type="button" class="mg-inv" data-g="manda" title="manda" disabled>&#8594;<span class="mg-pulsa" data-stato="manda" hidden></span></button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<script>
+/* solo i pannelli che si aprono, la freccia che si accende I dati li mette il codice. */
+(function(){
+  var mg=document.getElementById('mg'), campo=mg.querySelector('.mg-campo'), inv=mg.querySelector('[data-g="manda"]');
+  var pans=[].slice.call(mg.querySelectorAll('.mg-pan')), aprono=[].slice.call(mg.querySelectorAll('[aria-controls]'));
+  function chiudi(){ pans.forEach(function(p){p.hidden=true}); aprono.forEach(function(b){b.setAttribute(b.classList.contains('mg-tipo')?'aria-expanded':'aria-pressed','false')}); }
+  aprono.forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation();
+    var p=document.getElementById(b.getAttribute('aria-controls')), era=!p.hidden; chiudi();
+    if(!era){ p.hidden=false; b.setAttribute(b.classList.contains('mg-tipo')?'aria-expanded':'aria-pressed','true'); var i=p.querySelector('input'); if(i) setTimeout(function(){i.focus()},40); }
+  }); });
+  document.addEventListener('click',function(e){ if(!e.target.closest('.mg-pan')) chiudi(); });
+  pans.forEach(function(p){ p.addEventListener('click',function(e){ e.stopPropagation(); }); });
+  campo.addEventListener('input',function(){ inv.disabled=!campo.value.trim(); campo.style.height='auto'; campo.style.height=campo.value?campo.scrollHeight+'px':''; });
+  /* il calendarietto: la griglia del mese, disegnata qui perché è forma, non dato */
+  var g=document.getElementById('gg2'), o=new Date(), primo=new Date(o.getFullYear(),o.getMonth(),1).getDay()||7, ultimo=new Date(o.getFullYear(),o.getMonth()+1,0).getDate();
+  for(var k=1;k<primo;k++) g.appendChild(document.createElement('span'));
+  for(var d=1;d<=ultimo;d++){ var s=document.createElement('button'); s.type='button'; s.textContent=d; if(d===o.getDate()) s.className='oggi'; g.appendChild(s); }
+  /* scelte a pastiglia dentro il pannello del tipo */
+  mg.querySelectorAll('#pan-tipo .due2').forEach(function(box){ box.addEventListener('click',function(e){ var b=e.target.closest('.tb'); if(!b) return; box.querySelectorAll('.tb').forEach(function(x){x.setAttribute('aria-pressed',x===b)}); }); });
+})();
+</script>
+</body>
+</html>
