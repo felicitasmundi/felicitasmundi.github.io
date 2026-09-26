@@ -64,6 +64,7 @@
     font-family:'DM Sans',system-ui,sans-serif; font-size:.98rem; line-height:1.4;
     color:rgba(245,240,230,.85); cursor:pointer; }
   .spunta input{ margin-top:.15rem; width:1.15rem; height:1.15rem; flex:none; accent-color:var(--oro); }
+  .spunta a{ color:var(--oro); text-decoration:underline; }
   /* campo esca anti-automatismi: un umano lo lascia vuoto */
   .esca{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
   button{
@@ -108,7 +109,12 @@
 
     <input class="esca" type="text" id="dolce" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-    <button type="submit" id="invia">Resta in contatto</button>
+    <label class="spunta">
+      <input type="checkbox" id="privacy">
+      <span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa privacy</a> e acconsento al trattamento della mia mail per ricevere aggiornamenti su FelicitasMundi.</span>
+    </label>
+
+    <button type="submit" id="invia" disabled>Resta in contatto</button>
     <div class="msg" id="msg"></div>
   </form>
 
@@ -128,6 +134,9 @@
 
   var $ = function(id){ return document.getElementById(id); };
   function dice(t, err){ var m = $("msg"); m.textContent = t || ""; m.className = "msg" + (err ? " err" : ""); }
+
+  /* il consenso privacy è obbligatorio: il tasto resta spento finché non è spuntato */
+  $("privacy").addEventListener("change", function(){ $("invia").disabled = !this.checked; });
 
   $("modulo").addEventListener("submit", function(e){
     e.preventDefault();
