@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bozza · La mia orma</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F1226; --navy2:#171C36; --ivory:#F5F0E6; --oro:#C8A055; --oro-ch:#D4AF6A;
+  --terra:#C8A055; --acqua:#5AA6DD; --fuoco:#D2724E; --aria:#7FB25C; --etere:#A87FD8;
+  --line:rgba(200,160,85,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:#05060D;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+display:flex;justify-content:center}
+.schermo{position:relative;width:100%;max-width:34rem;min-height:100vh;background:
+radial-gradient(120% 80% at 50% 0%, #1a2145 0%, var(--navy) 55%, #090B18 100%);
+display:flex;flex-direction:column;padding-bottom:1.2rem}
+
+/* barra in alto */
+.top{display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem}
+.icon{flex:none;width:2.7rem;height:2.7rem;border-radius:.6rem;border:1px solid var(--line);
+background:rgba(245,240,230,.04);display:flex;align-items:center;justify-content:center;
+color:var(--oro);font-size:1.1rem}
+.top .sp{flex:1}
+
+/* 1 — titolo grande + soglie */
+.titolo{padding:.4rem 1.1rem 0}
+.titolo h1{font-family:'Cinzel',serif;font-weight:500;font-size:2rem;letter-spacing:.01em;line-height:1}
+.soglie{display:flex;gap:.35rem;margin-top:.9rem;background:rgba(245,240,230,.05);
+border:1px solid var(--line);border-radius:.7rem;padding:.28rem}
+.soglie button{flex:1;border:0;background:transparent;color:rgba(245,240,230,.6);
+font-family:'DM Sans';font-size:.95rem;padding:.5rem;border-radius:.5rem;cursor:pointer}
+.soglie button.on{background:rgba(200,160,85,.18);color:var(--ivory)}
+
+/* 2 — riga di stato piccola */
+.stato{display:flex;gap:.5rem;padding:1rem 1.1rem .2rem}
+.pill{flex:1;border:1px solid var(--line);border-radius:.6rem;background:rgba(245,240,230,.03);
+padding:.5rem .6rem;text-align:center}
+.pill .k{display:block;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,230,.4)}
+.pill .v{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--oro-ch);margin-top:.15rem}
+.pill.vuota .v{color:rgba(245,240,230,.28)}
+
+/* 3 — tasto invita */
+.invita{margin:.7rem 1.1rem 0;display:flex;align-items:center;justify-content:center;gap:.5rem;
+padding:.7rem;border:1px solid var(--line);border-radius:.7rem;background:rgba(200,160,85,.08);
+color:var(--oro-ch);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;cursor:pointer}
+
+/* 4 — la mappa protagonista */
+.mappa{position:relative;margin:1rem 1.1rem 0;flex:1;min-height:20rem;border-radius:1.1rem;
+overflow:hidden;border:1px solid var(--line);
+background:
+ radial-gradient(90% 70% at 50% 45%, rgba(90,166,221,.10), transparent 70%),
+ linear-gradient(180deg,#0d1330,#0a0e22)}
+/* il cubo di Metatron, trama di sfondo leggera */
+.mappa .cubo{position:absolute;inset:0;margin:auto;width:78%;opacity:.16}
+/* profilo stilizzato dell'Italia/Sardegna, solo accenno */
+.mappa .terra{position:absolute;inset:0;opacity:.5}
+/* il punto "dove sei", che pulsa */
+.locatore{position:absolute;left:46%;top:58%;width:.9rem;height:.9rem;border-radius:50%;
+background:var(--oro);box-shadow:0 0 0 0 rgba(200,160,85,.55);animation:pulsa 2.2s infinite}
+.locatore::after{content:"sei qui";position:absolute;left:1.3rem;top:-.3rem;white-space:nowrap;
+font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ivory)}
+@keyframes pulsa{0%{box-shadow:0 0 0 0 rgba(200,160,85,.5)}70%{box-shadow:0 0 0 1.4rem rgba(200,160,85,0)}100%{box-shadow:0 0 0 0 rgba(200,160,85,0)}}
+.mappa .et{position:absolute;left:1rem;bottom:.9rem;font-size:.66rem;letter-spacing:.2em;
+text-transform:uppercase;color:rgba(245,240,230,.38)}
+
+/* nota megafono */
+.nota{padding:.9rem 1.1rem 0;text-align:center;font-family:'Cormorant Garamond',serif;
+font-style:italic;font-size:1rem;color:rgba(245,240,230,.45)}
+
+.marca{position:fixed;top:0;left:0;right:0;background:#8C2F39;color:#fff;text-align:center;
+font-size:.7rem;letter-spacing:.15em;padding:.25rem;z-index:9}
+.schermo{margin-top:1.3rem}
+@media (prefers-reduced-motion:reduce){.locatore{animation:none}}
+</style></head><body>
+<div class="marca">BOZZA — solo layout, dati finti</div>
+<div class="schermo">
+
+  <div class="top">
+    <div class="icon">&#9776;</div>
+    <div class="icon">&#9654;</div>
+    <div class="sp"></div>
+    <div class="icon">&#10022;</div>
+  </div>
+
+  <!-- 1 -->
+  <div class="titolo">
+    <h1>La mia orma</h1>
+    <div class="soglie">
+      <button class="on">Talenti</button>
+      <button>Squadre</button>
+      <button>Strumenti</button>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="stato">
+    <div class="pill"><span class="k">il giorno</span><span class="v">27 settembre</span></div>
+    <div class="pill"><span class="k">la luna</span><span class="v">luna piena</span></div>
+    <div class="pill vuota"><span class="k">il santo</span><span class="v">&mdash;</span></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="invita">&#9737;&nbsp; invita chi risuona</div>
+
+  <!-- 4 -->
+  <div class="mappa">
+    <svg class="cubo" viewBox="0 0 200 200" fill="none" stroke="#C8A055" stroke-width="0.6" aria-hidden="true">
+      <circle cx="100" cy="100" r="90"/>
+      <circle cx="100" cy="55" r="26"/><circle cx="100" cy="145" r="26"/>
+      <circle cx="61" cy="77" r="26"/><circle cx="139" cy="77" r="26"/>
+      <circle cx="61" cy="123" r="26"/><circle cx="139" cy="123" r="26"/>
+      <circle cx="100" cy="100" r="26"/>
+      <path d="M100 29 L161 64 L161 136 L100 171 L39 136 L39 64 Z"/>
+      <path d="M100 29 L100 171 M39 64 L161 136 M161 64 L39 136 M39 64 L161 64 M39 136 L161 136"/>
+    </svg>
+    <div class="locatore" title="dove sei"></div>
+    <div class="et">dove sei &middot; la mappa dei vicinati</div>
+  </div>
+
+  <!-- 5 -->
+  <div class="nota">la scrittura dell&rsquo;orma vive nel megafono &#9654;</div>
+
+</div>
+</body></html>
