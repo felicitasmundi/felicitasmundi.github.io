@@ -281,7 +281,8 @@
         if (!chiuso) rifiuta(new Error("FMPiatto: la pagina non si carica — " + indirizzo));
       });
       box.appendChild(f);
-      f.src = indirizzo;
+      /* ⭐ PROVA — anti-cache: ogni piatto si ricarica sempre fresco, così le modifiche si vedono subito */
+      f.src = indirizzo + (indirizzo.indexOf("?") > -1 ? "&" : "?") + "t=" + Date.now();
       if (window.ResizeObserver) {
         ro = new ResizeObserver(function () { if (!chiuso) fmpAltezza(box, f); });
         ro.observe(box);

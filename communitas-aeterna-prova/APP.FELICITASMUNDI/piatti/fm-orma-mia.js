@@ -120,10 +120,9 @@
 
       /* il santo di oggi */
       var oggi = new Date();
-      var mmgg = String(oggi.getMonth() + 1).padStart(2, "0") + "-" +
-                 String(oggi.getDate()).padStart(2, "0");
-      var sa = await db.from("santi").select("nome").eq("giorno", mmgg).limit(1);
-      if (!sa.error && sa.data && sa.data[0]) d.santo = sa.data[0].nome;
+      var sa = await db.from("santi").select("intero")
+                 .eq("mese", oggi.getMonth() + 1).eq("giorno", oggi.getDate()).limit(1);
+      if (!sa.error && sa.data && sa.data[0]) d.santo = sa.data[0].intero;
 
       /* il nome del comune */
       if (d.io && d.io.comune_cod) {
