@@ -374,34 +374,39 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
   var mappa = null, strato = null;
   function pronta(cb){ if(window.L){ cb(); } else { setTimeout(function(){ pronta(cb); }, 120); } }
   function icona(cls){ return L.divIcon({className:'', html:'<div class="'+cls+'"></div>', iconSize:[16,16], iconAnchor:[8,8]}); }
-  function disegna(centro, vicinati){
+  function disegna(info){
+    info = info || {};
     pronta(function(){
       if(!mappa){
         mappa = L.map(box, { zoomControl:true, attributionControl:true, scrollWheelZoom:false });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
           { maxZoom:19, attribution:'&copy; OpenStreetMap' }).addTo(mappa);
-        strato = L.layerGroup().addTo(mappa);
+        strato = L.featureGroup().addTo(mappa);
       }
       strato.clearLayers();
-      var punti = [];
-      (vicinati||[]).forEach(function(v){
-        if(v.lat==null||v.lon==null) return;
-        strato.addLayer(L.marker([v.lat, v.lon], {icon:icona('ak-vic')}).bindPopup(v.nome || v.territorio || 'vicinato'));
-        punti.push([v.lat, v.lon]);
-      });
-      if(centro && centro.lat!=null){
-        strato.addLayer(L.marker([centro.lat, centro.lon], {icon:icona('ak-seiqui')}).bindPopup('Sei qui &middot; '+(centro.nome||'')));
-        punti.push([centro.lat, centro.lon]);
-        mappa.setView([centro.lat, centro.lon], 9);
+      /* l'area del micelio — una zona sulla tua regione */
+      if(info.area && info.area.lat!=null){
+        L.circle([info.area.lat, info.area.lon], { radius: info.area.raggio,
+          color:'#C8A055', weight:1, opacity:.55, fillColor:'#C8A055', fillOpacity:.08 })
+          .addTo(strato).bindTooltip('Micelio ' + (info.areaNome||''), {sticky:true});
       }
-      if(punti.length>1){ try{ mappa.fitBounds(punti, {padding:[30,30], maxZoom:11}); }catch(e){} }
-      else if(!centro && punti.length===0){ mappa.setView([41.9,12.5], 5); }
+      /* i vicinati dell'area */
+      (info.vicinati||[]).forEach(function(v){
+        if(v.lat==null||v.lon==null) return;
+        L.marker([v.lat, v.lon], {icon:icona('ak-vic')}).addTo(strato).bindPopup(v.nome || v.territorio || 'vicinato');
+      });
+      /* il tuo segnaposto */
+      if(info.centro && info.centro.lat!=null){
+        L.marker([info.centro.lat, info.centro.lon], {icon:icona('ak-seiqui')}).addTo(strato).bindPopup('Sei qui &middot; '+(info.centro.nome||''));
+      }
+      if(strato.getLayers().length){ try{ mappa.fitBounds(strato.getBounds(), {padding:[24,24], maxZoom:11}); }catch(e){} }
+      else { mappa.setView([41.9,12.5], 5); }
       setTimeout(function(){ mappa.invalidateSize(); }, 200);
     });
   }
   async function dati(){
-    if(!db){ disegna(null, []); return; }
-    var centro = null, vic = [];
+    if(!db){ disegna({}); return; }
+    var centro=null, area=null, areaNome='', vic=[], regCod=null;
     try{
       var s = await db.auth.getSession();
       var uid = s && s.data && s.data.session && s.data.session.user && s.data.session.user.id;
@@ -409,16 +414,33 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
         var me = await db.from('persone').select('comune_cod').eq('id', uid).maybeSingle();
         var cc = me && me.data && me.data.comune_cod;
         if(cc){
-          var t = await db.from('territori').select('nome,lat,lon').eq('codice', cc).limit(1);
-          if(t && t.data && t.data[0]) centro = { lat:t.data[0].lat, lon:t.data[0].lon, nome:t.data[0].nome };
+          var t = await db.from('territori').select('nome,lat,lon,regione_cod').eq('codice', cc).limit(1);
+          if(t && t.data && t.data[0]){ centro = { lat:t.data[0].lat, lon:t.data[0].lon, nome:t.data[0].nome }; regCod = t.data[0].regione_cod; }
         }
       }
     }catch(e){}
+    /* l'area del micelio = la nuvola dei comuni della tua regione */
+    if(regCod){
+      try{ var reg = await db.from('regioni').select('nome').eq('codice', regCod).limit(1);
+           areaNome = reg && reg.data && reg.data[0] ? reg.data[0].nome : ''; }catch(e){}
+      try{
+        var cs = await db.from('territori').select('lat,lon').eq('tipo','comune').eq('regione_cod', regCod).limit(2000);
+        var pts = (cs.data||[]).filter(function(x){ return x.lat!=null && x.lon!=null; });
+        if(pts.length){
+          var la=0, lo=0; pts.forEach(function(p){ la+=p.lat; lo+=p.lon; }); la/=pts.length; lo/=pts.length;
+          var rmax=0; pts.forEach(function(p){
+            var dx=(p.lat-la)*111000, dy=(p.lon-lo)*111000*Math.cos(la*Math.PI/180);
+            var d=Math.sqrt(dx*dx+dy*dy); if(d>rmax) rmax=d;
+          });
+          area = { lat:la, lon:lo, raggio:Math.max(rmax*1.05, 8000) };
+        }
+      }catch(e){}
+    }
     try{
       var r = await db.from('vicinati').select('id,nome,territorio,lat,lon');
       vic = (r && r.data) || [];
     }catch(e){}
-    disegna(centro, vic);
+    disegna({ centro:centro, area:area, areaNome:areaNome, vicinati:vic });
   }
   var geo = document.getElementById('ak-geoloc');
   if(geo) geo.addEventListener('click', function(){
