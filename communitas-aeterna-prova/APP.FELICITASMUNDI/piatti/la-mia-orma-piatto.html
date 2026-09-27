@@ -462,7 +462,18 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
   if(lista) lista.addEventListener('click', function(e){
     if(e.target.closest('[data-g="scegli-comune"]')) setTimeout(dati, 900);
   });
-  dati();
+  /* avvio la mappa solo quando il suo riquadro ha davvero un'altezza (niente partenza a zero) */
+  function avvia(){
+    if(box.getBoundingClientRect().height > 20){ dati(); return; }
+    if(window.ResizeObserver){
+      var ro = new ResizeObserver(function(){
+        if(box.getBoundingClientRect().height > 20){ try{ ro.disconnect(); }catch(e){} dati(); }
+      });
+      ro.observe(box);
+      setTimeout(function(){ try{ ro.disconnect(); }catch(e){} dati(); }, 3000);
+    } else { setTimeout(dati, 600); }
+  }
+  avvia();
 })();
 </script>
 </body>
