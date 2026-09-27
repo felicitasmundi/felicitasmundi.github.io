@@ -401,7 +401,11 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
       }
       if(strato.getLayers().length){ try{ mappa.fitBounds(strato.getBounds(), {padding:[24,24], maxZoom:11}); }catch(e){} }
       else { mappa.setView([41.9,12.5], 5); }
-      setTimeout(function(){ mappa.invalidateSize(); }, 200);
+      [80,300,700,1400,2500].forEach(function(ms){ setTimeout(function(){ try{ mappa.invalidateSize(); }catch(e){} }, ms); });
+      if(window.ResizeObserver && !box._ro){
+        box._ro = new ResizeObserver(function(){ try{ mappa.invalidateSize(); }catch(e){} });
+        box._ro.observe(box);
+      }
     });
   }
   async function dati(){
