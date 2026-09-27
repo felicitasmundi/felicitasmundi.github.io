@@ -6,6 +6,8 @@
 <title>La mia orma</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 /* la-mia-orma · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g
    ── colonna unica, in ordine: capo (orma+soglie+giorno+invita) · talenti/orme · mappa ── */
@@ -134,6 +136,16 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
 /* ⑤ la mappa (l'evoluzione del cubo «dove sei») — sotto le orme */
 .ak-mappa{display:flex;flex-direction:column;gap:.9rem;margin-top:.4rem}
 .ak-mappa-t{font-family:'Cinzel',serif;font-size:.84rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,240,230,.4)}
+.ak-map{width:100%;height:22rem;border-radius:1.1rem;overflow:hidden;border:1px solid rgba(212,175,106,.4);background:#0a0e22}
+.ak-map .leaflet-container{background:#0a0e22;font-family:'DM Sans',system-ui,sans-serif}
+.ak-map .leaflet-control-attribution{background:rgba(4,8,20,.7);color:rgba(245,240,230,.4)}
+.ak-map .leaflet-control-attribution a{color:rgba(212,175,106,.7)}
+.ak-map .leaflet-bar a{background:#12172e;color:var(--oro);border-color:rgba(212,175,106,.3)}
+.ak-map .leaflet-bar a:hover{background:#1a2140}
+.ak-seiqui{width:1rem;height:1rem;border-radius:50%;background:var(--oro);box-shadow:0 0 0 4px rgba(212,175,106,.3),0 0 12px rgba(212,175,106,.9)}
+.ak-vic{width:.7rem;height:.7rem;border-radius:50%;background:var(--acqua);border:1px solid #fff;box-shadow:0 0 6px rgba(74,136,184,.8)}
+.ak-mieitasti{display:flex;gap:.6rem;width:100%;max-width:22rem;margin:0 auto}
+.ak-mieitasti .ak-tasto{flex:1}
 .ak-cubo{position:relative;width:100%;max-width:22rem;aspect-ratio:1;margin:0 auto}
 .ak-cubo .alone{position:absolute;inset:8%;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(212,175,106,.16),transparent 70%)}
 .ak-cubo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -292,7 +304,8 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
     <!-- ⑤ LA MAPPA — sotto le orme. Il cubo (radar) è te al centro; la mappa vera si accende a ottobre. -->
     <div class="ak-mappa">
       <div class="ak-mappa-t">dove sei &middot; la mappa dei vicinati</div>
-      <div class="ak-cubo">
+      <div class="ak-map" id="ak-map"></div>
+      <div class="ak-cubo" hidden>
         <div class="alone"></div>
         <svg viewBox="-128 -128 256 256" aria-hidden="true">
           <g fill="none" stroke="#D4AF6A" stroke-linejoin="round">
@@ -316,10 +329,14 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
         </svg>
       </div>
 
-      <div class="ak-due">
+      <div class="ak-mieitasti">
         <button type="button" class="ak-tasto" data-g="apri-comune">
           <span data-c="persona.comune_cod">dove sei?</span>
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D4AF6A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+        </button>
+        <button type="button" class="ak-tasto" id="ak-geoloc">
+          <span>usa la mia posizione</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#D4AF6A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path><circle cx="12" cy="12" r="2.5" fill="#D4AF6A" stroke="none"></circle></svg>
         </button>
       </div>
 
@@ -347,6 +364,72 @@ document.querySelectorAll('.ak-sog').forEach(function(b){
 document.querySelector('[data-g="apri-comune"]').addEventListener('click',function(){
   var p=document.querySelector('[data-stato="comune-aperto"]'); p.hidden=!p.hidden; if(!p.hidden) p.querySelector('input').focus();
 });
+
+/* ── LA MAPPA · dove sei e i vicinati (legge db e persona dal guscio) ── */
+(function(){
+  var db = (window.parent && window.parent.db) || window.db;
+  var box = document.getElementById('ak-map');
+  if(!box) return;
+  var mappa = null;
+  function pronta(cb){ if(window.L){ cb(); } else { setTimeout(function(){ pronta(cb); }, 120); } }
+  function icona(cls){ return L.divIcon({className:'', html:'<div class="'+cls+'"></div>', iconSize:[16,16], iconAnchor:[8,8]}); }
+  function disegna(centro, vicinati){
+    pronta(function(){
+      if(!mappa){
+        mappa = L.map(box, { zoomControl:true, attributionControl:true, scrollWheelZoom:false });
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+          { maxZoom:19, attribution:'&copy; OpenStreetMap &copy; CARTO' }).addTo(mappa);
+      }
+      var punti = [];
+      (vicinati||[]).forEach(function(v){
+        if(v.lat==null||v.lon==null) return;
+        L.marker([v.lat, v.lon], {icon:icona('ak-vic')}).addTo(mappa).bindPopup(v.nome || v.territorio || 'vicinato');
+        punti.push([v.lat, v.lon]);
+      });
+      if(centro && centro.lat!=null){
+        L.marker([centro.lat, centro.lon], {icon:icona('ak-seiqui')}).addTo(mappa).bindPopup('Sei qui &middot; '+(centro.nome||''));
+        punti.push([centro.lat, centro.lon]);
+        mappa.setView([centro.lat, centro.lon], 9);
+      }
+      if(punti.length>1){ try{ mappa.fitBounds(punti, {padding:[30,30], maxZoom:11}); }catch(e){} }
+      else if(!centro){ mappa.setView([41.9,12.5], 5); }
+      setTimeout(function(){ mappa.invalidateSize(); }, 200);
+    });
+  }
+  async function dati(){
+    if(!db){ disegna(null, []); return; }
+    var centro = null, vic = [];
+    try{
+      var s = await db.auth.getSession();
+      var uid = s && s.data && s.data.session && s.data.session.user && s.data.session.user.id;
+      if(uid){
+        var me = await db.from('persone').select('comune_cod').eq('id', uid).maybeSingle();
+        var cc = me && me.data && me.data.comune_cod;
+        if(cc){
+          var t = await db.from('territori').select('nome,lat,lon').eq('codice', cc).limit(1);
+          if(t && t.data && t.data[0]) centro = { lat:t.data[0].lat, lon:t.data[0].lon, nome:t.data[0].nome };
+        }
+      }
+    }catch(e){}
+    try{
+      var r = await db.from('vicinati').select('id,nome,territorio,lat,lon');
+      vic = (r && r.data) || [];
+    }catch(e){}
+    disegna(centro, vic);
+  }
+  var geo = document.getElementById('ak-geoloc');
+  if(geo) geo.addEventListener('click', function(){
+    if(!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(function(p){
+      pronta(function(){
+        if(!mappa) return;
+        L.marker([p.coords.latitude, p.coords.longitude], {icon:icona('ak-seiqui')}).addTo(mappa).bindPopup('Sei qui');
+        mappa.setView([p.coords.latitude, p.coords.longitude], 11);
+      });
+    });
+  });
+  dati();
+})();
 </script>
 </body>
 </html>
