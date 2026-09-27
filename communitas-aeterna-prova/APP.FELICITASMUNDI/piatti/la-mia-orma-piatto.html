@@ -374,6 +374,7 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
   var mappa = null, strato = null;
   function pronta(cb){ if(window.L){ cb(); } else { setTimeout(function(){ pronta(cb); }, 120); } }
   function icona(cls){ return L.divIcon({className:'', html:'<div class="'+cls+'"></div>', iconSize:[16,16], iconAnchor:[8,8]}); }
+  function tieniViva(){ if(!mappa) return; try{ mappa.invalidateSize(); mappa.setView(mappa.getCenter(), mappa.getZoom(), {animate:false}); }catch(e){} }
   function disegna(info){
     info = info || {};
     pronta(function(){
@@ -382,6 +383,13 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
           { maxZoom:19, attribution:'&copy; OpenStreetMap' }).addTo(mappa);
         strato = L.featureGroup().addTo(mappa);
+        mappa.setView([41.9,12.5], 5);   /* una vista subito, così le tessere partono */
+        /* il browser sospende la rete quando il riquadro è in secondo piano: riprova quando torna vivo */
+        document.addEventListener('visibilitychange', function(){ if(!document.hidden) tieniViva(); });
+        window.addEventListener('pageshow', tieniViva);
+        window.addEventListener('focus', tieniViva);
+        if(window.ResizeObserver){ new ResizeObserver(tieniViva).observe(box); }
+        var _n=0, _iv=setInterval(function(){ tieniViva(); if(++_n>25) clearInterval(_iv); }, 800);
       }
       strato.clearLayers();
       /* l'area del micelio — una zona sulla tua regione */
@@ -400,12 +408,7 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
         L.marker([info.centro.lat, info.centro.lon], {icon:icona('ak-seiqui')}).addTo(strato).bindPopup('Sei qui &middot; '+(info.centro.nome||''));
       }
       if(strato.getLayers().length){ try{ mappa.fitBounds(strato.getBounds(), {padding:[24,24], maxZoom:11}); }catch(e){} }
-      else { mappa.setView([41.9,12.5], 5); }
-      [80,300,700,1400,2500].forEach(function(ms){ setTimeout(function(){ try{ mappa.invalidateSize(); }catch(e){} }, ms); });
-      if(window.ResizeObserver && !box._ro){
-        box._ro = new ResizeObserver(function(){ try{ mappa.invalidateSize(); }catch(e){} });
-        box._ro.observe(box);
-      }
+      setTimeout(tieniViva, 200);
     });
   }
   async function dati(){
