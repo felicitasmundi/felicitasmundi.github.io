@@ -368,7 +368,7 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
 
 /* ── LA MAPPA · dove sei e i vicinati (legge db e persona dal guscio) ── */
 (function(){
-  var db = (window.parent && window.parent.db) || window.db;
+  function getdb(){ return (window.parent && window.parent.db) || window.db; }
   var box = document.getElementById('ak-map');
   if(!box) return;
   var mappa = null, strato = null;
@@ -409,7 +409,8 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
     });
   }
   async function dati(){
-    if(!db){ disegna({}); return; }
+    var db = getdb();
+    if(!db){ setTimeout(dati, 300); return; }   /* aspetta che il guscio abbia pronto il database */
     var centro=null, area=null, areaNome='', vic=[], regCod=null;
     try{
       var s = await db.auth.getSession();
