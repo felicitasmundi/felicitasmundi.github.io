@@ -5708,7 +5708,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(giaAperto){ vai(vista, sottoVista); return; }
     giaAperto = true;
     if(apriRotta(rottaChiesta)) return;
-    vai(torna || "spazio");
+    vai(torna || (ospite ? "spazio" : "orme"));
   }
 
   /* ⭐ TOCCATO NEL GUSCIO 51 — IL MURO COL NEXUS, comando di Gab del
