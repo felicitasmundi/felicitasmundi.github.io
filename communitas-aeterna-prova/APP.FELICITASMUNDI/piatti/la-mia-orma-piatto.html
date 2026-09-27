@@ -371,7 +371,7 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
   var db = (window.parent && window.parent.db) || window.db;
   var box = document.getElementById('ak-map');
   if(!box) return;
-  var mappa = null;
+  var mappa = null, strato = null;
   function pronta(cb){ if(window.L){ cb(); } else { setTimeout(function(){ pronta(cb); }, 120); } }
   function icona(cls){ return L.divIcon({className:'', html:'<div class="'+cls+'"></div>', iconSize:[16,16], iconAnchor:[8,8]}); }
   function disegna(centro, vicinati){
@@ -380,20 +380,22 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
         mappa = L.map(box, { zoomControl:true, attributionControl:true, scrollWheelZoom:false });
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
           { maxZoom:19, attribution:'&copy; OpenStreetMap' }).addTo(mappa);
+        strato = L.layerGroup().addTo(mappa);
       }
+      strato.clearLayers();
       var punti = [];
       (vicinati||[]).forEach(function(v){
         if(v.lat==null||v.lon==null) return;
-        L.marker([v.lat, v.lon], {icon:icona('ak-vic')}).addTo(mappa).bindPopup(v.nome || v.territorio || 'vicinato');
+        strato.addLayer(L.marker([v.lat, v.lon], {icon:icona('ak-vic')}).bindPopup(v.nome || v.territorio || 'vicinato'));
         punti.push([v.lat, v.lon]);
       });
       if(centro && centro.lat!=null){
-        L.marker([centro.lat, centro.lon], {icon:icona('ak-seiqui')}).addTo(mappa).bindPopup('Sei qui &middot; '+(centro.nome||''));
+        strato.addLayer(L.marker([centro.lat, centro.lon], {icon:icona('ak-seiqui')}).bindPopup('Sei qui &middot; '+(centro.nome||'')));
         punti.push([centro.lat, centro.lon]);
         mappa.setView([centro.lat, centro.lon], 9);
       }
       if(punti.length>1){ try{ mappa.fitBounds(punti, {padding:[30,30], maxZoom:11}); }catch(e){} }
-      else if(!centro){ mappa.setView([41.9,12.5], 5); }
+      else if(!centro && punti.length===0){ mappa.setView([41.9,12.5], 5); }
       setTimeout(function(){ mappa.invalidateSize(); }, 200);
     });
   }
@@ -428,6 +430,11 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
         mappa.setView([p.coords.latitude, p.coords.longitude], 11);
       });
     });
+  });
+  /* quando scegli il comune (gestito dal codice del guscio), la mappa si ricentra */
+  var lista = document.querySelector('.ak-dove-l');
+  if(lista) lista.addEventListener('click', function(e){
+    if(e.target.closest('[data-g="scegli-comune"]')) setTimeout(dati, 900);
   });
   dati();
 })();
