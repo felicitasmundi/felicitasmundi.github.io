@@ -362,6 +362,49 @@
     var d = await leggi();
     disegna(R, d);
     comune(R);
+    settimanaDentro(R);
+  }
+
+  /* ── ⓪ la settimana, in apertura — deciso da Gab il 28 settembre ─────
+     I dati li legge fm-settimana.js (FMSettimana.leggi); qui si disegnano
+     compatti: elementi con obiettivi, ognuno collo stadio e i passi fatti.
+     «tutta la settimana» porta alla pagina intera. ─────────────────── */
+  var ELEM = [["nexus","⊕ Nexus"],["terra","🟤 Terra"],["acqua","🔵 Acqua"],["fuoco","🔴 Fuoco"],["aria","🟢 Aria"],["etere","🟣 Etere"]];
+  function stadioDi(s){ return s === "sviluppato" ? "impronta" : s === "in_avanzamento" ? "cammino" : "seme"; }
+  async function settimanaDentro(R) {
+    var P = F(), S = window.FMSettimana;
+    Array.prototype.forEach.call(R.querySelectorAll('a[href="#settimana"]'), function (a) {
+      a.onclick = function (e) { e.preventDefault(); vaiA("settimana"); };
+    });
+    if (!S || !S.leggi) { P.stato(R, "sett-vuota", true); return; }
+    var lun = new Date(); lun.setHours(0,0,0,0); lun.setDate(lun.getDate() - ((lun.getDay() + 6) % 7));
+    var dom = new Date(lun); dom.setDate(dom.getDate() + 6);
+    var oggi = new Date(); oggi.setHours(0,0,0,0);
+    var u = new Date(Date.UTC(lun.getFullYear(), lun.getMonth(), lun.getDate())); u.setUTCDate(u.getUTCDate() + 3);
+    var nSett = Math.ceil(((u - Date.UTC(u.getUTCFullYear(), 0, 1)) / 86400000 + 1) / 7);
+    var d = await S.leggi(lun);
+    var conto = { seme: 0, cammino: 0, impronta: 0 };
+    d.obiettivi.forEach(function (o) { conto[stadioDi(o.stadio)]++; (d.passi[o.id] || []).forEach(function (x) { conto[stadioDi(x.stadio)]++; }); });
+    P.riempi(R, { sett: { date: "dal " + giornoMese(lun) + " al " + giornoMese(dom),
+                          numero: String(nSett),
+                          seme: String(conto.seme), cammino: String(conto.cammino), impronta: String(conto.impronta) } });
+    P.stato(R, "sett-vuota", d.obiettivi.length === 0);
+    var pieni = ELEM.filter(function (E) { return d.obiettivi.some(function (o) { return (o.elemento || "nexus") === E[0]; }); });
+    P.stampa(R, "sett-el", pieni, function (c, E) {
+      var suoi = d.obiettivi.filter(function (o) { return (o.elemento || "nexus") === E[0]; });
+      P.riempi(c, { settel: { elemento: E[0], nome: E[1], conto: String(suoi.length) } });
+      P.stampa(c, "sett-ob", suoi, function (co, o) {
+        var st = stadioDi(o.stadio), passi = d.passi[o.id] || [];
+        var fatti = passi.filter(function (x) { return stadioDi(x.stadio) === "impronta"; }).length;
+        var tardi = o.entro_il && new Date(o.entro_il) < oggi && st !== "impronta";
+        P.riempi(co, { settob: { titolo: o.titolo || (o.contenuto || "").split("\n")[0],
+          stadio: tardi ? "in ritardo" : (st === "cammino" ? "in cammino" : st),
+          passi: passi.length ? fatti + "/" + passi.length + " passi" : "",
+          entro: o.entro_il ? "entro " + giornoMese(o.entro_il) : "" } });
+        var pill = co.querySelector("[data-pill]"); if (pill) pill.className = "pill " + (tardi ? "tardi" : st);
+        P.gesto(co, "apri-obiettivo", function () { apri(o.id); });
+      });
+    });
   }
 
   window.SpazioVivo = window.SpazioVivo || {};

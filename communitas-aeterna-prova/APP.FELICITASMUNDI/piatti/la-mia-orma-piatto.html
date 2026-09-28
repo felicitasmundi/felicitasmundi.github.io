@@ -53,6 +53,27 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
 .ak-invita:hover{border-color:var(--oro);background:rgba(212,175,106,.12);color:var(--ivory)}
 .ak-invita svg{width:1.4rem;height:1.4rem;flex:none}
 
+/* ⓪ la settimana dentro «La mia orma» */
+.ak-sett-capo{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem 1rem;margin-left:-1.4rem;padding-left:1.4rem}
+.ak-sett-date b{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.25rem;color:var(--oro)}
+.ak-sett-date small{display:block;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,240,230,.42)}
+.ak-sett-conti{display:flex;gap:.9rem;font-size:.72rem;color:rgba(245,240,230,.55)}
+.ak-sett-conti i{font-style:normal}.ak-sett-conti b{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;margin-right:.2rem}
+.ak-sett-conti .seme b{color:#b5bcc8}.ak-sett-conti .cammino b{color:var(--oro)}.ak-sett-conti .impronta b{color:#9ac296}
+.ak-sett-el{display:flex;flex-direction:column;gap:.55rem}
+.ak-sett-el>header{display:flex;align-items:baseline;gap:.6rem}
+.ak-sett-el>header b{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--c,var(--oro))}
+.ak-sett-el>header em{margin-left:auto;font-style:normal;font-size:.72rem;color:rgba(245,240,230,.4)}
+.ak-sett-ob{display:flex;flex-direction:column;gap:.4rem;padding:.8rem 1rem;border-radius:.8rem;border:1px solid rgba(212,175,106,.28);background:rgba(8,11,26,.45);color:var(--ivory);text-decoration:none}
+.ak-sett-ob:hover{border-color:rgba(212,175,106,.7);color:var(--ivory)}
+.ak-sett-ob .t{font-weight:500;font-size:1rem;line-height:1.3}
+.ak-sett-ob .m{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.76rem;color:rgba(245,240,230,.6)}
+.pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.64rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:.18rem .55rem;border-radius:999px;border:1px solid transparent}
+.pill::before{content:'';width:.42rem;height:.42rem;border-radius:50%;background:currentColor}
+.pill.seme{color:#b5bcc8;border-color:rgba(138,145,158,.4)}.pill.cammino{color:var(--oro);border-color:rgba(212,175,106,.45)}
+.pill.impronta{color:#9ac296;border-color:rgba(111,155,106,.45)}.pill.tardi{color:#e08a80;border-color:rgba(192,87,74,.45)}
+.ak-sett-tutta{align-self:flex-end;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--oro)}
+
 /* ④ i pannelli delle soglie */
 .ak-pan{display:none;flex-direction:column;gap:1.4rem}.ak-pan.on{display:flex}.ak-pan:not(.on){display:none!important}
 .ak-lista{display:flex;flex-direction:column;gap:1.6rem;border-left:1px solid rgba(212,175,106,.28);padding-left:1.4rem}
@@ -178,7 +199,8 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
     <div class="ak-capo">
       <h1>La mia orma</h1>
       <div class="ak-soglie">
-        <button type="button" class="ak-sog on" data-s="talenti" data-g="soglia-talenti">Talenti</button>
+        <button type="button" class="ak-sog on" data-s="settimana" data-g="soglia-settimana">Settimana</button>
+        <button type="button" class="ak-sog" data-s="talenti" data-g="soglia-talenti">Talenti</button>
         <button type="button" class="ak-sog" data-s="squadre" data-g="soglia-squadre">Squadre</button>
         <button type="button" class="ak-sog" data-s="strumenti" data-g="soglia-strumenti">Strumenti</button>
       </div>
@@ -201,7 +223,26 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
     <!-- ④ le soglie: i pannelli -->
 
     <!-- ⑥ TALENTI -->
-    <div class="ak-pan ak-lista on" id="ak-p-talenti">
+    <!-- ⓪ LA SETTIMANA — deciso da Gab il 28 settembre: «La mia orma» apre sul flusso della settimana; i talenti sono una lente -->
+    <div class="ak-pan ak-lista on" id="ak-p-settimana">
+      <div class="ak-sett-capo">
+        <span class="ak-sett-date"><b data-c="sett.date">[ dal … al … ]</b><small>settimana <span data-c="sett.numero">[ n ]</span></small></span>
+        <span class="ak-sett-conti"><i class="seme"><b data-c="sett.seme">0</b> semi</i><i class="cammino"><b data-c="sett.cammino">0</b> in cammino</i><i class="impronta"><b data-c="sett.impronta">0</b> impronte</i></span>
+      </div>
+      <div data-stato="sett-vuota" hidden style="display:flex;flex-direction:column;gap:1rem">
+        <div class="ak-nota tratt"><span class="ak-notati">questa settimana</span><span class="ak-notatx">Nessun obiettivo ancora. Scrivi il primo nello spazio in basso: un&rsquo;orma di tipo <b>obiettivo</b>, coi suoi passi.</span></div>
+      </div>
+      <section class="ak-sett-el" data-stampo="sett-el" data-c="settel.elemento" style="--c:var(--oro)">
+        <header><b data-c="settel.nome">[ elemento ]</b><em data-c="settel.conto">[ n ]</em></header>
+        <a class="ak-sett-ob" href="#" data-stampo="sett-ob" data-g="apri-obiettivo">
+          <span class="t" data-c="settob.titolo">[ l&rsquo;obiettivo ]</span>
+          <span class="m"><span class="pill" data-c="settob.stadio" data-pill>[ stadio ]</span><span data-c="settob.passi"></span><span data-c="settob.entro"></span></span>
+        </a>
+      </section>
+      <a class="ak-sett-tutta" href="#settimana">tutta la settimana, coi passi &rsaquo;</a>
+    </div>
+
+    <div class="ak-pan ak-lista" id="ak-p-talenti">
 
       <!-- vuota: nessun talento -->
       <div data-stato="vuota" hidden style="display:flex;flex-direction:column;gap:1.2rem">
