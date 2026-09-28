@@ -307,6 +307,7 @@ function chiudiBarra(){
   if(n) n.classList.remove("aperta");
   if(v) v.classList.remove("si");
   var t = document.getElementById("sv-apri-barra"); if(t) t.style.visibility = "";
+  document.body.classList.remove("barra-aperta");   /* ⭐ il cassetto del guscio si apre con questa classe */
 }
 function barraQui(rotta){ brQui = rotta; brDisegna(); }
 
