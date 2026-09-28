@@ -5777,6 +5777,19 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      gesto «apri-carrello» e conta le righe del carrello nel numero. La testata
      resta quella vecchia — qui si passa solo il bottone del carrello. */
   if(window.SpazioVivo && SpazioVivo.testata) SpazioVivo.testata(document.getElementById("sv-carrello"));
+  /* ⭐ 28 settembre (Gab) — il carrello allineato alla radio: stessa altezza, stesso bordo alto */
+  (function(){
+    function allinea(){
+      var r=document.getElementById("blocco-radio"), c=document.getElementById("sv-carrello");
+      if(!r||!c) return;
+      if(document.body.classList.contains("radio-aperta")){ c.style.top=""; c.style.height=""; return; }
+      var b=r.getBoundingClientRect(); if(!b.height) return;
+      c.style.top=b.top+"px"; c.style.height=b.height+"px";
+    }
+    window.addEventListener("resize", allinea); window.addEventListener("load", allinea);
+    setTimeout(allinea, 300); setTimeout(allinea, 1500);
+    new MutationObserver(allinea).observe(document.body,{attributes:true,attributeFilter:["class"]});
+  })();
 
   /* la plancia non è più della home: si accende all'avvio e resta accesa
      da qualunque stanza, senza ricaricarsi quando si cambia vista */
