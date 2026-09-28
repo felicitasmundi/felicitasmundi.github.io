@@ -215,8 +215,9 @@
     P.riempi(R, {
       giorno:  { data: giornoMese(new Date()), luna: luna().nome, santo: d.santo },
       persona: { nome: io.nome || "", grado: io.grado || "ospite",
-                 foto_url: io.foto_url || "" },
-      nota:    { testo: "" }
+                 foto_url: io.foto_url || "" }
+      /* ⛔ 28 settembre — la nota di Antahkarana NON si svuota: il testo è nel disegno,
+         parole di Gab («Per scrivere la tua prima orma usa lo spazio in basso.») */
     });
     var sl = R.querySelector("b.luna");
     if (sl) sl.textContent = luna().segno;
