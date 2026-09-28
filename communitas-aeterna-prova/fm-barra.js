@@ -58,6 +58,8 @@ function brVeste(){
       "font-family:'DM Sans',system-ui,sans-serif;color:#F5F0E6;" +
       "overflow-y:auto;scrollbar-width:none}" +
     ".sv-barra::-webkit-scrollbar{display:none}" +
+    ".sv-barra.piatta{background:#02040c;width:17rem;max-width:88vw;overflow:hidden}" +
+    ".sv-barra.piatta iframe.fm-piatto{height:100%!important;min-height:100%}" +
     ".sv-barra.aperta{transform:none}" +
     ".sv-barra *{box-sizing:border-box}" +
 
@@ -142,7 +144,7 @@ function brVeste(){
 }
 
 /* ── il disegno ─────────────────────────────────────────────────── */
-function brDisegna(){
+function brDisegnaVecchia(){
   var n = document.getElementById("sv-barra");
   if(!n) return;
   n.innerHTML = "";
@@ -224,6 +226,63 @@ function brDisegna(){
   b.onclick = function(){ brVai("account"); };
   conto.appendChild(b);
   n.appendChild(conto);
+}
+
+/* ── ⭐ 28 settembre (Gab): LA BARRA PIATTA DI DESIGN ─────────────────
+   Il disegno è barra-piatto.html (APP.FELICITASMUNDI/piatti), coi simboli
+   delle stanze. Si monta UNA volta dentro #sv-barra, come ogni piatto;
+   poi a ogni cambio di stanza si accende la voce e si rilegge chi è dentro.
+   Il cassetto (☰, velo, apri/chiudi) resta quello di prima.
+   Senza fm-piatto.js si torna al disegno vecchio. ─────────────────── */
+var BR_PIATTO = "APP.FELICITASMUNDI/piatti/barra-piatto.html";
+var BR_R = null, BR_MONTA = null;
+var BR_DA_V = { "la-mia-orma": "orme", "antahkarana": "anthakarana" };   /* voce di Design → rotta del guscio */
+var BR_A_V  = { "orme": "la-mia-orma", "anthakarana": "antahkarana", "sentiero": "antahkarana" };
+var BR_RUOLI = { ospite: "ospite", karma_yoga: "karma yoga", studente: "studente",
+                 praticante: "praticante", operatore: "operatore", nucleo: "nucleo" };
+
+function brDisegna(){
+  var n = document.getElementById("sv-barra");
+  if(!n) return;
+  if(!window.FMPiatto) return brDisegnaVecchia();
+  if(BR_R){ brRiempi(); return; }
+  if(BR_MONTA) return;
+  n.classList.add("piatta");
+  BR_MONTA = window.FMPiatto.monta(n, BR_PIATTO).then(function(doc){
+    BR_R = (doc && doc.body) ? doc.body : doc;
+    brRiempi();
+  }).catch(function(e){
+    console.warn("barra piatta:", e);
+    BR_MONTA = null; n.classList.remove("piatta"); brDisegnaVecchia();
+  });
+}
+
+function brRiempi(){
+  var R = BR_R, P = window.FMPiatto;
+  if(!R || !P) return;
+  var chi = brChi || {}, grado = chi.grado || "ospite";
+  var nome = String(chi.nome || "").trim();
+  P.riempi(R, { persona: { nome: nome || "ospite", ruolo: BR_RUOLI[grado] || grado,
+                           foto_url: chi.foto_url || "", iniziale: "", grado: grado } });
+  var ini = R.querySelector('[data-c="persona.iniziale"]');
+  if(ini && !chi.foto_url) ini.textContent = (nome || "?").charAt(0).toUpperCase();
+  var piede = R.querySelector('[data-g="apri-account"]');
+  if(piede){
+    piede.setAttribute("data-grado", grado);
+    piede.onclick = function(e){ if(e) e.preventDefault(); brVai("account"); };
+  }
+  var qui = BR_A_V[brQui] || brQui;
+  Array.prototype.forEach.call(R.querySelectorAll('[data-g="apri-voce"]'), function(a){
+    var v = a.getAttribute("data-v"), rotta = BR_DA_V[v] || v;
+    var st = (a.getAttribute("data-stato") || "").replace(/\battiva\b/g, "").trim();
+    a.setAttribute("data-stato", v === qui ? (st ? st + " attiva" : "attiva") : st);
+    if(v === qui) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    a.onclick = function(e){ if(e) e.preventDefault(); brVai(rotta); };
+  });
+  var tre = R.querySelector('[data-g="chiudi-barra"]');
+  if(tre) tre.onclick = function(e){ if(e) e.preventDefault(); chiudiBarra(); };
+  var tempio = R.querySelector(".br-tempio");
+  if(tempio) tempio.onclick = function(e){ if(e) e.preventDefault(); brVai("orme"); };
 }
 
 function brVai(rotta){
