@@ -83,8 +83,9 @@
     try {
       /* gli obiettivi: scadenza nella settimana, oppure senza scadenza e nati nella settimana */
       var o = await db.from("orme")
-        .select("id,titolo,contenuto,tipo,elemento,stadio,entro_il,momento,persona_id,dorme_dal")
+        .select("id,titolo,contenuto,tipo,elemento,stadio,entro_il,momento,persona_id,dorme_dal,orma_madre_id")
         .eq("tipo", "obiettivo")
+        .is("orma_madre_id", null)      /* ⛔ i passi (le figlie) non sono obiettivi: stanno dentro la madre */
         .or("and(entro_il.gte." + da + ",entro_il.lte." + a + ")," +
             "and(entro_il.is.null,momento.gte." + da + "T00:00:00,momento.lte." + a + "T23:59:59)")
         .order("elemento").order("entro_il");
