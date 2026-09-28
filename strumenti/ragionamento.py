@@ -4,11 +4,9 @@
 ragionamento.py — rigenera «Il ragionamento» dal Cruscotto.
 
 Uso, ogni lunedì:
-    python3 ragionamento.py CRUSCOTTO.md settimane.html > ragionamento-<settimana>.html
+    python3 ragionamento.py CRUSCOTTO.md > ragionamento-<settimana>.html
 
-  CRUSCOTTO.md     il Cruscotto vivo (la fonte: ⛔ nessuna sintesi, si estrae e basta)
-  settimane.html   i blocchi in cima — «la settimana che comincia», «la settimana
-                   prima» — scritti a mano il lunedì (un frammento HTML, niente <html>)
+  CRUSCOTTO.md     il Cruscotto vivo: l'unica fonte (⛔ nessuna sintesi, si estrae e basta)
 
 Cosa fa:
   · legge il Cruscotto riga per riga e raccoglie le FRASI di Gab:
@@ -21,9 +19,12 @@ Cosa fa:
     Cruscotto (⊕ NEXUS · 🟤 TERRA · …) prende quello; altrimenti lo dicono le
     parole del titolo e delle sue righe (le regole sono in ELEMENTI, qui sotto);
     se nessuna regola parla, va in Nexus
-  · scrive una pagina sola: le settimane in cima, la plancia (elementi · mesi ·
-    cerca), poi gli argomenti per elemento colle loro frasi
-Lo script non contiene testi: i contenuti stanno nel Cruscotto e in settimane.html.
+  · in cima mette due blocchi presi dal Cruscotto così come sono: «la settimana
+    che comincia» (② LA MATRICE: quello che pesa, quello che comincia per elemento)
+    e «la settimana prima» (il primo blocco di ③ ARCHIVIO: il sommario e il colpo
+    d'occhio per elemento)
+  · poi la plancia (elementi · mesi · cerca) e gli argomenti per elemento colle frasi
+Lo script non contiene testi: tutto sta nel Cruscotto.
 """
 
 import re, sys, html, collections
@@ -155,6 +156,98 @@ def mesi_di(a):
 def data_di(a):
     m = RE_DATA.search(a["titolo"])
     return (m.group(1) + " " + m.group(2).lower()) if m else "—"
+
+
+# ── i due blocchi in cima, presi dal Cruscotto ──────────────────────────────
+ELEM_RIGA = re.compile(r"^\*\*(⊕|🟤|🔵|🔴|🟢|🟣|⚙️)\s*([^*]+?)\*\*\s*(.*)$")
+
+def blocco_md(righe):
+    """righe di markdown (voci «·» con continuazioni rientrate) → <p> uno per voce"""
+    voci, cur = [], None
+    for r in righe:
+        if not r.strip():
+            continue
+        nuova = re.match(r"^(?:[·•\-]\s|\*\*|>\s)", r) is not None
+        if cur is not None and (r.startswith(" ") or not nuova):
+            cur += " " + r.strip()
+        else:
+            if cur is not None: voci.append(cur)
+            cur = r.strip()
+    if cur is not None: voci.append(cur)
+    return "".join("<p>" + inline(pulisci(v)) + "</p>" for v in voci)
+
+def settimane_dal_cruscotto(righe):
+    out = []
+    # ── la settimana che comincia: ② LA MATRICE ──
+    i = next((k for k, r in enumerate(righe) if r.startswith("# ② LA MATRICE")), None)
+    j = next((k for k, r in enumerate(righe) if r.startswith("# ③ ARCHIVIO")), len(righe))
+    if i is not None:
+        m = righe[i:j]
+        date = re.sub(r"^# ② LA MATRICE\s*[—-]\s*settimana\s*", "", righe[i]).strip()
+        num = next((re.search(r"settimana\s+(\d+)", r).group(1) for r in m if re.search(r"⭕.*settimana\s+\d+", r)), "")
+        pesa = []
+        for r in m:
+            if r.startswith("**⚡ QUELLO CHE PESA"):
+                pesa.append(r)
+            elif pesa and r.strip() and not r.startswith("---") and not r.startswith("#"):
+                pesa.append(r)
+            elif pesa:
+                break
+        # gli elementi sotto «QUELLO CHE COMINCIA»
+        a = next((k for k, r in enumerate(m) if r.startswith("## ⭐ QUELLO CHE COMINCIA")), None)
+        b = next((k for k, r in enumerate(m) if k > (a or 0) and r.startswith("## ") and not r.startswith("## ⭐ QUELLO CHE COMINCIA")), len(m))
+        elementi = []
+        if a is not None:
+            cur = None
+            for r in m[a+1:b]:
+                if r.strip() == "---": continue
+                em = ELEM_RIGA.match(r)
+                if em:
+                    cur = {"nome": em.group(1) + " " + em.group(2).strip(), "righe": []}
+                    elementi.append(cur)
+                    if em.group(3).strip(): cur["righe"].append(em.group(3).strip())
+                elif cur is not None:
+                    cur["righe"].append(r)
+        out.append('<div class="sett"><div class="capo"><span class="cerchio">' + html.escape(num) +
+                   '</span><span class="tx"><b>La settimana che comincia</b><span>' + inline(date) +
+                   ' &middot; e quello che comincia adesso</span></span></div>')
+        if pesa:
+            out.append('<p class="ap">' + inline(pulisci(" ".join(x.strip() for x in pesa))) + '</p>')
+        for e in elementi:
+            out.append('<div class="el"><b>' + inline(e["nome"]) + '</b>' + (blocco_md(e["righe"]) or "<p>[ da Gab ]</p>") + '</div>')
+        out.append('</div>\n')
+    # ── la settimana prima: il primo <details> di ③ ARCHIVIO ──
+    k0 = next((k for k in range(j, len(righe)) if righe[k].strip() == "<details>"), None)
+    if k0 is not None:
+        k1 = next((k for k in range(k0, len(righe)) if righe[k].strip() == "</details>"), len(righe))
+        d = righe[k0:k1]
+        somm = " ".join(x.strip() for x in d if True)
+        sm = re.search(r"<summary>(.*?)</summary>", somm, re.S)
+        sommario = re.sub(r"<[^>]+>", "", sm.group(1)).strip() if sm else ""
+        num2 = next((re.search(r"settimana\s+(\d+)", r).group(1) for r in d if re.search(r"⭕.*settimana\s+\d+", r)), "")
+        titolo2 = re.sub(r"^⛳\s*SETTIMANA\s*", "", sommario.split("—")[0]).strip().lower()
+        chiusura = [r for r in d if r.startswith("**Scesa ") or (r.startswith("**") and "non è stato raggiunto" in r)]
+        out.append('<div class="sett"><div class="capo"><span class="cerchio">' + html.escape(num2) +
+                   '</span><span class="tx"><b>La settimana prima</b><span>' + inline(titolo2) +
+                   ' &middot; e il ragionamento da cui nasce</span></span></div>')
+        out.append('<p class="ap">' + inline(sommario) + '</p>')
+        # le righe della chiusura (Scesa …)
+        cl = []
+        preso = False
+        for r in d:
+            if r.startswith("**Scesa "): preso = True
+            if preso:
+                if not r.strip(): break
+                cl.append(r.strip())
+        if cl: out.append('<p class="ap">' + inline(pulisci(" ".join(cl))) + '</p>')
+        # il colpo d'occhio per elemento
+        for r in d:
+            if r.startswith("> **") and ELEM_RIGA.match(r[2:]):
+                em = ELEM_RIGA.match(r[2:])
+                out.append('<div class="el"><b>' + inline(em.group(1) + " " + em.group(2).strip()) + '</b><p>' +
+                           inline(pulisci(em.group(3))) + '</p></div>')
+        out.append('</div>\n')
+    return "".join(out)
 
 # ── scrivere la pagina ──────────────────────────────────────────────────────
 CSS = r"""
@@ -327,13 +420,15 @@ def pagina(argomenti, settimane, titolo):
     return "".join(o)
 
 def main():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         sys.exit(__doc__)
-    cruscotto, settimane = sys.argv[1], sys.argv[2]
-    titolo = sys.argv[3] if len(sys.argv) > 3 else "Il ragionamento · Comunità Eterna FelicitasMundi"
+    cruscotto = sys.argv[1]
+    righe = open(cruscotto, encoding="utf-8").read().split("\n")
+    matr = next((r for r in righe if r.startswith("# ② LA MATRICE")), "")
+    date = re.sub(r"^# ② LA MATRICE\s*[—-]\s*settimana\s*", "", matr).strip()
+    titolo = sys.argv[2] if len(sys.argv) > 2 else "Il ragionamento · " + date + " · Comunità Eterna FelicitasMundi"
     argomenti = leggi(cruscotto)
-    frag = open(settimane, encoding="utf-8").read()
-    sys.stdout.write(pagina(argomenti, frag, titolo))
+    sys.stdout.write(pagina(argomenti, settimane_dal_cruscotto(righe), titolo))
     per = collections.Counter(elemento_di(a) for a in argomenti)
     cls = collections.Counter(f["c"] for a in argomenti for f in a["frasi"])
     sys.stderr.write("argomenti: %d · frasi: %s · per elemento: %s\n" % (len(argomenti), dict(cls), dict(per)))
