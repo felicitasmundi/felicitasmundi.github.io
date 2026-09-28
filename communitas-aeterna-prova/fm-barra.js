@@ -297,6 +297,8 @@ function apriBarra(){
   var v = document.getElementById("sv-velo-barra");
   if(n) n.classList.add("aperta");
   if(v) v.classList.add("si");
+  /* ⭐ 28 settembre — col cassetto aperto il ☰ di fuori si nasconde: dentro c'è già il suo */
+  var t = document.getElementById("sv-apri-barra"); if(t) t.style.visibility = "hidden";
 }
 function chiudiBarra(){
   brAperta = false;
@@ -304,6 +306,7 @@ function chiudiBarra(){
   var v = document.getElementById("sv-velo-barra");
   if(n) n.classList.remove("aperta");
   if(v) v.classList.remove("si");
+  var t = document.getElementById("sv-apri-barra"); if(t) t.style.visibility = "";
 }
 function barraQui(rotta){ brQui = rotta; brDisegna(); }
 

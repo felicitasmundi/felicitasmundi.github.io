@@ -45,8 +45,13 @@ a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
 [data-grado="praticante"] .ak-arco{stroke-dashoffset:70}
 [data-grado="operatore"] .ak-arco{stroke-dashoffset:38;filter:drop-shadow(0 0 3px rgba(212,175,106,.7))}
 [data-grado="nucleo"] .ak-arco{stroke-dashoffset:0;filter:drop-shadow(0 0 5px rgba(212,175,106,.95))}
-/* ⭐ 28 settembre — il tempio non va sotto il tre-righe */
-.br-capo{justify-content:flex-end}.br-tempio{width:min(12.5rem,calc(100% - 2.8rem))}
+/* ⭐ 28 settembre (Gab) — via il tempio attorno al nome, e via le scritte «praticantato» e «le stanze» */
+.br-front,.br-trave,.br-stilo,.br-col{display:none!important}
+.br-ling{display:none!important}
+.br-capo{justify-content:flex-start;align-items:center;min-height:2.75rem}
+.br-tempio{margin-left:3.4rem;width:auto;filter:none}
+.br-cella{margin:0}
+.br-nome{align-items:flex-start;text-align:left}
 </style>
 </head>
 <body>
