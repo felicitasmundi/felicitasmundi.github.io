@@ -369,7 +369,7 @@
      I dati li legge fm-settimana.js (FMSettimana.leggi); qui si disegnano
      compatti: elementi con obiettivi, ognuno collo stadio e i passi fatti.
      «tutta la settimana» porta alla pagina intera. ─────────────────── */
-  var ELEM = [["nexus","⊕ Nexus"],["terra","🟤 Terra"],["acqua","🔵 Acqua"],["fuoco","🔴 Fuoco"],["aria","🟢 Aria"],["etere","🟣 Etere"]];
+  var ELEM = [["nexus","Sviluppo"],["terra","Vicinati"],["acqua","Emporio"],["fuoco","Assistenza"],["aria","Edizione"],["etere","Scuola"]];  /* il nome della stanza, non dell'elemento — Gab, 28 settembre */
   function stadioDi(s){ return s === "sviluppato" ? "impronta" : s === "in_avanzamento" ? "cammino" : "seme"; }
   async function settimanaDentro(R) {
     var P = F(), S = window.FMSettimana;

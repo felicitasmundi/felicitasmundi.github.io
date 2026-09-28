@@ -27,13 +27,15 @@
   var INDIRIZZO = "APP.FELICITASMUNDI/piatti/la-settimana-piatto.html";
   var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio",
               "agosto","settembre","ottobre","novembre","dicembre"];
+  /* ⭐ 28 settembre, Gab: qui si parla del nome della stanza, non dell'elemento
+     (gli elementi restano nel praticantato e nel ragionamento). Il colore resta. */
   var ELEMENTI = [
-    { el: "nexus", nome: "⊕ Nexus",  stanza: "Antahkarana · le orme, le squadre" },
-    { el: "terra", nome: "🟤 Terra", stanza: "i Vicinati" },
-    { el: "acqua", nome: "🔵 Acqua", stanza: "l’Emporio" },
-    { el: "fuoco", nome: "🔴 Fuoco", stanza: "l’Assistenza" },
-    { el: "aria",  nome: "🟢 Aria",  stanza: "l’Edizione" },
-    { el: "etere", nome: "🟣 Etere", stanza: "la Scuola" }
+    { el: "nexus", nome: "Sviluppo",   stanza: "" },
+    { el: "terra", nome: "Vicinati",   stanza: "" },
+    { el: "acqua", nome: "Emporio",    stanza: "" },
+    { el: "fuoco", nome: "Assistenza", stanza: "" },
+    { el: "aria",  nome: "Edizione",   stanza: "" },
+    { el: "etere", nome: "Scuola",     stanza: "" }
   ];
   var F = function () { return window.FMPiatto; };
   function getdb() { return window.db || (window.parent && window.parent.db) || null; }
