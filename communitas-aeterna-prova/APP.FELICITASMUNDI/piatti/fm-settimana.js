@@ -68,7 +68,7 @@
     return s === "sviluppato" ? "impronta" : s === "in_avanzamento" ? "cammino" : "seme";
   }
   function parola(s) {
-    return s === "impronta" ? "impronta" : s === "cammino" ? "in cammino" : "seme";
+    return s === "impronta" ? "fatto" : s === "cammino" ? "in corso" : "da fare";
   }
   function titolo(o) {
     if (o && o.titolo) return o.titolo;

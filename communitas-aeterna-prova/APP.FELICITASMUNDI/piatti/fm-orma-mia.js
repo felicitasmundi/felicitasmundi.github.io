@@ -398,7 +398,7 @@
         var fatti = passi.filter(function (x) { return stadioDi(x.stadio) === "impronta"; }).length;
         var tardi = o.entro_il && new Date(o.entro_il) < oggi && st !== "impronta";
         P.riempi(co, { settob: { titolo: o.titolo || (o.contenuto || "").split("\n")[0],
-          stadio: tardi ? "in ritardo" : (st === "cammino" ? "in cammino" : st),
+          stadio: tardi ? "in ritardo" : (st === "cammino" ? "in corso" : st === "impronta" ? "fatto" : "da fare"),
           passi: passi.length ? fatti + "/" + passi.length + " passi" : "",
           entro: o.entro_il ? "entro " + giornoMese(o.entro_il) : "" } });
         var pill = co.querySelector("[data-pill]"); if (pill) pill.className = "pill " + (tardi ? "tardi" : st);
