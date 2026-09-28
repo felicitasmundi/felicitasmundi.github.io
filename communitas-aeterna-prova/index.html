@@ -4107,6 +4107,7 @@
 <script src="APP.FELICITASMUNDI/piatti/fm-calendario.js"></script><!-- 56 — il calendario: SpazioVivo.calendario(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-costi.js"></script><!-- 56 — i costi: SpazioVivo.costi(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-rubrica.js"></script><!-- 56 — la rubrica: SpazioVivo.rubrica(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-settimana.js"></script><!-- 28 settembre — «La settimana»: gli obiettivi per elemento, SpazioVivo.settimana(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-invito.js"></script><!-- 56 — «Invita chi risuona»: SpazioVivo.invito(). DOPO le stanze, così vince il suo -->
 <script src="APP.FELICITASMUNDI/piatti/fm-evento.js"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
 <!-- ⛔ 56 — il Megafono-piatto NON è cablato qui: il vecchio fm-megafono.js resta (fornisce parla() e il Megafono in fondo). Il piatto megafono-piatto.html è full-viewport e va chiarito con Gab prima di sostituirlo. -->
@@ -4613,6 +4614,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     else if(id==="rubrica" && window.SpazioVivo && SpazioVivo.rubrica) SpazioVivo.rubrica(c);
     else if(id==="calendario" && window.SpazioVivo && SpazioVivo.calendario) SpazioVivo.calendario(c);
     else if(id==="costi" && window.SpazioVivo && SpazioVivo.costi) SpazioVivo.costi(c);
+    /* ⭐ 28 settembre — «La settimana»: gli obiettivi della settimana per elemento (fm-settimana.js) */
+    else if(id==="settimana" && window.SpazioVivo && SpazioVivo.settimana) SpazioVivo.settimana(c);
     /* ⭐ TOCCATO NEL GUSCIO ㊿ — le stanze della consegna del 15 settembre:
        Emporio, Assistenza, Scuola e il configuratore. Il configuratore
        prende l'orma per argomento, come fa `orma` con l'id.
@@ -5433,7 +5436,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore", "evento", "carrello"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» · 56 — e «carrello» */
+  var VISTE_SENZA_VOCE = ["chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore", "evento", "carrello", "settimana"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» · 56 — e «carrello» */
 
   /* ⭐ TOCCATO NEL GUSCIO ㊿ — LE PORTE DELLA BARRA SI CONOSCONO SUBITO.
      ROTTE si riempie dalla tavola `stanze` (il vocabolario, sopra), ma la

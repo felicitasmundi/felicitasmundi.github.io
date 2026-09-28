@@ -301,6 +301,21 @@
     Array.prototype.forEach.call(R.querySelectorAll('a[href="#antahkarana"]'), function (a) {
       a.onclick = function (e) { e.preventDefault(); vaiA("antahkarana"); };
     });
+    /* ⭐ 28 settembre — gli altri strumenti portano alla loro rotta: prima erano ancore mute */
+    [["settimana","settimana"],["calendario","calendario"],["rubrica","rubrica"],["conti","costi"]].forEach(function (v) {
+      Array.prototype.forEach.call(R.querySelectorAll('a[href="#' + v[0] + '"]'), function (a) {
+        a.onclick = function (e) { e.preventDefault(); vaiA(v[1]); };
+      });
+    });
+    /* la settimana di oggi, nella voce Strumenti */
+    (function () {
+      var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+      var x = new Date(); x.setHours(0,0,0,0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
+      var y = new Date(x); y.setDate(y.getDate() + 6);
+      var u = new Date(Date.UTC(x.getFullYear(), x.getMonth(), x.getDate())); var g = u.getUTCDay() || 7;
+      u.setUTCDate(u.getUTCDate() + 4 - g); var n = Math.ceil(((u - Date.UTC(u.getUTCFullYear(),0,1)) / 86400000 + 1) / 7);
+      P.riempi(R, { settimana: { numero: String(n), date: "dal " + x.getDate() + " " + MESI[x.getMonth()] + " al " + y.getDate() + " " + MESI[y.getMonth()] } });
+    })();
   }
 
   /* ── il comune: si cerca scrivendo ─────────────────────────────── */
