@@ -299,10 +299,10 @@
     });
     P.gesto(R, "aggiungi-talento", function () { vaiA("talenti"); });
     Array.prototype.forEach.call(R.querySelectorAll('a[href="#antahkarana"]'), function (a) {
-      a.onclick = function (e) { e.preventDefault(); vaiA("antahkarana"); };
+      a.onclick = function (e) { e.preventDefault(); vaiA("anthakarana"); };   /* ⭐ 28 settembre: la rotta del guscio si scrive «anthakarana» — «antahkarana» cadeva su attesa() */
     });
     /* ⭐ 28 settembre — gli altri strumenti portano alla loro rotta: prima erano ancore mute */
-    [["settimana","settimana"],["calendario","calendario"],["rubrica","rubrica"],["conti","costi"]].forEach(function (v) {
+    [["settimana","settimana"],["calendario","calendario"],["rubrica","rubrica"],["conti","costi"],["anthakarana","anthakarana"]].forEach(function (v) {
       Array.prototype.forEach.call(R.querySelectorAll('a[href="#' + v[0] + '"]'), function (a) {
         a.onclick = function (e) { e.preventDefault(); vaiA(v[1]); };
       });

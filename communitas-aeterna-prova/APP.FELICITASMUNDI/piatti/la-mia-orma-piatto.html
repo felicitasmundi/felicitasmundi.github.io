@@ -6,8 +6,7 @@
 <title>La mia orma</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<!-- la mappa è spenta (28 settembre): Leaflet non si carica -->
 <style>
 /* la-mia-orma · piatto · i quattro segni: data-c · data-stampo · data-stato · data-g
    ── colonna unica, in ordine: capo (orma+soglie+giorno+invita) · talenti/orme · mappa ── */
@@ -53,6 +52,7 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
 .ak-invita:hover{border-color:var(--oro);background:rgba(212,175,106,.12);color:var(--ivory)}
 .ak-invita svg{width:1.4rem;height:1.4rem;flex:none}
 
+.ak-prat{align-self:center;min-height:2.8rem;padding:0 1.8rem;font-size:.85rem}
 /* ⓪ la settimana dentro «La mia orma» */
 .ak-sett-capo{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.5rem 1rem;margin-left:-1.4rem;padding-left:1.4rem}
 .ak-sett-date b{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.25rem;color:var(--oro)}
@@ -218,7 +218,8 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
       &#9737;&nbsp; invita chi risuona
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="M13 5l7 7-7 7"></path></svg>
     </a>
-    <div class="ak-inizio">Segna gli obiettivi, coopera con i team, pubblica</div><!-- parole di Gab, 28 settembre -->
+    <div class="ak-inizio">Segna gli obiettivi, coopera con le squadre, pubblica</div><!-- parole di Gab, 28 settembre -->
+    <a class="ak-btn ak-prat" href="#anthakarana">il praticantato &rsaquo;</a><!-- il tasto che porta al praticantato — Gab, 28 settembre -->
 
     <!-- ④ le soglie: i pannelli -->
 
@@ -345,7 +346,8 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
     </div>
 
     <!-- ⑤ LA MAPPA — sotto le orme. Il cubo (radar) è te al centro; la mappa vera si accende a ottobre. -->
-    <div class="ak-mappa">
+    <!-- ⛔ 28 settembre, Gab: «per ora togli la mappa» — il blocco resta, spento -->
+    <div class="ak-mappa" hidden>
       <div class="ak-mappa-t">dove sei &middot; la mappa dei vicinati</div>
       <div class="ak-map" id="ak-map"></div>
       <div class="ak-cubo" hidden>
@@ -412,6 +414,7 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
 (function(){
   function getdb(){ return (window.parent && window.parent.db) || window.db; }
   var box = document.getElementById('ak-map');
+  if(!box || box.closest('[hidden]')) return;   /* mappa spenta: niente da fare */
   if(!box) return;
   var mappa = null, strato = null;
   function pronta(cb){ if(window.L){ cb(); } else { setTimeout(function(){ pronta(cb); }, 120); } }
