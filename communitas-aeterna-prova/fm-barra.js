@@ -271,7 +271,9 @@ function brRiempi(){
     piede.setAttribute("data-grado", grado);
     piede.onclick = function(e){ if(e) e.preventDefault(); brVai("account"); };
   }
-  var qui = BR_A_V[brQui] || brQui;
+  /* ⭐ 29 settembre — la voce accesa segue la stanza in cui si è davvero (la `vista` del guscio) */
+  var ora = window.FM_VISTA || brQui;
+  var qui = BR_A_V[ora] || ora;
   Array.prototype.forEach.call(R.querySelectorAll('[data-g="apri-voce"]'), function(a){
     var v = a.getAttribute("data-v"), rotta = BR_DA_V[v] || v;
     var st = (a.getAttribute("data-stato") || "").replace(/\battiva\b/g, "").trim();
