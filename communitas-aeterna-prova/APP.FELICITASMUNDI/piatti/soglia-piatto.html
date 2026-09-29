@@ -86,6 +86,11 @@ html,body{overflow-x:hidden;max-width:100%}
 }
 /* ⭐ 29 settembre, Gab: una linea sopra Antaḥkaraṇa, per dare respiro all'aspetto sanscrito */
 .ak-sans{font-family:'Noto Serif Devanagari','Tiro Devanagari Sanskrit',serif;font-size:clamp(1.3rem,2.4vw,1.8rem);letter-spacing:.12em;color:rgba(212,175,106,.85);margin-bottom:.6rem;padding-bottom:.7rem;border-bottom:1px solid rgba(212,175,106,.35);min-width:8rem}
+/* ⭐ 29 settembre, Gab: l'immagine più in alto, dentro la prima finestra */
+.ak{row-gap:1rem;padding-top:1.4rem}
+.ak-sopra{margin-bottom:-.4rem}
+.ak-figura{max-width:min(24rem,38vh)}
+@media (min-width:50rem){.ak-dx{padding:calc(min(24rem,38vh) * .15) 0}}
 </style>
 <script src="./ak-cosmo.js"></script>
 </head>
@@ -117,7 +122,7 @@ html,body{overflow-x:hidden;max-width:100%}
     </ol>
   </div>
   <div class="ak-azione" style="display:flex;flex-direction:column;gap:.9rem;align-items:center">
-      <a class="ak-btn" data-g="inizia" href="vicinati-piatto.html" data-stato="prima-volta">Vicinati &rsaquo;</a>
+      <a class="ak-btn" data-g="inizia" href="../../index.html?p=vicinati" target="_top" data-stato="prima-volta">Vicinati &rsaquo;</a>
       <a class="ak-btn" data-g="riprendi" href="la-mia-orma-piatto.html" data-stato="torna" hidden>riprendi da dove eri</a>
       <div class="ak-ponte">Ponte verso l&rsquo;Evoluzione della Specie Umana</div>
   </div>
