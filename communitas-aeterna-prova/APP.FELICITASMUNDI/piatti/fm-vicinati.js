@@ -25,7 +25,7 @@
   var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
   var GIORNI = ["domenica","lunedì","martedì","mercoledì","giovedì","venerdì","sabato"];
   var RAGGIO_KM = 20;
-  var ARTICOLI = "https://www.felicitasmundi.com/wp-json/wp/v2/posts?categories=399&per_page=3&_fields=id,title,excerpt,link,content";
+  var ARTICOLI = "https://www.felicitasmundi.com/wp-json/wp/v2/posts?categories=399&per_page=3&_fields=id,title,excerpt,link,content,date";
   var ICONE = {"operatori": "<path d=\"M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z\"/>", "ospitalita": "<path d=\"M3 11l9-7 9 7\"/><path d=\"M5 10v10h14V10\"/><path d=\"M10 20v-6h4v6\"/>", "aziende": "<path d=\"M12 21V8\"/><path d=\"M12 12c-3 0-5-2-5-5 3 0 5 2 5 5z\"/><path d=\"M12 12c3 0 5-2 5-5-3 0-5 2-5 5z\"/><path d=\"M12 17c-3 0-5-2-5-5 3 0 5 2 5 5z\"/><path d=\"M12 17c3 0 5-2 5-5-3 0-5 2-5 5z\"/>", "scuole": "<path d=\"M3 6c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z\"/><path d=\"M21 6c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z\"/>", "templi": "<path d=\"M4 9l8-5 8 5\"/><path d=\"M4 9h16\"/><path d=\"M6 9v9M10 9v9M14 9v9M18 9v9\"/><path d=\"M3 20h18\"/>"};
 
   function vaiA(r, x) { if (typeof window.vai === "function") window.vai(r, x); }
@@ -118,7 +118,13 @@
     P.stampa(R, "art", lista.slice(0, 3), function (c, a) {
       var m = /<img[^>]+src="([^"]+)"/i.exec((a.content && a.content.rendered) || "");
       var frasi = testo(a.excerpt && a.excerpt.rendered).replace(/\s*(\u2026|\[\u2026\]|\.\.\.)?\s*Leggi tutto\s*$/i, "").split(/(?<=[.!?])\s+/).filter(Boolean).slice(0, 2).join(" ");
-      P.riempi(c, { art: { titolo: testo(a.title && a.title.rendered), sotto: frasi } });
+      /* ⭐ in basso, in giallo: la zona (il «Vicinato …» scritto nell'articolo) e la data — Gab, 29 settembre */
+      var tutto = testo(a.excerpt && a.excerpt.rendered) + " " + testo(a.content && a.content.rendered).slice(0, 400);
+      var zm = /Vicinato\s+([A-ZÀ-Ý][\wÀ-ÿ'’ ]{1,40}?)(?=\s*(?:·|—|-|\||,|\.|$))/.exec(tutto);
+      var dd = a.date ? new Date(a.date) : null;
+      P.riempi(c, { art: { titolo: testo(a.title && a.title.rendered), sotto: frasi,
+        zona: zm ? "Vicinato " + zm[1].trim() : "",
+        data: dd && !isNaN(dd) ? dd.getDate() + " " + MESI[dd.getMonth()] + " " + dd.getFullYear() : "" } });
       var cop = c.querySelector(".cop"); if (cop && m) cop.style.backgroundImage = "url('" + m[1] + "')";
       c.setAttribute("href", a.link || "#"); c.setAttribute("target", "_blank"); c.setAttribute("rel", "noopener");
       c.onclick = function (e) { e.preventDefault(); if (a.link) window.open(a.link, "_blank", "noopener"); };

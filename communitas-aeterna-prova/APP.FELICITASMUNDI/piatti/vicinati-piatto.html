@@ -60,6 +60,10 @@ background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%
 .vc-a .cop{aspect-ratio:4/3;background:linear-gradient(135deg,rgba(170,136,68,.35),rgba(38,64,120,.4));background-size:cover;background-position:center}
 .vc-a .tx{padding:.6rem .7rem .75rem;display:flex;flex-direction:column;gap:.3rem}
 .vc-a b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.05rem;line-height:1.2}
+.vc-a .zona{display:flex;flex-wrap:wrap;gap:.1rem .5rem;margin-top:auto;padding-top:.3rem;font-style:normal;font-size:.72rem;letter-spacing:.04em;color:var(--oro)!important}
+.vc-a .zona span{color:var(--oro)!important;font-size:.72rem!important;-webkit-line-clamp:unset!important;display:inline!important}
+.vc-a .leggi{align-self:flex-start;margin-top:.35rem;padding:.3rem .8rem;border-radius:999px;border:1px solid rgba(212,175,106,.55);color:var(--ivory)!important;font-family:'Cinzel',serif;font-size:.66rem!important;letter-spacing:.12em;text-transform:uppercase;display:inline-block!important}
+.vc-a .tx{flex:1}
 .vc-a span{font-size:.76rem;line-height:1.4;color:rgba(245,240,230,.62);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 @media (max-width:520px){.vc-art{grid-template-columns:repeat(3,minmax(8.5rem,1fr));overflow-x:auto;padding-bottom:.3rem}}
 /* karma yoga: il modello dell'Emporio */
@@ -132,7 +136,7 @@ background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%
 
   <section class="vc-sez">
     <h2>Novit&agrave; dai vicinati</h2>
-    <div class="vc-art"><a class="vc-a" data-stampo="art" data-g="apri-art" href="#"><span class="cop" data-c="art.cop"></span><span class="tx"><b data-c="art.titolo">[ il titolo ]</b><span data-c="art.sotto">[ due frasi ]</span></span></a></div>
+    <div class="vc-art"><a class="vc-a" data-stampo="art" data-g="apri-art" href="#"><span class="cop" data-c="art.cop"></span><span class="tx"><b data-c="art.titolo">[ il titolo ]</b><span data-c="art.sotto">[ due frasi ]</span><em class="zona"><span data-c="art.zona"></span><span data-c="art.data">[ la data ]</span></em><span class="leggi">leggi di pi&ugrave; &rsaquo;</span></span></a></div>
     <p class="vc-vuoto" data-stato="art-vuoto" hidden>Ancora nessun articolo.</p>
   </section>
 
