@@ -4585,7 +4585,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        la fa il file di Gab: chi ha già i talenti non la vede mai, nemmeno
        per indirizzo — va dritto a «La mia orma». */
     else if(id==="soglia" && window.SpazioVivo && SpazioVivo.soglia){
-      SpazioVivo.sogliaServe().then(function(serve){ if(serve) SpazioVivo.soglia(c); else vai("orme"); });
+      SpazioVivo.sogliaServe().then(function(serve){ if(serve) SpazioVivo.soglia(c); else vai("vicinati"); }); /* ⭐ 29 settembre, Gab: chi è già dentro arriva nei Vicinati, la casa */
     }
     /* ⭐ TOCCATO NEL GUSCIO ㊸ — «talenti» è la parola dei bottoni di
        Antahkarana: porta al percorso. ㊹ — ora la chiama l'«avanti»
