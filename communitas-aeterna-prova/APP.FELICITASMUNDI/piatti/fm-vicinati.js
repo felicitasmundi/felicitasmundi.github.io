@@ -117,7 +117,7 @@
     P.stato(R, "art-vuoto", !lista.length);
     P.stampa(R, "art", lista.slice(0, 3), function (c, a) {
       var m = /<img[^>]+src="([^"]+)"/i.exec((a.content && a.content.rendered) || "");
-      var frasi = testo(a.excerpt && a.excerpt.rendered).split(/(?<=[.!?])\s+/).filter(Boolean).slice(0, 2).join(" ");
+      var frasi = testo(a.excerpt && a.excerpt.rendered).replace(/\s*(\u2026|\[\u2026\]|\.\.\.)?\s*Leggi tutto\s*$/i, "").split(/(?<=[.!?])\s+/).filter(Boolean).slice(0, 2).join(" ");
       P.riempi(c, { art: { titolo: testo(a.title && a.title.rendered), sotto: frasi } });
       var cop = c.querySelector(".cop"); if (cop && m) cop.style.backgroundImage = "url('" + m[1] + "')";
       c.setAttribute("href", a.link || "#"); c.setAttribute("target", "_blank"); c.setAttribute("rel", "noopener");
