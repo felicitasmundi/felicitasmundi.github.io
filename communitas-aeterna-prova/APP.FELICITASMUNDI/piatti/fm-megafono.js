@@ -30,7 +30,7 @@
   var STANZE = { terra: "I Vicinati", acqua: "L\u2019Emporio", fuoco: "L\u2019Assistenza",
                  aria: "L\u2019Edizione", etere: "La Scuola", nexus: "Organizzazione e sviluppo" };
   var TIPI = { karma_yoga: "karma yoga", obiettivo: "obiettivo", contatto: "contatto",
-               spesa: "spesa", racconto: "racconto" };
+               spesa: "spesa", racconto: "articolo" };  /* ⭐ 29 settembre, Gab: si chiama «articolo»; nel database resta racconto */
   var SU = ["karma_yoga", "studente", "praticante", "operatore", "nucleo"];  /* può fare figlie */
   var F = function () { return window.FMPiatto; };
 

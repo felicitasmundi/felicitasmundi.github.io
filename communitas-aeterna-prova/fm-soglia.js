@@ -28,8 +28,8 @@ var SOG_RIGHE = [
    "tenere traccia della giornata, attivare squadre, proporre attivit\u00e0, " +
    "espandere la comunit\u00e0"],
   ["Quello che condividi",
-   "ricerca, formazioni, racconti, persone e luoghi in risonanza, " +
-   "assistenza terapeutica, i tuoi prodotti in scambio o in vendita"],
+   "ricerca, formazioni, articoli, persone e luoghi in risonanza, " +
+   "assistenza comunitaria integrata, i tuoi prodotti in scambio o in vendita"],
   ["Quello che ricevi",
    "karma yoga, ospitalit\u00e0, pubblicazione e stampa, lezioni, " +
    "strumenti di coscienza, alimenti, rimedi, prenotazioni e pagamenti"]
