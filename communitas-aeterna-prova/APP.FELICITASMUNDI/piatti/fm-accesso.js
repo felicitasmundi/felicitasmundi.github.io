@@ -215,8 +215,9 @@
     });
 
     /* ⭐ i tre collegamenti del patto: le pagine vere della casa */
-    P.riempi(R, { patto: { condizioni: "condizioni.html", privacy: "privacy.html",
-                           cookie: "cookie.html" } });
+    /* ⭐ indirizzi pieni: il piatto vive in un riquadro dentro piatti/, e «privacy.html» da solo puntava lì */
+    P.riempi(R, { patto: { condizioni: CASA + "condizioni.html", privacy: CASA + "privacy.html",
+                           cookie: CASA + "cookie.html" } });
     Array.prototype.forEach.call(
       R.querySelectorAll('[data-c^="patto."]'), function (a) { a.target = "_blank"; });
 
