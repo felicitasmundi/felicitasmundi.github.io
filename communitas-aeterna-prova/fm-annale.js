@@ -314,7 +314,7 @@ function avviaAnnale(){
     memoria:   { sigla:'M', colore:'#C08CFF', riempimento:'transparent', coloreSigla:'#C08CFF', raggio:'2px', nome:'Memoria' },
 
     /* ── le orme, coi cinque colori del canone ── */
-    racconto:      { sigla:'',  colore:'#669944', riempimento:'#669944', coloreSigla:'#0A0C1A', raggio:'50%', nome:'Un articolo' },
+    articolo:      { sigla:'',  colore:'#669944', riempimento:'#669944', coloreSigla:'#0A0C1A', raggio:'50%', nome:'Un articolo' },
     testimonianza: { sigla:'T', colore:'#CC6644', riempimento:'transparent', coloreSigla:'#CC6644', raggio:'2px', nome:'Una testimonianza' },
     bisogno:       { sigla:'',  colore:'#AA8844', riempimento:'#AA8844', coloreSigla:'#0A0C1A', raggio:'50%', nome:'Un bisogno' },
     scambio_dono:  { sigla:'',  colore:'#4488BB', riempimento:'#4488BB', coloreSigla:'#0A0C1A', raggio:'50%', nome:'Uno scambio o un dono' },
