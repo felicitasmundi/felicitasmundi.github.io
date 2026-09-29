@@ -43,7 +43,8 @@ fmMgVeste.textContent = `  /* ⭐ TOCCATO NEL GUSCIO ㊶ — LA VESTE DEL MEGAFO
      coi puntini. I tocchi restano tutti a 2.75rem. */
   .mg-sotto{display:flex;align-items:center;gap:0.3rem;margin-top:0.35rem;
     height:2.75rem;min-width:0}
-  .mg-vuoto{display:none}
+  .mg-vuoto{display:block;flex:1 1 auto;min-width:0} /* ⭐ 29 settembre, Gab: il tasto d'invio a destra */
+  #mg .dentro{max-width:none} /* ⭐ 29 settembre, Gab: il megafono prende tutta l'area */
   .mg-tipo{--c:var(--oro);flex:1 1 auto;min-width:2.75rem;max-width:9rem;
     overflow:hidden;text-overflow:ellipsis;height:2.75rem;
     font-family:'DM Sans',sans-serif;font-size:var(--t-eti);

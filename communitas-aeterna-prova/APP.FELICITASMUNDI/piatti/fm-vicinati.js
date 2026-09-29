@@ -428,7 +428,12 @@
     await dueQuadranti(P, R, io, app);
     articoli(P, R);
     await bisogni(P, R, io, luoghi);
-    mappa(P, R, io, qui);
+    /* ⭐ 29 settembre, Gab: la mappa per ora è tolta (la funzione mappa resta qui, spenta).
+       «Invita una realtà» apre l'invito, come «invita chi risuona». */
+    P.gesto(R, "invita-realta", function () {
+      if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function") return window.SpazioVivo.invito();
+      vaiA("invito");
+    });
   }
   window.SpazioVivo = window.SpazioVivo || {};
   window.SpazioVivo.vicinati = vicinati;

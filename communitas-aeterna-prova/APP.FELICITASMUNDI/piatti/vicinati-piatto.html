@@ -6,8 +6,6 @@
 <title>Vicinati</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="./ak-solido.js"></script>
 <style>
 /* vicinati · piatto · la casa dell'app, l'elemento terra.
@@ -108,6 +106,8 @@ background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%
 .vc-posto .q{width:5.2rem}
 .vc-posto .vc-altri{flex:none;color:var(--oro)}
 .vc-perche{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.6)}
+/* ⭐ 29 settembre, Gab: dal computer la pagina prende tutta l'area */
+.vc-col{max-width:none}
 </style>
 </head>
 <body>
@@ -181,22 +181,10 @@ background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%
     </div>
   </section>
 
+  <!-- ⭐ 29 settembre, Gab: la mappa per ora si toglie; «aggiungi una realtà» diventa un invito -->
   <section class="vc-sez">
-    <h2>Il tuo vicinato <small><button type="button" class="vc-dove" data-g="apri-dove"><span data-c="mappa.dove">dove sei?</span></button> &middot; 20 km</small></h2>
-    <div class="vc-form vc-cerca" data-stato="dove-aperto" hidden>
-      <input id="vc-cerca" type="search" placeholder="scrivi il nome del tuo comune">
-      <div class="vc-cerca-l"><button type="button" data-stampo="comune" data-g="scegli-comune"><span data-c="comune.nome">[ il comune ]</span></button></div>
-    </div>
-    <div class="vc-cat"><button type="button" data-cat="operatori"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>operatori</button><button type="button" data-cat="ospitalita"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>luoghi di ospitalità</button><button type="button" data-cat="aziende"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V8"/><path d="M12 12c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M12 12c3 0 5-2 5-5-3 0-5 2-5 5z"/><path d="M12 17c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M12 17c3 0 5-2 5-5-3 0-5 2-5 5z"/></svg>aziende agricole</button><button type="button" data-cat="scuole"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z"/><path d="M21 6c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z"/></svg>scuole</button><button type="button" data-cat="templi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l8-5 8 5"/><path d="M4 9h16"/><path d="M6 9v9M10 9v9M14 9v9M18 9v9"/><path d="M3 20h18"/></svg>templi</button></div>
-    <div class="vc-map" id="vc-map"></div>
-    <button type="button" class="vc-agg" data-g="apri-luogo">aggiungi una realt&agrave;</button>
-    <div class="vc-form" data-stato="form-luogo" hidden>
-      <p class="vc-nota" data-c="luogo.passo">scegli la famiglia qui sopra, poi tocca la mappa dove si trova</p>
-      <input id="vc-luogo-nome" type="text" placeholder="il nome della realt&agrave;">
-      <textarea id="vc-luogo-desc" rows="2" placeholder="due parole: chi sono, cosa fanno"></textarea>
-      <div class="riga"><button type="button" class="vc-btn" data-g="annulla-luogo">annulla</button><button type="button" class="vc-btn" data-g="salva-luogo">aggiungi</button></div>
-      <p class="vc-nota" data-c="luogo.esito"></p>
-    </div>
+    <h2>Il tuo vicinato</h2>
+    <button type="button" class="vc-agg" data-g="invita-realta">invita una realt&agrave;</button>
   </section>
 
       <div class="vc-cubo"><div class="alone"></div>
