@@ -43,7 +43,7 @@
      dalla cartella della pagina d'accesso, che è quella del guscio. */
   var CASA = location.href.replace(/accesso\.html.*$/, "").replace(/[^/]*$/, "");
   var SOGLIA = CASA + "index.html?p=soglia";
-  var ORME   = CASA + "index.html?p=orme";
+  var ORME   = CASA + "index.html?p=vicinati"; /* ⭐ 29 settembre, Gab: chi è già dentro arriva nei Vicinati */
 
   var F = function () { return window.FMPiatto; };
 
