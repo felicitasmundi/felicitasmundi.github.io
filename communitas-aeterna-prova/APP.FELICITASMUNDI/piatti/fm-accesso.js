@@ -50,8 +50,11 @@
   /* ⭐ L'OCCHIO: un pannello in fondo che racconta cosa succede, sullo
      schermo, in chiaro. Nessuna Console. Si vede dove la catena si ferma.
      Si toglie cambiando SPIA a false quando l'accesso funziona. */
-  var SPIA = true;
+  /* ⭐ 29 settembre, Gab: la spia a schermo si spegne; il tragitto va in console.
+     Per rivederla a schermo: aggiungi ?spia=1 all'indirizzo. */
+  var SPIA = /[?&]spia=1/.test(location.search);
   function dico(t) {
+    try { console.log("accesso:", t); } catch (e) {}
     if (!SPIA) return;
     try {
       var box = document.getElementById("fm-spia");
