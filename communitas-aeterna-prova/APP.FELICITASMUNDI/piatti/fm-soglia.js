@@ -35,7 +35,7 @@
     var prima = await sogliaServe(), P = F();
     P.stato(R, "prima-volta", prima);
     P.stato(R, "torna", !prima);
-    P.gesto(R, "inizia", function () { vaiA("cammino"); });
+    P.gesto(R, "inizia", function () { vaiA("vicinati"); });  /* ⭐ 29 settembre, Gab: dalla soglia si va direttamente nei Vicinati; i talenti vanno nel praticantato */
     P.gesto(R, "riprendi", function () { vaiA("orme"); });
   }
 
