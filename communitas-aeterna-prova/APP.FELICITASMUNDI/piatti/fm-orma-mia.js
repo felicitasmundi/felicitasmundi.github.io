@@ -299,6 +299,7 @@
       vaiA("invito");
     });
     P.gesto(R, "aggiungi-talento", function () { vaiA("talenti"); });
+    P.gesto(R, "apri-conti", function () { vaiA("costi"); });   /* 29 settembre: Conti al posto di Strumenti */
     Array.prototype.forEach.call(R.querySelectorAll('a[href="#antahkarana"]'), function (a) {
       a.onclick = function (e) { e.preventDefault(); vaiA("anthakarana"); };   /* ⭐ 28 settembre: la rotta del guscio si scrive «anthakarana» — «antahkarana» cadeva su attesa() */
     });

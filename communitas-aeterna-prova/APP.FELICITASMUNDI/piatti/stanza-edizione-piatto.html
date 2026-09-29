@@ -70,6 +70,13 @@ a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
 .st-cubo .alone{background:radial-gradient(circle at 50% 50%,rgba(102,153,68,.18),transparent 70%)}
 .st-solido,.st-occ{color:#A6D07E}
 .st-autunno{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;line-height:1.4;color:rgba(245,240,230,.8);padding:.8rem 1rem;border:1px dashed rgba(212,175,106,.45);border-radius:.8rem;background:rgba(212,175,106,.05);animation:ak-alza .4s ease both}
+/* ⛔⛔ 29 settembre (Gab) — coerenza delle pagine: niente giorno/luna/santo nelle stanze,
+   il cubo col simbolo alla fine della pagina, sotto il nome «FelicitasMundi · Comunità Eterna» */
+.st{display:flex!important;flex-direction:column;align-items:center}
+.st-dx{order:1;max-width:40rem!important;justify-self:auto}
+.st-sx{order:2;position:relative!important;top:auto!important;max-width:24rem;margin-top:1rem}
+.st-giorno{display:none!important}
+.st-fm{margin-top:-.8rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;letter-spacing:.02em;color:rgba(245,240,230,.6)}
 </style>
 <script src="./ak-cosmo.js"></script>
 <script src="./ak-solido.js"></script>
@@ -108,6 +115,7 @@ a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
     <!-- ① la stanza: le opere pubblicate, e le famiglie della stampa -->
     <div data-stato="elenco" style="display:contents">
       <div class="st-capo"><h1>L&rsquo;Edizione</h1><div class="st-occ">aria</div></div>
+      <div class="st-fm">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
       <div class="st-cuore" style="font-size:1.3rem">quello che fai, stampato e portato dove serve</div>
 
       <div class="st-sez"><b>le opere</b><i></i><span><span data-c="conto.opere">[ n ]</span> pubblicate</span></div>

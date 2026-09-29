@@ -8,114 +8,191 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="./ak-solido.js"></script>
 <style>
-/* vicinati · piatto · la casa dell'app, l'elemento terra — si costruisce un pezzo alla volta con Gab (29 settembre) */
+/* vicinati · piatto · la casa dell'app, l'elemento terra.
+   ⛔⛔ Le regole di coerenza di Gab, 29 settembre (Cruscotto 24_63): sotto il nome «FelicitasMundi · Comunità Eterna» ·
+   giorno/luna/santo solo qui, senza scritte · calendario e rubrica qui · karma yoga col modello dell'Emporio ·
+   novità: tre articoli in riga · la mappa del vicinato con le realtà · in fondo il cubo col simbolo della terra */
 :root{--oro:#D4AF6A;--ivory:#F5F0E6;--terra:#AA8844}
 *{box-sizing:border-box}
 body{margin:0;background:#02040c}
 [hidden]{display:none!important}
 .vc{min-height:100vh;padding:1.6rem clamp(1.1rem,5vw,2.4rem) 3rem;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
 background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 90%,rgba(60,44,110,.42),transparent 60%),#0a1428}
-.vc-col{width:100%;max-width:40rem;margin:0 auto;display:flex;flex-direction:column;gap:1.4rem}
-.vc h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2rem,7vw,2.7rem);line-height:1;letter-spacing:.05em}
-/* il quadrante: il giorno · la luna · il santo */
+.vc-col{width:100%;max-width:44rem;margin:0 auto;display:flex;flex-direction:column;gap:1.5rem}
+.vc-capo h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2rem,7vw,2.7rem);line-height:1;letter-spacing:.05em}
+.vc-fm{margin-top:.35rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:rgba(245,240,230,.6)}
+/* il quadrante, senza scritte */
 .vc-giorno{display:flex;gap:.6rem}
-.vc-giorno>div{flex:1;border:1px solid rgba(184,150,62,.25);border-radius:.9rem;background:rgba(8,11,26,.35);padding:.9rem .6rem;text-align:center}
-.vc-giorno .k{display:block;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,230,.42)}
-.vc-giorno b{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.35rem;line-height:1.2;color:var(--oro);margin-top:.3rem}
+.vc-giorno>div{flex:1;border:1px solid rgba(184,150,62,.25);border-radius:.9rem;background:rgba(8,11,26,.35);padding:.8rem .5rem;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.vc-giorno b{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.3rem;line-height:1.2;color:var(--oro)}
 .vc-giorno b.luna{font-size:1.9rem;font-style:normal}
-.vc-giorno small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(245,240,230,.55);margin-top:.15rem}
-
-/* le sezioni — nell'ordine dato da Gab, 29 settembre */
+.vc-giorno small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(245,240,230,.5)}
+/* calendario · rubrica */
+.vc-due{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.vc-quad{display:flex;flex-direction:column;gap:.3rem;min-height:5.2rem;padding:.9rem 1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.35);background:rgba(8,11,26,.5);color:var(--ivory);cursor:pointer;text-align:left;font:inherit}
+.vc-quad:hover{border-color:rgba(212,175,106,.8);background:rgba(212,175,106,.08)}
+.vc-quad .no{font-family:'Cinzel',serif;font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;color:var(--oro)}
+.vc-quad .da{font-family:'Cormorant Garamond',serif;font-size:1.1rem}
+.vc-quad .so{font-size:.78rem;color:rgba(245,240,230,.5)}
+/* sezioni */
 .vc-sez{display:flex;flex-direction:column;gap:.7rem}
-.vc-sez>h2{margin:0;display:flex;align-items:baseline;gap:.6rem;font-family:'Cinzel',serif;font-weight:400;font-size:.95rem;letter-spacing:.16em;text-transform:uppercase;color:var(--oro);border-bottom:1px solid rgba(212,175,106,.22);padding-bottom:.4rem}
+.vc-sez>h2{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .6rem;font-family:'Cinzel',serif;font-weight:400;font-size:.95rem;letter-spacing:.16em;text-transform:uppercase;color:var(--oro);border-bottom:1px solid rgba(212,175,106,.22);padding-bottom:.4rem}
 .vc-sez>h2 small{font-family:'Cormorant Garamond',serif;font-style:italic;text-transform:none;letter-spacing:0;font-size:1rem;color:rgba(245,240,230,.5)}
-.vc-card{border:1px solid rgba(212,175,106,.25);border-radius:.9rem;background:rgba(8,11,26,.45);padding:.85rem 1rem;display:flex;flex-direction:column;gap:.25rem}
-.vc-card .k{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,240,230,.45)}
-.vc-card b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.3rem;line-height:1.2}
-.vc-card i{font-style:normal;font-size:.85rem;color:rgba(245,240,230,.6)}
-.vc-card.vc-onda{flex-direction:row;align-items:center;gap:.9rem}
+.vc-card{border:1px solid rgba(212,175,106,.25);border-radius:.9rem;background:rgba(8,11,26,.45);padding:.85rem 1rem}
+.vc-onda{display:flex;align-items:center;gap:.9rem}
 .vc-onda .spia{width:.6rem;height:.6rem;border-radius:50%;background:#e0584a;box-shadow:0 0 0 4px rgba(224,88,74,.2);flex:none}
-.vc-onda .tx{flex:1;min-width:0}
-.vc-onda button{flex:none;min-height:2.6rem;padding:0 1.1rem;border-radius:999px;border:1px solid rgba(212,175,106,.6);background:rgba(212,175,106,.1);color:var(--ivory);font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.vc-onda .tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.vc-onda .tx b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.3rem}
+.vc-onda .tx i{font-style:normal;font-size:.85rem;color:rgba(245,240,230,.6)}
+.vc-btn{flex:none;min-height:2.6rem;padding:0 1.1rem;border-radius:999px;border:1px solid rgba(212,175,106,.6);background:rgba(212,175,106,.1);color:var(--ivory);font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
 .vc-righe{display:flex;flex-direction:column}
-.vc-riga{display:flex;align-items:baseline;gap:.8rem;padding:.55rem .2rem;border-top:1px solid rgba(245,240,230,.07);font-size:.93rem}
+.vc-riga{display:flex;align-items:baseline;gap:.8rem;padding:.55rem .2rem;border-top:1px solid rgba(245,240,230,.07);font-size:.93rem;cursor:pointer}
 .vc-riga:first-child{border-top:0}
 .vc-riga .q{flex:none;width:4.2rem;font-size:.78rem;color:var(--oro)}
 .vc-riga .t{flex:1;min-width:0}
 .vc-riga .d{font-size:.78rem;color:rgba(245,240,230,.45);white-space:nowrap}
-.vc-vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.45);padding:.3rem .2rem}
-.vc-sett{display:grid;grid-template-columns:repeat(7,1fr);gap:.35rem}
-.vc-sett div{border:1px solid rgba(212,175,106,.18);border-radius:.6rem;padding:.4rem 0;text-align:center;font-size:.7rem;color:rgba(245,240,230,.5);position:relative}
-.vc-sett div b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.15rem;color:var(--ivory)}
-.vc-sett div.oggi{border-color:var(--oro);background:rgba(212,175,106,.1)}
-.vc-sett div.pieno::after{content:'';position:absolute;left:50%;bottom:.2rem;width:.3rem;height:.3rem;margin-left:-.15rem;border-radius:50%;background:var(--oro)}
-.vc-link{align-self:flex-end;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--oro);text-decoration:none;cursor:pointer;background:none;border:0}
-.vc-map{height:20rem;border-radius:.9rem;overflow:hidden;border:1px solid rgba(212,175,106,.25);background:#0b1224}
-
-.vc-cat{display:flex;flex-wrap:wrap;gap:.4rem}
-.vc-cat button{min-height:2.3rem;padding:0 .9rem;border-radius:999px;border:1px solid rgba(212,175,106,.3);background:transparent;color:rgba(245,240,230,.75);font:inherit;font-size:.82rem;cursor:pointer}
-.vc-cat button.on{border-color:var(--oro);color:var(--oro);background:rgba(212,175,106,.1)}
+.vc-vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.45);padding:.3rem .2rem;margin:0}
+/* novità: tre articoli in riga */
+.vc-art{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem}
+.vc-a{display:flex;flex-direction:column;border:1px solid rgba(212,175,106,.22);border-radius:.8rem;overflow:hidden;background:rgba(8,11,26,.5);color:var(--ivory);text-decoration:none;cursor:pointer}
+.vc-a .cop{aspect-ratio:4/3;background:linear-gradient(135deg,rgba(170,136,68,.35),rgba(38,64,120,.4));background-size:cover;background-position:center}
+.vc-a .tx{padding:.6rem .7rem .75rem;display:flex;flex-direction:column;gap:.3rem}
+.vc-a b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.05rem;line-height:1.2}
+.vc-a span{font-size:.76rem;line-height:1.4;color:rgba(245,240,230,.62);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:520px){.vc-art{grid-template-columns:repeat(3,minmax(8.5rem,1fr));overflow-x:auto;padding-bottom:.3rem}}
+/* karma yoga: il modello dell'Emporio */
+.vc-gruppo{display:flex;flex-direction:column;gap:.2rem}
+.vc-gruppo .capo{display:flex;align-items:center;gap:.6rem;margin:.4rem 0 .2rem}
+.vc-gruppo .capo b{font-family:'Cinzel',serif;font-weight:400;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--oro)}
+.vc-gruppo .capo i{flex:1;height:1px;background:rgba(212,175,106,.2)}
+.vc-gruppo .capo span{font-size:.75rem;color:rgba(245,240,230,.45)}
+.vc-bis{display:flex;align-items:center;gap:.8rem;padding:.6rem .8rem;border:1px solid rgba(245,240,230,.08);border-radius:.7rem;background:rgba(8,11,26,.35)}
+.vc-bis .t{flex:1;min-width:0}
+.vc-bis .t b{display:block;font-weight:500;font-size:.95rem}
+.vc-bis .t i{font-style:normal;font-size:.76rem;color:rgba(245,240,230,.5)}
+.vc-bis .d{font-size:.76rem;color:var(--oro);white-space:nowrap}
+.vc-altri{align-self:flex-start;background:none;border:0;color:rgba(245,240,230,.55);font:inherit;font-size:.8rem;cursor:pointer;padding:.2rem 0}
 .vc-agg{align-self:center;min-height:2.8rem;padding:0 1.6rem;border-radius:999px;border:1px solid rgba(212,175,106,.7);background:linear-gradient(180deg,rgba(212,175,106,.18),rgba(212,175,106,.06));color:var(--ivory);font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
-.vc-nota{font-size:.8rem;color:rgba(245,240,230,.5);text-align:center}
+.vc-form{display:flex;flex-direction:column;gap:.5rem;padding:.9rem;border:1px solid rgba(212,175,106,.35);border-radius:.9rem;background:rgba(8,11,26,.55)}
+.vc-form input,.vc-form textarea{width:100%;min-height:2.8rem;padding:.6rem .8rem;border-radius:.6rem;border:1px solid rgba(212,175,106,.45);background:rgba(8,11,26,.8);color:var(--ivory);font:inherit}
+.vc-form .riga{display:flex;gap:.5rem;justify-content:flex-end}
+.vc-nota{font-size:.8rem;color:rgba(245,240,230,.55);text-align:center;margin:0}
+/* il tuo vicinato */
+.vc-dove{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline dotted rgba(212,175,106,.5);text-underline-offset:3px}
+.vc-cerca{display:flex;flex-direction:column;gap:.4rem}
+.vc-cerca-l button{display:block;width:100%;text-align:left;min-height:2.5rem;padding:.4rem .7rem;border:0;border-radius:.5rem;background:transparent;color:var(--ivory);font:inherit;cursor:pointer}
+.vc-cerca-l button:hover{background:rgba(212,175,106,.12)}
+.vc-cat{display:flex;flex-wrap:wrap;gap:.4rem}
+.vc-cat button{display:inline-flex;align-items:center;gap:.4rem;min-height:2.3rem;padding:0 .85rem;border-radius:999px;border:1px solid rgba(212,175,106,.3);background:transparent;color:rgba(245,240,230,.75);font:inherit;font-size:.82rem;cursor:pointer}
+.vc-cat button svg{width:1.05rem;height:1.05rem;color:var(--oro)}
+.vc-cat button.on{border-color:var(--oro);color:var(--oro);background:rgba(212,175,106,.1)}
+.vc-map{height:22rem;border-radius:.9rem;overflow:hidden;border:1px solid rgba(212,175,106,.25);background:#0b1224}
+.vc-map.metti{cursor:crosshair}
+.vc-pin{width:30px;height:30px;border-radius:50%;background:#0a1428;border:1.5px solid var(--oro);display:grid;place-items:center;color:var(--oro);box-shadow:0 0 10px rgba(212,175,106,.45)}
+.vc-pin svg{width:17px;height:17px}
+.leaflet-container{font-family:'DM Sans',sans-serif}
+.leaflet-bar a{background:#0a1428!important;color:var(--oro)!important;border-color:rgba(212,175,106,.3)!important}
+/* il cubo col simbolo della terra */
+.vc-cubo{position:relative;width:100%;max-width:min(24rem,58vh);aspect-ratio:1;align-self:center;margin-top:.5rem}
+.vc-cubo .alone{position:absolute;inset:8%;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(170,136,68,.2),transparent 70%)}
+.vc-cubo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.vc-cubo ak-solido{position:absolute;inset:0}
+.vc-solido{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:#C9A866;text-align:center;margin-top:-.6rem}
 </style>
 </head>
 <body>
 <div class="vc"><div class="vc-col">
-  <h1>Vicinati</h1>
+
+  <div class="vc-capo"><h1>Vicinati</h1><div class="vc-fm">FelicitasMundi &middot; Comunit&agrave; Eterna</div></div>
+
   <div class="vc-giorno">
-    <div><span class="k">il giorno</span><b data-c="giorno.data">[ giorno ] [ mese ]</b><small data-c="giorno.settimana">[ giorno della settimana ]</small></div>
-    <div><span class="k">la luna</span><b class="luna" data-c="giorno.luna">&#127761;</b><small data-c="giorno.fase">[ la fase ]</small></div>
-    <div><span class="k">il santo</span><b data-c="giorno.santo">[ il santo ]</b></div>
+    <div><b data-c="giorno.data">[ giorno ] [ mese ]</b><small data-c="giorno.settimana">[ giorno ]</small></div>
+    <div><b class="luna" data-c="giorno.luna">&#127761;</b></div>
+    <div><b data-c="giorno.santo">[ il santo ]</b></div>
   </div>
-  <!-- ① ora in onda · prossimi appuntamenti -->
+
+  <div class="vc-due">
+    <button type="button" class="vc-quad" data-g="apri-calendario"><span class="no">Calendario</span><span class="da" data-c="cal.data">[ la prossima data ]</span><span class="so" data-c="cal.cosa">[ che cosa ]</span></button>
+    <button type="button" class="vc-quad" data-g="apri-rubrica"><span class="no">Rubrica</span><span class="da" data-c="rub.contatto">[ l&rsquo;ultimo contatto ]</span><span class="so" data-c="rub.quando">[ quando ]</span></button>
+  </div>
+
   <section class="vc-sez">
     <h2>Ora in onda</h2>
-    <div class="vc-card vc-onda"><span class="spia"></span><span class="tx"><b data-c="onda.nome">[ la fascia ]</b><br><i data-c="onda.desc">[ cosa passa ]</i></span><button type="button" data-g="ascolta">ascolta</button></div>
+    <div class="vc-card vc-onda"><span class="spia"></span><span class="tx"><b data-c="onda.nome">[ la fascia ]</b><i data-c="onda.desc">[ cosa passa ]</i></span><button type="button" class="vc-btn" data-g="ascolta">ascolta</button></div>
     <div class="vc-righe"><div class="vc-riga" data-stampo="fascia"><span class="q" data-c="fascia.ora">[ ora ]</span><span class="t" data-c="fascia.nome">[ fascia ]</span></div></div>
   </section>
+
   <section class="vc-sez">
     <h2>Prossimi appuntamenti</h2>
     <div class="vc-righe"><div class="vc-riga" data-stampo="app" data-g="apri-app"><span class="q" data-c="app.quando">[ quando ]</span><span class="t" data-c="app.titolo">[ l&rsquo;appuntamento ]</span><span class="d" data-c="app.dove"></span></div></div>
     <p class="vc-vuoto" data-stato="app-vuoto" hidden>Nessun appuntamento in programma.</p>
   </section>
 
-  <!-- ② novità dai vicinati -->
   <section class="vc-sez">
     <h2>Novit&agrave; dai vicinati</h2>
-    <div class="vc-righe"><div class="vc-riga" data-stampo="nov" data-g="apri-nov"><span class="q" data-c="nov.quando">[ quando ]</span><span class="t" data-c="nov.titolo">[ la novit&agrave; ]</span></div></div>
-    <p class="vc-vuoto" data-stato="nov-vuoto" hidden>Ancora nessuna novit&agrave; pubblicata.</p>
+    <div class="vc-art"><a class="vc-a" data-stampo="art" data-g="apri-art" href="#"><span class="cop" data-c="art.cop"></span><span class="tx"><b data-c="art.titolo">[ il titolo ]</b><span data-c="art.sotto">[ due frasi ]</span></span></a></div>
+    <p class="vc-vuoto" data-stato="art-vuoto" hidden>Ancora nessun articolo.</p>
   </section>
 
-  <!-- ③ calendario -->
-  <section class="vc-sez">
-    <h2>Calendario</h2>
-    <div class="vc-sett"><div data-stampo="giorno7"><span data-c="g7.nome">[ lun ]</span><b data-c="g7.num">[ 1 ]</b></div></div>
-    <button type="button" class="vc-link" data-g="apri-calendario">apri il calendario &rsaquo;</button>
-  </section>
-
-  <!-- ④ karma yoga -->
   <section class="vc-sez">
     <h2>Karma yoga <small>i bisogni, dal pi&ugrave; vicino al pi&ugrave; lontano</small></h2>
-    <div class="vc-righe"><div class="vc-riga" data-stampo="bis"><span class="t" data-c="bis.titolo">[ il bisogno ]</span><span class="d" data-c="bis.dove"></span></div></div>
-    <p class="vc-vuoto" data-stato="bis-vuoto" hidden>Nessun bisogno segnato, per ora.</p>
+    <div class="vc-gruppo" data-gruppo="antahkarana"><div class="capo"><b>Anta&#7717;kara&#7751;a</b><i></i><span data-c="conto.antahkarana">0</span></div>
+      <div class="vc-bis" data-stampo="bis-a"><span class="t"><b data-c="bis.titolo">[ il bisogno ]</b><i data-c="bis.chi"></i></span><span class="d" data-c="bis.dove"></span></div>
+      <p class="vc-vuoto" data-stato="vuoto-a" hidden>nessun bisogno di sviluppo aperto</p>
+      <button type="button" class="vc-altri" data-g="altri-a" data-stato="altri-a" hidden></button></div>
+    <div class="vc-gruppo" data-gruppo="vicino"><div class="capo"><b>pi&ugrave; vicino</b><i></i><span data-c="conto.vicino">0</span></div>
+      <div class="vc-bis" data-stampo="bis-v"><span class="t"><b data-c="bis.titolo">[ il bisogno ]</b><i data-c="bis.chi"></i></span><span class="d" data-c="bis.dove"></span></div>
+      <p class="vc-vuoto" data-stato="vuoto-v" hidden>nessun bisogno vicino</p>
+      <button type="button" class="vc-altri" data-g="altri-v" data-stato="altri-v" hidden></button></div>
+    <div class="vc-gruppo" data-gruppo="lontano"><div class="capo"><b>pi&ugrave; lontano</b><i></i><span data-c="conto.lontano">0</span></div>
+      <div class="vc-bis" data-stampo="bis-l"><span class="t"><b data-c="bis.titolo">[ il bisogno ]</b><i data-c="bis.chi"></i></span><span class="d" data-c="bis.dove"></span></div>
+      <p class="vc-vuoto" data-stato="vuoto-l" hidden>nessun bisogno lontano</p>
+      <button type="button" class="vc-altri" data-g="altri-l" data-stato="altri-l" hidden></button></div>
+    <button type="button" class="vc-agg" data-g="apri-bisogno">aggiungi un bisogno</button>
+    <div class="vc-form" data-stato="form-bisogno" hidden>
+      <input id="vc-bis-titolo" type="text" placeholder="di cosa c&rsquo;&egrave; bisogno">
+      <div class="riga"><button type="button" class="vc-btn" data-g="annulla-bisogno">annulla</button><button type="button" class="vc-btn" data-g="salva-bisogno">aggiungi</button></div>
+      <p class="vc-nota" data-c="bisogno.esito"></p>
+    </div>
   </section>
 
-  <!-- ⑤ il tuo vicinato: la mappa, 20 km -->
   <section class="vc-sez">
-    <h2>Il tuo vicinato <small data-c="mappa.dove">[ il comune ] &middot; 20 km</small></h2>
-    <div class="vc-cat">
-      <button type="button" data-cat="operatori">operatori</button>
-      <button type="button" data-cat="ospitalita">luoghi di ospitalit&agrave;</button>
-      <button type="button" data-cat="aziende">aziende agricole</button>
-      <button type="button" data-cat="scuole">scuole</button>
-      <button type="button" data-cat="templi">templi</button>
+    <h2>Il tuo vicinato <small><button type="button" class="vc-dove" data-g="apri-dove"><span data-c="mappa.dove">dove sei?</span></button> &middot; 20 km</small></h2>
+    <div class="vc-form vc-cerca" data-stato="dove-aperto" hidden>
+      <input id="vc-cerca" type="search" placeholder="scrivi il nome del tuo comune">
+      <div class="vc-cerca-l"><button type="button" data-stampo="comune" data-g="scegli-comune"><span data-c="comune.nome">[ il comune ]</span></button></div>
     </div>
+    <div class="vc-cat"><button type="button" data-cat="operatori"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>operatori</button><button type="button" data-cat="ospitalita"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>luoghi di ospitalità</button><button type="button" data-cat="aziende"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V8"/><path d="M12 12c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M12 12c3 0 5-2 5-5-3 0-5 2-5 5z"/><path d="M12 17c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M12 17c3 0 5-2 5-5-3 0-5 2-5 5z"/></svg>aziende agricole</button><button type="button" data-cat="scuole"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z"/><path d="M21 6c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z"/></svg>scuole</button><button type="button" data-cat="templi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l8-5 8 5"/><path d="M4 9h16"/><path d="M6 9v9M10 9v9M14 9v9M18 9v9"/><path d="M3 20h18"/></svg>templi</button></div>
     <div class="vc-map" id="vc-map"></div>
-    <p class="vc-nota" data-stato="map-senza-comune" hidden>Scegli il tuo comune in &laquo;La mia orma&raquo; per vedere il tuo vicinato.</p>
-    <button type="button" class="vc-agg" data-g="aggiungi-luogo">aggiungi un luogo</button>
-    <p class="vc-nota" data-stato="luoghi-nota" hidden>[ nota ]</p>
+    <button type="button" class="vc-agg" data-g="apri-luogo">aggiungi una realt&agrave;</button>
+    <div class="vc-form" data-stato="form-luogo" hidden>
+      <p class="vc-nota" data-c="luogo.passo">scegli la famiglia qui sopra, poi tocca la mappa dove si trova</p>
+      <input id="vc-luogo-nome" type="text" placeholder="il nome della realt&agrave;">
+      <textarea id="vc-luogo-desc" rows="2" placeholder="due parole: chi sono, cosa fanno"></textarea>
+      <div class="riga"><button type="button" class="vc-btn" data-g="annulla-luogo">annulla</button><button type="button" class="vc-btn" data-g="salva-luogo">aggiungi</button></div>
+      <p class="vc-nota" data-c="luogo.esito"></p>
+    </div>
   </section>
+
+      <div class="vc-cubo"><div class="alone"></div>
+      <svg viewBox="-128 -128 256 256" aria-hidden="true">
+        <g fill="none" stroke="#D4AF6A" stroke-linejoin="round">
+          <g stroke-width=".7" opacity=".34">
+            <line x1="0" y1="0" x2="0" y2="-46"></line><line x1="0" y1="0" x2="39.84" y2="-23"></line><line x1="0" y1="0" x2="39.84" y2="23"></line><line x1="0" y1="0" x2="0" y2="46"></line><line x1="0" y1="0" x2="-39.84" y2="23"></line><line x1="0" y1="0" x2="-39.84" y2="-23"></line><line x1="0" y1="0" x2="0" y2="-92"></line><line x1="0" y1="0" x2="79.67" y2="-46"></line><line x1="0" y1="0" x2="79.67" y2="46"></line><line x1="0" y1="0" x2="0" y2="92"></line><line x1="0" y1="0" x2="-79.67" y2="46"></line><line x1="0" y1="0" x2="-79.67" y2="-46"></line><line x1="0" y1="-46" x2="39.84" y2="-23"></line><line x1="0" y1="-46" x2="39.84" y2="23"></line><line x1="0" y1="-46" x2="0" y2="46"></line><line x1="0" y1="-46" x2="-39.84" y2="23"></line><line x1="0" y1="-46" x2="-39.84" y2="-23"></line><line x1="0" y1="-46" x2="0" y2="-92"></line><line x1="0" y1="-46" x2="79.67" y2="-46"></line><line x1="0" y1="-46" x2="79.67" y2="46"></line><line x1="0" y1="-46" x2="0" y2="92"></line><line x1="0" y1="-46" x2="-79.67" y2="46"></line><line x1="0" y1="-46" x2="-79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="39.84" y2="23"></line><line x1="39.84" y1="-23" x2="0" y2="46"></line><line x1="39.84" y1="-23" x2="-39.84" y2="23"></line><line x1="39.84" y1="-23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="-23" x2="0" y2="-92"></line><line x1="39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="39.84" y1="-23" x2="79.67" y2="46"></line><line x1="39.84" y1="-23" x2="0" y2="92"></line><line x1="39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="39.84" y1="23" x2="0" y2="46"></line><line x1="39.84" y1="23" x2="-39.84" y2="23"></line><line x1="39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="39.84" y1="23" x2="0" y2="-92"></line><line x1="39.84" y1="23" x2="79.67" y2="-46"></line><line x1="39.84" y1="23" x2="79.67" y2="46"></line><line x1="39.84" y1="23" x2="0" y2="92"></line><line x1="39.84" y1="23" x2="-79.67" y2="46"></line><line x1="39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="0" y1="46" x2="-39.84" y2="23"></line><line x1="0" y1="46" x2="-39.84" y2="-23"></line><line x1="0" y1="46" x2="0" y2="-92"></line><line x1="0" y1="46" x2="79.67" y2="-46"></line><line x1="0" y1="46" x2="79.67" y2="46"></line><line x1="0" y1="46" x2="0" y2="92"></line><line x1="0" y1="46" x2="-79.67" y2="46"></line><line x1="0" y1="46" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="-39.84" y2="-23"></line><line x1="-39.84" y1="23" x2="0" y2="-92"></line><line x1="-39.84" y1="23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="23" x2="79.67" y2="46"></line><line x1="-39.84" y1="23" x2="0" y2="92"></line><line x1="-39.84" y1="23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="23" x2="-79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="0" y2="-92"></line><line x1="-39.84" y1="-23" x2="79.67" y2="-46"></line><line x1="-39.84" y1="-23" x2="79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="0" y2="92"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="46"></line><line x1="-39.84" y1="-23" x2="-79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="-46"></line><line x1="0" y1="-92" x2="79.67" y2="46"></line><line x1="0" y1="-92" x2="0" y2="92"></line><line x1="0" y1="-92" x2="-79.67" y2="46"></line><line x1="0" y1="-92" x2="-79.67" y2="-46"></line><line x1="79.67" y1="-46" x2="79.67" y2="46"></line><line x1="79.67" y1="-46" x2="0" y2="92"></line><line x1="79.67" y1="-46" x2="-79.67" y2="46"></line><line x1="79.67" y1="-46" x2="-79.67" y2="-46"></line><line x1="79.67" y1="46" x2="0" y2="92"></line><line x1="79.67" y1="46" x2="-79.67" y2="46"></line><line x1="79.67" y1="46" x2="-79.67" y2="-46"></line><line x1="0" y1="92" x2="-79.67" y2="46"></line><line x1="0" y1="92" x2="-79.67" y2="-46"></line><line x1="-79.67" y1="46" x2="-79.67" y2="-46"></line>
+          </g>
+          <g stroke-width="1" opacity=".3" stroke="#C9A6E0">
+            <circle cx="0" cy="0" r="23"></circle><circle cx="0" cy="-46" r="23"></circle><circle cx="39.84" cy="-23" r="23"></circle><circle cx="39.84" cy="23" r="23"></circle><circle cx="0" cy="46" r="23"></circle><circle cx="-39.84" cy="23" r="23"></circle><circle cx="-39.84" cy="-23" r="23"></circle><circle cx="0" cy="-92" r="23"></circle><circle cx="79.67" cy="-46" r="23"></circle><circle cx="79.67" cy="46" r="23"></circle><circle cx="0" cy="92" r="23"></circle><circle cx="-79.67" cy="46" r="23"></circle><circle cx="-79.67" cy="-46" r="23"></circle>
+          </g>
+          <circle r="115" stroke-width="1" opacity=".5"></circle>
+          <rect x="-115" y="-115" width="230" height="230" stroke-width=".8" stroke-dasharray="3 3.6" opacity=".34"></rect>
+        </g>
+      </svg>
+      <ak-solido tipo="cubo" colore="#AA8844" aria-hidden="true"></ak-solido>
+    </div>
+  <div class="vc-solido">cubo &middot; terra</div>
+
 </div></div>
 </body>
 </html>

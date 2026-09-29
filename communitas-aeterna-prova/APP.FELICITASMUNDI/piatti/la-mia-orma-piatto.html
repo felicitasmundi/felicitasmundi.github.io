@@ -36,6 +36,9 @@ background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%
 font-family:'Cinzel',serif;font-size:.92rem;letter-spacing:.1em;cursor:pointer;transition:background .2s,color .2s}
 .ak-sog:hover{color:var(--ivory)}
 .ak-sog.on{background:rgba(212,175,106,.18);color:var(--oro)}
+/* ⛔⛔ 29 settembre (Gab) — giorno/luna/santo solo in Vicinati; sotto il nome «FelicitasMundi · Comunità Eterna» */
+.ak-giorno{display:none!important}
+.ak-fm{margin-top:-.5rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:rgba(245,240,230,.6)}
 
 /* ② giorno · luna · santo — piccoli */
 .ak-giorno{display:flex;gap:.5rem}
@@ -198,11 +201,12 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
     <!-- ① CAPO: nome + le tre soglie -->
     <div class="ak-capo">
       <h1>La mia orma</h1>
+      <div class="ak-fm">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
       <div class="ak-soglie">
         <button type="button" class="ak-sog on" data-s="settimana" data-g="soglia-settimana">Settimana</button>
         <button type="button" class="ak-sog" data-s="talenti" data-g="soglia-talenti">Talenti</button>
         <button type="button" class="ak-sog" data-s="squadre" data-g="soglia-squadre">Squadre</button>
-        <button type="button" class="ak-sog" data-s="strumenti" data-g="soglia-strumenti">Strumenti</button>
+        <button type="button" class="ak-sog ak-sog-link" data-g="apri-conti">Conti</button><!-- 29 settembre (Gab): via Strumenti, al suo posto Conti → la pagina dei conti -->
       </div>
     </div>
 
@@ -400,7 +404,7 @@ font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;cursor
 </div>
 <script>
 /* solo il passaggio fra le soglie e l'apertura del pannello «dove sei»: il resto lo fa il codice */
-document.querySelectorAll('.ak-sog').forEach(function(b){
+document.querySelectorAll('.ak-sog:not(.ak-sog-link)').forEach(function(b){
   b.addEventListener('click',function(){
     document.querySelectorAll('.ak-sog').forEach(function(x){x.classList.toggle('on',x===b)});
     document.querySelectorAll('.ak-pan').forEach(function(p){p.classList.toggle('on',p.id==='ak-p-'+b.dataset.s)});
