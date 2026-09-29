@@ -97,17 +97,14 @@ color:rgba(245,240,230,.3);padding:.6rem 0;text-align:center}
 button.tel{font:inherit;color:inherit;width:100%;text-align:left;cursor:pointer;box-sizing:border-box}
 .dt{text-decoration:none;color:inherit}
 .mesi button[aria-pressed="true"]{border-color:rgba(212,175,106,.9);background:rgba(212,175,106,.18);color:var(--ivory,#F5F0E6)}
+.indietro{background:none;border:1px solid rgba(212,175,106,.35);border-radius:999px;color:var(--oro);font:inherit;font-size:.78rem;padding:.3rem .8rem;cursor:pointer;margin-bottom:.8rem}
+.indietro:hover{border-color:var(--oro)}
 </style></head><body><div class="f" data-screen-label="Il calendario">
 
-<div class="oc">le orme che hanno un giorno</div>
+<button type="button" class="indietro" data-g="indietro">&lsaquo; Vicinati</button>
 <h1>Il calendario</h1>
-<div class="sot">[ la riga sotto il titolo ]</div>
+<div class="sot">FelicitasMundi · Comunità Eterna</div>
 
-<div class="tempo">
-  <div class="q"><b data-c="giorno.data">[ giorno ] [ mese ]</b><span>il giorno</span></div>
-  <div class="q"><b>&#127761;</b><span data-c="giorno.luna">[ la luna ]</span></div>
-  <div class="q"><b data-c="giorno.santo">[ il santo ]</b><span>il santo</span></div>
-</div>
 
 <!-- porta le date nel telefono: acceso nell'app, spento da computer -->
 <button type="button" class="tel" data-g="porta-nel-telefono" data-stato="in-app">

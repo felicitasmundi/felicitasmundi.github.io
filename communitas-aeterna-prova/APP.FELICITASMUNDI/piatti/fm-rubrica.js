@@ -53,6 +53,7 @@
   }
 
   function disegna(R, d, stato) {
+    F().gesto(R, "indietro", function () { if (typeof window.vai === "function") window.vai("vicinati"); });
     var P = F();
     var cerca = String(stato.cerca || "").trim().toLowerCase();
     var tutti = d.contatti.filter(function (c) {

@@ -74,7 +74,7 @@
 
   function disegna(R, d, stato) {
     var P = F(), l = window.FMOrmaMia && window.FMOrmaMia.luna ? window.FMOrmaMia.luna() : null;
-    P.riempi(R, { giorno: { data: oggi(), luna: l ? l.nome : "", santo: d.santo } });
+    P.gesto(R, "indietro", function () { if (typeof window.vai === "function") window.vai("vicinati"); });
 
     var mesi = perMese(d.orme);
     if (!stato.mese && mesi.length) stato.mese = mesi[0].k;
