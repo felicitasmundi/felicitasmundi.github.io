@@ -25,7 +25,7 @@
 /* le tre righe — parole di Gab, 12 settembre. ⛔ verbatim */
 var SOG_RIGHE = [
   ["Quello che fai",
-   "tenere traccia della giornata, attivare squadre, proporre attivit\u00e0, " +
+   "tenere traccia della giornata, attivare squadre, proporre attivit\u00e0 nei vicinati, partecipare a festival e mercati, " +
    "espandere la comunit\u00e0"],
   ["Quello che condividi",
    "ricerca, formazioni, articoli, persone e luoghi in risonanza, " +
