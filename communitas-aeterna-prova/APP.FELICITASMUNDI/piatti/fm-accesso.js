@@ -276,6 +276,7 @@
         if (r.error) throw r.error;
         P.riempi(R, { accesso: { email: email } });
         P.stato(R, "codice-mandato", true);
+        spuntaServe(email);
         /* ⭐ il tasto resta, e cambia parola: da qui si chiede un altro codice */
         b.textContent = "mandane un altro";
         var c = R.querySelector('[data-c="accesso.codice"]');
@@ -305,10 +306,35 @@
     var spunta = R.querySelector("#ak-consenso");
     var tastoEntra = R.querySelector('[data-g="entra"]');
     if (spunta && tastoEntra) spunta.onchange = function () { tastoEntra.disabled = !spunta.checked; };
+    /* ⭐ 29 settembre, Gab: chi ha già accettato non rimette la spunta.
+       Questo telefono ricorda le mail che hanno già accettato (solo la mail, nient'altro);
+       e in ogni caso, dopo il codice, se il database dice che il patto c'è, si entra senza spunta. */
+    var RICORDO = "fm_patto_mail";
+    function giaAccettata(m) {
+      try { return (JSON.parse(localStorage.getItem(RICORDO) || "[]")).indexOf(String(m).toLowerCase()) >= 0; } catch (e) { return false; }
+    }
+    function ricorda(m) {
+      try { var l = JSON.parse(localStorage.getItem(RICORDO) || "[]"); m = String(m).toLowerCase();
+            if (l.indexOf(m) < 0) l.push(m); localStorage.setItem(RICORDO, JSON.stringify(l.slice(-5))); } catch (e) {}
+    }
+    function spuntaServe(m) {
+      var serve = !giaAccettata(m);
+      var l = R.querySelector(".ak-consenso"); if (l) l.style.display = serve ? "" : "none";
+      if (tastoEntra) tastoEntra.disabled = serve && !(spunta && spunta.checked);
+      return serve;
+    }
+    var attesaPatto = false;   /* codice già speso, manca solo la spunta */
 
     /* ── entra ── */
     P.gesto(R, "entra", async function (e, b) {
-      if (spunta && !spunta.checked) return errore(R, "Serve la spunta sulle condizioni d\u2019uso e sulla privacy.");
+      /* il codice è già passato: manca solo la spunta */
+      if (attesaPatto) {
+        if (spunta && !spunta.checked) return errore(R, "Per entrare la prima volta serve la spunta sulle condizioni d\u2019uso e sulla privacy.");
+        b.disabled = true;
+        try { await accettaPatto(); ricorda(vale(R, "accesso.email")); await dentro(R, torna); }
+        catch (ea) { errore(R, "Non \u00e8 stato possibile registrare l\u2019accettazione. Riprova."); b.disabled = false; }
+        return;
+      }
       var email = vale(R, "accesso.email"), codice = vale(R, "accesso.codice");
       errore(R, "");
       /* ⭐ il codice incollato si porta dietro spazi e segni: si ripulisce */
@@ -350,12 +376,22 @@
                      b.textContent = era; b.disabled = false; return; }
         dico("patto letto: " + (haPatto ? "gi\u00e0 accettato" : "da accettare"));
         if (!haPatto) {
-          /* ⭐ la spunta sotto il codice È il consenso: si registra qui, senza un'altra schermata */
+          /* ⭐ la spunta sotto il codice È il consenso: si registra qui, senza un'altra schermata.
+             Se la spunta manca (mail ricordata ma patto non in regola), il codice è già speso:
+             si mostra la spunta e «entra» registra solo il consenso. */
+          if (!spunta || !spunta.checked) {
+            attesaPatto = true;
+            var lc = R.querySelector(".ak-consenso"); if (lc) lc.style.display = "";
+            errore(R, "Per entrare la prima volta serve la spunta sulle condizioni d\u2019uso e sulla privacy.");
+            b.textContent = era; b.disabled = !(spunta && spunta.checked);
+            return;
+          }
           dico("registro il consenso \u2026");
           try { await accettaPatto(); }
           catch (ea) { errore(R, "Non \u00e8 stato possibile registrare l\u2019accettazione. Riprova.");
                        b.textContent = era; b.disabled = false; return; }
         }
+        ricorda(email);
         try { await dentro(R, torna); }
         catch (ed) { errore(R, "sei entrato, ma non riesco a proseguire (" +
                      String(ed && ed.message || ed).slice(0,90) + ")");
