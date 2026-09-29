@@ -58,6 +58,86 @@
     } catch (e) { return null; }
   }
 
+
+  /* ── dove ti trovi: il comune principale (persone.comune_cod) + gli altri luoghi (persona_luoghi) ──
+     ⭐ 29 settembre, Gab: «quel dato serve per poter facilitare la conoscenza di chi è lì».
+        Vicino / lontano si misura dal luogo più vicino fra tutti quelli scritti qui. */
+  function kmMin(luoghi, c) {
+    if (!c || c.lat == null) return null;
+    var m = null;
+    (luoghi || []).forEach(function (l) {
+      if (!l || l.lat == null) return;
+      var d = km(l, c); if (m == null || d < m) m = d;
+    });
+    return m;
+  }
+  async function iMieiLuoghi(io, qui) {
+    var l = [];
+    if (qui) l.push({ cod: qui.cod, nome: qui.nome, lat: qui.lat, lon: qui.lon, principale: true });
+    if (!io) return l;
+    try {
+      var r = await db.from("persona_luoghi").select("id,comune_cod").eq("persona_id", io).order("creato_il");
+      var righe = r.error ? [] : (r.data || []);
+      var cods = righe.map(function (x) { return x.comune_cod; }).filter(function (c) { return !qui || c !== qui.cod; });
+      if (cods.length) {
+        var t = await db.from("territori").select("codice,nome,lat,lon").in("codice", cods);
+        var per = {};
+        ((t && t.data) || []).forEach(function (x) { per[x.codice] = x; });
+        righe.forEach(function (x) {
+          var c = per[x.comune_cod];
+          if (c) l.push({ id: x.id, cod: c.codice, nome: c.nome, lat: +c.lat, lon: +c.lon });
+        });
+      }
+    } catch (e) { console.warn("dove ti trovi:", e); }
+    return l;
+  }
+  function doveTiTrovi(P, R, io, qui, luoghi) {
+    var righe = luoghi.slice(), modo = "altro";
+    if (!qui) righe.unshift({ principale: true, nome: "\u2014" });
+    var esito = function (t) { var e = R.querySelector('[data-c="dove.esito"]'); if (e) e.textContent = t || ""; };
+    function apriForm(m) {
+      modo = m; esito("");
+      P.stato(R, "dove2-aperto", true);
+      var i = R.querySelector("#vc-dove-cerca"); if (i) { i.value = ""; i.focus(); }
+      P.stampa(R, "dove-com", [], function () {});
+    }
+    P.stampa(R, "posto", righe, function (c, x) {
+      P.riempi(c, { posto: { segno: x.principale ? "principale" : "", nome: x.nome,
+                             gesto: x.principale ? (qui ? "cambia" : "scegli") : "togli" } });
+      P.gesto(c, "posto-gesto", async function () {
+        if (x.principale) return apriForm("principale");
+        try { await db.from("persona_luoghi").delete().eq("id", x.id); } catch (e) { console.warn("dove ti trovi:", e); }
+        vaiA("vicinati");
+      });
+    });
+    P.gesto(R, "apri-altro-luogo", function () { apriForm(qui ? "altro" : "principale"); });
+    P.gesto(R, "annulla-dove", function () { P.stato(R, "dove2-aperto", false); });
+    var campo = R.querySelector("#vc-dove-cerca"), tempo = null;
+    if (campo) campo.oninput = function () {
+      clearTimeout(tempo);
+      var q = campo.value.trim();
+      tempo = setTimeout(async function () {
+        var trovati = [];
+        if (q.length >= 2) {
+          try { var r = await db.from("territori").select("codice,nome").eq("tipo", "comune").ilike("nome", q + "%").order("nome").limit(8); trovati = r.data || []; } catch (e) {}
+        }
+        P.stampa(R, "dove-com", trovati, function (c, x) {
+          P.riempi(c, { com: { nome: x.nome } });
+          P.gesto(c, "scegli-dove", async function () {
+            if (!io) return;
+            try {
+              var r = modo === "principale"
+                ? await db.from("persone").update({ comune_cod: x.codice }).eq("id", io)
+                : await db.from("persona_luoghi").insert({ comune_cod: x.codice });
+              if (r && r.error) { console.warn("dove ti trovi:", r.error); esito("Non salvato."); return; }
+              vaiA("vicinati");
+            } catch (e) { console.warn("dove ti trovi:", e); esito("Non salvato."); }
+          });
+        });
+      }, 250);
+    };
+  }
+
   /* ── il quadrante, senza scritte ── */
   async function quadrante(P, R) {
     var oggi = new Date(), santo = "";
@@ -153,7 +233,7 @@
     lista.forEach(function (x) {
       var p = persone[x.aperto_da] || {}, c = comuni[p.cod];
       x._chi = p.nome || ""; x._comune = c ? c.nome : "";
-      x._km = (dove && c) ? km(dove, c) : null;
+      x._km = kmMin(Array.isArray(dove) ? dove : (dove ? [dove] : []), c);
     });
     lista.sort(function (a, b) { return (a._km == null ? 1e9 : a._km) - (b._km == null ? 1e9 : b._km); });
     var G = {
@@ -340,14 +420,22 @@
     var io = await chiSono(), cod = null;
     try { if (io) { var p = await db.from("persone").select("comune_cod").eq("id", io).single(); cod = p && p.data && p.data.comune_cod; } } catch (e) {}
     var qui = await comuneDi(cod);
+    var luoghi = await iMieiLuoghi(io, qui);
     await quadrante(P, R);
+    doveTiTrovi(P, R, io, qui, luoghi);
     inOnda(P, R);
     var app = await appuntamenti(P, R);
     await dueQuadranti(P, R, io, app);
     articoli(P, R);
-    await bisogni(P, R, io, qui);
+    await bisogni(P, R, io, luoghi);
     mappa(P, R, io, qui);
   }
   window.SpazioVivo = window.SpazioVivo || {};
   window.SpazioVivo.vicinati = vicinati;
+  /* per il calendario: gli stessi luoghi e la stessa misura */
+  window.FMDove = { luoghi: async function () {
+    var io = await chiSono(), cod = null;
+    try { if (io) { var p = await db.from("persone").select("comune_cod").eq("id", io).single(); cod = p && p.data && p.data.comune_cod; } } catch (e) {}
+    return iMieiLuoghi(io, await comuneDi(cod));
+  }, kmMin: kmMin, raggio: RAGGIO_KM };
 })();

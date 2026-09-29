@@ -104,6 +104,10 @@ background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%
 .vc-cubo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .vc-cubo ak-solido{position:absolute;inset:0}
 .vc-solido{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:#C9A866;text-align:center;margin-top:-.6rem}
+.vc-posto{cursor:default;align-items:center}
+.vc-posto .q{width:5.2rem}
+.vc-posto .vc-altri{flex:none;color:var(--oro)}
+.vc-perche{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.6)}
 </style>
 </head>
 <body>
@@ -121,6 +125,21 @@ background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%
     <button type="button" class="vc-quad" data-g="apri-calendario"><span class="no">Calendario</span><span class="da" data-c="cal.data">[ la prossima data ]</span><span class="so" data-c="cal.cosa">[ che cosa ]</span></button>
     <button type="button" class="vc-quad" data-g="apri-rubrica"><span class="no">Rubrica</span><span class="da" data-c="rub.contatto">[ l&rsquo;ultimo contatto ]</span><span class="so" data-c="rub.quando">[ quando ]</span></button>
   </div>
+
+  <section class="vc-sez">
+    <h2>Dove ti trovi</h2>
+    <div class="vc-righe">
+      <div class="vc-riga vc-posto" data-stampo="posto"><span class="q" data-c="posto.segno">[ principale ]</span><span class="t" data-c="posto.nome">[ il comune ]</span><button type="button" class="vc-altri" data-g="posto-gesto" data-c="posto.gesto">[ cambia ]</button></div>
+    </div>
+    <p class="vc-perche">Questo dato serve per facilitare la conoscenza di chi &egrave; l&igrave;.</p>
+    <button type="button" class="vc-agg" data-g="apri-altro-luogo">aggiungi un altro luogo</button>
+    <div class="vc-form vc-cerca" data-stato="dove2-aperto" hidden>
+      <input id="vc-dove-cerca" type="search" placeholder="scrivi il nome del comune">
+      <div class="vc-cerca-l"><button type="button" data-stampo="dove-com" data-g="scegli-dove"><span data-c="com.nome">[ il comune ]</span></button></div>
+      <div class="riga"><button type="button" class="vc-btn" data-g="annulla-dove">annulla</button></div>
+      <p class="vc-nota" data-c="dove.esito"></p>
+    </div>
+  </section>
 
   <section class="vc-sez">
     <h2>Ora in onda</h2>
