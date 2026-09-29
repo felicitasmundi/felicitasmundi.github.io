@@ -172,11 +172,16 @@
       if (!W.L) { if (t < 60) setTimeout(function () { pronta(t + 1); }, 150); return; }
       var L = W.L, c = io ? [io.lat, io.lon] : [41.9, 12.5];
       var m = L.map(box, { zoomControl: false, attributionControl: true, scrollWheelZoom: false });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18, attribution: "© OpenStreetMap" }).addTo(m);
+      /* ⭐ tessere scure di Esri, senza chiave: niente filtro per scurirle */
+      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 16, attribution: "Esri, HERE, Garmin, © OpenStreetMap" }).addTo(m);
+      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+        { maxZoom: 16 }).addTo(m);
       if (io) {
-        var cer = L.circle(c, { radius: RAGGIO_KM * 1000, color: "#D4AF6A", weight: 1, opacity: .6, dashArray: "4 6", fill: false }).addTo(m);
+        /* ⛔ prima la vista, poi il cerchio: senza vista il cerchio non sa misurarsi */
+        m.fitBounds(L.latLng(c).toBounds(RAGGIO_KM * 2000), { padding: [8, 8] });
+        L.circle(c, { radius: RAGGIO_KM * 1000, color: "#D4AF6A", weight: 1, opacity: .6, dashArray: "4 6", fill: false }).addTo(m);
         L.circleMarker(c, { radius: 6, color: "#F5F0E6", weight: 2, fillColor: "#D4AF6A", fillOpacity: 1 }).addTo(m).bindTooltip("sei qui");
-        m.fitBounds(cer.getBounds(), { padding: [8, 8] });
       } else m.setView(c, 5);
       [300, 900, 2000].forEach(function (ms) { setTimeout(function () { m.invalidateSize(); }, ms); });
     })(0);
