@@ -54,6 +54,12 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
 .ak-nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.5)}
 .ak-nexus{position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;border:.45rem solid var(--nexus);box-shadow:0 0 0 .15rem rgba(140,47,57,.35),0 0 2.4rem rgba(140,47,57,.45),inset 0 0 2rem rgba(140,47,57,.35);background:#fff}
 .ak-nexus img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ak-consenso{display:flex;align-items:flex-start;gap:.6rem;font-size:.85rem;line-height:1.45;color:rgba(245,240,230,.75);cursor:pointer}
+.ak-consenso input{flex:none;width:1.15rem;height:1.15rem;margin-top:.12rem;accent-color:#D4AF6A;cursor:pointer}
+.ak-consenso a,.ak-piede a{color:#D4AF6A;text-decoration:underline;text-underline-offset:2px}
+.ak-btn:disabled{opacity:.4;cursor:default}
+.ak-piede{margin-top:1.2rem;padding-top:.9rem;border-top:1px solid rgba(212,175,106,.18);font-size:.72rem;line-height:1.6;color:rgba(245,240,230,.45)}
+.ak-piede p{margin:0}
 </style>
 <link rel="preload" as="image" href="nexus-cerchio.webp">
 <script src="./ak-cosmo.js"></script>
@@ -84,8 +90,15 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
         <div class="ak-nota" data-stato="codice-mandato" hidden>Il codice &egrave; partito verso <b data-c="accesso.email">[ la mail ]</b>: guarda la posta.</div>
       </div>
       <div class="ak-campo" data-stato="codice-mandato" hidden><label for="ak-codice">il codice di sei cifre</label><input id="ak-codice" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" data-c="accesso.codice" placeholder="&middot;&middot;&middot;&middot;&middot;&middot;"></div>
+      <!-- ⭐ 29 settembre, Gab: il consenso sta qui, sotto il codice; niente più schermata a parte -->
+      <label class="ak-consenso" data-stato="codice-mandato" hidden><input type="checkbox" id="ak-consenso"><span>Accetto le <a data-c="patto.condizioni" href="#">condizioni d&rsquo;uso</a> e l&rsquo;<a data-c="patto.privacy" href="#">informativa sulla privacy</a>.</span></label>
       <div class="ak-errore" data-stato="errore" hidden>[ cosa non &egrave; andato ]</div>
-      <button type="submit" class="ak-btn" data-g="entra" data-stato="codice-mandato" hidden>entra</button>
+      <button type="submit" class="ak-btn" data-g="entra" data-stato="codice-mandato" hidden disabled>entra</button>
+      <!-- ⭐ 29 settembre, Gab: sotto «entra» i riferimenti dell'azienda, privacy, cookie e condizioni -->
+      <div class="ak-piede">
+        <p>Felicitas Omnia S.r.l.s. &middot; Via Tempio 70/A, 07100 Sassari &middot; P.IVA 03075740906</p>
+        <p><a data-c="patto.privacy" href="#">privacy</a> &middot; <a data-c="patto.cookie" href="#">cookie</a> &middot; <a data-c="patto.condizioni" href="#">condizioni</a></p>
+      </div>
     </div>
   </form>
 

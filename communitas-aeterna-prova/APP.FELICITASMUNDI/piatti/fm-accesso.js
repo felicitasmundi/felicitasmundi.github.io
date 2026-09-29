@@ -299,8 +299,15 @@
       }
     });
 
+    /* ⭐ 29 settembre, Gab: il consenso sta sotto il codice. «Entra» si accende solo con la spunta
+       (non pre-selezionata, come in unisciti.html). */
+    var spunta = R.querySelector("#ak-consenso");
+    var tastoEntra = R.querySelector('[data-g="entra"]');
+    if (spunta && tastoEntra) spunta.onchange = function () { tastoEntra.disabled = !spunta.checked; };
+
     /* ── entra ── */
     P.gesto(R, "entra", async function (e, b) {
+      if (spunta && !spunta.checked) return errore(R, "Serve la spunta sulle condizioni d\u2019uso e sulla privacy.");
       var email = vale(R, "accesso.email"), codice = vale(R, "accesso.codice");
       errore(R, "");
       /* ⭐ il codice incollato si porta dietro spazi e segni: si ripulisce */
@@ -342,10 +349,11 @@
                      b.textContent = era; b.disabled = false; return; }
         dico("patto letto: " + (haPatto ? "gi\u00e0 accettato" : "da accettare"));
         if (!haPatto) {
-          dico("mostro «Prima di entrare»");
-          spegni(R, "accesso"); accendi(R, "patto");
-          b.textContent = era; b.disabled = false;
-          return;
+          /* ⭐ la spunta sotto il codice È il consenso: si registra qui, senza un'altra schermata */
+          dico("registro il consenso \u2026");
+          try { await accettaPatto(); }
+          catch (ea) { errore(R, "Non \u00e8 stato possibile registrare l\u2019accettazione. Riprova.");
+                       b.textContent = era; b.disabled = false; return; }
         }
         try { await dentro(R, torna); }
         catch (ed) { errore(R, "sei entrato, ma non riesco a proseguire (" +
