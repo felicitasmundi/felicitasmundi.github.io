@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vicinati</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* vicinati · piatto · la casa dell'app, l'elemento terra — si costruisce un pezzo alla volta con Gab (29 settembre) */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--terra:#AA8844}
+*{box-sizing:border-box}
+body{margin:0;background:#02040c}
+[hidden]{display:none!important}
+.vc{min-height:100vh;padding:1.6rem clamp(1.1rem,5vw,2.4rem) 3rem;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+background:radial-gradient(ellipse at 22% 10%,rgba(38,64,120,.5),transparent 58%),radial-gradient(ellipse at 84% 90%,rgba(60,44,110,.42),transparent 60%),#0a1428}
+.vc-col{width:100%;max-width:40rem;margin:0 auto;display:flex;flex-direction:column;gap:1.4rem}
+.vc h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2rem,7vw,2.7rem);line-height:1;letter-spacing:.05em}
+/* il quadrante: il giorno · la luna · il santo */
+.vc-giorno{display:flex;gap:.6rem}
+.vc-giorno>div{flex:1;border:1px solid rgba(184,150,62,.25);border-radius:.9rem;background:rgba(8,11,26,.35);padding:.9rem .6rem;text-align:center}
+.vc-giorno .k{display:block;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,230,.42)}
+.vc-giorno b{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.35rem;line-height:1.2;color:var(--oro);margin-top:.3rem}
+.vc-giorno b.luna{font-size:1.9rem;font-style:normal}
+.vc-giorno small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(245,240,230,.55);margin-top:.15rem}
+</style>
+</head>
+<body>
+<div class="vc"><div class="vc-col">
+  <h1>Vicinati</h1>
+  <div class="vc-giorno">
+    <div><span class="k">il giorno</span><b data-c="giorno.data">[ giorno ] [ mese ]</b><small data-c="giorno.settimana">[ giorno della settimana ]</small></div>
+    <div><span class="k">la luna</span><b class="luna" data-c="giorno.luna">&#127761;</b><small data-c="giorno.fase">[ la fase ]</small></div>
+    <div><span class="k">il santo</span><b data-c="giorno.santo">[ il santo ]</b></div>
+  </div>
+</div></div>
+</body>
+</html>
