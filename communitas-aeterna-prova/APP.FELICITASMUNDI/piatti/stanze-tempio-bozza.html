@@ -126,7 +126,16 @@ var STANZE = {
       ["online",{}], ["ricerca",{}]
     ]}
 };
-var ORDINE = ["vicinati","emporio","assistenza","edizione","scuola"];
+STANZE.antahkarana = { sans:"अन्तःकरण", nome:"Antaḥkaraṇa", solido:"nexus", colore:"#D4AF6A", ic:"✧",
+    frase:"[ la tua frase ]",
+    porte:[
+      ["Il tuo talento",{testo:"[ riconoscerlo: il pretesto delicato ]"}],
+      ["Le tue orme",{testo:"[ le orme, raccolte per talento ]"}],
+      ["Karma yoga",{testo:"[ i bisogni da prendere ]"}],
+      ["Gli incontri",{testo:"[ gli incontri di luna e le lezioni ]"}],
+      ["Le soglie",{testo:"ospite · praticante · operatore · nucleo"}]
+    ]};
+var ORDINE = ["antahkarana","vicinati","emporio","assistenza","edizione","scuola"];
 var qui = (location.search.match(/[?&]s=([a-z]+)/) || [])[1];
 if (!STANZE[qui]) qui = "emporio";
 var S = STANZE[qui];
@@ -146,9 +155,9 @@ function fascia(nome, voci){
 }
 document.getElementById("porte").innerHTML = S.porte.map(function(p){
   var d = p[1], n = (d.A||[]).length + (d.V||[]).length + (d.L||[]).length;
-  var conto = S.conto ? '<span class="n">'+n+' '+S.conto+'</span>' : '<span class="n"></span>';
+  var conto = (S.conto && !d.testo) ? '<span class="n">'+n+' '+S.conto+'</span>' : '<span class="n"></span>';
   return '<details><summary><span class="ic">'+S.ic+'</span><b>'+esc(p[0])+'</b>'+conto+'<i>›</i></summary>'
-    + '<div class="dentro">'+fascia("Antaḥkaraṇa",d.A)+fascia("Vicino a te",d.V)+fascia("Lontano",d.L)+'</div></details>';
+    + '<div class="dentro">'+(d.testo ? '<div class="voce">'+esc(d.testo)+'</div>' : fascia("Antaḥkaraṇa",d.A)+fascia("Vicino a te",d.V)+fascia("Lontano",d.L))+'</div></details>';
 }).join("");
 if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
 if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" href="#">'+esc(S.invita)+' ›</a>');
