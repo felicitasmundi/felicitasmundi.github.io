@@ -1281,6 +1281,13 @@
   body.barra-aperta #apri-barra{visibility:hidden}
   /* ⭐ 28 settembre (Gab) — la radio si ferma prima del carrello, che sta fisso in alto a destra */
   body:not(.radio-aperta) #pl{padding-right:4rem}
+/* ⭐ 30 settembre, Gab: «soglia non deve mostrare barra e megafono» — la soglia è una stanza sola, piena */
+body.vista-soglia .sv-barra,
+body.vista-soglia #apri-barra,
+body.vista-soglia #fuori-barra,
+body.vista-soglia #mg{display:none!important}
+body.vista-soglia #centro,
+body.vista-soglia #pl{margin-left:0!important}
 </style>
 
 <!-- ══ LA PLANCIA — la radio, ferma in alto ══ -->
@@ -4526,6 +4533,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ 52 — e uscendo da un evento si dimentica QUALE, come per l'orma */
     if(id !== "evento") window.eventoChiesto = null;
     vista=id; window.FM_VISTA=id;   /* ⭐ 29 settembre — la barra sa in che stanza si è */
+    document.body.classList.toggle("vista-soglia", id==="soglia"); /* ⭐ 30 settembre, Gab: la soglia senza barra e megafono */
     chiudiFinestre();
     sottoVista = sottoRichiesta || sub || null; sottoRichiesta = null;
     disegnaBarra();
