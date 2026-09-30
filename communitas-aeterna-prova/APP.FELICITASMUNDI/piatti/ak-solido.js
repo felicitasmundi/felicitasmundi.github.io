@@ -54,18 +54,27 @@
       this.t += .006;
       // ⭐ la posa isometrica: vista lungo la diagonale, il cubo coincide col reticolo di Metatron
       //    (i 6 vertici esterni + il centro). Da lì si solleva e oscilla appena, restando ancorato.
-      const oscilla = Math.sin(this.t) * .10, alza = (Math.sin(this.t * .5) + 1) / 2;   // 0..1: quanto è "nato"
-      const ay = Math.PI / 4 + oscilla, ax = Math.atan(1 / Math.sqrt(2)) + oscilla * .5;
+      // ⭐ 30 settembre, Gab: «il movimento diagonale di tutti i solidi» — dalla posa isometrica
+      //    ogni solido fa un giro completo attorno alla diagonale dello schermo (dal basso a
+      //    sinistra all'alto a destra), come il Nexus: un giro ogni 14 secondi.
+      const alza = 1, th = this.t0 === undefined ? (this.t0 = performance.now(), 0) : (performance.now() - this.t0) / 1000 * (Math.PI * 2 / 14);
+      const ct = Math.cos(th), st = Math.sin(th), k = Math.SQRT1_2;
+      const ay = Math.PI / 4, ax = Math.atan(1 / Math.sqrt(2));
       const rc = Math.min(W, H) / 2 * (115 / 128);
       // raggio del cubo di Metatron (2·d su 128 → 92/128 del cerchio interno): il cubo isometrico ci entra esatto
       const scala = rc * (92 / 115) / Math.sqrt(8 / 9);   // i 6 vertici esterni cadono sui 6 centri esterni del reticolo
       const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
-      const prof = .04 + alza * .16;   // piatto quando è nel disegno, profondo quando si solleva
+      const prof = .16;
       const P = s.v.map(([x, y, z]) => {
         let X = x * cy + z * sy, Z = -x * sy + z * cy, Y = y;
-        const Y2 = Y * cx - Z * sx, Z2 = Y * sx + Z * cx;
+        const Y1 = Y * cx - Z * sx, Z1 = Y * sx + Z * cx;
+        // Rodrigues attorno a (k, k, 0)
+        const kv = k * X + k * Y1;
+        const X2 = X * ct + (k * Z1) * st + k * kv * (1 - ct);
+        const Y2 = Y1 * ct + (-k * Z1) * st + k * kv * (1 - ct);
+        const Z2 = Z1 * ct + (k * Y1 - k * X) * st;
         const per = 1 / (1 + Z2 * prof);
-        return [W / 2 + X * scala * per, H / 2 - Y2 * scala * per, Z2];
+        return [W / 2 + X2 * scala * per, H / 2 - Y2 * scala * per, Z2];
       });
       g.clearRect(0, 0, W, H);
       g.lineCap = 'round'; g.lineJoin = 'round';
