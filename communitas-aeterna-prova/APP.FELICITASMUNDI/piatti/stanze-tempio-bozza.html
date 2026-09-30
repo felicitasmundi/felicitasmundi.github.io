@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <script src="./ak-solido.js"></script>
+<script type="module" src="./ak-nexus3d.js"></script>
 <style>
 /* BOZZA — 30 settembre. Le cinque stanze col rito del tempio: sanscrito, nome, solido, una frase, porte chiuse.
    Una porta si apre, le altre restano chiuse; dentro, Antaḥkaraṇa · Vicino a te · Lontano.
@@ -24,7 +25,8 @@ a{color:inherit}
 h1{margin:-.4rem 0 0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2.1rem,6vw,2.8rem);letter-spacing:.08em;text-align:center}
 .fm{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,175,106,.7);margin-top:-.8rem}
 .solido{width:min(14rem,56vw);aspect-ratio:1;position:relative}
-.solido ak-solido{position:absolute;inset:0}
+.solido ak-solido,.solido ak-nexus3d{position:absolute;inset:0}
+.solido.grande{width:min(20rem,78vw)}
 .frase{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;line-height:1.45;color:rgba(245,240,230,.78);text-align:center;max-width:32rem;margin:0}
 .porte{width:100%;max-width:36rem;display:flex;flex-direction:column;gap:.65rem;margin-top:.4rem}
 details{border:1px solid rgba(212,175,106,.22);border-radius:1.1rem;background:linear-gradient(180deg,rgba(245,240,230,.06),rgba(245,240,230,.02));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:hidden;transition:border-color .4s}
@@ -146,7 +148,10 @@ document.getElementById("giro").innerHTML = ORDINE.map(function(k){
 document.getElementById("sans").textContent = S.sans;
 document.getElementById("nome").textContent = S.nome;
 document.getElementById("frase").textContent = S.frase;
-document.getElementById("solido").innerHTML = '<ak-solido tipo="'+S.solido+'" colore="'+S.colore+'" aria-hidden="true"></ak-solido>';
+document.getElementById("solido").innerHTML = S.solido === "nexus"
+  ? '<ak-nexus3d aria-hidden="true"></ak-nexus3d>'
+  : '<ak-solido tipo="'+S.solido+'" colore="'+S.colore+'" aria-hidden="true"></ak-solido>';
+if (S.solido === "nexus") document.getElementById("solido").classList.add("grande");
 function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
 function fascia(nome, voci){
   return '<div class="fascia"><em>'+nome+'</em>' + (voci && voci.length
