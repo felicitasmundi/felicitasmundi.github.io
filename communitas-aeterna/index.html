@@ -4551,8 +4551,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        Antaḥkaraṇa si aprono col tempio (stanze-tempio-bozza.html, dentro l'app senza la sua
        barra). Dal tempio, «tutta la stanza» porta alla pagina di prima: la rotta con «-piena». */
     var TEMPIO = { vicinati:"vicinati", emporio:"emporio", assistenza:"assistenza", edizione:"edizione", scuola:"scuola", anthakarana:"antahkarana" };
-    var piena = /-piena$/.test(id); if(piena) id = id.replace(/-piena$/, "");
-    if(!piena && TEMPIO[id] && window.FMPiatto) FMPiatto.monta(c, "APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=" + TEMPIO[id] + "&in=app");
+    /* ⭐ 18:51, Gab: «ognuna di queste una volta che fai piena apre la vecchia versione» → anche «-piena» porta al tempio */
+    if(/-piena$/.test(id)) id = id.replace(/-piena$/, "");
+    if(TEMPIO[id] && window.FMPiatto) FMPiatto.monta(c, "APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=" + TEMPIO[id] + "&in=app");
     else if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
     /* ⭐ TOCCATO NEL GUSCIO ㊷ — «orme» ora è la matrice de «la mia orma».
        Se fm-orma-mia.js manca si ricade su «Le mie orme» com'era. */
