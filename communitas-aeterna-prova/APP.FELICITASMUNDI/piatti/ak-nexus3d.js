@@ -51,8 +51,8 @@ class AkNexus3d extends HTMLElement {
       if (!this.isConnected) return;
       const t = (now - t0) / 1000;
       // ⭐ 30 settembre, Gab: «un giro completo in diagonale» — ruota intero attorno alla diagonale
-      //    dello schermo (dal basso a sinistra all'alto a destra): un giro ogni 14 secondi.
-      if (!this.fermo) this.g.quaternion.setFromAxisAngle(ASSE, t * (Math.PI * 2 / 14)).multiply(BASE);
+      //    dello schermo (dal basso a sinistra all'alto a destra): un giro ogni 15,6 secondi (17:43, Gab: «10% meno veloci»).
+      if (!this.fermo) this.g.quaternion.setFromAxisAngle(ASSE, t * (Math.PI * 2 / 15.6)).multiply(BASE);
       r.render(sc, cam);
       requestAnimationFrame(loop);
     };

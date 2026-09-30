@@ -56,8 +56,8 @@
       //    (i 6 vertici esterni + il centro). Da lì si solleva e oscilla appena, restando ancorato.
       // ⭐ 30 settembre, Gab: «il movimento diagonale di tutti i solidi» — dalla posa isometrica
       //    ogni solido fa un giro completo attorno alla diagonale dello schermo (dal basso a
-      //    sinistra all'alto a destra), come il Nexus: un giro ogni 14 secondi.
-      const alza = 1, th = this.t0 === undefined ? (this.t0 = performance.now(), 0) : (performance.now() - this.t0) / 1000 * (Math.PI * 2 / 14);
+      //    sinistra all'alto a destra), come il Nexus: un giro ogni 15,6 secondi (17:43, Gab: «10% meno veloci»).
+      const alza = 1, th = this.t0 === undefined ? (this.t0 = performance.now(), 0) : (performance.now() - this.t0) / 1000 * (Math.PI * 2 / 15.6);
       const ct = Math.cos(th), st = Math.sin(th), k = Math.SQRT1_2;
       const ay = Math.PI / 4, ax = Math.atan(1 / Math.sqrt(2));
       const rc = Math.min(W, H) / 2 * (115 / 128);
