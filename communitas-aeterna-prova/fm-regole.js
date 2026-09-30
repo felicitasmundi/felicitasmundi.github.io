@@ -325,7 +325,6 @@ var G = [
  ["Le parole","var(--nexus)",[
   ["<b>FelicitasMundi non è «un sito»</b>: è piattaforma, ecosistema, esperienza oltre la soglia.",
    "", ["canone"]],
-  ["<b>Mai cura, terapia, diagnosi</b> o promesse cliniche.", "", ["canone"]],
   ["<b>Verbatim o segnaposto visibile.</b> Mai inventare prosa in nome di Gab.",
    "", ["canone"]],
   ["<b>Mai «non è X, è Y»</b>: affermare sempre in positivo.", "", ["canone"]],
