@@ -177,12 +177,7 @@ document.getElementById("porte").innerHTML = S.porte.map(function(p){
 }
 disegnaPorte();
 if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
-if (APP) {
-  var rotta = (qui === "antahkarana" ? "anthakarana" : qui) + "-piena";
-  var b = document.createElement("button"); b.className = "tutta"; b.type = "button";
-  b.textContent = "tutta la stanza ›"; b.addEventListener("click", function(){ vaiA(rotta); });
-  document.getElementById("porte").after(b);
-}
+/* ⭐ 30 settembre 18:48, Gab: «la voce tutta la stanza riapre la vecchia versione» → tolta. */
 if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" href="#">'+esc(S.invita)+' ›</a>');
 function legaPorte(){ document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});}); }
 legaPorte();
