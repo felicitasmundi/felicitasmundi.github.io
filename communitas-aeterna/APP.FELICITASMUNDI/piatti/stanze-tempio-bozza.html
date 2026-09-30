@@ -6,9 +6,8 @@
 <title>Le cinque stanze · bozza del tempio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./ak-solido.js?v=09301744"></script>
-<script type="module" src="./ak-nexus3d.js?v=09302040"></script>
+<script type="module" src="./ak-nexus3d.js?v=09302050"></script>
 <style>
 /* BOZZA — 30 settembre. Le cinque stanze col rito del tempio: sanscrito, nome, solido, una frase, porte chiuse.
    Una porta si apre, le altre restano chiuse; dentro, Antaḥkaraṇa · Vicino a te · Lontano.
@@ -192,9 +191,17 @@ legaPorte();
    «Vicino a te»: la distanza dal tuo «Dove ti trovi» arriva quando la stanza si monta nell'app.
    Se il database non risponde, restano le voci scritte qui. */
 (async function(){
-  if (!window.supabase || ["emporio","assistenza","scuola"].indexOf(qui) < 0) return;
+  if (["emporio","assistenza","scuola"].indexOf(qui) < 0) return;
   try {
-    var db = window.supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co", "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU");
+    /* ⭐ lentezza: dentro l'app si usa il collegamento al database che l'app ha già aperto;
+       fuori, la libreria si carica solo nelle stanze che leggono il database */
+    var db = null;
+    try { db = window.parent !== window && window.parent.db; } catch (e) {}
+    if (!db) {
+      if (!window.supabase) await new Promise(function(ok, ko){ var t = document.createElement("script");
+        t.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"; t.onload = ok; t.onerror = ko; document.head.appendChild(t); });
+      db = window.supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co", "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU");
+    }
     var porte = {};
     S.porte.forEach(function(p){ porte[p[0]] = {A:[],V:[],L:[]}; });
     if (qui === "emporio") {

@@ -32,9 +32,10 @@ class AkNexus3d extends HTMLElement {
     const o = new THREE.DirectionalLight(0xd4af6a, .9); o.position.set(-3, -1, -2); sc.add(o);   // un filo d'oro dietro
     this.g = new THREE.Group(); sc.add(this.g);
     this.fermo = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    new GLTFLoader().load(new URL(this.getAttribute('src') || 'nexus.glb', QUI).href, gl => {
+    new GLTFLoader().load(new URL(this.getAttribute('src') || 'nexus.glb?v=leggero', QUI).href, gl => {
       const m = gl.scene;
-      const box = new THREE.Box3().setFromObject(m), c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3());
+      m.updateMatrixWorld(true);   // il modello leggero porta le misure sui nodi: vanno contate prima
+      const box = new THREE.Box3().setFromObject(m, true), c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3());
       m.position.sub(c); const f = 1 / Math.max(s.x, s.y, s.z); m.scale.setScalar(f); m.position.multiplyScalar(f);
       m.traverse(x => {
         if (!x.isMesh) return;
