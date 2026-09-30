@@ -264,6 +264,8 @@
         catch (e) { rifiuta(e); return; }
         if (!doc) { rifiuta(new Error("FMPiatto: la pagina non è leggibile")); return; }
         fmpFrenaLink(doc);
+        /* ⭐ 30 settembre — i tocchi delle stanze arrivano al «trascina giù per aggiornare» (fm-tira.js) */
+        try { if (window.fmTira && window.fmTira.lega) window.fmTira.lega(doc); } catch (e) {}
         fmpAltezza(box, f);
         /* ⭐ e si resta a guardare: se il contenuto cresce — un pannello che
            si apre, una fila che si allunga — la finestra cresce con lui */
@@ -285,7 +287,7 @@
       /* ⭐ 30 settembre, Gab: «l app ha un problema di eccessiva lentezza» — fuori dalla prova il
          piatto non si riscarica più a ogni passaggio: resta in memoria finché non cambia VERSIONE_PIATTI
          (da alzare a ogni pubblicazione). Nella prova resta fresco sempre. */
-      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20260930f";
+      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20260930g";
       f.src = indirizzo + (indirizzo.indexOf("?") > -1 ? "&" : "?") + "t=" + fresco;
       if (window.ResizeObserver) {
         ro = new ResizeObserver(function () { if (!chiuso) fmpAltezza(box, f); });
