@@ -163,7 +163,13 @@
 
   function salaEntra(){
     if(typeof LivekitClient === "undefined"){
-      salaDice("La sala non si e’ caricata. Ricarica la pagina.", true);
+      /* ⭐ 30 settembre (lentezza): la sala si carica solo adesso, la prima volta che si entra */
+      salaDice("Un momento…");
+      var lk = document.createElement("script");
+      lk.src = "https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js";
+      lk.onload = function(){ salaEntra(); };
+      lk.onerror = function(){ salaDice("La sala non si e’ caricata. Ricarica la pagina.", true); };
+      document.head.appendChild(lk);
       return;
     }
     salaDice("Un momento…");

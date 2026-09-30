@@ -9,8 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- ⭐ la sala: la diretta audio della consolle. Ferma su 2.22.0 apposta, così non cambia da sé sotto una diretta -->
-<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js"></script>
+<!-- ⭐ la sala (livekit) non si carica più all'avvio: la carica fm-consolle.js quando si entra in sala (30 settembre, lentezza) -->
 <style>
   /* ══ DUE INTERRUTTORI SOLI ══
      --scala  : la leggibilità di tutto il sito. Tutto in rem: comanda il telefono.
@@ -4072,13 +4071,27 @@ body.vista-soglia #pl{margin-left:0!important}
 
 <script src="fm-incontro.js"></script>
 <!-- ⭐ TOCCATO NEL GUSCIO 56 — fm-edizione.js (vecchio) TOLTO: la stanza Edizione passa al piatto (piatti/fm-edizione.js, sotto) -->
-<script src="fm-consolle.js"></script>
+<script src="fm-consolle.js?v=09301930"></script>
 <script src="fm-account.js"></script>
 <script src="fm-account-mio.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Il tuo account» dal piede della barra: SpazioVivo.account(dove). I cinque pannelli del 7 agosto restano in fm-account.js -->
 
 <script src="fm-casa.js"></script>
 <script src="fm-praticantato.js"></script>
-<script src="fm-gruppi.js"></script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
+<script>
+/* ⭐ 30 settembre, Gab: «l app ha un problema di eccessiva lentezza» — i programmi pesanti si caricano
+   solo quando servono. fm-gruppi.js (157 KB) arriva la prima volta che si apre Squadre. */
+window.fmCarica = window.fmCarica || function (src) {
+  window._fmCaricati = window._fmCaricati || {};
+  if (!window._fmCaricati[src]) window._fmCaricati[src] = new Promise(function (ok, ko) {
+    var t = document.createElement("script"); t.src = src; t.onload = ok; t.onerror = ko; document.head.appendChild(t);
+  });
+  return window._fmCaricati[src];
+};
+window.gruppi = function (c) {
+  var io = window.gruppi;
+  fmCarica("fm-gruppi.js").then(function () { if (window.gruppi !== io) window.gruppi(c); });
+};
+</script><!-- ⭐ la terza voce della barra: Gruppi cooperativi -->
 <script src="fm-annale.js?v=09292225"></script><!-- ⭐ TOCCATO NEL GUSCIO ⑤ — l'Annale: la sesta finestra del nucleo. PRIMA di fm-nucleo.js, che lo chiama -->
 <script src="fm-nucleo.js"></script><!-- ⭐ la quinta voce della barra: Il nucleo -->
 <!-- ⭐ TOCCATO NEL GUSCIO 55 — fm-talenti.js (vecchio percorso) TOLTO: codice morto. Il percorso vero è APP.FELICITASMUNDI/piatti/fm-percorso-talenti.js, caricato sotto. I crediti restano in fm-crediti.js. -->
