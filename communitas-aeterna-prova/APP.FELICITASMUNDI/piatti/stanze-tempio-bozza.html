@@ -6,6 +6,7 @@
 <title>Le cinque stanze · bozza del tempio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./ak-solido.js?v=09301744"></script>
 <script type="module" src="./ak-nexus3d.js?v=09301744"></script>
 <style>
@@ -158,15 +159,53 @@ function fascia(nome, voci){
     ? voci.map(function(v){ return '<div class="voce">'+esc(v[0])+(v[1]?'<small>'+esc(v[1])+'</small>':'')+'</div>'; }).join("")
     : '<div class="vuoto">'+VUOTO+'</div>') + '</div>';
 }
+function disegnaPorte(){
 document.getElementById("porte").innerHTML = S.porte.map(function(p){
   var d = p[1], n = (d.A||[]).length + (d.V||[]).length + (d.L||[]).length;
   var conto = (S.conto && !d.testo) ? '<span class="n">'+n+' '+S.conto+'</span>' : '<span class="n"></span>';
   return '<details><summary><span class="ic">'+S.ic+'</span><b>'+esc(p[0])+'</b>'+conto+'<i>›</i></summary>'
     + '<div class="dentro">'+(d.testo ? '<div class="voce">'+esc(d.testo)+'</div>' : fascia("Antaḥkaraṇa",d.A)+fascia("Vicino a te",d.V)+fascia("Lontano",d.L))+'</div></details>';
 }).join("");
+}
+disegnaPorte();
 if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
 if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" href="#">'+esc(S.invita)+' ›</a>');
-document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});});
+function legaPorte(){ document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});}); }
+legaPorte();
+
+/* ⭐ 30 settembre, Gab: «secondo me riesci a mettere il collegamento database».
+   Le porte si riempiono dal database: Emporio da `prodotti` (scaffale; Antaḥkaraṇa = segnati),
+   Assistenza e Scuola da `servizi` (tipo). Chi non è segnato Antaḥkaraṇa va, per ora, in
+   «Vicino a te»: la distanza dal tuo «Dove ti trovi» arriva quando la stanza si monta nell'app.
+   Se il database non risponde, restano le voci scritte qui. */
+(async function(){
+  if (!window.supabase || ["emporio","assistenza","scuola"].indexOf(qui) < 0) return;
+  try {
+    var db = window.supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co", "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU");
+    var porte = {};
+    S.porte.forEach(function(p){ porte[p[0]] = {A:[],V:[],L:[]}; });
+    if (qui === "emporio") {
+      var r = await db.from("prodotti").select("nome,autore,scaffale,antahkarana").eq("stato","pubblico").limit(500);
+      if (r.error) return;
+      r.data.forEach(function(x){ var k = porte[x.scaffale]; if (!k) return;
+        (x.antahkarana ? k.A : k.V).push([x.nome, x.autore || ""]); });
+    } else {
+      var TIPO = qui === "assistenza"
+        ? {assistenza_spirituale:"spirituale", consulenza:"consulenze", percorso:"percorsi"}
+        : {formazione:"lezioni"};
+      var r2 = await db.from("servizi").select("titolo,tipo,a_distanza").eq("attivo",true).limit(500);
+      if (r2.error) return;
+      r2.data.forEach(function(x){ var nome = TIPO[x.tipo]; if (qui === "scuola" && nome && x.a_distanza) nome = "online";
+        var k = porte[nome]; if (!k) return;
+        (x.tipo === "assistenza_spirituale" ? k.A : k.V).push([x.titolo, x.a_distanza ? "online" : ""]); });
+    }
+    var qualcosa = Object.keys(porte).some(function(n){ var k = porte[n]; return k.A.length + k.V.length + k.L.length; });
+    if (!qualcosa) return;
+    S.porte = S.porte.map(function(p){ var k = porte[p[0]], v = p[1];
+      return [p[0], { A: k.A.length ? k.A : (v.A||[]), V: k.V.length ? k.V : (v.V||[]), L: k.L.length ? k.L : (v.L||[]) }]; });
+    disegnaPorte(); legaPorte();
+  } catch (e) { /* restano le voci scritte */ }
+})();
 </script>
 <script src="../../fm-vista-prova.js?v=09301530"></script> <!-- ⭐ solo prova: computer / telefono -->
 </body>
