@@ -44,6 +44,15 @@ details[open] summary i{transform:rotate(90deg)}
 .vuoto{font-size:.85rem;color:rgba(245,240,230,.35)}
 .sezione{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,106,.75);text-align:center;margin:1.4rem 0 .3rem;padding-top:1rem;border-top:1px solid rgba(212,175,106,.2)}
 .invita{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);text-decoration:none;padding:.7rem 1.4rem;border:1px solid rgba(212,175,106,.45);border-radius:999px;margin-top:.6rem}
+/* da stanza-edizione-piatto.html, tali e quali */
+.st-fam{position:relative;display:flex;flex-direction:column;gap:.35rem;min-height:5.5rem;padding:1rem 1rem .9rem;border-radius:.9rem;border:1px solid color-mix(in srgb,var(--c) 33%,transparent);border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);color:inherit;text-align:left;cursor:pointer;font:inherit;transition:border-color .3s,background .3s}
+.st-fam:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.st-fam b{font-family:'Cinzel',serif;font-weight:400;font-size:1rem;line-height:1.3;color:var(--ivory)}
+.st-fam span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.4;color:rgba(245,240,230,.65)}
+.st-sez{display:flex;align-items:center;gap:.7rem}
+.st-sez b{font-family:'Cinzel',serif;font-weight:400;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.85);white-space:nowrap}
+.st-sez i{flex:1;height:1px;background:rgba(212,175,106,.25)}
+.st-sez span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.45)}
 .nota{font-size:.75rem;color:rgba(245,240,230,.35);text-align:center;max-width:30rem}
 .carrello{position:fixed;top:1rem;right:1rem;width:2.8rem;height:2.8rem;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(212,175,106,.45);color:var(--oro);background:rgba(8,11,26,.6);z-index:5}
 .carrello svg{width:1.3rem;height:1.3rem}
@@ -62,6 +71,22 @@ details[open] summary i{transform:rotate(90deg)}
   <div class="porte" id="porte"></div>
   <p class="nota">Bozza: una porta si apre, le altre restano chiuse. Dentro ogni porta, Antaḥkaraṇa · Vicino a te · Lontano.</p>
 </div>
+<!-- ⭐ Edizione: le otto famiglie, tali e quali da stanza-edizione-piatto.html -->
+<template id="famiglie">
+      <div class="st-sez" style="margin-top:.6rem"><b>stampa</b><i></i><span>e ti arriva a casa</span></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.5;color:rgba(245,240,230,.75);text-wrap:pretty;margin-top:-.6rem">Oltre alla stampa proponiamo supporti per l&rsquo;esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</div>
+      <!-- le otto famiglie sono fisse: aprono il configuratore, dentro un'orma nuova -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.7rem">
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="carta" style="--c:#669944"><b>Carta stampata</b><span>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="libri" style="--c:#669944"><b>Libri e cataloghi</b><span>libri, riviste, cataloghi, fascicoli</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="agende" style="--c:#AA8844"><b>Agende e calendari</b><span>agende, calendari, quaderni e taccuini</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="fiere" style="--c:#CC6644"><b>Esposizione e fiere</b><span>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="confezioni" style="--c:#AA8844"><b>Confezioni e imballaggi</b><span>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="gadget" style="--c:#4488BB"><b>Gadget e regali</b><span>penne, cordini, portabadge, borse, borracce</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="abiti" style="--c:#4488BB"><b>Abbigliamento</b><span>magliette, felpe, tessuti personalizzati</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="servizi" style="--c:#B87333"><b>I servizi</b><span>grafica, impaginazione, correzione, consegna</span></button>
+      </div>
+</template>
 <script>
 /* A = Antaḥkaraṇa · V = Vicino a te · L = Lontano. Ogni voce: [titolo, riga sotto]. */
 var VUOTO = "[ ancora niente qui ]";
@@ -90,18 +115,9 @@ var STANZE = {
                         ["Bhakti Vriksa","6 livelli · un percorso di gruppo · USCI · ISKCON Italia"]]}],
       ["terapeutico",{}], ["consulenze",{}], ["percorsi",{}]
     ]},
-  edizione: { sans:"वायु", nome:"Edizione", solido:"ottaedro", colore:"#669944", ic:"✦", conto:"opere",
+  edizione: { sans:"वायु", nome:"Edizione", solido:"ottaedro", colore:"#669944", ic:"✦",
     frase:"quello che fai, stampato e portato dove serve", invita:"invita chi scrive",
-    porte:[ ["le opere",{}] ],
-    stampa:{ titolo:"stampa e ti arriva a casa", famiglie:[
-      ["Carta stampata","volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi"],
-      ["Libri e cataloghi","libri, riviste, cataloghi, fascicoli"],
-      ["Agende e calendari","agende, calendari, quaderni e taccuini"],
-      ["Esposizione e fiere","totem, roll-up, striscioni, stand, insegne, pellicole per vetrine"],
-      ["Confezioni e imballaggi","shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo"],
-      ["Gadget e regali","penne, cordini, portabadge, borse, borracce"],
-      ["Abbigliamento","magliette, felpe, tessuti personalizzati"],
-      ["I servizi","grafica, impaginazione, correzione, consegna"] ]}},
+    porte:[], famiglie:true },
   scuola: { sans:"आकाश", nome:"Scuola", solido:"dodecaedro", colore:"#9966CC", ic:"○", conto:"lezioni", invita:"invita chi insegna",
     frase:"le lezioni, le formazioni, e la ricerca che le accompagna",
     porte:[
@@ -134,12 +150,7 @@ document.getElementById("porte").innerHTML = S.porte.map(function(p){
   return '<details><summary><span class="ic">'+S.ic+'</span><b>'+esc(p[0])+'</b>'+conto+'<i>›</i></summary>'
     + '<div class="dentro">'+fascia("Antaḥkaraṇa",d.A)+fascia("Vicino a te",d.V)+fascia("Lontano",d.L)+'</div></details>';
 }).join("");
-if (S.stampa) {
-  document.getElementById("porte").insertAdjacentHTML("beforeend",
-    '<div class="sezione">'+esc(S.stampa.titolo)+'</div>' + S.stampa.famiglie.map(function(f){
-      return '<details><summary><span class="ic">'+S.ic+'</span><b>'+esc(f[0])+'</b><span class="n"></span><i>›</i></summary>'
-        + '<div class="dentro"><div class="voce">'+esc(f[1])+'</div></div></details>'; }).join(""));
-}
+if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
 if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" href="#">'+esc(S.invita)+' ›</a>');
 document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});});
 </script>
