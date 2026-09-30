@@ -16,6 +16,10 @@
 :root{--oro:#D4AF6A;--ivory:#F5F0E6;--el:#AA8844}
 *{box-sizing:border-box}
 html,body{margin:0;background:#02040c;overflow-x:hidden}
+/* ⭐ 30 settembre 20:17, Gab: «pagina anthakarana, la prima volta che provi lo scrollo rimane fermo» — dentro l'app la pagina
+   non deve essere un contenitore che scorre da sé (overflow-x:hidden lo diventa): lo scorrimento passa subito all'app. */
+.in-app,.in-app body{overflow:visible;overflow-x:clip;touch-action:pan-y;overscroll-behavior:auto}
+.in-app ak-nexus3d,.in-app ak-solido{touch-action:pan-y}
 a{color:inherit}
 .t{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:1.3rem;padding:1.4rem 1rem 4rem;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
   background:radial-gradient(ellipse at 50% 26%,color-mix(in srgb,var(--el) 20%,transparent),transparent 55%),radial-gradient(ellipse at 20% 90%,rgba(60,44,110,.35),transparent 60%),#070b18;transition:background .6s}
