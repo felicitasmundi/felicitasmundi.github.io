@@ -121,9 +121,18 @@ a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
 .st-des[data-stato="desiderato"]{border-color:rgba(212,175,106,.85);background:rgba(212,175,106,.16);color:var(--oro)}
 .st-des[data-stato="desiderato"] svg{fill:currentColor}
 .st-condividi .st-des{margin-left:auto}
+/* ⛔⛔ 29 settembre (Gab) — coerenza delle pagine: niente giorno/luna/santo nelle stanze,
+   il cubo col simbolo alla fine della pagina, sotto il nome «FelicitasMundi · Comunità Eterna» */
+.st{display:flex!important;flex-direction:column;align-items:center}
+.st-dx{order:1;max-width:40rem!important;justify-self:auto}
+.st-sx{order:2;position:relative!important;top:auto!important;max-width:24rem;margin-top:1rem}
+.st-giorno{display:none!important}
+.st-fm{margin-top:-.8rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;letter-spacing:.02em;color:rgba(245,240,230,.6)}
+/* ⭐ 29 settembre, Gab: dal computer la pagina prende tutta l'area */
+.st-dx{max-width:none!important}
 </style>
 <script src="./ak-cosmo.js"></script>
-<script src="./ak-solido.js"></script>
+<script src="./ak-solido.js?v=09301744"></script>
 
 </head>
 <body>
@@ -163,6 +172,7 @@ a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
     <!-- ① l'elenco: un elenco, non nove scaffali -->
     <div data-stato="elenco" style="display:contents">
       <div class="st-capo"><h1>L&rsquo;Emporio</h1><div class="st-occ">acqua</div></div>
+      <div class="st-fm">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
 
       <!-- gli scaffali come filtro: spenti finché vuoti. La percentuale è quanto resta a FelicitasMundi -->
       <div class="st-scaffali">

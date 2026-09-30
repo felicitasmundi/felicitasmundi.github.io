@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le cinque stanze · bozza del tempio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="./ak-solido.js?v=09301744"></script>
+<script type="module" src="./ak-nexus3d.js?v=09301744"></script>
+<style>
+/* BOZZA — 30 settembre. Le cinque stanze col rito del tempio: sanscrito, nome, solido, una frase, porte chiuse.
+   Una porta si apre, le altre restano chiuse; dentro, Antaḥkaraṇa · Vicino a te · Lontano.
+   Frasi: la riga di ogni stanza nel database. Porte e voci: le stanze di prima (fm-emporio.js, fm-assistenza.js, fm-scuola.js). */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--el:#AA8844}
+*{box-sizing:border-box}
+html,body{margin:0;background:#02040c;overflow-x:hidden}
+a{color:inherit}
+.t{min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:1.3rem;padding:1.4rem 1rem 4rem;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
+  background:radial-gradient(ellipse at 50% 26%,color-mix(in srgb,var(--el) 20%,transparent),transparent 55%),radial-gradient(ellipse at 20% 90%,rgba(60,44,110,.35),transparent 60%),#070b18;transition:background .6s}
+.giro{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center;margin-bottom:.6rem}
+.giro a{text-decoration:none;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,230,.5);padding:.4rem .75rem;border:1px solid rgba(245,240,230,.12);border-radius:999px}
+.giro a[aria-current="page"]{color:var(--oro);border-color:rgba(212,175,106,.55)}
+.sans{font-family:'Noto Serif Devanagari',serif;font-size:1.5rem;letter-spacing:.12em;color:rgba(212,175,106,.85);padding-bottom:.6rem;border-bottom:1px solid rgba(212,175,106,.35);min-width:7rem;text-align:center}
+h1{margin:-.4rem 0 0;font-family:'Cinzel',serif;font-weight:400;font-size:clamp(2.1rem,6vw,2.8rem);letter-spacing:.08em;text-align:center}
+.fm{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,175,106,.7);margin-top:-.8rem}
+.solido{width:min(14rem,56vw);aspect-ratio:1;position:relative}
+.solido ak-solido,.solido ak-nexus3d{position:absolute;inset:0}
+.solido.grande{width:min(20rem,78vw)}
+.frase{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;line-height:1.45;color:rgba(245,240,230,.78);text-align:center;max-width:32rem;margin:0}
+.porte{width:100%;max-width:36rem;display:flex;flex-direction:column;gap:.65rem;margin-top:.4rem}
+details{border:1px solid rgba(212,175,106,.22);border-radius:1.1rem;background:linear-gradient(180deg,rgba(245,240,230,.06),rgba(245,240,230,.02));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:hidden;transition:border-color .4s}
+details[open]{border-color:color-mix(in srgb,var(--el) 70%,var(--oro))}
+summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.9rem;padding:1rem 1.15rem}
+summary::-webkit-details-marker{display:none}
+summary .ic{width:2.3rem;height:2.3rem;border-radius:50%;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--el) 60%,transparent);color:var(--oro);flex:none;font-size:.95rem}
+summary b{font-family:'Cinzel',serif;font-weight:400;letter-spacing:.13em;text-transform:uppercase;font-size:.9rem;color:var(--oro)}
+summary .n{font-size:.76rem;color:rgba(245,240,230,.45);margin-left:auto;white-space:nowrap}
+summary i{font-style:normal;color:rgba(245,240,230,.4);transition:transform .4s;margin-left:.6rem}
+details[open] summary i{transform:rotate(90deg)}
+.dentro{padding:0 1.15rem 1.15rem 4.35rem;display:flex;flex-direction:column;gap:.9rem;animation:apri .5s ease both}
+@keyframes apri{from{opacity:0;transform:translateY(-.3rem)}to{opacity:1;transform:none}}
+.fascia em{display:block;font-style:normal;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,175,106,.8);margin-bottom:.3rem}
+.voce{font-size:.95rem;line-height:1.45;color:rgba(245,240,230,.88);padding:.15rem 0}
+.voce small{display:block;font-size:.8rem;color:rgba(245,240,230,.5)}
+.vuoto{font-size:.85rem;color:rgba(245,240,230,.35)}
+.sezione{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,106,.75);text-align:center;margin:1.4rem 0 .3rem;padding-top:1rem;border-top:1px solid rgba(212,175,106,.2)}
+.invita{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);text-decoration:none;padding:.7rem 1.4rem;border:1px solid rgba(212,175,106,.45);border-radius:999px;margin-top:.6rem}
+/* da stanza-edizione-piatto.html, tali e quali */
+.st-fam{position:relative;display:flex;flex-direction:column;gap:.35rem;min-height:5.5rem;padding:1rem 1rem .9rem;border-radius:.9rem;border:1px solid color-mix(in srgb,var(--c) 33%,transparent);border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);color:inherit;text-align:left;cursor:pointer;font:inherit;transition:border-color .3s,background .3s}
+.st-fam:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.st-fam b{font-family:'Cinzel',serif;font-weight:400;font-size:1rem;line-height:1.3;color:var(--ivory)}
+.st-fam span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.4;color:rgba(245,240,230,.65)}
+.st-sez{display:flex;align-items:center;gap:.7rem}
+.st-sez b{font-family:'Cinzel',serif;font-weight:400;font-size:.84rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.85);white-space:nowrap}
+.st-sez i{flex:1;height:1px;background:rgba(212,175,106,.25)}
+.st-sez span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.45)}
+.nota{font-size:.75rem;color:rgba(245,240,230,.35);text-align:center;max-width:30rem}
+.carrello{position:fixed;top:1rem;right:1rem;width:2.8rem;height:2.8rem;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(212,175,106,.45);color:var(--oro);background:rgba(8,11,26,.6);z-index:5}
+.carrello svg{width:1.3rem;height:1.3rem}
+@media(max-width:30rem){.dentro{padding-left:1.15rem}.t{padding-top:4.2rem}}
+</style>
+</head>
+<body>
+<div class="t" id="t">
+  <a class="carrello" href="#" aria-label="il carrello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h11L21 7H6.2"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg></a>
+  <nav class="giro" id="giro"></nav>
+  <div class="sans" lang="sa" id="sans"></div>
+  <h1 id="nome"></h1>
+  <div class="fm">FelicitasMundi · Comunità Eterna</div>
+  <div class="solido" id="solido"></div>
+  <p class="frase" id="frase"></p>
+  <div class="porte" id="porte"></div>
+  <p class="nota">Bozza: una porta si apre, le altre restano chiuse. Dentro ogni porta, Antaḥkaraṇa · Vicino a te · Lontano.</p>
+</div>
+<!-- ⭐ Edizione: le otto famiglie, tali e quali da stanza-edizione-piatto.html -->
+<template id="famiglie">
+      <div class="st-sez" style="margin-top:.6rem"><b>stampa</b><i></i><span>e ti arriva a casa</span></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.5;color:rgba(245,240,230,.75);text-wrap:pretty;margin-top:-.6rem">Oltre alla stampa proponiamo supporti per l&rsquo;esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</div>
+      <!-- le otto famiglie sono fisse: aprono il configuratore, dentro un'orma nuova -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.7rem">
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="carta" style="--c:#669944"><b>Carta stampata</b><span>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="libri" style="--c:#669944"><b>Libri e cataloghi</b><span>libri, riviste, cataloghi, fascicoli</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="agende" style="--c:#AA8844"><b>Agende e calendari</b><span>agende, calendari, quaderni e taccuini</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="fiere" style="--c:#CC6644"><b>Esposizione e fiere</b><span>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="confezioni" style="--c:#AA8844"><b>Confezioni e imballaggi</b><span>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="gadget" style="--c:#4488BB"><b>Gadget e regali</b><span>penne, cordini, portabadge, borse, borracce</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="abiti" style="--c:#4488BB"><b>Abbigliamento</b><span>magliette, felpe, tessuti personalizzati</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="servizi" style="--c:#B87333"><b>I servizi</b><span>grafica, impaginazione, correzione, consegna</span></button>
+      </div>
+</template>
+<script>
+/* A = Antaḥkaraṇa · V = Vicino a te · L = Lontano. Ogni voce: [titolo, riga sotto]. */
+var VUOTO = "[ ancora niente qui ]";
+var STANZE = {
+  vicinati: { sans:"पृथ्वी", nome:"Vicinati", solido:"cubo", colore:"#AA8844", ic:"◇", invita:"invita una realtà",
+    frase:"i luoghi e le persone vicine a te, e quello di cui c'è bisogno",
+    porte:[
+      ["Oggi",{}], ["Il tuo vicinato",{}], ["Karma yoga",{}], ["Novità",{}]
+    ]},
+  emporio: { sans:"जल", nome:"Emporio", solido:"icosaedro", colore:"#4488BB", ic:"≡", conto:"prodotti", invita:"invita produttori",
+    frase:"quello che si compra, si scambia e si dona, e chi lo porta",
+    porte:[
+      ["alimenti",{}], ["rimedi",{}], ["cosmesi",{}], ["oggettistica",{}], ["abbigliamento",{}], ["arredo",{}],
+      ["oggetti sacri",{A:[["Nexus","Strumenti di Coscienza · San Lazzaro di Savena"]]}],
+      ["libri e stampati",{A:[["La Bhagavad-gītā Così com’è","A.C. Bhaktivedānta Swāmī Prabhupāda · Villaggio Hare Krishna - Bergamo"],
+                             ["Anima vagabonda","Parabhakti dāsa · Villa Vrindavana - Firenze"]]}],
+      ["digitale",{}]
+    ]},
+  assistenza: { sans:"अग्नि", nome:"Assistenza comunitaria integrata", solido:"tetraedro", colore:"#CC6644", ic:"△", conto:"servizi", invita:"invita operatori",
+    frase:"chi risponde a un bisogno: spiritualità, trattamenti, consulenze, mutuo aiuto",
+    porte:[
+      ["spirituale",{A:[["Power Series","10 incontri online settimanali · USCI · ISKCON Italia"],
+                        ["Gita Manjari","19 incontri settimanali · USCI · ISKCON Italia"],
+                        ["Tulasi Manjari","8 incontri settimanali · USCI · ISKCON Italia"],
+                        ["Bhakti Yoga","7 livelli · circa 10 incontri ciascuno · USCI · ISKCON Italia"],
+                        ["Bhakti Vriksa","6 livelli · un percorso di gruppo · USCI · ISKCON Italia"]]}],
+      ["terapeutico",{}], ["consulenze",{}], ["percorsi",{}]
+    ]},
+  edizione: { sans:"वायु", nome:"Edizione", solido:"ottaedro", colore:"#669944", ic:"✦",
+    frase:"quello che fai, stampato e portato dove serve", invita:"invita chi scrive",
+    porte:[], famiglie:true },
+  scuola: { sans:"आकाश", nome:"Scuola", solido:"dodecaedro", colore:"#9966CC", ic:"○", conto:"lezioni", invita:"invita chi insegna",
+    frase:"le lezioni, le formazioni, e la ricerca che le accompagna",
+    porte:[
+      ["lezioni",{V:[["Astrologia","Ferrara"],["Simbologia","Ferrara"],["Agricoltura naturale","Livorno"]],
+                  L:[["Cristalloterapia","Livorno"],["Reiki","Giulianova"],["Astrologia","Giulianova"]]}],
+      ["online",{}], ["ricerca",{}]
+    ]}
+};
+STANZE.antahkarana = { sans:"अन्तःकरण", nome:"Antaḥkaraṇa", solido:"nexus", colore:"#D4AF6A", ic:"✧",
+    frase:"il percorso che integra Coscienza, Tecnologia e Comunità",
+    porte:[
+      ["Il tuo talento",{testo:"[ riconoscerlo: il pretesto delicato ]"}],
+      ["Le tue orme",{testo:"[ le orme, raccolte per talento ]"}],
+      ["Karma yoga",{testo:"[ i bisogni da prendere ]"}],
+      ["Gli incontri",{testo:"[ gli incontri di luna e le lezioni ]"}],
+      ["Le soglie",{testo:"ospite · praticante · operatore · nucleo"}]
+    ]};
+var ORDINE = ["antahkarana","vicinati","emporio","assistenza","edizione","scuola"];
+var qui = (location.search.match(/[?&]s=([a-z]+)/) || [])[1];
+if (!STANZE[qui]) qui = "emporio";
+var S = STANZE[qui];
+document.title = S.nome + " · bozza del tempio";
+document.documentElement.style.setProperty("--el", S.colore);
+document.getElementById("giro").innerHTML = ORDINE.map(function(k){
+  return '<a href="?s='+k+'"'+(k===qui?' aria-current="page"':'')+'>'+STANZE[k].nome+'</a>'; }).join("");
+document.getElementById("sans").textContent = S.sans;
+document.getElementById("nome").textContent = S.nome;
+document.getElementById("frase").textContent = S.frase;
+document.getElementById("solido").innerHTML = S.solido === "nexus"
+  ? '<ak-nexus3d aria-hidden="true"></ak-nexus3d>'
+  : '<ak-solido tipo="'+S.solido+'" colore="'+S.colore+'" aria-hidden="true"></ak-solido>';
+if (S.solido === "nexus") document.getElementById("solido").classList.add("grande");
+function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+function fascia(nome, voci){
+  return '<div class="fascia"><em>'+nome+'</em>' + (voci && voci.length
+    ? voci.map(function(v){ return '<div class="voce">'+esc(v[0])+(v[1]?'<small>'+esc(v[1])+'</small>':'')+'</div>'; }).join("")
+    : '<div class="vuoto">'+VUOTO+'</div>') + '</div>';
+}
+document.getElementById("porte").innerHTML = S.porte.map(function(p){
+  var d = p[1], n = (d.A||[]).length + (d.V||[]).length + (d.L||[]).length;
+  var conto = (S.conto && !d.testo) ? '<span class="n">'+n+' '+S.conto+'</span>' : '<span class="n"></span>';
+  return '<details><summary><span class="ic">'+S.ic+'</span><b>'+esc(p[0])+'</b>'+conto+'<i>›</i></summary>'
+    + '<div class="dentro">'+(d.testo ? '<div class="voce">'+esc(d.testo)+'</div>' : fascia("Antaḥkaraṇa",d.A)+fascia("Vicino a te",d.V)+fascia("Lontano",d.L))+'</div></details>';
+}).join("");
+if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
+if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" href="#">'+esc(S.invita)+' ›</a>');
+document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});});
+</script>
+<script src="../../fm-vista-prova.js?v=09301530"></script> <!-- ⭐ solo prova: computer / telefono -->
+</body>
+</html>

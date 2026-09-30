@@ -228,7 +228,8 @@
     gruppi.forEach(function (g) {
       var box = R.querySelector('[data-gruppo="' + g.k + '"]');
       if (!box) return;
-      P.stato(R, "ha-" + g.k, g.dentro.length > 0);
+      /* ⭐ 29 settembre, Gab: Antahkarana si vede sempre, anche vuoto */
+      P.stato(R, "ha-" + g.k, g.k === "antahkarana" || g.dentro.length > 0);
       var conto = {}; conto[g.k] = String(g.dentro.length);
       P.riempi(box, { conto: conto });
 

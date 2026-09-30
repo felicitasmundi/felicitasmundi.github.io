@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sei dentro una tessitura — Comunità Eterna FelicitasMundi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --scala:1;
+    --navy:#0A0C1A; --oro:#C8A055; --oro-ch:#D4AF6A; --ivory:#F5F0E6;
+    --line:rgba(184,150,62,0.2);
+    --t-eti:calc(0.8125rem * var(--scala));
+    --t-tas:calc(0.9375rem * var(--scala));
+    --t-cor:calc(1.0625rem * var(--scala));
+    --t-scr:calc(1.125rem  * var(--scala));
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{background:#02040c;color:var(--ivory);font-family:'DM Sans',sans-serif;
+    min-height:100dvh;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:1.5rem;-webkit-font-smoothing:antialiased}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;
+    background:radial-gradient(ellipse at 50% 34%,#0a1428,#060c1c 46%,#02040c 100%)}
+
+  .carta{max-width:30rem;width:100%;text-align:center}
+  .nexus{width:4rem;height:4rem;object-fit:contain;margin:0 auto 1.1rem;display:block;opacity:.9}
+  .occhio{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--oro-ch);margin-bottom:0.6rem}
+  h1{font-family:'Cinzel',serif;font-weight:500;font-size:calc(1.5rem*var(--scala));
+    line-height:1.25;margin-bottom:0.5rem}
+  .sotto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);
+    color:rgba(245,240,230,0.82);margin-bottom:1.8rem;line-height:1.5}
+
+  /* il filo: chi ti ha collegato, tu, e cosa è accaduto */
+  .filo{display:flex;align-items:center;gap:0.7rem;justify-content:center;margin-bottom:1.2rem}
+  .capo{width:0.85rem;height:0.85rem;border-radius:50%;background:var(--oro);flex:0 0 auto}
+  .capo.vuoto{background:none;border:1.5px dashed rgba(200,160,85,0.6)}
+  .tratto{flex:1;max-width:7rem;height:1px;
+    background:linear-gradient(to right,var(--oro),rgba(200,160,85,0.35));position:relative}
+  .tratto::after{content:'';position:absolute;top:-2px;width:5px;height:5px;border-radius:50%;
+    background:var(--oro);animation:passa 3.2s ease-in-out infinite}
+  @keyframes passa{0%{left:0;opacity:0}20%{opacity:1}80%{opacity:1}100%{left:100%;opacity:0}}
+  .nomi{display:flex;justify-content:space-between;max-width:13rem;margin:0 auto 1.4rem;
+    font-family:'DM Sans',sans-serif;font-size:var(--t-eti);color:rgba(245,240,230,0.8)}
+
+  .orma{border:1px solid var(--line);border-left:0.22rem solid var(--oro);
+    border-radius:0.7rem;padding:1rem 1.1rem;text-align:left;margin-bottom:1.6rem;
+    background:rgba(245,240,230,0.04)}
+  .orma .quando{font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
+    color:rgba(245,240,230,0.78);margin-bottom:0.35rem}
+  .orma p{font-family:'Cormorant Garamond',serif;font-size:var(--t-scr);line-height:1.6;
+    color:var(--ivory)}
+
+  .tasto{display:block;width:100%;background:var(--oro);color:var(--navy);border:0;
+    border-radius:0.7rem;padding:0.8rem;font-family:'DM Sans',sans-serif;
+    font-size:var(--t-tas);font-weight:500;cursor:pointer;margin-bottom:0.55rem;
+    text-decoration:none;text-align:center}
+  .tasto.vuoto{background:none;color:var(--ivory);border:1px solid var(--line)}
+  .msg{font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.5;
+    color:rgba(245,240,230,0.82);margin-top:1rem;min-height:1.5rem}
+  .msg.err{color:#f0b0a6}
+  .piede{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.2em;
+    text-transform:uppercase;color:rgba(200,160,85,0.55);margin-top:2.2rem}
+
+  /* ══ IL PIEDE — uguale in ogni pagina ══ */
+  .fm-piede{width:100%;max-width:30rem;margin:2.4rem auto 0;padding:1.3rem 1rem 1.4rem;
+    border-top:1px solid var(--line,rgba(184,150,62,0.2));text-align:center}
+  .fp-marchio{font-family:'Cinzel',serif;font-size:var(--t-eti,0.8125rem);
+    letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--oro-ch,#D4AF6A);margin-bottom:0.6rem}
+  .fp-riga{font-family:'DM Sans',sans-serif;font-size:var(--t-eti,0.8125rem);
+    color:rgba(245,240,230,0.78);line-height:1.5}
+  .fp-link{margin-top:0.7rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap}
+  .fp-link a{font-family:'DM Sans',sans-serif;font-size:var(--t-eti,0.8125rem);
+    color:var(--oro-ch,#D4AF6A);text-decoration:none;
+    border-bottom:1px solid rgba(200,160,85,0.35);padding-bottom:0.1rem}
+  .fp-link a:hover{color:var(--ivory,#F5F0E6);border-bottom-color:var(--ivory,#F5F0E6)}
+</style>
+</head>
+<body>
+<div class="carta">
+  <img class="nexus" src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="">
+  <div class="occhio">Comunità Eterna FelicitasMundi</div>
+  <div id="corpo">
+    <h1>Un momento…</h1>
+    <p class="sotto">Sto cercando il filo.</p>
+  </div>
+</div>
+
+<div class="fm-piede">
+  <div class="fp-marchio">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
+  <div class="fp-riga">Felicitas Omnia S.r.l.s. &middot; P.IVA 03075740906</div>
+  <div class="fp-riga">&copy; 2026 &middot; Tutti i diritti riservati</div>
+  <div class="fp-link">
+    <a href="privacy.html">Informativa privacy</a>
+    <a href="cookie.html">Cookie</a>
+    <a href="condizioni.html">Condizioni d&rsquo;uso</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
+  var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
+
+  var codice = new URLSearchParams(location.search).get("c");
+  var corpo  = document.getElementById("corpo");
+
+  function dice(h){ corpo.innerHTML = h; }
+
+  if(!codice){
+    dice('<h1>Manca il filo</h1><p class="sotto">Questo indirizzo non porta a nulla. '
+       + 'Chiedi a chi te l\u2019ha mandato di rifarlo.</p>');
+    return;
+  }
+
+  db.from("inviti").select("codice,chi,testo,momento,da_persona,accettato_da")
+    .eq("codice", codice).maybeSingle()
+    .then(function(r){
+      if(r.error || !r.data){
+        dice('<h1>Non lo trovo</h1><p class="sotto">Questo filo non esiste, o \u00e8 stato tolto.</p>');
+        return;
+      }
+      var inv = r.data;
+      return db.from("persone").select("nome").eq("id", inv.da_persona).maybeSingle()
+        .then(function(p){
+          var da = (p && p.data && p.data.nome) || "qualcuno";
+          mostra(inv, da);
+        })
+        .catch(function(){ mostra(inv, "qualcuno"); });
+    })
+    .catch(function(e){
+      dice('<h1>Qualcosa non ha risposto</h1><p class="sotto">' + (e.message||e) + '</p>');
+    });
+
+  function mostra(inv, da){
+    var quando = new Date(inv.momento).toLocaleDateString("it-IT",
+                   {day:"numeric", month:"long", year:"numeric"});
+    var chi = inv.chi || "tu";
+
+    dice(
+      '<h1>Sei dentro una tessitura</h1>'
+    + '<p class="sotto">' + esc(da) + ' ti ha messo nel proprio cammino.</p>'
+
+    + '<div class="filo"><span class="capo"></span><span class="tratto"></span>'
+    +   '<span class="capo vuoto"></span></div>'
+    + '<div class="nomi"><span>' + esc(da) + '</span><span>' + esc(chi) + '</span></div>'
+
+    + '<div class="orma"><div class="quando">' + quando + '</div><p id="testo"></p></div>'
+
+    + (inv.accettato_da
+        ? '<p class="msg">Questo filo \u00e8 gi\u00e0 stato confermato.</p>'
+        : '<a class="tasto" href="accesso.html?invito=' + encodeURIComponent(inv.codice)
+            /* ⭐ dopo il Nexus si torna QUI: il seguito dell'invito — l'orma,
+                  il team, il vicinato — sta sull'invito e non altrove.
+               ⚠️ Se un giorno serve mandarlo altrove, si cambia questa riga. */
+            + '&torna=' + encodeURIComponent('invito.html?invito=' + inv.codice) + '">'
+        +   'Conferma, e comincia la tua</a>'
+        + '<a class="tasto vuoto" href="soglia.html">Prima voglio capire cos\u2019\u00e8</a>')
+    );
+
+    var t = document.getElementById("testo");
+    if(t) t.textContent = inv.testo;
+  }
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
+    });
+  }
+})();
+</script>
+<!-- ══ stanza di prova · si accende solo a questo indirizzo ══ --><script>if(location.pathname.indexOf("communitas-aeterna-prova")>-1){var s=document.createElement("script");s.src="/communitas-aeterna-prova/fm-prova.js";document.body.appendChild(s);}</script>
+</body>
+</html>

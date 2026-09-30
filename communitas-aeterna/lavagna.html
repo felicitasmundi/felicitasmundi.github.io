@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>La lavagna — Comunità Eterna FelicitasMundi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --scala:1.4;
+    --navy:#0A0C1A; --oro:#C8A055; --oro-ch:#D4AF6A; --ivory:#F5F0E6;
+    --line:rgba(184,150,62,0.2); --rosso:#CC6644; --verde:#669944;
+    --t-eti:calc(0.8125rem * var(--scala));
+    --t-tas:calc(0.9375rem * var(--scala));
+    --t-cor:calc(1.0625rem * var(--scala));
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:#02040c;color:var(--ivory);font-family:'DM Sans',sans-serif;
+       -webkit-font-smoothing:antialiased;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;
+    background:radial-gradient(ellipse at 28% 22%,rgba(38,64,120,0.45),transparent 58%),
+               radial-gradient(ellipse at 76% 74%,rgba(60,44,110,0.35),transparent 60%),
+               radial-gradient(ellipse at 50% 42%,#0a1428 0%,#060c1c 46%,#02040c 100%)}
+  .foglio{max-width:66rem;margin:0 auto;padding:2.4rem 1.2rem 4rem}
+
+  .occhio{font-family:'Cinzel',serif;font-size:var(--t-eti);letter-spacing:0.22em;
+          text-transform:uppercase;color:var(--oro);margin-bottom:0.5rem}
+  h1{font-family:'Cinzel',serif;font-weight:500;font-size:calc(1.6rem*var(--scala));
+     margin-bottom:0.4rem;color:var(--ivory)}
+  .sotto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:var(--t-cor);
+         color:rgba(245,240,230,0.72);margin-bottom:1.8rem}
+  h2{font-family:'Cinzel',serif;font-weight:400;font-size:var(--t-cor);
+     letter-spacing:0.1em;color:var(--oro-ch);margin:2.4rem 0 0.9rem}
+
+  .box{border:1px solid var(--line);border-radius:0.5rem;padding:0.9rem 1.1rem;
+       font-size:var(--t-tas);line-height:1.55;margin-bottom:1.4rem;
+       background:rgba(10,12,26,0.55)}
+  .box.male{border-color:rgba(204,102,68,0.5)}
+  .box.bene{border-color:rgba(102,153,68,0.45)}
+  .box b{color:var(--oro-ch);font-weight:500}
+  .box a{color:var(--oro-ch)}
+  .box p + p{margin-top:0.5rem}
+
+  label.et{display:block;font-size:var(--t-eti);letter-spacing:0.16em;
+           text-transform:uppercase;color:var(--oro);margin-bottom:0.4rem}
+  select{width:100%;max-width:32rem;background:rgba(10,12,26,0.9);color:var(--ivory);
+         border:1px solid var(--line);border-radius:0.4rem;padding:0.55rem 0.7rem;
+         font-family:'DM Sans',sans-serif;font-size:var(--t-tas)}
+
+  .colonne{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;align-items:start}
+  @media(max-width:56rem){ .colonne{grid-template-columns:1fr} }
+
+  .colonna{border:1px solid var(--line);border-radius:0.5rem;
+           background:rgba(10,12,26,0.45);padding:0.8rem}
+  .colonna h3{font-family:'Cinzel',serif;font-weight:400;font-size:var(--t-eti);
+              letter-spacing:0.14em;text-transform:uppercase;color:var(--oro);
+              margin-bottom:0.7rem;display:flex;justify-content:space-between}
+  .colonna h3 i{font-style:normal;color:rgba(245,240,230,0.4)}
+
+  .cart{border:1px solid var(--line);border-left:2px solid rgba(184,150,62,0.45);
+        border-radius:0.35rem;padding:0.6rem 0.7rem;margin-bottom:0.6rem;
+        background:rgba(10,12,26,0.7)}
+  .cart.penna{border-left-color:var(--oro-ch)}
+  .cart b{display:block;font-weight:400;font-size:var(--t-tas);line-height:1.45;
+          color:var(--ivory);margin-bottom:0.35rem}
+  .cart .segni{font-size:var(--t-eti);color:rgba(245,240,230,0.5);
+               display:flex;gap:0.7rem;flex-wrap:wrap;align-items:baseline}
+  .cart .mano-penna{color:var(--oro-ch)}
+  .cart .rif{font-family:'DM Sans',sans-serif;letter-spacing:0.06em}
+
+  .vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;
+         font-size:var(--t-tas);color:rgba(245,240,230,0.4);padding:0.4rem 0}
+
+  table.reg{width:100%;border-collapse:collapse;font-size:var(--t-eti)}
+  table.reg th{text-align:left;font-weight:500;letter-spacing:0.12em;
+               text-transform:uppercase;color:var(--oro);
+               padding:0.4rem 0.6rem;border-bottom:1px solid var(--line)}
+  table.reg td{padding:0.45rem 0.6rem;border-bottom:1px solid rgba(184,150,62,0.1);
+               color:rgba(245,240,230,0.8)}
+  .avvolgi{overflow-x:auto}
+
+  .piede{margin-top:2.6rem;padding-top:1rem;border-top:1px solid var(--line);
+         font-family:'Cormorant Garamond',serif;font-style:italic;
+         font-size:var(--t-tas);color:rgba(245,240,230,0.45);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="foglio">
+
+  <div class="occhio">Strumento interno</div>
+  <h1>La lavagna</h1>
+  <p class="sotto">Le task per stadio, e la mano che le ha messe. Si guarda soltanto.</p>
+
+  <div class="box" id="stato"><p>Un momento…</p></div>
+
+  <div id="scelta" style="display:none;margin-bottom:1.6rem">
+    <label class="et" for="quale">Quale lavagna</label>
+    <select id="quale"></select>
+  </div>
+
+  <div class="colonne" id="colonne" style="display:none"></div>
+  <p class="vuoto" id="fuori" style="display:none"></p>
+
+  <div id="parte-registro" style="display:none">
+    <h2>Le ultime scritture del varco</h2>
+    <div class="box" id="reg-stato" style="display:none"></div>
+    <div class="avvolgi"><table class="reg" id="reg"></table></div>
+  </div>
+
+  <p class="piede">
+    Questa pagina non scrive niente: nessun bottone, nessun comando, nessuna
+    riga che cambia. Il segno ✍ comparirà sui cartellini soltanto quando il
+    varco sarà aperto e sarà la penna a scriverli — finché non accade, ogni
+    riga porta la mano di una persona, ed è la verità di oggi.
+  </p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var FM_URL    = "https://gfnveesogkfvkrdudpfg.supabase.co";
+  var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE);
+
+  var $ = function(i){ return document.getElementById(i); };
+
+  /* I tre stadi che si mostrano. Le parole sono quelle del database
+     — task_stadio_check — non quelle scritte a mano altrove.        */
+  var STADI = [
+    { k:"in_coda",        n:"In coda" },
+    { k:"in_avanzamento", n:"In avanzamento" },
+    { k:"sviluppato",     n:"Sviluppato" }
+  ];
+
+  function dice(html, tipo){
+    var s = $("stato");
+    s.className = "box" + (tipo ? " " + tipo : "");
+    s.innerHTML = html;
+  }
+
+  function quando(t){
+    if(!t) return "";
+    var d = new Date(t);
+    if(isNaN(d)) return "";
+    return d.toLocaleDateString("it-IT", {day:"2-digit", month:"short"})
+         + " " + d.toLocaleTimeString("it-IT", {hour:"2-digit", minute:"2-digit"});
+  }
+
+  /* La colonna del nome si chiama `nome` — confermato il 21 agosto.
+     Le colonne di `lavagne`, nell'ordine vero:
+     id · nome · persona_id · vicinato_id · squadra_id · ordine · creata_il */
+  function nomeLavagna(r){
+    return r.nome || "(lavagna senza nome)";
+  }
+
+  /* ══ ① aperta come si deve? ══════════════════════════════════════ */
+  if(location.protocol === "file:"){
+    dice('<p><b>Questa pagina è aperta dal disco, non dal sito.</b></p>'
+       + '<p>La sessione di Supabase vive nel deposito del navigatore ed è '
+       + 'legata all’indirizzo: aperta così, la pagina non vede nessun '
+       + 'accesso e direbbe «nessuna lavagna» anche se ce ne fossero dieci.</p>'
+       + '<p>Va aperta <b>dallo stesso indirizzo dello Spazio Vivo</b>.</p>', "male");
+    return;
+  }
+
+  /* ══ ② chi sei ═══════════════════════════════════════════════════ */
+  db.auth.getSession().then(function(s){
+    var sess = s && s.data && s.data.session;
+    if(!sess){
+      dice('<p><b>Non sei entrato.</b></p>'
+         + '<p>La lavagna mostra soltanto le task delle lavagne che ti '
+         + 'spettano, e senza un accesso non ne spetta nessuna. '
+         + '<a href="accesso.html">Si entra da qui</a>, poi si torna.</p>', "male");
+      return;
+    }
+    var io = sess.user;
+    return db.from("persone").select("nucleo").eq("id", io.id).maybeSingle()
+      .then(function(r){
+        var nucleo = !!(r && r.data && r.data.nucleo);
+        dice('<p><b>Sei entrato</b> come ' + (io.email || io.id) + '.</p>'
+           + '<p>Nel database <b>persone.nucleo</b> sulla tua riga vale '
+           + '<b>' + (r && r.data ? String(nucleo) : "non leggibile") + '</b>'
+           + (nucleo
+              ? ' — quindi il registro del varco, qui sotto, si vede.'
+              : ' — quindi il registro del varco resta vuoto: la sua regola '
+                + 'di riga lo apre solo al nucleo. Non è un guasto.')
+           + '</p>', nucleo ? "bene" : null);
+        return { io: io, nucleo: nucleo };
+      });
+  })
+  .then(function(chi){
+    if(!chi) return;
+    return leggiLavagne(chi);
+  })
+  .catch(function(e){
+    dice('<p><b>Il database non ha risposto.</b></p><p>' +
+         (e && e.message ? e.message : "Errore sconosciuto.") + '</p>', "male");
+  });
+
+  /* ══ ③ le lavagne che mi spettano ════════════════════════════════ */
+  function leggiLavagne(chi){
+    return db.from("lavagne").select("id,nome,ordine").then(function(r){
+      if(r.error) throw r.error;
+      var righe = r.data || [];
+      if(!righe.length){
+        $("fuori").style.display = "";
+        $("fuori").textContent =
+          "Sei entrato, ma non c’è nessuna lavagna che ti spetti. "
+        + "Non è un guasto: la regola di riga mostra solo le lavagne tue, "
+        + "del tuo vicinato o della tua squadra.";
+        return;
+      }
+      righe.sort(function(a,b){
+        var d = (a.ordine == null ? 1e9 : a.ordine) - (b.ordine == null ? 1e9 : b.ordine);
+        return d !== 0 ? d : nomeLavagna(a).localeCompare(nomeLavagna(b));
+      });
+
+      var sel = $("quale");
+      sel.innerHTML = "";
+      righe.forEach(function(l){
+        var o = document.createElement("option");
+        o.value = l.id;
+        o.textContent = nomeLavagna(l);
+        sel.appendChild(o);
+      });
+      /* si parte da quella del versamento, se c'è */
+      righe.forEach(function(l){
+        if(/sviluppo della piattaforma/i.test(nomeLavagna(l))) sel.value = l.id;
+      });
+      $("scelta").style.display = "";
+      sel.onchange = function(){ leggiTask(sel.value); };
+
+      if(chi.nucleo) leggiRegistro();
+      return leggiTask(sel.value);
+    });
+  }
+
+  /* ══ ④ le task di una lavagna ════════════════════════════════════ */
+  function leggiTask(lavagnaId){
+    var colonne = $("colonne");
+    colonne.style.display = "";
+    colonne.innerHTML = '<p class="vuoto">Un momento…</p>';
+
+    /* Solo le colonne di cui conosco con certezza il nome: le altre
+       non si indovinano.                                            */
+    return db.from("task")
+      .select("id,titolo,stadio,ordine,mano,riferimento,creata_il")
+      .eq("lavagna_id", lavagnaId)
+      .order("stadio", {ascending:true})
+      .order("ordine", {ascending:true, nullsFirst:false})
+      .then(function(r){
+        if(r.error) throw r.error;
+        var task = r.data || [];
+        var ids  = task.map(function(t){ return t.id; });
+
+        if(!ids.length) return disegna(task, {});
+        return db.from("task_note").select("id,task_id").in("task_id", ids)
+          .then(function(n){
+            var conto = {};
+            (n.data || []).forEach(function(x){
+              conto[x.task_id] = (conto[x.task_id] || 0) + 1;
+            });
+            return disegna(task, conto);
+          });
+      })
+      .catch(function(e){
+        colonne.innerHTML = "";
+        $("fuori").style.display = "";
+        $("fuori").textContent = "Le task non si sono lasciate leggere: "
+          + (e && e.message ? e.message : "errore sconosciuto.");
+      });
+  }
+
+  function disegna(task, conto){
+    var colonne = $("colonne");
+    colonne.innerHTML = "";
+    $("fuori").style.display = "none";
+
+    var altri = task.filter(function(t){
+      return !STADI.some(function(s){ return s.k === t.stadio; });
+    });
+
+    STADI.forEach(function(s){
+      var mie = task.filter(function(t){ return t.stadio === s.k; });
+      var col = document.createElement("div");
+      col.className = "colonna";
+
+      var h = document.createElement("h3");
+      h.innerHTML = "<span></span><i></i>";
+      h.querySelector("span").textContent = s.n;
+      h.querySelector("i").textContent = mie.length ? String(mie.length) : "";
+      col.appendChild(h);
+
+      if(!mie.length){
+        var v = document.createElement("p");
+        v.className = "vuoto";
+        v.textContent = "—";
+        col.appendChild(v);
+      }
+
+      mie.forEach(function(t){
+        var penna = (t.mano === "penna");
+        var c = document.createElement("div");
+        c.className = "cart" + (penna ? " penna" : "");
+
+        var b = document.createElement("b");
+        b.textContent = t.titolo || "(senza titolo)";
+        c.appendChild(b);
+
+        var segni = document.createElement("div");
+        segni.className = "segni";
+
+        var m = document.createElement("span");
+        m.className = penna ? "mano-penna" : "";
+        m.textContent = penna ? "✍ la penna" : "una persona";
+        segni.appendChild(m);
+
+        if(t.riferimento){
+          var rif = document.createElement("span");
+          rif.className = "rif";
+          rif.textContent = t.riferimento;
+          segni.appendChild(rif);
+        }
+        if(conto[t.id]){
+          var nn = document.createElement("span");
+          nn.textContent = conto[t.id] + (conto[t.id] === 1 ? " nota" : " note");
+          segni.appendChild(nn);
+        }
+        var q = document.createElement("span");
+        q.textContent = quando(t.creata_il);
+        segni.appendChild(q);
+
+        c.appendChild(segni);
+        col.appendChild(c);
+      });
+
+      colonne.appendChild(col);
+    });
+
+    if(altri.length){
+      $("fuori").style.display = "";
+      $("fuori").textContent = altri.length
+        + (altri.length === 1 ? " task è in un altro stadio" : " task sono in altri stadi")
+        + " e non compaiono qui: " + altri.map(function(t){ return t.stadio; })
+            .filter(function(v,i,a){ return a.indexOf(v) === i; }).join(", ") + ".";
+    }
+  }
+
+  /* ══ ⑤ il registro del varco ═════════════════════════════════════ */
+  function leggiRegistro(){
+    $("parte-registro").style.display = "";
+    /* ⛔ `prima` e `dopo` NON si chiedono: contengono righe intere,
+       talenti compresi. Qui serve sapere CHE una scrittura è avvenuta,
+       non cosa c'era dentro.                                          */
+    return db.from("varco_registro")
+      .select("quando,mano,chi,tabella,gesto,riga_id")
+      .order("quando", {ascending:false})
+      .limit(20)
+      .then(function(r){
+        var t = $("reg");
+        if(r.error){
+          $("reg-stato").style.display = "";
+          $("reg-stato").className = "box male";
+          $("reg-stato").textContent = "Il registro non si è lasciato leggere: " + r.error.message;
+          return;
+        }
+        var righe = r.data || [];
+        if(!righe.length){
+          $("reg-stato").style.display = "";
+          $("reg-stato").className = "box";
+          $("reg-stato").innerHTML =
+            "<p><b>Il registro è vuoto, ed è giusto così.</b></p>"
+          + "<p>Nessuna scrittura è ancora passata dal varco, perché il varco "
+          + "non c’è. Da quando ci sarà, ogni riga aperta o spostata dalla "
+          + "penna comparirà qui.</p>";
+          return;
+        }
+        t.innerHTML = "<tr><th>Quando</th><th>Mano</th><th>Ruolo</th>"
+                    + "<th>Tabella</th><th>Gesto</th></tr>";
+        righe.forEach(function(x){
+          var tr = document.createElement("tr");
+          [quando(x.quando), x.mano, x.chi, x.tabella, x.gesto].forEach(function(v){
+            var td = document.createElement("td");
+            td.textContent = v == null ? "" : String(v);
+            tr.appendChild(td);
+          });
+          t.appendChild(tr);
+        });
+      });
+  }
+
+})();
+</script>
+<!-- ══ stanza di prova · si accende solo a questo indirizzo ══ --><script>if(location.pathname.indexOf("communitas-aeterna-prova")>-1){var s=document.createElement("script");s.src="/communitas-aeterna-prova/fm-prova.js";document.body.appendChild(s);}</script>
+</body>
+</html>

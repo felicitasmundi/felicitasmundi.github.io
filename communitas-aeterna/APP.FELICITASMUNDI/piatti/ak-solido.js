@@ -46,6 +46,7 @@
       this.cv.width = this.W * d; this.cv.height = this.H * d; this.ctx.setTransform(d, 0, 0, d, 0, 0);
     }
     dis() {
+      if (this.getAttribute('tipo') === 'nexus') return this.nexus();
       const g = this.ctx, W = this.W, H = this.H, s = S[this.getAttribute('tipo') || 'cubo'] || S.cubo;
       const col = this.getAttribute('colore') || '#AA8844';
       const n = parseInt(col.slice(1), 16), R = n >> 16, G = (n >> 8) & 255, B = n & 255;
@@ -53,18 +54,27 @@
       this.t += .006;
       // ⭐ la posa isometrica: vista lungo la diagonale, il cubo coincide col reticolo di Metatron
       //    (i 6 vertici esterni + il centro). Da lì si solleva e oscilla appena, restando ancorato.
-      const oscilla = Math.sin(this.t) * .10, alza = (Math.sin(this.t * .5) + 1) / 2;   // 0..1: quanto è "nato"
-      const ay = Math.PI / 4 + oscilla, ax = Math.atan(1 / Math.sqrt(2)) + oscilla * .5;
+      // ⭐ 30 settembre, Gab: «il movimento diagonale di tutti i solidi» — dalla posa isometrica
+      //    ogni solido fa un giro completo attorno alla diagonale dello schermo (dal basso a
+      //    sinistra all'alto a destra), come il Nexus: un giro ogni 15,6 secondi (17:43, Gab: «10% meno veloci»).
+      const alza = 1, th = this.t0 === undefined ? (this.t0 = performance.now(), 0) : (performance.now() - this.t0) / 1000 * (Math.PI * 2 / 15.6);
+      const ct = Math.cos(th), st = Math.sin(th), k = Math.SQRT1_2;
+      const ay = Math.PI / 4, ax = Math.atan(1 / Math.sqrt(2));
       const rc = Math.min(W, H) / 2 * (115 / 128);
       // raggio del cubo di Metatron (2·d su 128 → 92/128 del cerchio interno): il cubo isometrico ci entra esatto
       const scala = rc * (92 / 115) / Math.sqrt(8 / 9);   // i 6 vertici esterni cadono sui 6 centri esterni del reticolo
       const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
-      const prof = .04 + alza * .16;   // piatto quando è nel disegno, profondo quando si solleva
+      const prof = .16;
       const P = s.v.map(([x, y, z]) => {
         let X = x * cy + z * sy, Z = -x * sy + z * cy, Y = y;
-        const Y2 = Y * cx - Z * sx, Z2 = Y * sx + Z * cx;
+        const Y1 = Y * cx - Z * sx, Z1 = Y * sx + Z * cx;
+        // Rodrigues attorno a (k, k, 0)
+        const kv = k * X + k * Y1;
+        const X2 = X * ct + (k * Z1) * st + k * kv * (1 - ct);
+        const Y2 = Y1 * ct + (-k * Z1) * st + k * kv * (1 - ct);
+        const Z2 = Z1 * ct + (k * Y1 - k * X) * st;
         const per = 1 / (1 + Z2 * prof);
-        return [W / 2 + X * scala * per, H / 2 - Y2 * scala * per, Z2];
+        return [W / 2 + X2 * scala * per, H / 2 - Y2 * scala * per, Z2];
       });
       g.clearRect(0, 0, W, H);
       g.lineCap = 'round'; g.lineJoin = 'round';
@@ -79,6 +89,62 @@
       });
       g.shadowBlur = 0;
       P.forEach(p => { const a = .5 + (p[2] + 1) / 2 * .45; g.fillStyle = rgba(a); g.beginPath(); g.arc(p[0], p[1], 1.8 + (p[2] + 1) * .7, 0, 6.2832); g.fill(); });
+    }
+
+    /* ⭐ 30 settembre, Gab: «possiamo creare il solido nexus in movimento».
+       Preso da metatron-frame.obj (il modello del Nexus): il cubo (grafite), i due tetraedri
+       intrecciati (vermiglio), l'ottaedro (azzurro), i nodi coi loro anelli — magenta sugli
+       otto vertici, azzurro sulle sei facce e al centro. Colori dal .mtl. Ruota intero, lento. */
+    nexus() {
+      const g = this.ctx, W = this.W, H = this.H;
+      this.t += .005;
+      const C = { cubo: [245,240,230], rosso: [199,53,36], blu: [36,116,199], mag: [167,55,139] };
+      const col = (c, a) => `rgba(${C[c][0]},${C[c][1]},${C[c][2]},${a})`;
+      const ay = this.t, ax = .42 + Math.sin(this.t * .6) * .18, az = Math.sin(this.t * .4) * .08;
+      const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax), cz = Math.cos(az), sz = Math.sin(az);
+      const sc = Math.min(W, H) * .78;
+      const pr = ([x, y, z]) => {
+        let X = x * cy + z * sy, Z = -x * sy + z * cy, Y = y;
+        let Y2 = Y * cx - Z * sx, Z2 = Y * sx + Z * cx;
+        let X3 = X * cz - Y2 * sz, Y3 = X * sz + Y2 * cz;
+        const per = 1 / (1 + Z2 * .9);
+        return [W / 2 + X3 * sc * per, H / 2 - Y3 * sc * per, Z2];
+      };
+      const h = .3, V = [];
+      for (const x of [-h, h]) for (const y of [-h, h]) for (const z of [-h, h]) V.push([x, y, z]);
+      const lin = [], nod = [];
+      // il cubo: spigoli fra vertici che differiscono in una coordinata sola
+      for (let i = 0; i < 8; i++) for (let j = i + 1; j < 8; j++) {
+        const d = [0,1,2].filter(k => V[i][k] !== V[j][k]).length;
+        if (d === 1) lin.push([V[i], V[j], 'cubo', 1.3]);
+        if (d === 2) lin.push([V[i], V[j], 'rosso', 1.6]);          // le diagonali delle facce: i due tetraedri
+      }
+      const F = [[h,0,0],[-h,0,0],[0,h,0],[0,-h,0],[0,0,h],[0,0,-h]];
+      for (let i = 0; i < 6; i++) for (let j = i + 1; j < 6; j++)
+        if (F[i].some((v, k) => v !== 0 && F[j][k] === -v) === false) lin.push([F[i], F[j], 'blu', 1.2]);   // l'ottaedro
+      V.forEach(v => nod.push([v, 'mag', v.map(x => Math.sign(x) / Math.sqrt(3)), .075, 5.5]));
+      F.forEach(f => nod.push([f, 'blu', f.map(x => Math.sign(x)), .075, 4.5]));
+      nod.push([[0,0,0], 'blu', [0,1,0], .085, 5]);
+      const cose = [];
+      lin.forEach(([a, b, c, w]) => { const A = pr(a), B = pr(b); cose.push({ z: (A[2] + B[2]) / 2, f: () => {
+        g.strokeStyle = col(c, c === 'cubo' ? .55 : .85); g.lineWidth = w; g.shadowColor = col(c, .6); g.shadowBlur = 5;
+        g.beginPath(); g.moveTo(A[0], A[1]); g.lineTo(B[0], B[1]); g.stroke(); } }); });
+      nod.forEach(([p, c, n, r, pt]) => {
+        // l'anello: un cerchio nel piano perpendicolare a n
+        const u = Math.abs(n[1]) < .9 ? [0,1,0] : [1,0,0];
+        let a = [n[1]*u[2]-n[2]*u[1], n[2]*u[0]-n[0]*u[2], n[0]*u[1]-n[1]*u[0]]; const la = Math.hypot(...a); a = a.map(x => x / la);
+        const b = [n[1]*a[2]-n[2]*a[1], n[2]*a[0]-n[0]*a[2], n[0]*a[1]-n[1]*a[0]];
+        const ring = []; for (let k = 0; k <= 40; k++) { const t = k / 40 * 6.2832;
+          ring.push(pr([0,1,2].map(i => p[i] + r * (Math.cos(t) * a[i] + Math.sin(t) * b[i])))); }
+        const P0 = pr(p);
+        cose.push({ z: P0[2] + .01, f: () => {
+          g.shadowColor = col(c, .7); g.shadowBlur = 8;
+          g.strokeStyle = col(c, .9); g.lineWidth = 1.4; g.beginPath(); ring.forEach((q, k) => k ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); g.stroke();
+          g.fillStyle = col(c, .95); g.beginPath(); g.arc(P0[0], P0[1], pt * (1 + P0[2] * .3), 0, 6.2832); g.fill(); } });
+      });
+      g.clearRect(0, 0, W, H); g.lineCap = 'round'; g.lineJoin = 'round';
+      cose.sort((u, v) => u.z - v.z).forEach(o => { g.globalAlpha = .55 + (o.z + .5) * .45; o.f(); });
+      g.globalAlpha = 1; g.shadowBlur = 0;
     }
   }
   if (!customElements.get('ak-solido')) customElements.define('ak-solido', AkSolido);

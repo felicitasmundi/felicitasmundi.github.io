@@ -43,7 +43,8 @@ fmMgVeste.textContent = `  /* ⭐ TOCCATO NEL GUSCIO ㊶ — LA VESTE DEL MEGAFO
      coi puntini. I tocchi restano tutti a 2.75rem. */
   .mg-sotto{display:flex;align-items:center;gap:0.3rem;margin-top:0.35rem;
     height:2.75rem;min-width:0}
-  .mg-vuoto{display:none}
+  .mg-vuoto{display:block;flex:1 1 auto;min-width:0} /* ⭐ 29 settembre, Gab: il tasto d'invio a destra */
+  #mg .dentro{max-width:none} /* ⭐ 29 settembre, Gab: il megafono prende tutta l'area */
   .mg-tipo{--c:var(--oro);flex:1 1 auto;min-width:2.75rem;max-width:9rem;
     overflow:hidden;text-overflow:ellipsis;height:2.75rem;
     font-family:'DM Sans',sans-serif;font-size:var(--t-eti);
@@ -230,7 +231,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     {n:"obiettivo",  d:"obiettivo",  c:"var(--fuoco)", f:"rombo"},
     {n:"contatto",   d:"contatto",   c:"var(--oro)",   f:"cerchio"},
     {n:"spesa",      d:"spesa",      c:"var(--acqua)", f:"quadro"},
-    {n:"racconto",   d:"racconto",   c:"var(--aria)",  f:"tondo"}
+    {n:"articolo",   d:"articolo",   c:"var(--aria)",  f:"tondo"}
   ];
   var MG_NEX = '<svg class="nx" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg>';
   var mgStato = {tipo:"karma yoga", quando:null, dove:null, persone:[], file:[]};

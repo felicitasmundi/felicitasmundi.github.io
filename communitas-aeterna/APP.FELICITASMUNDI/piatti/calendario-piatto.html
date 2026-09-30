@@ -97,17 +97,29 @@ color:rgba(245,240,230,.3);padding:.6rem 0;text-align:center}
 button.tel{font:inherit;color:inherit;width:100%;text-align:left;cursor:pointer;box-sizing:border-box}
 .dt{text-decoration:none;color:inherit}
 .mesi button[aria-pressed="true"]{border-color:rgba(212,175,106,.9);background:rgba(212,175,106,.18);color:var(--ivory,#F5F0E6)}
+.indietro{background:none;border:1px solid rgba(212,175,106,.35);border-radius:999px;color:var(--oro);font:inherit;font-size:.78rem;padding:.3rem .8rem;cursor:pointer;margin-bottom:.8rem}
+.indietro:hover{border-color:var(--oro)}
+.schede{display:flex;gap:.35rem;overflow-x:auto;margin-bottom:.6rem;padding-bottom:.2rem}
+.schede button{flex:none;font-family:'DM Sans',sans-serif;font-size:.8rem;padding:.35rem .85rem;border-radius:999px;cursor:pointer;background:transparent;white-space:nowrap;border:1px solid rgba(212,175,106,.3);color:rgba(245,240,230,.7)}
+.schede button[aria-pressed="true"]{background:var(--oro-ch);border-color:var(--oro-ch);color:var(--navy)}
+.zona{font-size:.78rem;color:rgba(245,240,230,.5);margin:0 0 .8rem}
+.zona b{font-weight:500;color:var(--oro-ch)}
+.gru{display:flex;flex-direction:column;gap:.1rem;margin-bottom:.6rem}
+.gru .capo{display:flex;align-items:center;gap:.6rem;margin:.5rem 0 .35rem}
+.gru .capo b{font-family:'Cinzel',serif;font-weight:400;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--oro-ch)}
+.gru .capo i{flex:1;height:1px;background:var(--line)}
+.gru .capo span{font-size:.75rem;color:rgba(245,240,230,.45)}
+.gru .vuoto{text-align:left;padding:.2rem 0}
+.altri{align-self:flex-start;background:none;border:0;color:var(--oro-ch);font:inherit;font-size:.8rem;cursor:pointer;padding:.2rem 0}
+.dt .qd span{text-transform:lowercase}
+/* ⭐ 29 settembre, Gab: dal computer la pagina prende tutta l'area */
+.f{max-width:none}
 </style></head><body><div class="f" data-screen-label="Il calendario">
 
-<div class="oc">le orme che hanno un giorno</div>
+<button type="button" class="indietro" data-g="indietro">&lsaquo; Vicinati</button>
 <h1>Il calendario</h1>
-<div class="sot">[ la riga sotto il titolo ]</div>
+<div class="sot">FelicitasMundi · Comunità Eterna</div>
 
-<div class="tempo">
-  <div class="q"><b data-c="giorno.data">[ giorno ] [ mese ]</b><span>il giorno</span></div>
-  <div class="q"><b>&#127761;</b><span data-c="giorno.luna">[ la luna ]</span></div>
-  <div class="q"><b data-c="giorno.santo">[ il santo ]</b><span>il santo</span></div>
-</div>
 
 <!-- porta le date nel telefono: acceso nell'app, spento da computer -->
 <button type="button" class="tel" data-g="porta-nel-telefono" data-stato="in-app">
@@ -120,6 +132,19 @@ button.tel{font:inherit;color:inherit;width:100%;text-align:left;cursor:pointer;
   <span class="tx"><b>Porta le date nel telefono</b><i>[ da computer non si pu&ograve;: serve l&rsquo;app ]</i></span>
 </div>
 
+<!-- ⭐ 29 settembre, Gab: prima i tuoi appuntamenti, poi le voci; ogni voce come il karma yoga: Antahkarana · più vicino · più lontano -->
+<div class="schede" role="group" aria-label="cosa vedere">
+  <button type="button" data-g="scheda" data-t="tuoi" aria-pressed="true">i tuoi</button>
+  <button type="button" data-g="scheda" data-t="festa" aria-pressed="false">feste</button>
+  <button type="button" data-g="scheda" data-t="trattamento" aria-pressed="false">trattamenti</button>
+  <button type="button" data-g="scheda" data-t="corso" aria-pressed="false">corsi</button>
+  <button type="button" data-g="scheda" data-t="incontro_luna" aria-pressed="false">incontri di luna</button>
+  <button type="button" data-g="scheda" data-t="riunione" aria-pressed="false">riunioni</button>
+  <button type="button" data-g="scheda" data-t="ricorrenze" aria-pressed="false">ricorrenze</button>
+</div>
+<p class="zona" data-stato="ha-zona" hidden>vicino a <b data-c="zona.nomi">[ i tuoi luoghi ]</b> &middot; 20 km</p>
+
+<div data-stato="vista-tuoi">
 <div class="mesi">
   <button type="button" data-stampo="mese" data-g="scegli-mese" aria-pressed="true" data-c="mese.nome">[ questo mese ]</button>
 </div>
@@ -139,6 +164,29 @@ button.tel{font:inherit;color:inherit;width:100%;text-align:left;cursor:pointer;
   </a>
 </div>
 
-<div class="vuoto" data-stato="senza-date" hidden>[ un mese senza date non mostra righe ]</div>
+<div class="vuoto" data-stato="senza-date" hidden>Nessun appuntamento.</div>
+</div>
+
+<!-- una voce: tre gruppi, tre righe l'uno -->
+<div data-stato="vista-gruppi" hidden>
+  <div class="gru"><div class="capo"><b>Anta&#7717;kara&#7751;a</b><i></i><span data-c="conto.a">0</span></div>
+    <a class="dt" data-stampo="ev-a" data-g="apri-ev" href="#" style="--c:var(--terra)"><span class="qd"><b data-c="ev.giorno">[ g ]</b><span data-c="ev.mese">[ mese ]</span></span><span class="cr"><b data-c="ev.titolo">[ il titolo ]</b><span class="me" data-c="ev.dove">[ ora · dove ]</span></span></a>
+    <p class="vuoto" data-stato="vuoto-a" hidden>&mdash;</p>
+    <button type="button" class="altri" data-g="altri-a" data-stato="altri-a" hidden></button></div>
+  <div class="gru"><div class="capo"><b>pi&ugrave; vicino</b><i></i><span data-c="conto.v">0</span></div>
+    <a class="dt" data-stampo="ev-v" data-g="apri-ev" href="#" style="--c:var(--terra)"><span class="qd"><b data-c="ev.giorno">[ g ]</b><span data-c="ev.mese">[ mese ]</span></span><span class="cr"><b data-c="ev.titolo">[ il titolo ]</b><span class="me" data-c="ev.dove">[ ora · dove ]</span></span></a>
+    <p class="vuoto" data-stato="vuoto-v" hidden>&mdash;</p>
+    <button type="button" class="altri" data-g="altri-v" data-stato="altri-v" hidden></button></div>
+  <div class="gru"><div class="capo"><b>pi&ugrave; lontano</b><i></i><span data-c="conto.l">0</span></div>
+    <a class="dt" data-stampo="ev-l" data-g="apri-ev" href="#" style="--c:var(--terra)"><span class="qd"><b data-c="ev.giorno">[ g ]</b><span data-c="ev.mese">[ mese ]</span></span><span class="cr"><b data-c="ev.titolo">[ il titolo ]</b><span class="me" data-c="ev.dove">[ ora · dove ]</span></span></a>
+    <p class="vuoto" data-stato="vuoto-l" hidden>&mdash;</p>
+    <button type="button" class="altri" data-g="altri-l" data-stato="altri-l" hidden></button></div>
+</div>
+
+<!-- le ricorrenze: le feste della comunità e quelle della tradizione indiana -->
+<div data-stato="vista-ric" hidden>
+  <a class="dt" data-stampo="ric" href="#" style="--c:var(--oro)"><span class="qd"><b data-c="ric.giorno">[ g ]</b><span data-c="ric.mese">[ mese ]</span></span><span class="cr"><span class="et" data-c="ric.fonte">[ di chi ]</span><b data-c="ric.nome">[ la ricorrenza ]</b></span></a>
+  <p class="vuoto" data-stato="ric-vuoto" hidden>&mdash;</p>
+</div>
 
 </div></body></html>
