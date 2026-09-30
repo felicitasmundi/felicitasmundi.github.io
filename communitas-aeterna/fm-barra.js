@@ -281,6 +281,16 @@ function brRiempi(){
     if(v === qui) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     a.onclick = function(e){ if(e) e.preventDefault(); brVai(rotta); };
   });
+  /* ⭐ 30 settembre: «aggiorna» ricarica l'app fresca, restando nella stessa stanza */
+  var agg = R.querySelector('[data-g="aggiorna"]');
+  if(agg) agg.onclick = function(e){
+    if(e) e.preventDefault();
+    try{
+      var u = new URL(window.top.location.href);
+      u.searchParams.set("avvio", Date.now());
+      window.top.location.replace(u.toString());
+    }catch(x){ location.reload(); }
+  };
   var tre = R.querySelector('[data-g="chiudi-barra"]');
   if(tre) tre.onclick = function(e){ if(e) e.preventDefault(); chiudiBarra(); };
   var tempio = R.querySelector(".br-tempio");
