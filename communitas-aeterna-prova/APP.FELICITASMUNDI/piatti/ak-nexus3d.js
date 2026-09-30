@@ -18,7 +18,7 @@ class AkNexus3d extends HTMLElement {
     const sh = this.attachShadow({ mode: 'open' });
     sh.innerHTML = '<style>:host{display:block;position:absolute;inset:0;pointer-events:none}canvas{width:100%;height:100%;display:block}</style>';
     const r = this.r = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    r.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    r.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));   // ⭐ leggero sul telefono
     r.outputColorSpace = THREE.SRGBColorSpace;
     r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.15;
     sh.appendChild(r.domElement);
@@ -47,14 +47,21 @@ class AkNexus3d extends HTMLElement {
     });
     this.ro = new ResizeObserver(() => this.mis()); this.ro.observe(this); this.mis();
     const t0 = performance.now();
+    /* ⭐ 30 settembre 20:39, Gab: «dà lo stesso problema del doppio tocco in anthakarana» — il Nexus
+       non deve occupare il telefono mentre si scorre: 30 immagini al secondo invece di 60, e si ferma
+       quando non si vede. */
+    let visibile = true, ultimo = 0;
+    if (window.IntersectionObserver) new IntersectionObserver(v => { visibile = v[0].isIntersecting; }).observe(this);
     const loop = now => {
       if (!this.isConnected) return;
+      requestAnimationFrame(loop);
+      if (!visibile || document.hidden || now - ultimo < 33) return;
+      ultimo = now;
       const t = (now - t0) / 1000;
       // ⭐ 30 settembre, Gab: «un giro completo in diagonale» — ruota intero attorno alla diagonale
       //    dello schermo (dal basso a sinistra all'alto a destra): un giro ogni 15,6 secondi (17:43, Gab: «10% meno veloci»).
       if (!this.fermo) this.g.quaternion.setFromAxisAngle(ASSE, t * (Math.PI * 2 / 15.6)).multiply(BASE);
       r.render(sc, cam);
-      requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
   }
