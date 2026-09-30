@@ -9,6 +9,8 @@ import { GLTFLoader } from './tre/loaders/GLTFLoader.js';
 import { RoomEnvironment } from './tre/environments/RoomEnvironment.js';
 
 const QUI = new URL('.', import.meta.url);
+const ASSE = new THREE.Vector3(1, 1, 0).normalize();
+const BASE = new THREE.Quaternion().setFromEuler(new THREE.Euler(.5, .6, 0));
 
 class AkNexus3d extends HTMLElement {
   connectedCallback() {
@@ -42,14 +44,15 @@ class AkNexus3d extends HTMLElement {
         else { mt.emissive = mt.color.clone(); mt.emissiveIntensity = .18; }
       });
       this.g.add(m);
-      this.g.rotation.set(.5, .6, 0);
     });
     this.ro = new ResizeObserver(() => this.mis()); this.ro.observe(this); this.mis();
     const t0 = performance.now();
     const loop = now => {
       if (!this.isConnected) return;
       const t = (now - t0) / 1000;
-      if (!this.fermo) { this.g.rotation.y = .6 + t * .35; this.g.rotation.x = .5 + Math.sin(t * .4) * .18; }
+      // ⭐ 30 settembre, Gab: «un giro completo in diagonale» — ruota intero attorno alla diagonale
+      //    dello schermo (dal basso a sinistra all'alto a destra): un giro ogni 14 secondi.
+      if (!this.fermo) this.g.quaternion.setFromAxisAngle(ASSE, t * (Math.PI * 2 / 14)).multiply(BASE);
       r.render(sc, cam);
       requestAnimationFrame(loop);
     };
