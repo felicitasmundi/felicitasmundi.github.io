@@ -1107,7 +1107,25 @@ window.SpazioVivo.scriviOrma = function(opz){
   var tt = MG_TIPI.filter(function(x){ return x.d === opz.tipo; })[0];
   if(tt) mgStato.tipo = tt.n;
   if(typeof mgAggiorna === "function") mgAggiorna();
-  var cp = document.getElementById("campo"); if(cp){ cp.focus(); }
+  /* ⭐ 1 ottobre, Gab: «schiacci chiedo una mano e non succede nulla» — il Megafono si fa vedere:
+     si porta in vista, si accende per un momento, e il campo dice cosa scriverci */
+  var cp = document.getElementById("campo"), box = document.querySelector("#mg .mg-box");
+  if(!document.getElementById("mg-accendi-st")){
+    var st = document.createElement("style"); st.id = "mg-accendi-st";
+    st.textContent = "@keyframes mgAcc{0%,100%{box-shadow:0 0 0 0 rgba(212,175,106,0)}30%{box-shadow:0 0 0 .35rem rgba(212,175,106,.55)}}" +
+      "#mg .mg-box.accesa{animation:mgAcc 1.6s ease 2;border-radius:1.2rem}";
+    document.head.appendChild(st);
+  }
+  if(box){ box.classList.remove("accesa"); void box.offsetWidth; box.classList.add("accesa"); setTimeout(function(){ box.classList.remove("accesa"); }, 3400); }
+  var SEGNO = { karma_yoga: "( la richiesta: di cosa c'è bisogno, dove, entro quando )", festa: "( l'incontro: cosa, dove, quando )", articolo: "( l'articolo )" };
+  if(cp){
+    if(!cp.dataset.segnoBase) cp.dataset.segnoBase = cp.getAttribute("placeholder") || "";
+    if(SEGNO[opz.tipo]) cp.setAttribute("placeholder", SEGNO[opz.tipo]);
+    var rimetti = function(){ if(!cp.value.trim()) cp.setAttribute("placeholder", cp.dataset.segnoBase); cp.removeEventListener("blur", rimetti); };
+    cp.addEventListener("blur", rimetti);
+    try { (box || cp).scrollIntoView({ block: "end", behavior: "smooth" }); } catch(e){}
+    cp.focus();
+  }
 };
 /* il link dell'incontro appena proposto, pronto da mandare */
 function mgLinkEvento(id, testo){

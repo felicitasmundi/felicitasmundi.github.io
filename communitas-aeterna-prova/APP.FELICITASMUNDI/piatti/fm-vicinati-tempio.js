@@ -14,6 +14,8 @@
 (function () {
   "use strict";
   var RAGGIO = 20;   /* km */
+  /* regione (codice ISO) → civiltà. Da allargare quando si definiscono le aree/civiltà. */
+  var CIVILTA = { "IT-88": { nome: "Civiltà Sarda", cerca: /sard/i } };
   var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
   var GIORNI = ["domenica","lunedì","martedì","mercoledì","giovedì","venerdì","sabato"];
   var W = window.parent !== window ? window.parent : window;
@@ -44,7 +46,7 @@
 
   /* ── leggere ───────────────────────────────────────────────────── */
   async function leggi() {
-    var d = { io: null, centro: null, comune: null, karma: [], presi: [], mie: [], villaggi: [], eventi: [], novita: [], dentro: {}, coord: {} };
+    var d = { io: null, centro: null, comune: null, karma: [], presi: [], mie: [], villaggi: [], luoghi: [], eventi: [], novita: [], dentro: {}, coord: {} };
     var b = await db(); if (!b) return d;
     try {
       var u = await b.auth.getUser(); d.io = u && u.data && u.data.user && u.data.user.id;
@@ -52,7 +54,7 @@
         var p = await b.from("persone").select("comune_cod").eq("id", d.io).maybeSingle();
         var cc = p && p.data && p.data.comune_cod;
         if (cc) {
-          var t = await b.from("territori").select("codice,nome,lat,lon").eq("codice", cc).limit(1);
+          var t = await b.from("territori").select("codice,nome,lat,lon,regione_cod").eq("codice", cc).limit(1);
           if (t.data && t.data[0]) { d.comune = t.data[0]; d.centro = { lat: t.data[0].lat, lon: t.data[0].lon }; }
         }
       }
@@ -61,6 +63,9 @@
       d.karma = k.data || [];
       var v = await b.from("orme").select(COL).eq("tipo", "micelio").is("dorme_dal", null).limit(20);
       d.villaggi = v.data || [];
+      /* i luoghi dentro i villaggi */
+      var vid = d.villaggi.map(function (x) { return x.id; });
+      if (vid.length) { var lu = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "luogo").in("orma_madre_id", vid).is("dorme_dal", null).limit(100); d.luoghi = lu.data || []; }
       var e = await b.from("orme").select(COL).eq("tipo", "festa").eq("visibilita", "pubblico").is("dorme_dal", null).limit(200);
       d.eventi = e.data || [];
       var mese = new Date(Date.now() - 45 * 864e5).toISOString();
@@ -117,34 +122,48 @@
     if (ds) ds.hidden = !!d.comune || !d.io;
 
     /* 1 · Karma yoga */
-    var presiId = {}, richieste = [], presi = [], mie = [];
+    var presiId = {}, richieste = [], lontane = [], presi = [], mie = [];
     d.karma.forEach(function (o) {
       var den = d.dentro[o.id] || [];
       var mio = den.some(function (r) { return r.persona_id === d.io; });
       if (o.persona_id === d.io) mie.push(o);
       else if (mio) presi.push(o);
-      else if (o.stadio !== "sviluppato" && vicino(d, o)) richieste.push(o);
+      else if (o.stadio !== "sviluppato") (vicino(d, o) ? richieste : lontane).push(o);
     });
     var rk = function (o) {
       var den = (d.dentro[o.id] || []).length, serve = o.quanti_servono;
       var s = [o.luogo, o.entro_il ? "entro " + o.entro_il.split("-").reverse().slice(0, 2).join("/") : "", serve ? den + " su " + serve : (den ? den + " dentro" : "")].filter(Boolean).join(" · ");
       return riga(o, s);
     };
-    var hK = fascia("richieste vicino a te", richieste.map(rk).join(""), "nessuna richiesta aperta qui vicino") +
+    /* ⭐ 1 ottobre, Gab — le sue parole: */
+    var hK = '<p class="intro">il karma yoga è l’azione disinteressata, messa a disposizione per la comunità, attività che ripulisce dalle azioni del passato, ponendoti in un senso di servizio</p>' +
+             fascia("richieste vicino a te", richieste.map(rk).join(""), "nessuna richiesta aperta qui vicino") +
+             fascia("richieste lontano", lontane.map(rk).join(""), "") +
              fascia("quello che hai preso", presi.map(rk).join(""), "") +
              fascia("le tue richieste", mie.map(rk).join(""), "") +
              '<div class="gesti">' + tasto("chiedo una mano", 'data-scrivi="karma_yoga"') + '</div>';
-    /* 2 · Villaggio Felicitas */
-    var hV = '<p class="intro">L’area attiva in un territorio ampio, legata a una civiltà e alla sua radice linguistica. Dentro il villaggio si propongono i vicinati.</p>';
-    if (d.villaggi.length) {
-      d.villaggi.forEach(function (v) {
-        var den = d.dentro[v.id] || [];
-        var coord = den.filter(function (r) { return r.ruolo === "coordinatore"; }).map(function (r) { return r.nome; }).filter(Boolean);
-        var sotto = [den.length === 1 ? "1 persona" : den.length + " persone", coord.length ? "coordina " + coord.join(", ") : ""].filter(Boolean).join(" · ");
-        hV += riga(v, sotto);
-      });
-    } else hV += '<div class="vuoto">il primo villaggio si apre con la civiltà sarda</div>';
-    hV += '<div class="gesti">' + tasto("proponi un vicinato", "", true) + '</div>';
+    /* 2 · Villaggio Felicitas
+       ⭐ 1 ottobre, Gab: «villaggio felicitas acquisisce la scritta - Civiltà Sarda - nel momento in cui dici di dove sei …
+          nell'elenco ci sarà chi coordina, i partecipanti, i luoghi, e la possibilità di attivare un vicinato».
+       ⛔ La regione → civiltà per ora vale solo per la Sardegna: le aree/civiltà si definiscono dopo.
+          Il villaggio (l'orma micelio) si riconosce dal nome finché non è legato alla civiltà nel database. */
+    var civ = d.comune && CIVILTA[d.comune.regione_cod] || null;
+    var vil = civ ? d.villaggi.filter(function (v) { return civ.cerca.test(titolo(v)); })[0] || null : null;
+    var hV = "";
+    if (civ) {
+      var den = vil ? (d.dentro[vil.id] || []) : [];
+      var nome = function (r) { return '<span class="pers">' + esc(r.nome || "( )") + '</span>'; };
+      var coordV = den.filter(function (r) { return r.ruolo === "coordinatore"; });
+      var partV = den.filter(function (r) { return r.ruolo !== "coordinatore"; });
+      var luV = vil ? d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id; }) : [];
+      hV += (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
+            fascia("chi coordina", coordV.map(nome).join(" "), "( )") +
+            fascia("i partecipanti", partV.map(nome).join(" "), "( )") +
+            fascia("i luoghi", luV.map(function (l) { return riga(l, l.luogo || ""); }).join(""), "( )");
+    } else if (d.villaggi.length) {
+      d.villaggi.forEach(function (v) { var n = (d.dentro[v.id] || []).length; hV += riga(v, n === 1 ? "1 persona" : n + " persone"); });
+    } else hV += '<div class="vuoto">( )</div>';
+    hV += '<div class="gesti">' + tasto("attiva un vicinato", "", true) + '</div>';
 
     /* 3 · Oggi / calendario */
     var oggi = new Date(); oggi.setHours(0, 0, 0, 0);
@@ -173,7 +192,7 @@
 
     D.getElementById("porte").innerHTML =
       porta("◇", "Karma yoga", richieste.length ? richieste.length + (richieste.length === 1 ? " richiesta" : " richieste") : "", hK) +
-      porta("◎", "Villaggio Felicitas", d.villaggi.length ? (d.villaggi.length === 1 ? "1 villaggio" : d.villaggi.length + " villaggi") : "", hV) +
+      porta("◎", "Villaggio Felicitas" + (civ ? " – " + civ.nome : ""), civ ? "" : (d.villaggi.length ? (d.villaggi.length === 1 ? "1 villaggio" : d.villaggi.length + " villaggi") : ""), hV) +
       porta("☾", "Oggi / calendario", futuri.length ? futuri.length + " in arrivo" : "", hC) +
       porta("✦", "Novità", nv.length ? String(nv.length) : "", hN);
 
