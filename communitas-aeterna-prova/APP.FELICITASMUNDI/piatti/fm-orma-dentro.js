@@ -139,7 +139,7 @@
 
       /* le figlie, in ordine di tempo, e chi ha preso ognuna */
       var f = await db.from("orme")
-        .select("id,titolo,contenuto,elemento,stadio,entro_il,luogo,destinazione")
+        .select("id,titolo,contenuto,elemento,stadio,entro_il,luogo,destinazione,tipo,categoria,inizio_il,accaduto_il")
         .eq("orma_madre_id", id).order("momento");
       d.figlie = f.error ? [] : (f.data || []);
       if (d.figlie.length) {
@@ -165,6 +165,8 @@
         .select("id,persona_id,nome,testo,momento,argomento")
         .eq("orma_id", id).order("momento").limit(80);
       d.chat = c.error ? [] : (c.data || []);
+
+      try { var mt = await db.rpc("fm_miei_tipi"); d.aperti = (!mt.error && mt.data) || []; } catch (e) { d.aperti = []; }
 
       /* chi può pubblicare vede la vetrina */
       try {
@@ -270,7 +272,12 @@
 
     /* le figlie */
     P.stato(R, "senza-figlie", d.figlie.length === 0);
-    P.stampa(R, "figlia", d.figlie, function (c, x) {
+    /* ⭐ 1 ottobre — obiettivi, eventi, riunioni: la parte pratica, raggruppata */
+    var GRUPPO = function (x) { return x.categoria === "riunione" ? "riunioni" : x.tipo === "festa" ? "eventi" : x.tipo === "obiettivo" ? "obiettivi" : "altro"; };
+    var ORD = { obiettivi: 0, eventi: 1, riunioni: 2, altro: 3 };
+    d.figlie.sort(function (a, b) { return ORD[GRUPPO(a)] - ORD[GRUPPO(b)]; });
+    var copieF = P.stampa(R, "figlia", d.figlie, function (c, x) {
+      c.style.cursor = "pointer"; c.onclick = function () { apri(x.id); };
       P.riempi(c, { figlia: { titolo: titolo(x), contenuto: x.contenuto || "",
         elemento: x.elemento, stadio: stadio(x.stadio), entro_il: giornoMese(x.entro_il),
         luogo: x.luogo || "", destinazione: x.destinazione || "" } });
@@ -283,6 +290,28 @@
         a.onclick = function (e) { e.preventDefault(); apri(x.id); };
       });
     });
+
+    (function () {
+      var visto = {};
+      (copieF || []).forEach(function (c, i) {
+        var g = GRUPPO(d.figlie[i]); if (visto[g]) return; visto[g] = 1;
+        var h = c.ownerDocument.createElement("div"); h.className = "fascia-f"; h.setAttribute("data-fm-copia", "figlia");
+        h.textContent = g; c.parentNode.insertBefore(h, c);
+      });
+      /* l'inizio del racconto, nella porta chiusa */
+      var ri = R.querySelector("#racconto-inizio");
+      if (ri) ri.textContent = String(o.contenuto || "").trim().split("\n")[0].slice(0, 60);
+      var pr = R.querySelector("#p-racconto"); if (pr) pr.hidden = !String(o.contenuto || "").trim();
+      /* il link per entrare: un evento si apre dalla sua pagina pubblica, il resto dall'orma */
+      var base = location.origin + location.pathname;
+      var link = base + (o.tipo === "festa" ? "?p=evento&e=" : "?p=orma&o=") + id;
+      var cp = R.querySelector('[data-g="copia-invito"]');
+      if (cp) cp.onclick = function () { try { navigator.clipboard.writeText(link); cp.textContent = "copiato"; } catch (e) {} };
+      var wa = R.querySelector('[data-g="wa-invito"]');
+      if (wa) wa.setAttribute("href", "https://wa.me/?text=" + encodeURIComponent((titolo(o) || "") + " \u2014 " + link));
+      /* evento e riunione solo a chi ha lo strumento aperto */
+      P.stato(R, "apre-evento", (d.aperti || []).indexOf("festa") >= 0);
+    })();
 
     /* la conversazione: l'argomento si vede solo quando cambia */
     P.stato(R, "senza-chat", d.chat.length === 0);
@@ -403,6 +432,12 @@
       };
       i.click();
     });
+    function nuova(opz) {
+      if (window.SpazioVivo && typeof window.SpazioVivo.nuovaOrma === "function") return window.SpazioVivo.nuovaOrma(id, opz);
+    }
+    P.gesto(R, "nuovo-obiettivo", function () { nuova({ tipo: "obiettivo" }); });
+    P.gesto(R, "nuovo-evento", function () { nuova({ tipo: "festa" }); });
+    P.gesto(R, "nuova-riunione", function () { nuova({ tipo: "festa", categoria: "riunione" }); });
     P.gesto(R, "apri-figlia", function () {
       if (window.SpazioVivo && typeof window.SpazioVivo.nuovaOrma === "function")
         return window.SpazioVivo.nuovaOrma(id);

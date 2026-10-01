@@ -929,6 +929,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       accaduto_il: mgStato.quando || dataDiOggi()};
     /* ⭐ 1 ottobre — da «Apri un'orma dentro questa»: la nuova è figlia, e si vede come la madre */
     var madre = mgStato.madre || null;
+    if(mgStato.categoria) riga.categoria = mgStato.categoria;
     if(madre){
       riga.orma_madre_id = madre.id;
       riga.visibilita = madre.visibilita || "solo_me";
@@ -1070,16 +1071,27 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
 })();
 function mgMadre(m){
   mgStato.madre = m || null;
+  if(!m) mgStato.categoria = null;
   var c = document.getElementById("mg-madre"); if(!c) return;
   c.hidden = !m;
   if(m) c.querySelector("b").textContent = m.titolo || String(m.contenuto || "").split("\n")[0];
 }
 window.SpazioVivo = window.SpazioVivo || {};
-window.SpazioVivo.nuovaOrma = async function(madreId){
+window.SpazioVivo.nuovaOrma = async function(madreId, opz){
+  opz = opz || {};
   try {
     var r = await db.from("orme").select("id,titolo,contenuto,visibilita,elemento").eq("id", madreId).single();
     if(r.error || !r.data) return;
     mgMadre(r.data);
+    /* ⭐ 1 ottobre — da «+ obiettivo / + evento / + riunione»: il tipo è già scelto */
+    if(opz.tipo){
+      var tt = MG_TIPI.filter(function(x){ return x.d === opz.tipo; })[0];
+      if(tt) mgStato.tipo = tt.n;
+    }
+    mgStato.categoria = opz.categoria || null;
+    var cm = document.getElementById("mg-madre");
+    if(cm) cm.querySelector("span").textContent = opz.categoria === "riunione" ? "riunione dentro" : opz.tipo === "festa" ? "evento dentro" : opz.tipo === "obiettivo" ? "obiettivo dentro" : "dentro";
+    if(typeof mgAggiorna === "function") mgAggiorna();
     var cp = document.getElementById("campo"); if(cp){ cp.focus(); }
   } catch(e) { console.warn("megafono, madre:", e); }
 };

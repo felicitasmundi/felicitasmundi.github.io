@@ -782,6 +782,16 @@ details.porta .vetr-f>.oc{display:none}
 .mia-madre{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:.6rem 0}
 .mia-madre .et{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,230,.45)}
 .mia-madre select{flex:1;min-width:12rem;min-height:2.4rem;background:rgba(8,11,26,.7);color:var(--ivory);border:1px solid rgba(212,175,106,.35);border-radius:.7rem;padding:.3rem .6rem;font-family:'Cormorant Garamond',serif;font-size:1rem}
+.invito-l{margin:.7rem 0 .2rem;padding:.7rem .85rem;border:1px dashed rgba(212,175,106,.4);border-radius:.8rem;display:flex;flex-direction:column;gap:.45rem}
+.invito-l .et{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,230,.5)}
+.invito-l .bt{display:flex;gap:.5rem;flex-wrap:wrap}
+.invito-l .bt>*{all:unset;cursor:pointer;font-size:.85rem;color:var(--oro-ch);border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.3rem .9rem}
+.invito-l .ni{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(245,240,230,.6);line-height:1.4}
+.nuove3{display:flex;gap:.5rem;flex-wrap:wrap}
+.nuove3 .nuova{width:auto;flex:1 1 8rem;margin-bottom:0}
+.fascia-f{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,106,.8);margin:.6rem 0 .3rem;display:flex;gap:.6rem;align-items:center}
+.fascia-f::after{content:'';flex:1;height:1px;background:rgba(212,175,106,.2)}
+#racconto-inizio{max-width:45%;overflow:hidden;text-overflow:ellipsis;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem}
 @media(max-width:34rem){details.porta>.dentro{padding:0 .7rem .9rem}}
 </style>
 </head>
@@ -850,7 +860,10 @@ details.porta .vetr-f>.oc{display:none}
   <span class="stadio" style="--c:var(--terra)"><i></i><span data-c="orma.stadio">[ a che punto &egrave; ]</span></span>
   <span class="stadio" style="--c:#8A8A8A" data-stato="chiusa" hidden><i></i>chiusa</span>
 
-  <p class="testo" data-c="orma.contenuto">[ il racconto ]</p>
+  <!-- ⭐ 1 ottobre, Gab: «anche la descrizione dovrebbe essere un elemento che si apre e si chiude» -->
+  <details class="porta" id="p-racconto"><summary><span class="ic">&#9998;</span><b>Il racconto</b><span class="n" id="racconto-inizio"></span><i>&rsaquo;</i></summary>
+  <div class="dentro"><p class="testo" data-c="orma.contenuto">[ il racconto ]</p></div>
+  </details>
 
   <!-- i gesti: chi non è dentro prende; chi è dentro lascia o chiude (e dice le ore) -->
   <div class="gesti" style="margin-top:0;padding-top:0;border-top:0">
@@ -875,12 +888,18 @@ details.porta .vetr-f>.oc{display:none}
       <button type="button" class="togli" data-g="togli" data-stato="in-attesa" hidden>togli</button>
     </a>
     <button type="button" class="chiama" data-g="chiamo"><span class="pi">+</span><span>aggiungi persone all&rsquo;orma</span></button>
+    <!-- ⭐ 1 ottobre, Gab: «forse dovrei avere la possibilità di creare un link per aggiungere persone all'orma» -->
+    <div class="invito-l">
+      <span class="et">il link per entrare</span>
+      <div class="bt"><button type="button" data-g="copia-invito">copia il link</button><a data-g="wa-invito" href="#" target="_blank" rel="noopener">WhatsApp</a></div>
+      <span class="ni">Chi lo apre ed entra compare qui: scrive nella conversazione, vede gli allegati, prende obiettivi, eventi e riunioni e ci segna le ore.</span>
+    </div>
     <div class="nota" style="margin-top:.4rem">Nella tua rubrica non c&rsquo;&egrave; ancora nessuno con un account.</div>
   </div>
   </div>
   </details>
 
-  <details class="porta" open><summary><span class="ic">&#10022;</span><b>Quello che ne &egrave; nato</b><span class="n"><span data-c="conto.figlie">[ n ]</span></span><i>&rsaquo;</i></summary>
+  <details class="porta" open><summary><span class="ic">&#10022;</span><b>Obiettivi, eventi, riunioni</b><span class="n"><span data-c="conto.figlie">[ n ]</span></span><i>&rsaquo;</i></summary>
   <div class="dentro">
   <div class="vuota-s" data-stato="senza-figlie" hidden>[ nessuna orma &egrave; nata da questa ]</div>
   <div>
@@ -893,7 +912,12 @@ details.porta .vetr-f>.oc{display:none}
       </div>
       <span class="st" data-c="figlia.stadio">[ stadio ]</span></div>
   </div>
-  <button type="button" class="nuova" data-g="apri-figlia"><span class="pi">+</span><span>Apri un&rsquo;orma dentro questa</span></button>
+  <!-- ⭐ 1 ottobre, Gab: «servirebbero obiettivi, eventi, riunioni… dovrebbe essere una cosa pratica» -->
+  <div class="nuove3">
+    <button type="button" class="nuova" data-g="nuovo-obiettivo"><span class="pi">+</span><span>obiettivo</span></button>
+    <button type="button" class="nuova" data-g="nuovo-evento" data-stato="apre-evento" hidden><span class="pi">+</span><span>evento</span></button>
+    <button type="button" class="nuova" data-g="nuova-riunione" data-stato="apre-evento" hidden><span class="pi">+</span><span>riunione</span></button>
+  </div>
   </div>
   </details>
 
