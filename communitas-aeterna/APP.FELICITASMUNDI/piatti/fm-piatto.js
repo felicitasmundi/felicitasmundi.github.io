@@ -213,13 +213,45 @@
     var dentro = 0;
     try {
       var d = f.contentDocument;
-      if (d && d.body) dentro = Math.max(d.body.scrollHeight || 0,
-                                         (d.documentElement && d.documentElement.scrollHeight) || 0);
+      /* ⭐ 1 ottobre 19:24, Gab: «quando apri le porte la visuale va molto in fondo» — la finestra deve anche
+         potersi ACCORCIARE quando una porta si chiude: si misura il corpo, non il documento (che è sempre
+         alto almeno quanto la finestra stessa), e non più il contenitore (che contiene la finestra). */
+      if (d && d.body) {
+        var cs = d.defaultView.getComputedStyle(d.body);
+        dentro = d.body.scrollHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+        if (!f.style.height) dentro = Math.max(dentro, (d.documentElement && d.documentElement.scrollHeight) || 0);
+      }
     } catch (e) {}
-    var h = Math.max(box.clientHeight || 0, dentro);
+    var h = dentro || box.clientHeight || 0;
     /* ⛔ se ancora non si sa niente, meglio una finestra piena che una invisibile */
     if (!h) h = Math.max(320, (window.innerHeight || 640) - 160);
     f.style.height = h + "px";
+  }
+  /* ⭐ 1 ottobre 19:24, Gab: «la visuale … non rimane fissa sull'apertura finestra» — quando una porta si apre
+     e un'altra sopra si chiude, il titolo della porta aperta resta dov'era sullo schermo */
+  function fmpScorritore(el) {
+    while (el && el !== document.body && el !== document.documentElement) {
+      var cs = getComputedStyle(el);
+      if (/(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight) return el;
+      el = el.parentElement;
+    }
+    return document.scrollingElement || document.documentElement;
+  }
+  function fmpTieniPorta(doc, f) {
+    if (!doc || !doc.addEventListener) return;
+    doc.addEventListener("toggle", function (e) {
+      var dt = e.target;
+      if (!dt || dt.tagName !== "DETAILS" || !dt.open) return;
+      var s = dt.querySelector("summary"); if (!s) return;
+      var dove = function () { return f.getBoundingClientRect().top + s.getBoundingClientRect().top; };
+      var prima = dove();
+      var tieni = function () {
+        var dl = dove() - prima;
+        if (Math.abs(dl) > 2) { var sc = fmpScorritore(f.parentElement); sc.scrollTop += dl; }
+      };
+      requestAnimationFrame(function () { tieni(); requestAnimationFrame(tieni); });
+      setTimeout(tieni, 200); setTimeout(tieni, 500);
+    }, true);
   }
   /* un <a href> dentro la finestra la porterebbe via: si frena la fuga.
      I tasti veri li collega il codice delle pagine. */
@@ -264,6 +296,7 @@
         catch (e) { rifiuta(e); return; }
         if (!doc) { rifiuta(new Error("FMPiatto: la pagina non è leggibile")); return; }
         fmpFrenaLink(doc);
+        fmpTieniPorta(doc, f);
         /* ⭐ 1 ottobre, Gab: «se vado ad abbassare mi fa prima bloccare lo scrolling, si attiva una sorta
            di barra laterale … e poi si toglie» — la finestra non scorre MAI da sé: è alta quanto il suo
            contenuto e scorre la pagina che la contiene. Così niente barra interna, niente rimbalzo. */
@@ -297,7 +330,7 @@
       /* ⭐ 30 settembre, Gab: «l app ha un problema di eccessiva lentezza» — fuori dalla prova il
          piatto non si riscarica più a ogni passaggio: resta in memoria finché non cambia VERSIONE_PIATTI
          (da alzare a ogni pubblicazione). Nella prova resta fresco sempre. */
-      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20261001p";
+      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20261001q";
       f.src = indirizzo + (indirizzo.indexOf("?") > -1 ? "&" : "?") + "t=" + fresco;
       if (window.ResizeObserver) {
         ro = new ResizeObserver(function () { if (!chiuso) fmpAltezza(box, f); });
