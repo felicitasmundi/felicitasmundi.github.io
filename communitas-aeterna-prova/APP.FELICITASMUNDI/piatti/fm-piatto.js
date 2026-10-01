@@ -270,7 +270,7 @@
         try {
           f.setAttribute("scrolling", "no");
           var noScroll = doc.createElement("style");
-          noScroll.textContent = "html,body{overflow-y:hidden!important;overscroll-behavior:none!important}";
+          noScroll.textContent = "html,body{overflow-y:hidden!important}";
           (doc.head || doc.documentElement).appendChild(noScroll);
         } catch (e) {}
         /* ⭐ 30 settembre — i tocchi delle stanze arrivano al «trascina giù per aggiornare» (fm-tira.js) */
