@@ -234,18 +234,7 @@
         var n = R.querySelector('[data-stato="da-invito"]');
         if (n && chi) n.textContent = chi + " ti aspetta: nome e cognome servono anche a te.";
       } catch (e) {}
-      /* ⭐ 1 ottobre 21:36, Gab — chi ti invita: foto e biografia (solo se «la biografia viaggia con me») */
-      try {
-        var ci = await db.rpc("fm_chi_invita", { p_nome_url: invito });
-        var c = !ci.error && ci.data && (Array.isArray(ci.data) ? ci.data[0] : ci.data);
-        var box = R.querySelector("#ak-chi");
-        if (box && c && (c.biografia || c.foto_url)) {
-          box.querySelector('[data-chi="nome"]').textContent = [c.nome, c.cognome].filter(Boolean).join(" ");
-          box.querySelector('[data-chi="bio"]').textContent = c.biografia || "";
-          if (c.foto_url) box.querySelector('[data-chi="foto"]').setAttribute("src", c.foto_url);
-          box.hidden = false;
-        }
-      } catch (e) {}
+      /* ⭐ 1 ottobre 22:39, Gab: la bio NON va nella pagina d'accesso — il riquadro «chi ti invita» resta spento */
     }
 
     /* ⭐ CHI ARRIVA DAL COLLEGAMENTO DELLA MAIL è già entrato: Supabase
