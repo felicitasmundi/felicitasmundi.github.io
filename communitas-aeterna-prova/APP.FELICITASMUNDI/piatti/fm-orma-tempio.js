@@ -225,7 +225,9 @@
       a.onclick = function (e) { e.preventDefault(); vaiA(a.getAttribute("data-rotta")); };
     });
     D.getElementById("prat").onclick = function (e) { e.preventDefault(); vaiA("anthakarana"); };
-    D.getElementById("invita").onclick = function (e) { e.preventDefault(); vaiA("invito"); };
+    D.getElementById("invita").onclick = function (e) { e.preventDefault();
+      if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function") return window.SpazioVivo.invito({});
+      vaiA("invito"); };
   }
 
   /* ── la porta ──────────────────────────────────────────────────── */

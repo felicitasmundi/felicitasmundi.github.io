@@ -51,6 +51,9 @@ a.voce.va{display:block;position:relative;text-decoration:none;padding:.45rem 1.
 a.voce.va:hover,a.voce.va:active{background:color-mix(in srgb,var(--el) 14%,transparent)}
 a.voce.va i{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);font-style:normal;color:var(--oro)}
 .vuoto{font-size:.85rem;color:rgba(245,240,230,.35)}
+details.spenta{opacity:.42}
+details.spenta[open]{opacity:.8}
+details.tutti{border-color:color-mix(in srgb,var(--el) 55%,var(--oro))}
 .sezione{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,106,.75);text-align:center;margin:1.4rem 0 .3rem;padding-top:1rem;border-top:1px solid rgba(212,175,106,.2)}
 .invita{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);text-decoration:none;padding:.7rem 1.4rem;border:1px solid rgba(212,175,106,.45);border-radius:999px;margin-top:.6rem}
 /* da stanza-edizione-piatto.html, tali e quali */
@@ -113,6 +116,7 @@ var STANZE = {
     porte:[
       ["alimenti",{}], ["rimedi",{}], ["cosmesi",{}], ["oggettistica",{}], ["abbigliamento",{}], ["arredo",{}],
       ["oggetti sacri",{A:[["Nexus","Strumenti di Coscienza · San Lazzaro di Savena"]]}],
+      ["strumenti di coscienza",{}],   /* ⭐ 1 ottobre, Gab: «strumenti di coscienza (voce che nell'elenco manca)» */
       ["libri e stampati",{A:[["La Bhagavad-gītā Così com’è","A.C. Bhaktivedānta Swāmī Prabhupāda · Villaggio Hare Krishna - Bergamo"],
                              ["Anima vagabonda","Parabhakti dāsa · Villa Vrindavana - Firenze"]]}],
       ["digitale",{}]
@@ -168,23 +172,39 @@ document.getElementById("solido").innerHTML = S.solido === "nexus"
   : '<ak-solido tipo="'+S.solido+'" colore="'+S.colore+'" aria-hidden="true"></ak-solido>';
 if (S.solido === "nexus") document.getElementById("solido").classList.add("grande");
 function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+/* ⭐ 1 ottobre, Gab: «metti i prodotti per ordine alfabetico» */
+function alfa(v){ return (v||[]).slice().sort(function(a,b){ return String(a[0]).localeCompare(String(b[0]),"it",{sensitivity:"base"}); }); }
 function fascia(nome, voci){
+  voci = alfa(voci);
   return '<div class="fascia"><em>'+nome+'</em>' + (voci && voci.length
     ? voci.map(function(v){ return (v[2] ? '<a class="voce va" href="#" data-prodotto="'+esc(v[2])+'">' : '<div class="voce">')+esc(v[0])+(v[1]?'<small>'+esc(v[1])+'</small>':'')+(v[2]?'<i>›</i></a>':'</div>'); }).join("")
     : '<div class="vuoto">'+VUOTO+'</div>') + '</div>';
 }
 function disegnaPorte(){
-document.getElementById("porte").innerHTML = S.porte.map(function(p){
+/* ⭐ 1 ottobre, Gab: «un primissimo tasto che integra tutti i prodotti visibili, partendo da anthakarana» */
+var tutte = S.porte;
+if (S.conto) {
+  var T = {A:[],V:[],L:[]};
+  S.porte.forEach(function(p){ var d=p[1]; if(d.testo) return; ["A","V","L"].forEach(function(k){ T[k]=T[k].concat(d[k]||[]); }); });
+  tutte = [["tutti i "+S.conto, T, true]].concat(S.porte);
+}
+document.getElementById("porte").innerHTML = tutte.map(function(p){
   var d = p[1], n = (d.A||[]).length + (d.V||[]).length + (d.L||[]).length;
-  var conto = (S.conto && !d.testo) ? '<span class="n">'+n+' '+S.conto+'</span>' : '<span class="n"></span>';
-  return '<details><summary><span class="ic">'+S.ic+'</span><b>'+esc(p[0])+'</b>'+conto+'<i>›</i></summary>'
+  var conto = (S.conto && !d.testo) ? '<span class="n">'+n+' '+(n===1 ? S.conto.replace(/i$/,"o") : S.conto)+'</span>' : '<span class="n"></span>';
+  /* ⭐ «semi trasparenti tutte le voci non coperte» */
+  var cls = (S.conto && !d.testo && n === 0) ? ' class="spenta"' : (p[2] ? ' class="tutti"' : '');
+  return '<details'+cls+'><summary><span class="ic">'+S.ic+'</span><b>'+esc(p[0])+'</b>'+conto+'<i>›</i></summary>'
     + '<div class="dentro">'+(d.testo ? '<div class="voce">'+esc(d.testo)+'</div>' : fascia("Antaḥkaraṇa",d.A)+fascia("Vicino a te",d.V)+fascia("Lontano",d.L))+'</div></details>';
 }).join("");
 }
 disegnaPorte();
 if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
 /* ⭐ 30 settembre 18:48, Gab: «la voce tutta la stanza riapre la vecchia versione» → tolta. */
-if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" href="#">'+esc(S.invita)+' ›</a>');
+if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" id="invita" href="../../invito.html">'+esc(S.invita)+' ›</a>');
+/* ⭐ 1 ottobre, Gab: «invita produttori deve mandare al link d'invito» */
+(function(){ var a=document.getElementById("invita"); if(a) a.addEventListener("click",function(e){
+  try { var W = window.parent; if (W !== window && W.SpazioVivo && typeof W.SpazioVivo.invito === "function") { e.preventDefault(); W.SpazioVivo.invito({}); } } catch (x) {}
+}); })();
 /* ⭐ 1 ottobre, Gab: «se uno schiaccia su un libro apre le info e le modalità di acquisto» */
 document.getElementById("porte").addEventListener("click",function(e){
   var a=e.target.closest && e.target.closest("a[data-prodotto]"); if(!a) return;
