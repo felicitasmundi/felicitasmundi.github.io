@@ -130,6 +130,28 @@
     if (typeof window.vai === "function") window.vai("orma", { id: id });
   }
 
+  function quadranti(R, testo) {
+    var doc = R.ownerDocument || document;
+    var box = R.querySelector('[data-c="orma.contenuto"]'); if (!box) return;
+    var vecchi = R.querySelector("#ev-quadranti"); if (vecchi) vecchi.remove();
+    if (!/^##\s+/m.test(testo)) { box.hidden = !testo.trim(); return; }
+    var parti = testo.split(/^##\s+/m), testa = parti.shift().trim();
+    box.textContent = testa; box.hidden = !testa;
+    var esc = function (x) { return String(x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var w = doc.createElement("div"); w.id = "ev-quadranti";
+    w.innerHTML = parti.map(function (p, i) {
+      var righe = p.split("\n"), tit = righe.shift().trim(), corpo = righe.join("\n").trim();
+      var html = corpo.split(/\n\s*\n/).map(function (par) {
+        var l = par.split("\n");
+        if (l.every(function (x) { return /^\s*[-·•]\s+/.test(x); }))
+          return "<ul>" + l.map(function (x) { return "<li>" + esc(x.replace(/^\s*[-·•]\s+/, "")) + "</li>"; }).join("") + "</ul>";
+        return "<p>" + esc(par).replace(/\n/g, "<br>") + "</p>";
+      }).join("");
+      return '<details class="ev-q"' + (i === 0 ? " open" : "") + '><summary>' + esc(tit) + '</summary><div>' + html + '</div></details>';
+    }).join("");
+    box.parentNode.insertBefore(w, box.nextSibling);
+  }
+
   /* ── disegnare ─────────────────────────────────────────────────── */
   function disegna(R, d, id, ricarica) {
     var P = F(), o = d.orma || {}, au = d.autore || {};
@@ -144,6 +166,9 @@
       conto: { aderenti: String(d.aderenti) },
       madre: { titolo: d.madri && d.madri[0] ? (d.madri[0].titolo || "") : "" }
     });
+    /* ⭐ 1 ottobre 21:14, Gab: «ok pubblica i testi nell'evento» — la descrizione in quadranti con titolo.
+       Nel testo dell'evento ogni riga «## Titolo» apre un quadrante; quello che sta prima resta in alto. */
+    quadranti(R, o.contenuto || "");
     P.stato(R, "ha-madre", !!(d.madri && d.madri[0]));
     if (d.madri && d.madri[0]) P.gesto(R, "apri-madre", function () {
       if (typeof window.vai === "function") window.vai("evento", { id: d.madri[0].id });

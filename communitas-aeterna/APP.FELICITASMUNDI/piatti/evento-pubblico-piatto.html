@@ -9,6 +9,16 @@
 <style>
 body{margin:0;background:#02040c}
 a{color:#D4AF6A;text-decoration:none}a:hover{color:#F5F0E6}
+/* ⭐ 1 ottobre, Gab: la descrizione in quadranti con titolo */
+#ev-quadranti{display:flex;flex-direction:column;gap:.6rem}
+.ev-q{border:1px solid rgba(212,175,106,.3);border-radius:1rem;background:rgba(245,240,230,.04)}
+.ev-q[open]{border-color:rgba(212,175,106,.65)}
+.ev-q summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.8rem;min-height:3rem;padding:.8rem 1.1rem;font-family:'Cinzel',serif;letter-spacing:.12em;text-transform:uppercase;color:#D4AF6A;font-size:.9rem}
+.ev-q summary::-webkit-details-marker{display:none}
+.ev-q summary::after{content:"\203A";opacity:.55;transition:transform .3s}
+.ev-q[open] summary::after{transform:rotate(90deg)}
+.ev-q>div{padding:0 1.1rem 1rem;font-size:1.02rem;line-height:1.55;color:rgba(245,240,230,.88)}
+.ev-q p{margin:.2rem 0 .7rem}.ev-q ul{margin:.2rem 0 .7rem;padding-left:1.1rem}.ev-q li{margin:.25rem 0}
 </style>
 <script src="./ak-cosmo.js"></script>
 <script src="./ak-solido.js?v=09301744"></script>
