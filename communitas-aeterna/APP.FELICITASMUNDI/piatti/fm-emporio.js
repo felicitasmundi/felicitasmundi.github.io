@@ -182,7 +182,11 @@
     if (faccia === "carrello") carrello(R, d, stato);
 
     /* i tasti che valgono sempre */
-    P.gesto(R, "chiudi", function () { stato.faccia = "elenco"; disegna(R, d, stato); });
+    P.gesto(R, "chiudi", function () {
+      /* ⭐ 1 ottobre — aperta da un tempio, la scheda torna al tempio */
+      if (stato.tempio && typeof window.vai === "function") return window.vai(stato.tempio);
+      stato.faccia = "elenco"; disegna(R, d, stato);
+    });
     P.gesto(R, "chiudi-carrello", function () { stato.faccia = "elenco"; disegna(R, d, stato); });
     P.gesto(R, "invita", function () {
       if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function")
@@ -406,7 +410,21 @@
     disegna(R, d, { faccia: "elenco", scaffale: null, prodotto: null, linguetta: -1, aperti: {} });
   }
 
+  /* ⭐ 1 ottobre, Gab: «se uno schiaccia su un libro apre le info e le modalità di acquisto»
+     — dal tempio si apre la scheda del prodotto (per id o nome_url), con «al carrello». */
+  async function prodotto(dove, chi, tempio) {
+    var box = typeof dove === "string" ? document.querySelector(dove) : dove;
+    if (!box || !window.FMPiatto) return;
+    var R = await F().monta(box, INDIRIZZO);
+    if (R && R.body) R = R.body;
+    var d = await leggi();
+    var p = d.prodotti.filter(function (x) { return x.id === chi || x.nome_url === chi; })[0];
+    disegna(R, d, p ? { faccia: "scheda", scaffale: null, prodotto: p, linguetta: -1, aperti: {}, tempio: tempio || "emporio" }
+                    : { faccia: "elenco", scaffale: null, prodotto: null, linguetta: -1, aperti: {} });
+  }
+
   window.SpazioVivo = window.SpazioVivo || {};
   window.SpazioVivo.emporio = emporio;
+  window.SpazioVivo.prodotto = prodotto;
   window.FMEmporio = { disegna: disegna };
 })();

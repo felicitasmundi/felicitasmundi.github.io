@@ -69,10 +69,20 @@
 
       var o = await db.from("orme")
         .select("id,titolo,contenuto,tipo,elemento,luogo,accaduto_il,inizio_il," +
-                "immagine_url,persona_id,quanti_servono")
+                "immagine_url,persona_id,quanti_servono,orma_madre_id")
         .eq("id", id).single();
       if (o.error) return d;
       d.orma = o.data;
+
+      /* ⭐ 1 ottobre, Gab: l'incontro dell'11 «è una task dentro festival», e chi entra
+         entra anche nel festival e nel micelio. Si risale la catena delle madri. */
+      d.madri = [];
+      var su = d.orma.orma_madre_id;
+      for (var k = 0; su && k < 4; k++) {
+        var m = await db.from("orme").select("id,titolo,tipo,orma_madre_id").eq("id", su).limit(1);
+        if (m.error || !m.data || !m.data[0]) break;
+        d.madri.push(m.data[0]); su = m.data[0].orma_madre_id;
+      }
 
       /* chi organizza: si vede anche da fuori */
       var a = await db.rpc("fm_orma_autore", { p_orma: id });
@@ -131,8 +141,15 @@
               accaduto_il: quando(o), immagine_url: o.immagine_url || "" },
       persona: { nome: au.nome || "", cognome: "", foto_url: au.foto_url || "",
                  nome_url: au.nome_url ? "?p=" + au.nome_url : "" },
-      conto: { aderenti: String(d.aderenti) }
+      conto: { aderenti: String(d.aderenti) },
+      madre: { titolo: d.madri && d.madri[0] ? (d.madri[0].titolo || "") : "" }
     });
+    P.stato(R, "ha-madre", !!(d.madri && d.madri[0]));
+    if (d.madri && d.madri[0]) P.gesto(R, "apri-madre", function () {
+      if (typeof window.vai === "function") window.vai("evento", { id: d.madri[0].id });
+    });
+    var W = R.ownerDocument && R.ownerDocument.defaultView;
+    if (W && W.fmVeste) W.fmVeste(o.elemento);
     /* «il gruppo»: la pagina del gruppo non c'è ancora */
     Array.prototype.forEach.call(R.querySelectorAll('[data-c="organizzazione"]'),
       function (el) { el.textContent = ""; el.removeAttribute("href"); });
@@ -168,8 +185,16 @@
           var r = await db.rpc("fm_prendi_orma", { p_orma: id });
           if (r.error) throw r.error;
         } catch (e) { console.warn("evento:", e); return; }
+        /* ⭐ chi entra nell'incontro entra anche nelle orme madri: il festival, il micelio.
+           Se una non lo accetta (è già dentro, o è chiusa) si va avanti lo stesso. */
+        for (var k = 0; k < (d.madri || []).length; k++) {
+          try { await db.rpc("fm_prendi_orma", { p_orma: d.madri[k].id }); } catch (e) {}
+        }
       }
-      entra(id);
+      /* ⭐ Gab: «il link 11 … porta comunque dentro orma festival» — si entra nella prima madre
+         che è una festa; se non c'è, nell'orma stessa */
+      var festa = (d.madri || []).filter(function (m) { return m.tipo === "festa"; })[0];
+      entra(festa ? festa.id : id);
     });
   }
 

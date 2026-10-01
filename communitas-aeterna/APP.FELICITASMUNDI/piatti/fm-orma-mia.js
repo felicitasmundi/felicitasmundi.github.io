@@ -371,7 +371,7 @@
      I dati li legge fm-settimana.js (FMSettimana.leggi); qui si disegnano
      compatti: elementi con obiettivi, ognuno collo stadio e i passi fatti.
      «tutta la settimana» porta alla pagina intera. ─────────────────── */
-  var ELEM = [["nexus","Sviluppo"],["terra","Vicinati"],["acqua","Emporio"],["fuoco","Assistenza"],["aria","Edizione"],["etere","Scuola"]];  /* il nome della stanza, non dell'elemento — Gab, 28 settembre */
+  var ELEM = [["nexus","Sviluppo"],["terra","Vicinati"],["acqua","Emporio"],["fuoco","Assistenza"],["aria","Edizione"],["etere","Scuola"],["karma","Karma yoga","nexus"]];  /* il nome della stanza, non dell'elemento — Gab, 28 settembre */
   function stadioDi(s){ return s === "sviluppato" ? "impronta" : s === "in_avanzamento" ? "cammino" : "seme"; }
   async function settimanaDentro(R) {
     var P = F(), S = window.FMSettimana;
@@ -391,10 +391,11 @@
                           numero: String(nSett),
                           seme: String(conto.seme), cammino: String(conto.cammino), impronta: String(conto.impronta) } });
     P.stato(R, "sett-vuota", d.obiettivi.length === 0);
-    var pieni = ELEM.filter(function (E) { return d.obiettivi.some(function (o) { return (o.elemento || "nexus") === E[0]; }); });
+    var gr = function (o) { return o.gruppo || o.elemento || "nexus"; };   /* ⭐ 1 ottobre: il karma yoga ha il suo gruppo */
+    var pieni = ELEM.filter(function (E) { return d.obiettivi.some(function (o) { return gr(o) === E[0]; }); });
     P.stampa(R, "sett-el", pieni, function (c, E) {
-      var suoi = d.obiettivi.filter(function (o) { return (o.elemento || "nexus") === E[0]; });
-      P.riempi(c, { settel: { elemento: E[0], nome: E[1], conto: String(suoi.length) } });
+      var suoi = d.obiettivi.filter(function (o) { return gr(o) === E[0]; });
+      P.riempi(c, { settel: { elemento: E[2] || E[0], nome: E[1], conto: String(suoi.length) } });
       P.stampa(c, "sett-ob", suoi, function (co, o) {
         var st = stadioDi(o.stadio), passi = d.passi[o.id] || [];
         var fatti = passi.filter(function (x) { return stadioDi(x.stadio) === "impronta"; }).length;

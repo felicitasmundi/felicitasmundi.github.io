@@ -132,6 +132,23 @@ var MODELLO = `<style>
      va a zero, o il telefono ne prende il doppio e il testo si stringe.
      Sta dopo la riga dei 52rem apposta: stessa forza, vince l'ultima. */
   @media(max-width:40rem){ .fm-pag{padding-left:0;padding-right:0} }
+  /* ⭐ 1 ottobre, Gab: «in che modo possiamo evitare di avere un quadrante indice che prende lo
+     spazio di lettura?» — sul telefono le voci stanno sotto il titolo, piccole, su una riga che
+     scorre di lato, e non seguono più la lettura: il testo resta libero. */
+  /* ⭐ 1 ottobre, Gab: «nella visione computer l'indice risulta sempre grande e fisso» —
+     anche sul computer non segue più la lettura, ed è più piccolo */
+  .fm-pag [data-quad]{position:static!important;top:auto!important;margin-top:1.2rem!important;padding:.4rem .2rem!important;
+    background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .fm-pag [data-quad-voce]{font-size:.78rem!important;letter-spacing:.14em!important;padding:.35rem .85rem!important;
+    border:1px solid rgba(212,175,106,.3)!important}
+  @media(max-width:40rem){
+    .fm-pag [data-quad]{position:static!important;flex-wrap:nowrap!important;overflow-x:auto;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;padding:.35rem .2rem!important;margin-top:1rem!important;
+      background:transparent!important;border:0!important;box-shadow:none!important}
+    .fm-pag [data-quad]::-webkit-scrollbar{display:none}
+    .fm-pag [data-quad-voce]{flex:none;font-size:.72rem!important;letter-spacing:.12em!important;
+      padding:.35rem .75rem!important;border:1px solid rgba(212,175,106,.3)!important}
+  }
 
   @media print{
     .fm-pag [data-quad],.fm-pag [data-vie],.fm-pag [data-tasto]{display:none}
@@ -643,12 +660,16 @@ function pagina(c, nome){
 /* ══ LEGGERE ═══════════════════════════════════════════════════ */
 
 function paginaLeggi(nome, poi){
-  db.from("prodotti")
-    .select("id,nome,nome_url,sottotitolo,autore,editore,isbn,formato," +
+  /* ⭐ 1 ottobre, Gab: «chi scrive, è stra necessario bio foto ed eventuali link video» —
+     si leggono anche biografia, ritratto e video; se la colonna del video non c'è ancora, senza */
+  var COL = "id,nome,nome_url,sottotitolo,autore,editore,isbn,formato," +
             "racconto,scaffale,prezzo,si_compra,si_scambia,si_dona," +
             "accetta_talenti,quanti_talenti,foto,foto_secondaria," +
-            "stato,vicinato_id")
-    .eq("nome_url", nome).single().then(function(r){
+            "stato,vicinato_id,biografia,foto_autore,testo_lungo,domande";
+  db.from("prodotti").select(COL + ",video_url").eq("nome_url", nome).single().then(function(r0){
+    if(r0.error && !r0.data) return db.from("prodotti").select(COL).eq("nome_url", nome).single();
+    return r0;
+  }).then(function(r){
 
     if(r.error || !r.data){ poi(null); return; }
     var d = r.data;
@@ -736,6 +757,81 @@ function paginaRiempi(pag, d){
 
   /* ⑥ le porte */
   paginaPorte(pag, d);
+
+  /* ⑦ ⭐ 1 ottobre — la matrice: ogni prodotto ha le stesse sezioni della pagina di
+     Anima Vagabonda, coi nomi giusti, e niente «[ in attesa ]» a vista */
+  paginaMatrice(pag, d);
+}
+
+function paginaMatrice(pag, d){
+  var q = function(s){ return pag.querySelector(s); };
+  var qq = function(s){ return [].slice.call(pag.querySelectorAll(s)); };
+  var libro = /libri/i.test(d.scaffale || "");
+  var NOMI = [libro ? "Il libro" : "Il prodotto", "Ordina", libro ? "Chi scrive" : "Chi lo fa", "Collegamenti", "Condividi"];
+  qq("[data-quad-voce]").forEach(function(a, i){ if(NOMI[i]) a.textContent = NOMI[i]; });
+  var occ = { corpo: NOMI[0], prezzo: NOMI[1], chi: NOMI[2] };
+  Object.keys(occ).forEach(function(k){ var e = q('[data-occhiello-sez="' + k + '"]'); if(e) e.textContent = occ[k]; });
+
+  /* il racconto: un paragrafo per ogni riga vuota */
+  var par = String(d.racconto || "").split(/\n\s*\n/).map(function(x){ return x.trim(); }).filter(Boolean);
+  qq("[data-racconto]").forEach(function(e, i){ paginaScrivi(e, par[i] || ""); });
+
+  /* il testo lungo e le domande: solo se ci sono */
+  var tl = String(d.testo_lungo || "").split(/\n\s*\n/).map(function(x){ return x.trim(); }).filter(Boolean);
+  var stl = q('[data-scheda="testo_lungo"]');
+  if(stl){ var ps = [].slice.call(stl.querySelectorAll("p")); ps.forEach(function(e, i){ paginaScrivi(e, tl[i] || ""); });
+    if(!tl.length){ stl.setAttribute("hidden", ""); var o1 = q('[data-occhiello-sez="come"]'); if(o1) o1.setAttribute("hidden", ""); } }
+  var dom = String(d.domande || "").split(/\n/).map(function(x){ return x.trim(); }).filter(Boolean);
+  var sd = q('[data-scheda="domande"]');
+  if(sd){ qq("[data-domanda]").forEach(function(e, i){ paginaScrivi(e, dom[i] || ""); });
+    if(!dom.length){ sd.setAttribute("hidden", ""); var o2 = q('[data-occhiello-sez="domande"]'); if(o2) o2.setAttribute("hidden", ""); } }
+
+  /* ordina: il nome e i dati in breve */
+  var np = q("[data-nome-prod]");
+  if(np){ np.firstChild && np.firstChild.nodeType === 3 ? (np.firstChild.nodeValue = (d.nome || "") + " ") : null;
+    var dp = q("[data-dati-prod]"); paginaScrivi(dp, [d.autore, d.formato].filter(Boolean).join(" · ")); }
+
+  /* chi scrive / chi lo fa: biografia, ritratto, video */
+  var bp = String(d.biografia || "").split(/\n\s*\n/).map(function(x){ return x.trim(); }).filter(Boolean);
+  qq("[data-bio-testo]").forEach(function(e, i){ paginaScrivi(e, bp[i] || ""); });
+  var nb = q('[data-nota="bio"]'); if(nb) nb.setAttribute("hidden", "");
+  var rit = q("[data-ritratto]");
+  if(rit){ if(d.foto_autore) rit.innerHTML = '<img src="' + paginaPulisci(d.foto_autore) + '" alt="" style="width:100%;height:100%;object-fit:cover">';
+           else rit.setAttribute("hidden", ""); }
+  var bio = q("[data-bio]"); if(bio && (bp.length || d.foto_autore)) bio.removeAttribute("hidden");
+  var vid = q('[data-scheda="video"]');
+  if(vid){
+    if(d.video_url){
+      vid.setAttribute("href", d.video_url); vid.setAttribute("target", "_blank"); vid.setAttribute("rel", "noopener");
+      var yt = String(d.video_url).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/);
+      if(yt){ vid.style.backgroundImage = "url(https://i.ytimg.com/vi/" + yt[1] + "/hqdefault.jpg)"; vid.style.backgroundSize = "cover"; vid.style.backgroundPosition = "center"; }
+      var at = vid.querySelector("[data-attesa]"); if(at) at.textContent = "guarda il video";
+      var dv = vid.querySelector("[data-video-dove]"); if(dv) dv.setAttribute("hidden", "");
+    } else vid.setAttribute("hidden", "");
+  }
+  var sez3 = q("#sez-3");
+  if(sez3 && !bp.length && !d.foto_autore && !d.video_url){ sez3.setAttribute("hidden", "");
+    var v3 = qq("[data-quad-voce]")[2]; if(v3) v3.setAttribute("hidden", ""); }
+
+  /* «Ordina»: nel carrello, e si apre il carrello */
+  var tasto = q("[data-tasto]");
+  if(tasto) tasto.onclick = async function(e){
+    e.preventDefault();
+    try {
+      var u = await db.auth.getUser(); var io = u && u.data && u.data.user && u.data.user.id;
+      if(!io){ location.href = "accesso.html?torna=" + encodeURIComponent(location.pathname + location.search); return; }
+      tasto.textContent = "un momento\u2026";
+      var c = await db.from("carrello").select("id,quante").eq("persona_id", io).eq("prodotto_id", d.id).eq("faccia", "in_corso").limit(1);
+      if(!c.error && c.data && c.data[0]) await db.from("carrello").update({ quante: (c.data[0].quante || 1) + 1 }).eq("id", c.data[0].id);
+      else await db.from("carrello").insert({ persona_id: io, prodotto_id: d.id, nome: d.nome || "", quante: 1, faccia: "in_corso" });
+      if(typeof vai === "function") vai("carrello");
+    } catch(err){ console.warn("ordina:", err); tasto.textContent = "Ordina"; }
+  };
+
+  /* quello che resta «[ in attesa ]» non si mostra */
+  qq("*").forEach(function(e){
+    if(e.children.length === 0 && /^\s*\[\s*in attesa\s*\]\s*$/i.test(e.textContent || "")) e.setAttribute("hidden", "");
+  });
 }
 
 

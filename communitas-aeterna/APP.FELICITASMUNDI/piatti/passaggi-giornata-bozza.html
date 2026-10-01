@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I passaggi di una giornata · bozza</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* BOZZA — 1 ottobre. Gab: «mi fai vedere una prova concreta di tutti i passaggi» con la sua giornata.
+   Quattro schermi del telefono, uno dopo l'altro. Solo da guardare. */
+:root{--oro:#D4AF6A;--ivory:#F5F0E6;--terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--nexus:#8C2F39}
+*{box-sizing:border-box}
+body{margin:0;background:#02040c;color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif}
+.fila{display:flex;gap:1.6rem;padding:1.6rem;overflow-x:auto;align-items:flex-start}
+.passo{flex:none;width:22rem}
+.num{font-family:'Cinzel',serif;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--oro);margin:0 0 .3rem}
+.cosa{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;line-height:1.35;color:rgba(245,240,230,.78);margin:0 0 .8rem;min-height:3rem}
+.tel{border-radius:2rem;border:1px solid rgba(212,175,106,.3);padding:1.1rem .9rem 1.4rem;min-height:40rem;
+  background:radial-gradient(ellipse at 50% 10%,rgba(212,175,106,.12),transparent 55%),radial-gradient(ellipse at 20% 90%,rgba(60,44,110,.35),transparent 60%),#070b18;display:flex;flex-direction:column;gap:.7rem}
+h3{margin:.2rem 0 0;text-align:center;font-family:'Cinzel',serif;font-weight:400;font-size:1.35rem;letter-spacing:.08em}
+.sot{text-align:center;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(212,175,106,.7)}
+.porta{border:1px solid rgba(212,175,106,.3);border-radius:1rem;background:linear-gradient(180deg,rgba(245,240,230,.06),rgba(245,240,230,.02));padding:.8rem .9rem;display:flex;flex-direction:column;gap:.35rem}
+.porta>b{font-family:'Cinzel',serif;font-weight:400;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--oro);display:flex;justify-content:space-between}
+.porta>b span{font-family:'DM Sans',sans-serif;letter-spacing:0;text-transform:none;font-size:.72rem;color:rgba(245,240,230,.45)}
+.fa{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.8);margin-top:.35rem;display:flex;gap:.5rem;align-items:center}
+.fa::after{content:'';flex:1;height:1px;background:rgba(212,175,106,.2)}
+.r{display:flex;align-items:center;gap:.6rem;padding:.35rem 0}
+.r .pt{width:.5rem;height:.5rem;border-radius:50%;background:var(--c);box-shadow:0 0 .45rem var(--c);flex:none}
+.r .tx{flex:1;min-width:0}
+.r .tx b{display:block;font-weight:400;font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.25}
+.r .tx small{display:block;font-size:.7rem;color:rgba(245,240,230,.5)}
+.tag{font-family:'Cinzel',serif;font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;padding:.12rem .5rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--c,var(--oro)) 60%,transparent);color:color-mix(in srgb,var(--c,var(--oro)) 75%,#F5F0E6);white-space:nowrap}
+.nuovo{outline:1px solid rgba(212,175,106,.7);outline-offset:3px;border-radius:.6rem;background:rgba(212,175,106,.07)}
+.mg{margin-top:auto;border:1px solid rgba(212,175,106,.35);border-radius:1rem;background:rgba(8,11,26,.8);padding:.7rem .8rem;display:flex;flex-direction:column;gap:.5rem}
+.mg .chip{align-self:flex-start;font-size:.8rem;padding:.2rem .7rem;border-radius:999px;border:1px solid rgba(212,175,106,.45);background:rgba(212,175,106,.1);font-family:'Cormorant Garamond',serif}
+.mg .chip span{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.16em;color:var(--oro);margin-right:.35rem;text-transform:uppercase}
+.mg .campo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--ivory)}
+.mg .sotto{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+.mg .sotto .tag{font-size:.6rem}
+.mg .inv{margin-left:auto;width:2rem;height:2rem;border-radius:50%;background:var(--oro);color:#0A0C1A;display:grid;place-items:center}
+.capo{text-align:center;display:flex;flex-direction:column;gap:.3rem;align-items:center}
+.madre{font-family:'Cormorant Garamond',serif;font-size:.95rem;padding:.2rem .8rem;border-radius:999px;border:1px solid rgba(212,175,106,.4);background:rgba(212,175,106,.07)}
+.madre span{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.18em;color:var(--oro);text-transform:uppercase;margin-right:.3rem}
+.capo .t1{font-family:'Cinzel',serif;font-size:1.25rem;letter-spacing:.04em;line-height:1.2}
+.dati{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}
+.dati span{border:1px solid rgba(212,175,106,.22);border-radius:.8rem;padding:.35rem .7rem;font-size:.72rem;color:rgba(245,240,230,.6);text-align:center}
+.dati span b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:.98rem;color:var(--ivory)}
+.btn{align-self:center;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;padding:.55rem 1.1rem;border-radius:999px;border:1px solid var(--oro);background:rgba(212,175,106,.18)}
+.ore{display:flex;gap:.5rem;align-items:center;justify-content:center;font-size:.8rem;color:rgba(245,240,230,.6)}
+.ore b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.2rem;color:var(--ivory);border-bottom:1px solid var(--oro);padding:0 .4rem}
+.conti{display:flex;gap:.4rem}
+.conti span{flex:1;text-align:center;border:1px solid rgba(212,175,106,.2);border-radius:.7rem;padding:.4rem;font-size:.66rem;color:rgba(245,240,230,.55)}
+.conti span b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.3rem;color:var(--ivory)}
+.nota{font-size:.7rem;color:rgba(245,240,230,.4);text-align:center;font-style:italic}
+</style>
+</head>
+<body>
+<div class="fila">
+
+ <!-- ① scrivo dal megafono -->
+ <div class="passo">
+  <p class="num">① scrivi</p>
+  <p class="cosa">Dal Megafono scrivi quello che devi fare oggi, scegli il tipo e il talento.</p>
+  <div class="tel">
+   <h3>La mia orma</h3><div class="sot">settimana (n)</div>
+   <div class="porta"><b>Settimana <span>da fare · 2</span></b>
+    <div class="r" style="--c:var(--terra)"><span class="pt"></span><span class="tx"><b>comunicare incontro vicinati</b><small>I Vicinati · dentro: (l’incontro dell’11 ottobre)</small></span></div>
+    <div class="r" style="--c:var(--terra)"><span class="pt"></span><span class="tx"><b>parlare con la rete agricoltura naturale</b><small>I Vicinati</small></span></div>
+   </div>
+   <div class="mg">
+    <span class="chip"><span>talento</span>(il talento scelto nel praticantato)</span>
+    <div class="campo">incontrare rosangela dello human design</div>
+    <div class="sotto"><span class="tag" style="--c:var(--fuoco)">obiettivo</span><span class="tag">oggi</span><span class="tag">con: rosangela</span><span class="inv">→</span></div>
+   </div>
+  </div>
+ </div>
+
+ <!-- ② la settimana si riempie -->
+ <div class="passo">
+  <p class="num">② la settimana</p>
+  <p class="cosa">L’orma nasce sotto il suo talento ed entra nella settimana. Il karma yoga a cui partecipi compare da solo.</p>
+  <div class="tel">
+   <h3>La mia orma</h3><div class="sot">settimana (n)</div>
+   <div class="porta"><b>Settimana <span>da fare · 3 · karma yoga · 1</span></b>
+    <div class="fa">da fare</div>
+    <div class="r" style="--c:var(--terra)"><span class="pt"></span><span class="tx"><b>comunicare incontro vicinati</b><small>I Vicinati · dentro: (l’incontro dell’11 ottobre)</small></span></div>
+    <div class="r nuovo" style="--c:var(--fuoco)"><span class="pt"></span><span class="tx"><b>incontrare rosangela dello human design</b><small>(il talento) · oggi · con rosangela</small></span><span class="tag" style="--c:var(--fuoco)">nuova</span></div>
+    <div class="r" style="--c:var(--terra)"><span class="pt"></span><span class="tx"><b>parlare con la rete agricoltura naturale</b><small>I Vicinati</small></span></div>
+    <div class="fa">karma yoga</div>
+    <div class="r" style="--c:var(--nexus)"><span class="pt"></span><span class="tx"><b>(un lavoro karma yoga del festival)</b><small>Felicitas Festival · ci sei dentro</small></span><span class="tag" style="--c:var(--nexus)">karma yoga</span></div>
+   </div>
+   <div class="porta"><b>Talenti <span>(n)</span></b>
+    <div class="r" style="--c:var(--fuoco)"><span class="pt"></span><span class="tx"><b>(il talento scelto nel praticantato)</b><small>1 orma nuova oggi</small></span></div>
+   </div>
+  </div>
+ </div>
+
+ <!-- ③ dentro l'orma -->
+ <div class="passo">
+  <p class="num">③ dentro l’orma</p>
+  <p class="cosa">Dopo l’incontro la apri: vedi di quale talento fa parte, chi c’era, scrivi due righe nella conversazione e la chiudi con le ore.</p>
+  <div class="tel">
+   <div class="capo">
+    <span class="madre"><span>fa parte di</span>(il talento) ›</span>
+    <div class="t1">incontrare rosangela dello human design</div>
+    <div class="dati"><span>quando<b>oggi</b></span><span>con chi<b>rosangela</b></span><span>stanza<b>(la stanza)</b></span></div>
+   </div>
+   <div class="porta"><b>Chi c’è dentro <span>2</span></b>
+    <div class="r" style="--c:var(--oro)"><span class="pt"></span><span class="tx"><b>Gabriele</b><small>dal 1 ottobre</small></span><span class="tag">coordina</span></div>
+    <div class="r" style="--c:var(--oro)"><span class="pt"></span><span class="tx"><b>rosangela</b><small>in attesa di risposta</small></span></div>
+   </div>
+   <div class="porta"><b>La conversazione <span>›</span></b></div>
+   <div class="ore">quante ore hai messo <b>(2)</b> ore</div>
+   <span class="btn">chiudo</span>
+  </div>
+ </div>
+
+ <!-- ④ fatto -->
+ <div class="passo">
+  <p class="num">④ fatto</p>
+  <p class="cosa">Chiusa, passa tra i fatti della settimana; le ore vanno nei conti, e il talento ha un’orma in più.</p>
+  <div class="tel">
+   <h3>La mia orma</h3><div class="sot">settimana (n)</div>
+   <div class="porta"><b>Settimana <span>da fare · 2 · fatti · 1</span></b>
+    <div class="fa">da fare</div>
+    <div class="r" style="--c:var(--terra)"><span class="pt"></span><span class="tx"><b>comunicare incontro vicinati</b><small>I Vicinati</small></span></div>
+    <div class="r" style="--c:var(--terra)"><span class="pt"></span><span class="tx"><b>parlare con la rete agricoltura naturale</b><small>I Vicinati</small></span></div>
+    <div class="fa">fatti</div>
+    <div class="r nuovo" style="--c:var(--fuoco)"><span class="pt"></span><span class="tx"><b>incontrare rosangela dello human design</b><small>(il talento) · 2 ore</small></span><span class="tag" style="--c:var(--aria)">fatto</span></div>
+   </div>
+   <div class="porta"><b>Conti</b>
+    <div class="conti"><span><b>(…)</b>entrate</span><span><b>(…)</b>uscite</span><span><b>+2</b>ore</span></div>
+   </div>
+  </div>
+ </div>
+
+</div>
+</body>
+</html>

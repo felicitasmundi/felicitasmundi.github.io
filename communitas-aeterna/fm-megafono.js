@@ -231,8 +231,20 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     {n:"obiettivo",  d:"obiettivo",  c:"var(--fuoco)", f:"rombo"},
     {n:"contatto",   d:"contatto",   c:"var(--oro)",   f:"cerchio"},
     {n:"spesa",      d:"spesa",      c:"var(--acqua)", f:"quadro"},
-    {n:"articolo",   d:"articolo",   c:"var(--aria)",  f:"tondo"}
+    {n:"articolo",   d:"articolo",   c:"var(--aria)",  f:"tondo"},
+    /* ⭐ 1 ottobre, Gab: «vorrei fare la prova di attivare io l'orma villaggio … e creare l'incontro».
+       Queste due si vedono solo a chi ha lo strumento aperto (permessi → fm_miei_tipi). */
+    {n:"micelio",    d:"micelio",    c:"var(--terra)", f:"cerchio", solo:true},
+    {n:"evento",     d:"festa",      c:"var(--oro)",   f:"rombo",   solo:true}
   ];
+  var mgAperti = null;
+  function mgPuo(t){ return !t.solo || (mgAperti && mgAperti.indexOf(t.d) >= 0); }
+  function mgChiediAperti(poi){
+    try { db.rpc("fm_miei_tipi").then(function(r){
+      if (r && !r.error && r.data) mgAperti = r.data;
+      if (poi) poi();
+    }); } catch (e) {}
+  }
   var MG_NEX = '<svg class="nx" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg>';
   var mgStato = {tipo:"karma yoga", quando:null, dove:null, persone:[], file:[]};
   var mgPan = $("mg-pan"), mgTipo = $("mg-tipo"), mgInv = $("mg-inv"),
@@ -294,7 +306,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     mgApri("tipo");
     mgEtichetta("che cosa \u00e8");
     var due=document.createElement("div"); due.className="due2";
-    MG_TIPI.forEach(function(t){
+    MG_TIPI.filter(mgPuo).forEach(function(t){
       var b=document.createElement("button"); b.type="button";
       b.className="tb "+t.f+(t.n===mgStato.tipo?" on":"");
       b.style.setProperty("--c", t.c);
@@ -308,6 +320,12 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       due.appendChild(b);
     });
     mgPan.appendChild(due);
+    /* gli strumenti aperti si chiedono al database quando la sessione c'è: se ne arrivano di nuovi, il pannello si ridisegna */
+    if(!mgAperti || !mgAperti.length) mgChiediAperti(function(){
+      if(mgPan.dataset.q === "tipo" && mgAperti && mgAperti.length && MG_TIPI.some(function(t){ return t.solo && mgPuo(t); })){
+        mgChiudi(); mgTipo.click();
+      }
+    });
   });
 
   /* quando: il calendarietto del mese */
@@ -909,6 +927,14 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       tipo: tt ? tt.d : "karma_yoga",
       visibilita:"solo_me",
       accaduto_il: mgStato.quando || dataDiOggi()};
+    /* ⭐ 1 ottobre — da «Apri un'orma dentro questa»: la nuova è figlia, e si vede come la madre */
+    var madre = mgStato.madre || null;
+    if(mgStato.categoria) riga.categoria = mgStato.categoria;
+    if(madre){
+      riga.orma_madre_id = madre.id;
+      riga.visibilita = madre.visibilita || "solo_me";
+      if(madre.elemento) riga.elemento = madre.elemento;
+    }
     if(mgStato.dove){
       riga.territorio_cod = mgStato.dove.codice;
       riga.luogo = mgStato.dove.nome;
@@ -925,6 +951,14 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       .select("id,contenuto").single().then(function(r){
       if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
       ultimaOrma = r.data;
+      /* ⭐ chi apre un micelio o un evento ci sta dentro da subito: è la prima persona della squadra */
+      if(riga.tipo === "micelio" || riga.tipo === "festa"){
+        try { db.rpc("fm_prendi_orma", {p_orma: r.data.id}); } catch(e) {}
+      }
+      if(madre){
+        mgMadre(null);
+        setTimeout(function(){ if(typeof vai === "function") vai("orma", {id: madre.id}); }, 600);
+      }
 
       /* le persone nominate: una riga a testa, stato «proposto».
          ⛔ Il legame si propone, non si impone: diventa «confermato» solo
@@ -1017,3 +1051,47 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       parla("[ " + x.n + " — questa voce aspetta ]");
     }));
   });
+
+/* ⭐ 1 ottobre 2026 — «Apri un'orma dentro questa»: il Megafono in fondo scrive una figlia.
+   Sopra il campo compare «dentro: <la madre>», con la × per tornare a un'orma libera. */
+(function(){
+  var box = document.querySelector("#mg .mg-box");
+  if(!box || document.getElementById("mg-madre")) return;
+  var st = document.createElement("style");
+  st.textContent = "#mg-madre{display:flex;align-items:center;gap:.5rem;padding:.35rem .7rem;margin:0 0 .4rem;border-radius:999px;" +
+    "border:1px solid rgba(212,175,106,.45);background:rgba(212,175,106,.1);font-family:'Cormorant Garamond',serif;font-size:1rem;color:#F5F0E6}" +
+    "#mg-madre[hidden]{display:none}#mg-madre span{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A}" +
+    "#mg-madre b{font-weight:400;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}" +
+    "#mg-madre button{all:unset;cursor:pointer;width:1.6rem;height:1.6rem;display:grid;place-items:center;color:rgba(245,240,230,.6)}";
+  document.head.appendChild(st);
+  var c = document.createElement("div"); c.id = "mg-madre"; c.hidden = true;
+  c.innerHTML = '<span>dentro</span><b></b><button type="button" aria-label="togli">&times;</button>';
+  box.insertBefore(c, box.firstChild);
+  c.querySelector("button").addEventListener("click", function(){ mgMadre(null); });
+})();
+function mgMadre(m){
+  mgStato.madre = m || null;
+  if(!m) mgStato.categoria = null;
+  var c = document.getElementById("mg-madre"); if(!c) return;
+  c.hidden = !m;
+  if(m) c.querySelector("b").textContent = m.titolo || String(m.contenuto || "").split("\n")[0];
+}
+window.SpazioVivo = window.SpazioVivo || {};
+window.SpazioVivo.nuovaOrma = async function(madreId, opz){
+  opz = opz || {};
+  try {
+    var r = await db.from("orme").select("id,titolo,contenuto,visibilita,elemento").eq("id", madreId).single();
+    if(r.error || !r.data) return;
+    mgMadre(r.data);
+    /* ⭐ 1 ottobre — da «+ obiettivo / + evento / + riunione»: il tipo è già scelto */
+    if(opz.tipo){
+      var tt = MG_TIPI.filter(function(x){ return x.d === opz.tipo; })[0];
+      if(tt) mgStato.tipo = tt.n;
+    }
+    mgStato.categoria = opz.categoria || null;
+    var cm = document.getElementById("mg-madre");
+    if(cm) cm.querySelector("span").textContent = opz.categoria === "riunione" ? "riunione dentro" : opz.tipo === "festa" ? "evento dentro" : opz.tipo === "obiettivo" ? "obiettivo dentro" : "dentro";
+    if(typeof mgAggiorna === "function") mgAggiorna();
+    var cp = document.getElementById("campo"); if(cp){ cp.focus(); }
+  } catch(e) { console.warn("megafono, madre:", e); }
+};

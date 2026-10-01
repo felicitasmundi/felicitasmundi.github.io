@@ -30,7 +30,7 @@
   var STANZE = { terra: "I Vicinati", acqua: "L\u2019Emporio", fuoco: "L\u2019Assistenza",
                  aria: "L\u2019Edizione", etere: "La Scuola", nexus: "Organizzazione e sviluppo" };
   var TIPI = { karma_yoga: "karma yoga", obiettivo: "obiettivo", contatto: "contatto",
-               spesa: "spesa", articolo: "articolo" };  /* ⭐ 29 settembre, Gab: «racconto» è diventato «articolo», anche nel database */
+               spesa: "spesa", articolo: "articolo", festa: "evento", micelio: "micelio" };  /* ⭐ 29 settembre, Gab: «racconto» è diventato «articolo», anche nel database */
   var SU = ["karma_yoga", "studente", "praticante", "operatore", "nucleo"];  /* può fare figlie */
   var F = function () { return window.FMPiatto; };
 
@@ -61,6 +61,8 @@
         d.talenti = t.error ? [] : (t.data || []);
       }
 
+      /* ⭐ 1 ottobre — evento e micelio solo a chi ha lo strumento aperto */
+      try { var mt = await db.rpc("fm_miei_tipi"); d.aperti = (!mt.error && mt.data) || []; } catch (e) { d.aperti = []; }
       if (madreId) {
         var m = await db.from("orme").select("id,titolo,contenuto,elemento,visibilita")
           .eq("id", madreId).single();
@@ -100,6 +102,8 @@
       contesto: { nome: STANZE[s.contesto] || "" }
     });
     P.stato(R, "ha-contesto", !!s.contesto);
+    P.stato(R, "apre-festa", (d.aperti || []).indexOf("festa") >= 0);
+    P.stato(R, "apre-micelio", (d.aperti || []).indexOf("micelio") >= 0);
     var pt = R.querySelector(".mg-tipo");
     if (pt && s.contesto) pt.style.setProperty("--c", "var(--" + s.contesto + ")");
     Array.prototype.forEach.call(R.querySelectorAll('[data-g="scegli-contesto"]'), function (b) {
@@ -153,6 +157,10 @@
     var n = await db.from("orme").insert(riga).select("id").single();
     if (n.error) throw n.error;
     var id = n.data.id;
+    /* ⭐ chi apre un evento o un micelio ci sta dentro da subito */
+    if (riga.tipo === "festa" || riga.tipo === "micelio") {
+      try { await db.rpc("fm_prendi_orma", { p_orma: id }); } catch (e) {}
+    }
 
     /* chi è stato chiamato */
     for (var i = 0; i < s.persone.length; i++) {

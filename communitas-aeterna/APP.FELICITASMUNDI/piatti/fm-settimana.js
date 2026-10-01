@@ -35,7 +35,8 @@
     { el: "acqua", nome: "Emporio",    stanza: "" },
     { el: "fuoco", nome: "Assistenza", stanza: "" },
     { el: "aria",  nome: "Edizione",   stanza: "" },
-    { el: "etere", nome: "Scuola",     stanza: "" }
+    { el: "etere", nome: "Scuola",     stanza: "" },
+    { el: "karma", nome: "Karma yoga", stanza: "", colore: "nexus" }   /* ⭐ 1 ottobre, Gab */
   ];
   var F = function () { return window.FMPiatto; };
   function getdb() { return window.db || (window.parent && window.parent.db) || null; }
@@ -87,11 +88,45 @@
       var o = await db.from("orme")
         .select("id,titolo,contenuto,tipo,elemento,stadio,entro_il,momento,persona_id,dorme_dal,orma_madre_id")
         .eq("tipo", "obiettivo")
-        .is("orma_madre_id", null)      /* ⛔ i passi (le figlie) non sono obiettivi: stanno dentro la madre */
         .or("and(entro_il.gte." + da + ",entro_il.lte." + a + ")," +
             "and(entro_il.is.null,momento.gte." + da + "T00:00:00,momento.lte." + a + "T23:59:59)")
         .order("elemento").order("entro_il");
       d.obiettivi = o.error ? [] : (o.data || []).filter(function (x) { return !x.dorme_dal; });
+      /* ⭐ 1 ottobre, Gab: «corregi ciò che viene scartato per errore» — prima si scartava ogni
+         obiettivo con una madre, anche quelli nati sotto un talento o dentro un evento.
+         È un passo (e sta dentro la sua madre) solo se la madre è a sua volta un obiettivo. */
+      var mids = d.obiettivi.map(function (x) { return x.orma_madre_id; }).filter(Boolean);
+      if (mids.length) {
+        var mm = await db.from("orme").select("id,tipo").in("id", mids);
+        var tipoMadre = {};
+        (mm.error ? [] : mm.data || []).forEach(function (r) { tipoMadre[r.id] = r.tipo; });
+        d.obiettivi = d.obiettivi.filter(function (x) { return !x.orma_madre_id || tipoMadre[x.orma_madre_id] !== "obiettivo"; });
+      }
+
+      /* ⭐ 1 ottobre, Gab: «in settimana si legge karma yoga … facciamolo» — i karma yoga in cui
+         sei dentro (o che hai aperto tu): quelli ancora aperti, e quelli chiusi in questa settimana */
+      try {
+        var u = await db.auth.getUser();
+        var io = u && u.data && u.data.user && u.data.user.id;
+        if (io) {
+          var mie = await db.from("orma_persone").select("orma_id")
+            .eq("persona_id", io).not("preso_il", "is", null).is("lasciato_il", null);
+          var kid = (mie.error ? [] : mie.data || []).map(function (r) { return r.orma_id; });
+          var k = await db.from("orme")
+            .select("id,titolo,contenuto,tipo,elemento,stadio,entro_il,momento,persona_id,dorme_dal,orma_madre_id")
+            .eq("tipo", "karma_yoga")
+            .or("persona_id.eq." + io + (kid.length ? ",id.in.(" + kid.join(",") + ")" : ""));
+          (k.error ? [] : k.data || []).forEach(function (x) {
+            if (x.dorme_dal) return;
+            var chiuso = x.stadio === "sviluppato";
+            var nellaSettimana = x.momento >= da && x.momento <= a + "T23:59:59";
+            if (chiuso && !nellaSettimana) return;
+            x.gruppo = "karma";
+            d.obiettivi.push(x);
+          });
+        }
+      } catch (e) { console.warn("la settimana, karma yoga:", e); }
+
       var ids = d.obiettivi.map(function (x) { return x.id; });
       if (!ids.length) return d;
 
@@ -145,8 +180,8 @@
 
     /* i sei elementi, sempre tutti */
     P.stampa(R, "elemento", ELEMENTI, function (c, E) {
-      var suoi = d.obiettivi.filter(function (o) { return (o.elemento || "nexus") === E.el; });
-      P.riempi(c, { elemento: { elemento: E.el, nome: E.nome, stanza: E.stanza,
+      var suoi = d.obiettivi.filter(function (o) { return (o.gruppo || o.elemento || "nexus") === E.el; });
+      P.riempi(c, { elemento: { elemento: E.colore || E.el, nome: E.nome, stanza: E.stanza,
                                 conto: suoi.length ? String(suoi.length) : "" } });
       P.stato(c, "senza-obiettivi", suoi.length === 0);
       P.stampa(c, "obiettivo", suoi, function (co, o) {
