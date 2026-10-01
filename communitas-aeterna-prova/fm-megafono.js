@@ -175,7 +175,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       <div class="mg-box">
         <textarea id="campo" rows="1" placeholder="scrivi la tua orma"></textarea>
         <div class="mg-sotto">
-          <span class="mg-tipo" id="mg-tipo">karma yoga</span>
+          <span class="mg-tipo" id="mg-tipo">obiettivo</span>
           <button type="button" class="mg-vsg" data-p="quando" title="oggi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button>
           <button type="button" class="mg-vsg" data-p="dove" title="dove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg></button>
           <button type="button" class="mg-vsg" data-p="chi" title="con chi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 20c0-3.3 2.7-5.4 6-5.4s6 2.1 6 5.4"/><path d="M16 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.9c2 .7 3.5 2.5 3.5 5.1"/></svg></button>
@@ -227,8 +227,9 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
      Nexus della legenda — due cerchi e l'esagono col raggio — preso tale
      e quale dal modello, non ridisegnato. */
   var MG_TIPI = [
-    {n:"karma yoga", d:"karma_yoga", c:"var(--nexus)", f:"nex"},
+    /* ⭐ 1 ottobre, Gab: «forse è tanto mettere karma yoga come primo riferimento sul megafono» — prima l'obiettivo */
     {n:"obiettivo",  d:"obiettivo",  c:"var(--fuoco)", f:"rombo"},
+    {n:"karma yoga", d:"karma_yoga", c:"var(--nexus)", f:"nex"},
     {n:"contatto",   d:"contatto",   c:"var(--oro)",   f:"cerchio"},
     {n:"spesa",      d:"spesa",      c:"var(--acqua)", f:"quadro"},
     {n:"articolo",   d:"articolo",   c:"var(--aria)",  f:"tondo"},
@@ -246,7 +247,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     }); } catch (e) {}
   }
   var MG_NEX = '<svg class="nx" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="20" cy="20" r="14"></circle><circle cx="20" cy="20" r="11.2"></circle><path d="M20 12.5 L26 15.7 L26 24.3 L20 27.5 L14 24.3 L14 15.7 Z"></path><path d="M20 12.5 L20 20 M20 20 L26 15.7 M20 20 L14 15.7 M20 20 L20 27.5"></path></svg>';
-  var mgStato = {tipo:"karma yoga", quando:null, dove:null, persone:[], file:[]};
+  var mgStato = {tipo:"obiettivo", quando:null, dove:null, persone:[], file:[]};
   var mgPan = $("mg-pan"), mgTipo = $("mg-tipo"), mgInv = $("mg-inv"),
       mgNato = $("mg-nato");
 
@@ -955,6 +956,8 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       if(riga.tipo === "micelio" || riga.tipo === "festa"){
         try { db.rpc("fm_prendi_orma", {p_orma: r.data.id}); } catch(e) {}
       }
+      /* ⭐ 1 ottobre, Gab: «propongo incontro, prepara già il link che poi manda» */
+      if(riga.tipo === "festa") mgLinkEvento(r.data.id, t);
       if(madre){
         mgMadre(null);
         setTimeout(function(){ if(typeof vai === "function") vai("orma", {id: madre.id}); }, 600);
@@ -1004,7 +1007,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       }
 
       campo.value=""; cresci();
-      mgStato = {tipo:"karma yoga", quando:null, dove:null, persone:[], file:[]};
+      mgStato = {tipo:"obiettivo", quando:null, dove:null, persone:[], file:[]};
       mgChiudi(); mgAggiorna();
       mgAvvisa("\u2713  \u00e8 nata un\u2019orma  \u00b7  " + dettagli.join("  \u00b7  "));
       if(vista==="orme") caricaOrme(); else contaOrme();
@@ -1095,3 +1098,31 @@ window.SpazioVivo.nuovaOrma = async function(madreId, opz){
     var cp = document.getElementById("campo"); if(cp){ cp.focus(); }
   } catch(e) { console.warn("megafono, madre:", e); }
 };
+
+/* ⭐ 1 ottobre — scrivere un'orma di un tipo già scelto, senza madre (dai Vicinati: chiedo una mano,
+   propongo un incontro, scrivo un articolo) */
+window.SpazioVivo.scriviOrma = function(opz){
+  opz = opz || {};
+  mgMadre(null);
+  var tt = MG_TIPI.filter(function(x){ return x.d === opz.tipo; })[0];
+  if(tt) mgStato.tipo = tt.n;
+  if(typeof mgAggiorna === "function") mgAggiorna();
+  var cp = document.getElementById("campo"); if(cp){ cp.focus(); }
+};
+/* il link dell'incontro appena proposto, pronto da mandare */
+function mgLinkEvento(id, testo){
+  var ind = location.origin + location.pathname + "?p=evento&e=" + id;
+  var w = document.getElementById("mg-link") || document.createElement("div");
+  w.id = "mg-link";
+  w.setAttribute("style", "position:fixed;left:50%;bottom:7.5rem;transform:translateX(-50%);z-index:2147483300;width:min(26rem,92vw);padding:1rem 1.1rem;border-radius:1rem;border:1px solid rgba(212,175,106,.6);background:rgba(10,12,26,.96);color:#F5F0E6;font-family:'DM Sans',sans-serif;box-shadow:0 1rem 2.5rem rgba(0,0,0,.5)");
+  var e = function(x){ return String(x).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  w.innerHTML = '<div style="font-family:Cinzel,serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#D4AF6A;margin-bottom:.4rem">il link dell\u2019incontro</div>' +
+    '<div style="font-size:.85rem;word-break:break-all;color:rgba(245,240,230,.8)">' + e(ind) + '</div>' +
+    '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem">' +
+    '<button type="button" data-c="1" style="all:unset;cursor:pointer;color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.3rem .8rem">copia</button>' +
+    '<a target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(String(testo||"").split("\n")[0] + " \u2014 " + ind) + '" style="color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.3rem .8rem;text-decoration:none">WhatsApp</a>' +
+    '<button type="button" data-x="1" style="all:unset;cursor:pointer;margin-left:auto;color:rgba(245,240,230,.6)">chiudi</button></div>';
+  document.body.appendChild(w);
+  w.querySelector("[data-c]").onclick = function(){ try { navigator.clipboard.writeText(ind); this.textContent = "copiato"; } catch(x){} };
+  w.querySelector("[data-x]").onclick = function(){ w.remove(); };
+}

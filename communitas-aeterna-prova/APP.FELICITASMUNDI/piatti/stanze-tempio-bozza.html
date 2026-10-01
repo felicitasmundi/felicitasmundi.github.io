@@ -52,6 +52,24 @@ a.voce.va:hover,a.voce.va:active{background:color-mix(in srgb,var(--el) 14%,tran
 a.voce.va i{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);font-style:normal;color:var(--oro)}
 .vuoto{font-size:.85rem;color:rgba(245,240,230,.35)}
 details.spenta{opacity:.42}
+/* ⭐ i Vicinati */
+.dove-sei{width:100%;max-width:34rem;border:1px solid color-mix(in srgb,var(--el) 70%,var(--oro));border-radius:1.1rem;padding:1rem 1.1rem;background:linear-gradient(180deg,rgba(245,240,230,.07),rgba(245,240,230,.02));display:flex;flex-direction:column;gap:.55rem}
+.dove-sei[hidden]{display:none}
+.dove-sei b{font-family:'Cinzel',serif;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--oro)}
+.dove-sei p{margin:0;font-family:'Cormorant Garamond',serif;font-size:1.1rem;line-height:1.45;color:rgba(245,240,230,.82)}
+.dove-sei input{background:rgba(8,11,26,.7);border:1px solid rgba(212,175,106,.35);border-radius:.7rem;color:var(--ivory);padding:.6rem .8rem;font:inherit}
+.dove-sei .esiti{display:flex;flex-wrap:wrap;gap:.35rem}
+.dove-sei .esiti button,.dove-sei [data-geo]{all:unset;cursor:pointer;padding:.35rem .8rem;border-radius:999px;border:1px solid rgba(212,175,106,.45);color:var(--oro);font-size:.85rem}
+.dove-sei [data-geo]{align-self:flex-start}
+.gesti{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
+.gesto{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:.45rem;padding:.45rem .9rem;border-radius:999px;border:1px dashed rgba(212,175,106,.55);color:var(--oro);font-size:.85rem}
+.gesto b{font-weight:400}
+.gesto.presto{opacity:.42;cursor:default}
+a.voce .tg{position:absolute;right:1.7rem;top:50%;transform:translateY(-50%);font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.1rem .45rem;color:var(--oro)}
+.intro{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.45;color:rgba(245,240,230,.75)}
+.nota-r{margin:.2rem 0 0;font-size:.78rem;line-height:1.45;color:rgba(245,240,230,.5)}
+details.archivio{border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+details.archivio>summary{padding:.3rem 0;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,175,106,.8)}
 .in-attesa #porte{opacity:.42;pointer-events:none;user-select:none}
 .in-attesa .invita{opacity:.42;pointer-events:none}
 .avviso{margin:.2rem 0 0;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--oro);text-align:center;padding:.6rem 1.2rem;border:1px solid rgba(212,175,106,.45);border-radius:999px}
@@ -179,6 +197,8 @@ function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&am
 function alfa(v){ return (v||[]).slice().sort(function(a,b){ return String(a[0]).localeCompare(String(b[0]),"it",{sensitivity:"base"}); }); }
 function fascia(nome, voci){
   voci = alfa(voci);
+  /* ⭐ 1 ottobre, Gab: «in generale mostra in ogni stanza anthakarana solo quando già c'è qualcosa» */
+  if (nome === "Antaḥkaraṇa" && !(voci && voci.length)) return "";
   return '<div class="fascia"><em>'+nome+'</em>' + (voci && voci.length
     ? voci.map(function(v){ return (v[2] ? '<a class="voce va" href="#" data-prodotto="'+esc(v[2])+'">' : '<div class="voce">')+esc(v[0])+(v[1]?'<small>'+esc(v[1])+'</small>':'')+(v[2]?'<i>›</i></a>':'</div>'); }).join("")
     : '<div class="vuoto">'+VUOTO+'</div>') + '</div>';
@@ -201,6 +221,18 @@ document.getElementById("porte").innerHTML = tutte.map(function(p){
 }).join("");
 }
 disegnaPorte();
+/* ⭐ 1 ottobre — i Vicinati hanno la loro stanza: dove sei, karma yoga, villaggio, calendario, novità */
+if (qui === "vicinati") {
+  document.getElementById("porte").insertAdjacentHTML("beforebegin",
+    '<div class="dove-sei" id="dove-sei" hidden>' +
+    '<b>dove sei?</b>' +
+    '<p>Ti chiediamo il comune per mostrarti quello che succede vicino a te: le richieste di aiuto, gli incontri, il villaggio e le novit\u00e0, nel raggio di circa 20 km. Si sceglie una volta.</p>' +
+    '<input type="search" placeholder="scrivi il nome del comune" autocomplete="off"><div class="esiti"></div>' +
+    '<button type="button" data-geo>usa la mia posizione</button></div>');
+  var sv = document.createElement("script"); sv.src = "./fm-vicinati-tempio.js?v=10011520";
+  sv.onload = function () { if (window.FMVicinatiTempio) window.FMVicinatiTempio.avvia(); };
+  document.body.appendChild(sv);
+}
 /* ⭐ 1 ottobre 15:09, Gab: «nella pagina anthakarana metti semi trasparenti tutti i tasti, rendili non
    schiacciabili; inserisci sopra i quadranti la scritta che l'anthakarana parte in autunno» */
 if (qui === "antahkarana") {
@@ -227,7 +259,7 @@ document.getElementById("porte").addEventListener("click",function(e){
     else { W.pagineNomeChiesto = n; W.vai("pagina"); }
   } catch (x) { location.href="../../index.html?p=pagina&n="+encodeURIComponent(n); }
 });
-function legaPorte(){ document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});}); }
+function legaPorte(){ document.querySelectorAll('#porte > details').forEach(function(d){ if(d._lega) return; d._lega=1; d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('#porte > details').forEach(function(x){if(x!==d)x.open=false;});});}); }
 legaPorte();
 
 /* ⭐ 30 settembre, Gab: «secondo me riesci a mettere il collegamento database».

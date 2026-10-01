@@ -1,0 +1,228 @@
+/* ═══════════════════════════════════════════════════════════════
+   FM-VICINATI-TEMPIO — la stanza dei Vicinati, dentro il tempio.
+   ⭐ 1 ottobre, Gab (dopo l'incontro con Manuela): «non riesco a far arrivare il senso effettivo
+      di cosa si possa fare partendo da quella pagina».
+      0 · Dove sei — prima di tutto, con due righe sul perché; sparisce quando l'account ha scelto
+      1 · Karma yoga — le richieste vicino a te, quello che hai preso, le tue richieste
+      2 · Villaggio Felicitas — l'area attiva, legata alla civiltà e alla radice linguistica (il micelio)
+      3 · Oggi / calendario — oggi, i prossimi giorni, l'archivio · propongo un incontro
+      4 · Novità — Antaḥkaraṇa · vicino · lontano; si leggono e si scrivono (dal karma yoga)
+   Quello che non è pronto resta semitrasparente (Gab: «le cose le mettiamo semi trasparenti
+   finché non sono pronte»). «Vicino» = entro circa 20 km dal tuo comune.
+   Vuole: dentro il guscio `window.parent.db` e `window.parent.vai`.
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+  var RAGGIO = 20;   /* km */
+  var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+  var GIORNI = ["domenica","lunedì","martedì","mercoledì","giovedì","venerdì","sabato"];
+  var W = window.parent !== window ? window.parent : window;
+
+  function esc(x) { return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function titolo(o) { if (o.titolo) return o.titolo; var s = String(o.contenuto || "").trim().split("\n")[0]; return s.length > 80 ? s.slice(0, 78) + "…" : s; }
+  function km(a, b) {
+    if (!a || !b || a.lat == null || b.lat == null) return null;
+    var R = 6371, dLa = (b.lat - a.lat) * Math.PI / 180, dLo = (b.lon - a.lon) * Math.PI / 180;
+    var x = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLo / 2) * Math.sin(dLo / 2);
+    return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+  }
+  function quando(o) {
+    var s = o.inizio_il || o.accaduto_il; if (!s) return "";
+    var x = new Date(s); if (isNaN(x)) return "";
+    var t = GIORNI[x.getDay()] + " " + x.getDate() + " " + MESI[x.getMonth()];
+    if (o.inizio_il) t += ", " + String(x.getHours()).padStart(2, "0") + ":" + String(x.getMinutes()).padStart(2, "0");
+    return t;
+  }
+  function vai(r, x) { try { W.vai(r, x); } catch (e) {} }
+  function apriOrma(id) { try { if (W.SpazioVivo && W.SpazioVivo.apriOrma) return W.SpazioVivo.apriOrma(id); } catch (e) {} vai("orma", { id: id }); }
+  function scrivi(opz) { try { if (W.SpazioVivo && W.SpazioVivo.scriviOrma) return W.SpazioVivo.scriviOrma(opz); } catch (e) {} }
+
+  async function db() {
+    try { if (W.db) return W.db; } catch (e) {}
+    return null;
+  }
+
+  /* ── leggere ───────────────────────────────────────────────────── */
+  async function leggi() {
+    var d = { io: null, centro: null, comune: null, karma: [], presi: [], mie: [], villaggi: [], eventi: [], novita: [], dentro: {}, coord: {} };
+    var b = await db(); if (!b) return d;
+    try {
+      var u = await b.auth.getUser(); d.io = u && u.data && u.data.user && u.data.user.id;
+      if (d.io) {
+        var p = await b.from("persone").select("comune_cod").eq("id", d.io).maybeSingle();
+        var cc = p && p.data && p.data.comune_cod;
+        if (cc) {
+          var t = await b.from("territori").select("codice,nome,lat,lon").eq("codice", cc).limit(1);
+          if (t.data && t.data[0]) { d.comune = t.data[0]; d.centro = { lat: t.data[0].lat, lon: t.data[0].lon }; }
+        }
+      }
+      var COL = "id,titolo,contenuto,tipo,stadio,entro_il,luogo,luogo_lat,luogo_lon,territorio_cod,persona_id,quanti_servono,momento,dorme_dal,inizio_il,accaduto_il,categoria,visibilita";
+      var k = await b.from("orme").select(COL).eq("tipo", "karma_yoga").is("dorme_dal", null).order("momento", { ascending: false }).limit(120);
+      d.karma = k.data || [];
+      var v = await b.from("orme").select(COL).eq("tipo", "micelio").is("dorme_dal", null).limit(20);
+      d.villaggi = v.data || [];
+      var e = await b.from("orme").select(COL).eq("tipo", "festa").eq("visibilita", "pubblico").is("dorme_dal", null).limit(200);
+      d.eventi = e.data || [];
+      var mese = new Date(Date.now() - 45 * 864e5).toISOString();
+      var n = await b.from("orme").select(COL).in("tipo", ["articolo", "rubrica_radio"]).eq("visibilita", "pubblico").gte("momento", mese).order("momento", { ascending: false }).limit(60);
+      d.novita = n.data || [];
+
+      /* chi c'è dentro, e cosa ho preso io */
+      var ids = d.karma.map(function (x) { return x.id; }).concat(d.villaggi.map(function (x) { return x.id; }));
+      if (ids.length) {
+        var op = await b.from("orma_persone").select("orma_id,persona_id,nome,preso_il,lasciato_il,ruolo").in("orma_id", ids);
+        (op.data || []).forEach(function (r) {
+          if (!r.preso_il || r.lasciato_il) return;
+          (d.dentro[r.orma_id] = d.dentro[r.orma_id] || []).push(r);
+        });
+      }
+      /* le coordinate dei comuni delle orme che non hanno un punto */
+      var cods = {};
+      [].concat(d.karma, d.eventi, d.novita).forEach(function (o) { if (o.luogo_lat == null && o.territorio_cod) cods[o.territorio_cod] = 1; });
+      var lista = Object.keys(cods);
+      if (lista.length) {
+        var tc = await b.from("territori").select("codice,lat,lon").in("codice", lista.slice(0, 300));
+        (tc.data || []).forEach(function (r) { d.coord[r.codice] = { lat: r.lat, lon: r.lon }; });
+      }
+    } catch (x) { console.warn("vicinati:", x); }
+    return d;
+  }
+  function dove(d, o) {
+    if (o.luogo_lat != null) return { lat: o.luogo_lat, lon: o.luogo_lon };
+    return d.coord[o.territorio_cod] || null;
+  }
+  /* vicino se entro il raggio; senza luogo o senza «dove sei» resta vicino (non si nasconde niente) */
+  function vicino(d, o) { var k = km(d.centro, dove(d, o)); return k == null || k <= RAGGIO; }
+
+  /* ── disegnare ─────────────────────────────────────────────────── */
+  function riga(o, sotto, tag, attr) {
+    return '<a class="voce va" href="#" ' + (attr || ('data-orma="' + esc(o.id) + '"')) + '>' + esc(titolo(o)) +
+      (sotto ? '<small>' + esc(sotto) + '</small>' : '') + (tag ? '<span class="tg">' + esc(tag) + '</span>' : '') + '<i>›</i></a>';
+  }
+  function fascia(nome, html, vuoto) {
+    if (!html && !vuoto) return "";
+    return '<div class="fascia"><em>' + esc(nome) + '</em>' + (html || '<div class="vuoto">' + esc(vuoto) + '</div>') + '</div>';
+  }
+  function tasto(testo, attr, spento) {
+    return '<button type="button" class="gesto' + (spento ? ' presto' : '') + '" ' + (attr || '') + (spento ? ' disabled' : '') + '><b>+</b>' + esc(testo) + '</button>';
+  }
+  function porta(ic, nome, n, dentro) {
+    return '<details><summary><span class="ic">' + ic + '</span><b>' + esc(nome) + '</b><span class="n">' + esc(n || "") + '</span><i>›</i></summary><div class="dentro">' + dentro + '</div></details>';
+  }
+
+  function disegna(d) {
+    var D = document;
+    /* 0 · Dove sei */
+    var ds = D.getElementById("dove-sei");
+    if (ds) ds.hidden = !!d.comune || !d.io;
+
+    /* 1 · Karma yoga */
+    var presiId = {}, richieste = [], presi = [], mie = [];
+    d.karma.forEach(function (o) {
+      var den = d.dentro[o.id] || [];
+      var mio = den.some(function (r) { return r.persona_id === d.io; });
+      if (o.persona_id === d.io) mie.push(o);
+      else if (mio) presi.push(o);
+      else if (o.stadio !== "sviluppato" && vicino(d, o)) richieste.push(o);
+    });
+    var rk = function (o) {
+      var den = (d.dentro[o.id] || []).length, serve = o.quanti_servono;
+      var s = [o.luogo, o.entro_il ? "entro " + o.entro_il.split("-").reverse().slice(0, 2).join("/") : "", serve ? den + " su " + serve : (den ? den + " dentro" : "")].filter(Boolean).join(" · ");
+      return riga(o, s);
+    };
+    var hK = fascia("richieste vicino a te", richieste.map(rk).join(""), "nessuna richiesta aperta qui vicino") +
+             fascia("quello che hai preso", presi.map(rk).join(""), "") +
+             fascia("le tue richieste", mie.map(rk).join(""), "") +
+             '<div class="gesti">' + tasto("chiedo una mano", 'data-scrivi="karma_yoga"') + '</div>';
+    /* 2 · Villaggio Felicitas */
+    var hV = '<p class="intro">L’area attiva in un territorio ampio, legata a una civiltà e alla sua radice linguistica. Dentro il villaggio si propongono i vicinati.</p>';
+    if (d.villaggi.length) {
+      d.villaggi.forEach(function (v) {
+        var den = d.dentro[v.id] || [];
+        var coord = den.filter(function (r) { return r.ruolo === "coordinatore"; }).map(function (r) { return r.nome; }).filter(Boolean);
+        var sotto = [den.length === 1 ? "1 persona" : den.length + " persone", coord.length ? "coordina " + coord.join(", ") : ""].filter(Boolean).join(" · ");
+        hV += riga(v, sotto);
+      });
+    } else hV += '<div class="vuoto">il primo villaggio si apre con la civiltà sarda</div>';
+    hV += '<div class="gesti">' + tasto("proponi un vicinato", "", true) + '</div>';
+
+    /* 3 · Oggi / calendario */
+    var oggi = new Date(); oggi.setHours(0, 0, 0, 0);
+    var domani = new Date(oggi.getTime() + 864e5);
+    var data = function (o) { var s = o.inizio_il || o.accaduto_il; return s ? new Date(s) : null; };
+    var ev = d.eventi.filter(function (o) { return data(o); });
+    var futuri = ev.filter(function (o) { return data(o) >= oggi; }).sort(function (a, b) { return data(a) - data(b); });
+    var passati = ev.filter(function (o) { return data(o) < oggi; }).sort(function (a, b) { return data(b) - data(a); });
+    var re = function (o) { return riga(o, [quando(o), o.luogo].filter(Boolean).join(" · "), o.categoria === "riunione" ? "riunione" : "", 'data-evento="' + esc(o.id) + '"'); };
+    var diOggi = futuri.filter(function (o) { return data(o) < domani; });
+    var prossimi = futuri.filter(function (o) { return data(o) >= domani; });
+    var hC = fascia("oggi", diOggi.filter(function (o) { return vicino(d, o); }).map(re).join(""), "niente oggi qui vicino") +
+             fascia("i prossimi giorni", prossimi.filter(function (o) { return vicino(d, o); }).map(re).join(""), "") +
+             fascia("più lontano", futuri.filter(function (o) { return !vicino(d, o); }).map(re).join(""), "") +
+             (passati.length ? '<details class="archivio"><summary>archivio · ' + passati.length + '</summary>' + passati.slice(0, 20).map(re).join("") + '</details>' : "") +
+             '<div class="gesti">' + tasto("propongo un incontro", 'data-scrivi="festa"') + '</div>';
+
+    /* 4 · Novità — Antaḥkaraṇa solo quando c'è qualcosa */
+    var nv = d.novita;
+    var rn = function (o) { return riga(o, [o.tipo === "rubrica_radio" ? "radio" : "articolo", giornoMese(o.momento)].filter(Boolean).join(" · ")); };
+    var hN = fascia("vicino a te", nv.filter(function (o) { return vicino(d, o); }).map(rn).join(""), "ancora niente qui vicino") +
+             fascia("lontano", nv.filter(function (o) { return !vicino(d, o); }).map(rn).join(""), "") +
+             '<div class="gesti">' + tasto("scrivo un articolo", 'data-scrivi="articolo"') +
+             tasto("chiedo uno spazio radio", "", true) + tasto("inserisco una puntata", "", true) + '</div>' +
+             '<p class="nota-r">Le puntate: solo vostre o di cui avete i diritti. Chi fa la regia carica l’mp3 della puntata, oppure il suo link.</p>';
+
+    D.getElementById("porte").innerHTML =
+      porta("◇", "Karma yoga", richieste.length ? richieste.length + (richieste.length === 1 ? " richiesta" : " richieste") : "", hK) +
+      porta("◎", "Villaggio Felicitas", d.villaggi.length ? (d.villaggi.length === 1 ? "1 villaggio" : d.villaggi.length + " villaggi") : "", hV) +
+      porta("☾", "Oggi / calendario", futuri.length ? futuri.length + " in arrivo" : "", hC) +
+      porta("✦", "Novità", nv.length ? String(nv.length) : "", hN);
+
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-orma]"), function (a) { a.onclick = function (e) { e.preventDefault(); apriOrma(a.getAttribute("data-orma")); }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-evento]"), function (a) { a.onclick = function (e) { e.preventDefault(); vai("evento", { id: a.getAttribute("data-evento") }); }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-scrivi]"), function (a) { a.onclick = function () { scrivi({ tipo: a.getAttribute("data-scrivi") }); }; });
+    if (typeof window.legaPorte === "function") window.legaPorte();
+  }
+  function giornoMese(s) { if (!s) return ""; var x = new Date(s); return isNaN(x) ? "" : x.getDate() + " " + MESI[x.getMonth()]; }
+
+  /* ── 0 · dove sei: cerca il comune, o la posizione ─────────────── */
+  function doveSei(ricarica) {
+    var box = document.getElementById("dove-sei"); if (!box) return;
+    var inp = box.querySelector("input"), lis = box.querySelector(".esiti"), geo = box.querySelector("[data-geo]");
+    async function salva(cod) {
+      var b = await db(); if (!b) return;
+      var u = await b.auth.getUser(); var id = u && u.data && u.data.user && u.data.user.id; if (!id) return;
+      var r = await b.from("persone").update({ comune_cod: cod }).eq("id", id);
+      if (!r.error) ricarica();
+    }
+    var T = null;
+    inp.oninput = function () {
+      clearTimeout(T); var q = inp.value.trim(); if (q.length < 2) { lis.innerHTML = ""; return; }
+      T = setTimeout(async function () {
+        var b = await db(); if (!b) return;
+        var r = await b.from("territori").select("codice,nome").eq("tipo", "comune").ilike("nome", q + "%").order("nome").limit(8);
+        lis.innerHTML = (r.data || []).map(function (c) { return '<button type="button" data-cod="' + esc(c.codice) + '">' + esc(c.nome) + '</button>'; }).join("");
+        Array.prototype.forEach.call(lis.querySelectorAll("button"), function (bt) { bt.onclick = function () { salva(bt.getAttribute("data-cod")); }; });
+      }, 250);
+    };
+    geo.onclick = function () {
+      if (!navigator.geolocation) return;
+      geo.textContent = "un momento…";
+      navigator.geolocation.getCurrentPosition(async function (p) {
+        var b = await db(); if (!b) return;
+        var la = p.coords.latitude, lo = p.coords.longitude;
+        var r = await b.from("territori").select("codice,nome,lat,lon").eq("tipo", "comune")
+          .gte("lat", la - .2).lte("lat", la + .2).gte("lon", lo - .25).lte("lon", lo + .25).limit(400);
+        var best = null, bd = 1e9;
+        (r.data || []).forEach(function (c) { var k = km({ lat: la, lon: lo }, c); if (k != null && k < bd) { bd = k; best = c; } });
+        if (best) salva(best.codice); else geo.textContent = "non trovo il comune: scrivilo";
+      }, function () { geo.textContent = "posizione non disponibile: scrivi il comune"; });
+    };
+  }
+
+  async function avvia() {
+    var giro = async function () { disegna(await leggi()); };
+    doveSei(giro);
+    await giro();
+  }
+  window.FMVicinatiTempio = { avvia: avvia };
+})();
