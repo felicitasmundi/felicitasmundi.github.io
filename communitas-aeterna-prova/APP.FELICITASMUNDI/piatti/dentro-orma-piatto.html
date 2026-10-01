@@ -796,6 +796,10 @@ details.porta .vetr-f>.oc{display:none}
 @media(max-width:34rem){details.porta>.dentro{padding:0 .7rem .9rem}}
 /* ⭐ 1 ottobre, Gab: il numerino dei messaggi nuovi */
 #p-chat summary .n.nuovi{display:inline-grid;place-items:center;min-width:1.5rem;height:1.5rem;padding:0 .4rem;border-radius:999px;background:var(--oro,#D4AF6A);color:#0A0C1A;font-weight:600;font-size:.78rem}
+/* ⭐ 1 ottobre 22:59, Gab: «devi poter toccare tutto il quadrante» — scadenza e file si toccano interi */
+#q-scadenza.si-tocca,#q-file.si-tocca{cursor:pointer;position:relative;transition:border-color .3s,background .3s}
+#q-scadenza.si-tocca:hover,#q-file.si-tocca:hover{border-color:rgba(212,175,106,.7);background:rgba(212,175,106,.06)}
+#q-scadenza.si-tocca .vl:empty::before,#q-scadenza.si-tocca .vuota{content:"tocca per scegliere";font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(245,240,230,.45)}
 </style>
 </head>
 <body>
@@ -829,8 +833,7 @@ details.porta .vetr-f>.oc{display:none}
     </div>
     <label class="mia-madre" data-stato="puo-madre" hidden><span class="et">fa parte di</span>
       <select data-g="scegli-madre"></select></label>
-    <!-- ⭐ 1 ottobre 22:56, Gab: «ho fatto un obiettivo ma non posso inserire scadenza né archivio» -->
-    <label class="mia-madre"><span class="et">scadenza</span><input type="date" data-g="scadenza"></label>
+    <!-- ⭐ 1 ottobre 22:56, Gab: «non posso inserire scadenza né archivio» — l'archivio è qui; la scadenza si tocca nel suo quadrante -->
     <div class="mia-gesti">
       <button type="button" data-g="concludi" data-stato="aperta-mia">fatto · va in archivio</button>
       <button type="button" data-g="riprendi" data-stato="chiusa" hidden>riprendila dall&rsquo;archivio</button>
@@ -854,13 +857,12 @@ details.porta .vetr-f>.oc{display:none}
     <span><span class="et">Dove</span><span class="vl" data-c="orma.luogo">[ dove ]</span></span>
     <span><span class="et">Destinazione</span><span class="vl" data-c="orma.destinazione">[ dove va ]</span></span>
     <span><span class="et">Servono</span><span class="vl"><span data-c="orma.quanti_servono">[ n ]</span> persone</span></span>
-    <span><span class="et">Scadenza</span><span class="vl"><span data-c="orma.entro_il">[ entro quando ]</span><span class="sc" data-stato="scaduta" hidden>&middot; scaduta</span></span></span>
-    <span><span class="et">File allegati</span>
+    <span id="q-scadenza"><span class="et">Scadenza</span><input type="date" id="scad-in" tabindex="-1" aria-hidden="true" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><span class="vl"><span data-c="orma.entro_il">[ entro quando ]</span><span class="sc" data-stato="scaduta" hidden>&middot; scaduta</span></span></span>
+    <span id="q-file"><span class="et">File allegati</span>
       <span class="vl fl">
         <span class="ff" data-stampo="file"><a data-c="file.vai" href="#"><span data-c="file.nome">[ un file ]</span></a></span>
         <span class="ffn" data-stato="senza-file" hidden>[ nessun allegato ]</span>
-        <button type="button" class="ff piu-g" data-g="allega" aria-label="+ aggiungi">+</button>
-        <span class="ffn">+ aggiungi &middot; Il file non pu&ograve; superare i 25 MB.</span>
+        <span class="ffn">tocca qui per aggiungere un file &middot; fino a 25 MB</span>
       </span></span>
   </div>
 

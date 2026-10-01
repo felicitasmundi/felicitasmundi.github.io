@@ -430,7 +430,7 @@
       } catch (e) { console.warn("chiamare:", e); }
     });
     /* ⭐ allegare: bucket riservato, <orma>/<nome> · 25 MB · 10 per orma */
-    P.gesto(R, "allega", function () {
+    function allega() {
       if (d.file.length >= TETTO_FILE) return;
       var i = R.ownerDocument.createElement("input");
       i.type = "file";
@@ -446,8 +446,10 @@
           await ricarica();
         } catch (e) { console.warn("allegato:", e); }
       };
+      i.style.display = "none"; R.appendChild(i);
       i.click();
-    });
+    }
+    P.gesto(R, "allega", allega);
     function nuova(opz) {
       if (window.SpazioVivo && typeof window.SpazioVivo.nuovaOrma === "function") return window.SpazioVivo.nuovaOrma(id, opz);
     }
@@ -492,18 +494,27 @@
         await ricarica();
       } catch (err) { console.warn("visibilit\u00e0:", err); }
     });
-    /* ⭐ 1 ottobre 22:56, Gab — la scadenza e l'archivio di chi ha aperto l'orma */
-    var sc = R.querySelector('[data-g="scadenza"]');
-    if (sc) {
-      sc.value = o.entro_il ? String(o.entro_il).slice(0, 10) : "";
-      sc.onchange = async function () {
-        var r = await db.from("orme").update({ entro_il: sc.value || null }).eq("id", id);
-        if (r.error) { console.warn("scadenza:", r.error); alertino(r.error.message); return; }
+    /* ⭐ 1 ottobre 22:59, Gab: «toccando il quadrante scadenza esce un calendario, clicchi e rimane» ·
+       «devi poter toccare tutto il quadrante e carichi un file» */
+    var qs = R.querySelector("#q-scadenza"), si = R.querySelector("#scad-in");
+    if (qs && si && padrone) {
+      qs.classList.add("si-tocca"); qs.hidden = false;
+      var vs = qs.querySelector('[data-c="orma.entro_il"]');
+      if (vs && !o.entro_il) vs.textContent = "tocca per scegliere";
+      si.value = o.entro_il ? String(o.entro_il).slice(0, 10) : "";
+      qs.onclick = function () { try { if (si.showPicker) si.showPicker(); else si.click(); } catch (e) { si.click(); } };
+      si.onchange = async function () {
+        var r = await db.from("orme").update({ entro_il: si.value || null }).eq("id", id);
+        if (r.error) { console.warn("scadenza:", r.error); return; }
         await ricarica();
       };
     }
+    var qf = R.querySelector("#q-file");
+    if (qf) {
+      qf.classList.add("si-tocca");
+      qf.onclick = function (e) { if (e.target.closest && e.target.closest("a")) return; allega(); };
+    }
     P.stato(R, "aperta-mia", o.stadio !== "sviluppato");
-    function alertino(t) { var n = R.querySelector('[data-g="concludi"]'); if (n) { n.textContent = "non riesco: " + String(t).slice(0, 80); } }
     P.gesto(R, "concludi", function (e, b) {
       occupato(b, async function () {
         var r = await db.from("orme").update({ stadio: "sviluppato" }).eq("id", id);
