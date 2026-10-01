@@ -52,14 +52,30 @@
   <h1>Felicitas</h1>
   <div class="eti">L&rsquo;app per Android</div>
   <div class="dati">Versione 2026.10.01a &middot; 1.520.572 byte</div>
-  <a class="tasto" href="felicitas.apk?v=20261001a" download="felicitas.apk">Scarica</a>
+  <a class="tasto" id="scarica" href="felicitas.apk?v=20261001a" download="felicitas.apk">Scarica</a>
   <p class="nota-conferma">L&rsquo;app si installa da qui, fuori dal Play Store: per questo il telefono chiede conferma due volte. &Egrave; la procedura normale per ogni app scaricata da un sito.</p>
   <ol class="come">
-    <li>Tocca &laquo;Scarica&raquo;. Il browser avvisa che il file potrebbe essere dannoso: tocca &laquo;Scarica comunque&raquo;. Se il browser non lo scarica, apri questa pagina con Chrome.</li>
+    <li>Tocca &laquo;Scarica&raquo;. Il browser avvisa che il file potrebbe essere dannoso: tocca &laquo;Scarica comunque&raquo;.</li>
     <li>Apri il file dalla tendina delle notifiche o dalla cartella Download.</li>
     <li>Android chiede se consentire l&rsquo;installazione da questa origine: consenti.</li>
     <li>Tocca &laquo;Installa&raquo;: l&rsquo;icona di Felicitas compare fra le tue app.</li>
   </ol>
 </div>
+<script id="fm-brave">
+/* ⭐ 1 ottobre, Gab: «continua a far problemi a far partire l'installazione con brave … quale
+   escamotage esiste?» → «ok passaggio automatico a chrome». Su Android, da Brave, il tasto apre
+   lo scaricamento direttamente in Chrome. Se Chrome non c'è, si scarica da qui come sempre. */
+(function(){
+  var a=document.getElementById("scarica"); if(!a) return;
+  var android=/Android/i.test(navigator.userAgent);
+  var brave=!!(navigator.brave && navigator.brave.isBrave);
+  if(!android||!brave) return;
+  a.addEventListener("click",function(e){
+    var u=new URL(a.getAttribute("href"),location.href);
+    e.preventDefault();
+    location.href="intent://"+u.host+u.pathname+u.search+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent(u.href)+";end";
+  });
+})();
+</script>
 </body>
 </html>
