@@ -213,16 +213,12 @@
     var dentro = 0;
     try {
       var d = f.contentDocument;
-      /* ⭐ 1 ottobre 19:24, Gab: «quando apri le porte la visuale va molto in fondo» — la finestra deve anche
-         potersi ACCORCIARE quando una porta si chiude: si misura il corpo, non il documento (che è sempre
-         alto almeno quanto la finestra stessa), e non più il contenitore (che contiene la finestra). */
-      if (d && d.body) {
-        var cs = d.defaultView.getComputedStyle(d.body);
-        dentro = d.body.scrollHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
-        if (!f.style.height) dentro = Math.max(dentro, (d.documentElement && d.documentElement.scrollHeight) || 0);
-      }
+      if (d && d.body) dentro = Math.max(d.body.scrollHeight || 0,
+                                         (d.documentElement && d.documentElement.scrollHeight) || 0);
     } catch (e) {}
-    var h = dentro || box.clientHeight || 0;
+    /* ⭐ 1 ottobre 22:40, Gab: «mi mostra la schermata a metà, sul pc» — torna la misura di prima
+       (la più grande fra contenitore e contenuto): l'accorciamento delle 19:24 tagliava le stanze */
+    var h = Math.max(box.clientHeight || 0, dentro);
     /* ⛔ se ancora non si sa niente, meglio una finestra piena che una invisibile */
     if (!h) h = Math.max(320, (window.innerHeight || 640) - 160);
     f.style.height = h + "px";
@@ -330,7 +326,7 @@
       /* ⭐ 30 settembre, Gab: «l app ha un problema di eccessiva lentezza» — fuori dalla prova il
          piatto non si riscarica più a ogni passaggio: resta in memoria finché non cambia VERSIONE_PIATTI
          (da alzare a ogni pubblicazione). Nella prova resta fresco sempre. */
-      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20261001s";
+      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20261001t";
       f.src = indirizzo + (indirizzo.indexOf("?") > -1 ? "&" : "?") + "t=" + fresco;
       if (window.ResizeObserver) {
         ro = new ResizeObserver(function () { if (!chiuso) fmpAltezza(box, f); });
