@@ -90,10 +90,17 @@
       /* ⭐ 1 ottobre, Gab: «mettere felicitas festival dentro micelio» — chi ha aperto l'orma
          può metterla dentro un micelio o un evento suo */
       if (d.io && d.orma.persona_id === d.io) {
-        var cand = await db.from("orme").select("id,titolo,contenuto,tipo")
-          .eq("persona_id", d.io).in("tipo", ["micelio", "festa"]).neq("id", id)
+        var cand = await db.from("orme").select("id,titolo,contenuto,tipo,talento_id")
+          .eq("persona_id", d.io).in("tipo", ["micelio", "festa", "talento_radice"]).neq("id", id)
           .order("momento", { ascending: false }).limit(40);
         d.candidate = cand.error ? [] : (cand.data || []);
+        /* il talento si chiama col suo nome, non col testo della radice */
+        var tid = d.candidate.map(function (c) { return c.talento_id; }).filter(Boolean);
+        if (tid.length) {
+          var tn = await db.from("talenti").select("id,nome").in("id", tid);
+          var nomi = {}; (tn.error ? [] : tn.data || []).forEach(function (t) { nomi[t.id] = t.nome; });
+          d.candidate.forEach(function (c) { if (c.tipo === "talento_radice" && nomi[c.talento_id]) c.titolo = nomi[c.talento_id]; });
+        }
       }
 
       /* ⭐ 1 ottobre, Gab: l'evento dell'11 è «una task dentro festival» — ogni orma dice di chi è figlia */
@@ -393,7 +400,8 @@
     if (sm && d.candidate) {
       sm.innerHTML = '<option value="">— nessuna —</option>' + d.candidate.map(function (c) {
         var t = String(titolo(c)).replace(/[&<>"]/g, function (x) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[x]; });
-        return '<option value="' + c.id + '">' + (c.tipo === "micelio" ? "micelio · " : "evento · ") + t + '</option>';
+        var et = c.tipo === "micelio" ? "micelio · " : c.tipo === "talento_radice" ? "talento · " : "evento · ";
+        return '<option value="' + c.id + '">' + et + t + '</option>';
       }).join("");
       sm.value = o.orma_madre_id || "";
       sm.onchange = async function () {
