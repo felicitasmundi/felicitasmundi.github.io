@@ -38,7 +38,7 @@ var AC_FOGLI = {
   foto: { tit:"Foto", col:"foto_url", tipo:"riga",
     sot:"L\u2019indirizzo di un\u2019immagine. Il caricamento dal telefono arriva dopo.",
     posto:"https://\u2026" },
-  bio: { tit:"Biografia", col:"biografia", tipo:"lungo", max:600,
+  bio: { tit:"Biografia", col:"biografia", tipo:"lungo", max:650,   /* ⭐ 1 ottobre, Gab: «limite 650» */
     sot:"Chi sei, in poche righe. Viaggia con quello che porti, se lo accendi qui sotto.",
     posto:"scrivi\u2026" },
   tel: { tit:"Telefono", col:"telefono", tipo:"riga",
