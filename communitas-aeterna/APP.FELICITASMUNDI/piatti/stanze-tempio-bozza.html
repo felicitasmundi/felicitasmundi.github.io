@@ -215,7 +215,7 @@ var tutte = S.porte;
 if (S.conto) {
   var T = {A:[],V:[],L:[]};
   S.porte.forEach(function(p){ var d=p[1]; if(d.testo) return; ["A","V","L"].forEach(function(k){ T[k]=T[k].concat(d[k]||[]); }); });
-  tutte = [[(/e$/.test(S.conto) ? "tutte le " : "tutti i ")+S.conto, T, true]].concat(S.porte);
+  tutte = [[(S.conto === "lezioni" ? "tutte le " : "tutti i ")+S.conto, T, true]].concat(S.porte);
 }
 document.getElementById("porte").innerHTML = tutte.map(function(p){
   var d = p[1], n = (d.A||[]).length + (d.V||[]).length + (d.L||[]).length;
