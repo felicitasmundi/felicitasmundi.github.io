@@ -38,7 +38,11 @@ class AkNexus3d extends HTMLElement {
       v.src = new URL('nexus-giro.mp4?v=10011035', QUI).href;
       v.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;pointer-events:none');
       sh.appendChild(v);
-      if (!this.fermo) { const pp = v.play(); if (pp && pp.catch) pp.catch(() => {}); }
+      if (!this.fermo) {
+        const via = () => { const pp = v.play(); if (pp && pp.catch) pp.catch(() => {}); };
+        via(); v.addEventListener('loadeddata', via, { once: true });
+        addEventListener('touchstart', via, { once: true, passive: true });   // se il telefono ha fermato la riproduzione automatica
+      }
       return;
     }
     /* il 3D parte quando la pagina ha finito di caricarsi e il telefono respira */
