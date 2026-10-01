@@ -198,7 +198,7 @@
       orma: { titolo: titolo(o), sottotitolo: o.sottotitolo || "",
               contenuto: o.contenuto || "", tipo: o.tipo || "",
               elemento: o.elemento, stadio: stadio(o.stadio),
-              luogo: o.luogo || "", accaduto_il: giornoMese(o.accaduto_il),
+              luogo: o.luogo || "", accaduto_il: o.inizio_il ? "" : giornoMese(o.accaduto_il),
               inizio_il: o.inizio_il ? giornoMese(o.inizio_il) + ", " + ora(o.inizio_il) : "",
               entro_il: giornoMese(o.entro_il), destinazione: o.destinazione || "",
               quanti_servono: o.quanti_servono ? String(o.quanti_servono) : "" },
@@ -234,6 +234,23 @@
     P.stato(R, "non-sono-dentro", !mia && o.stadio !== "sviluppato");
     P.stato(R, "chiusa", o.stadio === "sviluppato");
     P.stato(R, "scaduta", !!scaduta);
+
+    /* ⭐ 1 ottobre — la pulizia: quello che non c'è non si vede (né i segnaposti, né le carte vuote) */
+    (function () {
+      var NOMI_TIPO = { festa: "evento", micelio: "micelio", karma_yoga: "karma yoga", talento_radice: "talento" };
+      Array.prototype.forEach.call(R.querySelectorAll('[data-c="orma.tipo"]'), function (e) { if (o.tipo) e.textContent = NOMI_TIPO[o.tipo] || String(o.tipo).replace(/_/g, " "); });
+      var occ = R.querySelector(".occ");
+      if (occ && !o.elemento) Array.prototype.forEach.call(occ.childNodes, function (n) {
+        if (n.nodeType === 1 && n.getAttribute("data-c") === "orma.elemento") n.hidden = true;
+        if (n.nodeType === 3 && /·\s*$/.test(n.nodeValue) && n.nextSibling && n.nextSibling.nodeType === 1 && n.nextSibling.getAttribute("data-c") === "orma.elemento") n.nodeValue = n.nodeValue.replace(/\s*·\s*$/, " ");
+      });
+      Array.prototype.forEach.call(R.querySelectorAll(".dati > span"), function (sp) {
+        if (sp.querySelector(".fl")) return;                       /* gli allegati restano: c'è il +  */
+        var vl = sp.querySelector(".vl"); var t = vl ? vl.textContent.replace(/persone/, "").trim() : "";
+        sp.hidden = !t || /^\[.*\]$/.test(t);
+      });
+      var doc = R.ownerDocument; if (doc && doc.documentElement) doc.documentElement.classList.add("pronta");
+    })();
     P.stato(R, "posso-pubblicare", !!d.puoPubblicare);
     /* ⭐ la vetrina: la costruisce Design, la scrive fm-vetrina.js */
     if (window.SpazioVivo && typeof window.SpazioVivo.vetrina === "function")
