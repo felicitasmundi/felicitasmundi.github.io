@@ -257,6 +257,9 @@
       var a = e.target && e.target.closest && e.target.closest("a[href]");
       if (!a) return;
       if ((a.getAttribute("href") || "").charAt(0) === "#") return;
+      /* ⭐ 1 ottobre 22:53, Gab: «le pagine privacy cookie e condizioni non sono cliccabili» —
+         un collegamento che si apre in una finestra nuova non porta via la pagina: passa */
+      if ((a.getAttribute("target") || "") === "_blank") return;
       e.preventDefault();
     }, true);
   }
