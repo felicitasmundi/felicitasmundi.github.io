@@ -135,6 +135,12 @@ var MODELLO = `<style>
   /* ⭐ 1 ottobre, Gab: «in che modo possiamo evitare di avere un quadrante indice che prende lo
      spazio di lettura?» — sul telefono le voci stanno sotto il titolo, piccole, su una riga che
      scorre di lato, e non seguono più la lettura: il testo resta libero. */
+  /* ⭐ 1 ottobre, Gab: «nella visione computer l'indice risulta sempre grande e fisso» —
+     anche sul computer non segue più la lettura, ed è più piccolo */
+  .fm-pag [data-quad]{position:static!important;top:auto!important;margin-top:1.2rem!important;padding:.4rem .2rem!important;
+    background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .fm-pag [data-quad-voce]{font-size:.78rem!important;letter-spacing:.14em!important;padding:.35rem .85rem!important;
+    border:1px solid rgba(212,175,106,.3)!important}
   @media(max-width:40rem){
     .fm-pag [data-quad]{position:static!important;flex-wrap:nowrap!important;overflow-x:auto;
       -webkit-overflow-scrolling:touch;scrollbar-width:none;padding:.35rem .2rem!important;margin-top:1rem!important;
