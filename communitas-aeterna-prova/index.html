@@ -4101,7 +4101,7 @@ window.gruppi = function (c) {
 <script src="fm-crediti.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊵ — i crediti (saldo, sigillo, gettone ?t=): erano fm-talenti.js, interi e identici -->
 <script src="fm-tira.js?v=09302055"></script><!-- ⭐ 30 settembre: trascina giù per aggiornare, prima dei piatti --><script src="APP.FELICITASMUNDI/piatti/fm-piatto.js?v=09302055"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — la finestra dei piatti: FMPiatto.monta/riempi/stampa/stato/gesto. PRIMA dei due file dell'orma, che la usano -->
 <script src="APP.FELICITASMUNDI/piatti/fm-testata.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — collega il tasto del carrello e il suo numero (SpazioVivo.testata). La testata resta quella vecchia: qui serve solo per il carrello. Dopo fm-piatto, che usa -->
-<script src="APP.FELICITASMUNDI/piatti/fm-orma-mia.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — «La mia orma» piatta: SpazioVivo.ormaMia(box). Sostituisce il vecchio fm-orma-mia.js (non più caricato) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-orma-mia.js?v=10011130"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — «La mia orma» piatta: SpazioVivo.ormaMia(box). Sostituisce il vecchio fm-orma-mia.js (non più caricato) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-soglia.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — la soglia piatta: SpazioVivo.soglia(box) · sogliaServe(). Sostituisce il vecchio fm-soglia.js -->
 <script src="APP.FELICITASMUNDI/piatti/fm-cammino.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — il cammino piatto: SpazioVivo.cammino(box). Sostituisce il vecchio fm-cammino.js -->
 <script src="APP.FELICITASMUNDI/piatti/fm-percorso-talenti.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — il percorso dei talenti piatto: SpazioVivo.percorsoDeiTalenti(box) e SpazioVivo.stanze(box). Le stanze vivono qui: sostituisce fm-stanze.js -->
@@ -4123,7 +4123,8 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-calendario.js?v=09292315"></script><!-- 56 — il calendario: SpazioVivo.calendario(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-costi.js?v=09292315"></script><!-- 56 — i costi: SpazioVivo.costi(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-rubrica.js?v=09292315"></script><!-- 56 — la rubrica: SpazioVivo.rubrica(box) -->
-<script src="APP.FELICITASMUNDI/piatti/fm-settimana.js?v=09292315"></script><!-- 28 settembre — «La settimana»: gli obiettivi per elemento, SpazioVivo.settimana(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-settimana.js?v=10011130"></script><!-- 28 settembre — «La settimana»: gli obiettivi per elemento, SpazioVivo.settimana(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-orma-tempio.js?v=10011130"></script><!-- ⭐ 1 ottobre — «La mia orma» col rito del tempio: SpazioVivo.ormaTempio(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-vicinati.js?v=09292315"></script><!-- 29 settembre — Vicinati come casa: SpazioVivo.vicinati(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-invito.js?v=09292315"></script><!-- 56 — «Invita chi risuona»: SpazioVivo.invito(). DOPO le stanze, così vince il suo -->
 <script src="APP.FELICITASMUNDI/piatti/fm-evento.js?v=10011000"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
@@ -4575,7 +4576,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ TOCCATO NEL GUSCIO ㊾ — «orme» è SpazioVivo.ormaMia (fm-orma-mia.js
        del 14 settembre): laMatriceDellOrma non esiste più. Senza il file
        si cade su mieOrme, come prima. */
-    else if(id==="orme"){ if(window.SpazioVivo && SpazioVivo.ormaMia) SpazioVivo.ormaMia(c); else mieOrme(c); }
+    /* ⭐ 1 ottobre, Gab: «per me questa visibilità orma puoi già pubblicarla» — la mia orma col tempio */
+    else if(id==="orme"){ if(window.SpazioVivo && SpazioVivo.ormaTempio) SpazioVivo.ormaTempio(c); else if(window.SpazioVivo && SpazioVivo.ormaMia) SpazioVivo.ormaMia(c); else mieOrme(c); }
     else if(id==="incontro") incontro(c, sub);
     else if(id==="chat"){ chat(c); segnaLetto(); }
     /* ⭐ TOCCATO NEL GUSCIO ④ — tolta la riga «annale».
