@@ -185,9 +185,7 @@
             fascia("chi coordina", coordV.map(nome).join(" "), "( )") +
             fascia("i partecipanti", partV.map(nome).join(" "), "( )") +
             fascia("i luoghi", luV.map(function (l) { return riga(l, l.luogo || ""); }).join(""), "( )");
-    } else if (d.villaggi.length) {
-      d.villaggi.forEach(function (v) { var n = (d.dentro[v.id] || []).length; hV += riga(v, n === 1 ? "1 persona" : n + " persone"); });
-    } else hV += '<div class="vuoto">( )</div>';
+    } else hV += '<div class="vuoto">( )</div>';   /* ⭐ Gab: «l'importante è che non esca civiltà sarda per chi non è di quella» — senza civiltà, nessun villaggio altrui */
     hV += '<div class="gesti">' + tasto("attiva un vicinato", "", true) + '</div>';
 
     /* 3 · Oggi / calendario */
@@ -231,7 +229,7 @@
 
     D.getElementById("porte").innerHTML =
       porta("◇", "Karma yoga", richieste.length ? richieste.length + (richieste.length === 1 ? " richiesta" : " richieste") : "", hK) +
-      porta("◎", "Villaggio Felicitas" + (civ ? " – " + civ.nome : ""), civ ? "" : (d.villaggi.length ? (d.villaggi.length === 1 ? "1 villaggio" : d.villaggi.length + " villaggi") : ""), hV) +
+      porta("◎", "Villaggio Felicitas" + (civ ? " – " + civ.nome : ""), "", hV) +
       porta("☾", "Oggi / calendario", futuri.length ? futuri.length + " in arrivo" : "", hC) +
       porta("✦", "Novità", nv.length ? String(nv.length) : "", hN);
 
