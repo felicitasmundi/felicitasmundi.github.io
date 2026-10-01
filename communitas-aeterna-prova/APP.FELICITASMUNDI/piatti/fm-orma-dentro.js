@@ -509,6 +509,19 @@
         await ricarica();
       };
     }
+    /* ⭐ 1 ottobre 23:00, Gab: «se tocco aperto da Gabriele, esce una finestrella col mio account» */
+    var ap = R.querySelector("a.aperta");
+    if (ap && d.autore) ap.onclick = async function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var doc = R.ownerDocument, vecchia = doc.getElementById("chi-scheda"); if (vecchia) { vecchia.remove(); return; }
+      var c = { nome: d.autore.nome || "", foto_url: d.autore.foto_url || "", biografia: "", cognome: "" };
+      try { if (d.autore.nome_url) { var r = await db.rpc("fm_chi_invita", { p_nome_url: d.autore.nome_url }); var x = !r.error && r.data && (Array.isArray(r.data) ? r.data[0] : r.data); if (x) { c.cognome = x.cognome || ""; c.biografia = x.biografia || ""; if (x.foto_url) c.foto_url = x.foto_url; } } } catch (er) {}
+      var w = doc.createElement("div"); w.id = "chi-scheda";
+      var esc = function (t) { return String(t).replace(/[&<>"]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]; }); };
+      w.innerHTML = (c.foto_url ? '<img alt="" src="' + esc(c.foto_url) + '">' : '') + '<div><b>' + esc([c.nome, c.cognome].filter(Boolean).join(" ")) + '</b>' + (c.biografia ? '<p>' + esc(c.biografia).replace(/\n/g, "<br>") + '</p>' : '') + '</div><button type="button" aria-label="chiudi">&times;</button>';
+      ap.parentNode.insertBefore(w, ap.nextSibling);
+      w.querySelector("button").onclick = function () { w.remove(); };
+    };
     var qf = R.querySelector("#q-file");
     if (qf) {
       qf.classList.add("si-tocca");
