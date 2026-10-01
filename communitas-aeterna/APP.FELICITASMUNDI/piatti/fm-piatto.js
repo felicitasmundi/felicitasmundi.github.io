@@ -264,6 +264,15 @@
         catch (e) { rifiuta(e); return; }
         if (!doc) { rifiuta(new Error("FMPiatto: la pagina non è leggibile")); return; }
         fmpFrenaLink(doc);
+        /* ⭐ 1 ottobre, Gab: «se vado ad abbassare mi fa prima bloccare lo scrolling, si attiva una sorta
+           di barra laterale … e poi si toglie» — la finestra non scorre MAI da sé: è alta quanto il suo
+           contenuto e scorre la pagina che la contiene. Così niente barra interna, niente rimbalzo. */
+        try {
+          f.setAttribute("scrolling", "no");
+          var noScroll = doc.createElement("style");
+          noScroll.textContent = "html,body{overflow-y:hidden!important;overscroll-behavior:none!important}";
+          (doc.head || doc.documentElement).appendChild(noScroll);
+        } catch (e) {}
         /* ⭐ 30 settembre — i tocchi delle stanze arrivano al «trascina giù per aggiornare» (fm-tira.js) */
         try { if (window.fmTira && window.fmTira.lega) window.fmTira.lega(doc); } catch (e) {}
         fmpAltezza(box, f);
@@ -273,6 +282,7 @@
           if (window.ResizeObserver && doc.body) {
             var ro2 = new ResizeObserver(function () { if (!chiuso) fmpAltezza(box, f); });
             ro2.observe(doc.body);
+            if (doc.documentElement) ro2.observe(doc.documentElement);
             var prima = f._fmpChiudi;
             f._fmpChiudi = function () { ro2.disconnect(); prima(); };
           }
@@ -287,7 +297,7 @@
       /* ⭐ 30 settembre, Gab: «l app ha un problema di eccessiva lentezza» — fuori dalla prova il
          piatto non si riscarica più a ogni passaggio: resta in memoria finché non cambia VERSIONE_PIATTI
          (da alzare a ogni pubblicazione). Nella prova resta fresco sempre. */
-      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20261001d";
+      var fresco = /communitas-aeterna-prova|localhost/.test(location.href) ? Date.now() : "20261001e";
       f.src = indirizzo + (indirizzo.indexOf("?") > -1 ? "&" : "?") + "t=" + fresco;
       if (window.ResizeObserver) {
         ro = new ResizeObserver(function () { if (!chiuso) fmpAltezza(box, f); });
