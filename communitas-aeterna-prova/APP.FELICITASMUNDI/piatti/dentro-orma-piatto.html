@@ -972,7 +972,7 @@ var VIC = [
 var CAT = [
   ["alimenti","5%"],["rimedi","8%"],["cosmesi","10%"],
   ["oggettistica","10%"],["abbigliamento","10%"],["arredo","10%"],
-  ["oggetti sacri","10%"],["libri e stampati","15%"],["digitale","20%"]
+  ["oggetti sacri","10%"],["strumenti di coscienza","( % )"],["libri e stampati","15%"],["digitale","20%"]
 ];
 
 var STAMPA_HTML = "<button type=\"button\" class=\"qd\" data-f=\"0\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M17 13 L43 13 L43 44 L17 44Z\" opacity=\".9\"/> <path d=\"M23 22 L37 22 M23 29 L37 29 M23 36 L32 36\" opacity=\".45\"/> <path d=\"M30 13 L30 8\" opacity=\".6\"/> <circle cx=\"30\" cy=\"7\" r=\"2.2\"/> <path d=\"M43 44 C41 48 38 51 34 52 L26 52 C22 51 19 48 17 44\" opacity=\".5\"/> <path d=\"M11 52 L49 52\" opacity=\".3\"/></svg><b>Carta stampata</b><i>volantini, manifesti</i></button><button type=\"button\" class=\"qd\" data-f=\"1\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 40 C14 37 26 37 31 40 C36 37 48 37 53 40\"/> <path d=\"M9 40 L9 48 C14 45 26 45 31 48 C36 45 48 45 53 48 L53 40\" opacity=\".8\"/> <path d=\"M31 40 L31 48\" opacity=\".55\"/> <path d=\"M40 33 C43 25 45 15 44 8 C41 13 38 23 37 32\"/> <path d=\"M44 8 C46 11 46 15 44 18\" opacity=\".55\"/> <path d=\"M37 32 L34 36\"/> <path d=\"M15 43 C18 42 24 42 27 43\" opacity=\".35\"/></svg><b>Libri e cataloghi</b><i>brossura, copertina</i></button><button type=\"button\" class=\"qd\" data-f=\"2\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"30\" cy=\"30\" r=\"21\" opacity=\".55\"/> <circle cx=\"30\" cy=\"30\" r=\"14\" opacity=\".28\"/> <circle cx=\"30\" cy=\"9\" r=\"3\" fill=\"currentColor\" stroke=\"none\"/> <path d=\"M51 30 A3 3 0 0 0 45 30 A3 3 0 0 0 51 30\" opacity=\".85\"/> <path d=\"M30 51 A3 3 0 0 1 30 45 A3 3 0 0 1 30 51\" fill=\"currentColor\" stroke=\"none\" opacity=\".5\"/> <circle cx=\"9\" cy=\"30\" r=\"3\" opacity=\".85\"/> <path d=\"M30 16 L30 30 L38 35\"/> <g opacity=\".3\"><path d=\"M45 15 L41 19 M15 45 L19 41 M45 45 L41 41 M15 15 L19 19\"/></g></svg><b>Agende e calendari</b><i>planner, da parete</i></button><button type=\"button\" class=\"qd\" data-f=\"3\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M19 52 L19 8\"/> <path d=\"M19 10 C27 7 37 13 45 10 L45 30 C37 33 27 27 19 30Z\"/> <path d=\"M19 20 C27 17 37 23 45 20\" opacity=\".4\"/> <path d=\"M19 6 C17 4 17 1 19 -1 C21 1 21 4 19 6Z\"/> <path d=\"M11 55 C14 51 24 51 27 55\" opacity=\".55\"/> <path d=\"M33 48 L33 30\" opacity=\".3\"/> <path d=\"M28 52 C31 49 36 49 39 52\" opacity=\".25\"/></svg><b>Esposizione e fiere</b><i>totem, banner</i></button><button type=\"button\" class=\"qd\" data-f=\"4\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M23 18 C15 24 13 35 18 44 C22 50 38 50 42 44 C47 35 45 24 37 18\"/> <path d=\"M23 18 L37 18\"/> <path d=\"M25 18 L25 13 C25 11 35 11 35 13 L35 18\"/> <path d=\"M25 14 C21 15 18 19 19 23\" opacity=\".6\"/> <path d=\"M35 14 C39 15 42 19 41 23\" opacity=\".6\"/> <path d=\"M30 11 C27 8 27 4 30 1 C33 4 33 8 30 11Z\" opacity=\".75\"/> <path d=\"M20 36 C25 33 35 33 40 36\" opacity=\".38\"/> <path d=\"M22 52 L38 52\" opacity=\".3\"/></svg><b>Confezioni e imballaggi</b><i>scatole, etichette</i></button><button type=\"button\" class=\"qd\" data-f=\"5\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M11 36 C13 33 18 31 24 32 L36 34 C41 35 45 38 46 42 C46 46 41 48 36 47 L20 45 C14 44 11 41 11 36Z\"/> <path d=\"M17 40 C21 38 27 38 32 40\" opacity=\".35\"/> <path d=\"M30 27 C26 27 22 24 23 20 C25 16 30 19 30 27Z\"/> <path d=\"M30 27 C34 27 38 24 37 20 C35 16 30 19 30 27Z\"/> <circle cx=\"30\" cy=\"18\" r=\"2.4\"/> <path d=\"M30 12 L30 6\" opacity=\".45\"/> <path d=\"M23 13 L20 8 M37 13 L40 8\" opacity=\".3\"/></svg><b>Gadget e regali</b><i>penne, borse</i></button><button type=\"button\" class=\"qd\" data-f=\"6\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 8 L12 52 M48 8 L48 52\"/> <path d=\"M9 11 L51 11 M9 49 L51 49\" opacity=\".7\"/> <g opacity=\".55\"><path d=\"M19 11 L19 49 M26 11 L26 49 M34 11 L34 49 M41 11 L41 49\"/></g> <path d=\"M12 24 C19 21 26 27 34 24 C41 21 48 27 48 24\" opacity=\".85\"/> <path d=\"M12 31 C19 34 26 28 34 31 C41 34 48 28 48 31\" opacity=\".85\"/> <path d=\"M12 38 C19 35 26 41 34 38 C41 35 48 41 48 38\" opacity=\".6\"/> <circle cx=\"30\" cy=\"4\" r=\"2.2\" opacity=\".6\"/></svg><b>Abbigliamento</b><i>magliette, felpe</i></button><button type=\"button\" class=\"qd\" data-f=\"7\"><svg viewBox=\"0 0 60 60\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 27 C13 22 14 17 17 15 C20 14 22 17 23 21 L25 27\"/> <path d=\"M25 27 L22 15 C21 12 25 10 27 13 L31 26\"/> <path d=\"M31 26 L30 14 C30 11 34 11 35 14 L37 27\"/> <path d=\"M37 27 L38 19 C39 16 42 17 42 20 L43 33 C43 41 38 46 32 46 L24 46 C18 46 14 41 13 35 C12 31 13 28 15 27Z\"/> <path d=\"M18 52 C23 49 33 49 38 52\" opacity=\".4\"/> <path d=\"M28 34 C31 34 33 36 32 38 C31 40 27 39 27 36 C27 33 32 32 34 35\" opacity=\".7\"/></svg><b>I servizi</b><i>impatto ridotto</i></button>";
@@ -1014,13 +1014,35 @@ function racconto(){
   d.appendChild(el("div","et2","raccontalo alla comunit\u00e0"));
   var t=document.createElement("textarea");
   t.placeholder="[ le parole del cuore ]"; t.setAttribute("data-c","vet.racconto");
-  t.maxLength=400; t.value=dati.racconto||"";
+  var MAX = tipo==="prodotto" ? 2000 : 400;   /* ⭐ 1 ottobre: il racconto di un libro è lungo (Anima Vagabonda) */
+  t.maxLength=MAX; t.value=dati.racconto||"";
   t.oninput=function(){ dati.racconto=t.value;
-    d.querySelector(".cnt").textContent=t.value.length+"/400"; vetrina(); };
+    d.querySelector(".cnt").textContent=t.value.length+"/"+MAX; vetrina(); };
   d.appendChild(t);
-  d.appendChild(el("div","cnt",(dati.racconto||"").length+"/400"));
+  d.appendChild(el("div","cnt",(dati.racconto||"").length+"/"+MAX));
   return d;
 }
+/* ⭐ 1 ottobre — un testo lungo (la biografia) */
+function lungo(et, chiave, posto){
+  var d=el("div","lungo"); d.appendChild(el("div","et2",et));
+  var t=document.createElement("textarea"); t.placeholder=posto; t.setAttribute("data-c","vet."+chiave);
+  t.value=dati[chiave]||""; t.oninput=function(){ dati[chiave]=t.value; vetrina(); };
+  d.appendChild(t); return d;
+}
+/* ⭐ 1 ottobre — il ritratto di chi scrive o di chi lo fa */
+function ritratto(){
+  var f=el("div","foto gal");
+  if(dati.ritratto){ var m=el("span","mini prima",""); m.setAttribute("data-stampo","vet-ritratto"); m.style.backgroundImage="url("+dati.ritratto+")";
+    m.style.borderRadius="50%"; m.title="togli"; m.onclick=function(e){ e.stopPropagation(); dati.ritratto=null; disegna(); }; f.appendChild(m); }
+  f.appendChild(el("span","qq","+"));
+  f.appendChild(el("span",null,"<b>"+(dati.ritratto?"cambia il ritratto":"il ritratto")+"</b><i>la foto di chi scrive o di chi lo fa</i>"));
+  var fin=document.createElement("input"); fin.type="file"; fin.accept="image/*"; fin.hidden=true;
+  fin.onchange=function(){ var x=this.files&&this.files[0]; if(!x) return; dati.ritratto=URL.createObjectURL(x); this.value=""; disegna(); };
+  f.onclick=function(){ fin.click(); }; f.appendChild(fin);
+  return f;
+}
+function sezione(t){ var s=el("div","et2",t); s.style.cssText="margin-top:1.4rem;padding-top:.9rem;border-top:1px solid rgba(212,175,106,.25);color:var(--oro-ch)"; return s; }
+
 function campo(et, chiave, posto, unita){
   var d=el("div","campo");
   d.appendChild(el("span",null,et));
@@ -1096,7 +1118,14 @@ function sinistra(){
     if(fam===null){ var sf=el("div","cm","[ scegli la famiglia ]"); sf.setAttribute("data-stato","vet-scegli-quad"); d.appendChild(sf); return; }
   }
 
+  if(tipo==="prodotto") d.appendChild(sezione("la testa"));
   d.appendChild(campo("il titolo","titolo","[ come si chiama ]"));
+  /* ⭐ 1 ottobre, Gab: «testa, rendi visibile autore o produttore, non chi ha inserito quel contenuto» */
+  if(tipo==="prodotto"){
+    d.appendChild(campo("il sottotitolo","sottotitolo","[ una riga sotto il titolo ]"));
+    d.appendChild(campo(cat===8 ? "chi l\u2019ha scritto" : "chi lo produce","autore","[ l\u2019autore o il produttore ]"));
+    d.appendChild(sezione(cat===8 ? "il libro" : "il prodotto"));
+  }
 
   /* \u2b50 la galleria: la prima si vede in elenco, le altre nella scheda */
   var f=el("div","foto gal");
@@ -1116,7 +1145,7 @@ function sinistra(){
   f.appendChild(fin);
   d.appendChild(f);
 
-  d.appendChild(campo("chi lo fa","chi","[ il nome della squadra ]"));
+  if(tipo!=="prodotto") d.appendChild(campo("chi lo fa","chi","[ il nome della squadra ]"));
   if(tipo!=="vicinato" && tipo!=="stampa"){
     /* \u2b50 il dove: dal comune di chi pubblica, si cambia solo se sta altrove */
     d.appendChild(campo("dove sta","dovep",COMUNE_MIO));
@@ -1124,7 +1153,7 @@ function sinistra(){
     d.appendChild(scelte("chi incassa","incassa",["FelicitasMundi","il produttore","nessuno"]));
   }
   d.appendChild(racconto());
-  var lg=legami(); lg.setAttribute("data-c","vet.legami"); d.appendChild(lg);
+  if(tipo!=="prodotto"){ var lg=legami(); lg.setAttribute("data-c","vet.legami"); d.appendChild(lg); }
 
   if(tipo==="vicinato"){
     /* \u2b50 il karma yoga chiede quante persone, la festa quando,
@@ -1150,7 +1179,8 @@ function sinistra(){
     }
   }
   else if(tipo!=="stampa"){
-    d.appendChild(campo("quanto costa","prezzo","0","\u20ac + IVA"));
+    if(tipo==="prodotto") d.appendChild(sezione("ordina"));
+    d.appendChild(campo("quanto costa","prezzo","0",tipo==="prodotto" ? "\u20ac IVA inclusa" : "\u20ac + IVA"));
     var c=ora(), q=(cat!==null?CAT[cat][1]:"\u2014");
     var cn=el("div","conto");
     cn.appendChild(el("span",null,"la quota per FelicitasMundi"));
@@ -1161,6 +1191,19 @@ function sinistra(){
     d.appendChild(scelte("il trasporto","spedisce",
       ["me ne occupo io","la fate voi"]));
     d.appendChild(campo("costo del trasporto","trasporto","[ quanto ]","€"));
+    if(tipo==="prodotto"){
+      /* ⭐ 1 ottobre, Gab: «ordina, inserisci editore formato isbn» */
+      if(cat===8) d.appendChild(campo("editore","editore","[ la casa editrice ]"));
+      d.appendChild(campo("formato","formato","[ es. 15 × 21 cm ]"));
+      if(cat===8) d.appendChild(campo("ISBN","isbn","[ 979-… ]"));
+      /* ⭐ «chi scrive, è stra necessario bio foto ed eventuali link video» */
+      d.appendChild(sezione(cat===8 ? "chi scrive" : "chi lo fa"));
+      d.appendChild(ritratto());
+      d.appendChild(lungo("la biografia","biografia","[ chi è, cosa fa, da dove viene ]"));
+      d.appendChild(campo("un video","video","[ il link, es. YouTube ]"));
+      d.appendChild(sezione("collegamenti"));
+      var lg2=legami(); lg2.setAttribute("data-c","vet.legami"); d.appendChild(lg2);
+    }
   }else{
     d.appendChild(campo("quante copie","prezzo","[ fra quelle possibili ]"));
     d.appendChild(scelte("la consegna","stato",
@@ -1300,9 +1343,12 @@ function legami(){
     var r=el("div","leg"); r.style.setProperty("--c","var("+(LEG_C[L.tipo]||"--oro")+")");
     r.appendChild(el("span","lt",L.tipo));
     r.appendChild(el("span","ln","<b>"+L.titolo+"</b><i>"+L.rel+" · "+nomeStanza(L.st)+" · "+L.chi+"</i>"));
+    var tx=document.createElement("input"); tx.type="text"; tx.placeholder="[ due righe su questo collegamento ]"; tx.value=L.testo||"";
+    tx.style.cssText="flex:1 1 100%;min-width:0;margin-top:.35rem;background:transparent;border:0;border-bottom:1px dashed rgba(212,175,106,.35);color:inherit;font:inherit;font-size:.9rem;padding:.2rem 0";
+    tx.oninput=function(){ L.testo=tx.value; };
     var x=el("button","lx","×"); x.type="button"; x.setAttribute("aria-label","togli il legame");
     x.onclick=function(){ leg.lista.splice(i,1); disegna(); };
-    r.appendChild(x); w.appendChild(r);
+    r.appendChild(x); r.style.flexWrap="wrap"; r.appendChild(tx); w.appendChild(r);
   });
   if(!leg.aperto){
     var b=el("button","legpiu","+ collega a una cosa già pubblicata"); b.type="button";
@@ -1334,19 +1380,55 @@ function legami(){
   var e=el("div","legesiti"); e.id="legesiti"; legEsiti(e); c.appendChild(e);
   w.appendChild(c); return w;
 }
+/* ⭐ 1 ottobre, Gab: «legami da attivare ora» — si cerca nel database vero, stanza per stanza.
+   Ogni legame diventa una porta della pagina del prodotto (tavola collegamenti). */
+var LEG_T=null;
 function legEsiti(e){
   if(!leg.st){ e.appendChild(el("div","legn","scegli la stanza, poi cerca fra le sue cose")); return; }
-  var q=leg.q.toLowerCase().trim(), gia=leg.lista.map(function(L){return L.id;});
-  var hit=PUBBLICATE.filter(function(p){ return p.st===leg.st && gia.indexOf(p.id)<0 && (!q || (p.titolo+" "+p.chi+" "+p.tipo).toLowerCase().indexOf(q)>=0); });
-  if(!hit.length){ e.appendChild(el("div","legn","niente in questa stanza"+(q?" per «"+q+"»":""))); return; }
-  hit.forEach(function(p){
-    var b=el("button","lege"); b.type="button"; b.style.setProperty("--c","var("+(LEG_C[p.tipo]||"--oro")+")");
-    b.appendChild(el("span","lt",p.tipo));
-    b.appendChild(el("span","ln","<b>"+p.titolo+"</b><i>"+nomeStanza(p.st)+" · "+p.chi+"</i>"));
-    b.appendChild(el("span","lf","+"));
-    b.onclick=function(){ leg.lista.push({id:p.id,tipo:p.tipo,titolo:p.titolo,st:p.st,chi:p.chi,rel:leg.rel}); leg.aperto=false; leg.q=""; disegna(); };
-    e.appendChild(b);
-  });
+  e.appendChild(el("div","legn","cerco\u2026"));
+  clearTimeout(LEG_T);
+  LEG_T=setTimeout(function(){ legCerca(leg.st, leg.q.trim()).then(function(hit){
+    e.innerHTML="";
+    var gia=leg.lista.map(function(L){return L.id;});
+    hit=hit.filter(function(p){ return gia.indexOf(p.id)<0; });
+    if(!hit.length){ e.appendChild(el("div","legn","niente in questa stanza"+(leg.q?" per «"+leg.q+"»":""))); return; }
+    hit.forEach(function(p){
+      var b=el("button","lege"); b.type="button"; b.style.setProperty("--c","var("+(LEG_C[p.tipo]||"--oro")+")");
+      b.appendChild(el("span","lt",p.tipo));
+      b.appendChild(el("span","ln","<b>"+String(p.titolo).replace(/</g,"&lt;")+"</b><i>"+nomeStanza(p.st)+(p.chi?" · "+String(p.chi).replace(/</g,"&lt;"):"")+"</i>"));
+      b.appendChild(el("span","lf","+"));
+      b.onclick=function(){ leg.lista.push({id:p.id,tipo:p.tipo,a_tipo:p.a_tipo,url:p.url,titolo:p.titolo,st:p.st,chi:p.chi||"",rel:leg.rel,testo:""}); leg.aperto=false; leg.q=""; disegna(); };
+      e.appendChild(b);
+    });
+  }); }, 250);
+}
+async function legCerca(st, q){
+  var db = null; try { db = window.parent && window.parent.db; } catch(x){}
+  if(!db) return [];
+  var like = "%" + q.replace(/[%_]/g,"") + "%", out = [];
+  try {
+    if(st==="emporio" || st==="edizione"){
+      var r = db.from("prodotti").select("id,nome,nome_url,autore,scaffale").eq("stato","pubblico").ilike("nome", like).limit(12);
+      if(st==="edizione") r = r.eq("scaffale","libri e stampati");
+      var a = await r;
+      (a.data||[]).forEach(function(x){ out.push({tipo:"prodotto", a_tipo:"prodotto", id:x.id, titolo:x.nome, chi:x.autore, st:st, url: x.nome_url ? "?p=pagina&n="+x.nome_url : null}); });
+    }
+    if(st==="assistenza"){
+      var b = await db.from("servizi").select("id,titolo,tipo").eq("attivo",true).ilike("titolo", like).limit(12);
+      (b.data||[]).forEach(function(x){ out.push({tipo:"assistenza", a_tipo:"servizio", id:x.id, titolo:x.titolo, st:st, url:null}); });
+    }
+    if(st==="scuola"){
+      var c = await db.from("classi").select("id,titolo").ilike("titolo", like).limit(12);
+      (c.data||[]).forEach(function(x){ out.push({tipo:"lezione", a_tipo:"classe", id:x.id, titolo:x.titolo, st:st, url:null}); });
+    }
+    if(st==="vicinati"){
+      var v = await db.from("vicinati").select("id,nome,territorio").ilike("nome", like).limit(8);
+      (v.data||[]).forEach(function(x){ out.push({tipo:"orma", a_tipo:"vicinato", id:x.id, titolo:x.nome, chi:x.territorio, st:st, url:null}); });
+      var o = await db.from("orme").select("id,titolo,tipo").eq("visibilita","pubblico").in("tipo",["festa","luogo","mercato","micelio"]).ilike("titolo", like).limit(8);
+      (o.data||[]).forEach(function(x){ out.push({tipo:"orma", a_tipo:"orma", id:x.id, titolo:x.titolo, chi:x.tipo==="festa"?"evento":x.tipo, st:st, url: x.tipo==="festa" ? "?p=evento&e="+x.id : "?p=orma&o="+x.id}); });
+    }
+  } catch(x){ console.warn("legami:", x); }
+  return out;
 }
 /* nella vetrina: sotto il racconto, sopra il prezzo */
 function legamiVetrina(dt){

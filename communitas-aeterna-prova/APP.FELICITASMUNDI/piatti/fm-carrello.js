@@ -157,8 +157,50 @@
       });
     });
 
-    /* ⛔ il pagamento non è aperto */
-    P.gesto(R, "paga", function () {});
+    /* ⭐ 1 ottobre, Gab: «se uno acquista deve andare su carrello e completare l'ordine» —
+       «per il pagamento ora usi il mio iban». «paga» conferma l'ordine (fm_conferma_ordine:
+       prezzi congelati, causale, carrello svuotato) e mostra i dati del bonifico, che si
+       leggono da impostazioni (li scrive Gab, non passano dal codice). */
+    P.gesto(R, "paga", async function (e, b) {
+      var era = b.textContent; b.disabled = true; b.textContent = "un momento\u2026";
+      try {
+        var o = await db.rpc("fm_conferma_ordine");
+        if (o.error) throw o.error;
+        var x = Array.isArray(o.data) ? o.data[0] : o.data;
+        var im = await db.from("impostazioni").select("chiave,valore").in("chiave", ["pagamento_iban", "pagamento_intestatario"]);
+        var v = {}; (im.error ? [] : im.data || []).forEach(function (r) { v[r.chiave] = r.valore; });
+        bonifico(R, x, v);
+      } catch (err) {
+        console.warn("ordine:", err);
+        b.textContent = era; b.disabled = false;
+        alert("L\u2019ordine non \u00e8 partito: " + (err.message || err));
+      }
+    });
+  }
+
+  function bonifico(R, x, v) {
+    var esc = function (t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var tot = Number(x.totale || 0).toFixed(2).replace(".", ",") + " \u20ac";
+    var riga = function (et, val, copia) {
+      return '<div style="display:flex;justify-content:space-between;gap:1rem;align-items:baseline;padding:.55rem 0;border-top:1px solid rgba(212,175,106,.18)">' +
+        '<span style="font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,230,.55)">' + esc(et) + '</span>' +
+        '<b style="font-weight:400;font-family:\'Cormorant Garamond\',serif;font-size:1.15rem;text-align:right;word-break:break-all">' + esc(val || "\u2014") + '</b>' +
+        (copia && val ? '<button type="button" data-copia="' + esc(val) + '" style="all:unset;cursor:pointer;font-size:.72rem;color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.2rem .6rem">copia</button>' : '') + '</div>';
+    };
+    var box = R.ownerDocument.createElement("div");
+    box.setAttribute("style", "margin:1.2rem 0;padding:1.3rem 1.2rem;border:1px solid rgba(212,175,106,.5);border-radius:1rem;background:rgba(212,175,106,.07);color:#F5F0E6;font-family:'DM Sans',sans-serif");
+    box.innerHTML = '<div style="font-family:\'Cinzel\',serif;letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;color:#D4AF6A;margin-bottom:.6rem">ordine n. ' + esc(x.numero) + ' confermato</div>' +
+      '<p style="margin:0 0 .8rem;font-family:\'Cormorant Garamond\',serif;font-size:1.15rem;line-height:1.5">Per completarlo fai un bonifico con questi dati. L\u2019ordine parte quando il bonifico arriva.</p>' +
+      riga("importo", tot, false) + riga("intestato a", v.pagamento_intestatario, true) + riga("IBAN", v.pagamento_iban, true) + riga("causale", x.causale, true);
+    var fondo = R.querySelector(".ca-fondo");
+    var lista = fondo ? fondo.parentNode : R;
+    lista.insertBefore(box, lista.firstChild);
+    if (fondo) fondo.setAttribute("hidden", "");
+    Array.prototype.forEach.call(R.querySelectorAll('[data-stampo]:not([data-fm-stampo])[data-fm-copia]'), function (c) { c.setAttribute("hidden", ""); });
+    Array.prototype.forEach.call(box.querySelectorAll("[data-copia]"), function (bt) {
+      bt.onclick = function () { try { navigator.clipboard.writeText(bt.getAttribute("data-copia")); bt.textContent = "copiato"; } catch (e) {} };
+    });
+    if (box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   async function carrello(dove) {

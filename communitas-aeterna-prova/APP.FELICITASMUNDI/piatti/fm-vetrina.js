@@ -64,6 +64,13 @@
       if (u) d.foto.push(u);
     });
 
+    /* ⭐ 1 ottobre — lo scaffale (la categoria scelta), il ritratto e i legami */
+    var cs = R.querySelector('[data-stampo="vet-categoria"].su [data-c="categoria.nome"]');
+    if (cs) d.campi.scaffale = cs.textContent.trim();
+    var W = (R.ownerDocument || R).defaultView || window;
+    d.ritratto = (W.dati && W.dati.ritratto) || null;
+    d.legami = (W.leg && W.leg.lista) ? W.leg.lista.slice() : [];
+
     var cb = R.querySelector('[data-c="diritti.dichiaro"]');
     d.dichiaro = !!(cb && cb.checked);
     return d;
@@ -88,19 +95,75 @@
     return dentro;
   }
 
+  /* ⭐ l'indirizzo della pagina: dal titolo, senza accenti; se c'è già, un numero in coda */
+  async function nomeUrl(t) {
+    var b = String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50) || "prodotto";
+    for (var i = 0; i < 20; i++) {
+      var n = i ? b + "-" + (i + 1) : b;
+      var r = await db.from("prodotti").select("id").eq("nome_url", n).limit(1);
+      if (!r.error && (!r.data || !r.data.length)) return n;
+    }
+    return b + "-" + Date.now();
+  }
+
+  /* ⭐ «condividi, è necessario la vetrina lo crei» — appena pubblicato: il link e i tasti */
+  function condividi(body, nata) {
+    if (!nata || !nata.nome_url) return;
+    var base = (window.BASE_INDIRIZZO || (location.origin + location.pathname));
+    var ind = base + "?p=pagina&n=" + encodeURIComponent(nata.nome_url);
+    var doc = body.ownerDocument || document;
+    var w = doc.createElement("div");
+    w.setAttribute("style", "margin:1rem 0;padding:1rem 1.1rem;border:1px solid rgba(212,175,106,.55);border-radius:1rem;background:rgba(212,175,106,.08)");
+    var e = function (x) { return String(x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    w.innerHTML = '<div style="font-family:Cinzel,serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:#D4AF6A;margin-bottom:.5rem">\u00e8 uscito nell\u2019Emporio</div>' +
+      '<a href="' + e(ind) + '" target="_top" style="color:#F5F0E6;word-break:break-all">' + e(ind) + '</a>' +
+      '<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem">' +
+      '<a target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent((nata.nome || "") + " \u2014 " + ind) + '" style="color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.3rem .8rem;text-decoration:none">WhatsApp</a>' +
+      '<a href="mailto:?subject=' + encodeURIComponent(nata.nome || "") + '&body=' + encodeURIComponent(ind) + '" style="color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.3rem .8rem;text-decoration:none">email</a>' +
+      '<button type="button" data-copia style="all:unset;cursor:pointer;color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.3rem .8rem">copia il collegamento</button></div>';
+    var dove = body.querySelector(".vetr-f") || body;
+    dove.insertBefore(w, dove.firstChild);
+    var cp = w.querySelector("[data-copia]");
+    cp.onclick = function () { try { navigator.clipboard.writeText(ind); cp.textContent = "copiato"; } catch (x) {} };
+  }
+
   /* ── scrivere la cosa ──────────────────────────────────────────── */
   async function pubblica(d, io, ormaId, foto) {
     var c = d.campi, prezzo = parseFloat(String(c.prezzo || "").replace(",", ".")) || null;
 
     if (d.tipo === "prodotto") {
-      var p = await db.from("prodotti").insert({
-        persona_id: io, orma_id: ormaId, nome: c.titolo || "", racconto: c.racconto || "",
-        prezzo: prezzo, foto: foto[0] || null, foto_secondaria: foto[1] || null,
+      /* ⭐ 1 ottobre, Gab: la pagina di Anima Vagabonda è la matrice — testa (titolo,
+         sottotitolo, autore o produttore), il libro (foto, racconto), ordina (prezzo,
+         editore, formato, ISBN), chi scrive (biografia, ritratto, video), collegamenti,
+         condividi (l'indirizzo ?p=pagina&n=<nome_url>). */
+      var url = await nomeUrl(c.titolo || "prodotto");
+      var rit = d.ritratto ? (await salvaFoto([d.ritratto], io, "prodotto"))[0] || null : null;
+      var riga = {
+        persona_id: io, orma_id: ormaId, nome: c.titolo || "", nome_url: url,
+        sottotitolo: c.sottotitolo || null, autore: c.autore || null,
+        racconto: c.racconto || "", prezzo: prezzo,
+        foto: foto[0] || null, foto_secondaria: foto[1] || null,
         scaffale: c.scaffale || null, stato: "pubblico",
-        si_compra: true, si_scambia: c.stato === "scambio", si_dona: c.stato === "dono"
-      }).select("id").single();
+        editore: c.editore || null, formato: c.formato || null, isbn: c.isbn || null,
+        biografia: c.biografia || null, foto_autore: rit, video_url: c.video || null,
+        si_compra: (c.incassa || "FelicitasMundi") !== "nessuno",
+        si_scambia: c.stato === "scambio", si_dona: c.stato === "dono"
+      };
+      var p = await db.from("prodotti").insert(riga).select("id,nome_url").single();
       if (p.error) throw p.error;
-      return { tavola: "prodotti", id: p.data.id };
+      /* i collegamenti: una porta per ogni legame */
+      var ELEM = { vicinati: "terra", emporio: "acqua", assistenza: "fuoco", edizione: "aria", scuola: "etere" };
+      var porte = (d.legami || []).map(function (L, i) {
+        return { da_tipo: "prodotto", da_id: p.data.id, a_tipo: L.a_tipo || L.tipo, a_id: L.id,
+                 url: L.url || null, elemento: ELEM[L.st] || null, titolo: L.titolo || "",
+                 testo: L.testo || null, ordine: i + 1 };
+      });
+      if (porte.length) {
+        var cl = await db.from("collegamenti").insert(porte);
+        if (cl.error) console.warn("collegamenti:", cl.error);
+      }
+      return { tavola: "prodotti", id: p.data.id, nome_url: p.data.nome_url, nome: riga.nome };
     }
 
     if (d.tipo === "assistenza") {
@@ -179,6 +242,7 @@
         }
         b.textContent = "fatto";
         if (typeof dopo === "function") await dopo(nata);
+        condividi(doc.body || R, nata);
       } catch (err) {
         console.warn("vetrina:", err);
         b.textContent = era; b.disabled = false;
