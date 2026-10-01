@@ -1299,7 +1299,7 @@ body.vista-soglia #pl{margin-left:0!important}
       </button>
       <div class="r-freq">
         <div class="r-nome">Come natura crea <b>fm</b></div>
-        <div class="r-brano" id="r-brano">&nbsp;</div>
+        <div class="r-brano" id="r-brano">in diretta dall&rsquo;autunno</div>
       </div>
       <button id="r-apri" aria-label="Il palinsesto e le ore">&#9662;</button>
       <div class="r-palinsesto" id="r-palinsesto"></div>
@@ -4717,6 +4717,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var coda  = branoOra.chi ? " \u00b7 " + branoOra.chi : "";
 
     var b = $("r-brano");
+    /* ⭐ 1 ottobre 19:17, Gab: «nella radio in alto inserisci "in diretta dall'autunno"» */
+    if(b){ b.textContent = "in diretta dall\u2019autunno"; return; }
     if(b){
       b.innerHTML = "";
       b.appendChild(document.createTextNode(testo || "\u00a0"));
@@ -4847,6 +4849,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
   function disegnaPalinsesto(){
     var box = $("r-palinsesto"); if(!box) return;
+    /* ⭐ 1 ottobre 19:17, Gab: «entrando dentro la radio, lascia la colonna col titolo, mentre nell'altra colonna
+       scrivi "rubriche radio e lezioni online"» — le fasce orarie restano scritte qui sotto, ferme */
+    box.innerHTML = '<div class="r-fascia ora"><span class="r-t"><b>rubriche radio e lezioni online</b></span></div>';
+    return;
     var i = fasciaOra();
     var righe = [];
     for(var k=0;k<3;k++){
