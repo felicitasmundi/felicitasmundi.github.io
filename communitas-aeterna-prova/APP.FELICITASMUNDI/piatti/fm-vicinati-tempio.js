@@ -187,7 +187,9 @@
             fascia("i luoghi", luV.map(function (l) { return riga(l, l.luogo || ""); }).join(""), "( )");
     } else if (d.comune) hV += '<div class="vuoto">area da attivare in felicitas</div>';   /* ⭐ 1 ottobre, Gab: le sue parole, per chi è in una zona senza civiltà */
     else hV += '<div class="vuoto">( )</div>';   /* ⭐ Gab: «l'importante è che non esca civiltà sarda per chi non è di quella» — senza civiltà, nessun villaggio altrui */
-    hV += '<div class="gesti">' + tasto("attiva un vicinato", "", true) + '</div>';
+    /* ⭐ 1 ottobre, Gab: «attiva un vicinato» crea un'orma dentro il villaggio della sua civiltà, visibile nelle orme del villaggio.
+       Dove il villaggio non c'è ancora, resta spento. */
+    hV += '<div class="gesti">' + (vil ? tasto("attiva un vicinato", 'data-vicinato="' + esc(vil.id) + '"') : tasto("attiva un vicinato", "", true)) + '</div>';
 
     /* 3 · Oggi / calendario */
     var oggi = new Date(); oggi.setHours(0, 0, 0, 0);
@@ -237,6 +239,9 @@
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-orma]"), function (a) { a.onclick = function (e) { e.preventDefault(); apriOrma(a.getAttribute("data-orma")); }; });
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-url]"), function (a) { a.onclick = function (e) { e.preventDefault(); try { W.open(a.getAttribute("data-url"), "_blank", "noopener"); } catch (x) {} }; });
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-evento]"), function (a) { a.onclick = function (e) { e.preventDefault(); vai("evento", { id: a.getAttribute("data-evento") }); }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-vicinato]"), function (a) { a.onclick = function () {
+      try { if (W.SpazioVivo && W.SpazioVivo.nuovaOrma) W.SpazioVivo.nuovaOrma(a.getAttribute("data-vicinato"), { tipo: "contatto" }); } catch (e) {}
+    }; });
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-scrivi]"), function (a) { a.onclick = function () { scrivi({ tipo: a.getAttribute("data-scrivi") }); }; });
     if (typeof window.legaPorte === "function") window.legaPorte();
   }

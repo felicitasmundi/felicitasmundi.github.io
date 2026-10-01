@@ -1083,6 +1083,19 @@ function mgMadre(m){
   if(m) c.querySelector("b").textContent = m.titolo || String(m.contenuto || "").split("\n")[0];
 }
 window.SpazioVivo = window.SpazioVivo || {};
+/* ⭐ 1 ottobre, Gab: «schiacci chiedo una mano e non succede nulla» — il Megafono si fa vedere:
+   si porta in vista e si accende per un momento */
+function mgAccendi(){
+  var cp = document.getElementById("campo"), box = document.querySelector("#mg .mg-box");
+  if(!document.getElementById("mg-accendi-st")){
+    var st = document.createElement("style"); st.id = "mg-accendi-st";
+    st.textContent = "@keyframes mgAcc{0%,100%{box-shadow:0 0 0 0 rgba(212,175,106,0)}30%{box-shadow:0 0 0 .35rem rgba(212,175,106,.55)}}" +
+      "#mg .mg-box.accesa{animation:mgAcc 1.6s ease 2;border-radius:1.2rem}";
+    document.head.appendChild(st);
+  }
+  if(box){ box.classList.remove("accesa"); void box.offsetWidth; box.classList.add("accesa"); setTimeout(function(){ box.classList.remove("accesa"); }, 3400); }
+  try { (box || cp).scrollIntoView({ block: "end", behavior: "smooth" }); } catch(e){}
+}
 window.SpazioVivo.nuovaOrma = async function(madreId, opz){
   opz = opz || {};
   try {
@@ -1098,6 +1111,7 @@ window.SpazioVivo.nuovaOrma = async function(madreId, opz){
     var cm = document.getElementById("mg-madre");
     if(cm) cm.querySelector("span").textContent = opz.categoria === "riunione" ? "riunione dentro" : opz.tipo === "festa" ? "evento dentro" : opz.tipo === "obiettivo" ? "obiettivo dentro" : "dentro";
     if(typeof mgAggiorna === "function") mgAggiorna();
+    mgAccendi();
     var cp = document.getElementById("campo"); if(cp){ cp.focus(); }
   } catch(e) { console.warn("megafono, madre:", e); }
 };
@@ -1110,16 +1124,8 @@ window.SpazioVivo.scriviOrma = function(opz){
   var tt = MG_TIPI.filter(function(x){ return x.d === opz.tipo; })[0];
   if(tt) mgStato.tipo = tt.n;
   if(typeof mgAggiorna === "function") mgAggiorna();
-  /* ⭐ 1 ottobre, Gab: «schiacci chiedo una mano e non succede nulla» — il Megafono si fa vedere:
-     si porta in vista, si accende per un momento, e il campo dice cosa scriverci */
+  mgAccendi();
   var cp = document.getElementById("campo"), box = document.querySelector("#mg .mg-box");
-  if(!document.getElementById("mg-accendi-st")){
-    var st = document.createElement("style"); st.id = "mg-accendi-st";
-    st.textContent = "@keyframes mgAcc{0%,100%{box-shadow:0 0 0 0 rgba(212,175,106,0)}30%{box-shadow:0 0 0 .35rem rgba(212,175,106,.55)}}" +
-      "#mg .mg-box.accesa{animation:mgAcc 1.6s ease 2;border-radius:1.2rem}";
-    document.head.appendChild(st);
-  }
-  if(box){ box.classList.remove("accesa"); void box.offsetWidth; box.classList.add("accesa"); setTimeout(function(){ box.classList.remove("accesa"); }, 3400); }
   if(cp){
     try { (box || cp).scrollIntoView({ block: "end", behavior: "smooth" }); } catch(e){}
     cp.focus();
