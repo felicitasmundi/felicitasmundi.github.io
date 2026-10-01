@@ -500,6 +500,30 @@
         await ricarica();
       } catch (err) { console.warn("visibilit\u00e0:", err); }
     });
+    /* ⭐ 1 ottobre 22:56, Gab — la scadenza e l'archivio di chi ha aperto l'orma */
+    var sc = R.querySelector('[data-g="scadenza"]');
+    if (sc) {
+      sc.value = o.entro_il ? String(o.entro_il).slice(0, 10) : "";
+      sc.onchange = async function () {
+        var r = await db.from("orme").update({ entro_il: sc.value || null }).eq("id", id);
+        if (r.error) { console.warn("scadenza:", r.error); alertino(r.error.message); return; }
+        await ricarica();
+      };
+    }
+    P.stato(R, "aperta-mia", o.stadio !== "sviluppato");
+    function alertino(t) { var n = R.querySelector('[data-g="concludi"]'); if (n) { n.textContent = "non riesco: " + String(t).slice(0, 80); } }
+    P.gesto(R, "concludi", function (e, b) {
+      occupato(b, async function () {
+        var r = await db.from("orme").update({ stadio: "sviluppato" }).eq("id", id);
+        if (r.error) throw r.error;
+      })();
+    });
+    P.gesto(R, "riprendi", function (e, b) {
+      occupato(b, async function () {
+        var r = await db.from("orme").update({ stadio: "in_avanzamento" }).eq("id", id);
+        if (r.error) throw r.error;
+      })();
+    });
     P.gesto(R, "chiudi-questa-orma", function (e, b) {
       occupato(b, async function () {
         var r = await db.rpc("fm_chiudi_questa_orma", { p_orma: id });
