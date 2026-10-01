@@ -87,6 +87,15 @@
       if (o.error) return d;
       d.orma = o.data;
 
+      /* ⭐ 1 ottobre, Gab: «mettere felicitas festival dentro micelio» — chi ha aperto l'orma
+         può metterla dentro un micelio o un evento suo */
+      if (d.io && d.orma.persona_id === d.io) {
+        var cand = await db.from("orme").select("id,titolo,contenuto,tipo")
+          .eq("persona_id", d.io).in("tipo", ["micelio", "festa"]).neq("id", id)
+          .order("momento", { ascending: false }).limit(40);
+        d.candidate = cand.error ? [] : (cand.data || []);
+      }
+
       /* ⭐ 1 ottobre, Gab: l'evento dell'11 è «una task dentro festival» — ogni orma dice di chi è figlia */
       if (d.orma.orma_madre_id) {
         var md = await db.from("orme").select("id,titolo,tipo").eq("id", d.orma.orma_madre_id).limit(1);
@@ -378,6 +387,23 @@
     P.gesto(R, "torna", function () { vaiA("orme"); });
 
     /* ─ le tre cose di chi ha aperto l'orma ─ */
+    /* fa parte di: la scelta della madre */
+    var sm = R.querySelector('[data-g="scegli-madre"]');
+    P.stato(R, "puo-madre", !!(d.candidate && d.candidate.length));
+    if (sm && d.candidate) {
+      sm.innerHTML = '<option value="">— nessuna —</option>' + d.candidate.map(function (c) {
+        var t = String(titolo(c)).replace(/[&<>"]/g, function (x) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[x]; });
+        return '<option value="' + c.id + '">' + (c.tipo === "micelio" ? "micelio · " : "evento · ") + t + '</option>';
+      }).join("");
+      sm.value = o.orma_madre_id || "";
+      sm.onchange = async function () {
+        try {
+          var r = await db.from("orme").update({ orma_madre_id: sm.value || null }).eq("id", id);
+          if (r.error) throw r.error;
+          await ricarica();
+        } catch (err) { console.warn("fa parte di:", err); alert("Non è stato possibile: " + (err.message || err)); }
+      };
+    }
     P.gesto(R, "cambia-visibilita", async function (e, b) {
       try {
         var r = await db.from("orme").update({ visibilita: b.getAttribute("data-v") }).eq("id", id);
