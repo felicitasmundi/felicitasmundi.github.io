@@ -312,6 +312,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     MG_TIPI.filter(mgPuo).forEach(function(t){
       var b=document.createElement("button"); b.type="button";
       b.className="tb "+t.f+(t.n===mgStato.tipo?" on":"");
+      if(Array.isArray(mgAperti) && mgAperti.indexOf(t.d) < 0) b.style.opacity = ".45";   /* ⭐ chiuso per il tuo grado */
       b.style.setProperty("--c", t.c);
       var i=document.createElement("i");
       if(t.f==="nex") i.innerHTML = MG_NEX;   /* il Nexus della legenda, tale e quale */
@@ -951,9 +952,14 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     if(nominati.length) dettagli.push("con "+nominati.map(function(x){ return x.nome; }).join(", "));
     if(alleg.length) dettagli.push(alleg.length === 1 ? "un allegato" : alleg.length + " allegati");
 
+    if(Array.isArray(mgAperti) && tt && mgAperti.indexOf(tt.d) < 0){ mgServePraticantato(mgStato.tipo); return; }
     db.from("orme").insert(riga)
       .select("id,contenuto").single().then(function(r){
-      if(r.error){ parla("Non è stata conservata: "+r.error.message); return; }
+      if(r.error){
+        /* ⭐ 1 ottobre 22:44, Gab: per chi non ha lo strumento, non l'errore del database ma la strada: il praticantato */
+        if(/non \u00e8 aperto adesso|non è aperto adesso/i.test(r.error.message || "")){ mgServePraticantato(mgStato.tipo); return; }
+        parla("Non è stata conservata: "+r.error.message); return;
+      }
       ultimaOrma = r.data;
       /* ⭐ chi apre un micelio o un evento ci sta dentro da subito: è la prima persona della squadra */
       if(riga.tipo === "micelio" || riga.tipo === "festa"){
@@ -1131,6 +1137,20 @@ window.SpazioVivo.scriviOrma = function(opz){
     cp.focus();
   }
 };
+/* ⭐ 1 ottobre 22:44, Gab: «si su praticantato» — chi non ha ancora lo strumento trova la strada */
+function mgServePraticantato(nome){
+  var w = document.getElementById("mg-prat") || document.createElement("div");
+  w.id = "mg-prat";
+  w.setAttribute("style", "position:fixed;left:50%;bottom:7.5rem;transform:translateX(-50%);z-index:2147483300;width:min(26rem,92vw);padding:1rem 1.1rem;border-radius:1rem;border:1px solid rgba(212,175,106,.6);background:rgba(10,12,26,.96);color:#F5F0E6;font-family:'DM Sans',sans-serif;box-shadow:0 1rem 2.5rem rgba(0,0,0,.5)");
+  var e = function(x){ return String(x).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+  w.innerHTML = '<div style="font-size:.95rem;line-height:1.45">Per scrivere ' + (nome ? '«' + e(nome) + '» ' : '') + 'serve il praticantato: è lì che si aprono gli strumenti del Megafono. Quello che hai scritto resta nel campo.</div>' +
+    '<div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center">' +
+    '<button type="button" data-p="1" style="all:unset;cursor:pointer;color:#0A0C1A;background:#D4AF6A;border-radius:999px;padding:.45rem 1rem;font-family:Cinzel,serif;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase">il praticantato ›</button>' +
+    '<button type="button" data-x="1" style="all:unset;cursor:pointer;margin-left:auto;color:rgba(245,240,230,.6)">chiudi</button></div>';
+  document.body.appendChild(w);
+  w.querySelector("[data-p]").onclick = function(){ w.remove(); try { vai("anthakarana"); } catch(x){} };
+  w.querySelector("[data-x]").onclick = function(){ w.remove(); };
+}
 /* il link dell'incontro appena proposto, pronto da mandare */
 function mgLinkEvento(id, testo){
   var ind = location.origin + location.pathname + "?p=evento&e=" + id;
