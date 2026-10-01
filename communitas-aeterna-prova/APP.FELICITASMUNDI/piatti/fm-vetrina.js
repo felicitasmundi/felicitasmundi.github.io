@@ -147,8 +147,9 @@
         scaffale: c.scaffale || null, stato: "pubblico",
         editore: c.editore || null, formato: c.formato || null, isbn: c.isbn || null,
         biografia: c.biografia || null, foto_autore: rit, video_url: c.video || null,
-        si_compra: (c.incassa || "FelicitasMundi") !== "nessuno",
-        si_scambia: c.stato === "scambio", si_dona: c.stato === "dono"
+        /* ⭐ in vendita → passa per FelicitasMundi (Ordina); in dono / in scambio → si scrive a chi lo fa */
+        si_compra: (c.modo || "in vendita") === "in vendita",
+        si_scambia: c.modo === "in scambio", si_dona: c.modo === "in dono"
       };
       var p = await db.from("prodotti").insert(riga).select("id,nome_url").single();
       if (p.error) throw p.error;

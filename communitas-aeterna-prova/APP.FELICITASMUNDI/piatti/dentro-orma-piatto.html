@@ -1007,7 +1007,7 @@ var STAMPA_HTML = "<button type=\"button\" class=\"qd\" data-f=\"0\"><svg viewBo
 
 var tipo = null, cat = null, fam = null, vic = null;
 var dati = { titolo:"", chi:"", racconto:"", prezzo:"", stato:"disponibile",
-  spedisce:"io", quando:"", dove:"", quanti:"", incassa:"FelicitasMundi", foto:[] };
+  spedisce:"io", quando:"", dove:"", quanti:"", modo:"in vendita", foto:[] };
 /* ⭐ il dove viene dal comune di chi pubblica: non si chiede, si cambia solo se sta altrove */
 var COMUNE_MIO = "[ il tuo comune ]";
 function dovePost(){ return dati.dovep || COMUNE_MIO; }
@@ -1028,7 +1028,7 @@ function pil(){
     if(tipo===t.k) b.className="su";
     b.onclick=function(){ tipo=(tipo===t.k?null:t.k); cat=null; fam=null; vic=null;
       dati={titolo:"",chi:"",racconto:"",prezzo:"",stato:"disponibile",
-        spedisce:"io",quando:"",dove:"",quanti:"",incassa:"FelicitasMundi",foto:[]};
+        spedisce:"io",quando:"",dove:"",quanti:"",modo:"in vendita",foto:[]};
       disegna(); };
     d.appendChild(b);
   });
@@ -1177,8 +1177,9 @@ function sinistra(){
   if(tipo!=="vicinato" && tipo!=="stampa"){
     /* \u2b50 il dove: dal comune di chi pubblica, si cambia solo se sta altrove */
     d.appendChild(campo("dove sta","dovep",COMUNE_MIO));
-    /* \u2b50 chi incassa: chi pubblica, chi fa e chi incassa non sono sempre la stessa persona */
-    d.appendChild(scelte("chi incassa","incassa",["FelicitasMundi","il produttore","nessuno"]));
+    /* ⭐ 1 ottobre, Gab: «chi incassa» era sbagliato — «la domanda è se è in vendita, quindi passa per
+       Felicitas, o se è in dono/scambio e quindi contatto diretto con il produttore» */
+    d.appendChild(scelte("come si ottiene","modo",["in vendita","in dono","in scambio"]));
   }
   d.appendChild(racconto());
   if(tipo!=="prodotto"){ var lg=legami(); lg.setAttribute("data-c","vet.legami"); d.appendChild(lg); }
@@ -1207,13 +1208,17 @@ function sinistra(){
     }
   }
   else if(tipo!=="stampa"){
-    if(tipo==="prodotto") d.appendChild(sezione("ordina"));
-    d.appendChild(campo("quanto costa","prezzo","0",tipo==="prodotto" ? "\u20ac IVA inclusa" : "\u20ac + IVA"));
-    var c=ora(), q=(cat!==null?CAT[cat][1]:"\u2014");
-    var cn=el("div","conto");
-    cn.appendChild(el("span",null,"la quota per FelicitasMundi"));
-    cn.appendChild(el("b",null,q));
-    d.appendChild(cn);
+    var inVendita=(dati.modo||"in vendita")==="in vendita";
+    if(tipo==="prodotto") d.appendChild(sezione(inVendita ? "ordina" : "come averlo"));
+    /* ⭐ in dono o in scambio non c'è prezzo né quota: ci si scrive con chi lo fa */
+    if(inVendita){
+      d.appendChild(campo("quanto costa","prezzo","0",tipo==="prodotto" ? "\u20ac IVA inclusa" : "\u20ac + IVA"));
+      var c=ora(), q=(cat!==null?CAT[cat][1]:"\u2014");
+      var cn=el("div","conto");
+      cn.appendChild(el("span",null,"la quota per FelicitasMundi"));
+      cn.appendChild(el("b",null,q));
+      d.appendChild(cn);
+    }
     d.appendChild(scelte("com\u2019\u00e8","stato",
       ["disponibile","su ordinazione","esaurito"]));
     d.appendChild(scelte("il trasporto","spedisce",
@@ -1284,8 +1289,9 @@ function vetrina(){
   dt.appendChild(el("div","chi", dati.chi || "[ chi lo fa ]"));
   if(tipo!=="vicinato" && tipo!=="stampa"){
     dt.appendChild(el("div","dove2", dovePost()));
-    var inc=el("div","inc", (dati.incassa||"FelicitasMundi")==="nessuno" ? "non si compra: ci si scrive" : "incassa " + (dati.incassa||"FelicitasMundi"));
-    if((dati.incassa||"FelicitasMundi")==="nessuno") inc.setAttribute("data-stato","vet-non-incassa");
+    var inv=(dati.modo||"in vendita")==="in vendita";
+    var inc=el("div","inc", inv ? "in vendita \u00b7 si ordina nell\u2019Emporio FelicitasMundi" : dati.modo + " \u00b7 si scrive a chi lo fa");
+    if(!inv) inc.setAttribute("data-stato","vet-non-incassa");
     dt.appendChild(inc);
   }
 
@@ -1319,7 +1325,7 @@ function vetrina(){
       dt.appendChild(el("button","comp","[ segnaposto ]"));
     }
   }
-  else if(tipo!=="stampa" && (dati.incassa||"FelicitasMundi")==="nessuno"){
+  else if(tipo!=="stampa" && (dati.modo||"in vendita")!=="in vendita"){
     var vb0=el("button","comp","scrivi"); vb0.setAttribute("data-g","vet-vendi"); dt.appendChild(vb0);
   }
   else if(tipo!=="stampa"){
@@ -1334,7 +1340,7 @@ function vetrina(){
     dt.appendChild(el("div","sp","Trasporto " + (dati.trasporto ? dati.trasporto + " €" : "[ quanto ] €")
       + (dati.spedisce==="me ne occupo io" ? " · a cura di chi lo fa" : " · a cura di FelicitasMundi")));
     /* \u2b50 il gesto segue chi incassa: «vendi» → il carrello; «scrivi» → la posta a chi lo tiene */
-    var vb=el("button","comp", (dati.incassa||"FelicitasMundi")==="nessuno" ? "scrivi" : "vendi"); vb.setAttribute("data-g","vet-vendi"); dt.appendChild(vb);
+    var vb=el("button","comp", (dati.modo||"in vendita")!=="in vendita" ? "scrivi" : "ordina"); vb.setAttribute("data-g","vet-vendi"); dt.appendChild(vb);
   }else{
     var vs=el("div","sp","Va in stampa: non compare in nessuna vetrina. " +
       "L\u2019ordine resta dentro questa orma."); vs.setAttribute("data-stato","vet-stampa"); dt.appendChild(vs);
