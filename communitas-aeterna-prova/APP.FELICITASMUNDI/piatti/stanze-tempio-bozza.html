@@ -52,6 +52,9 @@ a.voce.va:hover,a.voce.va:active{background:color-mix(in srgb,var(--el) 14%,tran
 a.voce.va i{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);font-style:normal;color:var(--oro)}
 .vuoto{font-size:.85rem;color:rgba(245,240,230,.35)}
 details.spenta{opacity:.42}
+.in-attesa #porte{opacity:.42;pointer-events:none;user-select:none}
+.in-attesa .invita{opacity:.42;pointer-events:none}
+.avviso{margin:.2rem 0 0;font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--oro);text-align:center;padding:.6rem 1.2rem;border:1px solid rgba(212,175,106,.45);border-radius:999px}
 details.spenta[open]{opacity:.8}
 details.tutti{border-color:color-mix(in srgb,var(--el) 55%,var(--oro))}
 .sezione{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,106,.75);text-align:center;margin:1.4rem 0 .3rem;padding-top:1rem;border-top:1px solid rgba(212,175,106,.2)}
@@ -198,6 +201,12 @@ document.getElementById("porte").innerHTML = tutte.map(function(p){
 }).join("");
 }
 disegnaPorte();
+/* ⭐ 1 ottobre 15:09, Gab: «nella pagina anthakarana metti semi trasparenti tutti i tasti, rendili non
+   schiacciabili; inserisci sopra i quadranti la scritta che l'anthakarana parte in autunno» */
+if (qui === "antahkarana") {
+  document.documentElement.classList.add("in-attesa");
+  document.getElementById("porte").insertAdjacentHTML("beforebegin", '<p class="avviso">L\u2019Anta\u1E25kara\u1E47a parte in autunno</p>');
+}
 if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
 /* ⭐ 30 settembre 18:48, Gab: «la voce tutta la stanza riapre la vecchia versione» → tolta. */
 if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" id="invita" href="../../invito.html">'+esc(S.invita)+' ›</a>');
