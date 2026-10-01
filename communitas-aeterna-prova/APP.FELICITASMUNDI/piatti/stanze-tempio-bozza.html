@@ -209,8 +209,14 @@ if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<
 document.getElementById("porte").addEventListener("click",function(e){
   var a=e.target.closest && e.target.closest("a[data-prodotto]"); if(!a) return;
   e.preventDefault();
-  try { window.parent.vai("prodotto",{id:a.getAttribute("data-prodotto"),tempio:qui}); }
-  catch (x) { location.href="../../index.html?prodotto="+encodeURIComponent(a.getAttribute("data-prodotto")); }
+  var n = a.getAttribute("data-prodotto");
+  /* ⭐ 1 ottobre, Gab: «abbiamo già fatto l'articolo del libro anima vagabonda … prendi riferimento»
+     → si apre la pagina del prodotto (?p=pagina&n=<nome_url>), quella con «ordina». */
+  try {
+    var W = window.parent;
+    if (/^[0-9a-f-]{36}$/.test(n)) W.vai("prodotto",{id:n,tempio:qui});
+    else { W.pagineNomeChiesto = n; W.vai("pagina"); }
+  } catch (x) { location.href="../../index.html?p=pagina&n="+encodeURIComponent(n); }
 });
 function legaPorte(){ document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});}); }
 legaPorte();
