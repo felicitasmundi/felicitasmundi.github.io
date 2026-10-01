@@ -448,7 +448,11 @@
         return window.SpazioVivo.nuovaOrma(id);
       vaiA("megafono", id);
     });
-    P.gesto(R, "torna", function () { vaiA("orme"); });
+    /* ⭐ 1 ottobre, Gab: «quando torno indietro mi riporta a orme, non a vicinati» — si torna da dove si è entrati */
+    var DA = window.ormaDa || "orme";
+    var NOMI_DA = { orme: "la mia orma", vicinati: "vicinati", emporio: "emporio", assistenza: "assistenza", edizione: "edizione", scuola: "scuola", anthakarana: "antaḥkaraṇa", settimana: "la settimana", calendario: "calendario", evento: "l'evento" };
+    var tn = R.querySelector('[data-g="torna"]'); if (tn) tn.innerHTML = "&larr; " + (NOMI_DA[DA.replace(/-piena$/, "")] || "indietro");
+    P.gesto(R, "torna", function () { vaiA(DA); });
 
     /* ─ le tre cose di chi ha aperto l'orma ─ */
     /* fa parte di: la scelta della madre */

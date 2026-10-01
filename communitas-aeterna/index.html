@@ -4107,7 +4107,7 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-percorso-talenti.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — il percorso dei talenti piatto: SpazioVivo.percorsoDeiTalenti(box) e SpazioVivo.stanze(box). Le stanze vivono qui: sostituisce fm-stanze.js -->
 
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` · ㊾ resta SOLO per l'ospite col codice `?c=`: il resto passa da fm-orma-dentro.js -->
-<script src="APP.FELICITASMUNDI/piatti/fm-orma-dentro.js?v=10011110"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — dentro un'orma, piatta: SpazioVivo.ormaDentro(box, idOrma). Sostituisce il vecchio fm-orma-dentro.js (non più caricato) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-orma-dentro.js?v=10011600"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — dentro un'orma, piatta: SpazioVivo.ormaDentro(box, idOrma). Sostituisce il vecchio fm-orma-dentro.js (non più caricato) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-vetrina.js?v=10011105"></script><!-- ⭐ 1 ottobre — la vetrina dentro l'orma pubblica davvero: SpazioVivo.vetrina(R, idOrma, dopo) -->
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js?v=10011100"></script>
@@ -4547,6 +4547,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(id !== "orma") window.codiceChiesto = null;
     /* ⭐ 52 — e uscendo da un evento si dimentica QUALE, come per l'orma */
     if(id !== "evento") window.eventoChiesto = null;
+    /* ⭐ 1 ottobre, Gab: «entro nell'orma, e quando torno indietro mi riporta a orme, non a vicinati».
+       Entrando in un'orma (o in un evento) si ricorda la stanza da cui si viene: «torna» riporta lì. */
+    if((id==="orma"||id==="evento") && vista && vista!=="orma" && vista!=="evento") window.ormaDa = vista;
     vista=id; window.FM_VISTA=id;   /* ⭐ 29 settembre — la barra sa in che stanza si è */
     document.body.classList.toggle("vista-soglia", id==="soglia"); /* ⭐ 30 settembre, Gab: la soglia senza barra e megafono */
     chiudiFinestre();
@@ -5325,7 +5328,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
 
   /* ⭐ TOCCATO NEL GUSCIO ㊺ — IL MEGAFONO vive in fm-megafono.js: il richiamo sta qui, nel punto esatto dove viveva, così l'ordine non cambia */
-</script><script src="fm-megafono.js?v=10011100"></script><script>
+</script><script src="fm-megafono.js?v=10011610"></script><script>
   "use strict"; /* ⭐ ㊺ — la ripresa dello script grande resta rigorosa come il suo inizio */
 
   /* ══════════════ L'ACCOUNT ══════════════ */
@@ -5982,7 +5985,6 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }).catch(function(){ daOspite(); });
 
 </script>
-
 <script src="fm-novita.js?v=09301820"></script> <!-- ⭐ 30 settembre: la finestra delle novità -->
 </body>
 </html>

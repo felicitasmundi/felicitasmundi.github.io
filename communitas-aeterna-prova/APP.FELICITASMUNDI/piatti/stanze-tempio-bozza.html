@@ -70,6 +70,7 @@ a.voce .tg{position:absolute;right:1.7rem;top:50%;transform:translateY(-50%);fon
 .intro{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.45;color:rgba(245,240,230,.75)}
 .nota-r{margin:.2rem 0 0;font-size:.78rem;line-height:1.45;color:rgba(245,240,230,.5)}
 details.archivio{border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.mese{margin:.8rem 0 .2rem;font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,240,230,.45)}
 details.archivio>summary{padding:.3rem 0;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,175,106,.8)}
 .in-attesa #porte{opacity:.42;pointer-events:none;user-select:none}
 .in-attesa .invita{opacity:.42;pointer-events:none}
@@ -230,7 +231,7 @@ if (qui === "vicinati") {
     '<p>Ti chiediamo il comune per mostrarti quello che succede vicino a te: le richieste di aiuto, gli incontri, il villaggio e le novit\u00e0, nel raggio di circa 20 km. Si sceglie una volta.</p>' +
     '<input type="search" placeholder="scrivi il nome del comune" autocomplete="off"><div class="esiti"></div>' +
     '<button type="button" data-geo>usa la mia posizione</button></div>');
-  var sv = document.createElement("script"); sv.src = "./fm-vicinati-tempio.js?v=10011600";
+  var sv = document.createElement("script"); sv.src = "./fm-vicinati-tempio.js?v=10011610";
   sv.onload = function () { if (window.FMVicinatiTempio) window.FMVicinatiTempio.avvia(); };
   document.body.appendChild(sv);
 }

@@ -227,16 +227,16 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
      Nexus della legenda — due cerchi e l'esagono col raggio — preso tale
      e quale dal modello, non ridisegnato. */
   var MG_TIPI = [
-    /* ⭐ 1 ottobre, Gab: «forse è tanto mettere karma yoga come primo riferimento sul megafono» — prima l'obiettivo */
-    {n:"obiettivo",  d:"obiettivo",  c:"var(--fuoco)", f:"rombo"},
-    {n:"karma yoga", d:"karma_yoga", c:"var(--nexus)", f:"nex"},
-    {n:"contatto",   d:"contatto",   c:"var(--oro)",   f:"cerchio"},
-    {n:"spesa",      d:"spesa",      c:"var(--acqua)", f:"quadro"},
-    {n:"articolo",   d:"articolo",   c:"var(--aria)",  f:"tondo"},
-    /* ⭐ 1 ottobre, Gab: «vorrei fare la prova di attivare io l'orma villaggio … e creare l'incontro».
-       Queste due si vedono solo a chi ha lo strumento aperto (permessi → fm_miei_tipi). */
-    {n:"micelio",    d:"micelio",    c:"var(--terra)", f:"cerchio", solo:true},
-    {n:"evento",     d:"festa",      c:"var(--oro)",   f:"rombo",   solo:true}
+    /* ⭐ 1 ottobre, Gab: «forse è tanto mettere karma yoga come primo riferimento sul megafono» — prima l'obiettivo.
+       ⭐ 1 ottobre 15:51, Gab — le parole di ogni tipo (s), sue, tali e quali. Il micelio esce dal Megafono:
+          «perchè hai messo micelio? qua non c entra nulla». */
+    {n:"obiettivo",  d:"obiettivo",  c:"var(--fuoco)", f:"rombo",   s:"cosa devi fare, quando e con chi"},
+    {n:"karma yoga", d:"karma_yoga", c:"var(--nexus)", f:"nex",     s:"la richiesta di cosa c'è bisogno"},
+    {n:"contatto",   d:"contatto",   c:"var(--oro)",   f:"cerchio", s:"collega la persona al contesto"},
+    {n:"spesa",      d:"spesa",      c:"var(--acqua)", f:"quadro",  s:"collega i flussi ai progetti"},
+    {n:"articolo",   d:"articolo",   c:"var(--aria)",  f:"tondo",   s:"novità di ricerca e vicinati"},
+    /* l'evento si vede solo a chi ha lo strumento aperto (permessi → fm_miei_tipi) */
+    {n:"evento",     d:"festa",      c:"var(--oro)",   f:"rombo",   s:"collega il calendario", solo:true}
   ];
   var mgAperti = null;
   function mgPuo(t){ return !t.solo || (mgAperti && mgAperti.indexOf(t.d) >= 0); }
@@ -266,6 +266,8 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
   function mgAggiorna(){
     if(mgInv) mgInv.classList.toggle("pronto", campo.value.trim().length>0);
     var tt = MG_TIPI.filter(function(x){ return x.n===mgStato.tipo; })[0];
+    /* ⭐ 1 ottobre, Gab — nel campo, le parole del tipo scelto */
+    if(campo && tt && tt.s) campo.setAttribute("placeholder", tt.s);
     if(mgTipo){
       mgTipo.textContent = mgStato.tipo;
       mgTipo.style.setProperty("--c", tt ? tt.c : "var(--oro)");
@@ -315,6 +317,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       if(t.f==="nex") i.innerHTML = MG_NEX;   /* il Nexus della legenda, tale e quale */
       b.appendChild(i);
       b.appendChild(document.createTextNode(t.n));
+      if(t.s){ b.style.flexWrap="wrap"; var sm=document.createElement("small"); sm.textContent=t.s; sm.setAttribute("style","display:block;flex-basis:100%;padding-left:1.6rem;font-size:.72rem;opacity:.6;letter-spacing:0;text-transform:none;margin-top:.15rem"); b.appendChild(sm); }
       b.addEventListener("click", function(){
         mgStato.tipo = t.n; mgChiudi(); mgAggiorna();
       });
@@ -1117,12 +1120,7 @@ window.SpazioVivo.scriviOrma = function(opz){
     document.head.appendChild(st);
   }
   if(box){ box.classList.remove("accesa"); void box.offsetWidth; box.classList.add("accesa"); setTimeout(function(){ box.classList.remove("accesa"); }, 3400); }
-  var SEGNO = { karma_yoga: "( la richiesta: di cosa c'è bisogno, dove, entro quando )", festa: "( l'incontro: cosa, dove, quando )", articolo: "( l'articolo )" };
   if(cp){
-    if(!cp.dataset.segnoBase) cp.dataset.segnoBase = cp.getAttribute("placeholder") || "";
-    if(SEGNO[opz.tipo]) cp.setAttribute("placeholder", SEGNO[opz.tipo]);
-    var rimetti = function(){ if(!cp.value.trim()) cp.setAttribute("placeholder", cp.dataset.segnoBase); cp.removeEventListener("blur", rimetti); };
-    cp.addEventListener("blur", rimetti);
     try { (box || cp).scrollIntoView({ block: "end", behavior: "smooth" }); } catch(e){}
     cp.focus();
   }
