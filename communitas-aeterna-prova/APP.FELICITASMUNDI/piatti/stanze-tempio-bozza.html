@@ -47,6 +47,9 @@ details[open] summary i{transform:rotate(90deg)}
 .fascia em{display:block;font-style:normal;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(212,175,106,.8);margin-bottom:.3rem}
 .voce{font-size:.95rem;line-height:1.45;color:rgba(245,240,230,.88);padding:.15rem 0}
 .voce small{display:block;font-size:.8rem;color:rgba(245,240,230,.5)}
+a.voce.va{display:block;position:relative;text-decoration:none;padding:.45rem 1.6rem .45rem .7rem;margin:0 -.7rem;border-radius:.7rem;transition:background .3s}
+a.voce.va:hover,a.voce.va:active{background:color-mix(in srgb,var(--el) 14%,transparent)}
+a.voce.va i{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);font-style:normal;color:var(--oro)}
 .vuoto{font-size:.85rem;color:rgba(245,240,230,.35)}
 .sezione{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,175,106,.75);text-align:center;margin:1.4rem 0 .3rem;padding-top:1rem;border-top:1px solid rgba(212,175,106,.2)}
 .invita{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);text-decoration:none;padding:.7rem 1.4rem;border:1px solid rgba(212,175,106,.45);border-radius:999px;margin-top:.6rem}
@@ -167,7 +170,7 @@ if (S.solido === "nexus") document.getElementById("solido").classList.add("grand
 function esc(x){ return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
 function fascia(nome, voci){
   return '<div class="fascia"><em>'+nome+'</em>' + (voci && voci.length
-    ? voci.map(function(v){ return '<div class="voce">'+esc(v[0])+(v[1]?'<small>'+esc(v[1])+'</small>':'')+'</div>'; }).join("")
+    ? voci.map(function(v){ return (v[2] ? '<a class="voce va" href="#" data-prodotto="'+esc(v[2])+'">' : '<div class="voce">')+esc(v[0])+(v[1]?'<small>'+esc(v[1])+'</small>':'')+(v[2]?'<i>›</i></a>':'</div>'); }).join("")
     : '<div class="vuoto">'+VUOTO+'</div>') + '</div>';
 }
 function disegnaPorte(){
@@ -182,6 +185,13 @@ disegnaPorte();
 if (S.famiglie) document.getElementById("porte").innerHTML = document.getElementById("famiglie").innerHTML;
 /* ⭐ 30 settembre 18:48, Gab: «la voce tutta la stanza riapre la vecchia versione» → tolta. */
 if (S.invita) document.getElementById("porte").insertAdjacentHTML("afterend", '<a class="invita" href="#">'+esc(S.invita)+' ›</a>');
+/* ⭐ 1 ottobre, Gab: «se uno schiaccia su un libro apre le info e le modalità di acquisto» */
+document.getElementById("porte").addEventListener("click",function(e){
+  var a=e.target.closest && e.target.closest("a[data-prodotto]"); if(!a) return;
+  e.preventDefault();
+  try { window.parent.vai("prodotto",{id:a.getAttribute("data-prodotto"),tempio:qui}); }
+  catch (x) { location.href="../../index.html?prodotto="+encodeURIComponent(a.getAttribute("data-prodotto")); }
+});
 function legaPorte(){ document.querySelectorAll('details').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)document.querySelectorAll('details').forEach(function(x){if(x!==d)x.open=false;});});}); }
 legaPorte();
 
@@ -205,10 +215,10 @@ legaPorte();
     var porte = {};
     S.porte.forEach(function(p){ porte[p[0]] = {A:[],V:[],L:[]}; });
     if (qui === "emporio") {
-      var r = await db.from("prodotti").select("nome,autore,scaffale,antahkarana").eq("stato","pubblico").limit(500);
+      var r = await db.from("prodotti").select("id,nome_url,nome,autore,scaffale,antahkarana").eq("stato","pubblico").limit(500);
       if (r.error) return;
       r.data.forEach(function(x){ var k = porte[x.scaffale]; if (!k) return;
-        (x.antahkarana ? k.A : k.V).push([x.nome, x.autore || ""]); });
+        (x.antahkarana ? k.A : k.V).push([x.nome, x.autore || "", x.nome_url || x.id]); });
     } else {
       var TIPO = qui === "assistenza"
         ? {assistenza_spirituale:"spirituale", consulenza:"consulenze", percorso:"percorsi"}

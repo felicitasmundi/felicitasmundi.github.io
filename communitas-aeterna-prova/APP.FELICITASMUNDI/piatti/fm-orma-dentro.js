@@ -82,10 +82,16 @@
       var o = await db.from("orme")
         .select("id,titolo,sottotitolo,contenuto,tipo,elemento,stadio,luogo," +
                 "accaduto_il,inizio_il,entro_il,destinazione,persona_id,quanti_servono," +
-                "visibilita,dorme_dal")
+                "visibilita,dorme_dal,orma_madre_id")
         .eq("id", id).single();
       if (o.error) return d;
       d.orma = o.data;
+
+      /* ⭐ 1 ottobre, Gab: l'evento dell'11 è «una task dentro festival» — ogni orma dice di chi è figlia */
+      if (d.orma.orma_madre_id) {
+        var md = await db.from("orme").select("id,titolo,tipo").eq("id", d.orma.orma_madre_id).limit(1);
+        if (!md.error && md.data && md.data[0]) d.madre = md.data[0];
+      }
 
       /* chi l'ha aperta */
       if (d.orma.persona_id) {
@@ -95,10 +101,15 @@
       }
 
       /* chi c'è dentro: i lasciati restano come storia, ma non contano */
+      /* ⭐ 1 ottobre — il ruolo (coordinatore) nelle squadre; se la colonna non c'è ancora, senza */
       var p = await db.from("orma_persone")
+        .select("id,persona_id,nome,stato,preso_il,chiuso_il,ore,lasciato_il,ruolo")
+        .eq("orma_id", id);
+      if (p.error) p = await db.from("orma_persone")
         .select("id,persona_id,nome,stato,preso_il,chiuso_il,ore,lasciato_il")
         .eq("orma_id", id);
       d.dentro = p.error ? [] : (p.data || []).filter(function (x) { return !x.lasciato_il; });
+      d.dentro.sort(function (a, b) { return (b.ruolo === "coordinatore") - (a.ruolo === "coordinatore"); });
 
       /* le loro foto e i loro profili, per chi ha un account */
       var pid = d.dentro.map(function (x) { return x.persona_id; }).filter(Boolean);
@@ -178,8 +189,14 @@
       persona: d.autore ? { nome: d.autore.nome || "", foto_url: d.autore.foto_url || "",
                             nome_url: d.autore.nome_url ? "?p=" + d.autore.nome_url : "" }
                         : { nome: "", foto_url: "" },
-      conto: { aderenti: String(presenti.length), figlie: String(d.figlie.length) }
+      conto: { aderenti: String(presenti.length), figlie: String(d.figlie.length) },
+      madre: { titolo: d.madre ? (d.madre.titolo || "") : "" }
     });
+    P.stato(R, "ha-madre", !!d.madre);
+    if (d.madre) P.gesto(R, "apri-madre", function () { apri(d.madre.id); });
+    /* il colore e il solido seguono l'elemento dell'orma, come nei templi */
+    if (R.ownerDocument && R.ownerDocument.defaultView && R.ownerDocument.defaultView.fmVeste)
+      R.ownerDocument.defaultView.fmVeste(o.elemento);
 
     /* la parola del tasto cambia col tipo */
     Array.prototype.forEach.call(R.querySelectorAll('[data-g="prendo"]'), function (b) {
@@ -215,6 +232,7 @@
         preso_il: x.preso_il ? "dal " + giornoMese(x.preso_il) : "",
         ore: ore(x.ore), chiuso_il: x.chiuso_il ? giornoMese(x.chiuso_il) : "" } });
       P.stato(c, "in-attesa", x.stato === "proposto" && !x.preso_il);
+      P.stato(c, "coordina", x.ruolo === "coordinatore");
     });
 
     /* le figlie */

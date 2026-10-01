@@ -4107,14 +4107,14 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-percorso-talenti.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — il percorso dei talenti piatto: SpazioVivo.percorsoDeiTalenti(box) e SpazioVivo.stanze(box). Le stanze vivono qui: sostituisce fm-stanze.js -->
 
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` · ㊾ resta SOLO per l'ospite col codice `?c=`: il resto passa da fm-orma-dentro.js -->
-<script src="APP.FELICITASMUNDI/piatti/fm-orma-dentro.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — dentro un'orma, piatta: SpazioVivo.ormaDentro(box, idOrma). Sostituisce il vecchio fm-orma-dentro.js (non più caricato) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-orma-dentro.js?v=10011000"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — dentro un'orma, piatta: SpazioVivo.ormaDentro(box, idOrma). Sostituisce il vecchio fm-orma-dentro.js (non più caricato) -->
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js"></script>
 <script src="fm-pagina-piu.js"></script>
 <!-- ⭐ TOCCATO NEL GUSCIO 56 — TUTTE LE STANZE PASSANO AI PIATTI, da piatti/, dopo fm-piatto.js.
      I vecchi fm-invito/fm-strumenti/fm-emporio/fm-assistenza/fm-configuratore/fm-scuola/fm-edizione non si caricano più.
      ⚠️ fm-invito.js DOPO le stanze: emporio/assistenza/scuola/edizione ridefiniscono SpazioVivo.invito, e deve vincere il suo. -->
-<script src="APP.FELICITASMUNDI/piatti/fm-emporio.js?v=09292315"></script><!-- 56 — Emporio: SpazioVivo.emporio(box) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-emporio.js?v=10011000"></script><!-- 56 — Emporio: SpazioVivo.emporio(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-assistenza.js?v=09292315"></script><!-- 56 — Assistenza: SpazioVivo.assistenza(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-scuola.js?v=09292315"></script><!-- 56 — Scuola: SpazioVivo.scuola(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-edizione.js?v=09292315"></script><!-- 56 — Edizione: SpazioVivo.edizione(box) -->
@@ -4126,7 +4126,7 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-settimana.js?v=09292315"></script><!-- 28 settembre — «La settimana»: gli obiettivi per elemento, SpazioVivo.settimana(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-vicinati.js?v=09292315"></script><!-- 29 settembre — Vicinati come casa: SpazioVivo.vicinati(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-invito.js?v=09292315"></script><!-- 56 — «Invita chi risuona»: SpazioVivo.invito(). DOPO le stanze, così vince il suo -->
-<script src="APP.FELICITASMUNDI/piatti/fm-evento.js?v=09292315"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
+<script src="APP.FELICITASMUNDI/piatti/fm-evento.js?v=10011000"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
 <!-- ⛔ 56 — il Megafono-piatto NON è cablato qui: il vecchio fm-megafono.js resta (fornisce parla() e il Megafono in fondo). Il piatto megafono-piatto.html è full-viewport e va chiarito con Gab prima di sostituirlo. -->
 
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
@@ -4567,6 +4567,8 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ 18:51, Gab: «ognuna di queste una volta che fai piena apre la vecchia versione» → anche «-piena» porta al tempio */
     if(/-piena$/.test(id)) id = id.replace(/-piena$/, "");
     if(TEMPIO[id] && window.FMPiatto) FMPiatto.monta(c, "APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=" + TEMPIO[id] + "&in=app");
+    /* ⭐ 1 ottobre, Gab: dal tempio, toccando un libro o un prodotto si apre la sua scheda con l'acquisto */
+    else if(id==="prodotto" && window.SpazioVivo && SpazioVivo.prodotto) SpazioVivo.prodotto(c, sub && sub.id, sub && sub.tempio);
     else if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
     /* ⭐ TOCCATO NEL GUSCIO ㊷ — «orme» ora è la matrice de «la mia orma».
        Se fm-orma-mia.js manca si ricade su «Le mie orme» com'era. */
