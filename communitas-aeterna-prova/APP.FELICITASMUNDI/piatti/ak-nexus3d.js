@@ -24,6 +24,23 @@ class AkNexus3d extends HTMLElement {
       ':host(.vivo) canvas{opacity:1}:host(.vivo) img{opacity:0}</style>' +
       '<img alt="" src="' + new URL('nexus-fermo.webp?v=10010900', QUI).href + '">';
     this.fermo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* ⭐ 1 ottobre 10:29, Gab: «è sempre come se rimbalza e rimane fisso» (nell'app).
+       Sul telefono il motore 3D tiene occupata la pagina mentre si prepara: lì il Nexus
+       gira in un video già girato dal modello vero (stessa posa, stesso giro diagonale,
+       15,6 s), che il telefono decodifica da sé senza fermare lo scorrimento. Il fondo nero
+       del video sparisce sul fondo notte (mix-blend-mode: screen). Sul computer resta il 3D. */
+    if (matchMedia('(pointer: coarse)').matches || this.hasAttribute('video')) {
+      const img = sh.querySelector('img'); if (img) img.remove();
+      const v = document.createElement('video');
+      v.muted = true; v.loop = true; v.autoplay = !this.fermo; v.playsInline = true;
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('preload', 'auto');
+      v.poster = new URL('nexus-giro.jpg?v=10011035', QUI).href;
+      v.src = new URL('nexus-giro.mp4?v=10011035', QUI).href;
+      v.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;pointer-events:none');
+      sh.appendChild(v);
+      if (!this.fermo) { const pp = v.play(); if (pp && pp.catch) pp.catch(() => {}); }
+      return;
+    }
     /* il 3D parte quando la pagina ha finito di caricarsi e il telefono respira */
     const via = () => { if (this.isConnected) this.accendi(); };
     const dopo = () => ('requestIdleCallback' in window) ? requestIdleCallback(via, { timeout: 2500 }) : setTimeout(via, 900);
