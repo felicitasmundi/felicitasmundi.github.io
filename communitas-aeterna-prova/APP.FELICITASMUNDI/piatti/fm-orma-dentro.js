@@ -305,7 +305,7 @@
       var base = location.origin + location.pathname;
       var link = base + (o.tipo === "festa" ? "?p=evento&e=" : "?p=orma&o=") + id;
       var cp = R.querySelector('[data-g="copia-invito"]');
-      if (cp) cp.onclick = function () { try { navigator.clipboard.writeText(link); cp.textContent = "copiato"; } catch (e) {} };
+      if (cp) cp.onclick = function () { if (window.fmCopia) window.fmCopia(link, cp); else { try { navigator.clipboard.writeText(link); cp.textContent = "copiato"; } catch (e) {} } };
       var wa = R.querySelector('[data-g="wa-invito"]');
       if (wa) wa.setAttribute("href", "https://wa.me/?text=" + encodeURIComponent((titolo(o) || "") + " \u2014 " + link));
       /* evento e riunione solo a chi ha lo strumento aperto */

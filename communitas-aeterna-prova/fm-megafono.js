@@ -1151,6 +1151,23 @@ function mgServePraticantato(nome){
   w.querySelector("[data-p]").onclick = function(){ w.remove(); try { vai("anthakarana"); } catch(x){} };
   w.querySelector("[data-x]").onclick = function(){ w.remove(); };
 }
+function fmCopia(testo, tasto){
+  var fatto = function(){ if(tasto) tasto.textContent = "copiato"; };
+  var amano = function(){
+    try {
+      var t = document.createElement("textarea"); t.value = testo; t.setAttribute("readonly", "");
+      t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select();
+      var ok = document.execCommand("copy"); t.remove();
+      if(ok){ fatto(); return; }
+    } catch(x){}
+    if(tasto) tasto.textContent = "tieni premuto il link e copia";
+  };
+  try {
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(testo).then(fatto, amano);
+    else amano();
+  } catch(x){ amano(); }
+}
+window.fmCopia = fmCopia;
 /* il link dell'incontro appena proposto, pronto da mandare */
 function mgLinkEvento(id, testo){
   var ind = location.origin + location.pathname + "?p=evento&e=" + id;
@@ -1165,6 +1182,8 @@ function mgLinkEvento(id, testo){
     '<a target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(String(testo||"").split("\n")[0] + " \u2014 " + ind) + '" style="color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:.3rem .8rem;text-decoration:none">WhatsApp</a>' +
     '<button type="button" data-x="1" style="all:unset;cursor:pointer;margin-left:auto;color:rgba(245,240,230,.6)">chiudi</button></div>';
   document.body.appendChild(w);
-  w.querySelector("[data-c]").onclick = function(){ try { navigator.clipboard.writeText(ind); this.textContent = "copiato"; } catch(x){} };
+  /* ⭐ 1 ottobre 23:05, Gab: «ho schiacciato copia e non ha copiato» — si copia davvero, e se il browser
+     non lo permette si seleziona il link perché si possa copiare a mano */
+  w.querySelector("[data-c]").onclick = function(){ fmCopia(ind, this); };
   w.querySelector("[data-x]").onclick = function(){ w.remove(); };
 }
