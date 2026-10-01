@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Il viaggio dell'invito · bozza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--notte:#0A0C1A;--oro:#D4AF6A;--crema:#F5F0E6;--linea:rgba(212,175,106,.28);--nuovo:#7FD1A0}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#1a1640,var(--notte) 60%);color:var(--crema);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh}
+header{padding:2rem 1rem 1rem;text-align:center}
+h1{font-family:'Cinzel',serif;font-weight:400;letter-spacing:.14em;color:var(--oro);font-size:1.3rem;margin:0}
+header p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;opacity:.75;margin:.5rem auto 0;max-width:36rem}
+.leg{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;font-size:.75rem;margin-top:.8rem;opacity:.85}
+.leg span{display:inline-flex;align-items:center;gap:.35rem}
+.leg i{width:.7rem;height:.7rem;border-radius:50%;display:inline-block}
+.fila{display:flex;gap:1.2rem;overflow-x:auto;padding:1.2rem 1rem 2.5rem;scroll-snap-type:x mandatory}
+@media(min-width:1100px){.fila{flex-wrap:wrap;justify-content:center;overflow:visible}}
+.passo{flex:0 0 17.5rem;scroll-snap-align:center}
+.num{font-family:'Cinzel',serif;color:var(--oro);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;margin:0 0 .5rem .3rem}
+.tel{height:31rem;border-radius:1.8rem;border:8px solid #1a1d2e;background:linear-gradient(180deg,#0e1024,#090b18);box-shadow:0 0 0 1px var(--linea),0 1rem 2rem rgba(0,0,0,.5);padding:1rem .9rem;display:flex;flex-direction:column;gap:.6rem;overflow:hidden;position:relative}
+.tel.wa{background:#0b141a}
+.tit{font-family:'Cinzel',serif;color:var(--oro);letter-spacing:.12em;text-transform:uppercase;font-size:.8rem;text-align:center}
+.cor{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;opacity:.8;text-align:center}
+.card{border:1px solid var(--linea);border-radius:.9rem;padding:.7rem .8rem;font-size:.8rem;background:rgba(245,240,230,.04)}
+.card small{display:block;opacity:.6;font-size:.7rem;margin-top:.2rem}
+.btn{border:1px solid rgba(212,175,106,.6);border-radius:999px;padding:.6rem 1rem;text-align:center;font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--oro)}
+.btn.pieno{background:var(--oro);color:var(--notte)}
+.nuovo{outline:2px dashed var(--nuovo);outline-offset:3px}
+.c{color:var(--nuovo)}
+.ph{color:rgba(245,240,230,.45)}
+.bolla{background:#005c4b;border-radius:.6rem .6rem .1rem .6rem;padding:.55rem .7rem;font-size:.8rem;align-self:flex-end;max-width:90%}
+.bolla .img{height:7rem;border-radius:.4rem;background:radial-gradient(circle at 50% 45%,rgba(212,175,106,.35),transparent 60%),#121530;display:grid;place-items:center;font-family:'Cinzel',serif;color:var(--oro);font-size:.7rem;letter-spacing:.15em;margin-bottom:.4rem}
+.bolla a{color:#53bdeb;word-break:break-all}
+.nex{width:5rem;height:5rem;margin:.6rem auto;border:1px solid var(--oro);transform:rotate(45deg);opacity:.7}
+.campo{border-bottom:1px solid var(--linea);padding:.45rem .1rem;font-size:.8rem;opacity:.65}
+.nota{font-size:.78rem;line-height:1.45;opacity:.85;margin:.6rem .2rem 0}
+.nota b{color:var(--oro);font-weight:500}
+.chi{display:flex;align-items:center;gap:.5rem;font-size:.8rem;padding:.35rem 0;border-bottom:1px solid rgba(212,175,106,.12)}
+.chi .pill{margin-left:auto;font-size:.65rem;border:1px solid var(--nuovo);color:var(--nuovo);border-radius:999px;padding:.15rem .5rem}
+.chi .co{margin-left:auto;font-size:.65rem;color:var(--oro)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Il viaggio dell'invito</h1>
+  <p>Dall'invito su WhatsApp all'incontro dell'11 ottobre, dentro il Felicitas Festival e il Villaggio Felicitas – Civiltà Sarda</p>
+  <div class="leg"><span><i style="background:var(--oro)"></i>c'è già</span><span><i style="background:var(--nuovo)"></i>da fare</span><span class="ph">( ) = testo tuo</span></div>
+</header>
+
+<div class="fila">
+
+  <div class="passo">
+    <div class="num">1 · l'invito</div>
+    <div class="tel wa">
+      <div class="bolla"><div class="img">( immagine con l'orma )</div>( il testo dell'invito )<br><a>app.felicitasmundi.com/communitas-aeterna/?p=evento&amp;e=…</a></div>
+    </div>
+    <p class="nota">Lo mandi tu. Il link è quello dell'incontro.</p>
+  </div>
+
+  <div class="passo">
+    <div class="num">2 · l'incontro</div>
+    <div class="tel">
+      <div class="tit">( titolo dell'incontro )</div>
+      <div class="cor">11 ottobre · Cas'ale, Baratili</div>
+      <div class="card">fa parte di<br><b style="color:var(--oro)">Felicitas Festival</b><small>Villaggio Felicitas – Civiltà Sarda</small></div>
+      <div class="card">( la descrizione )</div>
+      <div style="flex:1"></div>
+      <div class="btn pieno">ci sarò</div>
+    </div>
+    <p class="nota">Si vede anche senza account.</p>
+  </div>
+
+  <div class="passo">
+    <div class="num">3 · l'ingresso</div>
+    <div class="tel">
+      <div class="nex"></div>
+      <div class="tit">Comunità Eterna</div>
+      <div class="campo">la tua email</div>
+      <div class="campo">il codice che ti arriva</div>
+      <div class="card" style="font-size:.72rem">accetto le condizioni</div>
+      <div style="flex:1"></div>
+      <div class="btn pieno">entra</div>
+    </div>
+    <p class="nota">Chi non ha l'account passa da qui: c'è già.</p>
+  </div>
+
+  <div class="passo">
+    <div class="num">4 · la soglia</div>
+    <div class="tel">
+      <div class="tit">la soglia</div>
+      <div class="card">Quello che fai</div>
+      <div class="card">Quello che condividi</div>
+      <div class="card">Quello che ricevi</div>
+      <div style="flex:1"></div>
+      <div class="btn pieno nuovo">( titolo dell'incontro ) ›</div>
+      <div class="cor" style="font-size:.75rem;opacity:.5"><s>Vicinati ›</s></div>
+    </div>
+    <p class="nota"><b class="c">Da fare:</b> oggi dopo l'ingresso si torna dritti all'incontro, e la soglia si salta. Dopo: si passa dalla soglia, e al posto di «Vicinati» c'è il tasto dell'incontro da cui è arrivato.</p>
+  </div>
+
+  <div class="passo">
+    <div class="num">5 · dentro</div>
+    <div class="tel">
+      <div class="cor c">✓ ci sei · incontro · festival · villaggio</div>
+      <div class="tit">Felicitas Festival</div>
+      <div class="card nuovo">( completa la tua presentazione )<small>scrivi la bio, metti la foto ›</small></div>
+      <div class="card">Obiettivi, eventi, riunioni</div>
+      <div class="card">Chi c'è dentro</div>
+    </div>
+    <p class="nota"><b class="c">Da fare:</b> toccando il tasto dalla soglia il «ci sarò» vale da sé, senza toccarlo di nuovo. E chi non ha la bio trova il richiamo, che apre Account › Biografia.</p>
+  </div>
+
+  <div class="passo">
+    <div class="num">6 · il nucleo</div>
+    <div class="tel">
+      <div class="tit">Villaggio Felicitas<br>Civiltà Sarda</div>
+      <div class="cor" style="font-size:.8rem">chi c'è dentro</div>
+      <div class="chi">Gabriele <span class="co">coordina</span></div>
+      <div class="chi">Marco <span class="pill nuovo">rende coordinatore</span></div>
+      <div class="chi">Alessandra <span class="pill nuovo">rende coordinatore</span></div>
+      <div class="chi">( altri ) <span class="pill">rende coordinatore</span></div>
+    </div>
+    <p class="nota"><b class="c">Da fare:</b> il tasto lo vede solo il nucleo centrale. Ai coordinatori senza bio arriva il richiamo del passo 5.</p>
+  </div>
+
+</div>
+</body>
+</html>
