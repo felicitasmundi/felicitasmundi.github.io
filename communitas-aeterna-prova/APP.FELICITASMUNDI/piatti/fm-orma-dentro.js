@@ -218,15 +218,7 @@
     if (R.ownerDocument && R.ownerDocument.defaultView && R.ownerDocument.defaultView.fmVeste)
       R.ownerDocument.defaultView.fmVeste(o.elemento);
 
-    /* la parola del tasto cambia col tipo */
-    /* ⭐ 1 ottobre, Gab: «lo prendo non vuol dire nulla, non è quella una task» — il tasto c'è
-       solo dove c'è qualcosa da fare o a cui esserci, e dice la cosa giusta */
-    var PAROLA = { obiettivo: "me ne occupo io", karma_yoga: "lo prendo", festa: "ci sarò" };
-    Array.prototype.forEach.call(R.querySelectorAll('[data-g="prendo"]'), function (b) {
-      var w = PAROLA[o.tipo];
-      b.textContent = w || "";
-      b.hidden = !w;
-    });
+    /* ⭐ 1 ottobre 22:57, Gab: «elimina per sempre me ne occupo io dal racconto» — il tasto non c'è più */
 
     /* ⭐ chi ha aperto l'orma: le tre cose che può fare */
     var padrone = !!(io && o.persona_id === io);
