@@ -217,8 +217,13 @@
       R.ownerDocument.defaultView.fmVeste(o.elemento);
 
     /* la parola del tasto cambia col tipo */
+    /* ⭐ 1 ottobre, Gab: «lo prendo non vuol dire nulla, non è quella una task» — il tasto c'è
+       solo dove c'è qualcosa da fare o a cui esserci, e dice la cosa giusta */
+    var PAROLA = { obiettivo: "me ne occupo io", karma_yoga: "lo prendo", festa: "ci sarò" };
     Array.prototype.forEach.call(R.querySelectorAll('[data-g="prendo"]'), function (b) {
-      b.textContent = o.tipo === "obiettivo" ? "me ne occupo io" : "lo prendo";
+      var w = PAROLA[o.tipo];
+      b.textContent = w || "";
+      b.hidden = !w;
     });
 
     /* ⭐ chi ha aperto l'orma: le tre cose che può fare */
