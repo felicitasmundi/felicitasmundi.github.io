@@ -164,7 +164,9 @@ var STANZE = {
     porte:[
       ["lezioni",{V:[["Astrologia","Ferrara"],["Simbologia","Ferrara"],["Agricoltura naturale","Livorno"]],
                   L:[["Cristalloterapia","Livorno"],["Reiki","Giulianova"],["Astrologia","Giulianova"]]}],
-      ["online",{}], ["ricerca",{}]
+      ["online",{}],
+      /* ⭐ 1 ottobre 19:14, Gab: «su scuola rendi semi trasparente ricerca e scrivi che in autunno verrà condivisa la base di ricerca e sviluppo di felicitasmundi» */
+      ["ricerca",{testo:"In autunno verrà condivisa la base di ricerca e sviluppo di FelicitasMundi", spenta:true}]
     ]}
 };
 STANZE.antahkarana = { sans:"अन्तःकरण", nome:"Antaḥkaraṇa", solido:"nexus", colore:"#D4AF6A", ic:"✧",
@@ -219,7 +221,7 @@ document.getElementById("porte").innerHTML = tutte.map(function(p){
   var d = p[1], n = (d.A||[]).length + (d.V||[]).length + (d.L||[]).length;
   var conto = (S.conto && !d.testo) ? '<span class="n">'+n+' '+(n===1 ? S.conto.replace(/i$/,"o") : S.conto)+'</span>' : '<span class="n"></span>';
   /* ⭐ «semi trasparenti tutte le voci non coperte» */
-  var cls = (S.conto && !d.testo && n === 0) ? ' class="spenta"' : (p[2] ? ' class="tutti"' : '');
+  var cls = (d.spenta || (S.conto && !d.testo && n === 0)) ? ' class="spenta"' : (p[2] ? ' class="tutti"' : '');
   return '<details'+cls+'><summary><span class="ic">'+S.ic+'</span><b>'+esc(p[0])+'</b>'+conto+'<i>›</i></summary>'
     + '<div class="dentro">'+(d.testo ? '<div class="voce">'+esc(d.testo)+'</div>' : fascia("Antaḥkaraṇa",d.A)+fascia("Vicino a te",d.V)+fascia("Lontano",d.L))+'</div></details>';
 }).join("");
@@ -303,6 +305,7 @@ legaPorte();
     var qualcosa = Object.keys(porte).some(function(n){ var k = porte[n]; return k.A.length + k.V.length + k.L.length; });
     if (!qualcosa) return;
     S.porte = S.porte.map(function(p){ var k = porte[p[0]], v = p[1];
+      if (v.testo) return p;   /* una porta con il suo testo resta com'è */
       return [p[0], { A: k.A.length ? k.A : (v.A||[]), V: k.V.length ? k.V : (v.V||[]), L: k.L.length ? k.L : (v.L||[]) }]; });
     disegnaPorte(); legaPorte();
   } catch (e) { /* restano le voci scritte */ }
