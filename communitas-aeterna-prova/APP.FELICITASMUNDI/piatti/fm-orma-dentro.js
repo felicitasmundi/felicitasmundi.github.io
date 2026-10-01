@@ -246,7 +246,7 @@
       });
       Array.prototype.forEach.call(R.querySelectorAll(".dati > span"), function (sp) {
         if (sp.querySelector(".fl")) return;                       /* gli allegati restano: c'è il +  */
-        var vl = sp.querySelector(".vl"); var t = vl ? vl.textContent.replace(/persone/, "").trim() : "";
+        var vl = sp.querySelector(".vl"); var t = vl ? (vl.innerText || vl.textContent).replace(/persone/, "").trim() : "";
         sp.hidden = !t || /^\[.*\]$/.test(t);
       });
       var doc = R.ownerDocument; if (doc && doc.documentElement) doc.documentElement.classList.add("pronta");
