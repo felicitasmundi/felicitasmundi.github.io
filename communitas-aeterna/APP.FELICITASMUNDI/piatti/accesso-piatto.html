@@ -51,6 +51,11 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
 .ak-campo input:focus{border-color:var(--oro);box-shadow:0 0 .8rem rgba(212,175,106,.25)}
 .ak-campo input[inputmode="numeric"]{font-family:'Cinzel',serif;font-size:1.5rem;letter-spacing:.5em;text-align:center}
 .ak-due{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));gap:.9rem}
+.ak-chi{display:flex;gap:1rem;align-items:flex-start;margin:0 0 1.4rem;padding:1rem 1.1rem;border:1px solid rgba(212,175,106,.35);border-radius:1.1rem;background:rgba(245,240,230,.04)}
+.ak-chi img{width:4.6rem;height:4.6rem;border-radius:50%;object-fit:cover;object-position:16% 30%;flex:none;border:1px solid rgba(212,175,106,.5)}
+.ak-chi img[src=""],.ak-chi img:not([src]){display:none}
+.ak-chi b{display:block;font-family:'Cinzel',serif;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#D4AF6A;font-size:.9rem;margin-bottom:.35rem}
+.ak-chi p{margin:0;font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:1.45;color:rgba(245,240,230,.85)}
 .ak-nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.5)}
 .ak-nexus{position:absolute;left:50%;top:50%;width:84%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;border:.45rem solid var(--nexus);box-shadow:0 0 0 .15rem rgba(140,47,57,.35),0 0 2.4rem rgba(140,47,57,.45),inset 0 0 2rem rgba(140,47,57,.35);background:#fff}
 .ak-nexus img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -77,6 +82,8 @@ a{color:var(--oro);text-decoration:none}a:hover{color:var(--ivory)}
     <div class="ak-occ" style="text-align:center">FelicitasMundi &middot; Comunit&agrave; Eterna</div>
   </div>
   <form class="ak-dx" data-stato="accesso" onsubmit="return false">
+    <!-- ⭐ 1 ottobre 21:36, Gab: la bio e la foto «legate al collegamento col mio nome» — chi ti invita, prima di entrare -->
+    <div class="ak-chi" id="ak-chi" hidden><img alt="" data-chi="foto"><div><b data-chi="nome"></b><p data-chi="bio"></p></div></div>
     <div class="ak-capo"><h1>Entra</h1></div>
     <div class="ak-colonna">
       <div class="ak-campo"><label for="ak-email">la tua mail</label><input id="ak-email" type="email" autocomplete="email" data-c="accesso.email" required></div>
