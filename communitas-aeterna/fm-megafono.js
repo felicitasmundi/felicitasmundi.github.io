@@ -317,7 +317,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
       if(t.f==="nex") i.innerHTML = MG_NEX;   /* il Nexus della legenda, tale e quale */
       b.appendChild(i);
       b.appendChild(document.createTextNode(t.n));
-      if(t.s){ b.style.flexWrap="wrap"; var sm=document.createElement("small"); sm.textContent=t.s; sm.setAttribute("style","display:block;flex-basis:100%;padding-left:1.6rem;font-size:.72rem;opacity:.6;letter-spacing:0;text-transform:none;margin-top:.15rem"); b.appendChild(sm); }
+      /* ⭐ 1 ottobre, Gab: «la descrizione esce solo nella barra non sotto la parola» */
       b.addEventListener("click", function(){
         mgStato.tipo = t.n; mgChiudi(); mgAggiorna();
       });
