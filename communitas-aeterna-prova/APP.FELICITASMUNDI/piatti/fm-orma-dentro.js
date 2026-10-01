@@ -165,6 +165,8 @@
         .select("id,persona_id,nome,testo,momento,argomento")
         .eq("orma_id", id).order("momento").limit(80);
       d.chat = c.error ? [] : (c.data || []);
+      /* ⭐ 1 ottobre 20:44, Gab: «un numerino che indica l'avanzamento della chat» — fin dove ho letto */
+      if (d.io) { try { var lt = await db.from("letture").select("letto_fino").eq("orma_id", id).eq("persona_id", d.io).maybeSingle(); d.lettoFino = (lt && lt.data && lt.data.letto_fino) || null; } catch (e) {} }
 
       try { var mt = await db.rpc("fm_miei_tipi"); d.aperti = (!mt.error && mt.data) || []; } catch (e) { d.aperti = []; }
 
@@ -316,6 +318,23 @@
       if (wa) wa.setAttribute("href", "https://wa.me/?text=" + encodeURIComponent((titolo(o) || "") + " \u2014 " + link));
       /* evento e riunione solo a chi ha lo strumento aperto */
       P.stato(R, "apre-evento", (d.aperti || []).indexOf("festa") >= 0);
+    })();
+
+    /* ⭐ 1 ottobre 20:44, Gab: il numero dei messaggi nuovi sulla porta «La conversazione»; aprendola si azzera,
+       e l'app toglie la notifica di quest'orma (così il numero sull'icona resta uguale) */
+    (function () {
+      var pc = R.querySelector("#p-chat"); if (!pc) return;
+      var n = d.io ? d.chat.filter(function (m) { return m.persona_id && m.persona_id !== d.io && (!d.lettoFino || m.momento > d.lettoFino); }).length : 0;
+      var sn = pc.querySelector("summary .n");
+      if (sn) { sn.textContent = n ? String(n) : ""; sn.classList.toggle("nuovi", n > 0); }
+      var segna = async function () {
+        if (!d.io) return;
+        try { await db.from("letture").upsert({ persona_id: d.io, orma_id: id, letto_fino: new Date().toISOString() }); } catch (e) {}
+        try { if (window.FelicitasApp && typeof window.FelicitasApp.letti === "function") window.FelicitasApp.letti(id); } catch (e) {}
+        if (sn) { sn.textContent = ""; sn.classList.remove("nuovi"); }
+      };
+      if (!pc._segna) { pc._segna = 1; pc.addEventListener("toggle", function () { if (pc.open) segna(); }); }
+      if (pc.open) segna();
     })();
 
     /* la conversazione: l'argomento si vede solo quando cambia */
