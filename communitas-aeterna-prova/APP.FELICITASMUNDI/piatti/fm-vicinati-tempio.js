@@ -185,7 +185,8 @@
             fascia("chi coordina", coordV.map(nome).join(" "), "( )") +
             fascia("i partecipanti", partV.map(nome).join(" "), "( )") +
             fascia("i luoghi", luV.map(function (l) { return riga(l, l.luogo || ""); }).join(""), "( )");
-    } else hV += '<div class="vuoto">( )</div>';   /* ⭐ Gab: «l'importante è che non esca civiltà sarda per chi non è di quella» — senza civiltà, nessun villaggio altrui */
+    } else if (d.comune) hV += '<div class="vuoto">area da attivare in felicitas</div>';   /* ⭐ 1 ottobre, Gab: le sue parole, per chi è in una zona senza civiltà */
+    else hV += '<div class="vuoto">( )</div>';   /* ⭐ Gab: «l'importante è che non esca civiltà sarda per chi non è di quella» — senza civiltà, nessun villaggio altrui */
     hV += '<div class="gesti">' + tasto("attiva un vicinato", "", true) + '</div>';
 
     /* 3 · Oggi / calendario */
