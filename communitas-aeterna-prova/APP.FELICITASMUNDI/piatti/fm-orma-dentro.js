@@ -480,7 +480,8 @@
     if (sm && d.candidate) {
       sm.innerHTML = '<option value="">— nessuna —</option>' + d.candidate.map(function (c) {
         var t = String(titolo(c)).replace(/[&<>"]/g, function (x) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[x]; });
-        var et = c.tipo === "micelio" ? "micelio · " : c.tipo === "talento_radice" ? "talento · " : "evento · ";
+        /* ⭐ 1 ottobre 21:33, Gab: «togli le scritte micelio da fa parte di» — il villaggio si chiama da sé */
+        var et = c.tipo === "micelio" ? "" : c.tipo === "talento_radice" ? "talento · " : "evento · ";
         return '<option value="' + c.id + '">' + et + t + '</option>';
       }).join("");
       sm.value = o.orma_madre_id || "";
