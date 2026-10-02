@@ -707,7 +707,8 @@
     var R = await F().monta(box, INDIRIZZO);
     if (R && R.body) R = R.body;           /* monta torna il documento: si lavora sul corpo */
     var stato = {};
-    async function ricarica() { disegna(R, await leggi(id), id, ricarica, stato); }
+    /* ⭐ 2 ottobre 21:41, Gab: mai una pagina vuota — se l'orma non si può leggere, la finestra del praticantato */
+    async function ricarica() { var d = await leggi(id); if (!d.orma && window.FMChiuso) return window.FMChiuso(R, d.io); disegna(R, d, id, ricarica, stato); }
     await ricarica();
   }
 

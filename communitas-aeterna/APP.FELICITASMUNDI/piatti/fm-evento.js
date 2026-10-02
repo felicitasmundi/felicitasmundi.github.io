@@ -332,10 +332,12 @@
   /* ── la porta ──────────────────────────────────────────────────── */
   async function evento(dove, id) {
     var box = typeof dove === "string" ? document.querySelector(dove) : dove;
+    if (box && !id && window.FMChiuso) { var se = await window.db.auth.getSession(); return window.FMChiuso(box, se && se.data && se.data.session); }
     if (!box || !id || !window.FMPiatto) return;
     var R = await F().monta(box, INDIRIZZO);
     if (R && R.body) R = R.body;           /* monta torna il documento: si lavora sul corpo */
-    async function ricarica() { disegna(R, await leggi(id), id, ricarica); }
+    /* ⭐ 2 ottobre 21:41, Gab: mai una pagina vuota — se l'evento non si può leggere, la finestra del praticantato */
+    async function ricarica() { var d = await leggi(id); if (!d.orma && window.FMChiuso) return window.FMChiuso(R, d.io); disegna(R, d, id, ricarica); }
     await ricarica();
   }
 
