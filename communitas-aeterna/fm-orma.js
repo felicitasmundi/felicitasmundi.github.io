@@ -915,7 +915,7 @@ function ormaNonCe(){
   if(s) s.textContent = "";
   if(!corpo) return;
   corpo.innerHTML = '<p>'
-    + 'torna a casa per tracciare le tue orme e conoscere il tracciato della comunità eterna'
+    + 'torna alla tua orma per tracciare le tue orme e conoscere il tracciato della comunità eterna'
     + '</p>';
   var b = document.createElement("button");
   b.className = "mini";
