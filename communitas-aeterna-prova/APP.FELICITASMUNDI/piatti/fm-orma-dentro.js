@@ -288,7 +288,7 @@
     d.figlie.sort(function (a, b) { return ORD[GRUPPO(a)] - ORD[GRUPPO(b)]; });
     var copieF = P.stampa(R, "figlia", d.figlie, function (c, x) {
       c.style.cursor = "pointer"; c.onclick = function () { apri(x.id); };
-      P.riempi(c, { figlia: { titolo: titolo(x), contenuto: x.contenuto || "",
+      P.riempi(c, { figlia: { titolo: titolo(x), contenuto: String(x.contenuto || "").replace(/^##\s+/gm, ""),
         elemento: x.elemento, stadio: stadio(x.stadio), entro_il: giornoMese(x.entro_il),
         luogo: x.luogo || "", destinazione: x.destinazione || "" } });
       P.stato(c, "presa-vuota", !x.presa.length);
@@ -364,7 +364,7 @@
       /* ⭐ 2 ottobre, Gab: dalle «Conversazioni» si arriva con la conversazione già aperta */
       if (window.ormaApriChat === id) {
         window.ormaApriChat = null; pc.open = true;
-        setTimeout(function () { try { pc.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {} }, 300);
+        [500, 1500].forEach(function (ms) { setTimeout(function () { try { pc.scrollIntoView({ block: "start" }); } catch (e) {} }, ms); });
       }
       if (!pc._segna) { pc._segna = 1; pc.addEventListener("toggle", function () { if (pc.open) segna(); }); }
       if (pc.open) segna();
@@ -612,7 +612,7 @@
     });
 
     /* la conversazione: si scrive e si manda con Invio */
-    var scrivi = R.querySelector('input[type="text"]');
+    var scrivi = R.querySelector('.scrivi input[type="text"]') || R.querySelector('input[type="text"]');
     if (scrivi) {
       scrivi.placeholder = "scrivi";
       /* ⭐ 2 ottobre 13:02, Gab: «le persone non possano pubblicare grafiche, link esterni … se vuoi pubblicare
@@ -625,12 +625,12 @@
       if (!avviso) {
         avviso = R.ownerDocument.createElement("p"); avviso.id = "chat-regola";
         avviso.setAttribute("style", "margin:.4rem 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;line-height:1.4;color:rgba(245,240,230,.55)");
-        scrivi.parentNode.insertBefore(avviso, scrivi.nextSibling);
+        var riga = scrivi.closest(".scrivi") || scrivi.parentNode;   /* sotto la riga del campo, non dentro */
+        riga.appendChild(avviso);
       }
       avviso.textContent = REGOLA;
       var dice = function (rosso) { avviso.style.color = rosso ? "#E8A07A" : "rgba(245,240,230,.55)"; };
-      scrivi.onkeydown = async function (e) {
-        if (e.key !== "Enter") return;
+      var manda = async function () {
         var t = scrivi.value.trim();
         if (!t) return;
         if (LINK.test(t.replace(/(https?:\/\/)?([a-z0-9-]+\.)*felicitasmundi\.com\S*/gi, ""))) { dice(true); return; }
@@ -643,6 +643,9 @@
         }
         catch (err) { console.warn("chat:", err); }
       };
+      scrivi.onkeydown = function (e) { if (e.key === "Enter") manda(); };
+      /* anche il tasto ↑ manda (sul telefono l'Invio non sempre c'è) */
+      var tm = scrivi.parentNode.querySelector("button"); if (tm) tm.onclick = function (e) { e.preventDefault(); manda(); };
     }
   }
 
