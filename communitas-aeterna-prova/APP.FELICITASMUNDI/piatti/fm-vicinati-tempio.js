@@ -274,12 +274,26 @@
     box.hidden = !d.io || !vill.length || (!!d.radice && !cambiaRadici);
     if (box.hidden) return;
     var nome = function (v) { return String(titolo(v)).split(/\s[–—-]\s/)[1] || titolo(v); };
+    /* ⭐ 13:14, Gab: «una sola domanda: qual è la civiltà d'origine. Diamo la possibilità di aggiungere altre non presenti» —
+       chi non trova la sua la scrive, e arriva a Casa Radice */
     box.innerHTML = '<b>le tue radici</b>' +
-      '<p>In che contesto ti senti risuonare? Qual è la tua civiltà d’origine? In cosa senti essere le tue radici?</p>' +
+      '<p>Qual è la tua civiltà d’origine?</p>' +
       '<div class="esiti">' + vill.map(function (v) {
         var s = (suggerita && suggerita.cerca && suggerita.cerca.test(titolo(v))) || v.id === d.radice;
         return '<button type="button" data-radice="' + esc(v.id) + '"' + (s ? ' style="background:rgba(212,175,106,.18)"' : '') + '>' + esc(nome(v)) + '</button>';
-      }).join("") + '</div>';
+      }).join("") + '<button type="button" data-altra>+ un’altra</button></div>' +
+      '<div data-altra-box style="display:none;flex-direction:column;gap:.45rem"><input type="text" placeholder="la tua civiltà d’origine" autocomplete="off">' +
+      '<button type="button" data-altra-manda style="all:unset;cursor:pointer;align-self:flex-start;padding:.35rem .9rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font-size:.85rem">manda</button><small style="color:rgba(245,240,230,.6)"></small></div>';
+    var ab = box.querySelector("[data-altra-box]");
+    box.querySelector("[data-altra]").onclick = function () { var su = ab.style.display === "none"; ab.style.display = su ? "flex" : "none"; if (su) ab.querySelector("input").focus(); };
+    box.querySelector("[data-altra-manda]").onclick = async function () {
+      var inp = ab.querySelector("input"), sm = ab.querySelector("small"), v = inp.value.trim();
+      if (!v) { sm.textContent = "scrivi il nome"; return; }
+      var b = await db(); if (!b) return;
+      var r = await b.rpc("fm_scrivi_casa_radice", { p_testo: "civiltà d’origine da aggiungere: " + v });
+      if (r.error) { sm.textContent = "non partito: riprova"; console.warn("radici:", r.error); return; }
+      inp.value = ""; sm.textContent = "arrivato a Casa Radice";
+    };
     Array.prototype.forEach.call(box.querySelectorAll("[data-radice]"), function (bt) {
       bt.onclick = async function () {
         var b = await db(); if (!b) return;

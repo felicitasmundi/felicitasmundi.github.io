@@ -1280,6 +1280,15 @@
   body.barra-aperta #apri-barra{visibility:hidden}
   /* ⭐ 28 settembre (Gab) — la radio si ferma prima del carrello, che sta fisso in alto a destra */
   body:not(.radio-aperta) #pl{padding-right:4rem}
+  /* ⭐ 2 ottobre 13:14, Gab: «il simbolo chat mettilo di fianco al carrello, rendi più piccolo il quadrante radio»
+     — la radio si ferma prima dei due tasti, e da chiusa è più bassa e più stretta */
+  body:not(.radio-aperta) #pl{padding-right:7.2rem}
+  @media(min-width:52.01rem){
+    body:not(.radio-aperta) #pl > *{max-width:42rem}
+    body:not(.radio-aperta) .r-striscia{padding:.35rem .8rem;gap:.7rem}
+    body:not(.radio-aperta) .r-play{width:2.3rem;height:2.3rem}
+    body:not(.radio-aperta) .r-nome,body:not(.radio-aperta) .r-brano{font-size:.95rem}
+  }
 /* ⭐ 30 settembre, Gab: «soglia non deve mostrare barra e megafono» — la soglia è una stanza sola, piena */
 body.vista-soglia .sv-barra,
 body.vista-soglia #apri-barra,
@@ -4107,7 +4116,7 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-percorso-talenti.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — il percorso dei talenti piatto: SpazioVivo.percorsoDeiTalenti(box) e SpazioVivo.stanze(box). Le stanze vivono qui: sostituisce fm-stanze.js -->
 
 <script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` · ㊾ resta SOLO per l'ospite col codice `?c=`: il resto passa da fm-orma-dentro.js -->
-<script src="APP.FELICITASMUNDI/piatti/fm-scarica.js?v=10020935"></script><script src="APP.FELICITASMUNDI/piatti/fm-orma-dentro.js?v=10021310"></script><script src="APP.FELICITASMUNDI/piatti/fm-chat.js?v=10021300"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — dentro un'orma, piatta: SpazioVivo.ormaDentro(box, idOrma). Sostituisce il vecchio fm-orma-dentro.js (non più caricato) -->
+<script src="APP.FELICITASMUNDI/piatti/fm-scarica.js?v=10020935"></script><script src="APP.FELICITASMUNDI/piatti/fm-orma-dentro.js?v=10021330"></script><script src="APP.FELICITASMUNDI/piatti/fm-chat.js?v=10021330"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — dentro un'orma, piatta: SpazioVivo.ormaDentro(box, idOrma). Sostituisce il vecchio fm-orma-dentro.js (non più caricato) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-vetrina.js?v=10011105"></script><!-- ⭐ 1 ottobre — la vetrina dentro l'orma pubblica davvero: SpazioVivo.vetrina(R, idOrma, dopo) -->
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
 <script src="fm-pagina.js?v=10011100"></script>

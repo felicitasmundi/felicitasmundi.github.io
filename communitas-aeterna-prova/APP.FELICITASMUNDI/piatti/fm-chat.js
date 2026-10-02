@@ -26,16 +26,16 @@
   function civ(t) { var p = String(t || "").split(/\s[–—-]\s/); return (p[1] || p[0] || "").trim(); }
 
   var CSS =
-    "#sv-chat{position:fixed;top:3.9rem;right:1rem;z-index:71;display:inline-flex;align-items:center;justify-content:center;height:2.5rem;min-width:2.5rem;padding:0 .55rem;background:rgba(6,9,22,.85);border:1px solid rgba(200,160,85,.5);border-radius:.6rem;color:#E3C58A;cursor:pointer}" +
+    "#sv-chat{position:fixed;top:.9rem;right:4rem;z-index:71;display:inline-flex;align-items:center;justify-content:center;height:2.5rem;min-width:2.5rem;padding:0 .55rem;background:rgba(6,9,22,.85);border:1px solid rgba(200,160,85,.5);border-radius:.6rem;color:#E3C58A;cursor:pointer}" +
     "#sv-chat[hidden]{display:none}" +
     "#sv-chat svg{width:1.3rem;height:1.3rem;display:block}" +
     "#sv-chat.on{background:rgba(212,175,106,.18);border-color:#D4AF6A}" +
     "#sv-chat .bol{position:absolute;top:-.45rem;right:-.45rem;min-width:1.25rem;height:1.25rem;padding:0 .3rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font:500 .72rem 'DM Sans',system-ui,sans-serif;display:grid;place-items:center}" +
     "#sv-chat .bol:empty{display:none}" +
     "#sv-chat-p{position:fixed;z-index:70;top:0;right:0;bottom:0;width:min(26rem,100vw);background:#080B1A;border-left:1px solid rgba(212,175,106,.3);display:flex;flex-direction:column;box-shadow:-1rem 0 2rem rgba(0,0,0,.45);color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif}" +
-    "#sv-chat-p[hidden]{display:none}" +
+    "#sv-chat-p[hidden],#sv-chat-p [hidden]{display:none!important}" +
     "@media (max-width:40rem){#sv-chat-p{width:100vw;border-left:0}}" +
-    "#sv-chat-p .testa{padding:1.1rem 4rem .8rem 1rem;border-bottom:1px solid rgba(212,175,106,.3)}" +
+    "#sv-chat-p .testa{padding:1.1rem 7.5rem .8rem 1rem;min-height:4.2rem;box-sizing:border-box;border-bottom:1px solid rgba(212,175,106,.3)}" +
     "#sv-chat-p h2{margin:0;font-family:'Cinzel',serif;font-weight:500;font-size:1rem;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A}" +
     "#sv-chat-p .lista{flex:1;overflow:auto;padding:.3rem .6rem 1.4rem}" +
     "#sv-chat-p .gr{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#D4AF6A;padding:1rem .5rem .3rem}" +
@@ -52,8 +52,7 @@
     "#sv-chat-p .ak b{font-family:'Cinzel',serif;font-weight:400;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A}" +
     "#sv-chat-p .ak textarea{background:rgba(2,4,12,.6);border:1px solid rgba(212,175,106,.3);border-radius:.7rem;color:#F5F0E6;padding:.6rem .8rem;font:inherit;resize:vertical;min-height:4.5rem}" +
     "#sv-chat-p .ak button{all:unset;cursor:pointer;align-self:flex-start;min-height:2.6rem;padding:0 1.1rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;display:inline-grid;place-items:center}" +
-    "#sv-chat-p .ak small{font-size:.8rem;color:rgba(245,240,230,.55)}" +
-    "@media (max-width:40rem){#sv-chat-p .ak{margin-right:3.4rem}}";
+    "#sv-chat-p .ak small{font-size:.8rem;color:rgba(245,240,230,.55)}";
 
   var ICONA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 3.5V17.5H4A1.5 1.5 0 0 1 2.5 16V7A1.5 1.5 0 0 1 4 5.5z"/><path d="M7 10h10M7 13.2h6"/></svg>';
 
@@ -65,11 +64,24 @@
     t.innerHTML = ICONA + '<span class="bol"></span>';
     t.onclick = function () { apri(!stato.aperto); };
     document.body.appendChild(t);
+    posa();
+    window.addEventListener("resize", posa);
+    try { var c = document.getElementById("sv-carrello"); if (c && window.ResizeObserver) new ResizeObserver(posa).observe(c); } catch (e) {}
     var p = document.createElement("aside"); p.id = "sv-chat-p"; p.hidden = true;
     p.innerHTML = '<div class="testa"><h2>Conversazioni</h2></div><div class="lista"></div>';
     document.body.appendChild(p);
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && stato.aperto) apri(false); });
     return t;
+  }
+
+  /* ⭐ 2 ottobre 13:14, Gab: «il simbolo chat mettilo di fianco al carrello» — si misura il carrello e ci si mette accanto */
+  function posa() {
+    var t = document.getElementById("sv-chat"), c = document.getElementById("sv-carrello");
+    if (!t) return;
+    var r = c && c.getBoundingClientRect();
+    if (!r || !r.width) { t.style.top = ".9rem"; t.style.right = "4rem"; return; }
+    t.style.top = r.top + "px"; t.style.height = r.height + "px";
+    t.style.right = Math.round(window.innerWidth - r.left + 8) + "px";
   }
 
   function apri(si) {
@@ -94,7 +106,8 @@
     var villaggi = R.filter(function (r) { return r.tipo === "micelio"; })
       .sort(function (a, b) { return (b.dentro - a.dentro) || String(a.titolo).localeCompare(String(b.titolo)); });
     /* le orme in cui sei dentro, sotto il loro villaggio; quelle senza messaggi non compaiono */
-    var mie = R.filter(function (r) { return r.tipo !== "micelio" && r.dentro && r.ultimo_momento; }).sort(dopo);
+    var mie = R.filter(function (r) { return r.tipo !== "micelio" && !r.casa && r.dentro && r.ultimo_momento; }).sort(dopo);
+    var casa = R.filter(function (r) { return r.casa; })[0];
     var h = "";
     if (stato.io === GAB) h += '<div class="ak"><b>messaggio a tutti · Antaḥkaraṇa</b>' +
       '<textarea placeholder="esce in tutte le chat dei villaggi"></textarea>' +
@@ -104,6 +117,14 @@
       h += riga(v, "vil");
       mie.filter(function (m) { return m.villaggio_id === v.orma_id; }).forEach(function (m) { h += riga(m, true); });
     });
+    /* ⭐ 2 ottobre 13:14, Gab: «dopo le civiltà, metti una chat legata anche a casa radice, dove ci sarò solo io
+       per ora e lì mi arrivano i messaggi con potenziali feedback, compreso l'aggiunta di civiltà che non ci sono».
+       Chi è dentro (Gab) apre la chat; gli altri scrivono e basta. */
+    if (casa) {
+      if (casa.dentro) h += riga(casa);
+      else h += '<button type="button" class="riga" data-casa><span><span class="t">Casa Radice</span><span class="u">riscontri, civiltà da aggiungere</span></span><span class="dx"></span></button>' +
+        '<div class="ak" id="casa-scrivi" hidden><textarea placeholder="il tuo riscontro"></textarea><button type="button" data-casa-manda>manda</button><small></small></div>';
+    }
     var altre = mie.filter(function (m) { return !m.villaggio_id || !villaggi.some(function (v) { return v.orma_id === m.villaggio_id; }); });
     if (altre.length) { h += '<div class="gr">Le altre conversazioni</div>'; altre.forEach(function (m) { h += riga(m); }); }
     if (!villaggi.length && !altre.length) h += '<div class="vuoto">ancora nessuna conversazione</div>';
@@ -116,6 +137,18 @@
         else if (typeof window.vai === "function") window.vai("orma", { id: id });
       };
     });
+    var dc = L.querySelector("[data-casa]");
+    if (dc) dc.onclick = function () { var b = L.querySelector("#casa-scrivi"); b.hidden = !b.hidden; if (!b.hidden) b.querySelector("textarea").focus(); };
+    var cm = L.querySelector("[data-casa-manda]");
+    if (cm) cm.onclick = async function () {
+      var box = cm.parentNode, ta = box.querySelector("textarea"), sm = box.querySelector("small"), testo = ta.value.trim();
+      if (!testo) { sm.textContent = "scrivi il messaggio"; return; }
+      cm.textContent = "un momento…";
+      var r = await window.db.rpc("fm_scrivi_casa_radice", { p_testo: testo });
+      cm.textContent = "manda";
+      if (r.error) { sm.textContent = /FM_NO_LINK/.test(r.error.message || "") ? "niente link esterni: la chat è operativa" : "non partito: riprova"; return; }
+      ta.value = ""; sm.textContent = "arrivato a Casa Radice";
+    };
     var ak = L.querySelector("[data-ak]");
     if (ak) ak.onclick = async function () {
       var box = ak.parentNode, ta = box.querySelector("textarea"), sm = box.querySelector("small"), testo = ta.value.trim();
@@ -142,14 +175,14 @@
       stato.righe = r.data || [];
       var n = stato.righe.reduce(function (s, x) { return s + (x.non_letti || 0); }, 0);
       t.querySelector(".bol").textContent = n ? String(n) : "";
-      t.hidden = false;
+      t.hidden = false; posa();
       if (stato.aperto) disegna();
     } catch (e) { console.warn("chat:", e); }
   }
 
   function parti() {
     tasto();
-    setTimeout(aggiorna, 1500);
+    setTimeout(aggiorna, 1500); setTimeout(posa, 400); setTimeout(posa, 1800);
     setInterval(function () { if (!document.hidden) aggiorna(); }, 60000);
     document.addEventListener("visibilitychange", function () { if (!document.hidden) aggiorna(); });
   }

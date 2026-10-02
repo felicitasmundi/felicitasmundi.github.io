@@ -161,10 +161,21 @@
       } catch (e) {}
 
       /* la conversazione */
+      /* ⭐ 2 ottobre: orma_messaggi NON ha la colonna «nome» (testo·argomento·elemento·momento·persona_id):
+         chiederla faceva fallire tutta la lettura. Il nome si prende dalle persone. */
       var c = await db.from("orma_messaggi")
-        .select("id,persona_id,nome,testo,momento,argomento")
+        .select("id,persona_id,testo,momento,argomento")
         .eq("orma_id", id).order("momento").limit(80);
+      if (c.error) console.warn("chat:", c.error);
       d.chat = c.error ? [] : (c.data || []);
+      try {
+        var pids = d.chat.map(function (m) { return m.persona_id; }).filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+        if (pids.length) {
+          var pn = await db.from("persone_pubbliche").select("id,nome").in("id", pids);
+          var nomi = {}; (pn.data || []).forEach(function (r) { nomi[r.id] = r.nome || ""; });
+          d.chat.forEach(function (m) { m.nome = nomi[m.persona_id] || ""; });
+        }
+      } catch (e) {}
       /* ⭐ 1 ottobre 20:44, Gab: «un numerino che indica l'avanzamento della chat» — fin dove ho letto */
       if (d.io) { try { var lt = await db.from("letture").select("letto_fino").eq("orma_id", id).eq("persona_id", d.io).maybeSingle(); d.lettoFino = (lt && lt.data && lt.data.letto_fino) || null; } catch (e) {} }
 
