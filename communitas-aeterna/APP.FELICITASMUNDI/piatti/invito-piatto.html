@@ -217,7 +217,7 @@ color:rgba(245,240,230,.6)}
 <script>
 /* ⭐ copiare il collegamento */
 document.getElementById("copia").onclick = function(){
-  var t = document.getElementById("url").textContent.trim();
+  var t = document.getElementById("url").getAttribute("data-testo") ? acc().txt : document.getElementById("url").textContent.trim();
   var b = this;
   function fatto(){
     b.textContent = "copiato"; b.className = "fatto";
@@ -231,6 +231,9 @@ document.getElementById("copia").onclick = function(){
 function acc(){
   var u = document.getElementById("url").textContent.trim();
   if(u.indexOf("http") !== 0) u = "https://" + u;
+  /* ⭐ 2 ottobre 21:34, Gab: dall'evento il messaggio porta le righe di presentazione, il link alla fine */
+  var te = document.getElementById("url").getAttribute("data-testo");
+  if(te) return { url: u, solo: true, tit: "Villaggio Felicitas", txt: te + "\n\n" + u };
   return { url: u,
     tit: "FelicitasMundi \u00b7 Comunit\u00e0 Eterna",
     txt: "Ti invito su FelicitasMundi \u2014 uno strumento pratico per " +
@@ -249,7 +252,7 @@ document.getElementById("post").onclick = function(){
 document.getElementById("cond").onclick = function(){
   var a = acc(), b = this;
   if(navigator.share){
-    navigator.share({ title: a.tit, text: a.txt, url: a.url })
+    navigator.share(a.solo ? { title: a.tit, text: a.txt } : { title: a.tit, text: a.txt, url: a.url })
       .catch(function(){});
   }else{
     /* ⚠️ sul computer il pannello non c'è: si copia, e lo si dice */

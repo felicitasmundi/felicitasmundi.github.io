@@ -26,7 +26,9 @@
   var CASA = "felicitasmundi.com/";
   var APP = "app.felicitasmundi.com/communitas-aeterna/";
   /* le pagine d'anteprima fatte apposta per un evento (inviti/<nome>.html) */
-  var PAGINE = { "1d8ba038-2393-49fb-9493-3511c9e3ded6": "villaggio-felicitas-sardegna/invito-11-ottobre.html" };
+  var PAGINE = { "1d8ba038-2393-49fb-9493-3511c9e3ded6": "villaggio-felicitas-sardegna/invito-11-ottobre.html?v=2" };
+  /* ⭐ 2 ottobre 21:34, Gab: nel messaggio le righe che spiegano cosa si va a fare, il link alla fine */
+  var TESTI = { "1d8ba038-2393-49fb-9493-3511c9e3ded6": "Villaggio Felicitas · 11 ottobre, ore 10:00 · al Cas'ale di Alessandra, Baratili (Oristano).\n\nIl primo incontro tra i vicinati della Sardegna. Mettiamo in piedi un contesto logistico per raccogliere la domanda del territorio — alimenti, energia, libri, produzioni in grande quantità — e dividerci il costo, con i punti di ritiro e i vicini che portano i pacchi.\n\nPrepariamo insieme il Felicitas Festival e partiamo col karma yoga: ognuno porta le sue proposte, e riconosciamo il talento e il valore di chi partecipa.\n\nAperto a chi punta all'autosufficienza alimentare ed energetica, ai gruppi solidali, alle terapie naturali, all'educazione, all'artigianato: a tutti i progetti che tengono viva la civiltà sarda." };
 
   async function leggi() {
     var d = { io: null, nome: "", slug: "", quanti: 0 };
@@ -60,6 +62,8 @@
     var dati = { invito: { url: url }, conto: { invitati: String(d.quanti) },
                  persona: { nome: d.nome || "" } };
     if (P && P.riempi) P.riempi(R.body || R, dati);
+    var ue = (R.body || R).querySelector("#url");
+    if (ue) { if (cosa.evento && TESTI[cosa.evento]) ue.setAttribute("data-testo", TESTI[cosa.evento]); else ue.removeAttribute("data-testo"); }
 
     /* ⛔ solo «chiudi»: gli altri tasti sono della pagina */
     var x = (R.body || R).querySelector('[data-g="chiudi"]');
