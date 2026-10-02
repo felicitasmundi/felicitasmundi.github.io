@@ -149,7 +149,8 @@
       }).join("");
       return '<details class="ev-q"' + (i === 0 ? " open" : "") + '><summary>' + esc(tit) + '</summary><div>' + html + '</div></details>';
     }).join("");
-    box.parentNode.insertBefore(w, box.nextSibling);
+    var dopo = R.querySelector("#ev-invita") || box;   /* ⭐ 2 ottobre: i capitoli vengono dopo «invita chi risuona» */
+    dopo.parentNode.insertBefore(w, dopo.nextSibling);
   }
 
   /* ── disegnare ─────────────────────────────────────────────────── */
@@ -202,6 +203,15 @@
                               nome_url: pr.nome_url ? "?p=" + pr.nome_url : "" } });
     });
 
+    /* ⭐ 2 ottobre, Gab — «invita chi risuona» e «entra nel vicinato» */
+    P.gesto(R, "invita", function () {
+      if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function") return window.SpazioVivo.invito({});
+      location.href = "invito.html";
+    });
+    P.gesto(R, "entra-vicinato", function () {
+      if (!d.io) { location.href = "accesso.html?torna=" + encodeURIComponent("index.html?p=vicinati"); return; }
+      if (typeof window.vai === "function") window.vai("vicinati");
+    });
     /* «ci sarò» */
     P.gesto(R, "ci-saro", async function () {
       if (!d.io) { location.href = accesso(); return; }
