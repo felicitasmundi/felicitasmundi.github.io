@@ -87,7 +87,7 @@
       /* i luoghi dentro i villaggi */
       var vid = d.villaggi.map(function (x) { return x.id; });
       if (vid.length) { var lu = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "luogo").in("orma_madre_id", vid).is("dorme_dal", null).limit(100); d.luoghi = lu.data || []; }
-      var e = await b.from("orme").select(COL).eq("tipo", "festa").eq("visibilita", "pubblico").is("dorme_dal", null).limit(200);
+      var e = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "festa").eq("visibilita", "pubblico").is("dorme_dal", null).limit(200);
       d.eventi = e.data || [];
       /* ⭐ 1 ottobre, Gab: tutte le novità; se ne vedono tre, poi «leggi tutto», divise per mesi e anni */
       var n = await b.from("orme").select(COL + ",articolo_url,regione_cod").in("tipo", ["articolo", "rubrica_radio"]).eq("visibilita", "pubblico").is("dorme_dal", null).order("accaduto_il", { ascending: false, nullsFirst: false }).limit(200);
@@ -200,7 +200,13 @@
       var partV = den.filter(function (r) { return r.ruolo !== "coordinatore"; });
       var luV = vil ? d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id; }) : [];
       var sonoDentro = den.some(function (r) { return r.persona_id === d.io; });
+      /* ⭐ 2 ottobre 20:58, Gab: il villaggio è prima di tutto il posto dove un territorio raccoglie i propri bisogni —
+         il suo racconto in capitoli (paniere, punti di ritiro, partner) e gli eventi del villaggio, ognuno col suo link */
+      var evV = vil ? d.eventi.filter(function (o) { return o.orma_madre_id === vil.id; })
+        .sort(function (a, b) { return String(a.inizio_il || a.accaduto_il || "").localeCompare(String(b.inizio_il || b.accaduto_il || "")); }) : [];
       hV += (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
+            (vil && vil.contenuto ? '<div id="vil-racconto"><p class="intro" data-r></p></div>' : "") +
+            (vil ? fascia("gli eventi del villaggio", evV.map(function (o) { return riga(o, [quando(o), o.luogo].filter(Boolean).join(" · "), "", 'data-evento="' + esc(o.id) + '"'); }).join(""), "( )") : "") +
             (d.io && vil ? '<div class="gesti">' + tasto(sonoDentro ? "la tua presentazione" : "entra nel villaggio", 'data-presenta="' + esc(vil.id) + '"') + '</div><div id="presenta" hidden></div>' : "") +
             fascia("chi coordina", coordV.map(nome).join(" "), "( )") +
             fascia("i partecipanti", partV.map(nome).join(" "), "( )") +
@@ -272,6 +278,12 @@
       var rb = D.getElementById("radici"); if (rb) rb.scrollIntoView({ behavior: "smooth", block: "center" });
     }; });
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-scrivi]"), function (a) { a.onclick = function () { scrivi({ tipo: a.getAttribute("data-scrivi") }); }; });
+    /* il racconto del villaggio: l'apertura in alto, i capitoli d'oro che si aprono */
+    (function () {
+      var vr = D.querySelector("#vil-racconto [data-r]"); if (!vr || !vil) return;
+      try { if (W.FMCapitoli && W.FMCapitoli.mostra) { W.FMCapitoli.mostra(D, vr, vil.contenuto || ""); return; } } catch (e) {}
+      vr.textContent = String(vil.contenuto || "").replace(/^##\s+/gm, "");
+    })();
     if (typeof window.legaPorte === "function") window.legaPorte();
   }
   function giornoMese(s) { if (!s) return ""; var x = new Date(s); return isNaN(x) ? "" : x.getDate() + " " + MESI[x.getMonth()]; }
