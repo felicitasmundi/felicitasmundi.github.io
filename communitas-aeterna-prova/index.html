@@ -4561,7 +4561,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(id !== "evento") window.eventoChiesto = null;
     /* ⭐ 1 ottobre, Gab: «entro nell'orma, e quando torno indietro mi riporta a orme, non a vicinati».
        Entrando in un'orma (o in un evento) si ricorda la stanza da cui si viene: «torna» riporta lì. */
-    if((id==="orma"||id==="evento") && vista && vista!=="orma" && vista!=="evento") window.ormaDa = vista;
+    if((id==="orma"||id==="evento") && vista && vista!=="orma" && vista!=="evento") window.ormaDa = (vista==="spazio" ? "orme" : vista);   /* ⭐ 2 ottobre 21:58: mai la casa — si torna alla mia orma */
     vista=id; window.FM_VISTA=id;   /* ⭐ 29 settembre — la barra sa in che stanza si è */
     document.body.classList.toggle("vista-soglia", id==="soglia"); /* ⭐ 30 settembre, Gab: la soglia senza barra e megafono */
     chiudiFinestre();
