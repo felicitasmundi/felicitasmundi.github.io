@@ -920,7 +920,7 @@ function ormaNonCe(){
   var b = document.createElement("button");
   b.className = "mini";
   b.style.marginTop = "1rem";
-  b.textContent = "Torna a casa";
+  b.textContent = "Torna alla mia orma";
   b.addEventListener("click", function(){ vai("spazio"); });
   corpo.appendChild(b);
 }

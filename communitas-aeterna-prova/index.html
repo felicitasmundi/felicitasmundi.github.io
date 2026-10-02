@@ -4115,7 +4115,7 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-cammino.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — il cammino piatto: SpazioVivo.cammino(box). Sostituisce il vecchio fm-cammino.js -->
 <script src="APP.FELICITASMUNDI/piatti/fm-percorso-talenti.js?v=09292315"></script><!-- ⭐ TOCCATO NEL GUSCIO 54 — il percorso dei talenti piatto: SpazioVivo.percorsoDeiTalenti(box) e SpazioVivo.stanze(box). Le stanze vivono qui: sostituisce fm-stanze.js -->
 
-<script src="fm-orma.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` · ㊾ resta SOLO per l'ospite col codice `?c=`: il resto passa da fm-orma-dentro.js -->
+<script src="fm-orma.js?v=10022155"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊱ — una sola orma: `?o=<id>` · ㊾ resta SOLO per l'ospite col codice `?c=`: il resto passa da fm-orma-dentro.js -->
 <script src="APP.FELICITASMUNDI/piatti/fm-scarica.js?v=10020935"></script><script src="APP.FELICITASMUNDI/piatti/fm-orma-dentro.js?v=10022145"></script><script src="APP.FELICITASMUNDI/piatti/fm-chat.js?v=10022150"></script><script src="APP.FELICITASMUNDI/piatti/fm-paniere.js?v=10022140"></script><!-- ⭐ TOCCATO NEL GUSCIO 53 — dentro un'orma, piatta: SpazioVivo.ormaDentro(box, idOrma). Sostituisce il vecchio fm-orma-dentro.js (non più caricato) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-vetrina.js?v=10011105"></script><!-- ⭐ 1 ottobre — la vetrina dentro l'orma pubblica davvero: SpazioVivo.vetrina(R, idOrma, dopo) -->
 <script src="fm-radice.js"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊴ — l'orma radice: il gancio apriLeMieOrme(scelti). DOPO fm-orma.js che gli prepara le orme, PRIMA di fm-pagina.js -->
@@ -4544,6 +4544,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
 
   function vai(id, sub){
+    /* ⭐ 2 ottobre 21:50, Gab: «ELIMINA OGNI RIFERIMENTO DELLA LANDING PAGE NELLA PIATTAFORMA — se torni indietro
+       vai fino alla mia orma». La casa («spazio», l'indirizzo nudo) non si apre più: dovunque la si chieda, si va alla mia orma. */
+    if(id === "spazio") id = "orme";
     /* ⭐ uscendo dalla consolle si esce anche dalla sala: il microfono non
        resta aperto in una stanza che non si vede più */
     if(id !== "consolle" && typeof salaEsci === "function") salaEsci();
