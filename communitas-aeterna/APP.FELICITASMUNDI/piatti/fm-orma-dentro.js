@@ -371,9 +371,19 @@
         try { if (window.FMChat) window.FMChat.aggiorna(); } catch (e) {}
       };
       /* ⭐ 2 ottobre, Gab: dalle «Conversazioni» si arriva con la conversazione già aperta */
-      if (window.ormaApriChat === id) {
+      if (window.ormaApriChat === id && window.FMChat && window.FMChat.apri) { window.ormaApriChat = null; window.FMChat.apri(id); }
+      else if (window.ormaApriChat === id) {
         window.ormaApriChat = null; pc.open = true;
         [500, 1500].forEach(function (ms) { setTimeout(function () { try { pc.scrollIntoView({ block: "start" }); } catch (e) {} }, ms); });
+      }
+      /* ⭐ 2 ottobre 17:02, Gab: «ogni conversazione di ogni orma crei un bottone che manda all'apertura della chat,
+         così è più lineare» — la porta non si apre qui: apre la tendina delle Conversazioni su questa chat,
+         e si scrive dal Megafono */
+      var sm = pc.querySelector("summary");
+      if (sm && !sm._chat && window.FMChat && window.FMChat.apri) {
+        sm._chat = 1;
+        sm.addEventListener("click", function (e) { e.preventDefault(); pc.open = false; window.FMChat.apri(id); if (sn) { sn.textContent = ""; sn.classList.remove("nuovi"); } });
+        var bb = sm.querySelector("b"); if (bb) bb.textContent = "Apri la chat";
       }
       if (!pc._segna) { pc._segna = 1; pc.addEventListener("toggle", function () { if (pc.open) segna(); }); }
       if (pc.open) segna();
