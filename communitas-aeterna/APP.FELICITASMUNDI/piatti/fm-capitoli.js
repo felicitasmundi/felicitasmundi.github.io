@@ -43,6 +43,16 @@
     ".cap-ed button.pic{padding:0;width:2.6rem;font-family:'DM Sans',sans-serif;font-size:1rem}" +
     ".cap-ed .gesti{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}" +
     ".cap-ed .aiuto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.5)}" +
+    /* i capitoli, letti: titolo d'oro, testo chiaro */
+    ".cap-lista{display:flex;flex-direction:column;gap:.6rem;margin-top:.8rem}" +
+    ".cap-q{border:1px solid rgba(212,175,106,.3);border-radius:1rem;background:rgba(245,240,230,.04)}" +
+    ".cap-q[open]{border-color:rgba(212,175,106,.65)}" +
+    ".cap-q summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.8rem;min-height:3rem;padding:.8rem 1.1rem;font-family:'Cinzel',serif;letter-spacing:.12em;text-transform:uppercase;color:#D4AF6A;font-size:.9rem}" +
+    ".cap-q summary::-webkit-details-marker{display:none}" +
+    ".cap-q summary::after{content:'\\203A';opacity:.55;transition:transform .3s}" +
+    ".cap-q[open] summary::after{transform:rotate(90deg)}" +
+    ".cap-q>div{padding:0 1.1rem 1rem;font-family:'DM Sans',system-ui,sans-serif;font-size:1.02rem;line-height:1.55;color:rgba(245,240,230,.88)}" +
+    ".cap-q p{margin:.2rem 0 .7rem}.cap-q ul{margin:.2rem 0 .7rem;padding-left:1.1rem}.cap-q li{margin:.25rem 0}" +
     ".cap-apri{all:unset;cursor:pointer;align-self:flex-start;min-height:2.8rem;display:inline-flex;align-items:center;gap:.5rem;padding:0 1.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.5);color:#D4AF6A;font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}";
 
   function veste(doc) {
@@ -98,5 +108,27 @@
     return w;
   }
 
-  window.FMCapitoli = { leggi: leggi, componi: componi, editor: editor, veste: veste };
+  /* mostra: l'apertura resta in «box», i capitoli si mettono subito dopo (o dopo «dopo») */
+  function mostra(doc, box, testo, dopo) {
+    veste(doc);
+    var vecchia = box.parentNode && box.parentNode.querySelector(":scope > .cap-lista"); if (vecchia) vecchia.remove();
+    var st = leggi(testo);
+    if (!st.capitoli.length) { box.textContent = String(testo || ""); return null; }
+    box.textContent = st.testa; box.hidden = !st.testa;
+    var esc = function (x) { return String(x).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var w = doc.createElement("div"); w.className = "cap-lista";
+    w.innerHTML = st.capitoli.map(function (k, i) {
+      var html = String(k.c || "").split(/\n\s*\n/).filter(function (x) { return x.trim(); }).map(function (par) {
+        var l = par.split("\n");
+        if (l.every(function (x) { return /^\s*[-·•]\s+/.test(x); }))
+          return "<ul>" + l.map(function (x) { return "<li>" + esc(x.replace(/^\s*[-·•]\s+/, "")) + "</li>"; }).join("") + "</ul>";
+        return "<p>" + esc(par).replace(/\n/g, "<br>") + "</p>";
+      }).join("");
+      return '<details class="cap-q"' + (i === 0 ? " open" : "") + '><summary>' + esc(k.t) + '</summary><div>' + html + '</div></details>';
+    }).join("");
+    var d = dopo || box; d.parentNode.insertBefore(w, d.nextSibling);
+    return w;
+  }
+
+  window.FMCapitoli = { leggi: leggi, componi: componi, editor: editor, veste: veste, mostra: mostra };
 })();

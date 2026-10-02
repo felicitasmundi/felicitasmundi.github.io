@@ -301,6 +301,28 @@
       var ri = R.querySelector("#racconto-inizio");
       if (ri) ri.textContent = String(o.contenuto || "").trim().split("\n")[0].slice(0, 60);
       var pr = R.querySelector("#p-racconto"); if (pr) pr.hidden = !String(o.contenuto || "").trim();
+      /* ⭐ 2 ottobre, Gab: «imposta questo modello in ogni orma, solo per chi la organizza» — il racconto in capitoli */
+      (function () {
+        if (!window.FMCapitoli || !pr) return;
+        var doc = R.ownerDocument, box = pr.querySelector('[data-c="orma.contenuto"]'); if (!box) return;
+        window.FMCapitoli.mostra(doc, box, o.contenuto || "");
+        var lista = pr.querySelector(".cap-lista");
+        if (ri && lista) { var pc = window.FMCapitoli.leggi(o.contenuto || ""); ri.textContent = pc.testa ? pc.testa.slice(0, 60) : (pc.capitoli[0] ? pc.capitoli[0].t : ""); }
+        var vecchio = pr.querySelector("#cap-apri"); if (vecchio) vecchio.remove();
+        if (!d.io || o.persona_id !== d.io) return;
+        pr.hidden = false;                       /* chi l'ha aperta la vede anche vuota, per scriverla */
+        var b = doc.createElement("button"); b.type = "button"; b.id = "cap-apri"; b.className = "cap-apri";
+        b.textContent = String(o.contenuto || "").trim() ? "scrivi i capitoli" : "scrivi il racconto";
+        var dentro = pr.querySelector(".dentro") || pr; dentro.appendChild(b);
+        b.onclick = function () {
+          box.hidden = true; if (lista) lista.hidden = true; b.hidden = true;
+          window.FMCapitoli.editor(doc, b, o.contenuto || "", async function (testo) {
+            var r = await db.from("orme").update({ contenuto: testo }).eq("id", id);
+            if (r.error) throw r.error;
+            await ricarica();
+          }, function () { box.hidden = false; if (lista) lista.hidden = false; b.hidden = false; });
+        };
+      })();
       /* il link per entrare: un evento si apre dalla sua pagina pubblica, il resto dall'orma */
       var base = location.origin + location.pathname;
       var link = base + (o.tipo === "festa" ? "?p=evento&e=" : "?p=orma&o=") + id;
