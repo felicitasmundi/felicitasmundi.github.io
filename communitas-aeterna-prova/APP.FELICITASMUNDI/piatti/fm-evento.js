@@ -334,11 +334,19 @@
     var box = typeof dove === "string" ? document.querySelector(dove) : dove;
     if (box && !id && window.FMChiuso) { var se = await window.db.auth.getSession(); return window.FMChiuso(box, se && se.data && se.data.session); }
     if (!box || !id || !window.FMPiatto) return;
+    /* ⭐ 2 ottobre 21:54, Gab: «prima ti mostra la pagina matrice e poi mette le parole giuste» — i dati si leggono
+       mentre la pagina si monta, e la pagina resta nascosta finché non è riempita */
+    var primi = leggi(id);
     var R = await F().monta(box, INDIRIZZO);
     if (R && R.body) R = R.body;           /* monta torna il documento: si lavora sul corpo */
+    var vela = R && R.style; if (vela) vela.visibility = "hidden";
     /* ⭐ 2 ottobre 21:41, Gab: mai una pagina vuota — se l'evento non si può leggere, la finestra del praticantato */
-    async function ricarica() { var d = await leggi(id); if (!d.orma && window.FMChiuso) return window.FMChiuso(R, d.io); disegna(R, d, id, ricarica); }
-    await ricarica();
+    async function ricarica(pronti) {
+      var d = (pronti && typeof pronti === "object" && "orma" in pronti) ? pronti : await leggi(id);
+      try { if (!d.orma && window.FMChiuso) return window.FMChiuso(R, d.io); disegna(R, d, id, ricarica); }
+      finally { if (vela) vela.visibility = ""; }
+    }
+    await ricarica(await primi);
   }
 
   window.SpazioVivo = window.SpazioVivo || {};
