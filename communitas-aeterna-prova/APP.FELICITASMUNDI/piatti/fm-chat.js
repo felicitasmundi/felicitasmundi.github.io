@@ -26,13 +26,13 @@
   function civ(t) { var p = String(t || "").split(/\s[–—-]\s/); return (p[1] || p[0] || "").trim(); }
 
   var CSS =
-    "#sv-chat{position:fixed;top:.9rem;right:4rem;z-index:71;display:inline-flex;align-items:center;justify-content:center;height:2.5rem;min-width:2.5rem;padding:0 .55rem;background:rgba(6,9,22,.85);border:1px solid rgba(200,160,85,.5);border-radius:.6rem;color:#E3C58A;cursor:pointer}" +
+    "#sv-chat{position:fixed;top:.9rem;right:4rem;z-index:73;display:inline-flex;align-items:center;justify-content:center;height:2.5rem;min-width:2.5rem;padding:0 .55rem;background:rgba(6,9,22,.85);border:1px solid rgba(200,160,85,.5);border-radius:.6rem;color:#E3C58A;cursor:pointer}" +
     "#sv-chat[hidden]{display:none}" +
     "#sv-chat svg{width:1.3rem;height:1.3rem;display:block}" +
     "#sv-chat.on{background:rgba(212,175,106,.18);border-color:#D4AF6A}" +
     "#sv-chat .bol{position:absolute;top:-.45rem;right:-.45rem;min-width:1.25rem;height:1.25rem;padding:0 .3rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font:500 .72rem 'DM Sans',system-ui,sans-serif;display:grid;place-items:center}" +
     "#sv-chat .bol:empty{display:none}" +
-    "#sv-chat-p{position:fixed;z-index:70;top:0;right:0;bottom:0;width:min(26rem,100vw);background:#080B1A;border-left:1px solid rgba(212,175,106,.3);display:flex;flex-direction:column;box-shadow:-1rem 0 2rem rgba(0,0,0,.45);color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif}" +
+    "#sv-chat-p{position:fixed;z-index:72;top:0;right:0;bottom:0;width:min(26rem,100vw);background:#080B1A;border-left:1px solid rgba(212,175,106,.3);display:flex;flex-direction:column;box-shadow:-1rem 0 2rem rgba(0,0,0,.45);color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif}" +
     "#sv-chat-p[hidden],#sv-chat-p [hidden]{display:none!important}" +
     "@media (max-width:40rem){#sv-chat-p{width:100vw;border-left:0}}" +
     "#sv-chat-p .testa{padding:1.1rem 7.5rem .8rem 1rem;min-height:4.2rem;box-sizing:border-box;border-bottom:1px solid rgba(212,175,106,.3)}" +
@@ -104,7 +104,7 @@
     var L = p.querySelector(".lista"), R = stato.righe;
     var dopo = function (a, b) { return (b.non_letti > 0) - (a.non_letti > 0) || String(b.ultimo_momento || "").localeCompare(String(a.ultimo_momento || "")); };
     var villaggi = R.filter(function (r) { return r.tipo === "micelio"; })
-      .sort(function (a, b) { return (b.dentro - a.dentro) || String(a.titolo).localeCompare(String(b.titolo)); });
+      .sort(function (a, b) { return ((b.orma_id === stato.radice) - (a.orma_id === stato.radice)) || (b.dentro - a.dentro) || String(a.titolo).localeCompare(String(b.titolo)); });   /* prima le tue radici */
     /* le orme in cui sei dentro, sotto il loro villaggio; quelle senza messaggi non compaiono */
     var mie = R.filter(function (r) { return r.tipo !== "micelio" && !r.casa && r.dentro && r.ultimo_momento; }).sort(dopo);
     var casa = R.filter(function (r) { return r.casa; })[0];
@@ -170,6 +170,7 @@
       stato.io = u && u.data && u.data.user && u.data.user.id;
       var t = tasto();
       if (!stato.io) { t.hidden = true; return; }
+      try { var pr = await window.db.from("persone").select("radice_id").eq("id", stato.io).maybeSingle(); stato.radice = (pr && pr.data && pr.data.radice_id) || null; } catch (e) {}
       var r = await window.db.rpc("fm_mie_chat");
       if (r.error) { t.hidden = true; return; }     /* senza SQL 27 il tasto non c'è */
       stato.righe = r.data || [];
