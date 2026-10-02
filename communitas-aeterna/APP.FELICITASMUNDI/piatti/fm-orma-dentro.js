@@ -604,12 +604,32 @@
     var scrivi = R.querySelector('input[type="text"]');
     if (scrivi) {
       scrivi.placeholder = "scrivi";
+      /* ⭐ 2 ottobre 13:02, Gab: «le persone non possano pubblicare grafiche, link esterni … se vuoi pubblicare
+         un link con l'evento che hai e altro devi farlo attraverso Felicitas Mundi quindi lo pubblichi nel
+         contesto non nella chat che è operativa». I collegamenti di casa (felicitasmundi.com) passano.
+         Lo stesso controllo sta nel database (SQL 27, fm_chat_senza_link). */
+      var REGOLA = "La chat è operativa: un link, un evento o altro si pubblica attraverso FelicitasMundi, nel suo contesto, non nella chat.";
+      var LINK = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|it|org|net|eu|info|io|me|ly|be|gl|co|app|shop|store|link)\b)/i;
+      var avviso = R.querySelector("#chat-regola");
+      if (!avviso) {
+        avviso = R.ownerDocument.createElement("p"); avviso.id = "chat-regola";
+        avviso.setAttribute("style", "margin:.4rem 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;line-height:1.4;color:rgba(245,240,230,.55)");
+        scrivi.parentNode.insertBefore(avviso, scrivi.nextSibling);
+      }
+      avviso.textContent = REGOLA;
+      var dice = function (rosso) { avviso.style.color = rosso ? "#E8A07A" : "rgba(245,240,230,.55)"; };
       scrivi.onkeydown = async function (e) {
         if (e.key !== "Enter") return;
         var t = scrivi.value.trim();
         if (!t) return;
+        if (LINK.test(t.replace(/(https?:\/\/)?([a-z0-9-]+\.)*felicitasmundi\.com\S*/gi, ""))) { dice(true); return; }
+        dice(false);
         scrivi.value = "";
-        try { await db.from("orma_messaggi").insert({ orma_id: id, testo: t }); await ricarica(); }
+        try {
+          var r = await db.from("orma_messaggi").insert({ orma_id: id, testo: t });
+          if (r && r.error) { scrivi.value = t; if (/FM_NO_LINK/.test(r.error.message || "")) dice(true); console.warn("chat:", r.error); return; }
+          await ricarica();
+        }
         catch (err) { console.warn("chat:", err); }
       };
     }
