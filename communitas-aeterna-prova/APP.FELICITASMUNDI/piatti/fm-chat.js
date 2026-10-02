@@ -37,10 +37,13 @@
     "#sv-chat.on{background:rgba(212,175,106,.18);border-color:#D4AF6A}" +
     "#sv-chat .bol{position:absolute;top:-.45rem;right:-.45rem;min-width:1.25rem;height:1.25rem;padding:0 .3rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font:500 .72rem 'DM Sans',system-ui,sans-serif;display:grid;place-items:center}" +
     "#sv-chat .bol:empty{display:none}" +
-    "#sv-chat-p{position:fixed;z-index:72;top:0;right:0;bottom:0;width:min(26rem,100vw);background:#080B1A;border-left:1px solid rgba(212,175,106,.3);display:flex;flex-direction:column;box-shadow:-1rem 0 2rem rgba(0,0,0,.45);color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif}" +
+    /* ⭐ 15:49, Gab: «toccando la chat in alto … io voglio che scenda l'elenco delle chat» — una tendina sotto il tasto, non un pannello */
+    "#sv-chat-p{position:fixed;z-index:72;top:4rem;right:1rem;width:min(25rem,calc(100vw - 2rem));max-height:min(78vh,44rem);background:#080B1A;border:1px solid rgba(212,175,106,.45);border-radius:1.1rem;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1.2rem 2.6rem rgba(0,0,0,.6);color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif;transform-origin:top right;animation:svchatgiu .18s ease-out}" +
+    "@keyframes svchatgiu{from{opacity:0;transform:translateY(-.4rem) scaleY(.96)}to{opacity:1;transform:none}}" +
+    "#sv-chat-p.in-chat{height:min(78vh,44rem)}" +
     "#sv-chat-p[hidden],#sv-chat-p [hidden]{display:none!important}" +
-    "@media (max-width:40rem){#sv-chat-p{width:100vw;border-left:0}}" +
-    "#sv-chat-p .testa{padding:1.1rem 7.5rem .8rem 1rem;min-height:4.2rem;box-sizing:border-box;border-bottom:1px solid rgba(212,175,106,.3)}" +
+    "@media (max-width:40rem){#sv-chat-p{right:.5rem;width:calc(100vw - 1rem)}}" +
+    "#sv-chat-p .testa{padding:.75rem 1rem .6rem;box-sizing:border-box;border-bottom:1px solid rgba(212,175,106,.3)}" +
     "#sv-chat-p h2{margin:0;font-family:'Cinzel',serif;font-weight:500;font-size:1rem;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A}" +
     "#sv-chat-p .lista{flex:1;overflow:auto;padding:.3rem .6rem 1.4rem}" +
     "#sv-chat-p .gr{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#D4AF6A;padding:1rem .5rem .3rem}" +
@@ -54,6 +57,9 @@
     "#sv-chat-p .n{min-width:1.3rem;height:1.3rem;padding:0 .35rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font-weight:500;display:grid;place-items:center}" +
     "#sv-chat-p .vuoto{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.5);padding:.4rem .6rem}" +
     "#sv-chat-p .ak{margin:.8rem .6rem 0;padding:.9rem;border:1px solid rgba(212,175,106,.5);border-radius:1rem;background:rgba(212,175,106,.06);display:flex;flex-direction:column;gap:.5rem}" +
+    "#sv-chat-p details.ak{padding:.6rem .9rem}#sv-chat-p details.ak[open]{padding-bottom:.9rem}" +
+    "#sv-chat-p .ak summary{cursor:pointer;list-style:none;font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A}" +
+    "#sv-chat-p .ak summary::-webkit-details-marker{display:none}#sv-chat-p .ak summary::after{content:' \\203A';opacity:.6}" +
     "#sv-chat-p .ak b{font-family:'Cinzel',serif;font-weight:400;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A}" +
     "#sv-chat-p .ak textarea{background:rgba(2,4,12,.6);border:1px solid rgba(212,175,106,.3);border-radius:.7rem;color:#F5F0E6;padding:.6rem .8rem;font:inherit;resize:vertical;min-height:4.5rem}" +
     "#sv-chat-p .ak button{all:unset;cursor:pointer;align-self:flex-start;min-height:2.6rem;padding:0 1.1rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;display:inline-grid;place-items:center}" +
@@ -114,9 +120,23 @@
     t.style.right = Math.round(window.innerWidth - r.left + 8) + "px";
   }
 
+  /* la tendina scende proprio sotto il tasto */
+  function sotto() {
+    var t = document.getElementById("sv-chat"), p = document.getElementById("sv-chat-p"); if (!t || !p) return;
+    var r = t.getBoundingClientRect(); if (!r.height) return;
+    p.style.top = Math.round(r.bottom + 8) + "px";
+    if (window.innerWidth > 640) p.style.right = Math.max(8, Math.round(window.innerWidth - r.right)) + "px"; else p.style.right = "";
+  }
+  document.addEventListener("click", function (e) {
+    if (!stato.aperto) return;
+    var p = document.getElementById("sv-chat-p"), t = document.getElementById("sv-chat");
+    if (p && !p.contains(e.target) && t && !t.contains(e.target)) apri(false);   /* tocchi fuori: si chiude */
+  });
+
   function apri(si) {
     stato.aperto = si;
     var t = tasto(), p = document.getElementById("sv-chat-p");
+    if (si) sotto();
     p.hidden = !si; t.classList.toggle("on", si);
     if (si) { elenco(); aggiorna(); } else fermaChat();
   }
@@ -139,9 +159,10 @@
     var mie = R.filter(function (r) { return r.tipo !== "micelio" && !r.casa && r.dentro && r.ultimo_momento; }).sort(dopo);
     var casa = R.filter(function (r) { return r.casa; })[0];
     var h = "";
-    if (stato.io === GAB) h += '<div class="ak"><b>messaggio a tutti · Antaḥkaraṇa</b>' +
+    /* il messaggio a tutti: chiuso, si apre toccandolo — la lista resta in vista */
+    if (stato.io === GAB) h += '<details class="ak"><summary>messaggio a tutti · Antaḥkaraṇa</summary>' +
       '<textarea placeholder="esce in tutte le chat dei villaggi"></textarea>' +
-      '<button type="button" data-ak>manda a tutti</button><small></small></div>';
+      '<button type="button" data-ak>manda a tutti</button><small></small></details>';
     /* ⭐ Casa Radice (Gab, 13:14 e 15:40): «va messo fuori da villaggi felicitas, non lo deve vedere nessuno se non io».
        Solo chi ci è dentro (oggi Gab) la vede; gli altri le scrivono solo da «+ un'altra» nelle radici. */
     h += '<div class="quad"><div class="gr">Villaggi Felicitas</div>';
@@ -188,7 +209,7 @@
   function elenco() {
     fermaChat();
     var p = document.getElementById("sv-chat-p"); if (!p) return;
-    p.querySelector(".lista").hidden = false; p.querySelector(".vc").hidden = true;
+    p.querySelector(".lista").hidden = false; p.querySelector(".vc").hidden = true; p.classList.remove("in-chat");
     p.querySelector(".indietro").hidden = true; p.querySelector("h2").textContent = "Conversazioni";
     disegna();
   }
@@ -200,7 +221,7 @@
   function entra(id) {
     var p = document.getElementById("sv-chat-p"), r = stato.righe.filter(function (x) { return x.orma_id === id; })[0] || { orma_id: id, titolo: "" };
     fermaChat(); stato.chat = id;
-    p.querySelector(".lista").hidden = true;
+    p.querySelector(".lista").hidden = true; p.classList.add("in-chat");
     var V = p.querySelector(".vc"); V.hidden = false;
     p.querySelector(".indietro").hidden = false;
     p.querySelector("h2").textContent = r.tipo === "micelio" ? civ(r.titolo) : (r.titolo || "");
