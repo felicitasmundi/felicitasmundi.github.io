@@ -236,10 +236,17 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     {n:"spesa",      d:"spesa",      c:"var(--acqua)", f:"quadro",  s:"collega i flussi ai progetti"},
     {n:"articolo",   d:"articolo",   c:"var(--aria)",  f:"tondo",   s:"novità di ricerca e vicinati"},
     /* l'evento si vede solo a chi ha lo strumento aperto (permessi → fm_miei_tipi) */
-    {n:"evento",     d:"festa",      c:"var(--oro)",   f:"rombo",   s:"collega il calendario", solo:true}
+    {n:"evento",     d:"festa",      c:"var(--oro)",   f:"rombo",   s:"collega il calendario", solo:true},
+    /* ⭐ 2 ottobre 17:02, Gab: il messaggio a tutti sta nel Megafono, e «non deve proprio essere visibile per nulla,
+       solo io, non roba trasparente» — esiste solo per Gab. Può portare link, evento, foto, documento. */
+    {n:"Antaḥkaraṇa", d:"antakarana", c:"var(--oro)", f:"cerchio", s:"messaggio a tutti i villaggi", soloGab:true}
   ];
+  var MG_GAB = "352bb184-43cf-4795-92ff-2fa18993f994";
   var mgAperti = null;
-  function mgPuo(t){ return !t.solo || (mgAperti && mgAperti.indexOf(t.d) >= 0); }
+  function mgPuo(t){
+    if(t.soloGab) return !!(typeof io !== "undefined" && io && io.id === MG_GAB && !window.mgChat);
+    return !t.solo || (mgAperti && mgAperti.indexOf(t.d) >= 0);
+  }
   function mgChiediAperti(poi){
     try { db.rpc("fm_miei_tipi").then(function(r){
       if (r && !r.error && r.data) mgAperti = r.data;
@@ -267,7 +274,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     if(mgInv) mgInv.classList.toggle("pronto", campo.value.trim().length>0);
     var tt = MG_TIPI.filter(function(x){ return x.n===mgStato.tipo; })[0];
     /* ⭐ 1 ottobre, Gab — nel campo, le parole del tipo scelto */
-    if(campo && tt && tt.s) campo.setAttribute("placeholder", tt.s);
+    if(campo && tt && tt.s) campo.setAttribute("placeholder", window.mgChat ? "scrivi in " + window.mgChat.titolo : tt.s);
     if(mgTipo){
       mgTipo.textContent = mgStato.tipo;
       mgTipo.style.setProperty("--c", tt ? tt.c : "var(--oro)");
@@ -312,7 +319,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     MG_TIPI.filter(mgPuo).forEach(function(t){
       var b=document.createElement("button"); b.type="button";
       b.className="tb "+t.f+(t.n===mgStato.tipo?" on":"");
-      if(Array.isArray(mgAperti) && mgAperti.indexOf(t.d) < 0) b.style.opacity = ".45";   /* ⭐ chiuso per il tuo grado */
+      if(!t.soloGab && Array.isArray(mgAperti) && mgAperti.indexOf(t.d) < 0) b.style.opacity = ".45";   /* ⭐ chiuso per il tuo grado */
       b.style.setProperty("--c", t.c);
       var i=document.createElement("i");
       if(t.f==="nex") i.innerHTML = MG_NEX;   /* il Nexus della legenda, tale e quale */
@@ -926,8 +933,11 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     var t=campo.value.trim();
     if(!t){ campo.focus(); return; }
     if(ospite){ chiediAccesso("Per lasciare un'orma serve l'accesso"); return; }
+    /* ⭐ 2 ottobre 17:02, Gab: «rendiamo megafono il posto per scrivere» — dentro una chat, il Megafono scrive lì */
+    if(window.mgChat){ mgMandaChat(t); return; }
 
     var tt = MG_TIPI.filter(function(x){ return x.n===mgStato.tipo; })[0];
+    if(tt && tt.d === "antakarana"){ mgMandaTutti(t); return; }
     var riga = {persona_id:io.id, contenuto:t,
       tipo: tt ? tt.d : "karma_yoga",
       visibilita:"solo_me",
@@ -1186,4 +1196,88 @@ function mgLinkEvento(id, testo){
      non lo permette si seleziona il link perché si possa copiare a mano */
   w.querySelector("[data-c]").onclick = function(){ fmCopia(ind, this); };
   w.querySelector("[data-x]").onclick = function(){ w.remove(); };
+}
+
+
+/* ══ ⭐ 2 ottobre 17:02 — IL MEGAFONO SCRIVE NELLE CHAT ══
+   Gab: «che senso ha mettere in chat sia la barra di chat che il megafono? … rendiamo megafono il posto per
+   scrivere». Quando la tendina delle Conversazioni apre una chat, chiama mgModoChat({id, titolo}): i tipi e i tre
+   segni si nascondono, compare «scrivi in …» con la × per uscire. mgModoChat(null) torna al Megafono di sempre.
+   ⛔ La chat è operativa: niente link esterni (anche nel database). Il messaggio a tutti (solo Gab) li può portare. */
+var MG_REGOLA = "La chat è operativa: un link, un evento o altro si pubblica attraverso FelicitasMundi, nel suo contesto, non nella chat.";
+var MG_LINK = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|it|org|net|eu|info|io|me|ly|be|gl|co|app|shop|store|link)\b)/i;
+(function(){
+  var st = document.createElement("style");
+  st.textContent = "body.mg-in-chat #mg .mg-tipo,body.mg-in-chat #mg .mg-vsg{display:none!important}" +
+    "#mg-dove-scrivo{display:none;align-items:center;gap:.4rem;max-width:100%;min-width:0;height:2.75rem;padding:0 .4rem 0 .9rem;border-radius:1.2rem;border:1px solid rgba(212,175,106,.55);background:rgba(212,175,106,.12);color:#E3C58A;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);white-space:nowrap;overflow:hidden}" +
+    "#mg-dove-scrivo span{overflow:hidden;text-overflow:ellipsis}" +
+    "#mg-dove-scrivo button{all:unset;cursor:pointer;width:2rem;height:2rem;display:grid;place-items:center;font-size:1.1rem;color:rgba(245,240,230,.7)}" +
+    "body.mg-in-chat #mg-dove-scrivo{display:inline-flex}";
+  document.head.appendChild(st);
+  var sotto = document.querySelector("#mg .mg-sotto");
+  if(sotto){
+    var p = document.createElement("span"); p.id = "mg-dove-scrivo";
+    p.innerHTML = '<span></span><button type="button" aria-label="esci dalla chat">&times;</button>';
+    sotto.insertBefore(p, sotto.firstChild);
+    p.querySelector("button").onclick = function(e){ e.stopPropagation(); if(window.FMChat && FMChat.chiudi) FMChat.chiudi(); else mgModoChat(null); };
+  }
+})();
+function mgModoChat(c){
+  window.mgChat = c || null;
+  document.body.classList.toggle("mg-in-chat", !!c);
+  var p = document.querySelector("#mg-dove-scrivo span"); if(p) p.textContent = c ? "scrivi in " + c.titolo : "";
+  if(typeof mgChiudi === "function") mgChiudi();
+  if(typeof mgAggiorna === "function") mgAggiorna();
+}
+window.mgModoChat = mgModoChat;
+function mgFineInvio(){
+  campo.value = ""; if(typeof cresci === "function") cresci();
+  mgStato.file = []; mgAggiorna();
+}
+function mgMandaChat(t){
+  var c = window.mgChat; if(!c) return;
+  if(MG_LINK.test(t.replace(/(https?:\/\/)?([a-z0-9-]+\.)*felicitasmundi\.com\S*/gi, ""))){ parla(MG_REGOLA); return; }
+  var files = mgStato.file.slice();
+  db.from("orma_messaggi").insert({orma_id: c.id, testo: t}).then(function(r){
+    if(r && r.error){
+      parla(/FM_NO_LINK/.test(r.error.message || "") ? MG_REGOLA : "Non è partito: forse in questa chat non sei ancora dentro. Apri l\u2019orma ed entra.");
+      return;
+    }
+    /* gli allegati: nel magazzino riservato dell'orma, e un messaggio col file */
+    files.reduce(function(fila, f){
+      return fila.then(function(){
+        return db.storage.from("riservato").upload(c.id + "/" + f.name, f).then(function(u){
+          if(u && u.error){ parla("Il messaggio c'è, l'allegato no: " + mgParoleFile(u.error.message)); return; }
+          return db.from("orma_messaggi").insert({orma_id: c.id, testo: f.name,
+            file_indirizzo: c.id + "/" + f.name, file_nome: f.name, file_dimensione: f.size});
+        });
+      }).catch(function(){});
+    }, Promise.resolve()).then(function(){ if(window.FMChat && FMChat.ricarica) FMChat.ricarica(); });
+    mgFineInvio();
+    if(window.FMChat && FMChat.ricarica) FMChat.ricarica();
+  });
+}
+/* il messaggio a tutti: testo, e se c'è un file sale nel magazzino aperto e il suo indirizzo va nel messaggio */
+function mgMandaTutti(t){
+  if(!io || io.id !== MG_GAB) return;
+  var files = mgStato.file.slice();
+  var su = files.reduce(function(fila, f){
+    return fila.then(function(link){
+      var nome = "antakarana/" + Date.now() + "-" + f.name.replace(/[^A-Za-z0-9._-]/g, "_");
+      return db.storage.from("pubblico").upload(nome, f, {contentType: f.type}).then(function(u){
+        if(u && u.error){ parla("L'allegato non è salito: " + mgParoleFile(u.error.message)); return link; }
+        var pu = db.storage.from("pubblico").getPublicUrl(nome);
+        return link.concat([(pu && pu.data && pu.data.publicUrl) || ""]);
+      });
+    });
+  }, Promise.resolve([]));
+  su.then(function(link){
+    var testo = t + (link.filter(Boolean).length ? "\n" + link.filter(Boolean).join("\n") : "");
+    return db.rpc("fm_annuncio", {p_testo: testo});
+  }).then(function(r){
+    if(r && r.error){ parla("Non è uscito: " + r.error.message); return; }
+    mgFineInvio();
+    mgAvvisa("\u2713  uscito in " + (r && r.data) + " chat dei villaggi");
+    if(window.FMChat && FMChat.aggiorna) FMChat.aggiorna();
+  });
 }

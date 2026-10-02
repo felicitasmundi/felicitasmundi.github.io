@@ -41,6 +41,7 @@
     "#sv-chat-p{position:fixed;z-index:72;top:4rem;right:1rem;width:min(25rem,calc(100vw - 2rem));max-height:min(78vh,44rem);background:#080B1A;border:1px solid rgba(212,175,106,.45);border-radius:1.1rem;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1.2rem 2.6rem rgba(0,0,0,.6);color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif;transform-origin:top right;animation:svchatgiu .18s ease-out}" +
     "@keyframes svchatgiu{from{opacity:0;transform:translateY(-.4rem) scaleY(.96)}to{opacity:1;transform:none}}" +
     "#sv-chat-p.in-chat{height:min(78vh,44rem)}" +
+    "#sv-chat-p .scrivi{padding:.5rem 1rem .7rem}" +
     "#sv-chat-p[hidden],#sv-chat-p [hidden]{display:none!important}" +
     "@media (max-width:40rem){#sv-chat-p{right:.5rem;width:calc(100vw - 1rem)}}" +
     "#sv-chat-p .testa{padding:.75rem 1rem .6rem;box-sizing:border-box;border-bottom:1px solid rgba(212,175,106,.3)}" +
@@ -86,6 +87,7 @@
     "#sv-chat-p .scrivi .r{display:flex;gap:.5rem}" +
     "#sv-chat-p .scrivi input{flex:1;min-width:0;background:rgba(2,4,12,.6);border:1px solid rgba(212,175,106,.3);border-radius:999px;color:#F5F0E6;padding:.7rem 1rem;font:inherit}" +
     "#sv-chat-p .scrivi button{all:unset;cursor:pointer;width:2.8rem;height:2.8rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;display:grid;place-items:center;font-size:1.1rem}" +
+    "#sv-chat-p .m a{color:#E3C58A;word-break:break-all}" +
     "#sv-chat-p .scrivi p{margin:.45rem 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;line-height:1.35;color:rgba(245,240,230,.55)}";
 
   var ICONA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 3.5V17.5H4A1.5 1.5 0 0 1 2.5 16V7A1.5 1.5 0 0 1 4 5.5z"/><path d="M7 10h10M7 13.2h6"/></svg>';
@@ -125,12 +127,16 @@
     var t = document.getElementById("sv-chat"), p = document.getElementById("sv-chat-p"); if (!t || !p) return;
     var r = t.getBoundingClientRect(); if (!r.height) return;
     p.style.top = Math.round(r.bottom + 8) + "px";
+    /* ⭐ 17:02: la tendina si ferma sopra il Megafono, che è dove si scrive */
+    var mg = document.getElementById("mg"), mt = mg && mg.getBoundingClientRect();
+    if (mt && mt.height && mt.top > r.bottom + 120) p.style.maxHeight = Math.round(mt.top - r.bottom - 16) + "px";
     if (window.innerWidth > 640) p.style.right = Math.max(8, Math.round(window.innerWidth - r.right)) + "px"; else p.style.right = "";
   }
   document.addEventListener("click", function (e) {
     if (!stato.aperto) return;
     var p = document.getElementById("sv-chat-p"), t = document.getElementById("sv-chat");
-    if (p && !p.contains(e.target) && t && !t.contains(e.target)) apri(false);   /* tocchi fuori: si chiude */
+    var mg = document.getElementById("mg");
+    if (p && !p.contains(e.target) && t && !t.contains(e.target) && !(mg && mg.contains(e.target))) apri(false);   /* tocchi fuori: si chiude (il Megafono no: lì si scrive) */
   });
 
   function apri(si) {
@@ -138,7 +144,7 @@
     var t = tasto(), p = document.getElementById("sv-chat-p");
     if (si) sotto();
     p.hidden = !si; t.classList.toggle("on", si);
-    if (si) { elenco(); aggiorna(); } else fermaChat();
+    if (si) { sotto(); elenco(); aggiorna(); } else { fermaChat(); if (window.mgModoChat) window.mgModoChat(null); }
   }
 
   function riga(r, fi) {
@@ -159,12 +165,7 @@
     var mie = R.filter(function (r) { return r.tipo !== "micelio" && !r.casa && r.dentro && r.ultimo_momento; }).sort(dopo);
     var casa = R.filter(function (r) { return r.casa; })[0];
     var h = "";
-    /* il messaggio a tutti: chiuso, si apre toccandolo — la lista resta in vista */
-    if (stato.io === GAB) h += '<details class="ak"><summary>messaggio a tutti · Antaḥkaraṇa</summary>' +
-      '<textarea placeholder="esce in tutte le chat dei villaggi"></textarea>' +
-      '<button type="button" data-ak>manda a tutti</button><small></small></details>';
-    /* ⭐ Casa Radice (Gab, 13:14 e 15:40): «va messo fuori da villaggi felicitas, non lo deve vedere nessuno se non io».
-       Solo chi ci è dentro (oggi Gab) la vede; gli altri le scrivono solo da «+ un'altra» nelle radici. */
+    /* ⭐ 17:02, Gab: il messaggio a tutti è passato nel Megafono (voce che esiste solo per lui) */
     h += '<div class="quad"><div class="gr">Villaggi Felicitas</div>';
     villaggi.forEach(function (v) {
       h += riga(v, "vil");
@@ -213,7 +214,7 @@
     p.querySelector(".indietro").hidden = true; p.querySelector("h2").textContent = "Conversazioni";
     disegna();
   }
-  function fermaChat() { if (stato.giro) { clearInterval(stato.giro); stato.giro = null; } stato.chat = null; }
+  function fermaChat() { if (stato.giro) { clearInterval(stato.giro); stato.giro = null; } stato.chat = null; if (window.mgModoChat && document.body.classList.contains("mg-in-chat")) window.mgModoChat(null); }
 
   var REGOLA = "La chat è operativa: un link, un evento o altro si pubblica attraverso FelicitasMundi, nel suo contesto, non nella chat.";
   var LINK = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|it|org|net|eu|info|io|me|ly|be|gl|co|app|shop|store|link)\b)/i;
@@ -227,28 +228,14 @@
     p.querySelector("h2").textContent = r.tipo === "micelio" ? civ(r.titolo) : (r.titolo || "");
     V.innerHTML = '<button type="button" class="vai-orma">apri l’orma &rsaquo;</button>' +
       '<div class="corpo"><div class="vuoto">un momento…</div></div>' +
-      '<div class="scrivi"><div class="r"><input type="text" placeholder="scrivi" autocomplete="off"><button type="button" aria-label="manda">&#8593;</button></div><p>' + esc(REGOLA) + '</p></div>';
+      '<div class="scrivi"><p>Si scrive dal Megafono, qui sotto. ' + esc(REGOLA) + '</p></div>';
     V.querySelector(".vai-orma").onclick = function () {
-      window.ormaApriChat = id; apri(false);
+      apri(false);   /* nell'orma la chat è il bottone «Apri la chat» */
       if (window.SpazioVivo && typeof window.SpazioVivo.apriOrma === "function") window.SpazioVivo.apriOrma(id);
       else if (typeof window.vai === "function") window.vai("orma", { id: id });
     };
-    var inp = V.querySelector("input"), regola = V.querySelector(".scrivi p");
-    var manda = async function () {
-      var t = inp.value.trim(); if (!t) return;
-      if (LINK.test(t.replace(/(https?:\/\/)?([a-z0-9-]+\.)*felicitasmundi\.com\S*/gi, ""))) { regola.style.color = "#E8A07A"; return; }
-      regola.style.color = ""; inp.value = "";
-      var w = await window.db.from("orma_messaggi").insert({ orma_id: id, testo: t });
-      if (w && w.error) {
-        inp.value = t;
-        if (/FM_NO_LINK/.test(w.error.message || "")) regola.style.color = "#E8A07A";
-        else regola.textContent = "Non è partito: forse in questa chat non sei ancora dentro. Apri l’orma ed entra.";
-        return;
-      }
-      await messaggi(id, true);
-    };
-    inp.onkeydown = function (e) { if (e.key === "Enter") manda(); };
-    V.querySelector(".scrivi button").onclick = manda;
+    /* ⭐ 17:02, Gab: «rendiamo megafono il posto per scrivere» — il Megafono scrive in questa chat */
+    if (window.mgModoChat) window.mgModoChat({ id: id, titolo: r.tipo === "micelio" ? civ(r.titolo) : (r.titolo || "questa chat") });
     messaggi(id, true);
     stato.giro = setInterval(function () { if (stato.chat === id && !document.hidden) messaggi(id, false); }, 15000);
   }
@@ -257,7 +244,8 @@
   async function messaggi(id, giu) {
     var V = document.querySelector("#sv-chat-p .vc"); if (!V || stato.chat !== id) return;
     var C = V.querySelector(".corpo");
-    var r = await window.db.from("orma_messaggi").select("id,persona_id,testo,momento,argomento").eq("orma_id", id).order("momento").limit(300);
+    var r = await window.db.from("orma_messaggi").select("id,persona_id,testo,momento,argomento,file_indirizzo,file_nome").eq("orma_id", id).order("momento").limit(300);
+    if (r && r.error) r = await window.db.from("orma_messaggi").select("id,persona_id,testo,momento,argomento").eq("orma_id", id).order("momento").limit(300);
     if (stato.chat !== id) return;
     var M = (r && !r.error && r.data) || [];
     var pids = M.map(function (m) { return m.persona_id; }).filter(function (x, i, a) { return x && a.indexOf(x) === i; }), nomi = {};
@@ -272,12 +260,21 @@
     M.forEach(function (m) {
       if (m.argomento && m.argomento !== prima) { h += '<div class="arg" data-a="' + esc(m.argomento) + '">' + esc(m.argomento) + '</div>'; prima = m.argomento; }
       var mio = m.persona_id === stato.io, ak = m.argomento === "Antaḥkaraṇa";
-      h += '<div class="m' + (mio ? " mio" : "") + (ak ? " ak-m" : "") + '"><b>' + esc(mio ? "tu" : (nomi[m.persona_id] || "")) + '<span>' + esc(ora(m.momento)) + '</span></b>' + esc(m.testo) + '</div>';
+      var corpo = m.file_indirizzo ? '<a href="#" data-file="' + esc(m.file_indirizzo) + '">&#128206; ' + esc(m.file_nome || m.testo) + '</a>'
+        : (ak ? esc(m.testo).replace(/(https:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>') : esc(m.testo));
+      h += '<div class="m' + (mio ? " mio" : "") + (ak ? " ak-m" : "") + '"><b>' + esc(mio ? "tu" : (nomi[m.persona_id] || "")) + '<span>' + esc(ora(m.momento)) + '</span></b>' + corpo + '</div>';
     });
     var inFondo = C.scrollHeight - C.scrollTop - C.clientHeight < 60;
     C.innerHTML = h;
     Array.prototype.forEach.call(C.querySelectorAll("[data-arg]"), function (b) {
       b.onclick = function () { var nome = args[+b.getAttribute("data-arg")].nome; var t = Array.prototype.filter.call(C.querySelectorAll(".arg"), function (x) { return x.getAttribute("data-a") === nome; })[0]; if (t) C.scrollTop = t.offsetTop - C.offsetTop - 8; };
+    });
+    Array.prototype.forEach.call(C.querySelectorAll("[data-file]"), function (a) {
+      a.onclick = async function (e) {
+        e.preventDefault(); var f = a.getAttribute("data-file");
+        if (/^https?:/.test(f)) { window.open(f, "_blank", "noopener"); return; }
+        try { var su = await window.db.storage.from("riservato").createSignedUrl(f, 3600); if (su.data && su.data.signedUrl) window.open(su.data.signedUrl, "_blank", "noopener"); } catch (er) {}
+      };
     });
     if (giu || inFondo) C.scrollTop = C.scrollHeight;
     /* letto fin qui: il numerino si azzera, e l'app toglie la notifica */
@@ -310,5 +307,8 @@
     document.addEventListener("visibilitychange", function () { if (!document.hidden) aggiorna(); });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", parti); else parti();
-  window.FMChat = { aggiorna: aggiorna };
+  /* ⭐ 17:02, Gab: «ogni conversazione di ogni orma crei un bottone che manda all'apertura della chat» */
+  function apriChat(id) { apri(true); entra(id); }
+  window.FMChat = { aggiorna: aggiorna, apri: apriChat, chiudi: function () { apri(false); },
+                    ricarica: function () { if (stato.chat) messaggi(stato.chat, true); } };
 })();
