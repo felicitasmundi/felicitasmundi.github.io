@@ -223,14 +223,29 @@
                               nome_url: pr.nome_url ? "?p=" + pr.nome_url : "" } });
     });
 
-    /* ⭐ 2 ottobre, Gab — «invita chi risuona» e «entra nel vicinato» */
+    /* ⭐ 2 ottobre, Gab — «invita chi risuona» e «entra nel villaggio»
+       Matrice (Gab): «è sbagliato dire entra nel vicinato, meglio entra nel villaggio -
+       civiltà sarda». Il villaggio è l'orma micelio fra le madri (o l'orma stessa);
+       il nome viene dal suo titolo: «Villaggio Felicitas – Civiltà Sarda» → «entra nel
+       villaggio – civiltà sarda». Senza villaggio, il tasto non c'è. */
     P.gesto(R, "invita", function () {
       if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function") return window.SpazioVivo.invito({});
       location.href = "invito.html";
     });
-    P.gesto(R, "entra-vicinato", function () {
-      if (!d.io) { location.href = "accesso.html?torna=" + encodeURIComponent("index.html?p=vicinati"); return; }
-      if (typeof window.vai === "function") window.vai("vicinati");
+    var vil = o.tipo === "micelio" ? o : (d.madri || []).filter(function (m) { return m.tipo === "micelio"; })[0];
+    var tVil = R.querySelector('[data-g="entra-villaggio"]');
+    if (tVil) {
+      if (!vil || o.tipo === "micelio") tVil.hidden = true;
+      else {
+        var civ = String(vil.titolo || "").split(/\s[–—-]\s/)[1];
+        tVil.firstChild.nodeValue = "entra nel villaggio" + (civ ? " – " + civ.trim().toLowerCase() : "") + " ";
+      }
+    }
+    P.gesto(R, "entra-villaggio", function () {
+      if (!vil) return;
+      if (!d.io) { location.href = "accesso.html?torna=" + encodeURIComponent("index.html?p=orma&o=" + vil.id); return; }
+      if (window.SpazioVivo && typeof window.SpazioVivo.apriOrma === "function") window.SpazioVivo.apriOrma(vil.id);
+      else if (typeof window.vai === "function") window.vai("orma", { id: vil.id });
     });
     /* «ci sarò» */
     P.gesto(R, "ci-saro", async function () {
