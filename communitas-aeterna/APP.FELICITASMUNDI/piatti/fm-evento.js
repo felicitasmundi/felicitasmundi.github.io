@@ -264,11 +264,14 @@
     }
     /* ⭐ 2 ottobre 09:13, Gab: «scarica l'app» prima di «entra nel villaggio», e dopo si torna qui */
     if (window.FMScarica) window.FMScarica.metti(R, "index.html?p=evento&e=" + id + invitoQui(), tVil || R.querySelector("#ev-invita"));
-    P.gesto(R, "entra-villaggio", function () {
+    /* ⭐ 2 ottobre 15:54, Gab: «entra in vicinato sardo, ti dovrebbe portare nella pagina vicinati, si apre la tendina
+       e ti fa mettere foto e bio e figuri tra le persone visibili nella finestra villaggio felicitas civiltà sarda» */
+    P.gesto(R, "entra-villaggio", async function () {
       if (!vil) return;
-      if (!d.io) { location.href = accesso("index.html?p=orma&o=" + vil.id); return; }
-      if (window.SpazioVivo && typeof window.SpazioVivo.apriOrma === "function") window.SpazioVivo.apriOrma(vil.id);
-      else if (typeof window.vai === "function") window.vai("orma", { id: vil.id });
+      if (!d.io) { location.href = accesso("index.html?p=vicinati&entra=" + vil.id); return; }
+      try { await db.rpc("fm_mia_radice", { p_orma: vil.id }); } catch (e) {}
+      window.vicinatiEntra = vil.id;
+      if (typeof window.vai === "function") window.vai("vicinati");
     });
     /* «ci sarò» */
     P.gesto(R, "ci-saro", async function () {

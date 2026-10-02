@@ -73,6 +73,7 @@
         if (p && p.error) p = await b.from("persone").select("comune_cod").eq("id", d.io).maybeSingle();   /* prima dell'SQL 27 */
         var cc = p && p.data && p.data.comune_cod;
         d.radice = (p && p.data && p.data.radice_id) || null;
+        try { var me = await b.from("persone").select("nome,biografia,foto_url,consenso_bio").eq("id", d.io).maybeSingle(); d.me = (me && me.data) || {}; } catch (e) { d.me = {}; }
         if (cc) {
           var t = await b.from("territori").select("codice,nome,lat,lon,regione_cod").eq("codice", cc).limit(1);
           if (t.data && t.data[0]) { d.comune = t.data[0]; d.centro = { lat: t.data[0].lat, lon: t.data[0].lon }; }
@@ -101,6 +102,11 @@
           (d.dentro[r.orma_id] = d.dentro[r.orma_id] || []).push(r);
         });
       }
+      /* i volti di chi è dentro i villaggi: foto e indirizzo del nome (per la scheda) */
+      d.volti = {};
+      var vpid = [];
+      d.villaggi.forEach(function (v) { (d.dentro[v.id] || []).forEach(function (r) { if (r.persona_id && vpid.indexOf(r.persona_id) < 0) vpid.push(r.persona_id); }); });
+      if (vpid.length) { try { var pv = await b.from("persone_pubbliche").select("id,nome,foto_url,nome_url").in("id", vpid); (pv.data || []).forEach(function (x) { d.volti[x.id] = x; }); } catch (e) {} }
       /* le coordinate dei comuni delle orme che non hanno un punto */
       var cods = {};
       [].concat(d.karma, d.eventi, d.novita).forEach(function (o) { if (o.luogo_lat == null && o.territorio_cod) cods[o.territorio_cod] = 1; });
@@ -184,11 +190,18 @@
     var hV = "";
     if (civ) {
       var den = vil ? (d.dentro[vil.id] || []) : [];
-      var nome = function (r) { return '<span class="pers">' + esc(r.nome || "( )") + '</span>'; };
+      /* ⭐ 2 ottobre 15:54, Gab: «figuri tra le persone visibili nella finestra villaggio felicitas civiltà sarda» — foto e nome; toccando, la presentazione */
+      var nome = function (r) {
+        var v = d.volti[r.persona_id] || {};
+        return '<button type="button" class="pers" data-pers="' + esc(r.persona_id || "") + '" data-nu="' + esc(v.nome_url || "") + '">' +
+          (v.foto_url ? '<img alt="" src="' + esc(v.foto_url) + '">' : '') + esc(v.nome || r.nome || "( )") + '</button>';
+      };
       var coordV = den.filter(function (r) { return r.ruolo === "coordinatore"; });
       var partV = den.filter(function (r) { return r.ruolo !== "coordinatore"; });
       var luV = vil ? d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id; }) : [];
+      var sonoDentro = den.some(function (r) { return r.persona_id === d.io; });
       hV += (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
+            (d.io && vil ? '<div class="gesti">' + tasto(sonoDentro ? "la tua presentazione" : "entra nel villaggio", 'data-presenta="' + esc(vil.id) + '"') + '</div><div id="presenta" hidden></div>' : "") +
             fascia("chi coordina", coordV.map(nome).join(" "), "( )") +
             fascia("i partecipanti", partV.map(nome).join(" "), "( )") +
             fascia("i luoghi", luV.map(function (l) { return riga(l, l.luogo || ""); }).join(""), "( )");
@@ -240,7 +253,7 @@
 
     D.getElementById("porte").innerHTML =
       porta("◇", "Karma yoga", richieste.length ? richieste.length + (richieste.length === 1 ? " richiesta" : " richieste") : "", hK) +
-      porta("◎", "Villaggio Felicitas" + (civ ? " – " + civ.nome : ""), "", hV) +
+      porta("◎", "Villaggio Felicitas" + (civ ? " – " + civ.nome : ""), "", hV).replace("<details>", '<details class="villaggio">') +
       porta("☾", "Oggi / calendario", futuri.length ? futuri.length + " in arrivo" : "", hC) +
       porta("✦", "Novità", nv.length ? String(nv.length) : "", hN);
 
@@ -250,6 +263,8 @@
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-vicinato]"), function (a) { a.onclick = function () {
       try { if (W.SpazioVivo && W.SpazioVivo.nuovaOrma) W.SpazioVivo.nuovaOrma(a.getAttribute("data-vicinato"), { tipo: "contatto" }); } catch (e) {}
     }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-presenta]"), function (a) { a.onclick = function () { presenta(d, a.getAttribute("data-presenta")); }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-pers]"), function (a) { a.onclick = function () { scheda(a); }; });
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-cambia-radici]"), function (a) { a.onclick = function (e) {
       e.preventDefault(); cambiaRadici = true; radici(d, civilta(d.comune));
       var rb = D.getElementById("radici"); if (rb) rb.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -258,6 +273,67 @@
     if (typeof window.legaPorte === "function") window.legaPorte();
   }
   function giornoMese(s) { if (!s) return ""; var x = new Date(s); return isNaN(x) ? "" : x.getDate() + " " + MESI[x.getMonth()]; }
+
+  /* ── la tua presentazione nel villaggio ─────────────────────────
+     ⭐ 2 ottobre 15:54, Gab: «entra in vicinato sardo, ti dovrebbe portare nella pagina vicinati, si apre la
+        tendina e ti fa mettere foto e bio e figuri tra le persone visibili nella finestra villaggio felicitas
+        civiltà sarda». Si entra nel villaggio (le radici), poi foto e biografia. */
+  async function presenta(d, vilId) {
+    var D = document, box = D.getElementById("presenta"); if (!box) return;
+    var b = await db(); if (!b) return;
+    var den = d.dentro[vilId] || [];
+    if (!den.some(function (r) { return r.persona_id === d.io; })) {
+      try { await b.rpc("fm_mia_radice", { p_orma: vilId }); } catch (e) {}
+    }
+    var me = d.me || {};
+    box.hidden = false;
+    box.className = "dove-sei";
+    box.innerHTML = '<b>la tua presentazione</b>' +
+      '<p>Una foto e qualche riga su di te: così compari tra le persone del villaggio.</p>' +
+      '<div style="display:flex;gap:.8rem;align-items:center"><span class="pf" style="width:4.2rem;height:4.2rem;border-radius:50%;overflow:hidden;border:1px solid rgba(212,175,106,.5);flex:none;display:grid;place-items:center;color:rgba(245,240,230,.4)">' +
+        (me.foto_url ? '<img alt="" src="' + esc(me.foto_url) + '" style="width:100%;height:100%;object-fit:cover">' : '( )') + '</span>' +
+        '<label class="gesto" style="cursor:pointer"><b>+</b>scegli una foto<input type="file" accept="image/*" hidden></label></div>' +
+      '<textarea maxlength="650" rows="5" placeholder="la tua biografia" style="background:rgba(8,11,26,.7);border:1px solid rgba(212,175,106,.35);border-radius:.7rem;color:var(--ivory);padding:.6rem .8rem;font:inherit;resize:vertical">' + esc(me.biografia || "") + '</textarea>' +
+      '<small class="conta" style="color:rgba(245,240,230,.5)"></small>' +
+      '<label style="display:flex;gap:.5rem;align-items:center;font-size:.9rem"><input type="checkbox"' + (me.consenso_bio !== false ? " checked" : "") + '> la biografia viaggia con me</label>' +
+      '<div class="gesti"><button type="button" class="gesto" data-salva><b>✓</b>salva</button></div><small class="esito" style="color:rgba(245,240,230,.6)"></small>';
+    var ta = box.querySelector("textarea"), ct = box.querySelector(".conta"), fi = box.querySelector('input[type="file"]'), es = box.querySelector(".esito"), file = null;
+    var conta = function () { ct.textContent = ta.value.length + " / 650"; }; ta.oninput = conta; conta();
+    fi.onchange = function () {
+      file = fi.files && fi.files[0]; if (!file) return;
+      var u = URL.createObjectURL(file);
+      box.querySelector(".pf").innerHTML = '<img alt="" src="' + u + '" style="width:100%;height:100%;object-fit:cover">';
+    };
+    box.querySelector("[data-salva]").onclick = async function () {
+      es.textContent = "un momento…";
+      var up = { biografia: ta.value.trim().slice(0, 650), consenso_bio: box.querySelector('input[type="checkbox"]').checked };
+      if (file) {
+        var ext = ((file.type || "").split("/")[1] || "jpg").replace(/[^a-z0-9]/g, "");
+        var nomeF = "persone/" + d.io + "/" + Date.now() + "." + ext;
+        var s1 = await b.storage.from("pubblico").upload(nomeF, file, { contentType: file.type });
+        if (s1.error) { es.textContent = "la foto non è salita: riprova"; console.warn("presentazione, foto:", s1.error); return; }
+        var pu = b.storage.from("pubblico").getPublicUrl(nomeF);
+        up.foto_url = pu && pu.data && pu.data.publicUrl;
+      }
+      var r = await b.from("persone").update(up).eq("id", d.io);
+      if (r.error) { es.textContent = "non salvato: riprova"; console.warn("presentazione:", r.error); return; }
+      es.textContent = "fatto";
+      disegna(await leggi());
+      var pv = D.querySelector("#porte details.villaggio"); if (pv) pv.open = true;
+    };
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  /* toccando una persona: foto, nome e biografia (se la biografia viaggia) */
+  async function scheda(a) {
+    var D = document, vec = D.getElementById("scheda-pers"); if (vec) { var stessa = vec._di === a; vec.remove(); if (stessa) return; }
+    var b = await db(); var nu = a.getAttribute("data-nu"), c = null;
+    if (b && nu) { try { var r = await b.rpc("fm_chi_invita", { p_nome_url: nu }); c = !r.error && r.data && (Array.isArray(r.data) ? r.data[0] : r.data); } catch (e) {} }
+    var w = D.createElement("div"); w.id = "scheda-pers"; w._di = a; w.className = "dove-sei"; w.style.margin = ".5rem 0";
+    var img = a.querySelector("img");
+    w.innerHTML = '<div style="display:flex;gap:.8rem;align-items:flex-start">' + (img ? '<img alt="" src="' + esc(img.src) + '" style="width:3.6rem;height:3.6rem;border-radius:50%;object-fit:cover;flex:none">' : '') +
+      '<div><b>' + esc(c ? [c.nome, c.cognome].filter(Boolean).join(" ") : a.textContent) + '</b>' + (c && c.biografia ? '<p>' + esc(c.biografia) + '</p>' : '') + '</div></div>';
+    var f = a.closest(".fascia") || a.parentNode; f.parentNode.insertBefore(w, f.nextSibling);
+  }
 
   /* ── 0 · le tue radici: la civiltà in cui ti senti risuonare ───────
      ⭐ 2 ottobre 12:40, Gab: «In che contesto ti senti risuonare? Qual è la tua civiltà d'origine?
@@ -343,9 +419,20 @@
   }
 
   async function avvia() {
-    var giro = async function () { disegna(await leggi()); };
+    var dd = null;
+    var giro = async function () { dd = await leggi(); disegna(dd); };
     doveSei(giro);
     await giro();
+    /* ⭐ arrivo da «entra nel villaggio» di un evento: si apre il villaggio e la presentazione */
+    var entra = null;
+    try { entra = W.vicinatiEntra || new URLSearchParams(W.location.search).get("entra"); W.vicinatiEntra = null; } catch (e) {}
+    if (entra && dd && dd.io) {
+      try { var b = await db(); await b.rpc("fm_mia_radice", { p_orma: entra }); } catch (e) {}
+      await giro();
+      try { W.history.replaceState(null, "", W.location.pathname + "?p=vicinati"); } catch (e) {}
+      var pv = document.querySelector("#porte details.villaggio"); if (pv) pv.open = true;
+      presenta(dd, entra);
+    }
   }
   window.FMVicinatiTempio = { avvia: avvia };
 })();

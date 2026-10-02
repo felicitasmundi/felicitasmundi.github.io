@@ -4137,7 +4137,7 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-orma-tempio.js?v=10010955"></script><!-- ⭐ 1 ottobre — «La mia orma» col rito del tempio: SpazioVivo.ormaTempio(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-vicinati.js?v=09292315"></script><!-- 29 settembre — Vicinati come casa: SpazioVivo.vicinati(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-invito.js?v=10020930"></script><!-- 56 — «Invita chi risuona»: SpazioVivo.invito(). DOPO le stanze, così vince il suo -->
-<script src="APP.FELICITASMUNDI/piatti/fm-capitoli.js?v=10020915"></script><script src="APP.FELICITASMUNDI/piatti/fm-evento.js?v=10020935"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
+<script src="APP.FELICITASMUNDI/piatti/fm-capitoli.js?v=10020915"></script><script src="APP.FELICITASMUNDI/piatti/fm-evento.js?v=10021610"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
 <!-- ⛔ 56 — il Megafono-piatto NON è cablato qui: il vecchio fm-megafono.js resta (fornisce parla() e il Megafono in fondo). Il piatto megafono-piatto.html è full-viewport e va chiarito con Gab prima di sostituirlo. -->
 
 <script src="fm-dati.js"></script><!-- ══ il dato che leggono le macchine · per ultimo ══ -->
@@ -5761,6 +5761,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     if(giaAperto){ vai(vista, sottoVista); return; }
     giaAperto = true;
     if(apriRotta(rottaChiesta)) return;
+    /* ⭐ 2 ottobre 15:54, Gab: «mi ha riportato su …index.html?invito=gabriele-dettori dove non mi fa vedere più nulla».
+       Chi è già dentro e arriva da un collegamento d'invito non va alla soglia (è per chi comincia):
+       va nei Vicinati (la casa), e l'invito sparisce dall'indirizzo. */
+    var soloInvito = /[?&]invito=/.test(location.search) && !/[?&]p=/.test(location.search);
+    if(soloInvito && !ospite){
+      try{ history.replaceState(null, "", location.pathname + location.hash); }catch(e){}
+      vai(torna || "vicinati"); return;
+    }
     vai(torna || (ospite ? "spazio" : "soglia"));
   }
 
@@ -5799,8 +5807,14 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        L'indirizzo nudo non la porta: chi arriva da solo finisce sul
        bivio di accesso.html, che lo posa su «La mia orma». */
     var qui  = location.pathname.split("/").pop() || "index.html";
-    var dove = location.search ? (qui + location.search) : "";
-    location.replace("accesso.html" + (dove ? "?torna=" + encodeURIComponent(dove) : ""));
+    /* ⭐ 2 ottobre: l'invito va all'accesso come invito (lo legge da lì), non dentro il ritorno */
+    var inv = (location.search.match(/[?&]invito=([^&]+)/) || [])[1] || "";
+    var resto = location.search.replace(/([?&])invito=[^&]*&?/, "$1").replace(/[?&]$/, "");
+    var dove = resto ? (qui + resto) : "";
+    var q = [];
+    if(dove) q.push("torna=" + encodeURIComponent(dove));
+    if(inv) q.push("invito=" + inv);
+    location.replace("accesso.html" + (q.length ? "?" + q.join("&") : ""));
   }
 
   function daOspite(){
