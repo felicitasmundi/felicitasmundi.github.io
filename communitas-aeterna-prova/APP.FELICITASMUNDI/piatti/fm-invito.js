@@ -26,7 +26,7 @@
   var CASA = "felicitasmundi.com/";
   var APP = "app.felicitasmundi.com/communitas-aeterna/";
   /* le pagine d'anteprima fatte apposta per un evento (inviti/<nome>.html) */
-  var PAGINE = { "1d8ba038-2393-49fb-9493-3511c9e3ded6": "11-ottobre" };
+  var PAGINE = { "1d8ba038-2393-49fb-9493-3511c9e3ded6": "villaggio-felicitas-sardegna/invito-11-ottobre.html" };
 
   async function leggi() {
     var d = { io: null, nome: "", slug: "", quanti: 0 };
@@ -53,8 +53,8 @@
        (si vede anche senza account) e porta con sé chi invita fino all'accesso. */
     /* ⭐ 16:51, Gab: «fai ora, invita chi risuona all'evento» — il collegamento passa da una pagina d'anteprima
        (foto con l'orma, titolo, descrizione) che WhatsApp sa leggere: quella dell'evento se c'è, se no quella di FelicitasMundi */
-    if (cosa.evento) url = APP + (PAGINE[cosa.evento] ? "inviti/" + PAGINE[cosa.evento] + ".html?" : "inviti/evento.html?e=" + cosa.evento + "&") +
-      "invito=" + encodeURIComponent(d.slug || "");
+    /* 16:54, Gab: negli inviti agli eventi l'indirizzo dice il villaggio e l'evento, non chi lo manda */
+    if (cosa.evento) url = PAGINE[cosa.evento] ? "app.felicitasmundi.com/" + PAGINE[cosa.evento] : APP + "inviti/evento.html?e=" + cosa.evento;
 
     var P = window.FMPiatto;
     var dati = { invito: { url: url }, conto: { invitati: String(d.quanti) },
