@@ -112,19 +112,14 @@
     if (stato.io === GAB) h += '<div class="ak"><b>messaggio a tutti · Antaḥkaraṇa</b>' +
       '<textarea placeholder="esce in tutte le chat dei villaggi"></textarea>' +
       '<button type="button" data-ak>manda a tutti</button><small></small></div>';
+    /* ⭐ Casa Radice (Gab, 13:14 e 15:40): «va messo fuori da villaggi felicitas, non lo deve vedere nessuno se non io».
+       Solo chi ci è dentro (oggi Gab) la vede; gli altri le scrivono solo da «+ un'altra» nelle radici. */
+    if (casa && casa.dentro) h += '<div class="gr">Casa Radice</div>' + riga(casa);
     h += '<div class="gr">Villaggi Felicitas</div>';
     villaggi.forEach(function (v) {
       h += riga(v, "vil");
       mie.filter(function (m) { return m.villaggio_id === v.orma_id; }).forEach(function (m) { h += riga(m, true); });
     });
-    /* ⭐ 2 ottobre 13:14, Gab: «dopo le civiltà, metti una chat legata anche a casa radice, dove ci sarò solo io
-       per ora e lì mi arrivano i messaggi con potenziali feedback, compreso l'aggiunta di civiltà che non ci sono».
-       Chi è dentro (Gab) apre la chat; gli altri scrivono e basta. */
-    if (casa) {
-      if (casa.dentro) h += riga(casa);
-      else h += '<button type="button" class="riga" data-casa><span><span class="t">Casa Radice</span><span class="u">riscontri, civiltà da aggiungere</span></span><span class="dx"></span></button>' +
-        '<div class="ak" id="casa-scrivi" hidden><textarea placeholder="il tuo riscontro"></textarea><button type="button" data-casa-manda>manda</button><small></small></div>';
-    }
     var altre = mie.filter(function (m) { return !m.villaggio_id || !villaggi.some(function (v) { return v.orma_id === m.villaggio_id; }); });
     if (altre.length) { h += '<div class="gr">Le altre conversazioni</div>'; altre.forEach(function (m) { h += riga(m); }); }
     if (!villaggi.length && !altre.length) h += '<div class="vuoto">ancora nessuna conversazione</div>';
