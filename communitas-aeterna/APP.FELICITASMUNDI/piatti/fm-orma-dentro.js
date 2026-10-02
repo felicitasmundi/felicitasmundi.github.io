@@ -109,6 +109,14 @@
         if (!md.error && md.data && md.data[0]) d.madre = md.data[0];
       }
 
+      /* ⭐ 2 ottobre 16:36, Gab: nei villaggi le orme sono del gruppo — di quale villaggio è, e se coordino */
+      d.villaggio = null; d.coordina = false;
+      try {
+        var fv = await db.rpc("fm_villaggio_di", { p_orma: id });
+        d.villaggio = (!fv.error && fv.data) || null;
+        if (d.villaggio && d.io) { var fc = await db.rpc("fm_coordina", { p_villaggio: d.villaggio }); d.coordina = !fc.error && fc.data === true; }
+      } catch (e) {}
+
       /* chi l'ha aperta */
       if (d.orma.persona_id) {
         var a = await db.from("persone_pubbliche")
@@ -322,15 +330,16 @@
         var lista = pr.querySelector(".cap-lista");
         if (ri && lista) { var pc = window.FMCapitoli.leggi(o.contenuto || ""); ri.textContent = pc.testa ? pc.testa.slice(0, 60) : (pc.capitoli[0] ? pc.capitoli[0].t : ""); }
         var vecchio = pr.querySelector("#cap-apri"); if (vecchio) vecchio.remove();
-        if (!d.io || o.persona_id !== d.io) return;
-        pr.hidden = false;                       /* chi l'ha aperta la vede anche vuota, per scriverla */
+        if (!d.io || (o.persona_id !== d.io && !d.coordina)) return;
+        pr.hidden = false;                       /* chi l'ha aperta (o chi coordina il villaggio) la vede anche vuota, per scriverla */
         var b = doc.createElement("button"); b.type = "button"; b.id = "cap-apri"; b.className = "cap-apri";
         b.textContent = String(o.contenuto || "").trim() ? "scrivi i capitoli" : "scrivi il racconto";
         var dentro = pr.querySelector(".dentro") || pr; dentro.appendChild(b);
         b.onclick = function () {
           box.hidden = true; if (lista) lista.hidden = true; b.hidden = true;
           window.FMCapitoli.editor(doc, b, o.contenuto || "", async function (testo) {
-            var r = await db.from("orme").update({ contenuto: testo }).eq("id", id);
+            var r = await db.rpc("fm_scrivi_capitoli", { p_orma: id, p_testo: testo });
+            if (r.error) r = await db.from("orme").update({ contenuto: testo }).eq("id", id);   /* prima dell'SQL 30 */
             if (r.error) throw r.error;
             await ricarica();
           }, function () { box.hidden = false; if (lista) lista.hidden = false; b.hidden = false; });
@@ -552,6 +561,8 @@
     }
     /* ⭐ 1 ottobre 23:00, Gab: «se tocco aperto da Gabriele, esce una finestrella col mio account» */
     var ap = R.querySelector("a.aperta");
+    /* ⭐ 16:35, Gab: «non compare neanche chi lo organizza … è un default di felicitasmundi» — nei villaggi, nessun «aperta da» */
+    if (ap) ap.style.display = (d.villaggio && d.villaggio !== id) || (o.tipo === "micelio") ? "none" : "";
     if (ap && d.autore) ap.onclick = async function (e) {
       e.preventDefault(); e.stopPropagation();
       var doc = R.ownerDocument, vecchia = doc.getElementById("chi-scheda"); if (vecchia) { vecchia.remove(); return; }

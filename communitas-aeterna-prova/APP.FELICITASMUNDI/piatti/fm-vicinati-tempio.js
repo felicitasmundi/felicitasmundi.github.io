@@ -210,7 +210,9 @@
     /* ⭐ 1 ottobre, Gab: «attiva un vicinato» crea un'orma dentro il villaggio della sua civiltà, visibile nelle orme del villaggio.
        Dove il villaggio non c'è ancora, resta spento. */
     if (d.radice) hV += '<a class="voce va" href="#" data-cambia-radici>cambia le tue radici<i>›</i></a>';
-    hV += '<div class="gesti">' + (vil ? tasto("attiva un vicinato", 'data-vicinato="' + esc(vil.id) + '"') : tasto("attiva un vicinato", "", true)) + '</div>';
+    /* ⭐ 2 ottobre 16:34, Gab: «le orme dentro villaggio sardo, posso metterle io marco e alessandra in questa fase» — solo chi coordina */
+    var coordino = vil && (d.dentro[vil.id] || []).some(function (r) { return r.persona_id === d.io && r.ruolo === "coordinatore"; });
+    if (coordino) hV += '<div class="gesti">' + tasto("attiva un vicinato", 'data-vicinato="' + esc(vil.id) + '"') + '</div>';
 
     /* 3 · Oggi / calendario */
     var oggi = new Date(); oggi.setHours(0, 0, 0, 0);

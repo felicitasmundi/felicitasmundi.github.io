@@ -69,7 +69,7 @@
 
       var o = await db.from("orme")
         .select("id,titolo,contenuto,tipo,elemento,luogo,accaduto_il,inizio_il," +
-                "immagine_url,persona_id,quanti_servono,orma_madre_id")
+                "immagine_url,persona_id,quanti_servono,orma_madre_id,visibilita")
         .eq("id", id).single();
       if (o.error) return d;
       d.orma = o.data;
@@ -84,6 +84,10 @@
         d.madri.push(m.data[0]); su = m.data[0].orma_madre_id;
       }
 
+      /* ⭐ 2 ottobre 16:36, Gab: nei villaggi gli eventi sono del gruppo — chi coordina scrive e lancia */
+      d.villaggio = d.orma.tipo === "micelio" ? d.orma.id : ((d.madri.filter(function (m) { return m.tipo === "micelio"; })[0] || {}).id || null);
+      d.coordina = false;
+      if (d.io && d.villaggio) { try { var fc = await db.rpc("fm_coordina", { p_villaggio: d.villaggio }); d.coordina = !fc.error && fc.data === true; } catch (e) {} }
       /* chi organizza: si vede anche da fuori */
       var a = await db.rpc("fm_orma_autore", { p_orma: id });
       var au = a.error ? null : (Array.isArray(a.data) ? a.data[0] : a.data);
@@ -178,18 +182,33 @@
     /* ⭐ 2 ottobre, Gab: chi ha aperto l'evento scrive i capitoli a mano (titolo d'oro, testo chiaro) */
     (function () {
       var vecchio = R.querySelector("#cap-apri"); if (vecchio) vecchio.remove();
-      if (!window.FMCapitoli || !d.io || o.persona_id !== d.io) return;
+      var vl = R.querySelector("#ev-lancia"); if (vl) vl.remove();
+      if (!window.FMCapitoli || !d.io || (o.persona_id !== d.io && !d.coordina)) return;
       var doc = R.ownerDocument; window.FMCapitoli.veste(doc);
       var b = doc.createElement("button"); b.type = "button"; b.id = "cap-apri"; b.className = "cap-apri";
       b.textContent = "scrivi i capitoli";
       var dopo = R.querySelector("#ev-quadranti") || R.querySelector("#ev-invita") || R.querySelector('[data-c="orma.contenuto"]');
       if (!dopo) return;
       dopo.parentNode.insertBefore(b, dopo.nextSibling);
+      /* ⭐ «la presentazione evento rimondini la facciamo partire subito dopo»: un'orma del villaggio ancora
+         nascosta si lancia da qui, solo chi coordina */
+      if (d.coordina && d.villaggio && o.visibilita && o.visibilita !== "pubblico") {
+        var L = doc.createElement("button"); L.type = "button"; L.id = "ev-lancia"; L.className = "cap-apri";
+        L.textContent = "lancia: rendila visibile a tutti";
+        b.parentNode.insertBefore(L, b.nextSibling);
+        L.onclick = async function () {
+          L.textContent = "un momento…";
+          var rl = await db.rpc("fm_lancia", { p_orma: id });
+          if (rl.error) { L.textContent = "non riuscito: riprova"; console.warn("lancia:", rl.error); return; }
+          await ricarica();
+        };
+      }
       b.onclick = function () {
         var box = R.querySelector('[data-c="orma.contenuto"]'), q = R.querySelector("#ev-quadranti");
         if (box) box.hidden = true; if (q) q.hidden = true; b.hidden = true;
         window.FMCapitoli.editor(doc, b, o.contenuto || "", async function (testo) {
-          var r = await db.from("orme").update({ contenuto: testo }).eq("id", id);
+          var r = await db.rpc("fm_scrivi_capitoli", { p_orma: id, p_testo: testo });
+          if (r.error) { r = await db.from("orme").update({ contenuto: testo }).eq("id", id); }   /* prima dell'SQL 30 */
           if (r.error) throw r.error;
           await ricarica();
         }, function () { if (box) box.hidden = false; if (q) q.hidden = false; b.hidden = false; });
@@ -201,6 +220,9 @@
     });
     var W = R.ownerDocument && R.ownerDocument.defaultView;
     if (W && W.fmVeste) W.fmVeste(o.elemento);
+    /* ⭐ 2 ottobre 16:35, Gab: «non compare neanche chi lo organizza … è un default di felicitasmundi» —
+       sugli eventi dei villaggi nessun organizzatore, a livello di matrice */
+    Array.prototype.forEach.call(R.querySelectorAll("a.ev-organizza"), function (el) { el.style.display = d.villaggio ? "none" : ""; });
     /* «il gruppo»: la pagina del gruppo non c'è ancora */
     Array.prototype.forEach.call(R.querySelectorAll('[data-c="organizzazione"]'),
       function (el) { el.textContent = ""; el.removeAttribute("href"); });
