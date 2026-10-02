@@ -88,7 +88,7 @@
       var a = await db.rpc("fm_orma_autore", { p_orma: id });
       var au = a.error ? null : (Array.isArray(a.data) ? a.data[0] : a.data);
       if (au) d.autore = { id: au.id, nome: au.nome || "" };
-      if (d.io && d.autore) {
+      if (d.autore) {   /* ⭐ 2 ottobre: anche da fuori, per la scheda di chi organizza */
         var pp = await db.from("persone_pubbliche").select("foto_url,nome_url")
           .eq("id", d.autore.id).limit(1);
         if (!pp.error && pp.data && pp.data[0]) {
@@ -222,6 +222,21 @@
       P.riempi(c, { dentro: { nome: v.nome || "", foto_url: pr.foto_url || "",
                               nome_url: pr.nome_url ? "?p=" + pr.nome_url : "" } });
     });
+
+    /* ⭐ 2 ottobre 09:11, Gab: «se schiaccio organizza gabriele non si apre una finestra con bio e foto»
+       — come «aperta da» dentro l'orma: foto, nome e biografia (se la biografia viaggia). */
+    var org = R.querySelector("a.ev-organizza");
+    if (org && d.autore) org.onclick = async function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var doc = R.ownerDocument, vecchia = doc.getElementById("chi-scheda"); if (vecchia) { vecchia.remove(); return; }
+      var c = { nome: d.autore.nome || "", foto_url: d.autore.foto_url || "", biografia: "", cognome: "" };
+      try { if (d.autore.nome_url) { var r = await db.rpc("fm_chi_invita", { p_nome_url: d.autore.nome_url }); var x = !r.error && r.data && (Array.isArray(r.data) ? r.data[0] : r.data); if (x) { c.cognome = x.cognome || ""; c.biografia = x.biografia || ""; if (x.foto_url) c.foto_url = x.foto_url; } } } catch (er) {}
+      var w = doc.createElement("div"); w.id = "chi-scheda";
+      var esc = function (t) { return String(t).replace(/[&<>"]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]; }); };
+      w.innerHTML = (c.foto_url ? '<img alt="" src="' + esc(c.foto_url) + '">' : '') + '<div><b>' + esc([c.nome, c.cognome].filter(Boolean).join(" ")) + '</b>' + (c.biografia ? '<p>' + esc(c.biografia).replace(/\n/g, "<br>") + '</p>' : '') + '</div><button type="button" aria-label="chiudi">&times;</button>';
+      org.parentNode.insertBefore(w, org.nextSibling);
+      w.querySelector("button").onclick = function () { w.remove(); };
+    };
 
     /* ⭐ 2 ottobre, Gab — «invita chi risuona» e «entra nel villaggio»
        Matrice (Gab): «è sbagliato dire entra nel vicinato, meglio entra nel villaggio -
