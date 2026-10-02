@@ -244,6 +244,8 @@
   async function messaggi(id, giu) {
     var V = document.querySelector("#sv-chat-p .vc"); if (!V || stato.chat !== id) return;
     var C = V.querySelector(".corpo");
+    var C0 = V.querySelector(".corpo");
+    if (giu && stato.cache && stato.cache[id] && C0 && /un momento/.test(C0.textContent)) C0.innerHTML = stato.cache[id];   /* subito quello che si era visto */
     var r = await window.db.from("orma_messaggi").select("id,persona_id,testo,momento,argomento,file_indirizzo,file_nome").eq("orma_id", id).order("momento").limit(300);
     if (r && r.error) r = await window.db.from("orma_messaggi").select("id,persona_id,testo,momento,argomento").eq("orma_id", id).order("momento").limit(300);
     if (stato.chat !== id) return;
@@ -265,7 +267,7 @@
       h += '<div class="m' + (mio ? " mio" : "") + (ak ? " ak-m" : "") + '"><b>' + esc(mio ? "tu" : (nomi[m.persona_id] || "")) + '<span>' + esc(ora(m.momento)) + '</span></b>' + corpo + '</div>';
     });
     var inFondo = C.scrollHeight - C.scrollTop - C.clientHeight < 60;
-    C.innerHTML = h;
+    C.innerHTML = h; stato.cache = stato.cache || {}; stato.cache[id] = h;
     Array.prototype.forEach.call(C.querySelectorAll("[data-arg]"), function (b) {
       b.onclick = function () { var nome = args[+b.getAttribute("data-arg")].nome; var t = Array.prototype.filter.call(C.querySelectorAll(".arg"), function (x) { return x.getAttribute("data-a") === nome; })[0]; if (t) C.scrollTop = t.offsetTop - C.offsetTop - 8; };
     });
@@ -285,12 +287,17 @@
   async function aggiorna() {
     if (!window.db) return;
     try {
-      var u = await window.db.auth.getUser();
-      stato.io = u && u.data && u.data.user && u.data.user.id;
+      /* ⭐ 2 ottobre 17:28, Gab: «la finestrella di chat tarda sempre a caricare» — la sessione si legge sul posto
+         (getSession, niente viaggio al server) e le due domande partono insieme */
+      if (!stato.io) { var u = await window.db.auth.getSession(); stato.io = u && u.data && u.data.session && u.data.session.user && u.data.session.user.id; }
       var t = tasto();
       if (!stato.io) { t.hidden = true; return; }
-      try { var pr = await window.db.from("persone").select("radice_id").eq("id", stato.io).maybeSingle(); stato.radice = (pr && pr.data && pr.data.radice_id) || null; } catch (e) {}
-      var r = await window.db.rpc("fm_mie_chat");
+      var due = await Promise.all([
+        stato.radice !== undefined ? Promise.resolve(null) : window.db.from("persone").select("radice_id").eq("id", stato.io).maybeSingle(),
+        window.db.rpc("fm_mie_chat")
+      ]);
+      if (due[0]) stato.radice = (due[0].data && due[0].data.radice_id) || null;
+      var r = due[1];
       if (r.error) { t.hidden = true; return; }     /* senza SQL 27 il tasto non c'è */
       stato.righe = r.data || [];
       var n = stato.righe.reduce(function (s, x) { return s + (x.non_letti || 0); }, 0);
@@ -302,7 +309,7 @@
 
   function parti() {
     tasto();
-    setTimeout(aggiorna, 1500); setTimeout(posa, 400); setTimeout(posa, 1800);
+    setTimeout(aggiorna, 300); setTimeout(posa, 400); setTimeout(posa, 1800);
     setInterval(function () { if (!document.hidden) aggiorna(); }, 60000);
     document.addEventListener("visibilitychange", function () { if (!document.hidden) aggiorna(); });
   }
