@@ -325,7 +325,7 @@
     box.innerHTML = '<b>la tua presentazione</b>' +
       '<p>Una foto e qualche riga su di te: così compari tra le persone del villaggio.</p>' +
       '<div style="display:flex;gap:.8rem;align-items:center"><span class="pf" style="width:4.2rem;height:4.2rem;border-radius:50%;overflow:hidden;border:1px solid rgba(212,175,106,.5);flex:none;display:grid;place-items:center;color:rgba(245,240,230,.4)">' +
-        (me.foto_url ? '<img alt="" src="' + esc(me.foto_url) + '" style="width:100%;height:100%;object-fit:cover">' : '( )') + '</span>' +
+        (me.foto_url ? '<img alt="" src="' + esc(me.foto_url) + '" style="width:100%;height:100%;object-fit:cover">' : '') + '</span>' +
         '<label class="gesto" style="cursor:pointer"><b>+</b>scegli una foto<input type="file" accept="image/*" hidden></label></div>' +
       '<textarea maxlength="650" rows="5" placeholder="la tua biografia" style="background:rgba(8,11,26,.7);border:1px solid rgba(212,175,106,.35);border-radius:.7rem;color:var(--ivory);padding:.6rem .8rem;font:inherit;resize:vertical">' + esc(me.biografia || "") + '</textarea>' +
       '<small class="conta" style="color:rgba(245,240,230,.5)"></small>' +
