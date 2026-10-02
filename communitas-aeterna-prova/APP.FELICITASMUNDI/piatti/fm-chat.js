@@ -227,8 +227,7 @@
     p.querySelector(".indietro").hidden = false;
     p.querySelector("h2").textContent = r.tipo === "micelio" ? civ(r.titolo) : (r.titolo || "");
     V.innerHTML = '<button type="button" class="vai-orma">apri l’orma &rsaquo;</button>' +
-      '<div class="corpo"><div class="vuoto">un momento…</div></div>' +
-      '<div class="scrivi"><p>Si scrive dal Megafono, qui sotto. ' + esc(REGOLA) + '</p></div>';
+      '<div class="corpo"><div class="vuoto">un momento…</div></div>';   /* ⭐ 17:28, Gab: la riga sulla regola «prende troppo spazio» — via; la regola la dice il Megafono quando serve */
     V.querySelector(".vai-orma").onclick = function () {
       apri(false);   /* nell'orma la chat è il bottone «Apri la chat» */
       if (window.SpazioVivo && typeof window.SpazioVivo.apriOrma === "function") window.SpazioVivo.apriOrma(id);
