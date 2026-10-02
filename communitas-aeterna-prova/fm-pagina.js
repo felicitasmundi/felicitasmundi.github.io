@@ -828,6 +828,26 @@ function paginaMatrice(pag, d){
     } catch(err){ console.warn("ordina:", err); tasto.textContent = "Ordina"; }
   };
 
+  /* ⭐ 2 ottobre 21:18, Gab: «ok grafica» — accanto a «Ordina», «aggiungi al paniere del villaggio»:
+     compare solo se il villaggio delle mie radici ha un paniere in raccolta */
+  if(tasto && d.si_compra && d.prezzo && window.FMPaniere && !tasto.parentNode.querySelector("[data-paniere]")){
+    window.FMPaniere.stato().then(function(st){
+      var pa = st && st.paniere;
+      if(!pa || pa.stato !== "in_raccolta" || (pa.chiude_il && new Date(pa.chiude_il) < new Date())) return;
+      var b = tasto.cloneNode(false);
+      b.removeAttribute("data-tasto"); b.removeAttribute("href"); b.removeAttribute("id");
+      b.setAttribute("data-paniere", ""); b.setAttribute("role", "button");
+      b.style.cssText += ";display:block;margin-top:.6rem;background:transparent;border:1px solid rgba(212,175,106,.55);color:#D4AF6A";
+      b.textContent = "aggiungi al paniere del villaggio";
+      b.onclick = function(e){ e.preventDefault(); window.FMPaniere.aggiungi({ id: d.id, nome: d.nome, prezzo: d.prezzo }); };
+      tasto.parentNode.insertBefore(b, tasto.nextSibling);
+      if(pa.chiude_il){ var n = document.createElement("div"); n.setAttribute("data-paniere", "");
+        n.style.cssText = "font-size:.8rem;color:rgba(245,240,230,.55);margin-top:.35rem";
+        n.textContent = "il paniere chiude " + window.FMPaniere.data(pa.chiude_il);
+        b.parentNode.insertBefore(n, b.nextSibling); }
+    });
+  }
+
   /* quello che resta «[ in attesa ]» non si mostra */
   qq("*").forEach(function(e){
     if(e.children.length === 0 && /^\s*\[\s*in attesa\s*\]\s*$/i.test(e.textContent || "")) e.setAttribute("hidden", "");

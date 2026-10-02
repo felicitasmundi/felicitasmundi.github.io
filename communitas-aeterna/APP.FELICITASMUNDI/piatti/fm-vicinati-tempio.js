@@ -210,6 +210,7 @@
         .sort(function (a, b) { return String(a.inizio_il || a.accaduto_il || "").localeCompare(String(b.inizio_il || b.accaduto_il || "")); }) : [];
       hV += (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
             (vil && vil.contenuto ? '<div id="vil-racconto"><p class="intro" data-r></p></div>' : "") +
+            (vil ? '<div id="vil-paniere"></div>' : "") +
             (vil ? fascia("i punti di ritiro", d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id && l.punto_ritiro; }).map(function (l) { return riga(l, [l.luogo, l.ritiro_orari].filter(Boolean).join(" · ")); }).join(""), "( )") : "") +
             (vil ? fascia("gli eventi del villaggio", evV.map(function (o) { return riga(o, [quando(o), o.luogo].filter(Boolean).join(" · "), "", 'data-evento="' + esc(o.id) + '"'); }).join(""), "( )") : "") +
             (d.io && vil ? '<div class="gesti">' + tasto(sonoDentro ? "la tua presentazione" : "entra nel villaggio", 'data-presenta="' + esc(vil.id) + '"') + '</div><div id="presenta" hidden></div>' : "") +
@@ -283,6 +284,20 @@
       var rb = D.getElementById("radici"); if (rb) rb.scrollIntoView({ behavior: "smooth", block: "center" });
     }; });
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-scrivi]"), function (a) { a.onclick = function () { scrivi({ tipo: a.getAttribute("data-scrivi") }); }; });
+    /* ⭐ 2 ottobre 21:18, Gab: il paniere del villaggio — quello in corso, e per chi coordina «apri un paniere» */
+    (function () {
+      var vp = D.getElementById("vil-paniere"); if (!vp || !vil || !d.io || !W.FMPaniere) return;
+      W.FMPaniere.stato(vil.id).then(function (st) {
+        var pa = st && st.paniere;
+        if (pa) {
+          var nom = { in_raccolta: "in raccolta", ordinato: "ordinato", arrivato: "arrivato al punto" }[pa.stato] || "";
+          vp.innerHTML = fascia("il paniere del villaggio", riga({ titolo: pa.titolo || "Il paniere del villaggio" },
+            [nom, pa.chiude_il ? "chiude " + W.FMPaniere.data(pa.chiude_il) : ""].filter(Boolean).join(" · "), "", 'data-paniere-apri'), "( )");
+        } else if (coordino) vp.innerHTML = '<div class="gesti">' + tasto("apri un paniere", "data-paniere-nuovo") + '</div>';
+        var a = vp.querySelector("[data-paniere-apri]"); if (a) a.onclick = function (e) { e.preventDefault(); e.stopPropagation(); W.FMPaniere.apri(vil.id); };
+        var n = vp.querySelector("[data-paniere-nuovo]"); if (n) n.onclick = function (e) { e.preventDefault(); W.FMPaniere.apriNuovo(vil.id); };
+      });
+    })();
     /* il racconto del villaggio: l'apertura in alto, i capitoli d'oro che si aprono */
     (function () {
       var vr = D.querySelector("#vil-racconto [data-r]"); if (!vr || !vil) return;
