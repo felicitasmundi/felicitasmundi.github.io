@@ -79,11 +79,11 @@
       var u = await db.auth.getUser();
       d.io = u && u.data && u.data.user && u.data.user.id;
 
-      var o = await db.from("orme")
-        .select("id,titolo,sottotitolo,contenuto,tipo,elemento,stadio,luogo," +
+      var CAMPI = "id,titolo,sottotitolo,contenuto,tipo,elemento,stadio,luogo," +
                 "accaduto_il,inizio_il,entro_il,destinazione,persona_id,quanti_servono," +
-                "visibilita,dorme_dal,orma_madre_id")
-        .eq("id", id).single();
+                "visibilita,dorme_dal,orma_madre_id";
+      var o = await db.from("orme").select(CAMPI + ",punto_ritiro,ritiro_orari,ritiro_chi").eq("id", id).single();
+      if (o.error) o = await db.from("orme").select(CAMPI).eq("id", id).single();   /* prima dell'SQL 33 */
       if (o.error) return d;
       d.orma = o.data;
 
@@ -570,6 +570,36 @@
       };
     }
     /* ⭐ 1 ottobre 23:00, Gab: «se tocco aperto da Gabriele, esce una finestrella col mio account» */
+    /* ⭐ 2 ottobre 21:12, Gab: il punto di ritiro — un luogo del villaggio che riceve i pacchi del gruppo.
+       Lo accende chi ha aperto il luogo o chi coordina il villaggio (fm_punto_ritiro, SQL 33). */
+    (function () {
+      var vec = R.querySelector("#punto-ritiro"); if (vec) vec.remove();
+      if (o.tipo !== "luogo" || !("punto_ritiro" in o)) return;
+      var puo = d.io && (o.persona_id === d.io || d.coordina);
+      if (!o.punto_ritiro && !puo) return;
+      var doc = R.ownerDocument, w = doc.createElement("div"); w.id = "punto-ritiro";
+      w.setAttribute("style", "margin:.8rem 0;padding:.9rem 1rem;border:1px solid rgba(212,175,106,.45);border-radius:1rem;background:rgba(212,175,106,.06);display:flex;flex-direction:column;gap:.45rem;font-family:'DM Sans',system-ui,sans-serif");
+      var esc = function (t) { return String(t || "").replace(/[&<>"]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]; }); };
+      var et = "font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A";
+      var inp = "background:rgba(2,4,12,.6);border:1px solid rgba(212,175,106,.3);border-radius:.7rem;color:#F5F0E6;padding:.55rem .8rem;font:inherit";
+      if (!puo) {
+        w.innerHTML = '<b style="' + et + '">punto di ritiro</b>' + (o.ritiro_orari ? '<span>' + esc(o.ritiro_orari) + '</span>' : '') + (o.ritiro_chi ? '<span style="opacity:.7">' + esc(o.ritiro_chi) + '</span>' : '');
+      } else {
+        w.innerHTML = '<label style="display:flex;gap:.6rem;align-items:center;cursor:pointer"><input type="checkbox"' + (o.punto_ritiro ? " checked" : "") + '><b style="' + et + '">punto di ritiro</b></label>' +
+          '<input type="text" data-o placeholder="orari, per esempio: sabato mattina" value="' + esc(o.ritiro_orari) + '" style="' + inp + '">' +
+          '<input type="text" data-c placeholder="chi lo tiene" value="' + esc(o.ritiro_chi) + '" style="' + inp + '">' +
+          '<button type="button" style="all:unset;cursor:pointer;align-self:flex-start;padding:.45rem 1rem;border-radius:999px;background:#D4AF6A;color:#0A0C1A;font-size:.85rem">salva</button><small style="opacity:.6"></small>';
+        w.querySelector("button").onclick = async function () {
+          var sm = w.querySelector("small"); sm.textContent = "un momento…";
+          var r = await db.rpc("fm_punto_ritiro", { p_orma: id, p_si: w.querySelector('input[type="checkbox"]').checked,
+            p_orari: w.querySelector("[data-o]").value, p_chi: w.querySelector("[data-c]").value });
+          if (r.error) { sm.textContent = "non salvato: " + r.error.message; return; }
+          sm.textContent = "fatto"; await ricarica();
+        };
+      }
+      var dopo = R.querySelector("a.aperta") || R.querySelector("#p-racconto");
+      if (dopo && dopo.parentNode) dopo.parentNode.insertBefore(w, dopo.nextSibling);
+    })();
     var ap = R.querySelector("a.aperta");
     /* ⭐ 16:35, Gab: «non compare neanche chi lo organizza … è un default di felicitasmundi» — nei villaggi, nessun «aperta da» */
     if (ap) ap.style.display = (d.villaggio && d.villaggio !== id) || (o.tipo === "micelio") ? "none" : "";

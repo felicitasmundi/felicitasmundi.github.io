@@ -86,7 +86,11 @@
       d.villaggi = v.data || [];
       /* i luoghi dentro i villaggi */
       var vid = d.villaggi.map(function (x) { return x.id; });
-      if (vid.length) { var lu = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "luogo").in("orma_madre_id", vid).is("dorme_dal", null).limit(100); d.luoghi = lu.data || []; }
+      if (vid.length) {
+        var lu = await b.from("orme").select(COL + ",orma_madre_id,punto_ritiro,ritiro_orari").eq("tipo", "luogo").in("orma_madre_id", vid).is("dorme_dal", null).limit(100);
+        if (lu.error) lu = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "luogo").in("orma_madre_id", vid).is("dorme_dal", null).limit(100);   /* prima dell'SQL 33 */
+        d.luoghi = lu.data || [];
+      }
       var e = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "festa").eq("visibilita", "pubblico").is("dorme_dal", null).limit(200);
       d.eventi = e.data || [];
       /* ⭐ 1 ottobre, Gab: tutte le novità; se ne vedono tre, poi «leggi tutto», divise per mesi e anni */
@@ -206,6 +210,7 @@
         .sort(function (a, b) { return String(a.inizio_il || a.accaduto_il || "").localeCompare(String(b.inizio_il || b.accaduto_il || "")); }) : [];
       hV += (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
             (vil && vil.contenuto ? '<div id="vil-racconto"><p class="intro" data-r></p></div>' : "") +
+            (vil ? fascia("i punti di ritiro", d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id && l.punto_ritiro; }).map(function (l) { return riga(l, [l.luogo, l.ritiro_orari].filter(Boolean).join(" · ")); }).join(""), "( )") : "") +
             (vil ? fascia("gli eventi del villaggio", evV.map(function (o) { return riga(o, [quando(o), o.luogo].filter(Boolean).join(" · "), "", 'data-evento="' + esc(o.id) + '"'); }).join(""), "( )") : "") +
             (d.io && vil ? '<div class="gesti">' + tasto(sonoDentro ? "la tua presentazione" : "entra nel villaggio", 'data-presenta="' + esc(vil.id) + '"') + '</div><div id="presenta" hidden></div>' : "") +
             fascia("chi coordina", coordV.map(nome).join(" "), "( )") +

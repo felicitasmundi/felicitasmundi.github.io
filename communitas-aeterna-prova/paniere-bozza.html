@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Il paniere del villaggio · bozza</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--fondo:#0A0C1A;--oro:#D4AF6A;--oro-ch:#E3C58A;--ivory:#F5F0E6;--line:rgba(212,175,106,.3);--terra:#9C7A4A;--acqua:#4A8FB0}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--fondo);color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif}
+  .pagina{max-width:68rem;margin:0 auto;padding:1.4rem 1rem 3rem}
+  .nota{font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.45;color:rgba(245,240,230,.72);max-width:46rem;margin:0 0 1.6rem}
+  .nota b{color:var(--oro);font-weight:500}
+  .tre{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;align-items:start}
+  @media(max-width:62rem){.tre{grid-template-columns:1fr}}
+  .col h2{font-family:'Cinzel',serif;font-weight:500;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,230,.5);margin:0 0 .6rem}
+  .card{border:1px solid var(--line);border-radius:1.1rem;background:linear-gradient(180deg,rgba(245,240,230,.06),rgba(245,240,230,.015));padding:1rem;display:flex;flex-direction:column;gap:.7rem}
+  .foto{height:9rem;border-radius:.8rem;background:rgba(245,240,230,.06);display:grid;place-items:center;color:rgba(245,240,230,.35);font-family:'Cormorant Garamond',serif;font-style:italic}
+  .t{font-family:'Cinzel',serif;letter-spacing:.06em;font-size:1rem}
+  .s{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(245,240,230,.65)}
+  .prezzo{font-size:1.1rem;color:var(--oro-ch)}
+  .tasto{all:unset;cursor:pointer;text-align:center;padding:.75rem 1rem;border-radius:999px;font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
+  .pieno{background:var(--oro);color:#0A0C1A}
+  .vuoto{border:1px solid rgba(212,175,106,.55);color:var(--oro)}
+  .chiude{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:rgba(245,240,230,.7)}
+  .chiude b{color:var(--oro-ch);font-weight:500}
+  .barra{height:.45rem;border-radius:999px;background:rgba(245,240,230,.08);overflow:hidden}
+  .barra i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--terra),var(--oro))}
+  .riga{display:flex;justify-content:space-between;gap:.8rem;padding:.55rem 0;border-bottom:1px solid rgba(245,240,230,.08);font-size:.92rem}
+  .riga:last-child{border-bottom:0}
+  .riga span:last-child{color:rgba(245,240,230,.75);white-space:nowrap}
+  .et{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro)}
+  select{background:rgba(2,4,12,.6);border:1px solid var(--line);border-radius:.7rem;color:var(--ivory);padding:.6rem .7rem;font:inherit}
+  .stati{display:flex;gap:.3rem;flex-wrap:wrap}
+  .stati span{font-size:.72rem;padding:.25rem .6rem;border-radius:999px;border:1px solid rgba(245,240,230,.15);color:rgba(245,240,230,.5)}
+  .stati span.on{border-color:var(--oro);color:var(--oro);background:rgba(212,175,106,.1)}
+  .tot{display:flex;justify-content:space-between;font-size:1rem;padding-top:.3rem}
+  .tot b{color:var(--oro-ch);font-weight:500}
+  .piccolo{font-size:.8rem;color:rgba(245,240,230,.5)}
+</style>
+</head>
+<body>
+<div class="pagina">
+<p class="nota"><b>Bozza · il paniere del villaggio.</b> Tre momenti: nell'Emporio si aggiunge un prodotto al paniere del proprio villaggio; il paniere mostra quando chiude, quanto si è raccolto, il punto di ritiro e la propria parte da pagare; chi coordina vede il riepilogo per prodotto e manda l'ordine unico. I testi tra ( ) sono segnaposti.</p>
+
+<div class="tre">
+  <!-- 1 · nell'Emporio -->
+  <div class="col">
+    <h2>1 · nell'Emporio</h2>
+    <div class="card">
+      <div class="foto">( foto del prodotto )</div>
+      <div class="t">( nome del prodotto )</div>
+      <div class="s">( produttore · partner )</div>
+      <div class="prezzo">( prezzo )</div>
+      <div class="chiude"><span>Paniere del <b>Villaggio Sardo</b></span><span>chiude ( data )</span></div>
+      <button class="tasto pieno" type="button">aggiungi al paniere del villaggio</button>
+      <button class="tasto vuoto" type="button">compra da solo</button>
+      <span class="piccolo">Nel paniere il prezzo è quello del gruppo; la spedizione si divide tra chi partecipa.</span>
+    </div>
+  </div>
+
+  <!-- 2 · il mio paniere -->
+  <div class="col">
+    <h2>2 · il paniere · la mia parte</h2>
+    <div class="card">
+      <div class="t">Paniere del Villaggio Sardo</div>
+      <div class="chiude"><span><b>( n )</b> partecipanti · <b>( totale )</b> raccolti</span><span>chiude ( data )</span></div>
+      <div class="barra"><i></i></div>
+      <span class="piccolo">( cifra per chiudere l'ordine )</span>
+      <div class="et">quello che ho preso</div>
+      <div>
+        <div class="riga"><span>( prodotto ) × ( n )</span><span>( prezzo )</span></div>
+        <div class="riga"><span>( prodotto ) × ( n )</span><span>( prezzo )</span></div>
+        <div class="riga"><span>la mia parte della spedizione</span><span>( cifra )</span></div>
+      </div>
+      <div class="et">dove lo ritiro</div>
+      <select><option>( punto di ritiro · orari )</option><option>( altro punto di ritiro )</option><option>me lo porta un vicino (karma yoga)</option></select>
+      <div class="tot"><span>la mia parte</span><b>( totale )</b></div>
+      <button class="tasto pieno" type="button">paga la mia parte</button>
+      <div class="stati"><span class="on">in raccolta</span><span>ordinato</span><span>arrivato al punto</span><span>ritirato</span></div>
+    </div>
+  </div>
+
+  <!-- 3 · chi coordina -->
+  <div class="col">
+    <h2>3 · chi coordina</h2>
+    <div class="card">
+      <div class="t">Paniere del Villaggio Sardo</div>
+      <div class="chiude"><span><b>( n )</b> partecipanti · <b>( n )</b> hanno pagato</span><span>chiude ( data )</span></div>
+      <div class="et">per prodotto · l'ordine unico</div>
+      <div>
+        <div class="riga"><span>( prodotto ) · ( produttore )</span><span>( n ) pezzi</span></div>
+        <div class="riga"><span>( prodotto ) · ( produttore )</span><span>( n ) pezzi</span></div>
+        <div class="riga"><span>( prodotto ) · Macro Edizioni</span><span>( n ) pezzi</span></div>
+      </div>
+      <div class="et">per punto di ritiro</div>
+      <div>
+        <div class="riga"><span>( punto di ritiro )</span><span>( n ) pacchi</span></div>
+        <div class="riga"><span>da portare (karma yoga)</span><span>( n )</span></div>
+      </div>
+      <div class="tot"><span>totale</span><b>( totale )</b></div>
+      <button class="tasto pieno" type="button">chiudi e manda l'ordine</button>
+      <button class="tasto vuoto" type="button">segna: arrivato al punto</button>
+      <span class="piccolo">All'arrivo, ognuno riceve l'avviso «il tuo ordine è al punto di ritiro».</span>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
