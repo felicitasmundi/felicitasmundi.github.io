@@ -170,6 +170,26 @@
     /* ⭐ 1 ottobre 21:14, Gab: «ok pubblica i testi nell'evento» — la descrizione in quadranti con titolo.
        Nel testo dell'evento ogni riga «## Titolo» apre un quadrante; quello che sta prima resta in alto. */
     quadranti(R, o.contenuto || "");
+    /* ⭐ 2 ottobre, Gab: chi ha aperto l'evento scrive i capitoli a mano (titolo d'oro, testo chiaro) */
+    (function () {
+      var vecchio = R.querySelector("#cap-apri"); if (vecchio) vecchio.remove();
+      if (!window.FMCapitoli || !d.io || o.persona_id !== d.io) return;
+      var doc = R.ownerDocument; window.FMCapitoli.veste(doc);
+      var b = doc.createElement("button"); b.type = "button"; b.id = "cap-apri"; b.className = "cap-apri";
+      b.textContent = "scrivi i capitoli";
+      var dopo = R.querySelector("#ev-quadranti") || R.querySelector("#ev-invita") || R.querySelector('[data-c="orma.contenuto"]');
+      if (!dopo) return;
+      dopo.parentNode.insertBefore(b, dopo.nextSibling);
+      b.onclick = function () {
+        var box = R.querySelector('[data-c="orma.contenuto"]'), q = R.querySelector("#ev-quadranti");
+        if (box) box.hidden = true; if (q) q.hidden = true; b.hidden = true;
+        window.FMCapitoli.editor(doc, b, o.contenuto || "", async function (testo) {
+          var r = await db.from("orme").update({ contenuto: testo }).eq("id", id);
+          if (r.error) throw r.error;
+          await ricarica();
+        }, function () { if (box) box.hidden = false; if (q) q.hidden = false; b.hidden = false; });
+      };
+    })();
     P.stato(R, "ha-madre", !!(d.madri && d.madri[0]));
     if (d.madri && d.madri[0]) P.gesto(R, "apri-madre", function () {
       if (typeof window.vai === "function") window.vai("evento", { id: d.madri[0].id });
