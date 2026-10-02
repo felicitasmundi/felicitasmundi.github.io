@@ -179,6 +179,19 @@
     /* ⭐ 1 ottobre 21:14, Gab: «ok pubblica i testi nell'evento» — la descrizione in quadranti con titolo.
        Nel testo dell'evento ogni riga «## Titolo» apre un quadrante; quello che sta prima resta in alto. */
     quadranti(R, o.contenuto || "");
+    /* ⭐ 2 ottobre 16:51, Gab: «inserisci anche un quadrante con la descrizione di felicitas, prendendo i dati
+       dall'attuale format … perché le persone vogliono sapere anche cosa è» — in ogni evento, dopo i capitoli.
+       Le parole sono di Gab (il racconto del Felicitas Festival, «L'iniziativa»). */
+    (function () {
+      var doc = R.ownerDocument || document, vec = R.querySelector("#ev-felicitas"); if (vec) vec.remove();
+      var w = doc.createElement("details"); w.className = "ev-q"; w.id = "ev-felicitas"; w.style.marginTop = ".6rem";
+      w.innerHTML = '<summary>Cos’è FelicitasMundi</summary><div>' +
+        '<p>FelicitasMundi è una piattaforma che connette e supporta lo sviluppo economico e sociale di comunità contadine e spirituali dei territori nazionali.</p>' +
+        '<p>Permette la facilitazione della connessione tra comunità, famiglie, aziende agricole, operatori terapeutici e insegnanti che vivono in contesti rurali e contadini, e che difficilmente riescono a entrare in connessione, se non attraverso le ordinarie piattaforme virtuali.</p>' +
+        '<p>Noi invece cerchiamo di proporre uno strumento innovativo che unisce coscienza e tecnologia, e che tende a facilitare l’acquisto di beni — prodotti alimentari, rimedi e oggettistica —, l’acquisto di trattamenti, assistenza e consulenza, l’acquisto di lezioni; e a facilitare l’interscambio di doni, di prodotti, di rimedi naturali, per trovare un modo di sostenere e accompagnare all’autosufficienza alimentare ed energetica.</p></div>';
+      var dopo = R.querySelector("#ev-quadranti") || R.querySelector("#ev-invita") || R.querySelector('[data-c="orma.contenuto"]');
+      if (dopo) dopo.parentNode.insertBefore(w, dopo.nextSibling);
+    })();
     /* ⭐ 2 ottobre, Gab: chi ha aperto l'evento scrive i capitoli a mano (titolo d'oro, testo chiaro) */
     (function () {
       var vecchio = R.querySelector("#cap-apri"); if (vecchio) vecchio.remove();

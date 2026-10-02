@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ⭐ 2 ottobre 2026, Gab: «fai ora, invita chi risuona all'evento». L'anteprima di WhatsApp per ogni evento
+     che non ha ancora una pagina sua (inviti/<nome>.html): la foto con l'orma, il nome, cosa è FelicitasMundi.
+     Poi porta all'evento (?e=…) con l'invito (?invito=…). -->
+<title>Comunità Eterna FelicitasMundi</title>
+<meta name="description" content="FelicitasMundi è una piattaforma che connette e supporta lo sviluppo economico e sociale di comunità contadine e spirituali dei territori nazionali.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Comunità Eterna FelicitasMundi">
+<meta property="og:title" content="Comunità Eterna FelicitasMundi">
+<meta property="og:description" content="FelicitasMundi è una piattaforma che connette e supporta lo sviluppo economico e sociale di comunità contadine e spirituali dei territori nazionali.">
+<meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna/inviti/felicitas.jpg">
+<meta property="og:image:secure_url" content="https://app.felicitasmundi.com/communitas-aeterna/inviti/felicitas.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="567">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://app.felicitasmundi.com/communitas-aeterna/inviti/felicitas.jpg">
+<style>html,body{margin:0;background:#0A0C1A;color:#F5F0E6;font-family:Georgia,serif;min-height:100vh;display:flex;align-items:center;justify-content:center}a{color:#D4AF6A}</style>
+<script>
+  (function(){
+    var q; try { q = new URLSearchParams(location.search); } catch(e) { q = null; }
+    var e = q && q.get("e"), v = q && q.get("invito");
+    var dove = "../index.html" + (e && /^[0-9a-f-]{36}$/i.test(e) ? "?p=evento&e=" + e : "");
+    if (v) dove += (dove.indexOf("?") < 0 ? "?" : "&") + "invito=" + encodeURIComponent(v);
+    location.replace(dove);
+  })();
+</script>
+</head>
+<body><p><a href="../index.html">Comunità Eterna FelicitasMundi</a></p></body>
+</html>
