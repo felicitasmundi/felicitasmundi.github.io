@@ -24,6 +24,7 @@
 
   var INDIRIZZO = "APP.FELICITASMUNDI/piatti/invito-piatto.html";
   var CASA = "felicitasmundi.com/";
+  var APP = "app.felicitasmundi.com/communitas-aeterna/";
 
   async function leggi() {
     var d = { io: null, nome: "", slug: "", quanti: 0 };
@@ -46,7 +47,9 @@
   function disegna(R, d, cosa) {
     cosa = cosa || {};
     var url = CASA + "?invito=" + (d.slug || "");
-    if (cosa.evento) url += "&evento=" + cosa.evento;
+    /* ⭐ 2 ottobre 09:12, Gab: invitando da un evento, il collegamento apre QUELL'evento
+       (si vede anche senza account) e porta con sé chi invita fino all'accesso. */
+    if (cosa.evento) url = APP + "index.html?p=evento&e=" + cosa.evento + "&invito=" + encodeURIComponent(d.slug || "");
 
     var P = window.FMPiatto;
     var dati = { invito: { url: url }, conto: { invitati: String(d.quanti) },
@@ -56,6 +59,7 @@
     /* ⛔ solo «chiudi»: gli altri tasti sono della pagina */
     var x = (R.body || R).querySelector('[data-g="chiudi"]');
     if (x) x.onclick = function () {
+      if (cosa.evento && typeof window.vai === "function") return window.vai("evento", { id: cosa.evento });
       if (typeof window.vai === "function") return window.vai("orme");
       history.back();
     };

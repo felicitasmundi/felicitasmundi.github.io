@@ -121,8 +121,13 @@
 
   /* ── dove si va ────────────────────────────────────────────────── */
   /* ⚠️ accesso.html conserva «da dove si veniva» e riporta qui */
-  function accesso() {
-    return "accesso.html?torna=" + encodeURIComponent(location.pathname + location.search);
+  /* ⭐ 2 ottobre, Gab: chi arriva da un invito sull'evento (…&invito=<nome>) porta l'invito all'accesso */
+  function invitoQui() {
+    try { var v = new URLSearchParams(location.search).get("invito"); return v ? "&invito=" + encodeURIComponent(v) : ""; }
+    catch (e) { return ""; }
+  }
+  function accesso(torna) {
+    return "accesso.html?torna=" + encodeURIComponent(torna || (location.pathname + location.search)) + invitoQui();
   }
   function entra(id) {
     if (window.SpazioVivo && typeof window.SpazioVivo.apriOrma === "function")
@@ -244,7 +249,8 @@
        il nome viene dal suo titolo: «Villaggio Felicitas – Civiltà Sarda» → «entra nel
        villaggio – civiltà sarda». Senza villaggio, il tasto non c'è. */
     P.gesto(R, "invita", function () {
-      if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function") return window.SpazioVivo.invito({});
+      /* ⭐ 2 ottobre 09:12, Gab: l'invito porta all'evento, e «chiudi» riporta qui */
+      if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function") return window.SpazioVivo.invito({ evento: id });
       location.href = "invito.html";
     });
     var vil = o.tipo === "micelio" ? o : (d.madri || []).filter(function (m) { return m.tipo === "micelio"; })[0];
@@ -258,7 +264,7 @@
     }
     P.gesto(R, "entra-villaggio", function () {
       if (!vil) return;
-      if (!d.io) { location.href = "accesso.html?torna=" + encodeURIComponent("index.html?p=orma&o=" + vil.id); return; }
+      if (!d.io) { location.href = accesso("index.html?p=orma&o=" + vil.id); return; }
       if (window.SpazioVivo && typeof window.SpazioVivo.apriOrma === "function") window.SpazioVivo.apriOrma(vil.id);
       else if (typeof window.vai === "function") window.vai("orma", { id: vil.id });
     });
