@@ -69,8 +69,10 @@
     try {
       var u = await b.auth.getUser(); d.io = u && u.data && u.data.user && u.data.user.id;
       if (d.io) {
-        var p = await b.from("persone").select("comune_cod").eq("id", d.io).maybeSingle();
+        var p = await b.from("persone").select("comune_cod,radice_id").eq("id", d.io).maybeSingle();
+        if (p && p.error) p = await b.from("persone").select("comune_cod").eq("id", d.io).maybeSingle();   /* prima dell'SQL 27 */
         var cc = p && p.data && p.data.comune_cod;
+        d.radice = (p && p.data && p.data.radice_id) || null;
         if (cc) {
           var t = await b.from("territori").select("codice,nome,lat,lon,regione_cod").eq("codice", cc).limit(1);
           if (t.data && t.data[0]) { d.comune = t.data[0]; d.centro = { lat: t.data[0].lat, lon: t.data[0].lon }; }
@@ -174,6 +176,11 @@
           Il villaggio (l'orma micelio) si riconosce dal nome finché non è legato alla civiltà nel database. */
     var civ = civilta(d.comune);
     var vil = civ ? d.villaggi.filter(function (v) { return civ.cerca.test(titolo(v)); })[0] || null : null;
+    /* ⭐ 2 ottobre 12:40, Gab: «non è solo dici dove sei, ma dici qual è la tua identità di radice» —
+       le radici scelte valgono più del comune */
+    var vilR = d.radice ? d.villaggi.filter(function (v) { return v.id === d.radice; })[0] : null;
+    if (vilR) { vil = vilR; civ = { nome: String(titolo(vilR)).split(/\s[–—-]\s/)[1] || titolo(vilR) }; }
+    radici(d, civilta(d.comune));
     var hV = "";
     if (civ) {
       var den = vil ? (d.dentro[vil.id] || []) : [];
@@ -189,6 +196,7 @@
     else hV += '<div class="vuoto">( )</div>';   /* ⭐ Gab: «l'importante è che non esca civiltà sarda per chi non è di quella» — senza civiltà, nessun villaggio altrui */
     /* ⭐ 1 ottobre, Gab: «attiva un vicinato» crea un'orma dentro il villaggio della sua civiltà, visibile nelle orme del villaggio.
        Dove il villaggio non c'è ancora, resta spento. */
+    if (d.radice) hV += '<a class="voce va" href="#" data-cambia-radici>cambia le tue radici<i>›</i></a>';
     hV += '<div class="gesti">' + (vil ? tasto("attiva un vicinato", 'data-vicinato="' + esc(vil.id) + '"') : tasto("attiva un vicinato", "", true)) + '</div>';
 
     /* 3 · Oggi / calendario */
@@ -242,10 +250,48 @@
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-vicinato]"), function (a) { a.onclick = function () {
       try { if (W.SpazioVivo && W.SpazioVivo.nuovaOrma) W.SpazioVivo.nuovaOrma(a.getAttribute("data-vicinato"), { tipo: "contatto" }); } catch (e) {}
     }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-cambia-radici]"), function (a) { a.onclick = function (e) {
+      e.preventDefault(); cambiaRadici = true; radici(d, civilta(d.comune));
+      var rb = D.getElementById("radici"); if (rb) rb.scrollIntoView({ behavior: "smooth", block: "center" });
+    }; });
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-scrivi]"), function (a) { a.onclick = function () { scrivi({ tipo: a.getAttribute("data-scrivi") }); }; });
     if (typeof window.legaPorte === "function") window.legaPorte();
   }
   function giornoMese(s) { if (!s) return ""; var x = new Date(s); return isNaN(x) ? "" : x.getDate() + " " + MESI[x.getMonth()]; }
+
+  /* ── 0 · le tue radici: la civiltà in cui ti senti risuonare ───────
+     ⭐ 2 ottobre 12:40, Gab: «In che contesto ti senti risuonare? Qual è la tua civiltà d'origine?
+        In cosa senti essere le tue radici?» — chi sceglie entra nella chat di quel villaggio. */
+  var cambiaRadici = false;
+  function radici(d, suggerita) {
+    var D = document, box = D.getElementById("radici");
+    if (!box) {
+      var ds = D.getElementById("dove-sei"); if (!ds) return;
+      box = D.createElement("div"); box.className = "dove-sei"; box.id = "radici";
+      ds.parentNode.insertBefore(box, ds);
+    }
+    var vill = d.villaggi.slice().sort(function (a, b) { return String(titolo(a)).localeCompare(String(titolo(b))); });
+    box.hidden = !d.io || !vill.length || (!!d.radice && !cambiaRadici);
+    if (box.hidden) return;
+    var nome = function (v) { return String(titolo(v)).split(/\s[–—-]\s/)[1] || titolo(v); };
+    box.innerHTML = '<b>le tue radici</b>' +
+      '<p>In che contesto ti senti risuonare? Qual è la tua civiltà d’origine? In cosa senti essere le tue radici?</p>' +
+      '<div class="esiti">' + vill.map(function (v) {
+        var s = (suggerita && suggerita.cerca && suggerita.cerca.test(titolo(v))) || v.id === d.radice;
+        return '<button type="button" data-radice="' + esc(v.id) + '"' + (s ? ' style="background:rgba(212,175,106,.18)"' : '') + '>' + esc(nome(v)) + '</button>';
+      }).join("") + '</div>';
+    Array.prototype.forEach.call(box.querySelectorAll("[data-radice]"), function (bt) {
+      bt.onclick = async function () {
+        var b = await db(); if (!b) return;
+        bt.textContent = "un momento…";
+        var r = await b.rpc("fm_mia_radice", { p_orma: bt.getAttribute("data-radice") });
+        if (r.error) { bt.textContent = "non riuscito: riprova"; console.warn("radici:", r.error); return; }
+        cambiaRadici = false;
+        try { if (W.FMChat) W.FMChat.aggiorna(); } catch (e) {}
+        disegna(await leggi());
+      };
+    });
+  }
 
   /* ── 0 · dove sei: cerca il comune, o la posizione ─────────────── */
   function doveSei(ricarica) {

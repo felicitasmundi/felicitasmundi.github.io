@@ -348,7 +348,13 @@
         try { await db.from("letture").upsert({ persona_id: d.io, orma_id: id, letto_fino: new Date().toISOString() }); } catch (e) {}
         try { if (window.FelicitasApp && typeof window.FelicitasApp.letti === "function") window.FelicitasApp.letti(id); } catch (e) {}
         if (sn) { sn.textContent = ""; sn.classList.remove("nuovi"); }
+        try { if (window.FMChat) window.FMChat.aggiorna(); } catch (e) {}
       };
+      /* ⭐ 2 ottobre, Gab: dalle «Conversazioni» si arriva con la conversazione già aperta */
+      if (window.ormaApriChat === id) {
+        window.ormaApriChat = null; pc.open = true;
+        setTimeout(function () { try { pc.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {} }, 300);
+      }
       if (!pc._segna) { pc._segna = 1; pc.addEventListener("toggle", function () { if (pc.open) segna(); }); }
       if (pc.open) segna();
     })();
