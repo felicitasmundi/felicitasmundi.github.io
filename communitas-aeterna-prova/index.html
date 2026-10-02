@@ -5986,6 +5986,21 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      — ma la conclusione era un'altra: non serviva aspettarle insieme,
      serviva non aspettare `stanze` per niente. La barra ha già le voci del
      seme dal primo istante, e quando la risposta arriva le aggiorna. */
+  /* il gettone dell'accesso c'è ancora nella memoria del telefono? */
+  function fmHaGettone(){
+    try{ for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(/^sb-.*-auth-token$/.test(k) && localStorage.getItem(k)) return true; } }catch(e){}
+    return false;
+  }
+  /* tre tentativi di rinnovo, a un secondo e mezzo l'uno dall'altro */
+  function fmRiprovaSessione(poi){
+    var n = 0;
+    (function giro(){
+      n++;
+      db.auth.refreshSession().catch(function(){ return null; }).then(function(){ return db.auth.getSession(); })
+        .then(function(r){ var s = r && r.data && r.data.session; if(s || n >= 3 || !fmHaGettone()) return poi(s || null); setTimeout(giro, 1500); })
+        .catch(function(){ if(n >= 3) return poi(null); setTimeout(giro, 1500); });
+    })();
+  }
   var pronto = db.auth.getSession();
 
   briglia(pronto, ATTESA_GETTONE).then(function(g){
@@ -6008,6 +6023,16 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
     var r    = g.dato;
     var sess = r && r.data && r.data.session;
+    /* ⭐ 2 ottobre 17:38, Gab: «sono di nuovo entrato sull'applicazione e mi ha di nuovo chiesto i dati … non mi deve
+       chiedere i dati ogni volta che entro». Se il gettone è rimasto in memoria ma il rinnovo non è riuscito al primo
+       colpo (rete lenta all'avvio dell'app), non si manda all'accesso: si riprova il rinnovo, poi si decide. */
+    if(!sess && fmHaGettone()){
+      fmRiprovaSessione(function(s2){
+        if(s2) return entra(s2);
+        if(!spiraglio()){ muro(); return; } daOspite();
+      });
+      return;
+    }
     /* ⭐ 51 — risposta vera, nessuna sessione: il muro, coi tre spiragli */
     if(!sess){ if(!spiraglio()){ muro(); return; } daOspite(); return; }
     return entra(sess);

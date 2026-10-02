@@ -127,8 +127,13 @@
         var s = await db.auth.getSession();
         if (s && s.data && s.data.session) return true;
       } catch (e) {}
-      /* se nell'indirizzo non c'è nessun gettone, non c'è niente da aspettare */
-      if (i === 0 && !/access_token|[?&]code=|type=magiclink|token_hash/.test(
+      /* ⭐ 2 ottobre 17:38, Gab: «non mi deve chiedere i dati ogni volta che entro» — se il gettone è rimasto
+         nella memoria del telefono, si prova a rinnovarlo prima di chiedere di nuovo mail e nome */
+      var ricordato = false;
+      try { for (var k = 0; k < localStorage.length; k++) { if (/^sb-.*-auth-token$/.test(localStorage.key(k))) { ricordato = true; break; } } } catch (e) {}
+      if (ricordato && (i === 1 || i === 4)) { try { await db.auth.refreshSession(); } catch (e) {} }
+      /* se nell'indirizzo non c'è nessun gettone (e in memoria nemmeno), non c'è niente da aspettare */
+      if (i === 0 && !ricordato && !/access_token|[?&]code=|type=magiclink|token_hash/.test(
             location.hash + location.search)) return false;
       await new Promise(function (ok) { setTimeout(ok, 250); });
     }
