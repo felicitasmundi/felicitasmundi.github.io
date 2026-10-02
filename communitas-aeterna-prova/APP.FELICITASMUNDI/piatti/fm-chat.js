@@ -297,8 +297,7 @@
       ]);
       if (due[0]) stato.radice = (due[0].data && due[0].data.radice_id) || null;
       var r = due[1];
-      if (r.error) { t.hidden = true; return; }     /* senza SQL 27 il tasto non c'è */
-      stato.righe = r.data || [];
+      stato.righe = r.error ? (stato.righe || []) : (r.data || []);   /* il tasto c'è comunque per chi ha l'account */
       var n = stato.righe.reduce(function (s, x) { return s + (x.non_letti || 0); }, 0);
       t.querySelector(".bol").textContent = n ? String(n) : "";
       t.hidden = false; posa();
@@ -309,6 +308,12 @@
   function parti() {
     tasto();
     setTimeout(aggiorna, 300); setTimeout(posa, 400); setTimeout(posa, 1800);
+    /* ⭐ 2 ottobre 21:47, Gab: «non si vede tasto chat» — la sessione a volte arriva dopo i primi 300 ms
+       (sul telefono si rinnova): si riprova, e si ascolta quando l'accesso cambia */
+    [1500, 4000, 9000].forEach(function (ms) { setTimeout(function () { if (!stato.io || tasto().hidden) aggiorna(); }, ms); });
+    try { if (window.db && window.db.auth && window.db.auth.onAuthStateChange) window.db.auth.onAuthStateChange(function (ev, se) {
+      var id = se && se.user && se.user.id; if (id !== stato.io) { stato.io = id || null; stato.radice = undefined; setTimeout(aggiorna, 50); }
+    }); } catch (e) {}
     setInterval(function () { if (!document.hidden) aggiorna(); }, 60000);
     document.addEventListener("visibilitychange", function () { if (!document.hidden) aggiorna(); });
   }
