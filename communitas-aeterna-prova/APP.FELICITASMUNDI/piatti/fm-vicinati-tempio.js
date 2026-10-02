@@ -198,7 +198,7 @@
       var nome = function (r) {
         var v = d.volti[r.persona_id] || {};
         return '<button type="button" class="pers" data-pers="' + esc(r.persona_id || "") + '" data-nu="' + esc(v.nome_url || "") + '">' +
-          (v.foto_url ? '<img alt="" src="' + esc(v.foto_url) + '">' : '') + esc(v.nome || r.nome || "( )") + '</button>';
+          (v.foto_url ? '<img alt="" src="' + esc(v.foto_url) + '">' : '') + esc(v.nome || r.nome || "") + '</button>';
       };
       var coordV = den.filter(function (r) { return r.ruolo === "coordinatore"; });
       var partV = den.filter(function (r) { return r.ruolo !== "coordinatore"; });
@@ -211,14 +211,14 @@
       hV += (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
             (vil && vil.contenuto ? '<div id="vil-racconto"><p class="intro" data-r></p></div>' : "") +
             (vil ? '<div id="vil-paniere"></div>' : "") +
-            (vil ? fascia("i punti di ritiro", d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id && l.punto_ritiro; }).map(function (l) { return riga(l, [l.luogo, l.ritiro_orari].filter(Boolean).join(" · ")); }).join(""), "( )") : "") +
-            (vil ? fascia("gli eventi del villaggio", evV.map(function (o) { return riga(o, [quando(o), o.luogo].filter(Boolean).join(" · "), "", 'data-evento="' + esc(o.id) + '"'); }).join(""), "( )") : "") +
+            (vil ? fascia("i punti di ritiro", d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id && l.punto_ritiro; }).map(function (l) { return riga(l, [l.luogo, l.ritiro_orari].filter(Boolean).join(" · ")); }).join(""), "") : "") +
+            (vil ? fascia("gli eventi del villaggio", evV.map(function (o) { return riga(o, [quando(o), o.luogo].filter(Boolean).join(" · "), "", 'data-evento="' + esc(o.id) + '"'); }).join(""), "") : "") +
             (d.io && vil ? '<div class="gesti">' + tasto(sonoDentro ? "la tua presentazione" : "entra nel villaggio", 'data-presenta="' + esc(vil.id) + '"') + '</div><div id="presenta" hidden></div>' : "") +
-            fascia("chi coordina", coordV.map(nome).join(" "), "( )") +
-            fascia("i partecipanti", partV.map(nome).join(" "), "( )") +
-            fascia("i luoghi", luV.map(function (l) { return riga(l, l.luogo || ""); }).join(""), "( )");
+            fascia("chi coordina", coordV.map(nome).join(" "), "") +
+            fascia("i partecipanti", partV.map(nome).join(" "), "") +
+            fascia("i luoghi", luV.map(function (l) { return riga(l, l.luogo || ""); }).join(""), "");
     } else if (d.comune) hV += '<div class="vuoto">area da attivare in felicitas</div>';   /* ⭐ 1 ottobre, Gab: le sue parole, per chi è in una zona senza civiltà */
-    else hV += '<div class="vuoto">( )</div>';   /* ⭐ Gab: «l'importante è che non esca civiltà sarda per chi non è di quella» — senza civiltà, nessun villaggio altrui */
+    else hV += "";   /* ⭐ Gab: «l'importante è che non esca civiltà sarda per chi non è di quella» — senza civiltà, nessun villaggio altrui */
     /* ⭐ 1 ottobre, Gab: «attiva un vicinato» crea un'orma dentro il villaggio della sua civiltà, visibile nelle orme del villaggio.
        Dove il villaggio non c'è ancora, resta spento. */
     if (d.radice) hV += '<a class="voce va" href="#" data-cambia-radici>cambia le tue radici<i>›</i></a>';
@@ -292,7 +292,7 @@
         if (pa) {
           var nom = { in_raccolta: "in raccolta", ordinato: "ordinato", arrivato: "arrivato al punto" }[pa.stato] || "";
           vp.innerHTML = fascia("il paniere del villaggio", riga({ titolo: pa.titolo || "Il paniere del villaggio" },
-            [nom, pa.chiude_il ? "chiude " + W.FMPaniere.data(pa.chiude_il) : ""].filter(Boolean).join(" · "), "", 'data-paniere-apri'), "( )");
+            [nom, pa.chiude_il ? "chiude " + W.FMPaniere.data(pa.chiude_il) : ""].filter(Boolean).join(" · "), "", 'data-paniere-apri'), "");
         } else if (coordino) vp.innerHTML = '<div class="gesti">' + tasto("apri un paniere", "data-paniere-nuovo") + '</div>';
         var a = vp.querySelector("[data-paniere-apri]"); if (a) a.onclick = function (e) { e.preventDefault(); e.stopPropagation(); W.FMPaniere.apri(vil.id); };
         var n = vp.querySelector("[data-paniere-nuovo]"); if (n) n.onclick = function (e) { e.preventDefault(); W.FMPaniere.apriNuovo(vil.id); };
