@@ -262,6 +262,8 @@
         tVil.firstChild.nodeValue = "entra nel villaggio" + (civ ? " – " + civ.trim().toLowerCase() : "") + " ";
       }
     }
+    /* ⭐ 2 ottobre 09:13, Gab: «scarica l'app» prima di «entra nel villaggio», e dopo si torna qui */
+    if (window.FMScarica) window.FMScarica.metti(R, "index.html?p=evento&e=" + id + invitoQui(), tVil || R.querySelector("#ev-invita"));
     P.gesto(R, "entra-villaggio", function () {
       if (!vil) return;
       if (!d.io) { location.href = accesso("index.html?p=orma&o=" + vil.id); return; }

@@ -301,6 +301,8 @@
       var ri = R.querySelector("#racconto-inizio");
       if (ri) ri.textContent = String(o.contenuto || "").trim().split("\n")[0].slice(0, 60);
       var pr = R.querySelector("#p-racconto"); if (pr) pr.hidden = !String(o.contenuto || "").trim();
+      /* ⭐ 2 ottobre 09:13, Gab: «scarica l'app» in ogni orma, e dopo si torna qui */
+      if (window.FMScarica && pr) window.FMScarica.metti(R, "index.html?p=orma&o=" + id, null, pr);
       /* ⭐ 2 ottobre, Gab: «imposta questo modello in ogni orma, solo per chi la organizza» — il racconto in capitoli */
       (function () {
         if (!window.FMCapitoli || !pr) return;

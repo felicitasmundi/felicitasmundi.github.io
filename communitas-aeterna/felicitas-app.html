@@ -44,6 +44,7 @@
   .come li{font-size:var(--t-eti);color:rgba(245,240,230,.7);line-height:1.6;
     margin:0 0 .55rem 1.1rem}
 .nota-conferma{margin:1rem auto .4rem;max-width:26rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.5;color:rgba(245,240,230,.72);text-align:center}
+  [hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -60,7 +61,17 @@
     <li>Android chiede se consentire l&rsquo;installazione da questa origine: consenti.</li>
     <li>Tocca &laquo;Installa&raquo;: l&rsquo;icona di Felicitas compare fra le tue app.</li>
   </ol>
+  <a class="tasto" id="torna" href="index.html" hidden style="margin-top:1.4rem;background:transparent;color:#D4AF6A;border:1px solid rgba(212,175,106,.55)">&lsaquo; torna dove eri</a>
 </div>
+<script id="fm-torna">
+/* ⭐ 2 ottobre 2026, Gab: «se scarichi app poi devi tornare nella pagina in cui eri».
+   ?torna=<pagina> arriva dal tasto «scarica l'app» di orme ed eventi. Solo pagine di casa. */
+(function(){
+  var t=""; try{ t=new URLSearchParams(location.search).get("torna")||""; }catch(e){}
+  if(!/^index\.html(\?[\w=&%.\-]*)?$/.test(t)) return;
+  var a=document.getElementById("torna"); a.href=t; a.hidden=false;
+})();
+</script>
 <script id="fm-brave">
 /* ⭐ 1 ottobre, Gab: «continua a far problemi a far partire l'installazione con brave … quale
    escamotage esiste?» → «ok passaggio automatico a chrome». Su Android, da Brave, il tasto apre
