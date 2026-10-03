@@ -1014,7 +1014,7 @@
   /* col riquadro sceso la freccia si volta: ora riporta su */
   #blocco-radio.aperta #r-apri{transform:rotate(180deg)}
 
-  @media(max-width:52rem){
+  @media(max-width:72rem), (max-height:40rem){   /* ⭐ 3 ottobre, Gab: ingrandendo sul Mac, si passa alla cornice del telefono invece di accavallarsi */
     /* ── il tasto della barra: ancorato in alto a sinistra, e sta fermo
        mentre la pagina scorre. Sta dentro l'altezza della plancia, così il
        play della radio gli si mette accanto invece che sotto ── */
@@ -1269,7 +1269,7 @@
      bersaglio sono una trappola per chi legge — sembrano fare qualcosa.
      ⭐ Le parole non si sono perse: `stanze.riga` è intera, e la legge
         attesa() quando una stanza non è ancora fatta. */
-  @media(max-width:52rem){
+  @media(max-width:72rem), (max-height:40rem){   /* ⭐ 3 ottobre, Gab: ingrandendo sul Mac, si passa alla cornice del telefono invece di accavallarsi */
     /* ⭐ TOCCATO NEL GUSCIO ⑪ — il 70 che era di #barra, rimesso sulla
        barra vera. Sta fra il velo (69) e il tasto che apre (71): il
        cassetto sopra il velo, il tasto sopra il cassetto. */
@@ -1283,7 +1283,7 @@
   /* ⭐ 2 ottobre 13:14, Gab: «il simbolo chat mettilo di fianco al carrello, rendi più piccolo il quadrante radio»
      — la radio si ferma prima dei due tasti, e da chiusa è più bassa e più stretta */
   body:not(.radio-aperta) #pl{padding-right:7.2rem}
-  @media(min-width:52.01rem){
+  @media(min-width:72.01rem) and (min-height:40.01rem){
     body:not(.radio-aperta) #pl > *{max-width:42rem}
     body:not(.radio-aperta) .r-striscia{padding:.35rem .8rem;gap:.7rem}
     body:not(.radio-aperta) .r-play{width:2.3rem;height:2.3rem}
@@ -5019,7 +5019,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
 
   /* ── dove finisce il PC e comincia il telefono: un numero solo, e
      combacia con la media query del foglio ── */
-  function telefono(){ return window.matchMedia("(max-width:52rem)").matches; }
+  function telefono(){ return window.matchMedia("(max-width:72rem), (max-height:40rem)").matches; }
 
   /* sul telefono la fascia intera — palinsesto e scala delle ore — si mostra
      in una finestra sopra la pagina. È la stessa fascia: `blocco-radio` non
@@ -5838,7 +5838,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     location.href = "accesso.html";
   }
   /* ⭐ TOCCATO NEL GUSCIO ㊽ — qui passa fm-barra.js: dopo le dichiarazioni che legge, prima del primo disegno */
-</script><script src="fm-barra.js?v=09302055"></script><script>
+</script><script src="fm-barra.js?v=10031200"></script><script>
   "use strict"; /* ⭐ ㊽ — la ripresa dello script grande resta rigorosa come il suo inizio */
 
   /* ⭐ LA BARRA SI DISEGNA SUBITO, col seme. Non aspetta né la sessione né

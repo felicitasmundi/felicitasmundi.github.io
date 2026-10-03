@@ -136,7 +136,7 @@ function brVeste(){
       "font-style:italic;font-size:.86rem;color:#C8A055;opacity:.8;margin-top:.05rem}" +
     ".sv-barra .conto .fr{flex:none;color:rgba(245,240,230,.25);font-size:.9rem}" +
 
-    "@media (min-width:52rem){" +
+    "@media (min-width:72.01rem) and (min-height:40.01rem){" +
       "#sv-apri-barra,#sv-velo-barra{display:none}" +
       ".sv-barra{position:sticky;transform:none;max-width:17.5rem;box-shadow:none}}" +
     "@media (prefers-reduced-motion:reduce){.sv-barra{transition:none}}";
