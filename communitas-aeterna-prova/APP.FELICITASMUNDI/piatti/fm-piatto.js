@@ -209,7 +209,29 @@
      Adesso si prende la più grande fra due: quella del contenitore e
      QUELLA DEL CONTENUTO. Così la pagina si vede sempre, e cresce da sé
      quando cresce dentro — che è quello che serve al Megafono. */
+  /* ⭐ 3 ottobre 12:44, Gab: «nel pc … foto e testi della finestra sono troppo ristretti rispetto la grandezza
+     della finestra — aumenta l'ampiezza, tenendo conto di come si vede nel telefono». Sul computer, quando c'è
+     spazio, la finestra si ingrandisce tutta insieme (foto, testi, tasti) fino a 1,4 volte: dentro resta la
+     stessa impaginazione. Sul telefono e nella cornice del telefono resta 1. */
+  var FMP_BASE = 860, FMP_MAX = 1.4;
+  function fmpScala(box, f) {
+    var z = 1, largo = 0;
+    try {
+      var tel = window.matchMedia && window.matchMedia("(max-width:72rem), (max-height:40rem)").matches;
+      var cs = getComputedStyle(box);
+      largo = (box.clientWidth || 0) - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
+      if (!tel && largo > FMP_BASE) z = Math.min(FMP_MAX, largo / FMP_BASE);
+    } catch (e) {}
+    z = Math.round(z * 100) / 100;
+    f._fmpZ = z;
+    if (z === 1) { f.style.zoom = ""; f.style.width = ""; f.style.maxWidth = ""; return 1; }
+    f.style.zoom = String(z);
+    f.style.width = Math.floor(largo / z) + "px";
+    f.style.maxWidth = "none";
+    return z;
+  }
   function fmpAltezza(box, f) {
+    var z = fmpScala(box, f);
     var dentro = 0;
     try {
       var d = f.contentDocument;
@@ -218,7 +240,7 @@
     } catch (e) {}
     /* ⭐ 1 ottobre 22:40, Gab: «mi mostra la schermata a metà, sul pc» — torna la misura di prima
        (la più grande fra contenitore e contenuto): l'accorciamento delle 19:24 tagliava le stanze */
-    var h = Math.max(box.clientHeight || 0, dentro);
+    var h = Math.max(Math.round((box.clientHeight || 0) / z), dentro);
     /* ⛔ se ancora non si sa niente, meglio una finestra piena che una invisibile */
     if (!h) h = Math.max(320, (window.innerHeight || 640) - 160);
     f.style.height = h + "px";
