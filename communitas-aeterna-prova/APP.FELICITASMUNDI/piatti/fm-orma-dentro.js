@@ -802,13 +802,21 @@
       Array.prototype.forEach.call(R.querySelectorAll("#fm-scarica"), function (e) { e.remove(); });
     }
 
+    /* chi c'è dentro: chi è solo proposto non ha «da · ore ·» vuoti; «togli» solo per chi ha aperto l'orma */
+    Array.prototype.forEach.call(R.querySelectorAll('[data-fm-copia="dentro"]'), function (c, i) {
+      var x = d.dentro[i]; if (!x) return;
+      var sub = c.querySelector(".tx > span"); if (sub) sub.style.display = x.preso_il ? "" : "none";
+      var tg = c.querySelector('[data-g="togli"]'); if (tg && !padrone) tg.style.display = "none";
+    });
+
     /* i passi: niente etichette vuote, niente «?»; lo stato sulla riga */
     var copie = R.querySelectorAll('[data-fm-copia="figlia"].figlia, .figlia[data-fm-copia]');
     Array.prototype.forEach.call(copie, function (c, i) {
       var x = d.figlie[i]; if (!x) return;
       Array.prototype.forEach.call(c.querySelectorAll(".dd > span"), function (sp) {
         var v = sp.querySelector("span"); var t = v ? (v.textContent || "").trim() : "";
-        sp.style.display = !t || /^\[.*\]$/.test(t) ? "none" : "";
+        var et = sp.querySelector("i"); var eti = et ? (et.textContent || "").trim() : "";
+        sp.style.display = !t || /^\[.*\]$/.test(t) || (obiettivo && eti === "elemento") ? "none" : "";
       });
       var vu = c.querySelector('[data-stato="presa-vuota"]'); if (vu) vu.style.display = "none";
       var vecchio = c.querySelector(':scope > .st'); if (vecchio) vecchio.style.display = "none";

@@ -116,6 +116,17 @@
       }
       var rb = await db.from("contatti").select("nome,persona_id").eq("proprietario_id", d.io).not("persona_id", "is", null).order("nome");
       d.rubrica = rb.error ? [] : (rb.data || []);
+      /* e chi lavora con te nelle squadre (il lavoro del team), anche se non è in rubrica */
+      if (d.squadre.length) {
+        var gp = await db.from("orma_persone").select("persona_id,nome").in("orma_id", d.squadre.map(function (s) { return s.id; }))
+          .not("persona_id", "is", null).not("preso_il", "is", null).is("lasciato_il", null);
+        var visto = {}; d.rubrica.forEach(function (r) { visto[r.persona_id] = 1; });
+        (gp.error ? [] : gp.data || []).forEach(function (r) {
+          if (visto[r.persona_id] || r.persona_id === d.io) return;
+          visto[r.persona_id] = 1; d.rubrica.push({ nome: r.nome || "", persona_id: r.persona_id });
+        });
+        d.rubrica.sort(function (x, y) { return String(x.nome).localeCompare(String(y.nome)); });
+      }
     } catch (e) { console.warn("la mia orma:", e); }
     return d;
   }
@@ -171,7 +182,7 @@
       var lib = (d.rubrica || []).filter(function (r) { return !gia[r.persona_id] && r.persona_id !== d.io; });
       h += '<div class="scegli">' + (lib.length
         ? '<span class="nota">proponi a</span>' + lib.map(function (r) { return '<button type="button" data-proponi="' + esc(o.id) + '" data-persona="' + esc(r.persona_id) + '">' + esc(r.nome) + '</button>'; }).join("")
-        : '<span class="nota">Nella tua rubrica non c’è ancora nessuno con un account.</span>') + '</div>';
+        : '<span class="nota">Nella tua rubrica e nelle tue squadre non c’è ancora nessuno con un account.</span>') + '</div>';
     }
     return h;
   }

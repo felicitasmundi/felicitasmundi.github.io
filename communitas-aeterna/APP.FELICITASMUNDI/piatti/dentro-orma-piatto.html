@@ -805,6 +805,31 @@ details.porta .vetr-f>.oc{display:none}
 #chi-scheda b{display:block;font-family:'Cinzel',serif;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#D4AF6A;font-size:.9rem;margin-bottom:.35rem}
 #chi-scheda p{margin:0;font-family:'Cormorant Garamond',serif;font-size:1.08rem;line-height:1.45;color:rgba(245,240,230,.88)}
 #chi-scheda button{all:unset;cursor:pointer;position:absolute;top:.5rem;right:.8rem;font-size:1.3rem;color:rgba(245,240,230,.6)}
+/* ⭐ 3 ottobre, Gab: «mostrami come miglioreresti dentro orma» → «ok procedi».
+   Lo stato in alto (in coda · in avanzamento · sviluppato), «proponi a…», «chiudi» e «cancella» in fondo sotto «altro». */
+.fm-stati{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem;padding:.3rem;margin:.2rem 0 1rem;border-radius:999px;border:1px solid rgba(212,175,106,.25);background:rgba(8,11,26,.4)}
+.fm-stati button{all:unset;cursor:pointer;text-align:center;padding:.6rem .2rem;border-radius:999px;font-family:'DM Sans',system-ui,sans-serif;font-size:.8rem;white-space:nowrap;color:rgba(245,240,230,.6)}
+.fm-stati button[aria-pressed="true"]{color:#0A0C1A;background:var(--oro-ch);font-weight:500}
+.fm-stati button[aria-pressed="true"][data-v="sviluppato"]{background:#9ac296}
+.fm-stati button[aria-pressed="true"][data-v="in_coda"]{background:rgba(245,240,230,.75)}
+.fm-stati[aria-disabled="true"] button{cursor:default}
+.fm-proposta{display:flex;flex-direction:column;gap:.6rem;margin:0 0 1rem;padding:.9rem 1rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.55);background:rgba(212,175,106,.08)}
+.fm-proposta b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.2rem}
+.fm-proposta div{display:flex;gap:.5rem;flex-wrap:wrap}
+.fm-proposta button{all:unset;cursor:pointer;padding:.55rem 1.1rem;border-radius:999px;border:1px solid rgba(212,175,106,.6);font-size:.9rem;color:var(--ivory)}
+.fm-proposta button.si{background:var(--oro-ch);color:#0A0C1A;border-color:var(--oro-ch)}
+.fm-scegli{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.fm-scegli button{all:unset;cursor:pointer;font-size:.88rem;padding:.4rem .85rem;border-radius:999px;border:1px solid rgba(212,175,106,.45);color:var(--ivory)}
+.fm-scegli button:hover{background:rgba(212,175,106,.12)}
+.fm-scegli span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.55)}
+details.fm-altro{margin-top:1.4rem;border-top:1px solid rgba(212,175,106,.18);padding-top:.6rem}
+details.fm-altro summary{list-style:none;cursor:pointer;text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.5)}
+details.fm-altro summary::-webkit-details-marker{display:none}
+details.fm-altro .mia-gesti{justify-content:center;margin-top:.7rem}
+.figlia .fm-st{all:unset;cursor:pointer;flex:none;font-size:.72rem;padding:.3rem .65rem;border-radius:999px;border:1px solid rgba(245,240,230,.25);color:rgba(245,240,230,.7);white-space:nowrap}
+.figlia .fm-st.in_avanzamento{border-color:rgba(212,175,106,.6);color:var(--oro-ch);background:rgba(212,175,106,.12)}
+.figlia .fm-st.sviluppato{border-color:rgba(111,155,106,.6);color:#9ac296;background:rgba(111,155,106,.12)}
+.figlia .fm-st[aria-disabled="true"]{cursor:default}
 </style>
 </head>
 <body>
@@ -866,7 +891,6 @@ details.porta .vetr-f>.oc{display:none}
     <span id="q-file"><span class="et">File allegati</span>
       <span class="vl fl">
         <span class="ff" data-stampo="file"><a data-c="file.vai" href="#"><span data-c="file.nome">[ un file ]</span></a></span>
-        <span class="ffn" data-stato="senza-file" hidden>[ nessun allegato ]</span>
         <span class="ffn">tocca qui per aggiungere un file &middot; fino a 25 MB</span>
       </span></span>
   </div>
@@ -906,7 +930,6 @@ details.porta .vetr-f>.oc{display:none}
       <div class="bt"><button type="button" data-g="copia-invito">copia il link</button><a data-g="wa-invito" href="#" target="_blank" rel="noopener">WhatsApp</a></div>
       <span class="ni">Chi lo apre ed entra compare qui: scrive nella conversazione, vede gli allegati, prende obiettivi, eventi e riunioni e ci segna le ore.</span>
     </div>
-    <div class="nota" style="margin-top:.4rem">Nella tua rubrica non c&rsquo;&egrave; ancora nessuno con un account.</div>
   </div>
   </div>
   </details>
