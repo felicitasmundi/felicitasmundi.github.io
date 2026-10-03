@@ -1330,3 +1330,20 @@ function mgMandaTutti(t){
     }
   });
 })();
+
+/* ⭐ 3 ottobre 15:12, Gab: «crea un piccolo rettangolino con command o ctrl + invio, come ha Supabase» —
+   accanto al tasto →, solo dove c'è una tastiera (computer); sul telefono non compare */
+(function(){
+  var inv = document.getElementById("mg-inv"); if(!inv || document.getElementById("mg-scorciatoia")) return;
+  var mac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || "");
+  var s = document.createElement("span");
+  s.id = "mg-scorciatoia";
+  s.setAttribute("aria-hidden", "true");
+  s.textContent = (mac ? "⌘" : "Ctrl") + " ↵";
+  s.title = (mac ? "Cmd" : "Ctrl") + " + Invio per mandare";
+  var st = document.createElement("style");
+  st.textContent = "#mg-scorciatoia{align-self:center;display:inline-flex;align-items:center;gap:.2rem;height:1.6rem;padding:0 .45rem;margin-right:.35rem;border:1px solid rgba(212,175,106,.45);border-radius:.4rem;font-family:'DM Sans',system-ui,sans-serif;font-size:.78rem;line-height:1;color:rgba(227,197,138,.85);background:rgba(212,175,106,.06);white-space:nowrap;user-select:none}" +
+    "@media (hover:none),(pointer:coarse){#mg-scorciatoia{display:none}}";
+  document.head.appendChild(st);
+  inv.parentNode.insertBefore(s, inv);
+})();
