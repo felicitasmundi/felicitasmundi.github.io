@@ -176,6 +176,8 @@ async function acLeggi(){
               "talenti,consenso_bio,consenso_contatto,colore_sito,comune_cod,nome_url")
       .eq("id", id).single();
     if(r.error) throw r.error;
+    /* ⭐ 3 ottobre: l'interruttore degli avvisi per mail (SQL 40) — prima dello SQL la colonna non c'è e non si mostra */
+    try{ var am = await db.from("persone").select("avvisi_mail").eq("id", id).single(); if(!am.error && am.data) r.data.avvisi_mail = am.data.avvisi_mail; }catch(e2){}
     return r.data;
   }catch(e){ console.warn("account:", e); return null; }
 }
@@ -433,6 +435,10 @@ function acDisegna(box){
     "Il tuo recapito non compare mai su nessuna pagina: si apre un contatto, " +
     "e sei tu a rispondere.",
     "consenso_contatto", !!io.consenso_contatto);
+  /* ⭐ 3 ottobre 16:20, Gab: gli avvisi per mail, per chi è su iPhone o al computer */
+  if(io.avvisi_mail !== undefined) acSw(g2, "Avvisi per mail",
+    "Ti arriva una mail quando ci sono messaggi nuovi nelle tue chat, al massimo una ogni ora per chat.",
+    "avvisi_mail", io.avvisi_mail !== false);
   acRiga(g2, "Quello che hai pubblicato", "", function(){
     if(typeof vai === "function") vai("emporio"); });
   acAttesa(g2, "La tua pagina", "l\u2019indirizzo non c\u2019\u00e8 ancora");
