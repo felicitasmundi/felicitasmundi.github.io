@@ -18,6 +18,25 @@
     abiti:      { cat: ["abbigliamento & tessuti", "abbigliamento promozionale"] }
   };
   var TUTTI = null;
+  /* ⭐ Gab: «8 quadranti in alto e poi devi scendere giù a vedere cosa hai schiacciato, è la cosa meno saggia».
+     Come fa Apple nello Store: toccata una famiglia, le otto diventano una striscia che scorre di lato,
+     e i prodotti si aprono subito sotto. Toccando di nuovo la stessa, si richiude.
+     ⭐ «non avremo usato cose con scritto flyeralarm»: niente foto loro — schede nostre, fondo blu e il Nexus. */
+  (function () {
+    var st = document.createElement("style");
+    st.textContent =
+      ".fa-striscia{display:flex!important;overflow-x:auto;gap:.5rem!important;padding:.2rem 0 .5rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}" +
+      ".fa-striscia>[data-famiglia]{flex:0 0 auto;min-height:0!important;padding:.55rem .9rem!important;scroll-snap-align:start;border-radius:999px!important}" +
+      ".fa-striscia>[data-famiglia] span{display:none}" +
+      ".fa-striscia>[data-famiglia] b{font-size:.85rem!important;white-space:nowrap}" +
+      ".fa-striscia>[data-famiglia][aria-pressed=true]{background:color-mix(in srgb,var(--c) 30%,transparent)!important;border-color:var(--c)!important}" +
+      ".fa-scheda{display:flex;flex-direction:column;justify-content:space-between;gap:.6rem;min-height:9.5rem;padding:.9rem .8rem;border-radius:.9rem;" +
+      "background:radial-gradient(circle at 50% 0%,#2b5f9e 0%,#163a6b 55%,#0e2549 100%);border:1px solid rgba(212,175,106,.35);color:#F5F0E6}" +
+      ".fa-scheda img{width:2.6rem;height:2.6rem;object-fit:contain;opacity:.9;align-self:center}" +
+      ".fa-scheda b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.08rem;line-height:1.25;text-align:center}" +
+      ".fa-scheda small{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.22em;text-align:center;color:rgba(212,175,106,.85)}";
+    document.head.appendChild(st);
+  })();
   function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]; }); }
   async function mostra(btn, fam, gia) {
     var griglia = btn.parentNode, box = document.getElementById("fa-prodotti");
@@ -37,9 +56,7 @@
     });
     var fino = (gia || 0) + 24;
     box.innerHTML = lista.slice(0, fino).map(function (g) {
-      return '<div style="display:flex;flex-direction:column;gap:.35rem;padding:.6rem;border-radius:.8rem;border:1px solid rgba(212,175,106,.25);background:rgba(8,11,26,.45)">' +
-        (g.image ? '<img alt="" loading="lazy" src="' + esc(g.image) + '" style="width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:.5rem">' : "") +
-        '<b style="font-family:\'Cormorant Garamond\',serif;font-weight:400;font-size:1.05rem;line-height:1.25;color:#F5F0E6">' + esc(g.name) + '</b></div>';
+      return '<div class="fa-scheda"><img alt="" src="nexus-cerchio.webp"><b>' + esc(g.name) + '</b><small>FELICITASMUNDI</small></div>';
     }).join("") + (lista.length > fino
       ? '<button type="button" id="fa-altri" style="all:unset;grid-column:1/-1;cursor:pointer;justify-self:center;padding:.6rem 1.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.5);color:#D4AF6A;font-family:\'Cormorant Garamond\',serif;font-size:1.05rem">altri ' + Math.min(24, lista.length - fino) + ' · ' + lista.length + ' in tutto</button>'
       : "");
@@ -50,9 +67,18 @@
     if (!b) return;
     var fam = b.getAttribute("data-famiglia");
     var aut = document.querySelector('[data-stato="in-autunno"]');
-    if (!FAMIGLIE[fam]) { var v = document.getElementById("fa-prodotti"); if (v) v.remove(); return; }
+    if (!FAMIGLIE[fam]) { var v = document.getElementById("fa-prodotti"); if (v) v.remove(); b.parentNode.classList.remove("fa-striscia"); return; }
     setTimeout(function () { if (aut) aut.hidden = true; }, 0);
+    var griglia = b.parentNode, era = b.getAttribute("aria-pressed") === "true" && griglia.classList.contains("fa-striscia");
+    if (era) {   /* la stessa famiglia: si richiude */
+      griglia.classList.remove("fa-striscia");
+      b.setAttribute("aria-pressed", "false");
+      var v2 = document.getElementById("fa-prodotti"); if (v2) v2.remove();
+      return;
+    }
     Array.prototype.forEach.call(document.querySelectorAll("[data-famiglia]"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    griglia.classList.add("fa-striscia");
+    try { b.scrollIntoView({ block: "nearest", inline: "center" }); griglia.scrollIntoView({ block: "start", behavior: "smooth" }); } catch (er) {}
     mostra(b, fam, 0);
   });
 })();
