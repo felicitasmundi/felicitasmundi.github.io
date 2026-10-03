@@ -235,8 +235,8 @@
     V.querySelector("[data-invita-chat]").onclick = function () {
       if (!window.FMInvito || !window.FMInvito.condividi) return;
       var tit = r.tipo === "micelio" ? (r.titolo || "") : (r.titolo || "");
-      var url = r.tipo === "micelio" ? "https://app.felicitasmundi.com/communitas-aeterna/index.html?p=vicinati&entra=" + id
-                                     : "https://app.felicitasmundi.com/communitas-aeterna/index.html?o=" + id;
+      /* ⭐ 3 ottobre 15:48, Gab: «l'invito deve mandare nel posto dove va messo» — il link apre QUESTA chat */
+      var url = "https://app.felicitasmundi.com/communitas-aeterna/index.html?chat=" + id;
       window.FMInvito.condividi(this, { url: url, testo: tit, titolo: tit });
     };
     V.querySelector(".vai-orma").onclick = function () {
@@ -316,8 +316,30 @@
       var n = stato.righe.reduce(function (s, x) { return s + (x.non_letti || 0); }, 0);
       t.querySelector(".bol").textContent = n ? String(n) : "";
       t.hidden = false; posa();
+      if (chatChiesta && !arguments[0]) setTimeout(apriChiesta, 0);
       if (stato.aperto && !stato.chat) disegna();
     } catch (e) { console.warn("chat:", e); }
+  }
+
+  /* ⭐ 3 ottobre 15:48, Gab: chi apre un invito alla chat (…?chat=<orma>) entra nel posto giusto: fa l'accesso se serve
+     (il muro porta il ?chat= fin dopo l'accesso), entra nel villaggio o nell'orma se non c'è ancora, e si apre la sua chat */
+  var chatChiesta = null;
+  try { chatChiesta = new URLSearchParams(location.search).get("chat"); } catch (e) {}
+  async function apriChiesta() {
+    if (!chatChiesta || !stato.io || !window.db) return;
+    var id = chatChiesta; chatChiesta = null;
+    try { var u = new URL(location.href); u.searchParams.delete("chat"); history.replaceState(history.state, "", u.pathname + u.search + u.hash); } catch (e) {}
+    var c = (stato.righe || []).filter(function (x) { return x.orma_id === id; })[0];
+    if (!c || !c.dentro) {
+      try {
+        var o = await window.db.from("orme").select("tipo").eq("id", id).maybeSingle();
+        var tipo = o && o.data && o.data.tipo;
+        await window.db.rpc(tipo === "micelio" ? "fm_mia_radice" : "fm_prendi_orma", { p_orma: id });
+        stato.radice = undefined;
+      } catch (e) {}
+      await aggiorna(true);
+    }
+    if (window.FMChat && FMChat.apri) FMChat.apri(id);
   }
 
   function parti() {
