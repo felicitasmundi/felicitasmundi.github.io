@@ -688,7 +688,7 @@
         dice(false);
         scrivi.value = "";
         try {
-          var r = await db.from("orma_messaggi").insert({ orma_id: id, testo: t });
+          var r = await db.from("orma_messaggi").insert({ orma_id: id, persona_id: d.io, testo: t });   /* ⭐ 3 ottobre: senza chi scrive il database rifiutava */
           if (r && r.error) { scrivi.value = t; if (/FM_NO_LINK/.test(r.error.message || "")) dice(true); console.warn("chat:", r.error); return; }
           await ricarica();
         }

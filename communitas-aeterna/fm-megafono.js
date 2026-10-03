@@ -1240,7 +1240,7 @@ function mgMandaChat(t){
   var c = window.mgChat; if(!c) return;
   if(MG_LINK.test(t.replace(/(https?:\/\/)?([a-z0-9-]+\.)*felicitasmundi\.com\S*/gi, ""))){ parla(MG_REGOLA); return; }
   var files = mgStato.file.slice();
-  db.from("orma_messaggi").insert({orma_id: c.id, testo: t}).then(function(r){
+  db.from("orma_messaggi").insert({orma_id: c.id, persona_id: io && io.id, testo: t}).then(function(r){
     if(r && r.error){
       parla(/FM_NO_LINK/.test(r.error.message || "") ? MG_REGOLA : "Non è partito: forse in questa chat non sei ancora dentro. Apri l\u2019orma ed entra.");
       return;
@@ -1250,7 +1250,7 @@ function mgMandaChat(t){
       return fila.then(function(){
         return db.storage.from("riservato").upload(c.id + "/" + f.name, f).then(function(u){
           if(u && u.error){ parla("Il messaggio c'è, l'allegato no: " + mgParoleFile(u.error.message)); return; }
-          return db.from("orma_messaggi").insert({orma_id: c.id, testo: f.name,
+          return db.from("orma_messaggi").insert({orma_id: c.id, persona_id: io && io.id, testo: f.name,
             file_indirizzo: c.id + "/" + f.name, file_nome: f.name, file_dimensione: f.size});
         });
       }).catch(function(){});
@@ -1284,7 +1284,7 @@ function mgMandaChat(t){
       parla("il vocale sta partendo…");
       db.storage.from("riservato").upload(via, blob, { contentType: mime }).then(function(u){
         if(u && u.error){ parla("Il vocale non è partito: " + mgParoleFile(u.error.message)); return; }
-        return db.from("orma_messaggi").insert({ orma_id: c.id, testo: "messaggio vocale", file_indirizzo: via, file_nome: nome, file_dimensione: blob.size }).then(function(r){
+        return db.from("orma_messaggi").insert({ orma_id: c.id, persona_id: io && io.id, testo: "messaggio vocale", file_indirizzo: via, file_nome: nome, file_dimensione: blob.size }).then(function(r){
           if(r && r.error){ parla("Il vocale non è partito: forse in questa chat non sei ancora dentro."); return; }
           if(window.FMChat && FMChat.ricarica) FMChat.ricarica();
         });
@@ -1317,3 +1317,16 @@ function mgMandaTutti(t){
     if(window.FMChat && FMChat.aggiorna) FMChat.aggiorna();
   });
 }
+
+/* ⭐ 3 ottobre 15:02, Gab: «se uno scrive dal computer, può fare invio schiacciando command invio» —
+   Cmd+Invio (Mac) o Ctrl+Invio (Windows) manda, come il tasto →. Invio da solo resta un a capo. */
+(function(){
+  var c = document.getElementById("campo") || (typeof campo !== "undefined" ? campo : null);
+  if(!c) return;
+  c.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && (e.metaKey || e.ctrlKey)){
+      e.preventDefault();
+      var b = document.getElementById("mg-inv"); if(b) b.click();
+    }
+  });
+})();
