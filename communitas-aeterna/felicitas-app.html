@@ -80,8 +80,14 @@
   if(!ios) return;
   var nas = function(sel){ Array.prototype.forEach.call(document.querySelectorAll(sel), function(e){ e.hidden = true; }); };
   nas("#scarica"); nas(".dati"); nas(".foglio > .nota-conferma"); nas(".foglio > ol.come");
-  var e = document.querySelector(".eti"); if(e) e.textContent = "L\u2019app per iPhone";
-  document.getElementById("iphone").hidden = false;
+  var e = document.querySelector(".eti"); if(e) e.textContent = "su iPhone";
+  /* ⭐ 3 ottobre 15:15, Gab: su iPhone un tasto per entrare dal browser, e poi si torna dove si era */
+  var t = ""; try { t = new URLSearchParams(location.search).get("torna") || ""; } catch (x) {}
+  if (!/^index\.html(\?[\w=&%.\-]*)?$/.test(t)) t = "index.html?p=vicinati";
+  var b = document.createElement("a"); b.className = "tasto"; b.href = "accesso.html?torna=" + encodeURIComponent(t);
+  b.textContent = "Entra dal browser";
+  var dove = document.getElementById("iphone"); dove.innerHTML = "<p class=\"nota-conferma\">Su iPhone Felicitas si usa direttamente dal browser.</p>"; dove.appendChild(b);
+  dove.hidden = false;
 })();
 </script>
 <script id="fm-torna">

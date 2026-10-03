@@ -14,6 +14,8 @@
     return !!window.FelicitasApp || /FelicitasApp\//.test(navigator.userAgent || "");
   }
 
+  function iphone() { return /iPhone|iPad|iPod/.test(navigator.userAgent || "") || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+
   function metti(R, torna, prima, dopo) {
     if (!R) return null;
     var vecchio = R.querySelector("#fm-scarica"); if (vecchio) vecchio.remove();
@@ -28,6 +30,18 @@
       var url = "felicitas-app.html?torna=" + encodeURIComponent(torna || "index.html");
       try { (window.top || window).location.href = url; } catch (er) { location.href = url; }
     };
+    /* ⭐ 3 ottobre 15:15, Gab: «se lo vuole scaricare con l'iPhone gli scrivi un tasto per entrare direttamente dal browser:
+       fa l'accesso e dopo rientra nella pagina da cui era entrato» — su iPhone niente app da scaricare */
+    if (iphone()) {
+      a.innerHTML = "entra dal browser <span aria-hidden=\"true\">&rsaquo;</span>";
+      a.onclick = function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var url = "accesso.html?torna=" + encodeURIComponent(torna || "index.html");
+        try { (window.top || window).location.href = url; } catch (er) { location.href = url; }
+      };
+      /* chi è già dentro non ha bisogno del tasto */
+      try { if (window.db && window.db.auth) window.db.auth.getSession().then(function (r) { if (r && r.data && r.data.session) a.remove(); }); } catch (e) {}
+    }
     if (prima && prima.parentNode) prima.parentNode.insertBefore(a, prima);
     else if (dopo && dopo.parentNode) dopo.parentNode.insertBefore(a, dopo.nextSibling);
     else return null;
