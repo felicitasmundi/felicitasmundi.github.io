@@ -153,8 +153,8 @@
     if (!box) {
       box = doc.createElement("div"); box.id = "fa-prodotti";
       box.setAttribute("style", "display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,10.5rem),1fr));gap:.7rem;margin-top:.4rem");
-      var dopo = R.querySelector('[data-stato="in-autunno"]');
-      if (dopo && dopo.parentNode) dopo.parentNode.insertBefore(box, dopo.nextSibling);
+      var f1 = R.querySelector("[data-famiglia]"), griglia = f1 && f1.parentNode;
+      if (griglia && griglia.parentNode) griglia.parentNode.insertBefore(box, griglia.nextSibling);
     }
     if (!quanti) box.innerHTML = '<div style="grid-column:1/-1;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:rgba(245,240,230,.6)">un momento…</div>';
     try {
