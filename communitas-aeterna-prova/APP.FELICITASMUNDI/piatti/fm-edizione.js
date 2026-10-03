@@ -127,8 +127,51 @@
       Array.prototype.forEach.call(R.querySelectorAll('[data-g="scegli-famiglia"]'), function (x) {
         x.setAttribute("aria-pressed", x === b ? "true" : "false");
       });
-      P.stato(R, "in-autunno", true);
+      var fam = b && b.getAttribute("data-famiglia");
+      /* ⭐ 3 ottobre, Gab: il catalogo vero di Flyeralarm nelle famiglie (solo lettura: niente ordini).
+         «I servizi» sono nostri (grafica, impaginazione, correzione, consegna): restano come prima. */
+      if (FA_FAMIGLIE[fam]) { setTimeout(function () { P.stato(R, "in-autunno", false); }, 0); catalogo(R, fam, 0); }
+      else { P.stato(R, "in-autunno", true); var v = R.querySelector("#fa-prodotti"); if (v) v.remove(); }
     });
+  }
+
+  /* ── Flyeralarm: le famiglie dell'Edizione e le categorie del loro catalogo (Gab, 3 ottobre) ── */
+  var FA_URL = "https://gfnveesogkfvkrdudpfg.supabase.co/functions/v1/flyeralarm?p=";
+  var FA_FAMIGLIE = {
+    carta:      { cat: ["prodotti di stampa", "pieghevoli, depliant e opuscoli", "adesivi"] },
+    libri:      { cat: ["riviste", "pieghevoli, depliant e opuscoli", "accessori per prodotti di stampa e articoli da scrivania"] },
+    agende:     { cat: ["quaderni e blocchi per appunti"], nome: /calendar|agend/i },
+    fiere:      { cat: ["elementi per stand fieristici", "roll-up e display", "bandiere & stendardi", "banconi / desk promozionali", "fondali e pop up per fiere", "display pubblicitari", "insegne e pannelli pubblicitari"] },
+    confezioni: { cat: ["scatole e confezioni", "imballaggi per prodotti", "sacchetti e buste in carta", "bicchieri in carta e coppette", "borse, buste e shopper"] },
+    gadget:     { cat: ["gadget pubblicitari", "tazze", "penne e matite", "portachiavi", "borse, buste e shopper"] },
+    abiti:      { cat: ["abbigliamento & tessuti", "abbigliamento promozionale"] }
+  };
+  var FA_TUTTI = null;
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]; }); }
+  async function catalogo(R, fam, quanti) {
+    var doc = R.ownerDocument, box = R.querySelector("#fa-prodotti");
+    if (!box) {
+      box = doc.createElement("div"); box.id = "fa-prodotti";
+      box.setAttribute("style", "display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,10.5rem),1fr));gap:.7rem;margin-top:.4rem");
+      var dopo = R.querySelector('[data-stato="in-autunno"]');
+      if (dopo && dopo.parentNode) dopo.parentNode.insertBefore(box, dopo.nextSibling);
+    }
+    if (!quanti) box.innerHTML = '<div style="grid-column:1/-1;font-family:\'Cormorant Garamond\',serif;font-style:italic;color:rgba(245,240,230,.6)">un momento…</div>';
+    try {
+      if (!FA_TUTTI) { var r = await fetch(FA_URL + "/v2/catalog/groups"); var j = await r.json(); FA_TUTTI = (j && j.data) || []; }
+    } catch (e) { console.warn("flyeralarm:", e); box.innerHTML = ""; return; }
+    var F_ = FA_FAMIGLIE[fam], cats = F_.cat;
+    var lista = FA_TUTTI.filter(function (g) {
+      var c = (g.categories || []).some(function (x) { return cats.indexOf(String(x.name || "").trim().toLowerCase()) >= 0; });
+      return c || (F_.nome && F_.nome.test(g.name || ""));
+    });
+    var fino = (quanti || 0) + 24;
+    box.innerHTML = lista.slice(0, fino).map(function (g) {
+      return '<div style="display:flex;flex-direction:column;gap:.35rem;padding:.6rem;border-radius:.8rem;border:1px solid rgba(212,175,106,.25);background:rgba(8,11,26,.45)">' +
+        (g.image ? '<img alt="" loading="lazy" src="' + esc(g.image) + '" style="width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:.5rem">' : "") +
+        '<b style="font-family:\'Cormorant Garamond\',serif;font-weight:400;font-size:1.05rem;line-height:1.25;color:#F5F0E6">' + esc(g.name) + '</b></div>';
+    }).join("") + (lista.length > fino ? '<button type="button" id="fa-altri" style="all:unset;grid-column:1/-1;cursor:pointer;justify-self:center;padding:.6rem 1.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.5);color:#D4AF6A;font-family:\'Cormorant Garamond\',serif;font-size:1.05rem">altri ' + Math.min(24, lista.length - fino) + ' · ' + lista.length + ' in tutto</button>' : "");
+    var al = box.querySelector("#fa-altri"); if (al) al.onclick = function () { catalogo(R, fam, fino); };
   }
 
   function elenco(R, d, stato) {
