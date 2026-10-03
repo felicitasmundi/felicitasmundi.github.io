@@ -91,6 +91,8 @@
         var lu = await b.from("orme").select(COL + ",orma_madre_id,punto_ritiro,ritiro_orari").eq("tipo", "luogo").in("orma_madre_id", vid).is("dorme_dal", null).limit(100);
         if (lu.error) lu = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "luogo").in("orma_madre_id", vid).is("dorme_dal", null).limit(100);   /* prima dell'SQL 33 */
         d.luoghi = lu.data || [];
+        /* ⭐ 3 ottobre, Gab: «crea voce database per partner» (SQL 39) — prima dello SQL non c'è, e la fascia dice cosa vi comparirà */
+        try { var pt = await b.from("partner").select("id,villaggio_id,nome,cosa,luogo,sito").in("villaggio_id", vid).eq("attivo", true).order("nome"); d.partner = pt.error ? [] : (pt.data || []); } catch (e) { d.partner = []; }
       }
       var e = await b.from("orme").select(COL + ",orma_madre_id").eq("tipo", "festa").eq("visibilita", "pubblico").is("dorme_dal", null).limit(200);
       d.eventi = e.data || [];
@@ -212,8 +214,11 @@
       hV += (vil && vil.immagine_url ? '<img class="vil-foto" alt="" src="' + esc(vil.immagine_url) + '" style="display:block;width:100%;max-height:16rem;object-fit:cover;border-radius:.9rem;border:1px solid rgba(212,175,106,.3);margin:.2rem 0 .6rem">' : "") +
             (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
             (vil && vil.contenuto ? '<div id="vil-racconto"><p class="intro" data-r></p></div>' : "") +
-            (vil ? '<div id="vil-paniere"></div>' : "") +
-            (vil ? fascia("i punti di ritiro", d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id && l.punto_ritiro; }).map(function (l) { return riga(l, [l.luogo, l.ritiro_orari].filter(Boolean).join(" · ")); }).join(""), "") : "") +
+            /* ⭐ 3 ottobre 14:45–14:50, Gab: niente «paniere» e niente spiegazioni — tre spazi che dicono cosa vi comparirà:
+               i pacchetti del villaggio, i punti di ritiro, i partner */
+            (vil ? fascia("pacchetti del villaggio", "", "Qui troverai i pacchetti proposti dalle persone del gruppo: i prodotti e chi li propone.") : "") +
+            (vil ? fascia("punti di ritiro", d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id && l.punto_ritiro; }).map(function (l) { return riga(l, [l.luogo, l.ritiro_orari].filter(Boolean).join(" · ")); }).join(""), "Qui ci saranno i nomi dei luoghi di ritiro e gli orari.") : "") +
+            (vil ? fascia("partner", (d.partner || []).filter(function (p) { return p.villaggio_id === vil.id; }).map(function (p) { return riga({ titolo: p.nome }, [p.cosa, p.luogo].filter(Boolean).join(" · "), "", p.sito ? 'data-partner-sito="' + esc(p.sito) + '"' : 'data-partner'); }).join(""), "Qui ci saranno i partner che cooperano col villaggio.") : "") +
             (vil ? fascia("gli eventi del villaggio", evV.map(function (o) { return riga(o, [quando(o), o.luogo].filter(Boolean).join(" · "), "", 'data-evento="' + esc(o.id) + '"'); }).join(""), "") : "") +
             (d.io && vil ? '<div class="gesti">' + tasto(sonoDentro ? "la tua presentazione" : "entra nel villaggio", 'data-presenta="' + esc(vil.id) + '"') + '</div><div id="presenta" hidden></div>' : "") +
             fascia("chi coordina", coordV.map(nome).join(" "), "") +
@@ -232,6 +237,7 @@
     var mioVil = vil && d.io && (vil.persona_id === d.io || coordino);
     if (vil && d.io) hV += '<div class="gesti" id="vil-gesti">' +
       (mioVil ? tasto(vil.immagine_url ? "cambia la foto del villaggio" : "aggiungi una foto del villaggio", 'data-vil-foto="' + esc(vil.id) + '"') : "") +
+      (mioVil ? tasto("aggiungi un partner", 'data-vil-partner="' + esc(vil.id) + '"') : "") +
       tasto("invita chi risuona", 'data-vil-invita="' + esc(vil.id) + '"') + '</div>';
 
     /* 3 · Oggi / calendario */
@@ -294,7 +300,7 @@
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-scrivi]"), function (a) { a.onclick = function () { scrivi({ tipo: a.getAttribute("data-scrivi") }); }; });
     /* ⭐ 2 ottobre 21:18, Gab: il paniere del villaggio — quello in corso, e per chi coordina «apri un paniere» */
     (function () {
-      var vp = D.getElementById("vil-paniere"); if (!vp || !vil || !d.io || !W.FMPaniere) return;
+      var vp = D.getElementById("vil-paniere"); if (!vp || !vil || !d.io || !W.FMPaniere) return;   /* ⛔ 3 ottobre: il paniere è nascosto, la fascia non c'è più */
       W.FMPaniere.stato(vil.id).then(function (st) {
         var pa = st && st.paniere;
         if (pa) {
@@ -306,6 +312,31 @@
         var n = vp.querySelector("[data-paniere-nuovo]"); if (n) n.onclick = function (e) { e.preventDefault(); W.FMPaniere.apriNuovo(vil.id); };
       });
     })();
+    /* ⭐ 3 ottobre, Gab: i partner del villaggio — li aggiunge chi l'ha aperto o lo coordina */
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-vil-partner]"), function (bt) { bt.onclick = function () {
+      var g = D.getElementById("vil-gesti"); var f = D.getElementById("vil-partner-form");
+      if (f) { f.remove(); return; }
+      f = D.createElement("div"); f.id = "vil-partner-form";
+      f.style.cssText = "display:flex;flex-direction:column;gap:.5rem;margin:.6rem 0 1rem;padding:1rem;border:1px solid rgba(212,175,106,.35);border-radius:.9rem";
+      var C = "background:rgba(2,4,12,.6);border:1px solid rgba(212,175,106,.3);border-radius:.6rem;color:#F5F0E6;padding:.6rem .7rem;font:inherit";
+      f.innerHTML = '<input data-k="nome" placeholder="nome dell\u2019azienda" style="' + C + '"><input data-k="cosa" placeholder="cosa fa" style="' + C + '">' +
+        '<input data-k="luogo" placeholder="dove" style="' + C + '"><input data-k="sito" placeholder="sito (facoltativo)" style="' + C + '">' +
+        '<button type="button" class="gesto" data-salva><b>+</b>salva il partner</button><span class="vuoto" data-msg></span>';
+      g.parentNode.insertBefore(f, g.nextSibling);
+      f.querySelector("[data-salva]").onclick = async function () {
+        var v = function (k) { return f.querySelector('[data-k="' + k + '"]').value.trim(); };
+        if (!v("nome")) { f.querySelector("[data-msg]").textContent = "serve il nome"; return; }
+        var sito = v("sito"); if (sito && !/^https?:\/\//i.test(sito)) sito = "https://" + sito;
+        try {
+          var b = await db();
+          var q = await b.from("partner").insert({ villaggio_id: vil.id, nome: v("nome"), cosa: v("cosa") || null, luogo: v("luogo") || null, sito: sito || null });
+          if (q.error) throw q.error;
+          avvia();
+        } catch (e) { f.querySelector("[data-msg]").textContent = "Non salvato: " + (e.message || e); }
+      };
+    }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-partner-sito]"), function (a) { a.onclick = function (e) { e.preventDefault(); e.stopPropagation(); try { W.open(a.getAttribute("data-partner-sito"), "_blank", "noopener"); } catch (er) {} }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-partner]"), function (a) { a.onclick = function (e) { e.preventDefault(); e.stopPropagation(); }; });
     /* la foto del villaggio e l'invito */
     Array.prototype.forEach.call(D.querySelectorAll("#porte [data-vil-foto]"), function (bt) { bt.onclick = function () {
       var inp = D.createElement("input"); inp.type = "file"; inp.accept = "image/*";
