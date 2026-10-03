@@ -4082,7 +4082,7 @@ body.vista-soglia #pl{margin-left:0!important}
 <!-- ⭐ TOCCATO NEL GUSCIO 56 — fm-edizione.js (vecchio) TOLTO: la stanza Edizione passa al piatto (piatti/fm-edizione.js, sotto) -->
 <script src="fm-consolle.js?v=09301930"></script>
 <script src="fm-account.js"></script>
-<script src="fm-account-mio.js?v=10031630"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Il tuo account» dal piede della barra: SpazioVivo.account(dove). I cinque pannelli del 7 agosto restano in fm-account.js -->
+<script src="fm-account-mio.js?v=10031700"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Il tuo account» dal piede della barra: SpazioVivo.account(dove). I cinque pannelli del 7 agosto restano in fm-account.js -->
 
 <script src="fm-casa.js"></script>
 <script src="fm-praticantato.js"></script>
@@ -4543,10 +4543,18 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     chiudiVele();
   }
 
+  var SOLO_DENTRO = ["account", "orme", "chat", "carrello", "settimana", "rubrica", "calendario", "costi", "consolle", "configuratore", "soglia", "cammino", "talenti", "stanze", "percorso"];
+  function fmChiediAccesso(rotta){
+    location.href = "accesso.html?torna=" + encodeURIComponent("index.html?p=" + rotta);
+  }
+  window.fmChiediAccesso = fmChiediAccesso;
   function vai(id, sub){
     /* ⭐ 2 ottobre 21:50, Gab: «ELIMINA OGNI RIFERIMENTO DELLA LANDING PAGE NELLA PIATTAFORMA — se torni indietro
        vai fino alla mia orma». La casa («spazio», l'indirizzo nudo) non si apre più: dovunque la si chieda, si va alla mia orma. */
     if(id === "spazio") id = "orme";
+    /* ⭐ 3 ottobre 16:22, Gab: «uno senza accesso non ci deve andare là». Da ospite le stanze del fare
+       (account, la mia orma, chat, carrello…) non si aprono: si va all'accesso, e dopo si torna qui. */
+    if(ospite && SOLO_DENTRO.indexOf(id) >= 0){ fmChiediAccesso(id); return; }
     /* ⭐ uscendo dalla consolle si esce anche dalla sala: il microfono non
        resta aperto in una stanza che non si vede più */
     if(id !== "consolle" && typeof salaEsci === "function") salaEsci();

@@ -477,6 +477,14 @@ function acDisegna(box){
 async function account(dove){
   var box = typeof dove === "string" ? document.querySelector(dove) : dove;
   if(!box) return;
+  /* ⭐ 3 ottobre 16:22 — senza accesso l'account non si apre: si va all'accesso, e dopo si torna qui */
+  try{
+    var se = await db.auth.getSession();
+    if(!(se && se.data && se.data.session)){
+      location.href = "accesso.html?torna=" + encodeURIComponent("index.html?p=account");
+      return;
+    }
+  }catch(e){ console.warn("account:", e); }
   acVeste();
   acBox = box;
   acDisegna(box);              /* ⭐ si disegna subito, anche vuoto */
