@@ -61,8 +61,29 @@
     <li>Android chiede se consentire l&rsquo;installazione da questa origine: consenti.</li>
     <li>Tocca &laquo;Installa&raquo;: l&rsquo;icona di Felicitas compare fra le tue app.</li>
   </ol>
+  <!-- ⭐ 3 ottobre 15:01, Gab: «forse chi me lo dice non riesce a scaricarlo su iPhone» — su iPhone l'app non si scarica:
+       si aggiunge alla schermata Home da Safari, e si apre come un'app -->
+  <div id="iphone" hidden>
+    <p class="nota-conferma">Su iPhone Felicitas si mette nella schermata Home da Safari, e si apre come un&rsquo;app.</p>
+    <ol class="come">
+      <li>Apri <a href="index.html?p=vicinati" style="color:#D4AF6A">l&rsquo;app</a> in <b>Safari</b>.</li>
+      <li>Tocca il tasto <b>Condividi</b>: il quadrato con la freccia verso l&rsquo;alto, in basso al centro.</li>
+      <li>Scorri e tocca <b>&laquo;Aggiungi alla schermata Home&raquo;</b>, poi <b>&laquo;Aggiungi&raquo;</b>.</li>
+      <li>L&rsquo;icona di Felicitas compare fra le tue app.</li>
+    </ol>
+  </div>
   <a class="tasto" id="torna" href="index.html" hidden style="margin-top:1.4rem;background:transparent;color:#D4AF6A;border:1px solid rgba(212,175,106,.55)">&lsaquo; torna dove eri</a>
 </div>
+<script id="fm-iphone">
+(function(){
+  var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if(!ios) return;
+  var nas = function(sel){ Array.prototype.forEach.call(document.querySelectorAll(sel), function(e){ e.hidden = true; }); };
+  nas("#scarica"); nas(".dati"); nas(".foglio > .nota-conferma"); nas(".foglio > ol.come");
+  var e = document.querySelector(".eti"); if(e) e.textContent = "L\u2019app per iPhone";
+  document.getElementById("iphone").hidden = false;
+})();
+</script>
 <script id="fm-torna">
 /* ⭐ 2 ottobre 2026, Gab: «se scarichi app poi devi tornare nella pagina in cui eri».
    ?torna=<pagina> arriva dal tasto «scarica l'app» di orme ed eventi. Solo pagine di casa. */
