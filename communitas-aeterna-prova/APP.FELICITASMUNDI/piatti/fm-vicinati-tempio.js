@@ -493,6 +493,19 @@
     doveSei(giro);
     await giro();
     /* ⭐ arrivo da «entra nel villaggio» di un evento: si apre il villaggio e la presentazione */
+    /* ⭐ 3 ottobre 14:07, Gab: «portano a vicinato, ma poi uno non può tornare indietro all'evento» —
+       chi arriva da un evento trova in alto «‹ torna all'evento» */
+    try {
+      var da = W.vicinatiDa; W.vicinatiDa = null;
+      var pr = document.getElementById("porte");
+      if (da && da.id && pr && !document.getElementById("torna-evento")) {
+        var t = document.createElement("a"); t.id = "torna-evento"; t.href = "#";
+        t.style.cssText = "display:inline-flex;align-items:center;gap:.5rem;min-height:2.8rem;padding:.5rem 1.1rem;margin:0 0 1rem;border-radius:999px;border:1px solid rgba(212,175,106,.55);color:#D4AF6A;text-decoration:none;font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.08em";
+        t.textContent = "‹ torna all'evento" + (da.titolo ? ": " + da.titolo : "");
+        t.onclick = function (e) { e.preventDefault(); if (typeof W.vai === "function") W.vai("evento", { id: da.id }); };
+        pr.parentNode.insertBefore(t, pr);
+      }
+    } catch (e) {}
     try { if (W.vicinatiApri) { W.vicinatiApri = null; var pa = document.querySelector("#porte details.villaggio"); if (pa) { pa.open = true; pa.scrollIntoView({ block: "start" }); } } } catch (e) {}
     var entra = null;
     try { entra = W.vicinatiEntra || new URLSearchParams(W.location.search).get("entra"); W.vicinatiEntra = null; } catch (e) {}

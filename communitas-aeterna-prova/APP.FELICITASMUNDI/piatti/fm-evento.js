@@ -231,7 +231,7 @@
     if (d.madri && d.madri[0]) P.gesto(R, "apri-madre", function () {
       /* ⭐ 3 ottobre 13:59, Gab: il villaggio non si apre come un evento («è passata», «senza immagine»):
          si va nei Vicinati, sul villaggio vero */
-      if (d.madri[0].tipo === "micelio" && typeof window.vai === "function") { window.vicinatiApri = d.madri[0].id; return window.vai("vicinati"); }
+      if (d.madri[0].tipo === "micelio" && typeof window.vai === "function") { window.vicinatiApri = d.madri[0].id; window.vicinatiDa = { id: id, titolo: o.titolo || "" }; return window.vai("vicinati"); }
       if (typeof window.vai === "function") window.vai("evento", { id: d.madri[0].id });
     });
     var W = R.ownerDocument && R.ownerDocument.defaultView;
@@ -313,7 +313,7 @@
       if (!vil) return;
       if (!d.io) { location.href = accesso("index.html?p=vicinati&entra=" + vil.id); return; }
       try { await db.rpc("fm_mia_radice", { p_orma: vil.id }); } catch (e) {}
-      window.vicinatiEntra = vil.id;
+      window.vicinatiEntra = vil.id; window.vicinatiDa = { id: id, titolo: o.titolo || "" };
       if (typeof window.vai === "function") window.vai("vicinati");
     });
     /* «ci sarò» */
