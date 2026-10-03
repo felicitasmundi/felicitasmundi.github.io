@@ -92,5 +92,36 @@
 
   window.SpazioVivo = window.SpazioVivo || {};
   window.SpazioVivo.invito = invito;
-  window.FMInvito = { disegna: disegna };
+  /* ⭐ 3 ottobre 13:59, Gab: «invita chi risuona … toccando il tasto devi leggere copia o condividi via WhatsApp» —
+     niente pagina a parte: sotto il tasto si apre una tendina con le tre strade, e il messaggio porta il link in fondo */
+  function perEvento(id, titolo) {
+    var u = PAGINE[id] ? "https://app.felicitasmundi.com/" + PAGINE[id] : "https://" + APP + "inviti/evento.html?e=" + id;
+    return { url: u, testo: TESTI[id] || (titolo || "") };
+  }
+  function condividi(tasto, cosa) {
+    if (!tasto) return;
+    var D = tasto.ownerDocument, W = D.defaultView || window;
+    var dove = tasto.closest("#ev-invita") || tasto.parentNode;
+    var c = dove.parentNode.querySelector(":scope > .fm-condividi");
+    if (c) { c.remove(); return; }
+    var msg = (cosa.testo ? cosa.testo + "\n\n" : "") + cosa.url;
+    c = D.createElement("div");
+    c.className = "fm-condividi";
+    c.style.cssText = "display:flex;flex-wrap:wrap;gap:.6rem;margin:.2rem 0 .4rem";
+    var T = "min-height:2.9rem;padding:.6rem 1.1rem;border-radius:999px;font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;text-decoration:none;box-sizing:border-box;";
+    c.innerHTML =
+      '<button type="button" data-c="copia" style="' + T + 'border:1px solid rgba(212,175,106,.6);background:rgba(8,11,26,.6);color:#D4AF6A">copia</button>' +
+      '<a data-c="wa" target="_blank" rel="noopener" style="' + T + 'background:#25D366;color:#06210f;border:0">WhatsApp</a>' +
+      (W.navigator.share ? '<button type="button" data-c="altro" style="' + T + 'border:1px solid rgba(212,175,106,.6);background:rgba(8,11,26,.6);color:#D4AF6A">altre app</button>' : '');
+    c.querySelector('[data-c="wa"]').href = "https://wa.me/?text=" + encodeURIComponent(msg);
+    c.querySelector('[data-c="copia"]').onclick = function () {
+      var b = this, fatto = function () { b.textContent = "copiato"; setTimeout(function () { b.textContent = "copia"; }, 1800); };
+      try { (W.navigator.clipboard || navigator.clipboard).writeText(msg).then(fatto, fatto); } catch (e) { fatto(); }
+    };
+    var al = c.querySelector('[data-c="altro"]');
+    if (al) al.onclick = function () { W.navigator.share({ title: cosa.titolo || "FelicitasMundi", text: msg }).catch(function () {}); };
+    dove.parentNode.insertBefore(c, dove.nextSibling);
+  }
+
+  window.FMInvito = { disegna: disegna, perEvento: perEvento, condividi: condividi };
 })();

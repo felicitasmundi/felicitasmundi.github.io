@@ -82,7 +82,8 @@
       var COL = "id,titolo,contenuto,tipo,stadio,entro_il,luogo,luogo_lat,luogo_lon,territorio_cod,persona_id,quanti_servono,momento,dorme_dal,inizio_il,accaduto_il,categoria,visibilita";
       var k = await b.from("orme").select(COL).eq("tipo", "karma_yoga").is("dorme_dal", null).order("momento", { ascending: false }).limit(120);
       d.karma = k.data || [];
-      var v = await b.from("orme").select(COL).eq("tipo", "micelio").is("dorme_dal", null).limit(20);
+      var v = await b.from("orme").select(COL + ",immagine_url").eq("tipo", "micelio").is("dorme_dal", null).limit(20);
+      if (v.error) v = await b.from("orme").select(COL).eq("tipo", "micelio").is("dorme_dal", null).limit(20);
       d.villaggi = v.data || [];
       /* i luoghi dentro i villaggi */
       var vid = d.villaggi.map(function (x) { return x.id; });
@@ -208,7 +209,8 @@
          il suo racconto in capitoli (paniere, punti di ritiro, partner) e gli eventi del villaggio, ognuno col suo link */
       var evV = vil ? d.eventi.filter(function (o) { return o.orma_madre_id === vil.id; })
         .sort(function (a, b) { return String(a.inizio_il || a.accaduto_il || "").localeCompare(String(b.inizio_il || b.accaduto_il || "")); }) : [];
-      hV += (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
+      hV += (vil && vil.immagine_url ? '<img class="vil-foto" alt="" src="' + esc(vil.immagine_url) + '" style="display:block;width:100%;max-height:16rem;object-fit:cover;border-radius:.9rem;border:1px solid rgba(212,175,106,.3);margin:.2rem 0 .6rem">' : "") +
+            (vil ? riga(vil, den.length === 1 ? "1 persona" : den.length + " persone") : "") +
             (vil && vil.contenuto ? '<div id="vil-racconto"><p class="intro" data-r></p></div>' : "") +
             (vil ? '<div id="vil-paniere"></div>' : "") +
             (vil ? fascia("i punti di ritiro", d.luoghi.filter(function (l) { return l.orma_madre_id === vil.id && l.punto_ritiro; }).map(function (l) { return riga(l, [l.luogo, l.ritiro_orari].filter(Boolean).join(" · ")); }).join(""), "") : "") +
@@ -225,6 +227,12 @@
     /* ⭐ 2 ottobre 16:34, Gab: «le orme dentro villaggio sardo, posso metterle io marco e alessandra in questa fase» — solo chi coordina */
     var coordino = vil && (d.dentro[vil.id] || []).some(function (r) { return r.persona_id === d.io && r.ruolo === "coordinatore"; });
     if (coordino) hV += '<div class="gesti">' + tasto("attiva un vicinato", 'data-vicinato="' + esc(vil.id) + '"') + '</div>';
+    /* ⭐ 3 ottobre 13:59, Gab: «non permette a me che sono colui che l'ha creata di aggiungere foto o invitare persone» —
+       chi ha aperto il villaggio o lo coordina mette la foto; chiunque è dentro invita chi risuona */
+    var mioVil = vil && d.io && (vil.persona_id === d.io || coordino);
+    if (vil && d.io) hV += '<div class="gesti" id="vil-gesti">' +
+      (mioVil ? tasto(vil.immagine_url ? "cambia la foto del villaggio" : "aggiungi una foto del villaggio", 'data-vil-foto="' + esc(vil.id) + '"') : "") +
+      tasto("invita chi risuona", 'data-vil-invita="' + esc(vil.id) + '"') + '</div>';
 
     /* 3 · Oggi / calendario */
     var oggi = new Date(); oggi.setHours(0, 0, 0, 0);
@@ -298,6 +306,33 @@
         var n = vp.querySelector("[data-paniere-nuovo]"); if (n) n.onclick = function (e) { e.preventDefault(); W.FMPaniere.apriNuovo(vil.id); };
       });
     })();
+    /* la foto del villaggio e l'invito */
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-vil-foto]"), function (bt) { bt.onclick = function () {
+      var inp = D.createElement("input"); inp.type = "file"; inp.accept = "image/*";
+      inp.onchange = async function () {
+        var file = inp.files && inp.files[0]; if (!file) return;
+        bt.disabled = true; var lab = bt.lastChild; var prima = lab.nodeValue; lab.nodeValue = "un momento…";
+        try {
+          var b = await db();
+          var est = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+          var path = d.io + "/villaggi/" + vil.id + "-" + Date.now() + "." + est;
+          var up = await b.storage.from("pubblico").upload(path, file, { upsert: true, contentType: file.type || "image/jpeg" });
+          if (up.error) throw up.error;
+          var url = b.storage.from("pubblico").getPublicUrl(path).data.publicUrl;
+          var q = await b.from("orme").update({ immagine_url: url }).eq("id", vil.id).select("id");
+          if (q.error) throw q.error;
+          if (!q.data || !q.data.length) throw new Error("la foto la cambia chi ha aperto il villaggio");
+          avvia();
+        } catch (e) { lab.nodeValue = prima; bt.disabled = false; alert("Non riuscito: " + (e.message || e)); }
+      };
+      inp.click();
+    }; });
+    Array.prototype.forEach.call(D.querySelectorAll("#porte [data-vil-invita]"), function (bt) { bt.onclick = function () {
+      if (!W.FMInvito || !W.FMInvito.condividi) return;
+      var aper = String(vil.contenuto || "").split(/\n## /)[0].trim();
+      W.FMInvito.condividi(bt, { titolo: vil.titolo, testo: vil.titolo + (aper ? "\n\n" + aper : ""),
+        url: "https://app.felicitasmundi.com/communitas-aeterna/index.html?p=vicinati&entra=" + vil.id });
+    }; });
     /* il racconto del villaggio: l'apertura in alto, i capitoli d'oro che si aprono */
     (function () {
       var vr = D.querySelector("#vil-racconto [data-r]"); if (!vr || !vil) return;
@@ -458,6 +493,7 @@
     doveSei(giro);
     await giro();
     /* ⭐ arrivo da «entra nel villaggio» di un evento: si apre il villaggio e la presentazione */
+    try { if (W.vicinatiApri) { W.vicinatiApri = null; var pa = document.querySelector("#porte details.villaggio"); if (pa) { pa.open = true; pa.scrollIntoView({ block: "start" }); } } } catch (e) {}
     var entra = null;
     try { entra = W.vicinatiEntra || new URLSearchParams(W.location.search).get("entra"); W.vicinatiEntra = null; } catch (e) {}
     if (entra && dd && dd.io) {

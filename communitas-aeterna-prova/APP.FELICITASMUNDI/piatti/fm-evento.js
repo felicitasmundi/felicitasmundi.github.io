@@ -229,6 +229,9 @@
     })();
     P.stato(R, "ha-madre", !!(d.madri && d.madri[0]));
     if (d.madri && d.madri[0]) P.gesto(R, "apri-madre", function () {
+      /* ⭐ 3 ottobre 13:59, Gab: il villaggio non si apre come un evento («è passata», «senza immagine»):
+         si va nei Vicinati, sul villaggio vero */
+      if (d.madri[0].tipo === "micelio" && typeof window.vai === "function") { window.vicinatiApri = d.madri[0].id; return window.vai("vicinati"); }
       if (typeof window.vai === "function") window.vai("evento", { id: d.madri[0].id });
     });
     var W = R.ownerDocument && R.ownerDocument.defaultView;
@@ -284,6 +287,11 @@
        il nome viene dal suo titolo: «Villaggio Felicitas – Civiltà Sarda» → «entra nel
        villaggio – civiltà sarda». Senza villaggio, il tasto non c'è. */
     P.gesto(R, "invita", function () {
+      /* ⭐ 3 ottobre 13:59, Gab: toccando il tasto si legge «copia» o «condividi via WhatsApp», col link dell'evento */
+      if (window.FMInvito && window.FMInvito.condividi) {
+        var m = window.FMInvito.perEvento(id, o.titolo);
+        return window.FMInvito.condividi(R.querySelector('[data-g="invita"]'), { url: m.url, testo: m.testo, titolo: o.titolo });
+      }
       /* ⭐ 2 ottobre 09:12, Gab: l'invito porta all'evento, e «chiudi» riporta qui */
       if (window.SpazioVivo && typeof window.SpazioVivo.invito === "function") return window.SpazioVivo.invito({ evento: id });
       location.href = "invito.html";
