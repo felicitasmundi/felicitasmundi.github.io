@@ -5899,12 +5899,32 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
      così l'ultima riga sta sopra la tastiera invece che dietro. */
   (function(){
     var vv = window.visualViewport;
-    if(!vv) return;                      /* senza, resta 100dvh: si degrada bene */
+    /* ⭐ 3 ottobre 12:33, Gab: ingrandendo sul Mac «il megafono va in su» — l'altezza restava quella di prima.
+       Ora si rimisura a ogni cambio della finestra, e visualViewport conta solo quando è più bassa
+       della finestra (la tastiera del telefono): sul computer vale l'altezza della finestra. */
     var misura = function(){
-      document.documentElement.style.setProperty("--schermo", vv.height + "px");
+      var h = window.innerHeight;
+      if(vv && vv.height && vv.height < h - 1) h = vv.height;
+      document.documentElement.style.setProperty("--schermo", Math.round(h) + "px");
     };
-    vv.addEventListener("resize", misura);
+    if(vv) vv.addEventListener("resize", misura);
+    window.addEventListener("resize", misura);
     misura();
+  })();
+
+  /* ⭐ 3 ottobre 12:33, Gab: «se sei sulla linea del megafono non ti fa scendere» — la rotella del mouse
+     o del trackpad sopra il Megafono e sopra la radio fa scorrere la finestra centrale, come se fosse lì.
+     Dentro una casella che scorre da sé (il testo lungo del Megafono, il palinsesto aperto) resta sua. */
+  (function(){
+    function scorriCentro(e){
+      var c = document.getElementById("centro"); if(!c || e.ctrlKey) return;
+      for(var el = e.target; el && el !== e.currentTarget; el = el.parentElement){
+        var cs = getComputedStyle(el);
+        if(/(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight + 1) return;
+      }
+      c.scrollBy(0, e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY);
+    }
+    ["mg", "pl"].forEach(function(id){ var el = document.getElementById(id); if(el) el.addEventListener("wheel", scorriCentro, { passive: true }); });
   })();
 
   /* ⭐ `stanze` parte adesso, insieme al gettone: non dipende da chi
