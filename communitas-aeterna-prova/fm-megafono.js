@@ -181,6 +181,7 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
           <button type="button" class="mg-vsg" data-p="chi" title="con chi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 20c0-3.3 2.7-5.4 6-5.4s6 2.1 6 5.4"/><path d="M16 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.9c2 .7 3.5 2.5 3.5 5.1"/></svg></button>
           <span class="mg-vuoto"></span>
           <button type="button" class="mg-gf" id="mg-gf" title="Allegato">&#128206;&#xFE0E;</button>
+          <button type="button" class="mg-gf" id="mg-mic" title="messaggio vocale" aria-label="messaggio vocale"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></button>
           <input type="file" id="mg-file" multiple hidden>
           <button type="button" class="mg-inv" id="mg-inv" title="Manda">&#8594;</button>
         </div>
@@ -1212,7 +1213,8 @@ var MG_LINK = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|it|org|net|eu|info|io|me|ly
     "#mg-dove-scrivo{display:none;align-items:center;gap:.4rem;max-width:100%;min-width:0;height:2.75rem;padding:0 .4rem 0 .9rem;border-radius:1.2rem;border:1px solid rgba(212,175,106,.55);background:rgba(212,175,106,.12);color:#E3C58A;font-family:'DM Sans',sans-serif;font-size:var(--t-eti);white-space:nowrap;overflow:hidden}" +
     "#mg-dove-scrivo span{overflow:hidden;text-overflow:ellipsis}" +
     "#mg-dove-scrivo button{all:unset;cursor:pointer;width:2rem;height:2rem;display:grid;place-items:center;font-size:1.1rem;color:rgba(245,240,230,.7)}" +
-    "body.mg-in-chat #mg-dove-scrivo{display:inline-flex}";
+    "body.mg-in-chat #mg-dove-scrivo{display:inline-flex}" +
+    "body:not(.mg-in-chat) #mg-mic{display:none!important}#mg-mic.reg{background:#B3402F;color:#fff;border-color:#B3402F}";
   document.head.appendChild(st);
   var sotto = document.querySelector("#mg .mg-sotto");
   if(sotto){
@@ -1257,6 +1259,40 @@ function mgMandaChat(t){
     if(window.FMChat && FMChat.ricarica) FMChat.ricarica();
   });
 }
+/* ⭐ 3 ottobre 14:55, Gab: «nella chat crea anche tasto … per inviare audio» — il microfono, solo quando il Megafono
+   scrive in una chat: un tocco registra, un altro tocco ferma e manda. Il vocale sale nel magazzino riservato dell'orma. */
+(function(){
+  var b = document.getElementById("mg-mic"); if(!b) return;
+  var rec = null, pezzi = [], flusso = null;
+  function ferma(){ try{ if(flusso) flusso.getTracks().forEach(function(t){ t.stop(); }); }catch(e){} flusso = null; b.classList.remove("reg"); b.title = "messaggio vocale"; }
+  b.onclick = async function(e){
+    e.preventDefault(); e.stopPropagation();
+    var c = window.mgChat; if(!c) return;
+    if(rec && rec.state === "recording"){ rec.stop(); return; }
+    if(!navigator.mediaDevices || !window.MediaRecorder){ parla("Qui non si può registrare: prova dal browser del telefono o del computer."); return; }
+    try{ flusso = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+    catch(er){ parla("Serve il permesso del microfono."); return; }
+    pezzi = [];
+    var tipo = ["audio/webm;codecs=opus","audio/mp4","audio/webm"].filter(function(t){ try{ return MediaRecorder.isTypeSupported(t); }catch(x){ return false; } })[0] || "";
+    rec = tipo ? new MediaRecorder(flusso, { mimeType: tipo }) : new MediaRecorder(flusso);
+    rec.ondataavailable = function(ev){ if(ev.data && ev.data.size) pezzi.push(ev.data); };
+    rec.onstop = function(){
+      ferma();
+      var mime = (rec.mimeType || "audio/webm").split(";")[0], est = /mp4/.test(mime) ? "m4a" : "webm";
+      var blob = new Blob(pezzi, { type: mime }); if(!blob.size) return;
+      var nome = "vocale-" + new Date().toISOString().replace(/[:.]/g, "-") + "." + est, via = c.id + "/" + nome;
+      parla("il vocale sta partendo…");
+      db.storage.from("riservato").upload(via, blob, { contentType: mime }).then(function(u){
+        if(u && u.error){ parla("Il vocale non è partito: " + mgParoleFile(u.error.message)); return; }
+        return db.from("orma_messaggi").insert({ orma_id: c.id, testo: "messaggio vocale", file_indirizzo: via, file_nome: nome, file_dimensione: blob.size }).then(function(r){
+          if(r && r.error){ parla("Il vocale non è partito: forse in questa chat non sei ancora dentro."); return; }
+          if(window.FMChat && FMChat.ricarica) FMChat.ricarica();
+        });
+      });
+    };
+    rec.start(); b.classList.add("reg"); b.title = "tocca per fermare e mandare";
+  };
+})();
 /* il messaggio a tutti: testo, e se c'è un file sale nel magazzino aperto e il suo indirizzo va nel messaggio */
 function mgMandaTutti(t){
   if(!io || io.id !== MG_GAB) return;

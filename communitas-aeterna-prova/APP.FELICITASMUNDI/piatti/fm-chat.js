@@ -229,8 +229,16 @@
     var V = p.querySelector(".vc"); V.hidden = false;
     p.querySelector(".indietro").hidden = false;
     p.querySelector("h2").textContent = r.tipo === "micelio" ? civ(r.titolo) : (r.titolo || "");
-    V.innerHTML = '<button type="button" class="vai-orma">apri l’orma &rsaquo;</button>' +
+    /* ⭐ 3 ottobre 14:55, Gab: «nella chat crea anche tasto per invitare in chat» */
+    V.innerHTML = '<div class="vc-gesti" style="display:flex;flex-wrap:wrap;gap:.2rem 1.2rem"><button type="button" class="vai-orma">apri l’orma &rsaquo;</button><button type="button" class="vai-orma" data-invita-chat>invita in chat &rsaquo;</button></div>' +
       '<div class="corpo"><div class="vuoto">un momento…</div></div>';   /* ⭐ 17:28, Gab: la riga sulla regola «prende troppo spazio» — via; la regola la dice il Megafono quando serve */
+    V.querySelector("[data-invita-chat]").onclick = function () {
+      if (!window.FMInvito || !window.FMInvito.condividi) return;
+      var tit = r.tipo === "micelio" ? (r.titolo || "") : (r.titolo || "");
+      var url = r.tipo === "micelio" ? "https://app.felicitasmundi.com/communitas-aeterna/index.html?p=vicinati&entra=" + id
+                                     : "https://app.felicitasmundi.com/communitas-aeterna/index.html?o=" + id;
+      window.FMInvito.condividi(this, { url: url, testo: tit, titolo: tit });
+    };
     V.querySelector(".vai-orma").onclick = function () {
       apri(false);   /* nell'orma la chat è il bottone «Apri la chat» */
       if (window.SpazioVivo && typeof window.SpazioVivo.apriOrma === "function") window.SpazioVivo.apriOrma(id);
@@ -263,6 +271,8 @@
     M.forEach(function (m) {
       if (m.argomento && m.argomento !== prima) { h += '<div class="arg" data-a="' + esc(m.argomento) + '">' + esc(m.argomento) + '</div>'; prima = m.argomento; }
       var mio = m.persona_id === stato.io, ak = m.argomento === "Antaḥkaraṇa";
+      var vocale = m.file_indirizzo && /\.(webm|m4a|mp3|ogg|wav|aac)$/i.test(m.file_nome || m.file_indirizzo);
+      if (vocale) { h += '<div class="m' + (mio ? " mio" : "") + '"><b>' + esc(mio ? "tu" : (nomi[m.persona_id] || "")) + '<span>' + esc(ora(m.momento)) + '</span></b><audio controls preload="none" data-audio="' + esc(m.file_indirizzo) + '" style="width:100%;max-width:16rem;height:2.4rem"></audio></div>'; return; }
       var corpo = m.file_indirizzo ? '<a href="#" data-file="' + esc(m.file_indirizzo) + '">&#128206; ' + esc(m.file_nome || m.testo) + '</a>'
         : (ak ? esc(m.testo).replace(/(https:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>') : esc(m.testo));
       h += '<div class="m' + (mio ? " mio" : "") + (ak ? " ak-m" : "") + '"><b>' + esc(mio ? "tu" : (nomi[m.persona_id] || "")) + '<span>' + esc(ora(m.momento)) + '</span></b>' + corpo + '</div>';
@@ -278,6 +288,9 @@
         if (/^https?:/.test(f)) { window.open(f, "_blank", "noopener"); return; }
         try { var su = await window.db.storage.from("riservato").createSignedUrl(f, 3600); if (su.data && su.data.signedUrl) window.open(su.data.signedUrl, "_blank", "noopener"); } catch (er) {}
       };
+    });
+    Array.prototype.forEach.call(C.querySelectorAll("audio[data-audio]"), async function (au) {
+      try { var su = await window.db.storage.from("riservato").createSignedUrl(au.getAttribute("data-audio"), 3600); if (su.data && su.data.signedUrl) au.src = su.data.signedUrl; } catch (er) {}
     });
     if (giu || inFondo) C.scrollTop = C.scrollHeight;
     /* letto fin qui: il numerino si azzera, e l'app toglie la notifica */
