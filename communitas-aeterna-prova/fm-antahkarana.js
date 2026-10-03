@@ -223,8 +223,31 @@ function akDisegna(box){
   var h = document.createElement("h1"); h.textContent = "Anta\u1e25kara\u1e47a";
   box.appendChild(h);
   var so = document.createElement("div");
-  so.className = "sot"; so.textContent = "[ la luna e la data ]";
+  /* ⭐ 3 ottobre: niente segnaposti pubblicati — la data di oggi */
+  so.className = "sot"; so.textContent = new Date().toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" });
   box.appendChild(so);
+
+  /* ⭐ 3 ottobre 14:45, Gab: «in Antaḥkaraṇa si dovrebbe spiegare come funziona» — Base e Praticantato */
+  akTit(box, "Come funziona", "");
+  var cf = document.createElement("div");
+  cf.className = "come";
+  cf.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:.9rem;margin:.2rem 0 1.4rem";
+  var carta = function (tit, prezzo, voci) {
+    return '<div style="border:1px solid rgba(212,175,106,.45);border-radius:.9rem;padding:1rem 1.1rem;background:rgba(8,11,26,.5)">' +
+      '<b style="display:block;font-family:Cinzel,serif;font-weight:400;font-size:1.05rem;letter-spacing:.06em;color:#F5F0E6">' + tit + '</b>' +
+      '<span style="display:block;font-family:\'Cormorant Garamond\',serif;font-style:italic;font-size:1.15rem;color:#D4AF6A;margin:.15rem 0 .6rem">' + prezzo + '</span>' +
+      '<ul style="margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.4rem;font-size:.98rem;line-height:1.45;color:rgba(245,240,230,.82)">' +
+      voci.map(function (v) { return "<li>" + v + "</li>"; }).join("") + '</ul></div>';
+  };
+  cf.innerHTML =
+    carta("Base", "26 \u20ac al mese, o karma yoga", [
+      "tutti gli strumenti: la mia orma, Megafono, chat, villaggio, eventi, pubblicare nelle stanze, radio",
+      "Anta\u1e25kara\u1e47a primo livello: il cammino e il percorso dei talenti"]) +
+    carta("Praticantato", "20 \u20ac a settimana", [
+      "un incontro di gruppo alla settimana, un\u2019ora online; la registrazione resta a chi non c\u2019era",
+      "Anta\u1e25kara\u1e47a secondo livello",
+      "le lezioni riservate della Scuola"]);
+  box.appendChild(cf);
 
   /* ── ① karma yoga, aperto a tutti ── */
   akTit(box, "Karma yoga", "puoi prenderne uno adesso");

@@ -202,10 +202,9 @@ var G = [
   ["<b>Con l&rsquo;account si possono acquistare le lezioni a pagamento</b> e riceverne il codice.",
    "Comprare non è partecipare: anche una lezione è una cosa che si acquista. Senza account non si può nemmeno comprare.",
    ["canone","non ancora"]],
-  ["<b>Il karma yoga paga la piattaforma, non il tempo di chi accompagna.</b> Quattro ore al mese valgono i 26 €. Gli incontri di ogni fase lunare si pagano in denaro, sempre.",
+  ["<b>Il karma yoga paga la piattaforma, non il tempo di chi accompagna.</b> Quattro ore al mese valgono i 26 €.",
    "Se il tempo di chi guida si potesse comprare con le ore, bisognerebbe esserci per chiunque ne accumuli abbastanza.", ["canone","nelle condizioni"]],
-  ["<b>Gli incontri di ogni fase lunare: 50 € l'uno, 100 € al mese.</b> Sei lune 510 €, un anno 900 € — pagati subito, non a rate.",
-   "A rate è uguale al mensile, ma con dodici scadenze da inseguire — e chi smette a metà lascia un debito da rincorrere.", ["canone","non ancora"]],
+  /* ⭐ 3 ottobre, Gab: «l'aspetto incontri 50 euro da togliere» */
   ["<b>Chi conduce non è un counselor né un terapeuta</b>, e non esercita professioni regolamentate: propone l'uso di strumenti propri.",
    "La scrittura, il metodo e l'impianto di FelicitasMundi sono opera dell'autore.", ["nelle condizioni"]],
   ["<b>Servire per almeno quattro ore dà accesso al praticantato e agli scambi.</b> Supportare in un bisogno pubblico è già servizio.",
