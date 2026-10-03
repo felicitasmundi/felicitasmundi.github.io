@@ -147,7 +147,7 @@
 
       /* le figlie, in ordine di tempo, e chi ha preso ognuna */
       var f = await db.from("orme")
-        .select("id,titolo,contenuto,elemento,stadio,entro_il,luogo,destinazione,tipo,categoria,inizio_il,accaduto_il")
+        .select("id,titolo,contenuto,elemento,stadio,entro_il,luogo,destinazione,tipo,categoria,inizio_il,accaduto_il,persona_id")
         .eq("orma_madre_id", id).order("momento");
       d.figlie = f.error ? [] : (f.data || []);
       if (d.figlie.length) {
@@ -160,6 +160,24 @@
           (pr[r.orma_id] = pr[r.orma_id] || []).push(r);
         });
         d.figlie.forEach(function (x) { x.presa = pr[x.id] || []; });
+      }
+
+      /* ⭐ 3 ottobre — «proponi a…»: la rubrica e chi lavora nell'orma madre (il lavoro del team) */
+      d.rubrica = [];
+      if (d.io && d.orma.persona_id === d.io) {
+        try {
+          var rb = await db.from("contatti").select("nome,persona_id").eq("proprietario_id", d.io).not("persona_id", "is", null);
+          d.rubrica = rb.error ? [] : (rb.data || []);
+          if (d.orma.orma_madre_id) {
+            var tm = await db.from("orma_persone").select("persona_id,nome").eq("orma_id", d.orma.orma_madre_id)
+              .not("persona_id", "is", null).not("preso_il", "is", null).is("lasciato_il", null);
+            (tm.error ? [] : tm.data || []).forEach(function (r) { d.rubrica.push(r); });
+          }
+          var visto = {}; visto[d.io] = 1;
+          d.dentro.forEach(function (x) { if (x.persona_id && x.stato !== "rifiutato") visto[x.persona_id] = 1; });
+          d.rubrica = d.rubrica.filter(function (r) { if (visto[r.persona_id]) return false; visto[r.persona_id] = 1; return true; });
+          d.rubrica.sort(function (x, y) { return String(x.nome).localeCompare(String(y.nome)); });
+        } catch (e) {}
       }
 
       /* gli allegati, coi permessi che scadono */
@@ -470,25 +488,8 @@
         await db.rpc("fm_chiudi_orma", { p_orma: id, p_ore: n });
       })();
     });
-    P.gesto(R, "chiamo", async function () {
-      try {
-        var r = await db.from("contatti").select("nome,persona_id")
-          .eq("proprietario_id", io).not("persona_id", "is", null).order("nome");
-        var chi = r.error ? [] : (r.data || []);
-        if (!chi.length) {
-          alert("Nella tua rubrica non c\u2019\u00e8 ancora nessuno con un account. " +
-                "Prima passa dall\u2019invito.");
-          return;
-        }
-        var el = chi.map(function (c, k) { return (k + 1) + " \u00b7 " + c.nome; }).join("\n");
-        var sc = prompt("Chi chiami?\n\n" + el);
-        if (sc === null) return;
-        var k = parseInt(sc, 10) - 1;
-        if (isNaN(k) || !chi[k]) return;
-        await db.rpc("fm_chiama_orma", { p_orma: id, p_persona: chi[k].persona_id });
-        await ricarica();
-      } catch (e) { console.warn("chiamare:", e); }
-    });
+    /* ⭐ 3 ottobre — «proponi a…»: l'elenco si apre sotto il tasto, si tocca un nome (era una finestra coi numeri) */
+    P.gesto(R, "chiamo", function () { stato.scegli = !stato.scegli; disegna(R, d, id, ricarica, stato); });
     /* ⭐ allegare: bucket riservato, <orma>/<nome> · 25 MB · 10 per orma */
     function allega() {
       if (d.file.length >= TETTO_FILE) return;
@@ -698,6 +699,132 @@
       /* anche il tasto ↑ manda (sul telefono l'Invio non sempre c'è) */
       var tm = scrivi.parentNode.querySelector("button"); if (tm) tm.onclick = function (e) { e.preventDefault(); manda(); };
     }
+    riordina(R, d, id, ricarica, stato);
+  }
+
+  /* ── ⭐ 3 ottobre, Gab: «mostrami come miglioreresti dentro orma» → «ok procedi» ──────────
+     Lo stato in alto, che si cambia con un tocco · «proponi a…» con l'elenco sotto il tasto ·
+     chi riceve la proposta accetta o dice «non posso» · nei passi lo stato sulla riga ·
+     «chiudi» e «cancella» in fondo, sotto «altro» · per gli obiettivi: «note» e «passi». */
+  var STADI = [["in_coda", "in coda"], ["in_avanzamento", "in avanzamento"], ["sviluppato", "sviluppato"]];
+  function stadioVero(s) { return s === "sviluppato" || s === "in_avanzamento" ? s : "in_coda"; }
+  function riordina(R, d, id, ricarica, stato) {
+    var doc = R.ownerDocument, o = d.orma || {};
+    var padrone = !!(d.io && o.persona_id === d.io);
+    var obiettivo = o.tipo === "obiettivo" || o.tipo === "karma_yoga";
+    var esc = function (t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]; }); };
+    var capo = R.querySelector(".capo");
+
+    /* lo stato in alto */
+    var sb = R.querySelector("#fm-stati");
+    if (!sb) { sb = doc.createElement("div"); sb.id = "fm-stati"; sb.className = "fm-stati"; sb.setAttribute("role", "radiogroup"); sb.setAttribute("aria-label", "a che punto è");
+      if (capo && capo.parentNode) capo.parentNode.insertBefore(sb, capo.nextSibling); }
+    var st = stadioVero(o.stadio);
+    sb.setAttribute("aria-disabled", padrone ? "false" : "true");
+    sb.innerHTML = STADI.map(function (x) { return '<button type="button" data-v="' + x[0] + '" aria-pressed="' + (x[0] === st) + '">' + x[1] + '</button>'; }).join("");
+    if (padrone) Array.prototype.forEach.call(sb.querySelectorAll("button"), function (b) {
+      b.onclick = async function () {
+        var v = b.getAttribute("data-v"); if (v === stadioVero(o.stadio)) return;
+        var prima = o.stadio; o.stadio = v; riordina(R, d, id, ricarica, stato);
+        var r = await db.from("orme").update({ stadio: v }).eq("id", id).select("id");
+        if (r.error || !r.data || !r.data.length) { console.warn("stato:", r.error); o.stadio = prima; riordina(R, d, id, ricarica, stato); return; }
+        await ricarica();
+      };
+    });
+    /* il vecchio segno dello stato e «fatto · va in archivio / riprendila» non servono più: lo stato è sopra */
+    Array.prototype.forEach.call(R.querySelectorAll("span.stadio"), function (e) { e.style.display = "none"; });
+    Array.prototype.forEach.call(R.querySelectorAll('[data-g="concludi"],[data-g="riprendi"]'), function (e) { e.style.display = "none"; });
+
+    /* chiudi e cancella: in fondo, sotto «altro» */
+    var mia = R.querySelector(".mia");
+    var gesti = mia && mia.querySelector(":scope > .mia-gesti");
+    var conf = mia && mia.querySelector(".mia-conferma");
+    if (mia && gesti) {
+      var al = R.querySelector("#fm-altro");
+      if (!al) {
+        al = doc.createElement("details"); al.id = "fm-altro"; al.className = "fm-altro";
+        al.innerHTML = "<summary>altro</summary>";
+        var pie = R.querySelector(".pie"); (pie ? pie.parentNode : R).insertBefore(al, pie || null);
+      }
+      al.appendChild(gesti); if (conf) al.appendChild(conf);
+      al.hidden = !padrone || !!o.dorme_dal;
+      if (stato.confermaCancella) al.open = true;
+    }
+
+    /* chi riceve la proposta: accetto · non posso */
+    var miaRiga = d.dentro.filter(function (x) { return x.persona_id === d.io && x.stato === "proposto" && !x.preso_il; })[0];
+    var pp = R.querySelector("#fm-proposta"); if (pp) pp.remove();
+    if (miaRiga && !padrone) {
+      pp = doc.createElement("div"); pp.id = "fm-proposta"; pp.className = "fm-proposta";
+      pp.innerHTML = '<b>' + esc((d.autore && d.autore.nome) || "Qualcuno") + ' ti propone ' + (obiettivo ? "questo obiettivo" : "quest’orma") + '</b>' +
+        '<div><button type="button" class="si">accetto</button><button type="button" class="no">non posso</button></div>';
+      sb.parentNode.insertBefore(pp, sb.nextSibling);
+      pp.querySelector(".si").onclick = async function () {
+        var r = await db.rpc("fm_prendi_orma", { p_orma: id });
+        if (r.error || r.data === false) { console.warn("accetto:", r.error); return; }
+        await ricarica();
+      };
+      pp.querySelector(".no").onclick = async function () {
+        var r = await db.from("orma_persone").update({ stato: "rifiutato", deciso_il: new Date().toISOString() }).eq("id", miaRiga.id).eq("persona_id", d.io);
+        if (r.error) { console.warn("non posso:", r.error); return; }
+        await ricarica();
+      };
+    }
+
+    /* «proponi a…»: il tasto e l'elenco sotto */
+    var ch = R.querySelector('[data-g="chiamo"]');
+    if (ch) {
+      ch.hidden = !padrone;
+      var lab = ch.querySelector("span:not(.pi)"); if (lab) lab.textContent = "proponi a…";
+      var sc = R.querySelector("#fm-scegli"); if (sc) sc.remove();
+      if (padrone && stato.scegli) {
+        sc = doc.createElement("div"); sc.id = "fm-scegli"; sc.className = "fm-scegli";
+        var lib = d.rubrica || [];
+        sc.innerHTML = lib.length ? lib.map(function (r) { return '<button type="button" data-persona="' + esc(r.persona_id) + '">' + esc(r.nome) + '</button>'; }).join("")
+          : '<span>Nella tua rubrica e nella squadra non c’è ancora nessuno con un account.</span>';
+        ch.parentNode.insertBefore(sc, ch.nextSibling);
+        Array.prototype.forEach.call(sc.querySelectorAll("button[data-persona]"), function (b) {
+          b.onclick = async function () {
+            b.disabled = true;
+            var r = await db.rpc("fm_chiama_orma", { p_orma: id, p_persona: b.getAttribute("data-persona") });
+            if (r.error || r.data === false) { console.warn("proponi:", r.error); b.disabled = false; return; }
+            stato.scegli = false; await ricarica();
+          };
+        });
+      }
+    }
+
+    /* per gli obiettivi: «note» e «passi»; niente «scarica l'app» */
+    if (obiettivo) {
+      var rb = R.querySelector("#p-racconto summary b"); if (rb) rb.textContent = "Note";
+      Array.prototype.forEach.call(R.querySelectorAll("summary b"), function (b) { if (/^Obiettivi, eventi, riunioni$/.test(b.textContent)) b.textContent = "Passi"; });
+      Array.prototype.forEach.call(R.querySelectorAll(".fascia-f"), function (f) { if (f.textContent === "obiettivi") f.textContent = "passi"; });
+      Array.prototype.forEach.call(R.querySelectorAll("#fm-scarica"), function (e) { e.remove(); });
+    }
+
+    /* i passi: niente etichette vuote, niente «?»; lo stato sulla riga */
+    var copie = R.querySelectorAll('[data-fm-copia="figlia"].figlia, .figlia[data-fm-copia]');
+    Array.prototype.forEach.call(copie, function (c, i) {
+      var x = d.figlie[i]; if (!x) return;
+      Array.prototype.forEach.call(c.querySelectorAll(".dd > span"), function (sp) {
+        var v = sp.querySelector("span"); var t = v ? (v.textContent || "").trim() : "";
+        sp.style.display = !t || /^\[.*\]$/.test(t) ? "none" : "";
+      });
+      var vu = c.querySelector('[data-stato="presa-vuota"]'); if (vu) vu.style.display = "none";
+      var vecchio = c.querySelector(':scope > .st'); if (vecchio) vecchio.style.display = "none";
+      var b = c.querySelector(".fm-st");
+      if (!b) { b = doc.createElement("button"); b.type = "button"; c.appendChild(b); }
+      var sx = stadioVero(x.stadio), suo = x.persona_id === d.io;
+      b.className = "fm-st " + sx; b.textContent = STADI.filter(function (y) { return y[0] === sx; })[0][1];
+      b.setAttribute("aria-disabled", suo ? "false" : "true");
+      b.onclick = async function (e) {
+        e.stopPropagation(); if (!suo) return;
+        var k = STADI.map(function (y) { return y[0]; }).indexOf(stadioVero(x.stadio));
+        var prima = x.stadio; x.stadio = STADI[(k + 1) % 3][0]; riordina(R, d, id, ricarica, stato);
+        var r = await db.from("orme").update({ stadio: x.stadio }).eq("id", x.id).select("id");
+        if (r.error || !r.data || !r.data.length) { console.warn("stato del passo:", r.error); x.stadio = prima; riordina(R, d, id, ricarica, stato); }
+      };
+    });
   }
 
   /* ── la porta ──────────────────────────────────────────────────── */
