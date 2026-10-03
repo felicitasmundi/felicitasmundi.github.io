@@ -32,7 +32,7 @@
       ".fa-striscia>[data-famiglia][aria-pressed=true]{background:color-mix(in srgb,var(--c) 30%,transparent)!important;border-color:var(--c)!important}" +
       ".fa-scheda{display:flex;flex-direction:column;justify-content:space-between;gap:.6rem;min-height:9.5rem;padding:.9rem .8rem;border-radius:.9rem;" +
       "background:radial-gradient(circle at 50% 0%,#2b5f9e 0%,#163a6b 55%,#0e2549 100%);border:1px solid rgba(212,175,106,.35);color:#F5F0E6}" +
-      ".fa-scheda img{width:2.6rem;height:2.6rem;object-fit:contain;opacity:.9;align-self:center}" +
+      ".fa-scheda img{width:3.2rem;height:3.2rem;object-fit:contain;opacity:.9;align-self:center}" +
       ".fa-scheda b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.08rem;line-height:1.25;text-align:center}" +
       ".fa-scheda small{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.22em;text-align:center;color:rgba(212,175,106,.85)}";
     document.head.appendChild(st);
@@ -56,7 +56,7 @@
     });
     var fino = (gia || 0) + 24;
     box.innerHTML = lista.slice(0, fino).map(function (g) {
-      return '<div class="fa-scheda"><img alt="" src="nexus-cerchio.webp"><b>' + esc(g.name) + '</b><small>FELICITASMUNDI</small></div>';
+      return '<div class="fa-scheda"><img alt="" src="nexus-fermo.webp?v=10010900"><b>' + esc(g.name) + '</b><small>FELICITASMUNDI</small></div>';
     }).join("") + (lista.length > fino
       ? '<button type="button" id="fa-altri" style="all:unset;grid-column:1/-1;cursor:pointer;justify-self:center;padding:.6rem 1.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.5);color:#D4AF6A;font-family:\'Cormorant Garamond\',serif;font-size:1.05rem">altri ' + Math.min(24, lista.length - fino) + ' · ' + lista.length + ' in tutto</button>'
       : "");
