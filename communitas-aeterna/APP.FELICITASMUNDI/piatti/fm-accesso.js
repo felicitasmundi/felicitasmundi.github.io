@@ -233,8 +233,8 @@
     if (invito) {
       P.stato(R, "da-invito", true);
       try {
-        var q = await db.from("persone_pubbliche").select("nome")
-          .eq("nome_url", invito).limit(1);
+        /* ⭐ 3 ottobre (SQL 42): da fuori le persone non si leggono più in elenco — il nome di chi invita lo dà fm_chi_invita */
+        var q = await db.rpc("fm_chi_invita", { p_nome_url: invito });
         var chi = (!q.error && q.data && q.data[0] && q.data[0].nome) || "";
         var n = R.querySelector('[data-stato="da-invito"]');
         if (n && chi) n.textContent = chi + " ti aspetta: nome e cognome servono anche a te.";
