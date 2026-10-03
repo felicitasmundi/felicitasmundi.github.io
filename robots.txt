@@ -1,2 +1,4 @@
 User-agent: *
 Disallow: /communitas-aeterna-prova/
+
+Sitemap: https://app.felicitasmundi.com/sitemap.xml

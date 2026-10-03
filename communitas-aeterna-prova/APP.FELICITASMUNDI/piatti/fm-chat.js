@@ -40,7 +40,7 @@
     /* ⭐ 15:49, Gab: «toccando la chat in alto … io voglio che scenda l'elenco delle chat» — una tendina sotto il tasto, non un pannello */
     "#sv-chat-p{position:fixed;z-index:72;top:4rem;right:1rem;width:min(25rem,calc(100vw - 2rem));max-height:min(78vh,44rem);background:#080B1A;border:1px solid rgba(212,175,106,.45);border-radius:1.1rem;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1.2rem 2.6rem rgba(0,0,0,.6);color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif;transform-origin:top right;animation:svchatgiu .18s ease-out}" +
     "@keyframes svchatgiu{from{opacity:0;transform:translateY(-.4rem) scaleY(.96)}to{opacity:1;transform:none}}" +
-    "#sv-chat-p.in-chat{height:min(78vh,44rem)}" +
+    "#sv-chat-p.in-chat{height:auto}" +   /* ⭐ 3 ottobre 14:55, Gab: la finestra non si allunga più da sola fino al Megafono */
     "#sv-chat-p .scrivi{padding:.5rem 1rem .7rem}" +
     "#sv-chat-p[hidden],#sv-chat-p [hidden]{display:none!important}" +
     "@media (max-width:40rem){#sv-chat-p{right:.5rem;width:calc(100vw - 1rem)}}" +
@@ -129,9 +129,12 @@
     p.style.top = Math.round(r.bottom + 8) + "px";
     /* ⭐ 17:02: la tendina si ferma sopra il Megafono, che è dove si scrive */
     var mg = document.getElementById("mg"), mt = mg && mg.getBoundingClientRect();
-    if (mt && mt.height && mt.top > r.bottom + 120) p.style.maxHeight = Math.round(mt.top - r.bottom - 16) + "px";
+    /* ⭐ 3 ottobre 14:55, Gab: «non copra l'area scrittura» — con la tastiera aperta il Megafono sale, e la tendina si accorcia con lui */
+    if (mt && mt.height) p.style.maxHeight = Math.max(110, Math.round(mt.top - r.bottom - 16)) + "px";
     if (window.innerWidth > 640) p.style.right = Math.max(8, Math.round(window.innerWidth - r.right)) + "px"; else p.style.right = "";
   }
+  try { if (window.visualViewport) window.visualViewport.addEventListener("resize", function () { if (stato.aperto) sotto(); }); } catch (e) {}
+  window.addEventListener("resize", function () { if (stato.aperto) sotto(); });
   document.addEventListener("click", function (e) {
     if (!stato.aperto) return;
     var p = document.getElementById("sv-chat-p"), t = document.getElementById("sv-chat");
@@ -253,9 +256,8 @@
     if (pids.length) { try { var pn = await window.db.from("persone_pubbliche").select("id,nome").in("id", pids); (pn.data || []).forEach(function (x) { nomi[x.id] = x.nome || ""; }); } catch (e) {} }
     var args = [];
     M.forEach(function (m) { if (!m.argomento) return; var a = args.filter(function (x) { return x.nome === m.argomento; })[0]; if (a) a.n++; else args.push({ nome: m.argomento, n: 1 }); });
-    var h = '<div class="gr" style="padding-left:0">di cosa si è parlato</div>' +
-      (args.length ? '<div class="args">' + args.map(function (a, i) { return '<button type="button" data-arg="' + i + '">' + esc(a.nome) + '<i>' + a.n + '</i></button>'; }).join("") + '</div>'
-                   : '<div class="vuoto" style="padding-left:0">nessun argomento ancora</div>');
+    /* ⭐ 3 ottobre 14:55, Gab: «argomenti sia piccolino» — gli argomenti, quando ci sono, sono una riga di bottoncini; se non ci sono, non c'è niente */
+    var h = (args.length ? '<div class="args" style="margin:.2rem 0 .5rem">' + args.map(function (a, i) { return '<button type="button" data-arg="' + i + '">' + esc(a.nome) + '<i>' + a.n + '</i></button>'; }).join("") + '</div>' : '');
     if (!M.length) h += '<div class="vuoto" style="padding-left:0">nessun messaggio ancora</div>';
     var prima = null;
     M.forEach(function (m) {
