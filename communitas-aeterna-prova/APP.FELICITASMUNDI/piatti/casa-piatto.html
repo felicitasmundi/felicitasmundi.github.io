@@ -81,6 +81,48 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
 .sotto-mega{color:var(--tenue);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem}
 
 @media (max-width:40rem){ .fase{padding-left:2.9rem} .num{width:2.1rem;height:2.1rem} .fase::before{left:1rem} .pr{flex-basis:9.5rem} .pr.largo{flex-basis:12.5rem} }
+
+/* ── 19:09, Gab: «come lo farebbe la Apple?» — il prodotto in funzione, dentro un telefono ── */
+.link2{display:flex;justify-content:center;gap:1.8rem;flex-wrap:wrap;font-size:1.1rem;margin:.4rem 0 2rem}
+.link2 a,.link2 span{color:var(--oro)}
+.tel{width:15.5rem;margin:0 auto;border-radius:2.4rem;padding:.55rem;background:linear-gradient(145deg,#2a2d3c,#0c0e18);box-shadow:0 1.5rem 3rem rgba(0,0,0,.55),0 0 0 1px rgba(212,175,106,.25)}
+.tel.grande{width:18rem}
+.schermo{border-radius:1.9rem;overflow:hidden;aspect-ratio:9/18.5;background:radial-gradient(ellipse at 50% 0%,rgba(212,175,106,.14),transparent 55%),#060a16;padding:1.4rem .8rem .8rem;display:flex;flex-direction:column;gap:.35rem;text-align:left;position:relative}
+.schermo .sb b{display:block;font-family:Cinzel,serif;font-weight:400;font-size:1rem;letter-spacing:.06em}
+.schermo .sb small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.8rem;color:rgba(245,240,230,.6)}
+.schermo .g{font-family:Cinzel,serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.85);margin-top:.5rem}
+.schermo .o{display:flex;align-items:center;gap:.4rem;padding:.45rem 0;border-bottom:1px solid rgba(212,175,106,.14)}
+.schermo .pt{width:.42rem;height:.42rem;border-radius:50%;flex:none;background:var(--c,#4488BB);box-shadow:0 0 .4rem var(--c,#4488BB)}
+.schermo .tx{flex:1;min-width:0}
+.schermo .tx b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:.86rem;line-height:1.15;color:var(--ivory)}
+.schermo .sm{display:block;font-size:.62rem;color:rgba(245,240,230,.5)}
+.schermo .bar{display:block;height:2px;border-radius:9px;background:rgba(245,240,230,.1);margin-top:.3rem;overflow:hidden}
+.schermo .bar i{display:block;height:100%;width:0;background:var(--oro);transition:width .8s}
+.schermo .st{flex:none;font-size:.56rem;padding:.18rem .45rem;border-radius:999px;border:1px solid rgba(245,240,230,.25);color:rgba(245,240,230,.7);transition:all .4s}
+.schermo .st.av{border-color:rgba(212,175,106,.6);color:var(--oro);background:rgba(212,175,106,.12)}
+.schermo .st.sv{border-color:rgba(111,155,106,.6);color:#9ac296;background:rgba(111,155,106,.12)}
+.schermo .vv{display:flex}
+.schermo .vv span{width:1.15rem;height:1.15rem;border-radius:50%;display:grid;place-items:center;font-size:.55rem;border:1px solid rgba(212,175,106,.55);background:rgba(212,175,106,.12);transition:all .4s}
+.schermo .vv span+span{margin-left:-.3rem}
+.schermo .fatto .tx b{opacity:.55;text-decoration:line-through}
+.schermo .vet{margin-top:auto;border:1px solid rgba(212,175,106,.4);border-radius:.8rem;padding:.5rem;background:rgba(8,11,26,.8);opacity:0;transform:translateY(1rem);transition:all .6s}
+.schermo .vet.su{opacity:1;transform:none}
+.schermo .vet small{font-family:Cinzel,serif;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:#4488BB}
+.schermo .vet div{display:flex;gap:.5rem;align-items:center;margin-top:.3rem}
+.schermo .vet img{width:2.2rem;height:2.9rem;object-fit:cover;border-radius:.3rem}
+.schermo .vet b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:.85rem}
+.schermo .card{display:flex;flex-direction:column;gap:.5rem;margin-top:.6rem}
+.schermo .card img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:.7rem}
+.schermo .card b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1rem}
+.schermo .tg{display:inline-block;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(212,175,106,.55);color:var(--oro);border-radius:999px;padding:.1rem .4rem}
+.schermo .pz2{display:block;color:#E3C58A;font-size:.8rem;margin-top:.15rem}
+.schermo .btn{display:inline-block;margin-top:.35rem;font-family:Cinzel,serif;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;background:var(--oro);color:#0A0C1A;border-radius:999px;padding:.35rem .8rem}
+.scene{display:flex;flex-direction:column;gap:3.6rem;margin:3rem 0 4rem}
+.scena{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:2rem}
+.scena.giu .tel{order:2}
+.tx2 .eti{font-family:Cinzel,serif;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--oro)}
+.tx2 h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin:.4rem 0 0}
+@media (max-width:40rem){ .scena,.scena.giu{grid-template-columns:1fr;text-align:center} .scena.giu .tel{order:0} .tel.grande{width:15rem} }
 </style>
 </head>
 <body>
@@ -90,8 +132,46 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
   <div class="eti">COSCIENZA · TECNOLOGIA · COMUNITÀ</div>
   <h1>FelicitasMundi — Comunità Eterna</h1>
   <p class="sottotitolo">uno strumento pratico per tenere traccia di ciò che si fa insieme</p>
-  <p>FelicitasMundi è una piattaforma che connette e supporta lo sviluppo economico e sociale di comunità contadine e spirituali dei territori nazionali.</p>
-  <div class="passi"><span>la consapevolezza del proprio talento</span><span>lo sviluppo</span><span>i gruppi di lavoro</span><span>gli strumenti di tecnologia e di coscienza</span><span>i prodotti</span></div>
+  <div class="link2"><span data-r="soglia">Entra ›</span><a href="#scene">Guarda come funziona ›</a></div>
+  <div class="tel grande" aria-hidden="true"><div class="schermo" id="demo">
+   <div class="sb"><b>La mia orma</b><small>Segna gli obiettivi, coopera con le squadre, pubblica</small></div>
+   <div class="g">in avanzamento</div>
+   <div class="o" id="d-o"><i class="pt"></i><div class="tx"><b>[ un obiettivo del gruppo ]</b><span class="bar"><i id="d-bar"></i></span></div><span class="st" id="d-st">in coda</span><span class="vv" id="d-vv"><span>+</span></span></div>
+   <div class="o"><i class="pt" style="--c:#CC6644"></i><div class="tx"><b>[ un altro obiettivo ]</b><span class="bar"><i style="width:30%"></i></span></div><span class="st av">in avanzamento</span><span class="vv"><span>·</span></span></div>
+   <div class="vet" id="d-vet"><small>in vetrina · Emporio</small><div><img src="anima-vagabonda.jpg" alt=""><b>[ il prodotto ]</b></div></div>
+  </div></div>
+ </section>
+
+ <section class="scene" id="scene">
+  <div class="scena">
+   <div class="tel" aria-hidden="true"><div class="schermo">
+    <div class="sb"><b>La mia orma</b></div>
+    <div class="g">in coda</div>
+    <div class="o"><i class="pt" style="--c:#AA8844"></i><div class="tx"><b>[ il mio obiettivo ]</b><span class="bar"><i style="width:0"></i></span></div><span class="st">in coda</span></div>
+    <div class="g">in avanzamento</div>
+    <div class="o"><i class="pt"></i><div class="tx"><b>[ l'obiettivo del gruppo ]</b><span class="bar"><i style="width:55%"></i></span></div><span class="st av">in avanzamento</span><span class="vv"><span>·</span><span>·</span></span></div>
+    <div class="g">sviluppato</div>
+    <div class="o fatto"><i class="pt" style="--c:#669944"></i><div class="tx"><b>[ un obiettivo concluso ]</b><span class="bar"><i style="width:100%;background:#9ac296"></i></span></div><span class="st sv">sviluppato</span></div>
+   </div></div>
+   <div class="tx2"><div class="eti">Gli obiettivi</div><h3>Il tuo e quello del gruppo.</h3></div>
+  </div>
+  <div class="scena giu">
+   <div class="tel" aria-hidden="true"><div class="schermo">
+    <div class="sb"><b>Villaggio Felicitas</b><small>Civiltà Sarda</small></div>
+    <div class="g">comprare insieme</div>
+    <div class="o"><i class="pt" style="--c:#AA8844"></i><div class="tx"><b>[ un pacchetto del villaggio ]</b><small class="sm">il costo diviso tra chi partecipa</small></div><span class="st av">aperto</span></div>
+    <div class="g">punto di ritiro</div>
+    <div class="o"><i class="pt" style="--c:#AA8844"></i><div class="tx"><b>[ un luogo del villaggio ]</b><small class="sm">con i suoi orari</small></div></div>
+   </div></div>
+   <div class="tx2"><div class="eti">Il villaggio</div><h3>Comprare insieme, il punto di ritiro.</h3></div>
+  </div>
+  <div class="scena">
+   <div class="tel" aria-hidden="true"><div class="schermo">
+    <div class="sb"><b>Emporio</b><small>prodotti vicini e lontani</small></div>
+    <div class="card"><img src="anima-vagabonda.jpg" alt=""><div><span class="tg">nel percorso</span><b>Anima Vagabonda</b><small class="sm">Villa Vrindavana - Firenze</small><span class="pz2">18,00 €</span><span class="btn">ordina</span></div></div>
+   </div></div>
+   <div class="tx2"><div class="eti">La vetrina</div><h3>Quello che fai diventa un prodotto.</h3></div>
+  </div>
  </section>
 
  <!-- ① la piattaforma -->
@@ -198,6 +278,20 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
     if (r) { e.preventDefault(); vaiA(r.getAttribute("data-r").replace(/&amp;/g, "&")); }
   });
   if (window.parent !== window) document.documentElement.classList.add("in-app");
+
+  /* il telefono che lavora da solo: in coda → in avanzamento → arriva una persona → sviluppato → in vetrina */
+  (function(){
+    var st=document.getElementById("d-st"), bar=document.getElementById("d-bar"), vv=document.getElementById("d-vv"), vet=document.getElementById("d-vet");
+    if(!st) return;
+    var passi=[
+      function(){ st.className="st"; st.textContent="in coda"; bar.style.width="0"; vv.innerHTML="<span>+</span>"; vet.classList.remove("su"); },
+      function(){ st.className="st av"; st.textContent="in avanzamento"; bar.style.width="35%"; },
+      function(){ vv.innerHTML="<span>·</span><span>·</span>"; bar.style.width="70%"; },
+      function(){ st.className="st sv"; st.textContent="sviluppato"; bar.style.width="100%"; },
+      function(){ vet.classList.add("su"); }
+    ], i=0;
+    passi[0](); setInterval(function(){ i=(i+1)%(passi.length+1); if(i<passi.length) passi[i](); }, 1700);
+  })();
 </script>
 </body>
 </html>
