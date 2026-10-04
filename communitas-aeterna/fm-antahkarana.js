@@ -245,8 +245,7 @@ function akDisegna(box){
       "Anta\u1e25kara\u1e47a primo livello: il cammino e il percorso dei talenti"]) +
     carta("Praticantato", "20 \u20ac a settimana", [
       "un incontro di gruppo alla settimana, un\u2019ora online; la registrazione resta a chi non c\u2019era",
-      "Anta\u1e25kara\u1e47a secondo livello",
-      "le lezioni riservate della Scuola"]);
+      "Anta\u1e25kara\u1e47a secondo livello"]);
   box.appendChild(cf);
 
   /* ── ① karma yoga, aperto a tutti ── */
