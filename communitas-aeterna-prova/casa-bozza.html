@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="../">
+<meta name="robots" content="noindex">
+<title>Bozza · la casa di FelicitasMundi</title>
+<!-- ⭐ 4 ottobre 2026, Gab: «non deve più essere una landing page … è la pagina home del contesto dove c'è il
+     megafono che rimane sempre» · «la barra ci vuole a sinistra» · «Apple è proprio il riferimento» ·
+     «come lo farebbe un'azienda di banca?». Bozza in prova: le frasi tra [ ] sono di Gab, da scrivere. -->
+<link rel="icon" href="communitas-aeterna/favicon-felicitas-48.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--fondo:#0A0C1A;--fondo2:#0F1226;--oro:#D4AF6A;--oro-ch:#E3C58A;--avorio:#F5F0E6;--tenue:rgba(245,240,230,.62);--linea:rgba(212,175,106,.22);
+        --terra:#c89b6a;--acqua:#6fa8dc;--fuoco:#e07b5a;--aria:#9ac296;--etere:#c9a7e8;--barra:15.5rem}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--fondo);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif}
+  a{color:var(--oro);text-decoration:none}
+  .seg{display:inline-block;background:rgba(212,175,106,.12);border:1px dashed rgba(212,175,106,.6);border-radius:.4rem;padding:0 .35em;color:var(--oro-ch)}
+
+  /* ── la barra a sinistra ── */
+  .barra{position:fixed;inset:0 auto 0 0;width:var(--barra);background:var(--fondo2);border-right:1px solid var(--linea);display:flex;flex-direction:column;padding:1.2rem .9rem;gap:.3rem;z-index:5}
+  .marca{display:flex;align-items:center;gap:.6rem;color:var(--avorio);padding:.2rem .5rem 1.2rem}
+  .marca img{width:34px;height:34px}
+  .marca b{font-family:Cinzel,serif;font-weight:500;letter-spacing:.06em;font-size:1rem}
+  .voce{display:flex;align-items:center;gap:.75rem;padding:.65rem .7rem;border-radius:.7rem;color:rgba(245,240,230,.85);font-size:.98rem}
+  .voce:hover,.voce.qui{background:rgba(245,240,230,.06);color:var(--avorio)}
+  .voce i{width:.6rem;height:.6rem;border-radius:50%;flex:none}
+  .radio{margin-top:auto;display:flex;align-items:center;gap:.6rem;background:none;border:1px solid var(--linea);border-radius:.8rem;padding:.5rem;color:var(--avorio);font:inherit;cursor:pointer;text-align:left}
+  .radio span:first-child{width:2rem;height:2rem;border-radius:50%;background:var(--oro);color:var(--fondo);display:grid;place-items:center;flex:none}
+  .radio small{display:block;color:var(--tenue);font-size:.75rem}
+
+  /* ── il centro ── */
+  main{margin-left:var(--barra);padding-bottom:9rem}
+  .w{max-width:64rem;margin:0 auto;padding:0 2rem}
+  .prova{display:flex;justify-content:flex-end;gap:.4rem;padding:1rem 2rem 0}
+  .prova button{font:inherit;font-size:.78rem;background:none;border:1px solid var(--linea);color:var(--tenue);border-radius:999px;padding:.35rem .9rem;cursor:pointer}
+  .prova button.si{background:var(--oro);color:var(--fondo);border-color:var(--oro)}
+
+  .apri{text-align:center;padding:4.5rem 0 3rem}
+  .apri .eti{font-family:Cinzel,serif;font-size:.78rem;letter-spacing:.3em;color:var(--oro)}
+  .apri h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.05;margin:.8rem 0 1rem}
+  .apri p{font-size:1.2rem;color:var(--tenue);max-width:38rem;margin:0 auto 1.8rem;line-height:1.5}
+  .due{display:flex;justify-content:center;gap:1.4rem;flex-wrap:wrap;font-size:1.05rem}
+  .pill{display:inline-flex;align-items:center;min-height:2.8rem;padding:0 1.4rem;border-radius:999px;background:var(--oro);color:var(--fondo);font-weight:500}
+
+  /* chi è entrato: il conto */
+  .conto{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:2.5rem 0 1rem}
+  .conto div{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.1rem;padding:1.2rem 1.3rem}
+  .conto small{display:block;color:var(--tenue);font-size:.85rem;margin-bottom:.4rem}
+  .conto b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:2.1rem;line-height:1}
+  .conto em{display:block;font-style:normal;color:var(--aria);font-size:.85rem;margin-top:.4rem}
+  .ciao{font-family:'Cormorant Garamond',serif;font-size:2.4rem;margin:2.5rem 0 0}
+
+  /* i prodotti, uno per riga, alla Apple */
+  .pr{margin:1.3rem 0;border-radius:1.6rem;overflow:hidden;background:var(--fondo2);border:1px solid var(--linea);display:grid;grid-template-columns:1.1fr 1fr;min-height:22rem}
+  .pr .t{padding:2.6rem 2.4rem;display:flex;flex-direction:column;justify-content:center;gap:.8rem}
+  .pr .el{font-family:Cinzel,serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase}
+  .pr h2{font-family:Cinzel,serif;font-weight:500;font-size:clamp(2rem,3.6vw,2.8rem);letter-spacing:.04em;margin:0}
+  .pr p{font-family:'Cormorant Garamond',serif;font-size:1.45rem;line-height:1.3;margin:0;color:rgba(245,240,230,.88)}
+  .pr .da{color:var(--tenue);font-size:.98rem}
+  .pr .da b{color:var(--oro-ch);font-weight:500}
+  .pr .link{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:.4rem;font-size:1.02rem}
+  .pr .f{background-size:cover;background-position:center;min-height:16rem}
+  .pr.giu{grid-template-columns:1fr 1.1fr}.pr.giu .f{order:-1}
+  .ultimi{display:flex;gap:.6rem;flex-wrap:wrap}
+  .ultimi span{font-size:.82rem;border:1px solid var(--linea);border-radius:999px;padding:.2rem .7rem;color:rgba(245,240,230,.78)}
+
+  .sez{font-family:Cinzel,serif;font-weight:500;font-size:1.6rem;letter-spacing:.06em;margin:3.5rem 0 1.2rem}
+  .piani{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .piano{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.4rem;padding:1.8rem}
+  .piano.primo{border-color:var(--oro)}
+  .piano .p{font-family:'Cormorant Garamond',serif;font-size:2.6rem;color:var(--oro-ch)}
+  .piano .p small{font-size:1.05rem;color:var(--tenue)}
+  .piano ul{list-style:none;padding:0;margin:1rem 0 0;display:flex;flex-direction:column;gap:.55rem}
+  .piano li::before{content:"✓  ";color:var(--oro)}
+  .nov{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+  .nov a{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.2rem;overflow:hidden;color:var(--avorio)}
+  .nov .f{aspect-ratio:16/10;background-size:cover;background-position:center}
+  .nov div div{padding:1rem 1.1rem}
+  .nov small{color:var(--oro);font-family:Cinzel,serif;font-size:.7rem;letter-spacing:.2em}
+  .nov h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.3rem;margin:.3rem 0 0}
+  .fiducia{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--linea);color:var(--tenue);font-size:.95rem;line-height:1.5}
+  .fiducia b{display:block;color:var(--avorio);font-weight:500;margin-bottom:.3rem}
+
+  /* ── il Megafono, sempre lì, senza chiamarsi così ── */
+  .mega{position:fixed;left:var(--barra);right:0;bottom:0;z-index:6;background:linear-gradient(to top,var(--fondo) 70%,rgba(10,12,26,0));padding:1.4rem 2rem 1.2rem}
+  .mega .w{padding:0}
+  .scelte{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:.7rem}
+  .scelte button{font:inherit;font-size:.9rem;background:var(--fondo2);border:1px solid var(--linea);color:rgba(245,240,230,.88);border-radius:999px;padding:.45rem 1rem;cursor:pointer}
+  .campo{display:flex;align-items:center;gap:.7rem;background:var(--fondo2);border:1px solid rgba(212,175,106,.55);border-radius:999px;padding:.4rem .4rem .4rem 1.3rem}
+  .campo input{flex:1;background:none;border:0;color:var(--avorio);font:inherit;font-size:1.05rem;outline:none;min-width:0}
+  .campo button{width:2.6rem;height:2.6rem;border-radius:50%;border:0;background:var(--oro);color:var(--fondo);font-size:1.1rem;cursor:pointer}
+
+  .solo-dentro{display:none}
+  body.dentro .solo-dentro{display:block}
+  body.dentro .solo-fuori{display:none}
+
+  /* ── telefono: la barra va in basso, sopra il Megafono ── */
+  @media (max-width:52rem){
+    :root{--barra:0px}
+    .barra{inset:auto 0 0 0;width:auto;height:4.2rem;flex-direction:row;justify-content:space-around;padding:.3rem .2rem;border-right:0;border-top:1px solid var(--linea);gap:0}
+    .marca,.radio{display:none}
+    .voce{flex-direction:column;gap:.25rem;font-size:.68rem;padding:.4rem .3rem;text-align:center}
+    .mega{bottom:4.2rem;padding:1rem 1rem .6rem}
+    main{padding-bottom:13rem}
+    .w{padding:0 1rem}
+    .prova{padding:1rem 1rem 0}
+    .pr,.pr.giu{grid-template-columns:1fr}.pr .f,.pr.giu .f{order:-1;min-height:13rem}
+    .pr .t{padding:1.6rem 1.4rem}
+    .conto{grid-template-columns:1fr 1fr 1fr;gap:.5rem}.conto div{padding:.9rem}.conto b{font-size:1.6rem}
+    .piani,.nov,.fiducia{grid-template-columns:1fr}
+    .scelte{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start}
+    .scelte button{flex:none}
+    .apri{padding:3rem 0 2rem}
+  }
+</style>
+</head>
+<body>
+
+<nav class="barra" aria-label="stanze">
+  <a class="marca" href="communitas-aeterna-prova/casa-bozza.html"><img src="communitas-aeterna/APP.FELICITASMUNDI/piatti/nexus-cerchio.webp" alt=""><b>FelicitasMundi</b></a>
+  <a class="voce qui" href="communitas-aeterna-prova/casa-bozza.html"><i style="background:var(--oro)"></i>Casa</a>
+  <a class="voce" href="communitas-aeterna/index.html?p=vicinati"><i style="background:var(--terra)"></i>Villaggi</a>
+  <a class="voce" href="communitas-aeterna/index.html?p=emporio"><i style="background:var(--acqua)"></i>Emporio</a>
+  <a class="voce" href="communitas-aeterna/index.html?p=assistenza"><i style="background:var(--fuoco)"></i>Assistenza</a>
+  <a class="voce" href="communitas-aeterna/index.html?p=edizione"><i style="background:var(--aria)"></i>Edizione</a>
+  <a class="voce" href="communitas-aeterna/index.html?p=scuola"><i style="background:var(--etere)"></i>Scuola</a>
+  <button class="radio" id="radio" type="button"><span id="radio-i">▶</span><span>Radio<small id="radio-s">ascolta in diretta</small></span></button>
+  <audio id="radio-a" preload="none" src="https://radio.felicitasmundi.com/listen/radio_felicitasmundi/radio.mp3"></audio>
+</nav>
+
+<main>
+  <div class="prova"><button id="v-fuori" class="si" type="button">chi arriva</button><button id="v-dentro" type="button">chi è entrato</button></div>
+
+  <div class="w">
+    <!-- chi arriva -->
+    <section class="apri solo-fuori">
+      <div class="eti">COSCIENZA · TECNOLOGIA · COMUNITÀ</div>
+      <h1><span class="seg">[ la frase grande ]</span></h1>
+      <p>FelicitasMundi è una piattaforma che connette e supporta lo sviluppo economico e sociale di comunità contadine e spirituali dei territori nazionali.</p>
+      <div class="due"><a class="pill" href="communitas-aeterna/accesso.html">entra</a><a href="#piani">cosa ricevi ›</a></div>
+    </section>
+
+    <!-- chi è entrato: il conto -->
+    <section class="solo-dentro">
+      <p class="ciao">Buongiorno, <span class="seg">[ nome ]</span></p>
+      <div class="conto">
+        <div><small>la tua quota</small><b>Base</b><em>attiva · <span class="seg">[ fino al … ]</span></em></div>
+        <div><small>obiettivi in corso</small><b><span class="seg">[ 3 ]</span></b><em>in avanzamento</em></div>
+        <div><small>talenti</small><b><span class="seg">[ 12 ]</span></b><em>scambiati</em></div>
+      </div>
+    </section>
+
+    <!-- i prodotti, uno per riga -->
+    <article class="pr">
+      <div class="t">
+        <span class="el" style="color:var(--terra)">terra</span>
+        <h2>Villaggi</h2>
+        <p><span class="seg">[ la frase dei villaggi ]</span></p>
+        <span class="da">libri, prodotti, percorsi e terapie · il costo diviso tra chi partecipa</span>
+        <div class="link"><a href="communitas-aeterna/index.html?p=vicinati">scopri ›</a><a href="communitas-aeterna/index.html?p=evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6">11 ottobre, Oristano ›</a></div>
+      </div>
+      <div class="f" style="background-image:url(communitas-aeterna/inviti/11-ottobre-largo.jpg)"></div>
+    </article>
+
+    <article class="pr giu">
+      <div class="t">
+        <span class="el" style="color:var(--acqua)">acqua</span>
+        <h2>Emporio</h2>
+        <p><span class="seg">[ la frase dell'Emporio ]</span></p>
+        <span class="da">ultimo arrivo: Anima Vagabonda · <b>18,00 €</b></span>
+        <div class="ultimi"><span>Bhagavad-gītā</span><span>Nexus · strumenti di coscienza</span></div>
+        <div class="link"><a href="communitas-aeterna/index.html?p=emporio">scopri ›</a><a href="communitas-aeterna/index.html?p=pagina&amp;n=anima-vagabonda">ordina ›</a></div>
+      </div>
+      <div class="f" style="background-image:url(communitas-aeterna/APP.FELICITASMUNDI/piatti/anima-vagabonda.jpg);background-size:contain;background-repeat:no-repeat;background-color:#14172e"></div>
+    </article>
+
+    <article class="pr">
+      <div class="t">
+        <span class="el" style="color:var(--fuoco)">fuoco</span>
+        <h2>Assistenza</h2>
+        <p><span class="seg">[ la frase dell'Assistenza ]</span></p>
+        <div class="ultimi"><span>Bhakti Yoga</span><span>Bhakti Vriksa</span><span>Gita Manjari</span></div>
+        <div class="link"><a href="communitas-aeterna/index.html?p=assistenza">scopri ›</a><a href="communitas-aeterna/index.html?p=assistenza">prenota ›</a></div>
+      </div>
+      <div class="f" style="background:radial-gradient(circle at 50% 50%,rgba(224,123,90,.35),#14172e 70%)"></div>
+    </article>
+
+    <article class="pr giu">
+      <div class="t">
+        <span class="el" style="color:var(--aria)">aria</span>
+        <h2>Edizione</h2>
+        <p><span class="seg">[ la frase dell'Edizione ]</span></p>
+        <span class="da">stampa e forniture per le fiere · segnalibri da <b>12,85 €</b></span>
+        <div class="ultimi"><span>carta stampata</span><span>esposizione e fiere</span><span>libri e cataloghi</span></div>
+        <div class="link"><a href="communitas-aeterna/index.html?p=edizione">scopri ›</a></div>
+      </div>
+      <div class="f" style="background:radial-gradient(circle at 50% 45%,#1d4f86,#0b1830 75%) center/cover"><div style="height:100%;background:url(communitas-aeterna/APP.FELICITASMUNDI/piatti/nexus-fermo.webp) center/40% no-repeat"></div></div>
+    </article>
+
+    <article class="pr">
+      <div class="t">
+        <span class="el" style="color:var(--etere)">etere</span>
+        <h2>Scuola</h2>
+        <p><span class="seg">[ la frase della Scuola ]</span></p>
+        <span class="da">Antaḥkaraṇa · Praticantato <b>20 € a settimana</b></span>
+        <div class="link"><a href="communitas-aeterna/index.html?p=anthakarana">scopri ›</a></div>
+      </div>
+      <div class="f" style="background:url(communitas-aeterna/APP.FELICITASMUNDI/piatti/ak-fig.webp) center/contain no-repeat,#14172e"></div>
+    </article>
+
+    <!-- cosa ricevi -->
+    <h2 class="sez" id="piani">Cosa ricevi</h2>
+    <div class="piani">
+      <div class="piano primo"><div class="p">26 € <small>al mese, o karma yoga</small></div><b>Base</b>
+        <ul><li>Villaggio e acquisti di gruppo</li><li>La mia orma</li><li>Chat</li><li>Eventi</li><li>Pubblicare nelle stanze</li><li>Radio</li><li>Antaḥkaraṇa primo livello</li></ul></div>
+      <div class="piano"><div class="p">20 € <small>a settimana</small></div><b>Praticantato</b>
+        <ul><li>L'incontro di gruppo settimanale online</li><li>Antaḥkaraṇa secondo livello</li><li>Le lezioni riservate della Scuola</li></ul></div>
+    </div>
+
+    <!-- novità -->
+    <h2 class="sez">Novità</h2>
+    <div class="nov">
+      <a href="communitas-aeterna/articoli/2026/metodo-di-bella.html"><div><div class="f" style="background:radial-gradient(circle,#2a3160,#14172e)"></div><div><small>ARTICOLO</small><h3>Metodo Di Bella: un ponte tra ricerca e coscienza</h3></div></div></a>
+      <a href="communitas-aeterna/articoli/2026/bacheca-idea-economica-vicinati.html"><div><div class="f" style="background:radial-gradient(circle,#3a3220,#14172e)"></div><div><small>ARTICOLO</small><h3>Idea economica per i vicinati</h3></div></div></a>
+      <a href="communitas-aeterna/articoli/2026/60-anni-hare-krishna.html"><div><div class="f" style="background:radial-gradient(circle,#2f2440,#14172e)"></div><div><small>ARTICOLO</small><h3>60 anni di Hare Krishna — la Presenza Viva</h3></div></div></a>
+    </div>
+
+    <!-- fiducia -->
+    <div class="fiducia">
+      <div><b>Chi siamo</b>Felicitas Omnia S.r.l.s. · Sassari · P.IVA 03075740906</div>
+      <div><b>I partner</b>Macro Edizioni · Flyeralarm · USCI</div>
+      <div><b>Come si paga</b>bonifico o PostePay</div>
+    </div>
+  </div>
+</main>
+
+<!-- il Megafono: sempre lì -->
+<div class="mega">
+  <div class="w">
+    <div class="scelte"><button type="button">chiedi qualcosa</button><button type="button">proponi un servizio</button><button type="button">organizza un incontro</button><button type="button">pubblica un prodotto</button></div>
+    <div class="campo"><input placeholder="cosa vuoi fare?"><button type="button" aria-label="manda">↑</button></div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var b=document.getElementById("radio"),a=document.getElementById("radio-a"),i=document.getElementById("radio-i"),t=document.getElementById("radio-s");
+    b.addEventListener("click",function(){ if(a.paused){a.play().catch(function(){});i.textContent="❚❚";t.textContent="in ascolto";} else {a.pause();i.textContent="▶";t.textContent="ascolta in diretta";} });
+    var f=document.getElementById("v-fuori"),d=document.getElementById("v-dentro");
+    function vista(dentro){ document.body.classList.toggle("dentro",dentro); f.classList.toggle("si",!dentro); d.classList.toggle("si",dentro); }
+    f.onclick=function(){vista(false)}; d.onclick=function(){vista(true)};
+  })();
+</script>
+</body>
+</html>
