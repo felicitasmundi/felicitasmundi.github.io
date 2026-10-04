@@ -4,355 +4,197 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La casa · bozza</title>
-<!-- ⭐ 4 ottobre 2026, Gab: «non deve più essere una landing page … è la pagina home del contesto dove c'è il megafono».
-     15:53 · «qualcosa che sembra proprio la mia orma … gli stessi quadranti» · 16:02: «nella mia orma ci sono dei quadranti con le
-     task, gli obiettivi, i costi. Io volevo una cosa del genere … un'unione tra l'ambiente legato a Macrolibrarsi e a Banca Mediolanum».
-     In cima LA MIA ORMA (la veste è quella vera, copiata da la-mia-orma-tempio-piatto.html): obiettivi in tre stati, la tua rete
-     a tessere, i conti. Sotto LA VETRINA di ieri mattina (tavola «felicitasmundi.com · vetrina aperta»), sezioni copiate tali e quali,
-     nell'ordine di Gab: villaggi, eventi, piattaforma e percorso, Emporio, Assistenza, Scuola, Edizione (stampa e fiere), novità.
-     La barra e il Megafono sono quelli veri dell'app (rotta ?p=casa, in prova). -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<!-- ⭐ 4 ottobre 2026, Gab 17:08: «stiamo lavorando su tre filoni: l'utilizzo della piattaforma (cos'è, cosa comporta,
+     e il praticantato: due livelli) · l'organizzazione (fare villaggio, acquisto di gruppo, acquisti solidali, lo sviluppo
+     di una logistica) · l'e-commerce, interconnesso anche a dono e scambio» · «come lo comunicano Trello, ClickUp: un sito
+     che spiega cosa fanno in poche parole» · «Emporio: scorri tutte le foto con titolo dei prodotti, con sotto scritto
+     dove si trovano … se sono vicini, se sono lontani o se fanno parte del percorso del praticantato» · «tutto visualizzato
+     come un percorso: la consapevolezza del proprio talento, lo sviluppo di questo, lo sviluppo dei gruppi di lavoro,
+     il coordinamento attraverso gli strumenti di tecnologia e di coscienza, e da lì tutti i prodotti: tre fasi».
+     Antaḥkaraṇa, parole di Gab: «semplicemente una guida al ritorno a sé, attraverso strumenti, letture, percorsi di
+     gruppo, alla quale si accede anche attraverso il karma yoga».
+     17:20: «uno vede un po' di prodotti e da lì entra nell'app».
+     Le frasi tra [ ] sono di Gab, da scrivere. Barra e Megafono sono quelli veri dell'app (rotta ?p=casa, in prova). -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* 3 ottobre, Gab: «vorrei mettere in ordine la parte interna, per renderlo molto più semplice a livello visivo».
-   In alto chi sei, piccolo. Poi gli obiettivi in tre gruppi — in coda · in avanzamento · sviluppato —
-   e su ogni riga lo stato, la persona e la barretta, senza entrare. Il karma yoga chiuso in una riga.
-   In fondo «la tua rete», a tessere: una aperta alla volta. */
-:root{--oro:#D4AF6A;--ivory:#F5F0E6;--el:#D4AF6A;
+:root{--oro:#D4AF6A;--oro-ch:#E3C58A;--ivory:#F5F0E6;--tenue:rgba(245,240,230,.6);--linea:rgba(212,175,106,.22);
   --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC}
 *{box-sizing:border-box}
-html,body{margin:0;background:#02040c;overflow-x:hidden}
-.t{min-height:100vh;padding:1.2rem 1rem 4rem;font-family:'DM Sans',system-ui,sans-serif;color:var(--ivory);
-  background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--el) 14%,transparent),transparent 50%),radial-gradient(ellipse at 20% 90%,rgba(60,44,110,.35),transparent 60%),#070b18}
-.col{max-width:36rem;margin:0 auto;display:flex;flex-direction:column;gap:1.4rem}
-.lato,.destra{display:contents}
+html,body{margin:0;color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,175,106,.12),transparent 45%),radial-gradient(ellipse at 15% 70%,rgba(60,44,110,.3),transparent 60%),#070b18}
+html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
+.seg{display:inline-block;background:rgba(212,175,106,.12);border:1px dashed rgba(212,175,106,.6);border-radius:.4rem;padding:0 .35em;color:var(--oro-ch)}
+.w{max-width:64rem;margin:0 auto;padding:2.2rem 1.2rem 3rem}
+[data-r]{cursor:pointer}
 
-/* chi sei — piccolo */
-.io{display:flex;align-items:center;gap:.9rem}
-.vo{width:3.2rem;height:3.2rem;flex:none;border-radius:50%;display:grid;place-items:center;font-family:'Cinzel',serif;font-size:1.2rem;color:var(--oro);
-  border:1px solid rgba(212,175,106,.6);background:radial-gradient(circle,rgba(212,175,106,.18),rgba(8,11,26,.6))}
-.vo img{width:100%;height:100%;border-radius:50%;object-fit:cover}
-.io h1{margin:0;font-family:'Cinzel',serif;font-weight:400;font-size:1.7rem;letter-spacing:.06em;line-height:1.1}
-.io .sotto{font-size:.85rem;color:rgba(245,240,230,.6);margin-top:.2rem}
-.io .grado{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(212,175,106,.75)}
-.frase{margin:-.6rem 0 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:rgba(245,240,230,.7)}
+/* l'apertura */
+.apri{text-align:center;padding:1.6rem 0 2.4rem}
+.apri .eti{font-family:Cinzel,serif;font-size:.74rem;letter-spacing:.3em;color:var(--oro)}
+.apri h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2.2rem,5.4vw,3.6rem);line-height:1.08;margin:.7rem 0 .8rem}
+.apri p{color:var(--tenue);font-size:1.08rem;max-width:36rem;margin:0 auto;line-height:1.5}
+.passi{display:flex;justify-content:center;flex-wrap:wrap;gap:.4rem .2rem;margin-top:1.4rem;font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:rgba(245,240,230,.82)}
+.passi span::after{content:"→";color:var(--oro);margin:0 .5rem}
+.passi span:last-child::after{content:""}
 
-/* gli obiettivi */
-.gr{display:flex;align-items:baseline;justify-content:space-between;margin:.6rem 0 .1rem;font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.85)}
-.gr span{font-family:'DM Sans',sans-serif;letter-spacing:0;color:rgba(245,240,230,.45)}
-.ob{display:flex;align-items:center;gap:.7rem;padding:.75rem 0;border-bottom:1px solid rgba(212,175,106,.14)}
-.ob .pt{width:.6rem;height:.6rem;border-radius:50%;background:var(--c,var(--oro));flex:none;box-shadow:0 0 .5rem var(--c,var(--oro))}
-.ob .tx{flex:1;min-width:0;cursor:pointer;color:inherit;text-decoration:none}
-.ob .tx b{display:block;font-weight:400;font-family:'Cormorant Garamond',serif;font-size:1.22rem;line-height:1.25}
-.ob .tx small{display:block;font-size:.78rem;color:rgba(245,240,230,.5);margin-top:.1rem}
-.ob .tx small .tardi{color:#e08a80}
-.ob.sviluppato .tx b{opacity:.55;text-decoration:line-through;text-decoration-color:rgba(245,240,230,.35)}
-.bar{height:3px;border-radius:999px;background:rgba(245,240,230,.1);margin-top:.45rem;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--c,var(--oro));transition:width .4s}
-.stato{all:unset;cursor:pointer;flex:none;font-size:.72rem;padding:.3rem .65rem;border-radius:999px;border:1px solid rgba(245,240,230,.25);color:rgba(245,240,230,.7);white-space:nowrap}
-.stato.in_avanzamento{border-color:rgba(212,175,106,.6);color:var(--oro);background:rgba(212,175,106,.12)}
-.stato.sviluppato{border-color:rgba(111,155,106,.6);color:#9ac296;background:rgba(111,155,106,.12)}
-.stato[aria-disabled="true"]{cursor:default}
-.chi{all:unset;cursor:pointer;flex:none;display:flex;align-items:center}
-.chi span{width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;font-size:.72rem;border:1px solid rgba(212,175,106,.55);background:rgba(212,175,106,.12);color:var(--ivory)}
-.chi span+span{margin-left:-.55rem}
-.chi span.attesa{border-style:dashed;background:transparent;color:rgba(245,240,230,.6)}
-.chi span.vuoto{border:1px dashed rgba(245,240,230,.3);background:transparent;color:rgba(245,240,230,.55);font-size:1rem}
-.chi[aria-disabled="true"]{cursor:default}
-.scegli{display:flex;flex-wrap:wrap;gap:.4rem;padding:.2rem 0 .8rem 1.3rem}
-.scegli button{all:unset;cursor:pointer;font-size:.85rem;padding:.35rem .8rem;border-radius:999px;border:1px solid rgba(212,175,106,.45);color:var(--ivory)}
-.scegli button:hover{background:rgba(212,175,106,.12)}
-.scegli .nota{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(245,240,230,.55)}
-.vuoto-tx{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(245,240,230,.45);padding:.3rem 0}
-.tutta{align-self:flex-end;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--oro);text-decoration:none}
+/* le tre fasi, come un cammino */
+.fase{position:relative;padding-left:3.4rem;margin:0 0 3rem}
+.fase::before{content:"";position:absolute;left:1.15rem;top:2.6rem;bottom:-3rem;width:2px;background:linear-gradient(var(--oro),rgba(212,175,106,.08))}
+.fase:last-of-type::before{display:none}
+.num{position:absolute;left:0;top:0;width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;font-family:Cinzel,serif;color:#0A0C1A;background:var(--oro);box-shadow:0 0 1.2rem rgba(212,175,106,.45)}
+.fase .eti{font-family:Cinzel,serif;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--oro)}
+.fase h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1.8rem,3.6vw,2.5rem);line-height:1.12;margin:.35rem 0 .5rem}
+.fase .riga{color:var(--tenue);font-size:1.02rem;line-height:1.5;max-width:44rem;margin:0 0 1.2rem}
 
-/* il karma yoga, chiuso */
-details.ky{border:1px solid rgba(212,175,106,.22);border-radius:1rem;background:rgba(245,240,230,.03)}
-details.ky summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.8rem;padding:.9rem 1rem}
-details.ky summary::-webkit-details-marker{display:none}
-details.ky summary b{font-family:'Cinzel',serif;font-weight:400;letter-spacing:.12em;text-transform:uppercase;font-size:.82rem;color:var(--oro);flex:1}
-details.ky summary i{font-style:normal;color:rgba(245,240,230,.45);transition:transform .3s}
-details.ky[open] summary i{transform:rotate(90deg)}
-details.ky .dentro{padding:0 1rem .6rem}
+.due{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:.8rem}
+.carta{border:1px solid rgba(212,175,106,.4);border-radius:1rem;padding:1.1rem 1.2rem;background:rgba(8,11,26,.55)}
+.carta b{display:block;font-family:Cinzel,serif;font-weight:400;font-size:1.02rem;letter-spacing:.06em}
+.carta .p{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--oro);margin:.15rem 0 .55rem}
+.carta ul{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.35rem;font-size:.94rem;line-height:1.45;color:rgba(245,240,230,.82)}
+.cit{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.25rem;line-height:1.4;color:rgba(245,240,230,.9);border-left:2px solid var(--oro);padding:.2rem 0 .2rem 1rem;margin:1rem 0 0}
 
-/* la tua rete: tessere */
-.rete-t{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.85);margin-top:.6rem}
-.tessere{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem}
-.tes{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;min-height:4.6rem;padding:.6rem .3rem;border-radius:.9rem;border:1px solid rgba(212,175,106,.22);background:rgba(245,240,230,.04);text-align:center}
-.tes b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.6rem;line-height:1;color:var(--ivory)}
-.tes span{font-size:.76rem;color:rgba(245,240,230,.6);line-height:1.2}
-.tes[aria-pressed="true"]{border-color:var(--oro);background:rgba(212,175,106,.1)}
-.pan{display:flex;flex-direction:column;gap:.2rem;padding:.4rem 0}
-.pan[hidden]{display:none}
-.riga{display:flex;align-items:center;gap:.75rem;text-decoration:none;color:inherit;padding:.6rem .2rem;border-bottom:1px solid rgba(212,175,106,.12)}
-.riga .pt{width:.5rem;height:.5rem;border-radius:50%;background:var(--c,var(--oro));flex:none}
-.riga .tx{flex:1;min-width:0}
-.riga .tx b{display:block;font-weight:400;font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.3}
-.riga .tx small{display:block;font-size:.76rem;color:rgba(245,240,230,.5)}
-.riga .tag{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;padding:.15rem .55rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--c,var(--oro)) 55%,transparent);color:color-mix(in srgb,var(--c,var(--oro)) 70%,#F5F0E6);white-space:nowrap}
-.riga .fr{color:var(--oro)}
-.riga.figlia{margin-left:1rem}
-.fascia{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.75);margin:.6rem 0 0}
-.gesto{all:unset;cursor:pointer;display:flex;align-items:center;gap:.7rem;margin-top:.5rem;padding:.65rem .8rem;border-radius:.8rem;border:1px dashed rgba(212,175,106,.45);font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(245,240,230,.75)}
-.gesto i{font-style:normal;width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(212,175,106,.5);color:var(--oro)}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.2rem 0 1rem}
+.chip{border:1px solid var(--linea);border-radius:999px;padding:.35rem .85rem;font-size:.88rem;color:rgba(245,240,230,.85);background:rgba(245,240,230,.03)}
+.chip.oro{border-color:rgba(212,175,106,.55);color:var(--oro)}
 
-/* le cinque stanze, dentro la tessera */
-.anello{position:relative;width:min(19rem,82vw);aspect-ratio:1;margin:.2rem auto}
-.anello .centro{position:absolute;left:50%;top:50%;width:34%;aspect-ratio:1;transform:translate(-50%,-50%)}
-.anello .centro img{width:100%;height:100%;object-fit:contain}
-.anello .giro-l{position:absolute;inset:14%;border:1px dashed rgba(212,175,106,.22);border-radius:50%}
-.st{all:unset;cursor:pointer;position:absolute;width:30%;display:flex;flex-direction:column;align-items:center;gap:.1rem;transform:translate(-50%,-50%)}
-.st .so{position:relative;width:62%;aspect-ratio:1}
-.st .so ak-solido{position:absolute;inset:0}
-.st b{font-family:'Cinzel',serif;font-weight:400;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
-.st em{font-style:normal;font-size:.72rem;color:rgba(245,240,230,.6)}
-.st[aria-pressed="true"] .so{filter:drop-shadow(0 0 .8rem var(--c))}
-.st[aria-pressed="true"] b{color:var(--ivory)}
-.filtro{font-size:.82rem;color:rgba(245,240,230,.6);text-align:center}
-.filtro button{all:unset;cursor:pointer;color:var(--oro);margin-left:.4rem}
+/* le strisce che scorrono di lato, come un negozio */
+.stanza{margin:1.6rem 0 0}
+.testa{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.7rem}
+.testa h3{margin:0;font-family:Cinzel,serif;font-weight:500;font-size:1.25rem;letter-spacing:.06em}
+.testa h3 i{font-style:normal;display:inline-block;width:.55rem;height:.55rem;border-radius:50%;background:var(--c);margin-right:.55rem;vertical-align:middle;box-shadow:0 0 .5rem var(--c)}
+.testa small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--tenue);margin-top:.15rem}
+.testa a{font-size:.92rem}
+.striscia{display:flex;gap:.8rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.2rem .1rem .9rem;scrollbar-width:thin;scrollbar-color:rgba(212,175,106,.35) transparent}
+.pr{flex:0 0 11.5rem;scroll-snap-align:start;color:var(--ivory)}
+.pr .f{width:100%;aspect-ratio:3/4;border-radius:.8rem;border:1px solid var(--linea);background:#11152b center/cover no-repeat;position:relative;display:grid;place-items:center;overflow:hidden}
+.pr .f.cont{background-size:70%}
+.pr .f em{font-style:normal;font-family:Cinzel,serif;font-size:2rem;color:var(--c,var(--oro));opacity:.8}
+.pr .tag{position:absolute;left:.5rem;top:.5rem;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .55rem;border-radius:999px;background:rgba(7,11,24,.85);border:1px solid rgba(212,175,106,.55);color:var(--oro)}
+.pr b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.12rem;line-height:1.2;margin-top:.5rem}
+.pr small{display:block;color:var(--tenue);font-size:.8rem;margin-top:.15rem;line-height:1.35}
+.pr .pz{color:var(--oro-ch);font-size:.92rem;margin-top:.2rem}
+.pr.largo{flex-basis:15rem}
+.pr.largo .f{aspect-ratio:4/3}
 
-.piede{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:.6rem}
-.pill{font-family:'Cinzel',serif;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;padding:.7rem 1.3rem;border-radius:999px;border:1px solid rgba(212,175,106,.45);color:var(--oro)}
-.pill.oro{background:var(--oro);color:#0A0C1A;border-color:var(--oro)}
-html.in-app,html.in-app body{overflow:visible;overflow-x:clip;touch-action:pan-y}
+.entra{display:flex;flex-direction:column;align-items:center;gap:.8rem;text-align:center;padding:1.4rem 0 0}
+.pill{display:inline-flex;align-items:center;min-height:2.8rem;padding:0 1.6rem;border-radius:999px;background:var(--oro);color:#0A0C1A;font-family:Cinzel,serif;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase}
+.sotto-mega{color:var(--tenue);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem}
 
-/* computer: chi sei e la rete a sinistra, ferme; gli obiettivi a destra */
-@media(min-width:62rem){
-  .col{max-width:68rem;display:grid;grid-template-columns:24rem 1fr;gap:1.2rem 3rem;align-items:start}
-  .lato{display:flex;flex-direction:column;gap:1.1rem;position:sticky;top:1.2rem;grid-column:1;grid-row:1}
-  .destra{display:flex;flex-direction:column;gap:.4rem;grid-column:2;grid-row:1}
-}
-
-/* ── la casa (4 ottobre): la mia orma in cima, poi la vetrina di ieri ── */
-.prova{position:absolute;right:1rem;top:.8rem;display:flex;gap:.4rem;z-index:3}
-.prova button{all:unset;cursor:pointer;font-size:.74rem;border:1px solid rgba(212,175,106,.25);color:rgba(245,240,230,.6);border-radius:999px;padding:.3rem .8rem;font-family:'DM Sans',sans-serif}
-.prova button.si{background:#D4AF6A;color:#0A0C1A;border-color:#D4AF6A}
-body:not(.dentro) .solo-dentro{display:none!important} body.dentro .solo-fuori{display:none!important}
-.t{min-height:0}
-.vetrina{background:#0A0C1A;color:#F5F0E6;font-family:'DM Sans',system-ui,sans-serif}
-.vetrina a{color:#D4AF6A;text-decoration:none}
-.sotto-mega{text-align:center;color:rgba(245,240,230,.55);margin:0;padding:28px 16px 40px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px}
+@media (max-width:40rem){ .fase{padding-left:2.9rem} .num{width:2.1rem;height:2.1rem} .fase::before{left:1rem} .pr{flex-basis:9.5rem} .pr.largo{flex-basis:12.5rem} }
 </style>
 </head>
 <body>
-<div style="position:relative">
-<div class="prova"><button id="v-fuori" class="si" type="button">chi arriva</button><button id="v-dentro" type="button">chi è entrato</button></div>
-<div class="t" id="cosa">
- <div class="col">
-  <div class="destra">
-   <div class="io"><div class="vo"><img src="nexus-cerchio.webp" alt="" style="width:80%;height:80%;object-fit:contain"></div><div><div class="grado">Coscienza · Tecnologia · Comunità</div><h1>La mia orma</h1><div class="sotto">così si lavora dentro FelicitasMundi</div></div></div>
-   <p class="frase">Segna gli obiettivi, coopera con le squadre, pubblica</p>
-   <div id="obiettivi">
-    <div class="gr">in coda<span>1</span></div>
-    <div class="ob in_coda" style="--c:#AA8844"><span class="pt"></span><a class="tx" href="#"><b>[ un obiettivo del gruppo ]</b><small>entro [ data ]</small><span class="bar"><i style="width:0%"></i></span></a><button type="button" class="stato in_coda" data-giro>in coda</button><button type="button" class="chi" aria-label="proponi a"><span class="vuoto">+</span></button></div>
-    <div class="gr">in avanzamento<span>2</span></div>
-    <div class="ob in_avanzamento" style="--c:#4488BB"><span class="pt"></span><a class="tx" href="#"><b>[ un obiettivo con due persone ]</b><small>2 passi su 4</small><span class="bar"><i style="width:50%"></i></span></a><button type="button" class="stato in_avanzamento" data-giro>in avanzamento</button><button type="button" class="chi" aria-label="proponi a"><span>··</span><span class="attesa">··</span></button></div>
-    <div class="ob in_avanzamento" style="--c:#CC6644"><span class="pt"></span><a class="tx" href="#"><b>[ un task proposto a una persona ]</b><small>proposto · aspetta la risposta</small><span class="bar"><i style="width:20%"></i></span></a><button type="button" class="stato in_avanzamento" data-giro>in avanzamento</button><button type="button" class="chi" aria-label="proponi a"><span class="attesa">··</span></button></div>
-    <div class="gr">sviluppato<span>1</span></div>
-    <div class="ob sviluppato" style="--c:#669944"><span class="pt"></span><a class="tx" href="#"><b>[ un obiettivo concluso ]</b><small>il servizio fatto diventa un racconto</small><span class="bar"><i style="width:100%"></i></span></a><button type="button" class="stato sviluppato" data-giro>sviluppato</button><button type="button" class="chi" aria-label="proponi a"><span>··</span></button></div>
-   </div>
-   <details class="ky"><summary><b>Karma yoga</b><span class="n"></span><i>›</i></summary><div class="dentro"><div class="vuoto-tx">le richieste del villaggio: «lo faccio io», poi «fatto»</div></div></details>
+<div class="w">
+
+ <section class="apri">
+  <div class="eti">COSCIENZA · TECNOLOGIA · COMUNITÀ</div>
+  <h1><span class="seg">[ la frase grande ]</span></h1>
+  <p>FelicitasMundi è una piattaforma che connette e supporta lo sviluppo economico e sociale di comunità contadine e spirituali dei territori nazionali.</p>
+  <div class="passi"><span>la consapevolezza del proprio talento</span><span>lo sviluppo</span><span>i gruppi di lavoro</span><span>gli strumenti di tecnologia e di coscienza</span><span>i prodotti</span></div>
+ </section>
+
+ <!-- ① la piattaforma -->
+ <section class="fase">
+  <div class="num">1</div>
+  <div class="eti">La piattaforma</div>
+  <h2><span class="seg">[ la frase della piattaforma ]</span></h2>
+  <p class="riga">Un gestionale integrato al percorso di consapevolezza: obiettivi, gruppi di lavoro, coordinamento, pubblicazione.</p>
+  <div class="due">
+   <div class="carta"><b>Base</b><span class="p">26 € al mese, o karma yoga</span>
+    <ul><li>tutti gli strumenti: la mia orma, Megafono, chat, villaggio, eventi, pubblicare nelle stanze, radio</li><li>Antaḥkaraṇa primo livello: il cammino e il percorso dei talenti</li></ul></div>
+   <div class="carta"><b>Praticantato</b><span class="p">20 € a settimana</span>
+    <ul><li>un incontro di gruppo alla settimana, un'ora online; la registrazione resta a chi non c'era</li><li>Antaḥkaraṇa secondo livello</li></ul></div>
   </div>
-  <div class="lato">
-   <div class="rete-t">La tua rete</div>
-   <div class="tessere" id="tessere">
-    <button type="button" class="tes" data-tes="talenti" aria-pressed="false"><b>✧</b><span>talenti</span></button>
-    <button type="button" class="tes" data-tes="squadre" aria-pressed="false"><b>◌</b><span>squadre</span></button>
-    <button type="button" class="tes" data-tes="collegare" aria-pressed="false"><b>⇄</b><span>da collegare</span></button>
-    <button type="button" class="tes" data-tes="stanze" aria-pressed="false"><b>✦</b><span>orme negli elementi</span></button>
-    <button type="button" class="tes" data-tes="conti" aria-pressed="true"><b>€</b><span>conti</span></button>
-    <button type="button" class="tes" data-tes="invita" aria-pressed="false"><b>☉</b><span>invita</span></button>
-   </div>
-   <div class="pan" id="pan-talenti" hidden><div class="vuoto-tx">i tuoi talenti, e le orme che nascono da ognuno</div></div>
-   <div class="pan" id="pan-squadre" hidden><div class="vuoto-tx">le squadre a cui partecipi: il villaggio, gli eventi, i gruppi di lavoro</div></div>
-   <div class="pan" id="pan-collegare" hidden><div class="vuoto-tx">le orme ancora da legare a un talento o a una squadra</div></div>
-   <div class="pan" id="pan-stanze" hidden><div class="vuoto-tx">le orme pubblicate nelle cinque stanze: Vicinati, Emporio, Assistenza, Edizione, Scuola</div></div>
-   <div class="pan" id="pan-conti">
-    <a class="riga" href="#" style="--c:#D4AF6A"><span class="pt"></span><span class="tx"><b>Base</b><small>26 € al mese, o karma yoga</small></span><span class="fr">›</span></a>
-    <a class="riga" href="#" style="--c:#9966CC"><span class="pt"></span><span class="tx"><b>Praticantato</b><small>20 € a settimana</small></span><span class="fr">›</span></a>
-    <a class="riga" href="#" style="--c:#669944"><span class="pt"></span><span class="tx"><b>ore messe</b><small>entrate e uscite</small></span><span class="fr">›</span></a>
-   </div>
-   <div class="pan" id="pan-invita" hidden><div class="vuoto-tx">invita chi risuona: copia o WhatsApp</div></div>
-   <div class="piede"><a class="pill oro solo-fuori" href="#" data-r="soglia">entra</a><a class="pill solo-dentro" href="#" data-r="orme">la mia orma ›</a></div>
+  <p class="cit">Antaḥkaraṇa: una guida al ritorno a sé, attraverso strumenti, letture, percorsi di gruppo, alla quale si accede anche attraverso il karma yoga.</p>
+ </section>
+
+ <!-- ② l'organizzazione -->
+ <section class="fase">
+  <div class="num">2</div>
+  <div class="eti">L'organizzazione · Villaggi Felicitas</div>
+  <h2><span class="seg">[ la frase dei villaggi ]</span></h2>
+  <p class="riga">La co-creazione di una rete di logistica nazionale, organizzata in aree culturali che si auto-organizzano gli spazi per la distribuzione e il magazzino.</p>
+  <div class="chips">
+   <span class="chip">acquisti di gruppo</span><span class="chip">acquisti solidali</span><span class="chip">punti di ritiro</span><span class="chip">magazzino</span>
   </div>
+  <div class="chips">
+   <span class="chip oro" data-r="vicinati&amp;entra=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Civiltà Sarda</span>
+   <span class="chip oro" data-r="vicinati&amp;entra=19da43d2-66f1-4eb4-9783-c7874de6489a">Civiltà Tuscia</span>
+   <span class="chip oro" data-r="vicinati&amp;entra=91cb1506-35fc-44b2-a42f-630ac2709100">Civiltà Romagnola</span>
+   <span class="chip oro" data-r="vicinati&amp;entra=71e22940-04bb-4e96-9260-0413c753d6aa">Civiltà Emiliana</span>
+   <span class="chip oro" data-r="vicinati&amp;entra=a844a9b7-85b0-418a-a4c5-435ab8421f4f">Civiltà Piceni</span>
+  </div>
+  <div class="striscia">
+   <div class="pr largo" data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6"><div class="f" style="background-image:url(../../inviti/11-ottobre-largo.jpg)"><span class="tag">ci sarò</span></div><b>Villaggio Felicitas · 11 ottobre</b><small>il primo incontro tra i vicinati della Sardegna · Cas'ale, Baratili</small></div>
+   <div class="pr largo" data-r="vicinati"><div class="f" style="background-image:url(../../articoli/2026/incontro-11-ottobre.jpg);background-position:center 30%"></div><b>Felicitas Festival</b><small>21 novembre · Oristano</small></div>
+  </div>
+ </section>
+
+ <!-- ③ i prodotti e i servizi -->
+ <section class="fase">
+  <div class="num">3</div>
+  <div class="eti">I prodotti e i servizi</div>
+  <h2><span class="seg">[ la frase dei prodotti ]</span></h2>
+  <p class="riga">Da comprare, donare o scambiare: si vede dove si trovano, se sono vicini o lontani, e se fanno parte del percorso.</p>
+
+  <div class="stanza" style="--c:var(--acqua)">
+   <div class="testa"><div><h3><i></i>Emporio</h3><small>prodotti vicini e lontani, e quelli del percorso</small></div><a data-r="emporio">tutto l'Emporio ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="pagina&amp;n=anima-vagabonda"><div class="f" style="background-image:url(anima-vagabonda.jpg)"><span class="tag">nel percorso</span></div><b>Anima Vagabonda</b><small>Parabhakti dāsa · Villa Vrindavana - Firenze</small><div class="pz">18,00 €</div></div>
+    <div class="pr" data-r="emporio"><div class="f" style="background-image:url(bhagavad-gita.jpg)"><span class="tag">nel percorso</span></div><b>Bhagavad-gītā Così com'è</b><small>A.C. Bhaktivedānta Swāmī Prabhupāda · Villaggio Hare Krishna - Bergamo</small></div>
+    <div class="pr" data-r="emporio"><div class="f cont" style="background-image:url(nexus-cerchio.webp)"><span class="tag">nel percorso</span></div><b>Nexus</b><small>Strumenti di Coscienza · San Lazzaro di Savena</small></div>
+   </div>
+  </div>
+
+  <div class="stanza" style="--c:var(--fuoco)">
+   <div class="testa"><div><h3><i></i>Assistenza</h3><small>spiritualità, trattamenti, consulenze, mutuo aiuto</small></div><a data-r="assistenza">tutta l'Assistenza ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Bhakti Yoga</b><small>7 livelli · USCI · ISKCON Italia</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Bhakti Vriksa</b><small>6 livelli · un percorso di gruppo · USCI</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Gita Manjari</b><small>19 incontri settimanali · USCI</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Tulasi Manjari</b><small>8 incontri settimanali · USCI</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Power Series</b><small>10 incontri online settimanali · USCI</small></div>
+   </div>
+  </div>
+
+  <div class="stanza" style="--c:var(--etere)">
+   <div class="testa"><div><h3><i></i>Scuola</h3><small>le lezioni, le formazioni, e la ricerca che le accompagna</small></div><a data-r="scuola">tutta la Scuola ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Astrologia</b><small>Ferrara</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Simbologia</b><small>Ferrara</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Agricoltura naturale</b><small>Livorno</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Cristalloterapia</b><small>Livorno</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Reiki</b><small>Giulianova</small></div>
+   </div>
+  </div>
+
+  <div class="stanza" style="--c:var(--aria)">
+   <div class="testa"><div><h3><i></i>Edizione</h3><small>stampa e forniture per le fiere</small></div><a data-r="edizione">tutta l'Edizione ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Carta stampata</b><small>volantini, manifesti, biglietti, adesivi</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Libri e cataloghi</b><small>libri, riviste, cataloghi</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Esposizione e fiere</b><small>totem, roll-up, striscioni, stand</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Gadget e regali</b><small>penne, borse, borracce</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Confezioni</b><small>shopper, imballaggi</small></div>
+   </div>
+  </div>
+ </section>
+
+ <div class="entra">
+  <span class="pill" data-r="soglia">entra</span>
+  <span class="sotto-mega">oppure scrivi qui sotto un obiettivo, un evento o una richiesta ↓</span>
  </div>
 </div>
-</div>
-<div class="vetrina">
-<section id="villaggi" style="border-top: 1px solid rgba(212,175,106,0.18); background: rgba(245,240,230,0.02)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 26px">
-<div style="display: flex; flex-direction: column; gap: 10px">
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 28px; letter-spacing: 0.06em">Villaggi Felicitas</h2>
-<p style="margin: 0; max-width: 46rem; font-family: 'Cormorant Garamond', serif; font-size: 20px; line-height: 1.5; color: rgba(245,240,230,0.75)">Il villaggio raccoglie la domanda del territorio: cibo, energia, libri, prodotti. Chi ha bisogno lo chiede al villaggio, il villaggio lo chiede insieme ai produttori e ai partner, e il costo si divide tra chi partecipa.</p>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px">
-<article style="padding: 22px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); background: rgba(10,12,26,0.5); display: flex; flex-direction: column; gap: 10px"><h3 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 17px; letter-spacing: 0.05em; color: #D4AF6A">Il paniere del villaggio</h3><p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 19px; line-height: 1.5; color: rgba(245,240,230,0.82)">Chi coordina il villaggio apre un paniere e decide quando chiude. Dalla pagina di un prodotto dell'Emporio ognuno lo aggiunge al paniere del villaggio; nel paniere vede la sua parte, la sua quota della spedizione e sceglie dove ritirarlo. Quando il paniere chiude parte un ordine unico, e all'arrivo ognuno riceve l'avviso.</p></article>
-<article style="padding: 22px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); background: rgba(10,12,26,0.5); display: flex; flex-direction: column; gap: 10px"><h3 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 17px; letter-spacing: 0.05em; color: #D4AF6A">I punti di ritiro</h3><p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 19px; line-height: 1.5; color: rgba(245,240,230,0.82)">Sono i luoghi del villaggio che ricevono i pacchi del gruppo, ognuno con i suoi orari e con chi lo tiene. Chi non può andare al punto di ritiro chiede che un vicino glielo porti: è karma yoga.</p></article>
-<article style="padding: 22px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); background: rgba(10,12,26,0.5); display: flex; flex-direction: column; gap: 10px"><h3 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 17px; letter-spacing: 0.05em; color: #D4AF6A">I partner</h3><p style="margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 19px; line-height: 1.5; color: rgba(245,240,230,0.82)">Produttori alimentari, operatori terapeutici, chi organizza eventi, editori, chi lavora sull'energia. FelicitasMundi gestisce con loro la logistica: le richieste, gli ordini di gruppo, i punti di ritiro, l'ultimo tratto fatto dai vicini.</p></article>
-</div>
-<h3 style="margin: 8px 0 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 16px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,230,0.6)">trova il tuo villaggio</h3>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px">
-<a href="#" data-r="vicinati&amp;entra=5839d11d-9901-49bb-9b2f-f94236bbe2a1" style="display: flex; flex-direction: column; gap: 6px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.45); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Civiltà Sarda</span><span style="font-size: 14px; color: rgba(245,240,230,0.6)">Sardegna</span></a>
-<a href="#" data-r="vicinati&amp;entra=19da43d2-66f1-4eb4-9783-c7874de6489a" style="display: flex; flex-direction: column; gap: 6px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Civiltà Tuscia</span><span style="font-size: 14px; color: rgba(245,240,230,0.6)">Toscana, Umbria, Lazio</span></a>
-<a href="#" data-r="vicinati&amp;entra=91cb1506-35fc-44b2-a42f-630ac2709100" style="display: flex; flex-direction: column; gap: 6px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Civiltà Romagnola</span><span style="font-size: 14px; color: rgba(245,240,230,0.6)">Romagna</span></a>
-<a href="#" data-r="vicinati&amp;entra=71e22940-04bb-4e96-9260-0413c753d6aa" style="display: flex; flex-direction: column; gap: 6px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Civiltà Emiliana</span><span style="font-size: 14px; color: rgba(245,240,230,0.6)">Emilia</span></a>
-<a href="#" data-r="vicinati&amp;entra=a844a9b7-85b0-418a-a4c5-435ab8421f4f" style="display: flex; flex-direction: column; gap: 6px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Civiltà Piceni</span><span style="font-size: 14px; color: rgba(245,240,230,0.6)">Marche, Abruzzo</span></a>
-</div>
-</div>
-</section>
 
-<section id="eventi" style="border-top: 1px solid rgba(212,175,106,0.18)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 26px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px">
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 28px; letter-spacing: 0.06em">Eventi</h2>
-<a href="#" data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6" style="font-size: 15px">tutti gli eventi ›</a>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px">
-<article style="border: 1px solid rgba(212,175,106,0.3); border-radius: 16px; overflow: hidden; background: rgba(245,240,230,0.03); display: flex; flex-direction: column">
-<img src="../../inviti/11-ottobre-largo.jpg" alt="" style="display: block; width: 100%; height: 170px; object-fit: cover">
-<div style="padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px">
-<span style="font-size: 13px; color: #D4AF6A; letter-spacing: 0.08em">domenica 11 ottobre · 10:00</span>
-<h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 25px">Villaggio Felicitas - 11 ottobre Oristano</h3>
-<p style="margin: 0; font-size: 15px; line-height: 1.5; color: rgba(245,240,230,0.72)">Il primo incontro tra i vicinati della Sardegna, al Cas'ale di Alessandra, zona Baratili, pochi chilometri da Oristano.</p>
-<a href="#" data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6" style="margin-top: 6px; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase">ci sarò ›</a>
-</div>
-</article>
-<article style="border: 1px dashed rgba(212,175,106,0.3); border-radius: 16px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: rgba(245,240,230,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px">( prossimo evento )</article>
-<article style="border: 1px dashed rgba(212,175,106,0.3); border-radius: 16px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: rgba(245,240,230,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px">( prossimo evento )</article>
-</div>
-</div>
-</section>
-
-<section id="percorso" style="border-top: 1px solid rgba(212,175,106,0.18)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 26px">
-<h2 style="margin: 0; font-family:'Cinzel',serif;font-weight:500;font-size:28px;letter-spacing:0.06em">La piattaforma e il percorso</h2>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,300px), 1fr)); gap: 22px">
-<div style="border:1px solid rgba(212,175,106,.45);border-radius:16px;padding:22px 24px;background:rgba(8,11,26,.5)"><b style="display:block;font-family:Cinzel,serif;font-weight:400;font-size:19px;letter-spacing:.06em">Base</b><span style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:#D4AF6A;margin:4px 0 12px">26 € al mese, o karma yoga</span><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;font-size:15px;line-height:1.5;color:rgba(245,240,230,.82)"><li>tutti gli strumenti: la mia orma, Megafono, chat, villaggio, eventi, pubblicare nelle stanze, radio</li><li>Antaḥkaraṇa primo livello: il cammino e il percorso dei talenti</li></ul></div>
-<div style="border:1px solid rgba(212,175,106,.45);border-radius:16px;padding:22px 24px;background:rgba(8,11,26,.5)"><b style="display:block;font-family:Cinzel,serif;font-weight:400;font-size:19px;letter-spacing:.06em">Praticantato · Antaḥkaraṇa</b><span style="display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;color:#D4AF6A;margin:4px 0 12px">20 € a settimana</span><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;font-size:15px;line-height:1.5;color:rgba(245,240,230,.82)"><li>un incontro di gruppo alla settimana, un'ora online; la registrazione resta a chi non c'era</li><li>Antaḥkaraṇa secondo livello</li></ul><a href="#" data-r="anthakarana" style="display:inline-block;margin-top:14px;font-family:Cinzel,serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase">Antaḥkaraṇa ›</a></div>
-</div>
-</div>
-</section>
-<section id="emporio" style="border-top: 1px solid rgba(212,175,106,0.18)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 26px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px">
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 28px; letter-spacing: 0.06em">Emporio</h2>
-<a href="#" data-r="emporio" style="font-size: 15px">tutto l'Emporio ›</a>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px">
-<article style="display: flex; flex-direction: column; gap: 10px">
-<img src="anima-vagabonda.jpg" alt="Anima Vagabonda" style="width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 12px; border: 1px solid rgba(212,175,106,0.25)">
-<h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px">Anima Vagabonda</h3>
-<span style="font-size: 14px; color: rgba(245,240,230,0.65)">Pellegrini senza memoria alla ricerca della strada verso casa</span>
-<span style="color: #E3C58A">18,00 €</span>
-<div style="display: flex; flex-wrap: wrap; gap: 8px"><a href="#" data-r="pagina&amp;n=anima-vagabonda" style="font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px; background: #D4AF6A; color: #0A0C1A">acquista</a><a href="#" data-r="emporio" style="font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(212,175,106,0.6); color: #D4AF6A">nel paniere</a></div>
-</article>
-<article style="display: flex; flex-direction: column; gap: 10px">
-<img src="bhagavad-gita.jpg" alt="Bhagavad-gītā Così com'è" style="width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 12px; border: 1px solid rgba(212,175,106,0.25)">
-<h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px">Bhagavad-gītā Così com'è</h3>
-<span style="font-size: 14px; color: rgba(245,240,230,0.65)">A.C. Bhaktivedānta Swāmī Prabhupāda</span>
-<span style="color: rgba(245,240,230,0.45)">( prezzo )</span>
-</article>
-<article style="display: flex; flex-direction: column; gap: 10px">
-<div style="width: 100%; aspect-ratio: 3 / 4; border-radius: 12px; border: 1px solid rgba(212,175,106,0.25); display: flex; align-items: center; justify-content: center; background: rgba(245,240,230,0.03)"><img src="nexus-cerchio.webp" alt="" style="width: 55%"></div>
-<h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 22px">Nexus</h3>
-<span style="font-size: 14px; color: rgba(245,240,230,0.65)">Strumenti di Coscienza</span>
-<span style="color: rgba(245,240,230,0.45)">( prezzo )</span>
-</article>
-<article style="border: 1px dashed rgba(212,175,106,0.3); border-radius: 12px; min-height: 260px; display: flex; align-items: center; justify-content: center; color: rgba(245,240,230,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px">( altro prodotto )</article>
-</div>
-</div>
-</section>
-
-<section id="assistenza" style="border-top: 1px solid rgba(212,175,106,0.18); background: rgba(245,240,230,0.02)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 26px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px">
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 28px; letter-spacing: 0.06em">Assistenza</h2>
-<a href="#" data-r="assistenza" style="font-size: 15px">tutti i servizi ›</a>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px">
-<article style="padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 23px">Rosangela Pozzi · Disegno Umano</h3><span style="font-size: 14px; color: rgba(245,240,230,0.65)">lettura individuale di base · due ore · online o in presenza</span><span style="color: #E3C58A">160 €</span></article>
-<article style="padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 23px">Bhakti Yoga</h3><span style="font-size: 14px; color: rgba(245,240,230,0.65)">assistenza spirituale</span><span style="color: rgba(245,240,230,0.45)">( prezzo )</span></article>
-<article style="padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 23px">Gita Manjari</h3><span style="font-size: 14px; color: rgba(245,240,230,0.65)">assistenza spirituale</span><span style="color: rgba(245,240,230,0.45)">( prezzo )</span></article>
-</div>
-</div>
-</section>
-
-<section id="scuola" style="border-top: 1px solid rgba(212,175,106,0.18)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 26px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px">
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 28px; letter-spacing: 0.06em">Scuola</h2>
-<a href="#" data-r="scuola" style="font-size: 15px">tutte le lezioni ›</a>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px">
-<article style="border: 1px dashed rgba(212,175,106,0.3); border-radius: 14px; min-height: 130px; display: flex; align-items: center; justify-content: center; color: rgba(245,240,230,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px">( lezione )</article>
-<article style="border: 1px dashed rgba(212,175,106,0.3); border-radius: 14px; min-height: 130px; display: flex; align-items: center; justify-content: center; color: rgba(245,240,230,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px">( lezione )</article>
-<article style="border: 1px dashed rgba(212,175,106,0.3); border-radius: 14px; min-height: 130px; display: flex; align-items: center; justify-content: center; color: rgba(245,240,230,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px">( lezione )</article>
-</div>
-</div>
-</section>
-
-<section id="stampa" style="border-top: 1px solid rgba(212,175,106,0.18)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 22px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px">
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 28px; letter-spacing: 0.06em">Stampa e fiere</h2>
-<a href="#" data-r="edizione" style="font-size: 15px">tutti i cataloghi ›</a>
-</div>
-<p style="margin: 0; max-width: 46rem; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; color: rgba(245,240,230,0.85)">quello che fai, stampato e portato dove serve</p>
-<p style="margin: 0; max-width: 46rem; font-family: 'Cormorant Garamond', serif; font-size: 19px; line-height: 1.5; color: rgba(245,240,230,0.72)">Oltre alla stampa proponiamo supporti per l'esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</p>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px">
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Carta stampata</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Libri e cataloghi</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">libri, riviste, cataloghi, fascicoli</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Agende e calendari</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">agende, calendari, quaderni e taccuini</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Esposizione e fiere</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Confezioni e imballaggi</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Gadget e regali</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">penne, cordini, portabadge, borse, borracce</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">Abbigliamento</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">magliette, felpe, tessuti personalizzati</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-<a href="#" data-r="edizione" style="display: flex; flex-direction: column; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-family: 'Cinzel', serif; font-size: 16px">I servizi</span><span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 17px; line-height: 1.4; color: rgba(245,240,230,0.65)">stampa a impatto climatico zero, campionario carta</span><span style="margin-top: 4px; font-size: 13px; color: #D4AF6A">sfoglia il catalogo ›</span></a>
-</div>
-</div>
-</section>
-
-<section id="novita" style="border-top: 1px solid rgba(212,175,106,0.18); background: rgba(245,240,230,0.02)">
-<div style="max-width: 76rem; margin: 0 auto; padding: 56px 24px; display: flex; flex-direction: column; gap: 26px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px">
-<h2 style="margin: 0; font-family: 'Cinzel', serif; font-weight: 500; font-size: 28px; letter-spacing: 0.06em">Novità</h2>
-<a href="#" data-r="vicinati" style="font-size: 15px">tutte le novità ›</a>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px">
-<a href="#" data-r="vicinati" style="display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-size: 13px; letter-spacing: 0.08em; color: #D4AF6A">articolo · Bologna · 20 luglio</span><span style="font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.25">Metodo Di Bella: un ponte tra ricerca e coscienza</span></a>
-<a href="#" data-r="vicinati" style="display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-size: 13px; letter-spacing: 0.08em; color: #D4AF6A">articolo · Abruzzo · 16 luglio</span><span style="font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.25">Idea economica per i vicinati</span></a>
-<a href="#" data-r="vicinati" style="display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-size: 13px; letter-spacing: 0.08em; color: #D4AF6A">articolo · Firenze · 26 giugno</span><span style="font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.25">60 anni di Hare Krishna — la Presenza Viva</span></a>
-<a href="#" data-r="vicinati" style="display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 14px; border: 1px solid rgba(212,175,106,0.25); color: #F5F0E6"><span style="font-size: 13px; letter-spacing: 0.08em; color: #D4AF6A">articolo · Pomaia · 4 febbraio</span><span style="font-family: 'Cormorant Garamond', serif; font-size: 22px; line-height: 1.25">Una casa a Pomaia, accanto all'Istituto Lama Tzong Khapa</span></a>
-</div>
-</div>
-</section>
-
-<p class="sotto-mega">qui sotto scrivi un obiettivo, un evento o una richiesta ↓</p>
-</div>
 <script>
+  /* ogni cosa porta dentro l'app, nella sua stanza: dalla casa non c'è un'altra schermata in mezzo */
   function vaiA(r){
     if (r.indexOf("&") >= 0) { try { window.parent.location.href = "index.html?p=" + r; } catch (e) { location.href = "../../index.html?p=" + r; } return; }
     try { window.parent.vai(r); } catch (e) { location.href = "../../index.html?p=" + r; }
   }
-  var GIRO = ["in_coda", "in_avanzamento", "sviluppato"], PAROLA = { in_coda: "in coda", in_avanzamento: "in avanzamento", sviluppato: "sviluppato" };
   document.addEventListener("click", function (e) {
     var r = e.target.closest && e.target.closest("[data-r]");
-    if (r) { e.preventDefault(); vaiA(r.getAttribute("data-r").replace(/&amp;/g, "&")); return; }
-    var a = e.target.closest && e.target.closest("a[href='#']"); if (a) e.preventDefault();
-    /* la pillola: un tocco, lo stato gira — come nella mia orma */
-    var g = e.target.closest && e.target.closest("[data-giro]");
-    if (g) { var o = g.closest(".ob"), s = GIRO.filter(function (x) { return o.classList.contains(x); })[0] || "in_coda", n = GIRO[(GIRO.indexOf(s) + 1) % 3];
-      o.classList.remove(s); o.classList.add(n); g.className = "stato " + n; g.textContent = PAROLA[n]; return; }
-    /* le tessere: una aperta alla volta */
-    var t = e.target.closest && e.target.closest("[data-tes]");
-    if (t) { var k = t.getAttribute("data-tes"), on = t.getAttribute("aria-pressed") === "true";
-      document.querySelectorAll("[data-tes]").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
-      document.querySelectorAll(".lato .pan").forEach(function (p) { p.hidden = true; });
-      if (!on) { t.setAttribute("aria-pressed", "true"); document.getElementById("pan-" + k).hidden = false; } }
+    if (r) { e.preventDefault(); vaiA(r.getAttribute("data-r").replace(/&amp;/g, "&")); }
   });
-  var f = document.getElementById("v-fuori"), d = document.getElementById("v-dentro");
-  function vista(dentro){ document.body.classList.toggle("dentro", dentro); f.classList.toggle("si", !dentro); d.classList.toggle("si", dentro); }
-  f.onclick = function(){ vista(false); }; d.onclick = function(){ vista(true); };
   if (window.parent !== window) document.documentElement.classList.add("in-app");
 </script>
 </body>
