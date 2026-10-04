@@ -139,6 +139,20 @@
     .dentro4,.ky,.akp,.partner{grid-template-columns:1fr}
     .ky{padding:1.6rem}.akp .f{min-height:16rem}
   }
+
+  .tre3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
+  .str{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
+  .str div{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.2rem;padding:1.2rem 1.1rem;display:flex;flex-direction:column;gap:.45rem}
+  .str i{font-style:normal;color:var(--oro);font-size:1.5rem;line-height:1}
+  .str b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.25rem;line-height:1.15}
+  .str small{color:var(--tenue);font-size:.86rem;line-height:1.4}
+  .vet{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
+  .vet [data-r]{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.2rem;padding:1.2rem 1.1rem;display:flex;flex-direction:column;gap:.35rem;color:var(--avorio);min-height:9rem}
+  .vet .el{font-family:Cinzel,serif;font-size:.66rem;letter-spacing:.26em;text-transform:uppercase}
+  .vet b{font-family:Cinzel,serif;font-weight:500;font-size:1.1rem;letter-spacing:.04em}
+  .vet small{color:var(--tenue);font-size:.84rem;line-height:1.4}
+  @media (max-width:60rem){ .str,.vet{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:46rem){ .tre3{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -149,7 +163,7 @@
   <section class="solo-dentro">
     <p class="ciao">Buongiorno, <span class="seg">[ nome ]</span></p>
     <div class="conto">
-      <div><small>il tuo villaggio</small><b><span class="seg">[ Civiltà Sarda ]</span></b><em>attivo</em></div>
+      <div><small>villaggio</small><b><span class="seg">[ Civiltà Sarda ]</span></b><em>attivo</em></div>
       <div><small>obiettivi in corso</small><b><span class="seg">[ 3 ]</span></b><em>in avanzamento</em></div>
       <div><small>talenti</small><b><span class="seg">[ 12 ]</span></b><em>scambiati</em></div>
     </div>
@@ -158,8 +172,8 @@
   <!-- IL VILLAGGIO: il sogno, e il primo passo -->
   <section class="sogno">
     <div class="t">
-      <div class="eti">VILLAGGIO FELICITAS</div>
-      <h1>Il tuo villaggio</h1>
+      <div class="eti">COSCIENZA · TECNOLOGIA · COMUNITÀ</div>
+      <h1>Villaggi Felicitas</h1>
       <p class="def">«L'area attiva in un territorio ampio, legata a una civiltà e alla sua radice linguistica. Dentro il villaggio si propongono i vicinati.»</p>
       <div class="data">
         <span class="pill" data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6">ci sarò</span>
@@ -178,35 +192,32 @@
     <div data-r="vicinati&amp;entra=a844a9b7-85b0-418a-a4c5-435ab8421f4f"><b>Piceni</b><small>Marche, Abruzzo</small></div>
   </div>
 
-  <!-- dentro ogni villaggio -->
+  <!-- dentro ogni villaggio: i tre spazi che già ci sono nei Vicinati -->
   <h2 class="sez">In ogni villaggio</h2>
-  <div class="dentro4">
-    <div class="q4">
-      <span class="el" style="color:var(--acqua)">i prodotti dei luoghi</span>
-      <h3>Prodotti</h3>
-      <p>Prodotti che appartengono a luoghi reali e a chi li fa.</p>
-      <div class="chip"><span>Anima Vagabonda · 18,00 €</span><span>Bhagavad-gītā</span><span>Nexus</span></div>
-      <div class="link"><span data-r="emporio">vedi i prodotti ›</span></div>
-    </div>
-    <div class="q4">
-      <span class="el" style="color:var(--fuoco)">da vicino o da lontano</span>
-      <h3>Assistenza</h3>
-      <p>Assistenze che puoi avere da vicino o da lontano.</p>
-      <div class="chip"><span>Bhakti Yoga</span><span>Bhakti Vriksa</span><span>Gita Manjari</span></div>
-      <div class="link"><span data-r="assistenza">vedi le assistenze ›</span></div>
-    </div>
-    <div class="q4">
-      <span class="el" style="color:var(--terra)">comprare insieme</span>
-      <h3>I pacchetti del villaggio</h3>
-      <p>Il villaggio raccoglie la domanda del territorio: libri, prodotti, percorsi e terapie. Chi ha bisogno lo chiede al villaggio, il villaggio lo chiede insieme ai produttori e ai partner, e il costo si divide tra chi partecipa.</p>
-      <div class="chip"><span>alimenti</span><span>energia</span><span>libri</span><span>rimedi</span><span>assistenza terapeutica</span></div>
-    </div>
-    <div class="q4">
-      <span class="el" style="color:var(--aria)">i luoghi</span>
-      <h3>Punti di ritiro</h3>
-      <p>I luoghi del villaggio che ricevono i pacchi del gruppo, con i loro orari e chi li tiene. L'ultimo tratto lo fanno i vicini.</p>
-      <div class="link"><span data-r="vicinati">trova i luoghi ›</span></div>
-    </div>
+  <div class="tre3">
+    <div class="q4"><span class="el" style="color:var(--terra)">pacchetti del villaggio</span><p>I pacchetti proposti dalle persone del gruppo: i prodotti e chi li propone.</p></div>
+    <div class="q4"><span class="el" style="color:var(--terra)">punti di ritiro</span><p>I luoghi del villaggio dove arrivano i pacchi del gruppo, con i loro orari.</p></div>
+    <div class="q4"><span class="el" style="color:var(--terra)">partner</span><p>Le aziende che cooperano col villaggio.</p></div>
+  </div>
+
+  <!-- gli strumenti: quello che già c'è e si può usare -->
+  <h2 class="sez">Gli strumenti</h2>
+  <div class="str">
+    <div><i>◎</i><b>L'orma</b><small>tiene traccia di quello che si fa: obiettivi, eventi, richieste, con data, luogo e persone</small></div>
+    <div><i>☰</i><b>Compiti e coordinamento</b><small>ogni orma ha i suoi compiti: chi li prende, entro quando, a che punto sono</small></div>
+    <div><i>◌</i><b>I gruppi</b><small>la chat di ogni orma e del villaggio, con gli argomenti trattati</small></div>
+    <div><i>⇄</i><b>Distribuzione e produzione</b><small>i pacchetti del villaggio, l'ordine unico, i punti di ritiro e l'ultimo tratto dei vicini</small></div>
+    <div><i>✦</i><b>Pubblicare</b><small>prodotti, servizi, lezioni, articoli ed eventi, che compaiono nelle vetrine delle stanze</small></div>
+  </div>
+
+  <!-- le vetrine delle cinque stanze -->
+  <h2 class="sez">Le vetrine</h2>
+  <div class="vet">
+    <div data-r="vicinati"><span class="el" style="color:var(--terra)">terra</span><b>Vicinati</b><small>villaggi, eventi, karma yoga</small></div>
+    <div data-r="emporio"><span class="el" style="color:var(--acqua)">acqua</span><b>Emporio</b><small>Anima Vagabonda · 18,00 €</small><small>Bhagavad-gītā · Nexus</small></div>
+    <div data-r="assistenza"><span class="el" style="color:var(--fuoco)">fuoco</span><b>Assistenza</b><small>Bhakti Yoga · Bhakti Vriksa · Gita Manjari</small></div>
+    <div data-r="edizione"><span class="el" style="color:var(--aria)">aria</span><b>Edizione</b><small>stampa e forniture per le fiere · segnalibri da 12,85 €</small></div>
+    <div data-r="scuola"><span class="el" style="color:var(--etere)">etere</span><b>Scuola</b><small>Antaḥkaraṇa</small></div>
   </div>
 
   <!-- il karma yoga -->
@@ -239,18 +250,6 @@
       <div class="link" style="display:flex;gap:1.4rem;margin-top:.4rem"><span class="pill solo-fuori" data-r="soglia">inizia il percorso</span><span class="pill solo-dentro" data-r="anthakarana">continua il percorso</span><span data-r="scuola" style="align-self:center">la Scuola ›</span></div>
     </div>
   </section>
-
-  <!-- stampa e fiere -->
-  <article class="pr giu" style="margin-top:3.6rem">
-    <div class="t">
-      <span class="el" style="color:var(--aria)">aria · edizione</span>
-      <h2>Stampa e fiere</h2>
-      <p>Quello che fai, stampato e portato dove serve.</p>
-      <span class="da">segnalibri da <b>12,85 €</b> · carta stampata · esposizione e fiere · libri e cataloghi</span>
-      <div class="link"><span data-r="edizione">scopri ›</span></div>
-    </div>
-    <div class="f" style="background:url(nexus-fermo.webp) center/38% no-repeat,radial-gradient(circle at 50% 45%,#1d4f86,#0b1830 75%)"></div>
-  </article>
 
   <!-- i partner -->
   <h2 class="sez">I partner</h2>
