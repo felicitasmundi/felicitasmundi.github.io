@@ -4591,7 +4591,9 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     var TEMPIO = { vicinati:"vicinati", emporio:"emporio", assistenza:"assistenza", edizione:"edizione", scuola:"scuola", anthakarana:"antahkarana" };
     /* ⭐ 18:51, Gab: «ognuna di queste una volta che fai piena apre la vecchia versione» → anche «-piena» porta al tempio */
     if(/-piena$/.test(id)) id = id.replace(/-piena$/, "");
-    if(TEMPIO[id] && window.FMPiatto) FMPiatto.monta(c, "APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=" + TEMPIO[id] + "&in=app");
+    /* ⭐ 4 ottobre, Gab: «non deve più essere una landing page … è la pagina home del contesto dove c'è il megafono» — in prova, ?p=casa */
+    if(id==="casa" && window.FMPiatto) FMPiatto.monta(c, "APP.FELICITASMUNDI/piatti/casa-piatto.html?v=" + Date.now());
+    else if(TEMPIO[id] && window.FMPiatto) FMPiatto.monta(c, "APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=" + TEMPIO[id] + "&in=app");
     /* ⭐ 1 ottobre, Gab: dal tempio, toccando un libro o un prodotto si apre la sua scheda con l'acquisto */
     else if(id==="prodotto" && window.SpazioVivo && SpazioVivo.prodotto) SpazioVivo.prodotto(c, sub && sub.id, sub && sub.tempio);
     else if(id==="spazio"){ home(c); collegaLePorteDellaCasa(); riempiIlGiorno(); }
@@ -5497,7 +5499,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   /* le viste che vai() gestisce senza avere una voce nella barra */
   /* ⭐ TOCCATO NEL GUSCIO ㊱ — `orma` è una vista senza voce, come `pagina`:
      ci si arriva da un indirizzo o da un tocco, non da una riga della barra. */
-  var VISTE_SENZA_VOCE = ["vicinati-piena", "emporio-piena", "assistenza-piena", "edizione-piena", "scuola-piena", "anthakarana-piena", "chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore", "evento", "carrello", "settimana"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» · 56 — e «carrello» */
+  var VISTE_SENZA_VOCE = ["casa", "vicinati-piena", "emporio-piena", "assistenza-piena", "edizione-piena", "scuola-piena", "anthakarana-piena", "chat", "consolle", "pagina", "orma", "percorso", "soglia", "cammino", "stanze", "account", "anthakarana", "rubrica", "calendario", "costi", "configuratore", "evento", "carrello", "settimana"]; /* ⭐ TOCCATO NEL GUSCIO ㊵ — «percorso» è una rotta conosciuta · ㊸ — e «soglia», la prima soglia di Antahkarana · ㊹ — e «cammino» · ㊻ — e «stanze» · ㊾ — e le cinque del 15 settembre: account, anthakarana, rubrica, calendario, costi · ㊿ — e «configuratore» · 56 — e «carrello» */
 
   /* ⭐ TOCCATO NEL GUSCIO ㊿ — LE PORTE DELLA BARRA SI CONOSCONO SUBITO.
      ROTTE si riempie dalla tavola `stanze` (il vocabolario, sopra), ma la

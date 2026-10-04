@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La casa · bozza</title>
+<!-- ⭐ 4 ottobre 2026, Gab: «non deve più essere una landing page … è la pagina home del contesto dove c'è il
+     megafono che rimane sempre» · «Apple è proprio il riferimento» · «così come la Apple ha l'iPhone,
+     FelicitasMundi ha il percorso Antaḥkaraṇa … porta allo sviluppo della consapevolezza della propria anima,
+     lo sviluppo delle proprie capacità, dei propri talenti, la connessione col gruppo e la cooperazione …
+     far capire che stai andando verso quello».
+     Questa è solo la parte di mezzo: la barra e il Megafono sono quelli veri dell'app (rotta ?p=casa, in prova).
+     Le frasi tra [ ] sono di Gab, da scrivere. -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--fondo:#0A0C1A;--fondo2:#0F1226;--oro:#D4AF6A;--oro-ch:#E3C58A;--avorio:#F5F0E6;--tenue:rgba(245,240,230,.62);--linea:rgba(212,175,106,.22);
+        --terra:#c89b6a;--acqua:#6fa8dc;--fuoco:#e07b5a;--aria:#9ac296;--etere:#c9a7e8}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--fondo);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif}
+  a,[data-r]{color:var(--oro);text-decoration:none;cursor:pointer}
+  .seg{display:inline-block;background:rgba(212,175,106,.12);border:1px dashed rgba(212,175,106,.6);border-radius:.4rem;padding:0 .35em;color:var(--oro-ch)}
+  .w{max-width:62rem;margin:0 auto;padding:0 1.6rem 3rem}
+  .prova{display:flex;justify-content:flex-end;gap:.4rem;padding-top:1rem}
+  .prova button{font:inherit;font-size:.78rem;background:none;border:1px solid var(--linea);color:var(--tenue);border-radius:999px;padding:.35rem .9rem;cursor:pointer}
+  .prova button.si{background:var(--oro);color:var(--fondo);border-color:var(--oro)}
+  .solo-dentro{display:none} body.dentro .solo-dentro{display:block} body.dentro .solo-fuori{display:none}
+
+  /* chi è entrato: il conto, come in banca */
+  .ciao{font-family:'Cormorant Garamond',serif;font-size:2.2rem;margin:1.6rem 0 1rem}
+  .conto{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+  .conto div{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.1rem;padding:1.1rem 1.2rem}
+  .conto small{display:block;color:var(--tenue);font-size:.82rem;margin-bottom:.35rem}
+  .conto b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:2rem;line-height:1}
+  .conto em{display:block;font-style:normal;color:var(--aria);font-size:.82rem;margin-top:.35rem}
+
+  /* ── ANTAḤKARAṆA: il prodotto centrale, come l'iPhone ── */
+  .ak{text-align:center;padding:3.2rem 0 1rem}
+  .ak .eti{font-family:Cinzel,serif;font-size:.78rem;letter-spacing:.32em;color:var(--oro)}
+  .ak h1{font-family:Cinzel,serif;font-weight:500;font-size:clamp(2.6rem,6.5vw,4.6rem);letter-spacing:.04em;margin:.6rem 0 .4rem;
+         background:linear-gradient(180deg,#f3e3bd,#c99a4b);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ak .sotto{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:rgba(245,240,230,.88);margin:0 auto 1.4rem;max-width:36rem}
+  .ak .due{display:flex;justify-content:center;gap:1.6rem;flex-wrap:wrap;font-size:1.05rem;margin-bottom:1rem}
+  .pill{display:inline-flex;align-items:center;min-height:2.8rem;padding:0 1.5rem;border-radius:999px;background:var(--oro);color:var(--fondo)!important;font-weight:500}
+
+  /* il cammino: si sale verso la cooperazione */
+  .cammino{position:relative;margin:1rem auto 0;max-width:56rem}
+  .cammino svg{display:block;width:100%;height:auto}
+  .tappe{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:-.4rem}
+  .tappa{text-align:center;padding:0 .3rem}
+  .tappa b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.25rem;line-height:1.15}
+  .tappa small{display:block;color:var(--tenue);font-size:.85rem;margin-top:.25rem}
+  .tappa .qui{display:none;margin-top:.4rem;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--fondo);background:var(--oro);border-radius:999px;padding:.15rem .6rem}
+  body.dentro .tappa.ora .qui{display:inline-block}
+  .livelli{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:2rem 0 0}
+  .livello{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.2rem;padding:1.3rem 1.4rem;text-align:left}
+  .livello.primo{border-color:rgba(212,175,106,.7)}
+  .livello .p{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--oro-ch)}
+  .livello .p small{font-size:1rem;color:var(--tenue)}
+  .livello b{display:block;margin:.2rem 0 .5rem;font-weight:500}
+  .livello ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.4rem;color:rgba(245,240,230,.82);font-size:.95rem}
+  .livello li::before{content:"✓  ";color:var(--oro)}
+
+  /* ── le stanze, una per riga ── */
+  .sez{font-family:Cinzel,serif;font-weight:500;font-size:1.05rem;letter-spacing:.24em;text-transform:uppercase;color:var(--tenue);text-align:center;margin:3.6rem 0 1.2rem}
+  .pr{margin:1rem 0;border-radius:1.5rem;overflow:hidden;background:var(--fondo2);border:1px solid var(--linea);display:grid;grid-template-columns:1.1fr 1fr;min-height:19rem}
+  .pr .t{padding:2.2rem 2.2rem;display:flex;flex-direction:column;justify-content:center;gap:.7rem}
+  .pr .el{font-family:Cinzel,serif;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase}
+  .pr h2{font-family:Cinzel,serif;font-weight:500;font-size:clamp(1.8rem,3.4vw,2.5rem);letter-spacing:.04em;margin:0}
+  .pr p{font-family:'Cormorant Garamond',serif;font-size:1.4rem;line-height:1.3;margin:0}
+  .pr .da{color:var(--tenue);font-size:.95rem}
+  .pr .da b{color:var(--oro-ch);font-weight:500}
+  .pr .link{display:flex;gap:1.4rem;flex-wrap:wrap;margin-top:.3rem}
+  .pr .f{background-size:cover;background-position:center;min-height:14rem}
+  .pr.giu{grid-template-columns:1fr 1.1fr}.pr.giu .f{order:-1}
+  .chip{display:flex;gap:.5rem;flex-wrap:wrap}
+  .chip span{font-size:.8rem;border:1px solid var(--linea);border-radius:999px;padding:.2rem .7rem;color:rgba(245,240,230,.78)}
+
+  .nov{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
+  .nov [data-r]{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.2rem;padding:1.1rem 1.2rem;color:var(--avorio)}
+  .nov small{color:var(--oro);font-family:Cinzel,serif;font-size:.68rem;letter-spacing:.2em}
+  .nov h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.25rem;margin:.35rem 0 0}
+
+  .sotto-mega{text-align:center;color:var(--tenue);margin:3.2rem 0 0;font-size:1rem}
+  .sotto-mega b{color:var(--avorio);font-weight:500}
+
+  @media (max-width:46rem){
+    .w{padding:0 1rem 2rem}
+    .conto{gap:.5rem}.conto div{padding:.8rem}.conto b{font-size:1.5rem}
+    .tappe{grid-template-columns:repeat(2,1fr);row-gap:1.2rem}
+    .livelli,.nov{grid-template-columns:1fr}
+    .pr,.pr.giu{grid-template-columns:1fr}.pr .f,.pr.giu .f{order:-1;min-height:12rem}
+    .pr .t{padding:1.5rem 1.3rem}
+    .ak{padding-top:2rem}
+  }
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="prova"><button id="v-fuori" class="si" type="button">chi arriva</button><button id="v-dentro" type="button">chi è entrato</button></div>
+
+  <!-- chi è entrato: il conto -->
+  <section class="solo-dentro">
+    <p class="ciao">Buongiorno, <span class="seg">[ nome ]</span></p>
+    <div class="conto">
+      <div><small>la tua quota</small><b>Base</b><em>attiva</em></div>
+      <div><small>obiettivi in corso</small><b><span class="seg">[ 3 ]</span></b><em>in avanzamento</em></div>
+      <div><small>talenti</small><b><span class="seg">[ 12 ]</span></b><em>scambiati</em></div>
+    </div>
+  </section>
+
+  <!-- ANTAḤKARAṆA -->
+  <section class="ak">
+    <div class="eti">IL CAMMINO</div>
+    <h1>Antaḥkaraṇa</h1>
+    <p class="sotto"><span class="seg">[ la frase di Antaḥkaraṇa ]</span></p>
+    <div class="due">
+      <span class="pill solo-fuori" data-r="soglia">inizia il cammino</span>
+      <span class="pill solo-dentro" data-r="anthakarana">continua il cammino</span>
+      <span data-r="anthakarana">scopri ›</span>
+    </div>
+
+    <div class="cammino">
+      <svg viewBox="0 0 1000 230" aria-hidden="true">
+        <defs>
+          <linearGradient id="sale" x1="0" x2="1"><stop offset="0" stop-color="#D4AF6A" stop-opacity=".25"/><stop offset="1" stop-color="#F3E3BD"/></linearGradient>
+          <radialGradient id="luce"><stop offset="0" stop-color="#F3E3BD" stop-opacity=".9"/><stop offset="1" stop-color="#D4AF6A" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="875" cy="40" r="90" fill="url(#luce)" opacity=".45"/>
+        <path d="M125 200 C 260 200, 300 150, 375 140 S 560 120, 625 95 S 800 55, 875 40" fill="none" stroke="url(#sale)" stroke-width="3"/>
+        <path d="M125 200 C 260 200, 300 150, 375 140 S 560 120, 625 95 S 800 55, 875 40" fill="none" stroke="#F3E3BD" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round" opacity=".6">
+          <animate attributeName="stroke-dashoffset" from="0" to="-160" dur="6s" repeatCount="indefinite"/>
+        </path>
+        <circle cx="125" cy="200" r="9" fill="#0A0C1A" stroke="#D4AF6A" stroke-width="2"/>
+        <circle cx="375" cy="140" r="11" fill="#0A0C1A" stroke="#D4AF6A" stroke-width="2"/>
+        <circle cx="625" cy="95" r="13" fill="#0A0C1A" stroke="#E3C58A" stroke-width="2"/>
+        <circle cx="875" cy="40" r="16" fill="#E3C58A"/>
+      </svg>
+      <div class="tappe">
+        <div class="tappa ora"><b>La consapevolezza della propria anima</b><span class="qui">sei qui</span></div>
+        <div class="tappa"><b>Le proprie capacità e i propri talenti</b></div>
+        <div class="tappa"><b>La connessione col gruppo</b></div>
+        <div class="tappa"><b>La cooperazione</b></div>
+      </div>
+    </div>
+
+    <div class="livelli">
+      <div class="livello primo"><div class="p">26 € <small>al mese, o karma yoga</small></div><b>Base · primo livello</b>
+        <ul><li>il cammino e il percorso dei talenti</li><li>tutti gli strumenti dell'app</li></ul></div>
+      <div class="livello"><div class="p">20 € <small>a settimana</small></div><b>Praticantato · secondo livello</b>
+        <ul><li>l'incontro di gruppo settimanale online</li><li>le lezioni riservate della Scuola</li></ul></div>
+    </div>
+  </section>
+
+  <!-- le stanze -->
+  <h2 class="sez">Le stanze</h2>
+
+  <article class="pr">
+    <div class="t">
+      <span class="el" style="color:var(--terra)">terra</span>
+      <h2>Villaggi</h2>
+      <p><span class="seg">[ la frase dei villaggi ]</span></p>
+      <span class="da">libri, prodotti, percorsi e terapie · il costo diviso tra chi partecipa</span>
+      <div class="link"><span data-r="vicinati">scopri ›</span><span data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6">11 ottobre, Oristano ›</span></div>
+    </div>
+    <div class="f" style="background-image:url(../../inviti/11-ottobre-largo.jpg)"></div>
+  </article>
+
+  <article class="pr giu">
+    <div class="t">
+      <span class="el" style="color:var(--acqua)">acqua</span>
+      <h2>Emporio</h2>
+      <p><span class="seg">[ la frase dell'Emporio ]</span></p>
+      <span class="da">ultimo arrivo: Anima Vagabonda · <b>18,00 €</b></span>
+      <div class="chip"><span>Bhagavad-gītā</span><span>Nexus · strumenti di coscienza</span></div>
+      <div class="link"><span data-r="emporio">scopri ›</span><span data-r="pagina&amp;n=anima-vagabonda">ordina ›</span></div>
+    </div>
+    <div class="f" style="background:url(anima-vagabonda.jpg) center/contain no-repeat,#14172e"></div>
+  </article>
+
+  <article class="pr">
+    <div class="t">
+      <span class="el" style="color:var(--fuoco)">fuoco</span>
+      <h2>Assistenza</h2>
+      <p><span class="seg">[ la frase dell'Assistenza ]</span></p>
+      <div class="chip"><span>Bhakti Yoga</span><span>Bhakti Vriksa</span><span>Gita Manjari</span></div>
+      <div class="link"><span data-r="assistenza">scopri ›</span></div>
+    </div>
+    <div class="f" style="background:radial-gradient(circle at 50% 50%,rgba(224,123,90,.38),#14172e 70%)"></div>
+  </article>
+
+  <article class="pr giu">
+    <div class="t">
+      <span class="el" style="color:var(--aria)">aria</span>
+      <h2>Edizione</h2>
+      <p><span class="seg">[ la frase dell'Edizione ]</span></p>
+      <span class="da">stampa e forniture per le fiere · segnalibri da <b>12,85 €</b></span>
+      <div class="chip"><span>carta stampata</span><span>esposizione e fiere</span><span>libri e cataloghi</span></div>
+      <div class="link"><span data-r="edizione">scopri ›</span></div>
+    </div>
+    <div class="f" style="background:url(nexus-fermo.webp) center/38% no-repeat,radial-gradient(circle at 50% 45%,#1d4f86,#0b1830 75%)"></div>
+  </article>
+
+  <article class="pr">
+    <div class="t">
+      <span class="el" style="color:var(--etere)">etere</span>
+      <h2>Scuola</h2>
+      <p><span class="seg">[ la frase della Scuola ]</span></p>
+      <div class="link"><span data-r="scuola">scopri ›</span></div>
+    </div>
+    <div class="f" style="background:url(ak-fig.webp) center/contain no-repeat,#14172e"></div>
+  </article>
+
+  <h2 class="sez">Novità</h2>
+  <div class="nov">
+    <div data-r="vicinati"><small>ARTICOLO · BOLOGNA</small><h3>Metodo Di Bella: un ponte tra ricerca e coscienza</h3></div>
+    <div data-r="vicinati"><small>ARTICOLO · ABRUZZO</small><h3>Idea economica per i vicinati</h3></div>
+    <div data-r="vicinati"><small>ARTICOLO · FIRENZE</small><h3>60 anni di Hare Krishna — la Presenza Viva</h3></div>
+  </div>
+
+  <p class="sotto-mega">Qui sotto <b>scrivi un obiettivo, un evento o una richiesta</b> ↓</p>
+</div>
+
+<script>
+  /* le porte: dentro l'app chiedono la stanza alla barra vera; da sola la pagina apre l'app */
+  function vaiA(r){
+    if (r.indexOf("&") >= 0) { try { window.parent.location.href = "index.html?p=" + r; } catch (e) { location.href = "../../index.html?p=" + r; } return; }
+    try { window.parent.vai(r); } catch (e) { location.href = "../../index.html?p=" + r; }
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest && e.target.closest("[data-r]");
+    if (t) vaiA(t.getAttribute("data-r").replace(/&amp;/g, "&"));
+  });
+  var f = document.getElementById("v-fuori"), d = document.getElementById("v-dentro");
+  function vista(dentro){ document.body.classList.toggle("dentro", dentro); f.classList.toggle("si", !dentro); d.classList.toggle("si", dentro); }
+  f.onclick = function(){ vista(false); }; d.onclick = function(){ vista(true); };
+  /* chi è entrato davvero parte già da «chi è entrato» */
+  try { if (window.parent !== window && window.parent.ospite === false) vista(true); } catch (e) {}
+</script>
+</body>
+</html>
