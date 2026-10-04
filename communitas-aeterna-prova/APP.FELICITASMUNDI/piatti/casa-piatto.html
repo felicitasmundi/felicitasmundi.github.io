@@ -9,6 +9,7 @@
      FelicitasMundi ha il percorso Antaḥkaraṇa … porta allo sviluppo della consapevolezza della propria anima,
      lo sviluppo delle proprie capacità, dei propri talenti, la connessione col gruppo e la cooperazione …
      far capire che stai andando verso quello».
+     ⭐ 13:43, Gab: «il prodotto centrale è il villaggio … prendi come base quello che hai scritto per la lettera d'intenti» · «qualcosa che mi faccia sognare … il primo evento utile è quello dell'11» · «Antaḥkaraṇa è il percorso … da integrare alla scuola» · «il karma yoga ti dà accesso all'ospitalità, accesso a contatti di persone che ti risuonano vicino a te».
      Questa è solo la parte di mezzo: la barra e il Megafono sono quelli veri dell'app (rotta ?p=casa, in prova).
      Le frasi tra [ ] sono di Gab, da scrivere. -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -23,7 +24,7 @@
   .prova{display:flex;justify-content:flex-end;gap:.4rem;padding-top:1rem}
   .prova button{font:inherit;font-size:.78rem;background:none;border:1px solid var(--linea);color:var(--tenue);border-radius:999px;padding:.35rem .9rem;cursor:pointer}
   .prova button.si{background:var(--oro);color:var(--fondo);border-color:var(--oro)}
-  .solo-dentro{display:none} body.dentro .solo-dentro{display:block} body.dentro .solo-fuori{display:none}
+  body:not(.dentro) .solo-dentro{display:none!important} body.dentro .solo-fuori{display:none!important}
 
   /* chi è entrato: il conto, come in banca */
   .ciao{font-family:'Cormorant Garamond',serif;font-size:2.2rem;margin:1.6rem 0 1rem}
@@ -92,6 +93,52 @@
     .pr .t{padding:1.5rem 1.3rem}
     .ak{padding-top:2rem}
   }
+
+  /* ── 13:43: il villaggio al centro ── */
+  .sogno{position:relative;border-radius:1.8rem;overflow:hidden;margin-top:1.4rem;min-height:34rem;display:flex;align-items:flex-end;
+         background:linear-gradient(to right,rgba(10,12,26,.9) 0,rgba(10,12,26,.55) 45%,rgba(10,12,26,0) 75%),linear-gradient(to top,rgba(10,12,26,.95) 5%,rgba(10,12,26,0) 50%),url(../../articoli/2026/incontro-11-ottobre.jpg) 70% 35%/cover}
+  .sogno .t{padding:2.6rem 2.4rem;max-width:42rem}
+  .sogno .eti{font-family:Cinzel,serif;font-size:.78rem;letter-spacing:.32em;color:var(--oro)}
+  .sogno h1{font-family:Cinzel,serif;font-weight:500;font-size:clamp(2.4rem,6vw,4.2rem);letter-spacing:.04em;margin:.5rem 0 .6rem;line-height:1.05}
+  .sogno .def{font-family:'Cormorant Garamond',serif;font-size:1.45rem;line-height:1.35;color:rgba(245,240,230,.92);margin:0 0 1.4rem}
+  .data{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 1.6rem}
+  .data .q{font-size:1rem;color:var(--avorio)}
+  .data .q b{display:block;font-family:Cinzel,serif;font-weight:500;letter-spacing:.14em;color:var(--oro-ch);font-size:.82rem}
+  .civ{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem}
+  .civ [data-r]{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.1rem;padding:1.1rem 1rem;color:var(--avorio);display:flex;flex-direction:column;gap:.3rem;min-height:7.5rem;justify-content:flex-end;position:relative;overflow:hidden}
+  .civ [data-r]::before{content:"";position:absolute;inset:-40% -40% auto auto;width:9rem;height:9rem;border-radius:50%;background:radial-gradient(circle,rgba(212,175,106,.28),transparent 70%)}
+  .civ b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.35rem}
+  .civ small{color:var(--tenue);font-size:.82rem}
+  .dentro4{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+  .q4{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.4rem;padding:1.6rem 1.6rem 1.4rem;display:flex;flex-direction:column;gap:.6rem}
+  .q4 .el{font-family:Cinzel,serif;font-size:.7rem;letter-spacing:.26em;text-transform:uppercase}
+  .q4 h3{font-family:Cinzel,serif;font-weight:500;font-size:1.35rem;letter-spacing:.04em;margin:0}
+  .q4 p{margin:0;font-family:'Cormorant Garamond',serif;font-size:1.2rem;line-height:1.4;color:rgba(245,240,230,.86)}
+  .q4 .chip{margin-top:.2rem}
+  .q4 .link{margin-top:auto;padding-top:.4rem}
+  .ky{border-radius:1.6rem;padding:2.4rem;background:radial-gradient(circle at 85% 20%,rgba(154,194,150,.18),transparent 55%),var(--fondo2);border:1px solid var(--linea);display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:center}
+  .ky h2{font-family:Cinzel,serif;font-weight:500;font-size:2rem;margin:0 0 .6rem}
+  .ky blockquote{margin:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;line-height:1.4;color:rgba(245,240,230,.9)}
+  .ky ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
+  .ky li{display:flex;gap:.7rem;align-items:baseline;font-size:1.05rem}
+  .ky li::before{content:"✦";color:var(--oro)}
+  .akp{display:grid;grid-template-columns:.8fr 1.2fr;border-radius:1.6rem;overflow:hidden;background:var(--fondo2);border:1px solid var(--linea)}
+  .akp .f{background:url(../../praticantato-figura.jpg) center 30%/cover;min-height:24rem}
+  .akp .t{padding:2.2rem;display:flex;flex-direction:column;gap:.8rem;justify-content:center}
+  .akp h2{font-family:Cinzel,serif;font-weight:500;font-size:2.2rem;margin:0;background:linear-gradient(180deg,#f3e3bd,#c99a4b);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .akp ol{margin:.3rem 0 0;padding:0;list-style:none;counter-reset:t;display:flex;flex-direction:column;gap:.55rem}
+  .akp li{counter-increment:t;display:grid;grid-template-columns:2rem 1fr;align-items:baseline;font-family:'Cormorant Garamond',serif;font-size:1.25rem}
+  .akp li::before{content:counter(t);font-family:Cinzel,serif;font-size:.9rem;color:var(--fondo);background:var(--oro);width:1.5rem;height:1.5rem;border-radius:50%;display:grid;place-items:center}
+  .partner{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+  .partner div{background:var(--fondo2);border:1px solid var(--linea);border-radius:1.1rem;padding:1.1rem 1.2rem}
+  .partner b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.3rem}
+  .partner small{color:var(--tenue);font-size:.88rem;line-height:1.4}
+  @media (max-width:46rem){
+    .sogno{min-height:32rem;background:linear-gradient(to top,rgba(10,12,26,.97) 35%,rgba(10,12,26,.25) 75%),url(../../articoli/2026/incontro-11-ottobre.jpg) 60% 20%/cover}.sogno .t{padding:1.6rem 1.3rem}
+    .civ{grid-template-columns:1fr 1fr}
+    .dentro4,.ky,.akp,.partner{grid-template-columns:1fr}
+    .ky{padding:1.6rem}.akp .f{min-height:16rem}
+  }
 </style>
 </head>
 <body>
@@ -102,113 +149,116 @@
   <section class="solo-dentro">
     <p class="ciao">Buongiorno, <span class="seg">[ nome ]</span></p>
     <div class="conto">
-      <div><small>la tua quota</small><b>Base</b><em>attiva</em></div>
+      <div><small>il tuo villaggio</small><b><span class="seg">[ Civiltà Sarda ]</span></b><em>attivo</em></div>
       <div><small>obiettivi in corso</small><b><span class="seg">[ 3 ]</span></b><em>in avanzamento</em></div>
       <div><small>talenti</small><b><span class="seg">[ 12 ]</span></b><em>scambiati</em></div>
     </div>
   </section>
 
-  <!-- ANTAḤKARAṆA -->
-  <section class="ak">
-    <div class="eti">IL CAMMINO</div>
-    <h1>Antaḥkaraṇa</h1>
-    <p class="sotto"><span class="seg">[ la frase di Antaḥkaraṇa ]</span></p>
-    <div class="due">
-      <span class="pill solo-fuori" data-r="soglia">inizia il cammino</span>
-      <span class="pill solo-dentro" data-r="anthakarana">continua il cammino</span>
-      <span data-r="anthakarana">scopri ›</span>
-    </div>
-
-    <div class="cammino">
-      <svg viewBox="0 0 1000 230" aria-hidden="true">
-        <defs>
-          <linearGradient id="sale" x1="0" x2="1"><stop offset="0" stop-color="#D4AF6A" stop-opacity=".25"/><stop offset="1" stop-color="#F3E3BD"/></linearGradient>
-          <radialGradient id="luce"><stop offset="0" stop-color="#F3E3BD" stop-opacity=".9"/><stop offset="1" stop-color="#D4AF6A" stop-opacity="0"/></radialGradient>
-        </defs>
-        <circle cx="875" cy="40" r="90" fill="url(#luce)" opacity=".45"/>
-        <path d="M125 200 C 260 200, 300 150, 375 140 S 560 120, 625 95 S 800 55, 875 40" fill="none" stroke="url(#sale)" stroke-width="3"/>
-        <path d="M125 200 C 260 200, 300 150, 375 140 S 560 120, 625 95 S 800 55, 875 40" fill="none" stroke="#F3E3BD" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round" opacity=".6">
-          <animate attributeName="stroke-dashoffset" from="0" to="-160" dur="6s" repeatCount="indefinite"/>
-        </path>
-        <circle cx="125" cy="200" r="9" fill="#0A0C1A" stroke="#D4AF6A" stroke-width="2"/>
-        <circle cx="375" cy="140" r="11" fill="#0A0C1A" stroke="#D4AF6A" stroke-width="2"/>
-        <circle cx="625" cy="95" r="13" fill="#0A0C1A" stroke="#E3C58A" stroke-width="2"/>
-        <circle cx="875" cy="40" r="16" fill="#E3C58A"/>
-      </svg>
-      <div class="tappe">
-        <div class="tappa ora"><b>La consapevolezza della propria anima</b><span class="qui">sei qui</span></div>
-        <div class="tappa"><b>Le proprie capacità e i propri talenti</b></div>
-        <div class="tappa"><b>La connessione col gruppo</b></div>
-        <div class="tappa"><b>La cooperazione</b></div>
+  <!-- IL VILLAGGIO: il sogno, e il primo passo -->
+  <section class="sogno">
+    <div class="t">
+      <div class="eti">VILLAGGIO FELICITAS</div>
+      <h1>Il tuo villaggio</h1>
+      <p class="def">«L'area attiva in un territorio ampio, legata a una civiltà e alla sua radice linguistica. Dentro il villaggio si propongono i vicinati.»</p>
+      <div class="data">
+        <span class="pill" data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6">ci sarò</span>
+        <span class="q"><b>DOMENICA 11 OTTOBRE · ORE 10</b>il primo incontro tra i vicinati della Sardegna · Cas'ale, Baratili · Oristano</span>
       </div>
-    </div>
-
-    <div class="livelli">
-      <div class="livello primo"><div class="p">26 € <small>al mese, o karma yoga</small></div><b>Base · primo livello</b>
-        <ul><li>il cammino e il percorso dei talenti</li><li>tutti gli strumenti dell'app</li></ul></div>
-      <div class="livello"><div class="p">20 € <small>a settimana</small></div><b>Praticantato · secondo livello</b>
-        <ul><li>l'incontro di gruppo settimanale online</li><li>le lezioni riservate della Scuola</li></ul></div>
     </div>
   </section>
 
-  <!-- le stanze -->
-  <h2 class="sez">Le stanze</h2>
+  <!-- le civiltà -->
+  <h2 class="sez">Le civiltà</h2>
+  <div class="civ">
+    <div data-r="vicinati&amp;entra=5839d11d-9901-49bb-9b2f-f94236bbe2a1"><b>Sarda</b><small>Sardegna</small></div>
+    <div data-r="vicinati&amp;entra=19da43d2-66f1-4eb4-9783-c7874de6489a"><b>Tuscia</b><small>Toscana, Umbria, Lazio</small></div>
+    <div data-r="vicinati&amp;entra=91cb1506-35fc-44b2-a42f-630ac2709100"><b>Romagnola</b><small>Romagna</small></div>
+    <div data-r="vicinati&amp;entra=71e22940-04bb-4e96-9260-0413c753d6aa"><b>Emiliana</b><small>Emilia</small></div>
+    <div data-r="vicinati&amp;entra=a844a9b7-85b0-418a-a4c5-435ab8421f4f"><b>Piceni</b><small>Marche, Abruzzo</small></div>
+  </div>
 
-  <article class="pr">
-    <div class="t">
-      <span class="el" style="color:var(--terra)">terra</span>
-      <h2>Villaggi</h2>
-      <p><span class="seg">[ la frase dei villaggi ]</span></p>
-      <span class="da">libri, prodotti, percorsi e terapie · il costo diviso tra chi partecipa</span>
-      <div class="link"><span data-r="vicinati">scopri ›</span><span data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6">11 ottobre, Oristano ›</span></div>
+  <!-- dentro ogni villaggio -->
+  <h2 class="sez">In ogni villaggio</h2>
+  <div class="dentro4">
+    <div class="q4">
+      <span class="el" style="color:var(--acqua)">i prodotti dei luoghi</span>
+      <h3>Prodotti</h3>
+      <p>Prodotti che appartengono a luoghi reali e a chi li fa.</p>
+      <div class="chip"><span>Anima Vagabonda · 18,00 €</span><span>Bhagavad-gītā</span><span>Nexus</span></div>
+      <div class="link"><span data-r="emporio">vedi i prodotti ›</span></div>
     </div>
-    <div class="f" style="background-image:url(../../inviti/11-ottobre-largo.jpg)"></div>
-  </article>
-
-  <article class="pr giu">
-    <div class="t">
-      <span class="el" style="color:var(--acqua)">acqua</span>
-      <h2>Emporio</h2>
-      <p><span class="seg">[ la frase dell'Emporio ]</span></p>
-      <span class="da">ultimo arrivo: Anima Vagabonda · <b>18,00 €</b></span>
-      <div class="chip"><span>Bhagavad-gītā</span><span>Nexus · strumenti di coscienza</span></div>
-      <div class="link"><span data-r="emporio">scopri ›</span><span data-r="pagina&amp;n=anima-vagabonda">ordina ›</span></div>
-    </div>
-    <div class="f" style="background:url(anima-vagabonda.jpg) center/contain no-repeat,#14172e"></div>
-  </article>
-
-  <article class="pr">
-    <div class="t">
-      <span class="el" style="color:var(--fuoco)">fuoco</span>
-      <h2>Assistenza</h2>
-      <p><span class="seg">[ la frase dell'Assistenza ]</span></p>
+    <div class="q4">
+      <span class="el" style="color:var(--fuoco)">da vicino o da lontano</span>
+      <h3>Assistenza</h3>
+      <p>Assistenze che puoi avere da vicino o da lontano.</p>
       <div class="chip"><span>Bhakti Yoga</span><span>Bhakti Vriksa</span><span>Gita Manjari</span></div>
-      <div class="link"><span data-r="assistenza">scopri ›</span></div>
+      <div class="link"><span data-r="assistenza">vedi le assistenze ›</span></div>
     </div>
-    <div class="f" style="background:radial-gradient(circle at 50% 50%,rgba(224,123,90,.38),#14172e 70%)"></div>
-  </article>
+    <div class="q4">
+      <span class="el" style="color:var(--terra)">comprare insieme</span>
+      <h3>I pacchetti del villaggio</h3>
+      <p>Il villaggio raccoglie la domanda del territorio: libri, prodotti, percorsi e terapie. Chi ha bisogno lo chiede al villaggio, il villaggio lo chiede insieme ai produttori e ai partner, e il costo si divide tra chi partecipa.</p>
+      <div class="chip"><span>alimenti</span><span>energia</span><span>libri</span><span>rimedi</span><span>assistenza terapeutica</span></div>
+    </div>
+    <div class="q4">
+      <span class="el" style="color:var(--aria)">i luoghi</span>
+      <h3>Punti di ritiro</h3>
+      <p>I luoghi del villaggio che ricevono i pacchi del gruppo, con i loro orari e chi li tiene. L'ultimo tratto lo fanno i vicini.</p>
+      <div class="link"><span data-r="vicinati">trova i luoghi ›</span></div>
+    </div>
+  </div>
 
-  <article class="pr giu">
+  <!-- il karma yoga -->
+  <h2 class="sez">Il karma yoga</h2>
+  <section class="ky">
+    <div>
+      <blockquote>«L'azione disinteressata, messa a disposizione per la comunità, attività che ripulisce dalle azioni del passato, ponendoti in un senso di servizio.»</blockquote>
+    </div>
+    <ul>
+      <li>l'accesso all'ospitalità</li>
+      <li>i contatti di persone che ti risuonano, vicino a te</li>
+      <li><span class="seg">[ cos'altro dà il karma yoga ]</span></li>
+    </ul>
+  </section>
+
+  <!-- la scuola: Antaḥkaraṇa, il percorso -->
+  <h2 class="sez">La Scuola</h2>
+  <section class="akp">
+    <div class="f"></div>
     <div class="t">
-      <span class="el" style="color:var(--aria)">aria</span>
-      <h2>Edizione</h2>
-      <p><span class="seg">[ la frase dell'Edizione ]</span></p>
-      <span class="da">stampa e forniture per le fiere · segnalibri da <b>12,85 €</b></span>
-      <div class="chip"><span>carta stampata</span><span>esposizione e fiere</span><span>libri e cataloghi</span></div>
+      <span class="el" style="font-family:Cinzel,serif;font-size:.7rem;letter-spacing:.26em;color:var(--etere)">IL PERCORSO</span>
+      <h2>Antaḥkaraṇa</h2>
+      <p style="margin:0;font-family:'Cormorant Garamond',serif;font-size:1.3rem;line-height:1.4">Il percorso interno, che ti aiuta anche a riconoscere i prodotti che hanno un valore.</p>
+      <ol>
+        <li>La consapevolezza della propria anima</li>
+        <li>Le proprie capacità e i propri talenti</li>
+        <li>La connessione col gruppo</li>
+        <li>La cooperazione</li>
+      </ol>
+      <div class="link" style="display:flex;gap:1.4rem;margin-top:.4rem"><span class="pill solo-fuori" data-r="soglia">inizia il percorso</span><span class="pill solo-dentro" data-r="anthakarana">continua il percorso</span><span data-r="scuola" style="align-self:center">la Scuola ›</span></div>
+    </div>
+  </section>
+
+  <!-- stampa e fiere -->
+  <article class="pr giu" style="margin-top:3.6rem">
+    <div class="t">
+      <span class="el" style="color:var(--aria)">aria · edizione</span>
+      <h2>Stampa e fiere</h2>
+      <p>Quello che fai, stampato e portato dove serve.</p>
+      <span class="da">segnalibri da <b>12,85 €</b> · carta stampata · esposizione e fiere · libri e cataloghi</span>
       <div class="link"><span data-r="edizione">scopri ›</span></div>
     </div>
     <div class="f" style="background:url(nexus-fermo.webp) center/38% no-repeat,radial-gradient(circle at 50% 45%,#1d4f86,#0b1830 75%)"></div>
   </article>
 
-  <article class="pr">
-    <div class="t">
-      <span class="el" style="color:var(--etere)">etere</span>
-      <h2>Scuola</h2>
-      <p><span class="seg">[ la frase della Scuola ]</span></p>
-      <div class="link"><span data-r="scuola">scopri ›</span></div>
-    </div>
-    <div class="f" style="background:url(ak-fig.webp) center/contain no-repeat,#14172e"></div>
-  </article>
+  <!-- i partner -->
+  <h2 class="sez">I partner</h2>
+  <div class="partner">
+    <div><b>Macro Edizioni</b><small>il catalogo collegato a FelicitasMundi: i libri entrano nei pacchetti del villaggio</small></div>
+    <div><b>Flyeralarm</b><small>la stampa e le forniture per le fiere</small></div>
+    <div><b>USCI</b><small>la congregazione Hare Krishna che propone gli insegnamenti della filosofia indo-vedica</small></div>
+  </div>
 
   <h2 class="sez">Novità</h2>
   <div class="nov">
@@ -219,7 +269,6 @@
 
   <p class="sotto-mega">Qui sotto <b>scrivi un obiettivo, un evento o una richiesta</b> ↓</p>
 </div>
-
 <script>
   /* le porte: dentro l'app chiedono la stanza alla barra vera; da sola la pagina apre l'app */
   function vaiA(r){
