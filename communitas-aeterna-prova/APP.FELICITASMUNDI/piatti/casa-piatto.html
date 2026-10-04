@@ -4,17 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La casa · bozza</title>
-<!-- ⭐ 4 ottobre 2026, Gab 17:08: «stiamo lavorando su tre filoni: l'utilizzo della piattaforma (cos'è, cosa comporta,
-     e il praticantato: due livelli) · l'organizzazione (fare villaggio, acquisto di gruppo, acquisti solidali, lo sviluppo
-     di una logistica) · l'e-commerce, interconnesso anche a dono e scambio» · «come lo comunicano Trello, ClickUp: un sito
-     che spiega cosa fanno in poche parole» · «Emporio: scorri tutte le foto con titolo dei prodotti, con sotto scritto
-     dove si trovano … se sono vicini, se sono lontani o se fanno parte del percorso del praticantato» · «tutto visualizzato
-     come un percorso: la consapevolezza del proprio talento, lo sviluppo di questo, lo sviluppo dei gruppi di lavoro,
-     il coordinamento attraverso gli strumenti di tecnologia e di coscienza, e da lì tutti i prodotti: tre fasi».
-     Antaḥkaraṇa, parole di Gab: «semplicemente una guida al ritorno a sé, attraverso strumenti, letture, percorsi di
-     gruppo, alla quale si accede anche attraverso il karma yoga».
-     17:20: «uno vede un po' di prodotti e da lì entra nell'app».
-     Le frasi tra [ ] sono di Gab, da scrivere. Barra e Megafono sono quelli veri dell'app (rotta ?p=casa, in prova). -->
+<!-- ⭐ 4 ottobre 2026, 22:16, Gab (con l'immagine di clickup.com): «non mi piace come hai disegnato l'aspetto gestionale …
+     bisogna dargli veramente con chiarezza il quantitativo delle cose che gli si dà … cosa si arriva ad avere come percorso
+     introspettivo, cosa significa pubblicare da gruppo a vetrina, il fatto di fare insieme una logistica legata
+     all'alimentazione, rimedi ed educazione … loro hanno bisogno di dire tutto quello che si fa con AI agent, noi possiamo
+     fare dei quadranti dicendo tutto quello che possiamo fare col valore espresso dai talenti delle persone, mettendo una
+     breve visione dei talenti principali, del percorso … raccontare meglio il praticantato, cosa accade partendo dai 26 euro,
+     e quali sono le cose che si possono fare col karma yoga … tutto questo mi deve generare entusiasmo».
+     I numeri sono quelli del database (4 ottobre): 108 talenti attivi, 5 civiltà. Barra e Megafono sono quelli veri dell'app. -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--oro:#D4AF6A;--oro-ch:#E3C58A;--ivory:#F5F0E6;--tenue:rgba(245,240,230,.6);--linea:rgba(212,175,106,.22);
@@ -39,6 +36,8 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
 
 /* le tre fasi, come un cammino */
 .fase{position:relative;padding-left:3.4rem;margin:0 0 3rem}
+.fase.senza{padding-left:0;margin-top:4.4rem}
+.fase.senza::before{display:none}
 .fase::before{content:"";position:absolute;left:1.15rem;top:2.6rem;bottom:-3rem;width:2px;background:linear-gradient(var(--oro),rgba(212,175,106,.08))}
 .fase:last-of-type::before{display:none}
 .num{position:absolute;left:0;top:0;width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;font-family:Cinzel,serif;color:#0A0C1A;background:var(--oro);box-shadow:0 0 1.2rem rgba(212,175,106,.45)}
@@ -123,6 +122,61 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
 .tx2 .eti{font-family:Cinzel,serif;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--oro)}
 .tx2 h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin:.4rem 0 0}
 @media (max-width:40rem){ .scena,.scena.giu{grid-template-columns:1fr;text-align:center} .scena.giu .tel{order:0} .tel.grande{width:15rem} }
+
+/* ── la griglia di tutto quello che si fa (come clickup.com) ── */
+.titolone{text-align:center;margin:3.4rem 0 .6rem;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2.3rem,5.6vw,4rem);line-height:1.04}
+.titolone em{font-style:normal;background:linear-gradient(180deg,#f3e3bd,#c99a4b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sottotitolone{text-align:center;color:var(--tenue);font-size:1.12rem;margin:0 auto 2rem;max-width:40rem;line-height:1.5}
+.griglia{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid rgba(212,175,106,.12);border-left:1px solid rgba(212,175,106,.12)}
+.cella{border-right:1px solid rgba(212,175,106,.12);border-bottom:1px solid rgba(212,175,106,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;min-height:8.2rem;padding:.9rem .5rem;text-align:center;color:rgba(245,240,230,.85);font-size:.95rem;line-height:1.25}
+.cella svg{width:1.9rem;height:1.9rem;stroke:var(--c,var(--oro));fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cella:hover{background:rgba(212,175,106,.05)}
+.cella.grande{grid-column:span 2;grid-row:span 2;gap:1rem;background:radial-gradient(ellipse at 50% 30%,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%)}
+.cella.grande b{font-family:Cinzel,serif;font-weight:500;font-size:1.7rem;letter-spacing:.04em;color:var(--ivory)}
+.cella.grande small{color:var(--tenue);font-size:.92rem;max-width:18rem}
+.cella.grande .mini{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center}
+.cella.grande .mini span{font-size:.72rem;border:1px solid rgba(212,175,106,.35);border-radius:999px;padding:.2rem .6rem;color:rgba(245,240,230,.8)}
+.cella.grande svg{width:3rem;height:3rem}
+
+/* ── i blocchi che raccontano ── */
+.blocco2{margin:4.4rem 0 0}
+.blocco2 .eti{font-family:Cinzel,serif;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--oro);text-align:center}
+.blocco2 h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2rem,4.4vw,3rem);line-height:1.08;text-align:center;margin:.4rem 0 .5rem}
+.blocco2 .riga{text-align:center;color:var(--tenue);font-size:1.05rem;max-width:42rem;margin:0 auto 1.8rem;line-height:1.5}
+.numero{font-family:'Cormorant Garamond',serif;font-size:1.15em;background:linear-gradient(180deg,#f3e3bd,#c99a4b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fam{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.fa{border:1px solid var(--linea);border-radius:1.1rem;padding:1.2rem 1.2rem 1rem;background:rgba(245,240,230,.025)}
+.fa .n{font-family:'Cormorant Garamond',serif;font-size:2.6rem;line-height:1;color:var(--c)}
+.fa b{display:block;font-family:Cinzel,serif;font-weight:400;letter-spacing:.06em;margin:.2rem 0 .6rem}
+.fa .t{display:flex;flex-wrap:wrap;gap:.3rem}
+.fa .t span{font-size:.74rem;border:1px solid rgba(245,240,230,.14);border-radius:999px;padding:.18rem .55rem;color:rgba(245,240,230,.75)}
+.tappe4{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;counter-reset:t}
+.tappa4{border:1px solid var(--linea);border-radius:1.1rem;padding:1.3rem 1.1rem;background:linear-gradient(180deg,rgba(212,175,106,.08),transparent);counter-increment:t}
+.tappa4::before{content:counter(t);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--oro);color:#0A0C1A;font-family:Cinzel,serif;margin-bottom:.8rem}
+.tappa4 b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.3rem;line-height:1.2}
+.tappa4 small{display:block;color:var(--tenue);font-size:.88rem;margin-top:.4rem;line-height:1.4}
+.freccia{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.freccia > div{padding:1.2rem 1rem;text-align:center;position:relative}
+.freccia > div::after{content:"→";position:absolute;right:-.4rem;top:1.6rem;color:var(--oro);font-size:1.3rem}
+.freccia > div:last-child::after{content:""}
+.freccia i{font-style:normal;display:inline-grid;place-items:center;width:3.2rem;height:3.2rem;border-radius:50%;border:1px solid rgba(212,175,106,.5);color:var(--oro);font-size:1.3rem;margin-bottom:.6rem}
+.freccia b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.25rem}
+.freccia small{display:block;color:var(--tenue);font-size:.86rem;margin-top:.3rem;line-height:1.4}
+.tre-col{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.col3{border:1px solid rgba(212,175,106,.4);border-radius:1.2rem;padding:1.4rem;background:rgba(8,11,26,.55);display:flex;flex-direction:column;gap:.6rem}
+.col3.oro{border-color:var(--oro);box-shadow:0 0 0 1px rgba(212,175,106,.3) inset}
+.col3 .eti2{font-family:Cinzel,serif;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
+.col3 .p{font-family:'Cormorant Garamond',serif;font-size:2.3rem;line-height:1;color:var(--oro-ch)}
+.col3 .p small{font-size:1rem;color:var(--tenue)}
+.col3 ul{list-style:none;margin:.3rem 0 0;padding:0;display:flex;flex-direction:column;gap:.5rem;font-size:.95rem;line-height:1.4;color:rgba(245,240,230,.85)}
+.col3 li{display:grid;grid-template-columns:1.2rem 1fr}
+.col3 li::before{content:"✦";color:var(--oro);font-size:.8rem}
+.logi{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.lg{border-radius:1.2rem;padding:1.5rem 1.3rem;border:1px solid var(--linea);background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--c) 20%,transparent),transparent 70%)}
+.lg b{display:block;font-family:Cinzel,serif;font-weight:500;font-size:1.25rem;letter-spacing:.05em}
+.lg small{display:block;color:var(--tenue);font-size:.9rem;line-height:1.45;margin-top:.4rem}
+@media (max-width:60rem){ .griglia{grid-template-columns:repeat(3,1fr)} .fam,.tre-col,.logi{grid-template-columns:1fr 1fr} .tappe4{grid-template-columns:1fr 1fr} }
+@media (max-width:40rem){ .griglia{grid-template-columns:repeat(2,1fr)} .fam,.tre-col,.logi,.tappe4{grid-template-columns:1fr} .freccia{grid-template-columns:1fr} .freccia > div::after{content:"↓";right:auto;left:50%;top:auto;bottom:-.6rem} }
 </style>
 </head>
 <body>
@@ -132,88 +186,84 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
   <div class="eti">COSCIENZA · TECNOLOGIA · COMUNITÀ</div>
   <h1>FelicitasMundi — Comunità Eterna</h1>
   <p class="sottotitolo">uno strumento pratico per tenere traccia di ciò che si fa insieme</p>
-  <div class="link2"><span data-r="soglia">Entra ›</span><a href="#scene">Guarda come funziona ›</a></div>
-  <div class="tel grande" aria-hidden="true"><div class="schermo" id="demo">
-   <div class="sb"><b>La mia orma</b><small>Segna gli obiettivi, coopera con le squadre, pubblica</small></div>
-   <div class="g">in avanzamento</div>
-   <div class="o" id="d-o"><i class="pt"></i><div class="tx"><b>[ un obiettivo del gruppo ]</b><span class="bar"><i id="d-bar"></i></span></div><span class="st" id="d-st">in coda</span><span class="vv" id="d-vv"><span>+</span></span></div>
-   <div class="o"><i class="pt" style="--c:#CC6644"></i><div class="tx"><b>[ un altro obiettivo ]</b><span class="bar"><i style="width:30%"></i></span></div><span class="st av">in avanzamento</span><span class="vv"><span>·</span></span></div>
-   <div class="vet" id="d-vet"><small>in vetrina · Emporio</small><div><img src="anima-vagabonda.jpg" alt=""><b>[ il prodotto ]</b></div></div>
-  </div></div>
+  <div class="link2"><span data-r="soglia">Entra ›</span><a href="#tutto">Scopri cosa si fa ›</a></div>
  </section>
 
- <section class="scene" id="scene">
-  <div class="scena">
-   <div class="tel" aria-hidden="true"><div class="schermo">
-    <div class="sb"><b>La mia orma</b></div>
-    <div class="g">in coda</div>
-    <div class="o"><i class="pt" style="--c:#AA8844"></i><div class="tx"><b>[ il mio obiettivo ]</b><span class="bar"><i style="width:0"></i></span></div><span class="st">in coda</span></div>
-    <div class="g">in avanzamento</div>
-    <div class="o"><i class="pt"></i><div class="tx"><b>[ l'obiettivo del gruppo ]</b><span class="bar"><i style="width:55%"></i></span></div><span class="st av">in avanzamento</span><span class="vv"><span>·</span><span>·</span></span></div>
-    <div class="g">sviluppato</div>
-    <div class="o fatto"><i class="pt" style="--c:#669944"></i><div class="tx"><b>[ un obiettivo concluso ]</b><span class="bar"><i style="width:100%;background:#9ac296"></i></span></div><span class="st sv">sviluppato</span></div>
-   </div></div>
-   <div class="tx2"><div class="eti">Gli obiettivi</div><h3>Il tuo e quello del gruppo.</h3></div>
-  </div>
-  <div class="scena giu">
-   <div class="tel" aria-hidden="true"><div class="schermo">
-    <div class="sb"><b>Villaggio Felicitas</b><small>Civiltà Sarda</small></div>
-    <div class="g">comprare insieme</div>
-    <div class="o"><i class="pt" style="--c:#AA8844"></i><div class="tx"><b>[ un pacchetto del villaggio ]</b><small class="sm">il costo diviso tra chi partecipa</small></div><span class="st av">aperto</span></div>
-    <div class="g">punto di ritiro</div>
-    <div class="o"><i class="pt" style="--c:#AA8844"></i><div class="tx"><b>[ un luogo del villaggio ]</b><small class="sm">con i suoi orari</small></div></div>
-   </div></div>
-   <div class="tx2"><div class="eti">Il villaggio</div><h3>Comprare insieme, il punto di ritiro.</h3></div>
-  </div>
-  <div class="scena">
-   <div class="tel" aria-hidden="true"><div class="schermo">
-    <div class="sb"><b>Emporio</b><small>prodotti vicini e lontani</small></div>
-    <div class="card"><img src="anima-vagabonda.jpg" alt=""><div><span class="tg">nel percorso</span><b>Anima Vagabonda</b><small class="sm">Villa Vrindavana - Firenze</small><span class="pz2">18,00 €</span><span class="btn">ordina</span></div></div>
-   </div></div>
-   <div class="tx2"><div class="eti">La vetrina</div><h3>Quello che fai diventa un prodotto.</h3></div>
+ <!-- ① tutto quello che si fa, a quadranti -->
+ <h2 class="titolone" id="tutto"><em>108 talenti</em>, 5 civiltà<br>e una comunità che li mette insieme</h2>
+ <p class="sottotitolone">Tutto quello che possiamo fare col valore espresso dai talenti delle persone.</p>
+ <div class="griglia" id="griglia"></div>
+
+ <!-- ② i talenti -->
+ <section class="blocco2">
+  <div class="eti">I talenti</div>
+  <h2><span class="numero">108</span> modi di mettere il proprio valore nella comunità</h2>
+  <p class="riga">Ognuno sceglie i suoi talenti: da lì nascono le orme, i gruppi e quello che va in vetrina.</p>
+  <div class="fam" id="fam"></div>
+ </section>
+
+ <!-- ③ il percorso introspettivo -->
+ <section class="blocco2">
+  <div class="eti">Antaḥkaraṇa · il percorso</div>
+  <h2>Una guida al ritorno a sé</h2>
+  <p class="riga">Attraverso strumenti, letture, percorsi di gruppo. Si accede anche attraverso il karma yoga.</p>
+  <div class="tappe4">
+   <div class="tappa4"><b>La consapevolezza della propria anima</b></div>
+   <div class="tappa4"><b>Le proprie capacità e i propri talenti</b></div>
+   <div class="tappa4"><b>La connessione col gruppo</b></div>
+   <div class="tappa4"><b>La cooperazione</b></div>
   </div>
  </section>
 
- <!-- ① la piattaforma -->
- <section class="fase">
-  <div class="num">1</div>
-  <div class="eti">La piattaforma</div>
-  <h2><span class="seg">[ la frase della piattaforma ]</span></h2>
-  <p class="riga">Un modello innovativo che guida gli obiettivi dell'individuo e del gruppo, verso la pubblicazione del materiale e prodotti nella piattaforma, verso la distribuzione nei canali dei villaggi, seguendo un percorso di riallineamento.</p>
-  <div class="due">
-   <div class="carta"><b>Base</b><span class="p">26 € al mese, o karma yoga</span>
-    <ul><li>tutti gli strumenti: la mia orma, Megafono, chat, villaggio, eventi, pubblicare nelle stanze, radio</li><li>Antaḥkaraṇa primo livello: il cammino e il percorso dei talenti</li></ul></div>
-   <div class="carta"><b>Praticantato</b><span class="p">20 € a settimana</span>
-    <ul><li>gli esercizi</li><li>le video chiamate</li><li>i contenuti esclusivi</li></ul></div>
+ <!-- ④ da gruppo a vetrina -->
+ <section class="blocco2">
+  <div class="eti">Da gruppo a vetrina</div>
+  <h2>Quello che fate insieme arriva nei villaggi</h2>
+  <p class="riga">Un modello che guida gli obiettivi dell'individuo e del gruppo, verso la pubblicazione del materiale e prodotti nella piattaforma, verso la distribuzione nei canali dei villaggi, seguendo un percorso di riallineamento.</p>
+  <div class="freccia">
+   <div><i>◎</i><b>L'obiettivo</b><small>il tuo e quello del gruppo, con lo stato a colpo d'occhio</small></div>
+   <div><i>◌</i><b>La squadra</b><small>ognuno prende un compito: chi, entro quando, a che punto</small></div>
+   <div><i>✦</i><b>La pubblicazione</b><small>prodotti, servizi, lezioni, articoli ed eventi</small></div>
+   <div><i>◇</i><b>La vetrina dei villaggi</b><small>Emporio, Assistenza, Scuola, Edizione, e i pacchetti del villaggio</small></div>
   </div>
-  <p class="cit">Antaḥkaraṇa: una guida al ritorno a sé, attraverso strumenti, letture, percorsi di gruppo, alla quale si accede anche attraverso il karma yoga.</p>
  </section>
 
- <!-- ② l'organizzazione -->
- <section class="fase">
-  <div class="num">2</div>
-  <div class="eti">L'organizzazione · Villaggi Felicitas</div>
-  <h2><span class="seg">[ la frase dei villaggi ]</span></h2>
+ <!-- ⑤ la logistica insieme -->
+ <section class="blocco2">
+  <div class="eti">Villaggi Felicitas</div>
+  <h2>Una logistica fatta insieme</h2>
   <p class="riga">La co-creazione di una rete di logistica nazionale, organizzata in aree culturali che si auto-organizzano gli spazi per la distribuzione e il magazzino.</p>
-  <div class="chips">
-   <span class="chip">acquisti di gruppo</span><span class="chip">acquisti solidali</span><span class="chip">punti di ritiro</span><span class="chip">magazzino</span>
+  <div class="logi">
+   <div class="lg" style="--c:var(--terra)"><b>Alimentazione</b><small>i pacchetti del villaggio: si compra insieme, il costo si divide tra chi partecipa</small></div>
+   <div class="lg" style="--c:var(--acqua)"><b>Rimedi</b><small>i produttori dei luoghi, il punto di ritiro vicino, l'ultimo tratto fatto dai vicini</small></div>
+   <div class="lg" style="--c:var(--etere)"><b>Educazione</b><small>le lezioni e le formazioni dei villaggi, dal vivo e online</small></div>
   </div>
-  <div class="chips">
+  <div class="chips" style="justify-content:center;margin-top:1.4rem">
    <span class="chip oro" data-r="vicinati&amp;entra=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Civiltà Sarda</span>
    <span class="chip oro" data-r="vicinati&amp;entra=19da43d2-66f1-4eb4-9783-c7874de6489a">Civiltà Tuscia</span>
    <span class="chip oro" data-r="vicinati&amp;entra=91cb1506-35fc-44b2-a42f-630ac2709100">Civiltà Romagnola</span>
    <span class="chip oro" data-r="vicinati&amp;entra=71e22940-04bb-4e96-9260-0413c753d6aa">Civiltà Emiliana</span>
    <span class="chip oro" data-r="vicinati&amp;entra=a844a9b7-85b0-418a-a4c5-435ab8421f4f">Civiltà Piceni</span>
   </div>
-  <div class="striscia">
-   <div class="pr largo" data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6"><div class="f" style="background-image:url(../../inviti/11-ottobre-largo.jpg)"><span class="tag">ci sarò</span></div><b>Villaggio Felicitas · 11 ottobre</b><small>il primo incontro tra i vicinati della Sardegna · Cas'ale, Baratili</small></div>
-   <div class="pr largo" data-r="vicinati"><div class="f" style="background-image:url(../../articoli/2026/incontro-11-ottobre.jpg);background-position:center 30%"></div><b>Felicitas Festival</b><small>21 novembre · Oristano</small></div>
+ </section>
+
+ <!-- ⑥ cosa ricevi -->
+ <section class="blocco2">
+  <div class="eti">Come si partecipa</div>
+  <h2>Da 26 € al mese, o col karma yoga</h2>
+  <div class="tre-col">
+   <div class="col3 oro"><span class="eti2">Base</span><div class="p">26 € <small>al mese</small></div>
+    <ul><li>tutti gli strumenti: la mia orma, Megafono, chat, villaggio, eventi, pubblicare nelle stanze, radio</li><li>Antaḥkaraṇa primo livello: il cammino e il percorso dei talenti</li></ul></div>
+   <div class="col3"><span class="eti2">Praticantato</span><div class="p">20 € <small>a settimana</small></div>
+    <ul><li>gli esercizi</li><li>le video chiamate</li><li>i contenuti esclusivi</li></ul></div>
+   <div class="col3"><span class="eti2">Karma yoga</span><div class="p" style="font-size:1.7rem">il servizio</div>
+    <ul><li>l'accesso all'ospitalità</li><li>i contatti di persone che ti risuonano, vicino a te</li><li>mettere a disposizione un punto di ritiro, portare i pacchi, fare da referente di una zona</li></ul></div>
   </div>
  </section>
 
  <!-- ③ i prodotti e i servizi -->
- <section class="fase">
-  <div class="num">3</div>
+ <section class="fase senza">
+  
   <div class="eti">I prodotti e i servizi</div>
   <h2><span class="seg">[ la frase dei prodotti ]</span></h2>
   <p class="riga">Da comprare, donare o scambiare: si vede dove si trovano, se sono vicini o lontani, e se fanno parte del percorso.</p>
@@ -261,6 +311,7 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
   </div>
  </section>
 
+
  <div class="entra">
   <span class="pill" data-r="soglia">entra</span>
   <span class="sotto-mega">oppure scrivi qui sotto un obiettivo, un evento o una richiesta ↓</span>
@@ -268,7 +319,64 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
 </div>
 
 <script>
-  /* ogni cosa porta dentro l'app, nella sua stanza: dalla casa non c'è un'altra schermata in mezzo */
+  /* ⭐ i quadranti: tutto quello che si fa, ognuno porta alla sua stanza */
+  var IC = {
+    orma:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
+    task:'<path d="M5 12l4 4 10-10"/>',
+    obi:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    sq:'<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4M11 19c1-3 3-4 5-4s4 1 5 4"/>',
+    prop:'<circle cx="9" cy="8" r="3"/><path d="M3 19c1-3 3-4 6-4M15 13h6M18 10v6"/>',
+    stato:'<rect x="3" y="8" width="18" height="8" rx="4"/><circle cx="15" cy="12" r="2"/>',
+    chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+    voce:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/>',
+    mega:'<path d="M3 10v4h4l7 5V5L7 10zM17 9a4 4 0 010 6"/>',
+    cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    ev:'<path d="M12 3l2.6 5.6 6 .7-4.5 4 1.3 6-5.4-3-5.4 3 1.3-6-4.5-4 6-.7z"/>',
+    inv:'<path d="M4 6h16v12H4z"/><path d="M4 6l8 7 8-7"/>',
+    rub:'<rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17c1-2 2.5-3 4-3s3 1 4 3"/>',
+    radio:'<circle cx="12" cy="12" r="2"/><path d="M8 8a6 6 0 000 8M16 8a6 6 0 010 8M5 5a10 10 0 000 14M19 5a10 10 0 010 14"/>',
+    tal:'<path d="M12 3l3 6 6 1-4.5 4.5 1 6.5L12 18l-5.5 3 1-6.5L3 10l6-1z"/>',
+    perc:'<path d="M4 20c4-1 4-7 8-8s4-6 8-8"/><circle cx="4" cy="20" r="1.5"/><circle cx="20" cy="4" r="1.5"/>',
+    ky:'<path d="M12 21s-7-4.5-7-10a4 4 0 017-2.5A4 4 0 0119 11c0 5.5-7 10-7 10z"/>',
+    pac:'<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+    rit:'<path d="M12 21s-6-6.5-6-11a6 6 0 0112 0c0 4.5-6 11-6 11z"/><circle cx="12" cy="10" r="2"/>',
+    part:'<path d="M8 12l3 3 5-6"/><path d="M3 12a9 9 0 1018 0 9 9 0 10-18 0"/>',
+    emp:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/>',
+    ass:'<path d="M12 3l9 16H3z"/>',
+    scu:'<circle cx="12" cy="12" r="8"/><path d="M12 4v16M4 12h16"/>',
+    ediz:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',
+    nov:'<path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    ore:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    fest:'<path d="M4 20L10 4l10 10z"/><path d="M14 4l1-2M18 7l2-1M19 3l-1 1"/>',
+    civ:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>'
+  };
+  var C = function(ic, t, r, c){ return '<div class="cella" data-r="'+r+'" style="--c:'+(c||"var(--oro)")+'"><svg viewBox="0 0 24 24">'+IC[ic]+'</svg>'+t+'</div>'; };
+  var G = function(ic, t, sub, chips, r, c){ return '<div class="cella grande" data-r="'+r+'" style="--c:'+c+'"><svg viewBox="0 0 24 24">'+IC[ic]+'</svg><b>'+t+'</b><small>'+sub+'</small><div class="mini">'+chips.map(function(x){return "<span>"+x+"</span>";}).join("")+'</div></div>'; };
+  document.getElementById("griglia").innerHTML = [
+    C("orma","La mia orma","orme"), C("obi","Obiettivi di gruppo","orme"), C("task","Task e compiti","orme"), C("stato","Stato a colpo d'occhio","orme"), C("prop","Proponi a una persona","orme"), C("sq","Squadre","orme"),
+    C("chat","Chat dei gruppi","orme"), C("voce","Messaggi vocali","orme"),
+    G("civ","Villaggi Felicitas","comprare insieme, punti di ritiro, partner, festival",["5 civiltà","pacchetti","punti di ritiro"],"vicinati","#AA8844"),
+    G("perc","Antaḥkaraṇa","una guida al ritorno a sé: strumenti, letture, percorsi di gruppo",["108 talenti","il cammino","karma yoga"],"anthakarana","#D4AF6A"),
+    C("mega","Megafono","orme"), C("cal","Calendario","vicinati"), C("ev","Eventi","vicinati"), C("inv","Inviti","vicinati"),
+    C("pac","Pacchetti del villaggio","vicinati","#AA8844"), C("rit","Punti di ritiro","vicinati","#AA8844"),
+    C("tal","Talenti","anthakarana"), C("ky","Karma yoga","anthakarana"),
+    C("part","Partner","vicinati","#AA8844"), C("fest","Felicitas Festival","vicinati","#AA8844"),
+    C("emp","Emporio","emporio","#4488BB"), C("ass","Assistenza","assistenza","#CC6644"), C("scu","Scuola","scuola","#9966CC"), C("ediz","Stampa e fiere","edizione","#669944"),
+    C("rub","Rubrica","orme"), C("radio","Radio","orme"), C("nov","Novità","vicinati"), C("ore","Ore e conti","orme"),
+    C("perc","Percorso dei talenti","anthakarana"), C("civ","Civiltà","vicinati","#AA8844")
+  ].join("");
+  /* ⭐ i talenti: i numeri e i nomi dal database (4 ottobre) */
+  var FAM = [
+    ["Vicinati","terra",44,["Produco alimenti","Faccio rimedi naturali","Apicoltore","Raccolgo le erbe spontanee","Ho un luogo che ospita","Organizzo mercati","Lavoro il legno","Preparo da mangiare"]],
+    ["Assistenza","fuoco",26,["Sono un naturopata","Sono un osteopata","Faccio shiatsu","Faccio reiki","Sono un medico","Accompagno le neurodivergenze"]],
+    ["Edizione","aria",18,["Sono uno scrittore","Sono un musicista","Sono un grafico","Sono un giornalista","Dirigo una radio o una testata","Sono un traduttore"]],
+    ["Scuola","etere",16,["Agricoltura","Alimentare","Educativa","Spirituale","Simbologia","Comunicazione empatica"]],
+    ["Emporio","acqua",2,["Ho una bottega","Partecipo a un GAS"]],
+    ["Il percorso","oro",2,["Devoto","All’inizio del percorso"]]
+  ];
+  document.getElementById("fam").innerHTML = FAM.map(function(f){
+    return '<div class="fa" style="--c:var(--'+f[1]+')"><div class="n">'+f[2]+'</div><b>'+f[0]+'</b><div class="t">'+f[3].map(function(x){return "<span>"+x+"</span>";}).join("")+'</div></div>';
+  }).join("");
   function vaiA(r){
     if (r.indexOf("&") >= 0) { try { window.parent.location.href = "index.html?p=" + r; } catch (e) { location.href = "../../index.html?p=" + r; } return; }
     try { window.parent.vai(r); } catch (e) { location.href = "../../index.html?p=" + r; }
@@ -278,20 +386,6 @@ html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
     if (r) { e.preventDefault(); vaiA(r.getAttribute("data-r").replace(/&amp;/g, "&")); }
   });
   if (window.parent !== window) document.documentElement.classList.add("in-app");
-
-  /* il telefono che lavora da solo: in coda → in avanzamento → arriva una persona → sviluppato → in vetrina */
-  (function(){
-    var st=document.getElementById("d-st"), bar=document.getElementById("d-bar"), vv=document.getElementById("d-vv"), vet=document.getElementById("d-vet");
-    if(!st) return;
-    var passi=[
-      function(){ st.className="st"; st.textContent="in coda"; bar.style.width="0"; vv.innerHTML="<span>+</span>"; vet.classList.remove("su"); },
-      function(){ st.className="st av"; st.textContent="in avanzamento"; bar.style.width="35%"; },
-      function(){ vv.innerHTML="<span>·</span><span>·</span>"; bar.style.width="70%"; },
-      function(){ st.className="st sv"; st.textContent="sviluppato"; bar.style.width="100%"; },
-      function(){ vet.classList.add("su"); }
-    ], i=0;
-    passi[0](); setInterval(function(){ i=(i+1)%(passi.length+1); if(i<passi.length) passi[i](); }, 1700);
-  })();
 </script>
 </body>
 </html>
