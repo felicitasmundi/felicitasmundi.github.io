@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accesso · bozza finestra</title>
+<meta name="robots" content="noindex">
+<!-- ⭐ 5 ottobre 2026, Gab: «mostrami delle possibilità… una finestra popup di accesso, che renda trasparente
+     la pagina di dietro come fa ClickUp». BOZZA in prova: tre possibilità, nessuna collegata al vero accesso. -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Cormorant+Garamond:ital@0;1&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--oro:#D4AF6A;--avorio:#F5F0E6;--notte:#0A0C1A}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--notte);font-family:'DM Sans',sans-serif;color:var(--avorio)}
+/* dietro: l'app vera, sfocata */
+.dietro{position:fixed;inset:0;border:0;width:100%;height:100%;filter:blur(9px) saturate(1.1);transform:scale(1.04);pointer-events:none}
+.velo{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(140,110,200,.28),transparent 60%),rgba(10,12,26,.45)}
+/* scelta della bozza */
+.scegli{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:6px;background:rgba(10,12,26,.8);padding:5px;border-radius:999px;border:1px solid rgba(212,175,106,.35)}
+.scegli button{white-space:nowrap;font:500 .8rem 'DM Sans';color:var(--avorio);background:none;border:0;padding:.5rem .95rem;border-radius:999px;cursor:pointer;min-height:40px}
+.scegli button.si{background:var(--oro);color:var(--notte)}
+/* la finestra */
+.fin{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:70px 16px 24px;overflow-y:auto}
+.carta{width:min(26rem,100%);background:#fff;color:#1d1d24;border-radius:22px;padding:2rem 1.6rem 1.6rem;box-shadow:0 30px 80px rgba(0,0,0,.45);text-align:center;margin:auto}
+.carta.scura{background:#0F1226;color:var(--avorio);border:1px solid rgba(212,175,106,.4)}
+.nx{width:52px;height:52px;object-fit:contain;display:block;margin:0 auto .8rem}
+h1{font:400 1.55rem/1.2 'Cinzel',serif;letter-spacing:.02em}
+.sot{font:italic 1.12rem/1.4 'Cormorant Garamond',serif;opacity:.7;margin:.35rem 0 1.2rem}
+.campo{width:100%;min-height:52px;border-radius:12px;border:1.5px solid #7a5cd6;padding:0 1rem;font:1rem 'DM Sans';margin-bottom:.7rem;background:#fff;color:#1d1d24}
+.carta.scura .campo{border-color:rgba(212,175,106,.55);background:rgba(255,255,255,.04);color:var(--avorio)}
+.tasto{width:100%;min-height:52px;border-radius:12px;border:0;background:#1d1d24;color:#fff;font:500 1.05rem 'DM Sans';cursor:pointer}
+.carta.scura .tasto{background:var(--oro);color:var(--notte)}
+.piccolo{font-size:.86rem;opacity:.62;margin-top:.9rem;line-height:1.45}
+.dentro{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:0 0 1.2rem}
+.dentro div{border-radius:12px;padding:.7rem .3rem;font-size:.82rem;line-height:1.3;background:rgba(122,92,214,.08)}
+.dentro b{display:block;font:400 .95rem 'Cinzel',serif;margin-bottom:.15rem}
+.modi{display:flex;flex-direction:column;gap:.55rem;margin:0 0 1.1rem;text-align:left}
+.modo{display:flex;gap:.8rem;align-items:center;border:1.5px solid rgba(212,175,106,.35);border-radius:14px;padding:.8rem .9rem;cursor:pointer;min-height:56px}
+.modo.si{border-color:var(--oro);background:rgba(212,175,106,.12)}
+.modo b{font:400 1rem 'Cinzel',serif;display:block}
+.modo span{font-size:.84rem;opacity:.7}
+.modo i{margin-left:auto;font-style:normal;color:var(--oro);white-space:nowrap;font-size:.95rem}
+.nota{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);font-size:.75rem;opacity:.55;z-index:5;white-space:nowrap}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<iframe class="dietro" src="index.html" aria-hidden="true" tabindex="-1"></iframe>
+<div class="velo"></div>
+
+<div class="scegli" role="tablist">
+  <button class="si" data-v="a">A · essenziale</button>
+  <button data-v="b">B · cosa c’è</button>
+  <button data-v="c">C · partecipi</button>
+</div>
+
+<!-- A — essenziale, come ClickUp: una frase, la mail, un tasto -->
+<div class="fin" data-f="a">
+  <div class="carta">
+    <img class="nx" src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="">
+    <h1>Comunità Eterna</h1>
+    <p class="sot">uno strumento pratico per tenere traccia di ciò che si fa insieme</p>
+    <input class="campo" type="email" placeholder="la tua mail">
+    <button class="tasto">manda il codice</button>
+    <p class="piccolo">Ti arriva un codice di sei cifre per mail: lo scrivi e sei dentro.</p>
+  </div>
+</div>
+
+<!-- B — con i tre quadratini di cosa c'è dentro -->
+<div class="fin" data-f="b" hidden>
+  <div class="carta">
+    <img class="nx" src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="">
+    <h1>Comunità Eterna</h1>
+    <p class="sot">uno strumento pratico per tenere traccia di ciò che si fa insieme</p>
+    <div class="dentro">
+      <div><b>Villaggi</b>comprare insieme, il festival</div>
+      <div><b>Emporio</b>prodotti vicini e lontani</div>
+      <div><b>La mia orma</b>gli obiettivi tuoi e del gruppo</div>
+    </div>
+    <input class="campo" type="email" placeholder="la tua mail">
+    <button class="tasto">manda il codice</button>
+    <p class="piccolo">Ti arriva un codice di sei cifre per mail: lo scrivi e sei dentro.</p>
+  </div>
+</div>
+
+<!-- C — scura, si sceglie prima come partecipare (parole e prezzi di Gab, 4 ottobre 19:06) -->
+<div class="fin" data-f="c" hidden>
+  <div class="carta scura">
+    <img class="nx" src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="">
+    <h1>Come vuoi partecipare?</h1>
+    <p class="sot">uno strumento pratico per tenere traccia di ciò che si fa insieme</p>
+    <div class="modi">
+      <label class="modo si"><div><b>Karma yoga</b><span>ospitalità, contatti in risonanza, punto di ritiro</span></div><i>servizio</i></label>
+      <label class="modo"><div><b>Base</b><span>[ cosa dà la Base: le tue parole ]</span></div><i>26 € / mese</i></label>
+      <label class="modo"><div><b>Praticantato</b><span>con gli esercizi, le video chiamate e i contenuti esclusivi</span></div><i>20 € / sett.</i></label>
+    </div>
+    <input class="campo" type="email" placeholder="la tua mail">
+    <button class="tasto">manda il codice</button>
+    <p class="piccolo">Ti arriva un codice di sei cifre per mail: lo scrivi e sei dentro.</p>
+  </div>
+</div>
+
+<div class="nota">bozza · niente è collegato</div>
+
+<script>
+document.querySelectorAll(".scegli button").forEach(function(b){
+  b.onclick = function(){
+    document.querySelectorAll(".scegli button").forEach(function(x){ x.classList.toggle("si", x === b); });
+    document.querySelectorAll(".fin").forEach(function(f){ f.hidden = f.dataset.f !== b.dataset.v; });
+  };
+});
+document.querySelectorAll(".modo").forEach(function(m){
+  m.onclick = function(){ document.querySelectorAll(".modo").forEach(function(x){ x.classList.toggle("si", x === m); }); };
+});
+</script>
+</body>
+</html>
