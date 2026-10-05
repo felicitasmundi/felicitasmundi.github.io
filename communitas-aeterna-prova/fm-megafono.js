@@ -709,13 +709,13 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     }
     var d = $("d-dove");
     if(d){
-      d.textContent = luogoDato && luogoDato.nome ? luogoDato.nome : "[ dove ]";
+      d.textContent = luogoDato && luogoDato.nome ? luogoDato.nome : "dove";
       d.classList.toggle("scelta", !!(luogoDato && luogoDato.nome));
       d.classList.toggle("vuota", !(luogoDato && luogoDato.nome));
     }
     var c = $("d-chi");
     if(c){
-      c.textContent = !conChi.length ? "[ con chi ]"
+      c.textContent = !conChi.length ? "con chi"
         : conChi.length === 1 ? conChi[0].nome
         : conChi.length + " persone";
       c.classList.toggle("scelta", conChi.length > 0);

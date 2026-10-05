@@ -30,9 +30,9 @@
         c.innerHTML =
           '<div class="stato-riga"><b><a href="condizioni.html" target="_blank" '
         +   'rel="noopener">Condizioni d\u2019uso</a></b><i>'
-        +   (quando ? "accettate il " + quando : "[ non risulta ]") + '</i></div>'
+        +   (quando ? "accettate il " + quando : "—") + '</i></div>'
         + '<div class="stato-riga"><b>Versione accettata</b><i>'
-        +   (p.condizioni_versione || "[ non risulta ]") + '</i></div>'
+        +   (p.condizioni_versione || "—") + '</i></div>'
 
         + '<div class="mod" style="margin-top:1rem">'
         +   '<label class="spunta"><input type="checkbox" id="cs-bio"'

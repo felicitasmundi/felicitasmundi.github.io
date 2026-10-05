@@ -801,7 +801,7 @@ body.tutti .caro-frec{display:none}
   <!-- ░░ QUADRANTE MANIFESTO — due colonne ░░ -->
   <section class="manifesto" aria-label="Comunità Eterna FelicitasMundi">
     <div class="m-sx">
-      <a href="home.html" aria-label="Ricarica la home">
+      <a href="soglia.html" aria-label="Ricarica la home">
         <img src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/FM_sigillo_corniceoro_HR-scaled.png" alt="FelicitasMundi">
       </a>
       <span class="m-marchio-nome-wrap">
@@ -1172,12 +1172,8 @@ body.tutti .caro-frec{display:none}
     <div class="vb-caro">
       <a class="vb-c" href="/communitas-aeterna/articoli/2026/metodo-di-bella.html" style="--cc7:#9966CC;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg')"><div class="foto"></div>
         <div class="tx"><div class="cap">Etere &middot; ricerca</div><h3>Il metodo Di Bella</h3></div></a>
-      <a class="vb-c" href="/enciclopedia/gioia-radix.html" style="--cc7:#CC6644;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/06/regno-toscana-panoramica.jpg')"><div class="foto"></div>
-        <div class="tx"><div class="cap">20 giugno &ndash; 4 ottobre &middot; Toscana</div><h3>Gioia Radix</h3></div></a>
       <a class="vb-c" href="/communitas-aeterna/articoli/2026/60-anni-hare-krishna.html" style="--cc7:#CC6644;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/06/hk14.jpeg')"><div class="foto"></div>
         <div class="tx"><div class="cap">La festa &middot; dalla bacheca</div><h3>60 anni di Hare Krishna</h3></div></a>
-      <a class="vb-c" href="/communitas-aeterna/articoli/2026/emporio-sapone-lanascrub.html" style="--cc7:#4488BB;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/07/WhatsApp-Image-2026-07-15-at-11.13.44.jpeg')"><div class="foto"></div>
-        <div class="tx"><div class="cap">Emporio &middot; lo scambi o lo compri</div><h3>Il sapone Lanascrub di Daniele</h3></div></a>
       <a class="vb-c" href="/communitas-aeterna/articoli/2026/bacheca-sa-pirighedda.html" style="--cc7:#AA8844;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/07/IMG_20230222_093616-scaled.jpg')"><div class="foto"></div>
         <div class="tx"><div class="cap">Terra &middot; racconto</div><h3>Sa Pirighedda &mdash; la terra di Marco</h3></div></a>
       <a class="vb-c" href="/communitas-aeterna/articoli/2026/bacheca-idea-economica-vicinati.html" style="--cc7:#AA8844;--fbg:url('https://www.felicitasmundi.com/wp-content/uploads/2026/07/foto-bacheca-roberta.jpeg')"><div class="foto"></div>
@@ -1305,7 +1301,7 @@ const ICONE = {
 ══════════════════════════════════════════════════════════ */
 const INDICI = [
   {
-    el:'terra', colore:'#AA8844', nome:'Vicinati', pagina:'terra.html', aperta:false,
+    el:'terra', colore:'#AA8844', nome:'Vicinati', pagina:'index.html?p=vicinati', aperta:false,
     sub:'Una soglia che si aprirà',
     domanda:'Il Vicinato è dove la Comunità si incontra: si offre un talento, si chiede una mano, ci si riconosce. Sta nascendo ora \u2014 i primi vicinati si stanno formando. Puoi essere tra i primi a mettere qualcosa in circolo.',
     azioni:[
@@ -1315,7 +1311,7 @@ const INDICI = [
     nota:'I primi gesti del vicinato appariranno qui.',
   },
   {
-    el:'acqua', colore:'#4488BB', nome:'Emporio', pagina:'acqua.html', aperta:false,
+    el:'acqua', colore:'#4488BB', nome:'Emporio', pagina:'index.html?p=emporio', aperta:false,
     sub:'Una soglia che si aprirà',
     domanda:'L\u2019Emporio \u00e8 il luogo dove i frutti e i talenti della Comunit\u00e0 passano di mano: in dono, in scambio o in vendita. Stiamo aprendo le prime botteghe. Se hai qualcosa da offrire, puoi proporlo da subito.',
     azioni:[
@@ -1325,16 +1321,15 @@ const INDICI = [
     nota:'I primi prodotti della Comunità appariranno qui.',
   },
   {
-    el:'fuoco', colore:'#CC6644', nome:'Gioia Radix', pagina:'gioia-radix.html', aperta:true,
+    el:'fuoco', colore:'#CC6644', nome:'Gioia Radix', pagina:'index.html?p=assistenza', aperta:true,
     sub:'Il fuoco che \u00e8 gi\u00e0 acceso',
     domanda:'Gioia Radix \u00e8 il cuore vivo della Comunit\u00e0, ed \u00e8 gi\u00e0 attivo: formazioni, ritiri e trattamenti in Toscana, dal 20 giugno al 4 ottobre. Qui puoi entrare subito.',
     azioni:[
-      {label:'Scopri Gioia Radix', tipo:'link', url:'gioia-radix.html'},
     ],
     nota:'Il programma 2026 \u00e8 gi\u00e0 online.',
   },
   {
-    el:'aria', colore:'#669944', nome:'Megafono', pagina:'aria.html', aperta:false,
+    el:'aria', colore:'#669944', nome:'Megafono', pagina:'index.html?p=edizione', aperta:false,
     sub:'Una soglia che si aprirà',
     domanda:'Il Megafono \u00e8 la voce della Comunit\u00e0: messaggi in bacheca, diari di bordo, articoli che seguono il ciclo lunare. La bacheca \u00e8 aperta \u2014 la tua voce pu\u00f2 essere una delle prime.',
     azioni:[
@@ -1344,7 +1339,7 @@ const INDICI = [
     nota:'I primi messaggi e articoli appariranno qui.',
   },
   {
-    el:'etere', colore:'#9966CC', nome:'Scuola Itinerante', pagina:'etere.html', aperta:false,
+    el:'etere', colore:'#9966CC', nome:'Scuola Itinerante', pagina:'index.html?p=scuola', aperta:false,
     sub:'Una soglia che si aprirà',
     domanda:'La Scuola Itinerante custodisce e trasmette la conoscenza: ricerche, studi, saperi condivisi. Sta muovendo i primi passi \u2014 operatori e studenti potranno presto portare i propri contributi.',
     azioni:[
@@ -1526,7 +1521,7 @@ function apriCosaFaiOggi(){
     + '<div class="cfo-indice">'
     +   '<span class="cfo-voce">Gi\u00e0 operativo / frequenti</span>'
     +   '<span class="cfo-voce">Nuovo arrivato</span>'
-    +   '<a class="cfo-voce" href="praticantato.html">Praticantato</a>'
+    +   '<a class="cfo-voce" href="index.html?p=sentiero">Praticantato</a>'
     +   '<span class="cfo-voce">Spiritualit\u00e0</span>'
     + '</div>'
     + '<div id="cfo-form">'

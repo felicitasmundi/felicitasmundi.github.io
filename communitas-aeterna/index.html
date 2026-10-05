@@ -1780,7 +1780,7 @@ body.vista-soglia #pl{margin-left:0!important}
 
     if (!d.flussi || !d.flussi.length) {
       box.innerHTML = '<p style="font-family:\'Cormorant Garamond\',serif;' +
-        'font-style:italic;color:rgba(245,240,230,.44)">[ in attesa ]</p>';
+        'font-style:italic;color:rgba(245,240,230,.44)">ancora niente</p>';
     }
 
     (d.flussi || []).forEach(function (f) {
@@ -1802,7 +1802,7 @@ body.vista-soglia #pl{margin-left:0!important}
       var passi = f.passi || [];
       if (!passi.length) {
         fila.innerHTML = '<span style="font-family:\'Cormorant Garamond\',' +
-          'serif;font-style:italic;color:rgba(245,240,230,.4)">[ in attesa ]</span>';
+          'serif;font-style:italic;color:rgba(245,240,230,.4)">ancora niente</span>';
       }
 
       passi.forEach(function (p, i) {
@@ -4078,10 +4078,10 @@ body.vista-soglia #pl{margin-left:0!important}
 
 </div>
 
-<script src="fm-incontro.js"></script>
+<script src="fm-incontro.js?v=10051000"></script>
 <!-- ⭐ TOCCATO NEL GUSCIO 56 — fm-edizione.js (vecchio) TOLTO: la stanza Edizione passa al piatto (piatti/fm-edizione.js, sotto) -->
 <script src="fm-consolle.js?v=09301930"></script>
-<script src="fm-account.js"></script>
+<script src="fm-account.js?v=10051000"></script>
 <script src="fm-account-mio.js?v=10031700"></script><!-- ⭐ TOCCATO NEL GUSCIO ㊾ — «Il tuo account» dal piede della barra: SpazioVivo.account(dove). I cinque pannelli del 7 agosto restano in fm-account.js -->
 
 <script src="fm-casa.js"></script>
@@ -4136,7 +4136,7 @@ window.gruppi = function (c) {
 <script src="APP.FELICITASMUNDI/piatti/fm-settimana.js?v=10011130"></script><!-- 28 settembre — «La settimana»: gli obiettivi per elemento, SpazioVivo.settimana(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-orma-tempio.js?v=10031800"></script><!-- ⭐ 1 ottobre — «La mia orma» col rito del tempio: SpazioVivo.ormaTempio(box) -->
 <script src="APP.FELICITASMUNDI/piatti/fm-vicinati.js?v=09292315"></script><!-- 29 settembre — Vicinati come casa: SpazioVivo.vicinati(box) -->
-<script src="APP.FELICITASMUNDI/piatti/fm-invito.js?v=10031410"></script><!-- 56 — «Invita chi risuona»: SpazioVivo.invito(). DOPO le stanze, così vince il suo -->
+<script src="APP.FELICITASMUNDI/piatti/fm-invito.js?v=10051000"></script><!-- 56 — «Invita chi risuona»: SpazioVivo.invito(). DOPO le stanze, così vince il suo -->
 <script src="APP.FELICITASMUNDI/piatti/fm-capitoli.js?v=10020915"></script><script src="APP.FELICITASMUNDI/piatti/fm-chiuso.js?v=10022145"></script><script src="APP.FELICITASMUNDI/piatti/fm-evento.js?v=10031430"></script><!-- 53/56 — l'evento pubblico: SpazioVivo.evento(box, idEvento), rotta ?p=evento&e= -->
 <!-- ⛔ 56 — il Megafono-piatto NON è cablato qui: il vecchio fm-megafono.js resta (fornisce parla() e il Megafono in fondo). Il piatto megafono-piatto.html è full-viewport e va chiarito con Gab prima di sostituirlo. -->
 
@@ -5218,7 +5218,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
           var pi = document.createElement("p");
           pi.className = "vuoto";
           pi.textContent = "Qui ci sono le ultime " + ORME_QUANTE
-                         + " orme. Per andare più indietro: [ in attesa ]";
+                         + " orme.";
           box.appendChild(pi);
         }
       });
@@ -5335,7 +5335,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
         var r=document.createElement("div"); r.className="msg";
         var ora=new Date(m.momento).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
         var s=document.createElement("span"); s.className="chi";
-        s.textContent=(nomi[m.persona_id]||"[ senza nome ]")+" · "+ora;
+        s.textContent=(nomi[m.persona_id]||"qualcuno")+" · "+ora;
         r.appendChild(s); r.appendChild(document.createTextNode(m.testo));
         corpo.appendChild(r);
       });
@@ -5354,7 +5354,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   }
 
   /* ⭐ TOCCATO NEL GUSCIO ㊺ — IL MEGAFONO vive in fm-megafono.js: il richiamo sta qui, nel punto esatto dove viveva, così l'ordine non cambia */
-</script><script src="fm-megafono.js?v=10031600"></script><script>
+</script><script src="fm-megafono.js?v=10051000"></script><script>
   "use strict"; /* ⭐ ㊺ — la ripresa dello script grande resta rigorosa come il suo inizio */
 
   /* ══════════════ L'ACCOUNT ══════════════ */

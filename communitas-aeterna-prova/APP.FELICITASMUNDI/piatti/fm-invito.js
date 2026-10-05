@@ -23,7 +23,7 @@
   "use strict";
 
   var INDIRIZZO = "APP.FELICITASMUNDI/piatti/invito-piatto.html";
-  var CASA = "felicitasmundi.com/";
+  var CASA = "app.felicitasmundi.com/";  /* 5 ottobre: felicitasmundi.com è il vecchio sito; la porta vera è app. */
   var APP = "app.felicitasmundi.com/communitas-aeterna/";
   /* le pagine d'anteprima fatte apposta per un evento (inviti/<nome>.html) */
   var PAGINE = { "1d8ba038-2393-49fb-9493-3511c9e3ded6": "villaggio-felicitas-sardegna/invito-11-ottobre.html?v=2" };

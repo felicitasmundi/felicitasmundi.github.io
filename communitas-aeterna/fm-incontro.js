@@ -158,7 +158,7 @@
     var d = $("dentro-scuola"); if(!d) return;
     d.innerHTML = "";
     if(v.id === "ricerca"){ ricerca(d); return; }
-    d.innerHTML = '<p><span class="segna">[ in attesa ]</span></p>';
+    d.innerHTML = '<p><span class="segna">ancora niente</span></p>';
   }
 
   /* ── l'articolo si apre nel quadrante centrale: barra e Megafono restano ── */
