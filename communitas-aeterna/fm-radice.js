@@ -68,7 +68,7 @@ window.SpazioVivo.apriLeMieOrme = function(scelti){
      accesso.html prova il percorso, non la coda: spazio-vivo.html
      coi suoi parametri passa — è la stessa strada di `?o=`. */
   if(typeof ospite !== "undefined" && ospite){
-    var qui = "spazio-vivo.html?scelta=" + encodeURIComponent(nomi.join("|"));
+    var qui = "index.html?scelta=" + encodeURIComponent(nomi.join("|"));
     location.href = "accesso.html?torna=" + encodeURIComponent(qui);
     return;
   }

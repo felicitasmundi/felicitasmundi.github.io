@@ -194,6 +194,8 @@
   /* dopo il patto: chi non ha talenti va alla soglia */
   async function dentro(R, torna) {
     var prima = await primaVolta();
+    /* ⛔ 5 ottobre: si torna solo dentro FelicitasMundi — niente indirizzi esterni */
+    if (torna && (/^[a-z][a-z0-9+.-]*:/i.test(torna) || torna.indexOf("//") === 0 || torna.indexOf("\\") > -1)) torna = null;
     var dove = torna || (prima ? SOGLIA : ORME);
     dico("salto verso: " + dove);
     location.href = dove;

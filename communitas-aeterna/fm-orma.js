@@ -956,7 +956,7 @@ function ormaPorta(id){
   /* il ritorno: accesso.html accetta solo le pagine di questa cartella, e
      `spazio-vivo.html?o=<id>` le passa — la prova è sul percorso, non
      sulla coda. Dopo il Nexus si riapre quest'orma. */
-  var qui = "spazio-vivo.html?o=" + encodeURIComponent(id);
+  var qui = "index.html?o=" + encodeURIComponent(id);
   a.href = "accesso.html?torna=" + encodeURIComponent(qui);
   dove.appendChild(a);
   corpo.appendChild(dove);

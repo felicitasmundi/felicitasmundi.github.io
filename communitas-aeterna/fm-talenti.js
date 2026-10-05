@@ -464,7 +464,7 @@ function percConta(){
       quel file completa il gesto. */
 function percTocco(t, riga){
   if(typeof ospite !== "undefined" && ospite){
-    var qui = "spazio-vivo.html?scelta=" + encodeURIComponent(t.nome);
+    var qui = "index.html?scelta=" + encodeURIComponent(t.nome);
     location.href = "accesso.html?torna=" + encodeURIComponent(qui);
     return;
   }
