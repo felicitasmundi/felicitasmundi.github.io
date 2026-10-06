@@ -115,7 +115,9 @@
           var k = await db.from("orme")
             .select("id,titolo,contenuto,tipo,elemento,stadio,entro_il,momento,persona_id,dorme_dal,orma_madre_id")
             .eq("tipo", "karma_yoga")
-            .or("persona_id.eq." + io + (kid.length ? ",id.in.(" + kid.join(",") + ")" : ""));
+            /* ⭐ 6 ottobre, Gab: i karma yoga si devono poter prendere — compaiono anche quelli aperti
+               che si vedono (del proprio villaggio o pubblici), non solo i propri */
+            .or("persona_id.eq." + io + (kid.length ? ",id.in.(" + kid.join(",") + ")" : "") + ",stadio.is.null,stadio.neq.sviluppato");
           (k.error ? [] : k.data || []).forEach(function (x) {
             if (x.dorme_dal) return;
             var chiuso = x.stadio === "sviluppato";
