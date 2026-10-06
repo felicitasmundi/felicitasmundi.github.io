@@ -213,8 +213,24 @@
       qui.forEach(function (o) { h += rigaObiettivo(o, d, stato.aperto); });
       if (!qui.length) h += '<div class="vuoto-tx">—</div>';
     });
-    if (!S.obiettivi.length) h = '<div class="vuoto-tx">Nessun obiettivo per questa settimana. Scrivi il primo nello spazio in basso.</div>';
+    if (!S.obiettivi.length) h = '<div class="vuoto-tx">Nessun obiettivo per questa settimana. Apri il primo con il tasto qui sopra.</div>';
     D.getElementById("obiettivi").innerHTML = h;
+
+    /* ⭐ 6 ottobre, Gab: «quando vai su orma non c'è un tasto per aprirne una, per fare un obiettivo» —
+       il tasto sta in cima, e apre il Megafono già sull'obiettivo */
+    if (!D.getElementById("fm-apri-orma")) {
+      var ob0 = D.getElementById("obiettivi");
+      var t = D.createElement("button");
+      t.id = "fm-apri-orma"; t.type = "button";
+      t.innerHTML = '<span style="font-size:1.25em;line-height:1;margin-right:.45rem">+</span>apri un\u2019orma';
+      t.setAttribute("style", "display:flex;align-items:center;justify-content:center;width:100%;min-height:3rem;margin:.2rem 0 1rem;" +
+        "border-radius:999px;border:0;cursor:pointer;background:#D4AF6A;color:#0A0C1A;font-family:'Cinzel',serif;" +
+        "font-size:.92rem;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 .4rem 1.2rem rgba(212,175,106,.25)");
+      t.onclick = function () {
+        if (window.SpazioVivo && typeof window.SpazioVivo.scriviOrma === "function") window.SpazioVivo.scriviOrma({ tipo: "obiettivo" });
+      };
+      if (ob0 && ob0.parentNode) ob0.parentNode.insertBefore(t, ob0);
+    }
 
     var K = D.getElementById("ky");
     K.hidden = ky.length === 0;
