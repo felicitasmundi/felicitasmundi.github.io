@@ -73,14 +73,19 @@
       var c = (g.categories || []).some(function (x) { return F.cat.indexOf(String(x.name || "").trim().toLowerCase()) >= 0; });
       return c || (F.nome && F.nome.test(g.name || ""));
     });
-    var fino = (gia || 0) + 24;
-    box.innerHTML = lista.slice(0, fino).map(function (g) {
-      /* ⭐ 7 ottobre, Gab: le immagini stanno sulle famiglie; dentro, i prodotti per nome (una foto uguale per cento voci era peggio di nessuna) */
-      return '<div class="fa-scheda fa-riga"><b>' + esc(g.name) + '</b></div>';
-    }).join("") + (lista.length > fino
-      ? '<button type="button" id="fa-altri" style="all:unset;grid-column:1/-1;cursor:pointer;justify-self:center;padding:.6rem 1.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.5);color:#D4AF6A;font-family:\'Cormorant Garamond\',serif;font-size:1.05rem">altri ' + Math.min(24, lista.length - fino) + ' · ' + lista.length + ' in tutto</button>'
-      : "");
-    var al = document.getElementById("fa-altri"); if (al) al.onclick = function () { mostra(btn, fam, fino); };
+    /* ⭐ 7 ottobre 22:05, Gab: «procedi» — tutti i prodotti in una volta, e un campo per cercare */
+    box.innerHTML =
+      '<input id="fa-cerca" type="search" placeholder="cerca in ' + lista.length + ' prodotti" ' +
+      'style="grid-column:1/-1;width:100%;min-height:2.8rem;padding:0 1rem;border-radius:999px;border:1px solid rgba(212,175,106,.5);' +
+      'background:rgba(8,11,26,.6);color:#F5F0E6;font:inherit;font-size:1rem;box-sizing:border-box">' +
+      lista.map(function (g) {
+        return '<div class="fa-scheda fa-riga" data-nome="' + esc(String(g.name || "").toLowerCase()) + '"><b>' + esc(g.name) + '</b></div>';
+      }).join("");
+    var cerca = document.getElementById("fa-cerca");
+    if (cerca) cerca.oninput = function () {
+      var q = cerca.value.trim().toLowerCase();
+      Array.prototype.forEach.call(box.querySelectorAll(".fa-riga"), function (r) { r.style.display = !q || r.getAttribute("data-nome").indexOf(q) >= 0 ? "" : "none"; });
+    };
   }
   document.addEventListener("click", function (e) {
     var b = e.target.closest && e.target.closest("[data-famiglia]");
