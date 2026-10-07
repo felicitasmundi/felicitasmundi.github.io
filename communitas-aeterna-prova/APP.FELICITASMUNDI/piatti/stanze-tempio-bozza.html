@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <script src="./ak-solido.js?v=09301744"></script>
 <script type="module" src="./ak-nexus3d.js?v=10011040"></script>
-<script src="./fm-flyeralarm.js?v=10071120" defer></script><!-- ⭐ 3 ottobre: il catalogo di Flyeralarm nelle famiglie dell'Edizione -->
+<script src="./fm-flyeralarm.js?v=10071205" defer></script><!-- ⭐ 3 ottobre: il catalogo di Flyeralarm nelle famiglie dell'Edizione -->
 <style>
 /* BOZZA — 30 settembre. Le cinque stanze col rito del tempio: sanscrito, nome, solido, una frase, porte chiuse.
    Una porta si apre, le altre restano chiuse; dentro, Antaḥkaraṇa · Vicino a te · Lontano.
@@ -86,6 +86,7 @@ details.tutti{border-color:color-mix(in srgb,var(--el) 55%,var(--oro))}
 .invita:hover{background:rgba(212,175,106,.12)}
 /* da stanza-edizione-piatto.html, tali e quali */
 .st-fam{position:relative;display:flex;flex-direction:column;gap:.35rem;min-height:5.5rem;padding:1rem 1rem .9rem;border-radius:.9rem;border:1px solid color-mix(in srgb,var(--c) 33%,transparent);border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);color:inherit;text-align:left;cursor:pointer;font:inherit;transition:border-color .3s,background .3s}
+.st-fam-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:.6rem;margin-bottom:.3rem}
 .st-fam:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
 .st-fam b{font-family:'Cinzel',serif;font-weight:400;font-size:1rem;line-height:1.3;color:var(--ivory)}
 .st-fam span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.4;color:rgba(245,240,230,.65)}
@@ -119,15 +120,17 @@ details.tutti{border-color:color-mix(in srgb,var(--el) 55%,var(--oro))}
       <div class="st-sez" style="margin-top:.6rem"><b>stampa</b><i></i><span>e ti arriva a casa</span></div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.5;color:rgba(245,240,230,.75);text-wrap:pretty;margin-top:-.6rem">Oltre alla stampa proponiamo supporti per l&rsquo;esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</div>
       <!-- le otto famiglie sono fisse: aprono il configuratore, dentro un'orma nuova -->
+      <!-- ⭐ 7 ottobre, Gab: «secondo me si può anche scrivere che abbiamo 2000 possibili prodotti da stampare» -->
+      <div style="font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.08em;color:#D4AF6A;margin:.2rem 0 .1rem">2000 possibili prodotti da stampare</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr));gap:.7rem">
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="carta" style="--c:#669944"><b>Carta stampata</b><span>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</span></button>
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="libri" style="--c:#669944"><b>Libri e cataloghi</b><span>libri, riviste, cataloghi, fascicoli</span></button>
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="agende" style="--c:#AA8844"><b>Agende e calendari</b><span>agende, calendari, quaderni e taccuini</span></button>
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="fiere" style="--c:#CC6644"><b>Esposizione e fiere</b><span>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</span></button>
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="confezioni" style="--c:#AA8844"><b>Confezioni e imballaggi</b><span>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</span></button>
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="gadget" style="--c:#4488BB"><b>Gadget e regali</b><span>penne, cordini, portabadge, borse, borracce</span></button>
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="abiti" style="--c:#4488BB"><b>Abbigliamento</b><span>magliette, felpe, tessuti personalizzati</span></button>
-      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="servizi" style="--c:#B87333"><b>I servizi</b><span>grafica, impaginazione, correzione, consegna</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="carta" style="--c:#669944"><img class="st-fam-img" alt="" src="../../stampa/volantino.jpg?v=1007"><b>Carta stampata</b><span>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="libri" style="--c:#669944"><img class="st-fam-img" alt="" src="../../stampa/rivista.jpg?v=1007"><b>Libri e cataloghi</b><span>libri, riviste, cataloghi, fascicoli</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="agende" style="--c:#AA8844"><img class="st-fam-img" alt="" src="../../stampa/agenda.jpg?v=1007"><b>Agende e calendari</b><span>agende, calendari, quaderni e taccuini</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="fiere" style="--c:#CC6644"><img class="st-fam-img" alt="" src="../../stampa/rollup.jpg?v=1007"><b>Esposizione e fiere</b><span>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="confezioni" style="--c:#AA8844"><img class="st-fam-img" alt="" src="../../stampa/scatola.jpg?v=1007"><b>Confezioni e imballaggi</b><span>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="gadget" style="--c:#4488BB"><img class="st-fam-img" alt="" src="../../stampa/tazza.jpg?v=1007"><b>Gadget e regali</b><span>penne, cordini, portabadge, borse, borracce</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="abiti" style="--c:#4488BB"><img class="st-fam-img" alt="" src="../../stampa/tshirt.jpg?v=1007"><b>Abbigliamento</b><span>magliette, felpe, tessuti personalizzati</span></button>
+      <button type="button" class="st-fam" data-g="scegli-famiglia" data-famiglia="servizi" style="--c:#B87333"><img class="st-fam-img" alt="" src="../../stampa/poster.jpg?v=1007"><b>I servizi</b><span>grafica, impaginazione, correzione, consegna</span></button>
       </div>
 </template>
 <script>
