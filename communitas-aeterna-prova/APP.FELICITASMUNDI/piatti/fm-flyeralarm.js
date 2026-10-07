@@ -18,6 +18,23 @@
     abiti:      { cat: ["abbigliamento & tessuti", "abbigliamento promozionale"] }
   };
   var TUTTI = null;
+  /* ⭐ 7 ottobre, Gab: «brandizzi ogni forma» — le immagini sono nostre (disegnate apposta, col Nexus e il nome),
+     una per tipo di prodotto. Il nome del prodotto sceglie l'immagine; se non ne trova una, vale quella della famiglia. */
+  var IMG = [
+    [/biglietti da visita|business card/i, "biglietti"], [/roll|display|pop.?up|fondal|banner|insegn|stand|bancon|desk/i, "rollup"],
+    [/bandier|stendard|flag|vela/i, "bandiera"], [/poster|manifest|locandin/i, "poster"], [/pieghevol|depliant|leaflet/i, "pieghevole"],
+    [/volantin|flyer|cartolin/i, "volantino"], [/adesiv|etichett|sticker/i, "adesivi"], [/agend|quadern|calendar|blocc|notes|block/i, "agenda"],
+    [/rivist|opuscol|brochure|catalog|libr|magazin/i, "rivista"], [/scatol|confezion|imballag|box/i, "scatola"],
+    [/borsa|borse|shopper|sacchett|bust/i, "shopper"], [/tazz|bicchier|coppett|mug/i, "tazza"],
+    [/maglie|t-shirt|felp|abbigliam|cappell|tessut|polo|grembiul/i, "tshirt"], [/penn|matit|portachiav|gadget/i, "penne"]
+  ];
+  /* le immagini stanno in <radice dell'app>/stampa/, dovunque sia la pagina che carica questo file */
+  var BASE_IMG = ((document.currentScript && document.currentScript.src) || "").replace(/APP\.FELICITASMUNDI\/piatti\/[^\/]*$/, "");
+  var FAM_IMG = { carta: "volantino", libri: "rivista", agende: "agenda", fiere: "rollup", confezioni: "scatola", gadget: "penne", abiti: "tshirt" };
+  function immagine(nome, fam) {
+    for (var i = 0; i < IMG.length; i++) if (IMG[i][0].test(nome || "")) return BASE_IMG + "stampa/" + IMG[i][1] + ".jpg?v=1007";
+    return BASE_IMG + "stampa/" + (FAM_IMG[fam] || "volantino") + ".jpg?v=1007";
+  }
   /* ⭐ Gab: «8 quadranti in alto e poi devi scendere giù a vedere cosa hai schiacciato, è la cosa meno saggia».
      Come fa Apple nello Store: toccata una famiglia, le otto diventano una striscia che scorre di lato,
      e i prodotti si aprono subito sotto. Toccando di nuovo la stessa, si richiude.
@@ -32,7 +49,7 @@
       ".fa-striscia>[data-famiglia][aria-pressed=true]{background:color-mix(in srgb,var(--c) 30%,transparent)!important;border-color:var(--c)!important}" +
       ".fa-scheda{display:flex;flex-direction:column;justify-content:space-between;gap:.6rem;min-height:9.5rem;padding:.9rem .8rem;border-radius:.9rem;" +
       "background:radial-gradient(circle at 50% 0%,#2b5f9e 0%,#163a6b 55%,#0e2549 100%);border:1px solid rgba(212,175,106,.35);color:#F5F0E6}" +
-      ".fa-scheda img{width:3.2rem;height:3.2rem;object-fit:contain;opacity:.9;align-self:center}" +
+      ".fa-scheda img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:.6rem;align-self:center}" +
       ".fa-scheda b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.08rem;line-height:1.25;text-align:center}" +
       ".fa-scheda small{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.22em;text-align:center;color:rgba(212,175,106,.85)}";
     document.head.appendChild(st);
@@ -56,7 +73,7 @@
     });
     var fino = (gia || 0) + 24;
     box.innerHTML = lista.slice(0, fino).map(function (g) {
-      return '<div class="fa-scheda"><img alt="" src="nexus-fermo.webp?v=10010900"><b>' + esc(g.name) + '</b><small>FELICITASMUNDI</small></div>';
+      return '<div class="fa-scheda"><img alt="" loading="lazy" src="' + immagine(g.name, fam) + '"><b>' + esc(g.name) + '</b><small>FELICITASMUNDI</small></div>';
     }).join("") + (lista.length > fino
       ? '<button type="button" id="fa-altri" style="all:unset;grid-column:1/-1;cursor:pointer;justify-self:center;padding:.6rem 1.2rem;border-radius:999px;border:1px solid rgba(212,175,106,.5);color:#D4AF6A;font-family:\'Cormorant Garamond\',serif;font-size:1.05rem">altri ' + Math.min(24, lista.length - fino) + ' · ' + lista.length + ' in tutto</button>'
       : "");
