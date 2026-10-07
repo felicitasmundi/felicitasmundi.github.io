@@ -167,22 +167,35 @@
     if (passi.length) sotto.push(fatti + "/" + passi.length + " passi");
     var chi = (d.chi && d.chi[o.id]) || [];
     var volti = chi.slice(0, 3).map(function (p) { return '<span class="' + (p.attesa ? "attesa" : "") + '" title="' + esc(p.nome) + (p.attesa ? " · proposto" : "") + '">' + esc(iniziali(p.nome)) + '</span>'; }).join("");
-    if (!volti) volti = mio ? '<span class="vuoto">+</span>' : "";
+    /* ⭐ 6 ottobre, Gab: «le task di karma yoga non si possono schiacciare, prendere, assegnare e ampliare» —
+       ogni riga si tocca: lo prendo · affida a… (chi l'ha aperta) · + un passo */
+    var presoDaMe = chi.some(function (p) { return p.persona === d.io && !p.attesa; });
+    if (!volti) volti = '<span class="vuoto">+</span>';
     var c = COL[o.gruppo === "karma" ? "karma" : o.elemento] || "#D4AF6A";
     var h = '<div class="ob ' + st + '" style="--c:' + c + '" data-ob="' + esc(o.id) + '">' +
       '<span class="pt"></span>' +
       '<a class="tx" href="#" data-id="' + esc(o.id) + '"><b>' + esc(titolo(o)) + '</b>' +
         (sotto.length ? '<small>' + sotto.join(" · ") + '</small>' : "") +
         '<span class="bar"><i style="width:' + pieno + '%"></i></span></a>' +
-      '<button type="button" class="stato ' + st + '" data-stato="' + esc(o.id) + '"' + (mio ? "" : ' aria-disabled="true"') + '>' + parolaStadio(st) + '</button>' +
-      (volti ? '<button type="button" class="chi" data-chi="' + esc(o.id) + '"' + (mio ? ' aria-label="proponi a"' : ' aria-disabled="true"') + '>' + volti + '</button>' : "") +
+      '<button type="button" class="stato ' + st + '" data-stato="' + esc(o.id) + '">' + parolaStadio(st) + '</button>' +
+      '<button type="button" class="chi" data-chi="' + esc(o.id) + '" aria-label="prendi, affida, aggiungi un passo">' + volti + '</button>' +
       '</div>';
-    if (aperto === o.id && mio) {
-      var gia = {}; chi.forEach(function (p) { if (p.persona) gia[p.persona] = 1; });
-      var lib = (d.rubrica || []).filter(function (r) { return !gia[r.persona_id] && r.persona_id !== d.io; });
-      h += '<div class="scegli">' + (lib.length
-        ? '<span class="nota">proponi a</span>' + lib.map(function (r) { return '<button type="button" data-proponi="' + esc(o.id) + '" data-persona="' + esc(r.persona_id) + '">' + esc(r.nome) + '</button>'; }).join("")
-        : '<span class="nota">Nella tua rubrica e nelle tue squadre non c’è ancora nessuno con un account.</span>') + '</div>';
+    if (aperto === o.id) {
+      var B = "min-height:2.6rem;padding:0 1rem;border-radius:999px;cursor:pointer;font:inherit;font-size:.9rem;";
+      var oro = B + "border:0;background:#D4AF6A;color:#0A0C1A;";
+      var vuo = B + "border:1px solid rgba(212,175,106,.55);background:transparent;color:#D4AF6A;";
+      h += '<div class="scegli" style="display:flex;flex-wrap:wrap;gap:.45rem;align-items:center">';
+      if (!mio && !presoDaMe) h += '<button type="button" data-prendi="' + esc(o.id) + '" style="' + oro + '">lo prendo</button>';
+      if (presoDaMe) h += '<span class="nota">l’hai preso tu</span>';
+      h += '<button type="button" data-passo="' + esc(o.id) + '" style="' + vuo + '">+ un passo</button>';
+      if (mio) {
+        var gia = {}; chi.forEach(function (p) { if (p.persona) gia[p.persona] = 1; });
+        var lib = (d.rubrica || []).filter(function (r) { return !gia[r.persona_id] && r.persona_id !== d.io; });
+        h += lib.length
+          ? '<span class="nota" style="width:100%">affida a</span>' + lib.map(function (r) { return '<button type="button" data-proponi="' + esc(o.id) + '" data-persona="' + esc(r.persona_id) + '">' + esc(r.nome) + '</button>'; }).join("")
+          : '<span class="nota" style="width:100%">Per affidarlo a qualcuno, quella persona deve avere un account ed essere nella tua rubrica o in una tua squadra.</span>';
+      }
+      h += '</div>';
     }
     return h;
   }
@@ -213,8 +226,24 @@
       qui.forEach(function (o) { h += rigaObiettivo(o, d, stato.aperto); });
       if (!qui.length) h += '<div class="vuoto-tx">—</div>';
     });
-    if (!S.obiettivi.length) h = '<div class="vuoto-tx">Nessun obiettivo per questa settimana. Scrivi il primo nello spazio in basso.</div>';
+    if (!S.obiettivi.length) h = '<div class="vuoto-tx">Nessun obiettivo per questa settimana. Apri il primo con il tasto qui sopra.</div>';
     D.getElementById("obiettivi").innerHTML = h;
+
+    /* ⭐ 6 ottobre, Gab: «quando vai su orma non c'è un tasto per aprirne una, per fare un obiettivo» —
+       il tasto sta in cima, e apre il Megafono già sull'obiettivo */
+    if (!D.getElementById("fm-apri-orma")) {
+      var ob0 = D.getElementById("obiettivi");
+      var t = D.createElement("button");
+      t.id = "fm-apri-orma"; t.type = "button";
+      t.innerHTML = '<span style="font-size:1.25em;line-height:1;margin-right:.45rem">+</span>apri un\u2019orma';
+      t.setAttribute("style", "display:flex;align-items:center;justify-content:center;width:100%;min-height:3rem;margin:.2rem 0 1rem;" +
+        "border-radius:999px;border:0;cursor:pointer;background:#D4AF6A;color:#0A0C1A;font-family:'Cinzel',serif;" +
+        "font-size:.92rem;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 .4rem 1.2rem rgba(212,175,106,.25)");
+      t.onclick = function () {
+        if (window.SpazioVivo && typeof window.SpazioVivo.scriviOrma === "function") window.SpazioVivo.scriviOrma({ tipo: "obiettivo" });
+      };
+      if (ob0 && ob0.parentNode) ob0.parentNode.insertBefore(t, ob0);
+    }
 
     var K = D.getElementById("ky");
     K.hidden = ky.length === 0;
@@ -316,14 +345,32 @@
         var prima = o.stadio, i = STADI.map(function (s) { return s[0]; }).indexOf(stadioDi(o));
         o.stadio = STADI[(i + 1) % STADI.length][0];
         ridisegna(stato);
-        var r = await db.from("orme").update({ stadio: o.stadio }).eq("id", id).select("id");
-        if (r.error || !r.data || !r.data.length) { console.warn("lo stato non si è salvato:", r.error); o.stadio = prima; ridisegna(stato); }
+        /* ⭐ la regola del 3 ottobre sta nel database: chi ha aperto l'orma, chi coordina il villaggio, chi la fa */
+        var r = await db.rpc("fm_cambia_stadio", { p_orma: id, p_stadio: o.stadio });
+        if (r.error) { console.warn("lo stato non si è salvato:", r.error); o.stadio = prima; ridisegna(stato); }
       };
     });
     /* la persona: si apre l'elenco della rubrica, si tocca un nome */
     Array.prototype.forEach.call(D.querySelectorAll("button[data-chi]"), function (b) {
       if (b.getAttribute("aria-disabled") === "true") return;
       b.onclick = function () { var id = b.getAttribute("data-chi"); ridisegna({ tessera: stato.tessera, aperto: stato.aperto === id ? null : id }); };
+    });
+    Array.prototype.forEach.call(D.querySelectorAll("button[data-prendi]"), function (b) {
+      b.onclick = async function () {
+        var id = b.getAttribute("data-prendi");
+        b.disabled = true;
+        var r = await db.rpc("fm_prendi_orma", { p_orma: id });
+        if (r.error || r.data === false) { console.warn("non si è preso:", r.error); b.disabled = false; b.textContent = "non è riuscito, riprova"; return; }
+        var nome = (d.persona && d.persona.nome) || "";
+        (d.chi[id] = d.chi[id] || []).push({ nome: nome, attesa: false, persona: d.io });
+        ridisegna({ tessera: stato.tessera, aperto: id });
+      };
+    });
+    Array.prototype.forEach.call(D.querySelectorAll("button[data-passo]"), function (b) {
+      b.onclick = function () {
+        var id = b.getAttribute("data-passo");
+        if (window.SpazioVivo && typeof window.SpazioVivo.nuovaOrma === "function") window.SpazioVivo.nuovaOrma(id, { tipo: "obiettivo" });
+      };
     });
     Array.prototype.forEach.call(D.querySelectorAll("button[data-proponi]"), function (b) {
       b.onclick = async function () {
