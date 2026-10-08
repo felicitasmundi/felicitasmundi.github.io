@@ -145,6 +145,20 @@
         d.dentro.forEach(function (x) { x.profilo = per[x.persona_id] || null; });
       }
 
+      /* ⭐ 8 ottobre 11:09, Gab: «coordina è il nucleo operativo della civiltà · per ora lascia solo a me
+         la possibilità di rendere coordinatore · gli altri tasti dovrebbero essere karma yoga» — SQL 50 */
+      d.nomino = false; d.gradi = {};
+      if (d.io && d.orma && d.orma.tipo === "micelio" && pid.length) {
+        try {
+          var pn = await db.rpc("fm_posso_nominare");
+          d.nomino = !pn.error && pn.data === true;
+          if (d.nomino) {
+            var gg = await db.rpc("fm_gradi", { p_persone: pid });
+            (gg.error ? [] : gg.data || []).forEach(function (r) { d.gradi[r.id] = r.grado; });
+          }
+        } catch (e) { d.nomino = false; }
+      }
+
       /* le figlie, in ordine di tempo, e chi ha preso ognuna */
       var f = await db.from("orme")
         .select("id,titolo,contenuto,elemento,stadio,entro_il,luogo,destinazione,tipo,categoria,inizio_il,accaduto_il,persona_id")
@@ -807,6 +821,32 @@
       var x = d.dentro[i]; if (!x) return;
       var sub = c.querySelector(".tx > span"); if (sub) sub.style.display = x.preso_il ? "" : "none";
       var tg = c.querySelector('[data-g="togli"]'); if (tg && !padrone) tg.style.display = "none";
+      /* ⭐ 8 ottobre — «coordina» e «karma yoga»: solo Gab, solo nel villaggio, mai su se stesso */
+      var vecchi = c.querySelector(".fm-nomina"); if (vecchi) vecchi.remove();
+      if (!d.nomino || !x.persona_id || x.persona_id === d.io || !x.preso_il) return;
+      var coord = x.ruolo === "coordinatore", gr = d.gradi[x.persona_id] || "ospite";
+      var ky = gr !== "ospite";
+      var w = doc.createElement("span"); w.className = "fm-nomina";
+      w.style.cssText = "display:flex;gap:.4rem;flex-wrap:wrap;margin-left:auto;align-items:center";
+      function tasto(testo, acceso, cosa, chiuso) {
+        var b = doc.createElement("button"); b.type = "button"; b.textContent = testo;
+        b.style.cssText = "all:unset;cursor:pointer;min-height:2.2rem;display:inline-flex;align-items:center;padding:0 .8rem;border-radius:999px;font-size:.8rem;white-space:nowrap;" +
+          (acceso ? "background:#D4AF6A;color:#0A0C1A;border:1px solid #D4AF6A" : "border:1px solid rgba(212,175,106,.55);color:#D4AF6A");
+        if (chiuso) { b.style.opacity = ".45"; b.style.cursor = "default"; b.title = "prima togli coordina"; }
+        b.setAttribute("aria-pressed", acceso ? "true" : "false");
+        b.onclick = async function (e) {
+          e.preventDefault(); e.stopPropagation(); if (chiuso || b.disabled) return;
+          b.disabled = true; b.style.opacity = ".5";
+          var r = await db.rpc("fm_nomina", { p_villaggio: id, p_persona: x.persona_id, p_cosa: cosa });
+          if (r.error) { b.disabled = false; b.style.opacity = ""; alert("Non è stato possibile: " + (r.error.message || r.error)); return; }
+          ricarica();
+        };
+        return b;
+      }
+      w.appendChild(tasto("coordina", coord, coord ? "togli_coordina" : "coordina", false));
+      w.appendChild(tasto("karma yoga", ky, ky ? "togli_karma_yoga" : "karma_yoga", (coord && ky) || (gr !== "ospite" && gr !== "karma_yoga")));
+      var segno = c.querySelector(".coord"); if (segno) segno.style.display = "none";
+      c.appendChild(w);
     });
 
     /* i passi: niente etichette vuote, niente «?»; lo stato sulla riga */
