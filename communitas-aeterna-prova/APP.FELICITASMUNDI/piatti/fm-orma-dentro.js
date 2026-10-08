@@ -75,9 +75,15 @@
   async function leggi(id) {
     var d = { orma: null, autore: null, dentro: [], figlie: [], file: [],
               chat: [], io: null, puoPubblicare: false };
+    /* ⭐ 8 ottobre 11:17, Gab: «ci mette un sacco di tempo a caricarsi la pagina» — prima le domande
+       al database partivano una dopo l'altra (una ventina, ~3 secondi); ora partono insieme.
+       Chi sono lo dice la sessione salvata nel telefono, senza chiederlo al server: i permessi
+       veri li controlla comunque il database. */
+    function prova(f) { return f().catch(function (e) { console.warn("dentro l’orma:", e); }); }
     try {
-      var u = await db.auth.getUser();
-      d.io = u && u.data && u.data.user && u.data.user.id;
+      var s = await db.auth.getSession();
+      d.io = s && s.data && s.data.session && s.data.session.user && s.data.session.user.id;
+      if (!d.io) { var u = await db.auth.getUser(); d.io = u && u.data && u.data.user && u.data.user.id; }
 
       var CAMPI = "id,titolo,sottotitolo,contenuto,tipo,elemento,stadio,luogo," +
                 "accaduto_il,inizio_il,entro_il,destinazione,persona_id,quanti_servono," +
@@ -86,147 +92,159 @@
       if (o.error) o = await db.from("orme").select(CAMPI).eq("id", id).single();   /* prima dell'SQL 33 */
       if (o.error) return d;
       d.orma = o.data;
+      var mia = !!(d.io && d.orma.persona_id === d.io);
+      d.villaggio = null; d.coordina = false; d.nomino = false; d.gradi = {}; d.rubrica = [];
+      var rubrica = [], team = [];
 
-      /* ⭐ 1 ottobre, Gab: «mettere felicitas festival dentro micelio» — chi ha aperto l'orma
-         può metterla dentro un micelio o un evento suo */
-      if (d.io && d.orma.persona_id === d.io) {
-        var cand = await db.from("orme").select("id,titolo,contenuto,tipo,talento_id")
-          .eq("persona_id", d.io).in("tipo", ["micelio", "festa", "talento_radice"]).neq("id", id)
-          .order("momento", { ascending: false }).limit(40);
-        d.candidate = cand.error ? [] : (cand.data || []);
-        /* il talento si chiama col suo nome, non col testo della radice */
-        var tid = d.candidate.map(function (c) { return c.talento_id; }).filter(Boolean);
-        if (tid.length) {
-          var tn = await db.from("talenti").select("id,nome").in("id", tid);
-          var nomi = {}; (tn.error ? [] : tn.data || []).forEach(function (t) { nomi[t.id] = t.nome; });
-          d.candidate.forEach(function (c) { if (c.tipo === "talento_radice" && nomi[c.talento_id]) c.titolo = nomi[c.talento_id]; });
-        }
-      }
+      await Promise.all([
 
-      /* ⭐ 1 ottobre, Gab: l'evento dell'11 è «una task dentro festival» — ogni orma dice di chi è figlia */
-      if (d.orma.orma_madre_id) {
-        var md = await db.from("orme").select("id,titolo,tipo").eq("id", d.orma.orma_madre_id).limit(1);
-        if (!md.error && md.data && md.data[0]) d.madre = md.data[0];
-      }
-
-      /* ⭐ 2 ottobre 16:36, Gab: nei villaggi le orme sono del gruppo — di quale villaggio è, e se coordino */
-      d.villaggio = null; d.coordina = false;
-      try {
-        var fv = await db.rpc("fm_villaggio_di", { p_orma: id });
-        d.villaggio = (!fv.error && fv.data) || null;
-        if (d.villaggio && d.io) { var fc = await db.rpc("fm_coordina", { p_villaggio: d.villaggio }); d.coordina = !fc.error && fc.data === true; }
-      } catch (e) {}
-
-      /* chi l'ha aperta */
-      if (d.orma.persona_id) {
-        var a = await db.from("persone_pubbliche")
-          .select("id,nome,foto_url,nome_url").eq("id", d.orma.persona_id).limit(1);
-        if (!a.error && a.data && a.data[0]) d.autore = a.data[0];
-      }
-
-      /* chi c'è dentro: i lasciati restano come storia, ma non contano */
-      /* ⭐ 1 ottobre — il ruolo (coordinatore) nelle squadre; se la colonna non c'è ancora, senza */
-      var p = await db.from("orma_persone")
-        .select("id,persona_id,nome,stato,preso_il,chiuso_il,ore,lasciato_il,ruolo")
-        .eq("orma_id", id);
-      if (p.error) p = await db.from("orma_persone")
-        .select("id,persona_id,nome,stato,preso_il,chiuso_il,ore,lasciato_il")
-        .eq("orma_id", id);
-      d.dentro = p.error ? [] : (p.data || []).filter(function (x) { return !x.lasciato_il; });
-      d.dentro.sort(function (a, b) { return (b.ruolo === "coordinatore") - (a.ruolo === "coordinatore"); });
-
-      /* le loro foto e i loro profili, per chi ha un account */
-      var pid = d.dentro.map(function (x) { return x.persona_id; }).filter(Boolean);
-      if (pid.length) {
-        var pp = await db.from("persone_pubbliche")
-          .select("id,foto_url,nome_url").in("id", pid);
-        var per = {};
-        (pp.error ? [] : pp.data || []).forEach(function (r) { per[r.id] = r; });
-        d.dentro.forEach(function (x) { x.profilo = per[x.persona_id] || null; });
-      }
-
-      /* ⭐ 8 ottobre 11:09, Gab: «coordina è il nucleo operativo della civiltà · per ora lascia solo a me
-         la possibilità di rendere coordinatore · gli altri tasti dovrebbero essere karma yoga» — SQL 50 */
-      d.nomino = false; d.gradi = {};
-      if (d.io && d.orma && d.orma.tipo === "micelio" && pid.length) {
-        try {
-          var pn = await db.rpc("fm_posso_nominare");
-          d.nomino = !pn.error && pn.data === true;
-          if (d.nomino) {
-            var gg = await db.rpc("fm_gradi", { p_persone: pid });
-            (gg.error ? [] : gg.data || []).forEach(function (r) { d.gradi[r.id] = r.grado; });
+        /* ⭐ 1 ottobre, Gab: «mettere felicitas festival dentro micelio» — chi ha aperta l'orma
+           può metterla dentro un micelio o un evento suo */
+        mia && prova(async function () {
+          var cand = await db.from("orme").select("id,titolo,contenuto,tipo,talento_id")
+            .eq("persona_id", d.io).in("tipo", ["micelio", "festa", "talento_radice"]).neq("id", id)
+            .order("momento", { ascending: false }).limit(40);
+          d.candidate = cand.error ? [] : (cand.data || []);
+          /* il talento si chiama col suo nome, non col testo della radice */
+          var tid = d.candidate.map(function (c) { return c.talento_id; }).filter(Boolean);
+          if (tid.length) {
+            var tn = await db.from("talenti").select("id,nome").in("id", tid);
+            var nomi = {}; (tn.error ? [] : tn.data || []).forEach(function (t) { nomi[t.id] = t.nome; });
+            d.candidate.forEach(function (c) { if (c.tipo === "talento_radice" && nomi[c.talento_id]) c.titolo = nomi[c.talento_id]; });
           }
-        } catch (e) { d.nomino = false; }
-      }
+        }),
 
-      /* le figlie, in ordine di tempo, e chi ha preso ognuna */
-      var f = await db.from("orme")
-        .select("id,titolo,contenuto,elemento,stadio,entro_il,luogo,destinazione,tipo,categoria,inizio_il,accaduto_il,persona_id")
-        .eq("orma_madre_id", id).order("momento");
-      d.figlie = f.error ? [] : (f.data || []);
-      if (d.figlie.length) {
-        var fp = await db.from("orma_persone")
-          .select("orma_id,nome,persona_id,preso_il,chiuso_il,ore,lasciato_il")
-          .in("orma_id", d.figlie.map(function (x) { return x.id; }));
-        var pr = {};
-        (fp.error ? [] : fp.data || []).forEach(function (r) {
-          if (r.lasciato_il || !r.preso_il) return;
-          (pr[r.orma_id] = pr[r.orma_id] || []).push(r);
-        });
-        d.figlie.forEach(function (x) { x.presa = pr[x.id] || []; });
-      }
+        /* ⭐ 1 ottobre, Gab: l'evento dell'11 è «una task dentro festival» — ogni orma dice di chi è figlia */
+        d.orma.orma_madre_id && prova(async function () {
+          var md = await db.from("orme").select("id,titolo,tipo").eq("id", d.orma.orma_madre_id).limit(1);
+          if (!md.error && md.data && md.data[0]) d.madre = md.data[0];
+        }),
 
-      /* ⭐ 3 ottobre — «proponi a…»: la rubrica e chi lavora nell'orma madre (il lavoro del team) */
-      d.rubrica = [];
-      if (d.io && d.orma.persona_id === d.io) {
-        try {
+        /* ⭐ 2 ottobre 16:36, Gab: nei villaggi le orme sono del gruppo — di quale villaggio è, e se coordino */
+        prova(async function () {
+          var fv = await db.rpc("fm_villaggio_di", { p_orma: id });
+          d.villaggio = (!fv.error && fv.data) || null;
+          if (d.villaggio && d.io) { var fc = await db.rpc("fm_coordina", { p_villaggio: d.villaggio }); d.coordina = !fc.error && fc.data === true; }
+        }),
+
+        /* chi l'ha aperta */
+        d.orma.persona_id && prova(async function () {
+          var a = await db.from("persone_pubbliche")
+            .select("id,nome,foto_url,nome_url").eq("id", d.orma.persona_id).limit(1);
+          if (!a.error && a.data && a.data[0]) d.autore = a.data[0];
+        }),
+
+        /* chi c'è dentro: i lasciati restano come storia, ma non contano */
+        prova(async function () {
+          /* ⭐ 1 ottobre — il ruolo (coordinatore) nelle squadre; se la colonna non c'è ancora, senza */
+          var p = await db.from("orma_persone")
+            .select("id,persona_id,nome,stato,preso_il,chiuso_il,ore,lasciato_il,ruolo")
+            .eq("orma_id", id);
+          if (p.error) p = await db.from("orma_persone")
+            .select("id,persona_id,nome,stato,preso_il,chiuso_il,ore,lasciato_il")
+            .eq("orma_id", id);
+          d.dentro = p.error ? [] : (p.data || []).filter(function (x) { return !x.lasciato_il; });
+          d.dentro.sort(function (a, b) { return (b.ruolo === "coordinatore") - (a.ruolo === "coordinatore"); });
+          var pid = d.dentro.map(function (x) { return x.persona_id; }).filter(Boolean);
+          if (!pid.length) return;
+          await Promise.all([
+            /* le loro foto e i loro profili, per chi ha un account */
+            prova(async function () {
+              var pp = await db.from("persone_pubbliche").select("id,foto_url,nome_url").in("id", pid);
+              var per = {};
+              (pp.error ? [] : pp.data || []).forEach(function (r) { per[r.id] = r; });
+              d.dentro.forEach(function (x) { x.profilo = per[x.persona_id] || null; });
+            }),
+            /* ⭐ 8 ottobre 11:09, Gab: «coordina è il nucleo operativo della civiltà · per ora lascia solo a me
+               la possibilità di rendere coordinatore · gli altri tasti dovrebbero essere karma yoga» — SQL 50 */
+            d.io && d.orma.tipo === "micelio" && prova(async function () {
+              var pn = await db.rpc("fm_posso_nominare");
+              d.nomino = !pn.error && pn.data === true;
+              if (d.nomino) {
+                var gg = await db.rpc("fm_gradi", { p_persone: pid });
+                (gg.error ? [] : gg.data || []).forEach(function (r) { d.gradi[r.id] = r.grado; });
+              }
+            })
+          ]);
+        }),
+
+        /* le figlie, in ordine di tempo, e chi ha preso ognuna */
+        prova(async function () {
+          var f = await db.from("orme")
+            .select("id,titolo,contenuto,elemento,stadio,entro_il,luogo,destinazione,tipo,categoria,inizio_il,accaduto_il,persona_id")
+            .eq("orma_madre_id", id).order("momento");
+          d.figlie = f.error ? [] : (f.data || []);
+          if (d.figlie.length) {
+            var fp = await db.from("orma_persone")
+              .select("orma_id,nome,persona_id,preso_il,chiuso_il,ore,lasciato_il")
+              .in("orma_id", d.figlie.map(function (x) { return x.id; }));
+            var pr = {};
+            (fp.error ? [] : fp.data || []).forEach(function (r) {
+              if (r.lasciato_il || !r.preso_il) return;
+              (pr[r.orma_id] = pr[r.orma_id] || []).push(r);
+            });
+            d.figlie.forEach(function (x) { x.presa = pr[x.id] || []; });
+          }
+        }),
+
+        /* ⭐ 3 ottobre — «proponi a…»: la rubrica e chi lavora nell'orma madre (il lavoro del team) */
+        mia && prova(async function () {
           var rb = await db.from("contatti").select("nome,persona_id").eq("proprietario_id", d.io).not("persona_id", "is", null);
-          d.rubrica = rb.error ? [] : (rb.data || []);
-          if (d.orma.orma_madre_id) {
-            var tm = await db.from("orma_persone").select("persona_id,nome").eq("orma_id", d.orma.orma_madre_id)
-              .not("persona_id", "is", null).not("preso_il", "is", null).is("lasciato_il", null);
-            (tm.error ? [] : tm.data || []).forEach(function (r) { d.rubrica.push(r); });
+          rubrica = rb.error ? [] : (rb.data || []);
+        }),
+        mia && d.orma.orma_madre_id && prova(async function () {
+          var tm = await db.from("orma_persone").select("persona_id,nome").eq("orma_id", d.orma.orma_madre_id)
+            .not("persona_id", "is", null).not("preso_il", "is", null).is("lasciato_il", null);
+          team = tm.error ? [] : (tm.data || []);
+        }),
+
+        /* gli allegati, coi permessi che scadono */
+        prova(async function () {
+          var fl = await db.rpc("fm_file_orma", { p_orma: id });
+          if (!fl.error) d.file = fl.data || [];
+        }),
+
+        /* la conversazione */
+        /* ⭐ 2 ottobre: orma_messaggi NON ha la colonna «nome» (testo·argomento·elemento·momento·persona_id):
+           chiederla faceva fallire tutta la lettura. Il nome si prende dalle persone. */
+        prova(async function () {
+          var c = await db.from("orma_messaggi")
+            .select("id,persona_id,testo,momento,argomento")
+            .eq("orma_id", id).order("momento").limit(80);
+          if (c.error) console.warn("chat:", c.error);
+          d.chat = c.error ? [] : (c.data || []);
+          var pids = d.chat.map(function (m) { return m.persona_id; }).filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+          if (pids.length) {
+            var pn = await db.from("persone_pubbliche").select("id,nome").in("id", pids);
+            var nomi = {}; (pn.data || []).forEach(function (r) { nomi[r.id] = r.nome || ""; });
+            d.chat.forEach(function (m) { m.nome = nomi[m.persona_id] || ""; });
           }
-          var visto = {}; visto[d.io] = 1;
-          d.dentro.forEach(function (x) { if (x.persona_id && x.stato !== "rifiutato") visto[x.persona_id] = 1; });
-          d.rubrica = d.rubrica.filter(function (r) { if (visto[r.persona_id]) return false; visto[r.persona_id] = 1; return true; });
-          d.rubrica.sort(function (x, y) { return String(x.nome).localeCompare(String(y.nome)); });
-        } catch (e) {}
+        }),
+
+        /* ⭐ 1 ottobre 20:44, Gab: «un numerino che indica l'avanzamento della chat» — fin dove ho letto */
+        d.io && prova(async function () {
+          var lt = await db.from("letture").select("letto_fino").eq("orma_id", id).eq("persona_id", d.io).maybeSingle();
+          d.lettoFino = (lt && lt.data && lt.data.letto_fino) || null;
+        }),
+
+        prova(async function () { var mt = await db.rpc("fm_miei_tipi"); d.aperti = (!mt.error && mt.data) || []; }),
+
+        /* chi può pubblicare vede la vetrina */
+        prova(async function () {
+          var pb = await db.rpc("fm_puo_pubblicare");
+          d.puoPubblicare = !pb.error && pb.data === true;
+        })
+      ]);
+
+      if (!d.aperti) d.aperti = [];
+      if (mia) {
+        d.rubrica = rubrica.concat(team);
+        var visto = {}; visto[d.io] = 1;
+        d.dentro.forEach(function (x) { if (x.persona_id && x.stato !== "rifiutato") visto[x.persona_id] = 1; });
+        d.rubrica = d.rubrica.filter(function (r) { if (visto[r.persona_id]) return false; visto[r.persona_id] = 1; return true; });
+        d.rubrica.sort(function (x, y) { return String(x.nome).localeCompare(String(y.nome)); });
       }
-
-      /* gli allegati, coi permessi che scadono */
-      try {
-        var fl = await db.rpc("fm_file_orma", { p_orma: id });
-        if (!fl.error) d.file = fl.data || [];
-      } catch (e) {}
-
-      /* la conversazione */
-      /* ⭐ 2 ottobre: orma_messaggi NON ha la colonna «nome» (testo·argomento·elemento·momento·persona_id):
-         chiederla faceva fallire tutta la lettura. Il nome si prende dalle persone. */
-      var c = await db.from("orma_messaggi")
-        .select("id,persona_id,testo,momento,argomento")
-        .eq("orma_id", id).order("momento").limit(80);
-      if (c.error) console.warn("chat:", c.error);
-      d.chat = c.error ? [] : (c.data || []);
-      try {
-        var pids = d.chat.map(function (m) { return m.persona_id; }).filter(function (x, i, a) { return x && a.indexOf(x) === i; });
-        if (pids.length) {
-          var pn = await db.from("persone_pubbliche").select("id,nome").in("id", pids);
-          var nomi = {}; (pn.data || []).forEach(function (r) { nomi[r.id] = r.nome || ""; });
-          d.chat.forEach(function (m) { m.nome = nomi[m.persona_id] || ""; });
-        }
-      } catch (e) {}
-      /* ⭐ 1 ottobre 20:44, Gab: «un numerino che indica l'avanzamento della chat» — fin dove ho letto */
-      if (d.io) { try { var lt = await db.from("letture").select("letto_fino").eq("orma_id", id).eq("persona_id", d.io).maybeSingle(); d.lettoFino = (lt && lt.data && lt.data.letto_fino) || null; } catch (e) {} }
-
-      try { var mt = await db.rpc("fm_miei_tipi"); d.aperti = (!mt.error && mt.data) || []; } catch (e) { d.aperti = []; }
-
-      /* chi può pubblicare vede la vetrina */
-      try {
-        var pb = await db.rpc("fm_puo_pubblicare");
-        d.puoPubblicare = !pb.error && pb.data === true;
-      } catch (e) {}
-    } catch (e) { console.warn("dentro l\u2019orma:", e); }
+    } catch (e) { console.warn("dentro l’orma:", e); }
     return d;
   }
 
