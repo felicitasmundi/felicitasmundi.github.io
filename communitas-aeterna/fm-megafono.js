@@ -1335,7 +1335,14 @@ function mgMandaTutti(t){
    accanto al tasto →, solo dove c'è una tastiera (computer); sul telefono non compare */
 (function(){
   var inv = document.getElementById("mg-inv"); if(!inv || document.getElementById("mg-scorciatoia")) return;
-  var mac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || "");
+  /* ⭐ 8 ottobre 11:19, Gab: «hai lasciato nel telefono il segno comand invio» — la sola regola CSS non bastava:
+     ora si decide qui. Telefono e tablet (o schermo a tocco senza mouse): niente segno. Mac: ⌘ ↵. Gli altri computer: Ctrl ↵. */
+  var ua = navigator.userAgent || "";
+  var tocco = /Android|iPhone|iPad|iPod|Mobile|Tablet/i.test(ua) ||
+              (navigator.maxTouchPoints > 1 && /Macintosh/.test(ua)) ||
+              (window.matchMedia && !window.matchMedia("(hover:hover) and (pointer:fine)").matches);
+  if(tocco) return;
+  var mac = /Mac/.test(navigator.platform || ua);
   var s = document.createElement("span");
   s.id = "mg-scorciatoia";
   s.setAttribute("aria-hidden", "true");
