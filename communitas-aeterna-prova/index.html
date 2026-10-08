@@ -4165,7 +4165,40 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var NEXUS_IMG   = "nexus.png";   /* ⭐ il file accanto: WordPress non si sveglia */
   var MARCHIO_IMG = "FM_sigillo_corniceoro_HR.png";
-  var db = window.supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" } });
+  /* ⭐ 8 ottobre 11:23, Gab: «nel telefono c'è ancora la stessa lentezza in tutte le pagine».
+     ① La stessa domanda al database partiva più volte insieme (fino a 4 copie): ora le copie uguali,
+        mentre la prima è in viaggio o appena tornata (1,5 s), aspettano la stessa risposta.
+        Ogni scrittura (POST/PATCH/DELETE) svuota questa memoria, così non si legge mai il vecchio.
+     ② «Chi sono» si chiedeva al server 6 volte a ogni pagina: ora lo dice la sessione salvata nel
+        telefono. I permessi veri li controlla comunque il database, a ogni domanda. */
+  var fmGemelle = {};
+  function fmFetch(url, opz){
+    var metodo = ((opz && opz.method) || "GET").toUpperCase();
+    if(metodo !== "GET" || !/\/rest\/v1\//.test(String(url))){ fmGemelle = {}; return fetch(url, opz); }
+    var h = opz && opz.headers, aut = "";
+    try { aut = h ? (typeof h.get === "function" ? h.get("Authorization") : (h.Authorization || h.authorization)) || "" : ""; } catch(e){}
+    var k = String(url) + "|" + aut.slice(-24), ora = Date.now(), v = fmGemelle[k];
+    if(v && (v.inViaggio || ora - v.t < 1500)) return v.p.then(function(r){ return r.clone(); });
+    var voce = { t: ora, inViaggio: true };
+    voce.p = fetch(url, opz).then(function(r){ voce.inViaggio = false; voce.t = Date.now(); if(!r.ok) delete fmGemelle[k]; return r; },
+                                  function(e){ delete fmGemelle[k]; throw e; });
+    fmGemelle[k] = voce;
+    return voce.p.then(function(r){ return r.clone(); });
+  }
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" }, global: { fetch: fmFetch } });
+  (function(){
+    var vero = db.auth.getUser.bind(db.auth);
+    db.auth.getUser = async function(jwt){
+      if(jwt) return vero(jwt);
+      try {
+        var s = await db.auth.getSession();
+        var u = s && s.data && s.data.session && s.data.session.user;
+        if(u) return { data: { user: u }, error: null };
+      } catch(e){}
+      return vero();
+    };
+    db.auth.onAuthStateChange(function(){ fmGemelle = {}; });
+  })();
 
   var io=null, permessi=[], scelta=null, nomi={}, vista="spazio", stanza="sviluppo";
   /* quale voce del ramo è accesa: `sottoRichiesta` la porta dentro a vai() */
