@@ -11,6 +11,7 @@
      aiuto, vicinato, stampa, e poi un bel quadrante grande con felicitas festival e sotto footer».
      Misure prese da apple.com/it il 10 ottobre: barra 44 · hero 692 · titolo 56/60 peso 600 · sottotitolo 28/32 · riquadri 702×580
      con 12 di aria · titolo riquadro 40/44 · sottotitolo 21/25 · tasti 17 px, 11×21, raggio 980, #0071e3 · sfondi #000 e #f5f5f7. -->
+<script type="module" src="APP.FELICITASMUNDI/piatti/ak-nexus3d.js?v=10011040"></script>
 <style>
 :root{--nero:#000;--grigio:#f5f5f7;--testo:#1d1d1f;--testo2:#6e6e73;--chiaro:#f5f5f7;--blu:#0071e3;--blu2:#2997ff;--blu3:#0066cc;--oro:#D4AF6A}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -71,10 +72,8 @@ img{display:block;max-width:100%}
   radial-gradient(1px 1px at 44% 30%,#fff,transparent),radial-gradient(1px 1px at 88% 36%,#fff,transparent),radial-gradient(1px 1px at 70% 6%,#fff,transparent)}
 .cielo .copia{padding-top:96px}
 .cielo .occ{font-size:12px;letter-spacing:.3em;color:var(--oro);margin-bottom:22px;font-weight:600}
-.cielo .nexus{width:220px;height:220px;margin:48px auto 0;border-radius:50%;background:radial-gradient(circle,rgba(245,240,230,.98) 55%,rgba(245,240,230,0) 72%);display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 60px rgba(212,175,106,.45))}
-.cielo .nexus img{width:170px;height:170px;animation:gira 90s linear infinite}
-@keyframes gira{to{transform:rotate(360deg)}}
-@media (max-width:734px){.cielo .copia{padding-top:72px}.cielo .nexus{width:160px;height:160px;margin-top:36px}.cielo .nexus img{width:124px;height:124px}}
+.cielo .nexus3d{position:relative;width:min(360px,70vw);aspect-ratio:1;margin:28px auto 0}
+@media (max-width:734px){.cielo .copia{padding-top:72px}.cielo .nexus3d{margin-top:16px}}
 
 /* ── finestra a più livelli ── */
 .finestra .foto{position:absolute;inset:0;z-index:0}
@@ -129,7 +128,7 @@ footer a+a{margin-left:14px}
 /* ── apparizione allo scorrere ── */
 .copia,.fig{opacity:0;transform:translateY(14px);transition:opacity .9s ease,transform .9s ease}
 .unita.visto .copia,.unita.visto .fig{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.copia,.fig{opacity:1;transform:none;transition:none}.cielo .nexus img{animation:none}}
+@media (prefers-reduced-motion:reduce){.copia,.fig{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
@@ -147,7 +146,7 @@ footer a+a{margin-left:14px}
     <h1 class="h-hero">Villaggi diffusi.</h1>
     <p class="s-hero">FelicitasMundi. Il primo è la Sardegna.</p>
     <div class="ctas"><a class="cta" href="#festival">Felicitas Festival</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html">Entra nell’app</a></div>
-    <div class="nexus"><img src="casa/nexus.png" alt="Nexus, il simbolo di FelicitasMundi"></div>
+    <div class="nexus3d"><ak-nexus3d aria-hidden="true"></ak-nexus3d></div>
   </div>
 </section>
 
@@ -172,8 +171,6 @@ footer a+a{margin-left:14px}
   <div class="fig"><img src="casa/figura.jpg" alt=""></div>
   <div class="copia">
     <h2 class="h-tile">Discernimento,<br>strumenti per fare ordine.</h2>
-    <p class="s-tile">Il praticantato: percorso settimanale, in diretta lunedì ore 19.</p>
-    <div class="riga-dati"><span>20 € a settimana</span><span>oppure karma yoga</span><span>luna nuova · luna piena</span></div>
     <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Entra</a></div>
   </div>
 </section>
@@ -188,7 +185,7 @@ footer a+a{margin-left:14px}
       <p class="s-tile">La scelta antitumore. Giuseppe Di Bella · Macro · 27,90 €</p>
       <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Acquista</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=orma&o=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Gruppo d’acquisto</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Altri</a></div>
     </div>
-    <div class="fig"><img class="libro" src="https://copertine.hoepli.it/hoepli/xxl/978/8828/9788828527299.jpg" alt="La scelta antitumore, di Giuseppe Di Bella"></div>
+    <div class="fig"><img class="libro" src="casa/di-bella.jpg" alt="La scelta antitumore, di Giuseppe Di Bella"></div>
   </section>
 
   <section class="unita mutuo" id="mutuo">
@@ -214,7 +211,7 @@ footer a+a{margin-left:14px}
     <div class="copia">
       <div class="occ">STAMPA</div>
       <h2 class="h-tile">Kit fiera</h2>
-      <p class="s-tile">3000 volantini, 1 roll-up, 2 striscioni e 30 maglie dell’azienda. [ prezzo da Flyeralarm ]</p>
+      <p class="s-tile">2500 volantini, 1 roll-up, 2 striscioni e 30 maglie dell’azienda. 387,66 €</p>
       <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Ordina</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Altri 2000 prodotti</a></div>
     </div>
     <div class="fig"><img class="a" src="casa/rivista.jpg" alt=""><img class="b" src="casa/rollup.jpg" alt=""></div>
