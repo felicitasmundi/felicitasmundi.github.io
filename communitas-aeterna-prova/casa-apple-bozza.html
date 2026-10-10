@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Villaggi diffusi · FelicitasMundi</title>
+<title>Villaggi Diffusi · FelicitasMundi</title>
 <!-- ⭐ 10 ottobre 2026, Gab: «un'impaginazione classica come la Apple… con rimandi diretti al festival ed app (su sfondo cosmo),
      con la finestra su multi livelli (vicinato in cui è scattata, luna nuova e data), un quadrante sull'educazione "discernimento,
      strumenti per far ordine", percorso settimanale, in diretta lunedì ore 19, poi su sfondo bianco i quadranti di emporio, mutuo
@@ -55,7 +55,8 @@ img{display:block;max-width:100%}
 .riga .unita{height:580px;border-radius:0}
 .pieno{padding:0 12px 12px;background:#fff}
 .pieno .unita{height:692px}
-.pieno .pratic{height:auto;min-height:0;padding-bottom:64px}
+.pieno .pratic{height:692px}
+@media (max-width:734px){.pieno .pratic{height:640px}}
 @media (max-width:1068px){.hero{height:580px}.riga{grid-template-columns:1fr}.riga .unita{height:500px}.pieno .unita{height:580px}.unita .copia{padding-top:48px}}
 @media (max-width:734px){.hero{height:548px}.riga .unita{height:500px}.pieno .unita{height:548px}.unita .copia{padding:40px 24px 0}}
 
@@ -66,6 +67,7 @@ img{display:block;max-width:100%}
 
 /* ── cielo ── */
 .cielo{background:radial-gradient(ellipse at 50% 120%,rgba(140,110,200,.35),transparent 55%),#000}
+.cielo .cosmo{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block}
 .cielo .stelle{position:absolute;inset:0;z-index:0;opacity:.8;
   background-image:radial-gradient(1px 1px at 8% 18%,#fff,transparent),radial-gradient(1px 1px at 22% 62%,#fff,transparent),radial-gradient(1.4px 1.4px at 37% 12%,#fff,transparent),
   radial-gradient(1px 1px at 51% 48%,#fff,transparent),radial-gradient(1px 1px at 66% 24%,#fff,transparent),radial-gradient(1.4px 1.4px at 81% 58%,#fff,transparent),
@@ -92,18 +94,20 @@ img{display:block;max-width:100%}
 /* ── praticantato ── */
 .pratic .fig img{right:8%;bottom:-6%;height:92%;width:auto;mask-image:linear-gradient(180deg,#000 70%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent)}
 .pratic .copia{text-align:center}
+.pratic .fig img.gab{left:50%;transform:translateX(-50%);bottom:0;width:min(440px,78vw);height:auto;border-radius:28px 28px 0 0;box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .pratic .riga-dati{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .pratic .riga-dati span{font-size:14px;border:1px solid rgba(255,255,255,.28);border-radius:980px;padding:7px 14px;color:rgba(245,245,247,.9)}
 @media (max-width:734px){.finestra .foto img{object-position:50% 65%}.finestra .foto::after{background:linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,0) 62%,rgba(0,0,0,.75) 100%)}}
 
 /* ── i quattro riquadri ── */
 .emporio .fig img.libro{bottom:7%;left:50%;transform:translateX(-50%);height:54%;width:auto;box-shadow:0 30px 60px rgba(0,0,0,.25);border-radius:4px}
-.mutuo .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 35%}
-.mutuo .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.5) 42%,rgba(0,0,0,0) 70%)}
-.vicinato .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 0%}
-.vicinato .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.55) 38%,rgba(0,0,0,0) 68%)}
+.mutuo .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.mutuo .copia{position:absolute;left:0;right:0;bottom:0;padding:0 28px 52px}
+.mutuo .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.6) 34%,rgba(0,0,0,0) 62%)}
+.vicinato .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 12%}
+.vicinato .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.86) 0%,rgba(0,0,0,.62) 46%,rgba(0,0,0,0) 74%)}
 .unita.chiaro.stampa{background:#e2d5c2}
-.stampa .fig.kit{display:grid;grid-template-columns:repeat(4,1fr);align-items:end;top:auto;height:60%;padding:0 2%;gap:0}
+.stampa .fig.kit{display:grid;grid-template-columns:repeat(4,1fr);align-items:end;top:auto;height:auto;bottom:16px;padding:0 2%;gap:0}
 .stampa .fig.kit img{position:static;width:100%;height:auto;object-fit:contain}
 @media (max-width:734px){.stampa .fig.kit{grid-template-columns:repeat(2,1fr);height:58%}}
 @media (max-width:734px){.emporio .fig img.libro{height:54%}}
@@ -141,10 +145,10 @@ footer a+a{margin-left:14px}
 
 <!-- il cielo: festival e app -->
 <section class="unita hero cielo">
-  <div class="stelle"></div>
+  <canvas class="cosmo" aria-hidden="true"></canvas>
   <div class="copia">
     <div class="occ">COMUNITÀ ETERNA</div>
-    <h1 class="h-hero">Villaggi diffusi.</h1>
+    <h1 class="h-hero">Villaggi Diffusi.</h1>
     <p class="s-hero">Il primo è la Sardegna.</p>
     <div class="ctas"><a class="cta" href="#festival">Felicitas Festival</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html">Entra nell’app</a></div>
     <div class="nexus3d"><ak-nexus3d aria-hidden="true"></ak-nexus3d></div>
@@ -169,6 +173,7 @@ footer a+a{margin-left:14px}
 <!-- educazione -->
 <div class="pieno" id="praticantato">
 <section class="unita pratic">
+  <div class="fig"><img class="gab" src="casa/gab.jpg" alt="Gabriele Dettori"></div>
   <div class="copia">
     <div class="occ">EDUCAZIONE</div>
     <h2 class="h-tile">Discernimento,<br>strumenti per fare ordine.</h2>
@@ -203,9 +208,10 @@ footer a+a{margin-left:14px}
   <section class="unita vicinato">
     <div class="fig"><img src="casa/olivi.jpg" alt="Olivi e un prato in Sardegna, con l’orma dorata di FelicitasMundi"></div>
     <div class="copia">
-      <h2 class="h-tile">Vicinato</h2>
-      <p class="s-tile">Villaggio Felicitas · 25 ottobre · Cas’ale, Baratili · ore 10.</p>
-      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=1d8ba038-2393-49fb-9493-3511c9e3ded6">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=1d8ba038-2393-49fb-9493-3511c9e3ded6">Ci sarò</a></div>
+      <div class="occ">VICINATO</div>
+      <h2 class="h-tile">Karma yoga</h2>
+      <p class="s-tile">L’azione disinteressata, messa a disposizione per la comunità, attività che ripulisce dalle azioni del passato, ponendoti in un senso di servizio.</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=orma&o=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Bisogni</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=orma&o=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Disponibilità</a></div>
     </div>
   </section>
 
@@ -242,6 +248,38 @@ footer a+a{margin-left:14px}
 </div></footer>
 
 <script>
+/* ⭐ 10 ottobre 22:55, Gab: «nella parte iniziale creami l'effetto cosmo, con la rete neuronale che si muove come delle stelle» */
+(function(){
+  var c = document.querySelector(".cielo .cosmo"); if(!c) return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var x = c.getContext("2d"), W, H, P = [], N, vivo = false, dpr = Math.min(devicePixelRatio || 1, 2);
+  function misura(){
+    var r = c.parentNode.getBoundingClientRect(); W = r.width; H = r.height;
+    c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    N = Math.round(Math.min(160, Math.max(60, W * H / 9000)));
+    P = []; for(var i = 0; i < N; i++) P.push({ x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, r: Math.random() * 1.3 + .4, f: Math.random() * 6.28 });
+  }
+  var D = 130, t = 0;
+  function passo(){
+    if(!vivo) return;
+    t += .016; x.clearRect(0, 0, W, H);
+    for(var i = 0; i < N; i++){ var p = P[i]; p.x += p.vx; p.y += p.vy;
+      if(p.x < -10) p.x = W + 10; if(p.x > W + 10) p.x = -10; if(p.y < -10) p.y = H + 10; if(p.y > H + 10) p.y = -10; }
+    x.lineWidth = .6;
+    for(var i = 0; i < N; i++){ for(var j = i + 1; j < N; j++){
+      var a = P[i], b = P[j], dx = a.x - b.x, dy = a.y - b.y, d = dx * dx + dy * dy;
+      if(d < D * D){ var k = 1 - Math.sqrt(d) / D;
+        x.strokeStyle = "rgba(212,175,106," + (k * .28).toFixed(3) + ")";
+        x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke(); } } }
+    for(var i = 0; i < N; i++){ var p = P[i], l = .55 + .45 * Math.sin(t * 1.6 + p.f);
+      x.fillStyle = "rgba(245,240,230," + l.toFixed(3) + ")";
+      x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill(); }
+    requestAnimationFrame(passo);
+  }
+  misura(); addEventListener("resize", misura);
+  new IntersectionObserver(function(es){ es.forEach(function(e){ var prima = vivo; vivo = e.isIntersecting; if(vivo && !prima) passo(); }); }).observe(c);
+})();
 (function(){
   var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("visto"); io.unobserve(e.target); } }); }, { threshold: .18 });
   document.querySelectorAll(".unita").forEach(function(u){ io.observe(u); });
