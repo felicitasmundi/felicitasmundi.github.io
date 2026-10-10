@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>La casa viva · bozza</title>
+<!-- ⭐ 10 ottobre 2026, Gab: «la compenetrazione deve essere proprio un effetto di un gioco analogico, dove c'è il piano
+     fisico, e sopra più pagine semitrasparenti colorate» · «tutte e tre le ipotesi… fammi sognare».
+     BOZZA in prova: (1) la lente del Nexus, (2) la casa viva, (3) le presenze degli elementi. Dati veri del 10 ottobre. -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--oro:#D4AF6A;--avorio:#F5F0E6;--notte:#0A0C1A;
+  --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC;--nexus:#C9A45C}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;min-height:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ── la testata della settimana ── */
+.testa{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px 10px;flex-wrap:wrap}
+.testa .m{font-size:.72rem;letter-spacing:.3em;color:var(--oro)}
+.testa .m b{display:block;font:400 1.15rem/1.1 'Cinzel',serif;letter-spacing:.06em;color:var(--avorio);margin-top:3px}
+.sett{display:flex;align-items:center;gap:10px;font:italic 1.05rem 'Cormorant Garamond',serif;color:rgba(245,240,230,.8)}
+.luna{width:22px;height:22px;border-radius:50%;background:#14172b;box-shadow:inset -3px 0 0 1px rgba(212,175,106,.35),0 0 12px rgba(212,175,106,.25);border:1px solid rgba(212,175,106,.4)}
+
+/* ── la scena ── */
+.scena-fuori{width:100%;display:flex;justify-content:center;padding:0 0 10px}
+.scena{position:relative;width:min(100vw,calc((100vh - 150px) * 4 / 3),1500px);aspect-ratio:4/3;overflow:hidden;border-radius:6px}
+@media (max-width:700px){.scena{width:100vw;border-radius:0}}
+.foto{position:absolute;inset:-1.5%;width:103%;height:103%;object-fit:cover;filter:url(#acquerello) saturate(1.12) contrast(1.04) brightness(1.02);transition:filter 1.2s ease}
+.carta{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.35;
+  background:radial-gradient(ellipse at 20% 10%,rgba(255,240,210,.0),rgba(120,90,50,.25) 90%),
+             repeating-radial-gradient(circle at 30% 40%,rgba(0,0,0,.02) 0 2px,transparent 2px 5px)}
+.velo{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(20,24,52,.0),rgba(8,10,26,.0));transition:background 1.2s ease;pointer-events:none}
+
+/* la lente del Nexus: il fisico si spegne, l'invisibile si accende */
+.scena.lente .foto{filter:url(#acquerello) grayscale(.85) brightness(.5) contrast(1.1)}
+.scena.lente .velo{background:radial-gradient(ellipse at 50% 30%,rgba(60,40,110,.25),rgba(8,10,26,.55))}
+.fili{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+.scena.lente .fili{opacity:1}
+.fili path{fill:none;stroke-width:.35;stroke-dasharray:1.2 1.2;animation:scorre 6s linear infinite;filter:drop-shadow(0 0 .6px currentColor)}
+@keyframes scorre{to{stroke-dashoffset:-24}}
+
+/* le cose della stanza: punti che respirano */
+.cosa{position:absolute;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center}
+.cosa i{position:absolute;inset:0;border-radius:50%;border:2px solid var(--c);background:color-mix(in srgb,var(--c) 28%,transparent);
+  box-shadow:0 0 0 0 var(--c);animation:respira 3.2s ease-in-out infinite;animation-delay:var(--d,0s)}
+.cosa span{position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);white-space:nowrap;
+  font:500 .72rem 'DM Sans';letter-spacing:.06em;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8);
+  background:rgba(10,12,26,.55);padding:2px 8px;border-radius:999px;opacity:0;transition:opacity .3s}
+.cosa.sx span{left:0;transform:none}.cosa.dx span{left:auto;right:0;transform:none}
+.cosa:hover span,.cosa:focus-visible span,.scena.lente .cosa span{opacity:1}
+@keyframes respira{0%,100%{transform:scale(.8);box-shadow:0 0 0 0 color-mix(in srgb,var(--c) 60%,transparent)}
+  50%{transform:scale(1);box-shadow:0 0 0 10px transparent}}
+.scena.lente .cosa i{background:color-mix(in srgb,var(--c) 55%,transparent);box-shadow:0 0 22px 6px var(--c)}
+@media (max-width:700px){.cosa{width:34px;height:34px}.cosa span{font-size:.62rem}}
+
+/* le presenze degli elementi */
+.presenza{position:absolute;width:44px;height:44px;transform:translate(-50%,-50%);animation:vola 5s ease-in-out infinite;animation-delay:var(--d,0s);filter:drop-shadow(0 0 8px var(--c))}
+.presenza svg{width:100%;height:100%;overflow:visible}
+@keyframes vola{0%,100%{margin-top:0}50%{margin-top:-10px}}
+.scena.lente .presenza{filter:drop-shadow(0 0 16px var(--c)) brightness(1.2)}
+@media (max-width:700px){.presenza{width:30px;height:30px}}
+
+.invito{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);font:italic 1rem 'Cormorant Garamond',serif;
+  color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9);background:rgba(10,12,26,.45);padding:4px 14px;border-radius:999px;white-space:nowrap;pointer-events:none}
+
+/* ── il foglio semitrasparente colorato ── */
+.foglio{position:absolute;top:0;right:0;height:100%;width:min(420px,48%);padding:22px 22px 26px;overflow-y:auto;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--c) 55%,rgba(10,12,26,.55)),color-mix(in srgb,var(--c) 28%,rgba(10,12,26,.82)));
+  backdrop-filter:blur(6px) saturate(1.2);-webkit-backdrop-filter:blur(6px) saturate(1.2);
+  border-left:1px solid color-mix(in srgb,var(--c) 70%,white);transform:translateX(105%);transition:transform .6s cubic-bezier(.2,.8,.2,1);z-index:5}
+.foglio.su{transform:none}
+@media (max-width:700px){.foglio{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;height:auto;max-height:72vh;border-left:0;
+  border-top:1px solid color-mix(in srgb,var(--c) 70%,white);border-radius:18px 18px 0 0;transform:translateY(105%);z-index:20}
+  .foglio.su{transform:none}}
+.foglio .chiudi{position:absolute;top:10px;right:12px;width:40px;height:40px;font-size:1.5rem;color:rgba(255,255,255,.8)}
+.foglio .el{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.foglio h2{font:400 1.7rem/1.15 'Cinzel',serif;margin:6px 40px 4px 0}
+.foglio .sot{font:italic 1.08rem/1.35 'Cormorant Garamond',serif;color:rgba(255,255,255,.82);margin-bottom:14px}
+.foglio h3{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.7);margin:16px 0 7px}
+.voce{display:block;background:rgba(10,12,26,.38);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px 12px;margin-bottom:7px;color:#fff;text-decoration:none}
+.voce b{font-weight:500;display:block}
+.voce small{display:block;font-size:.8rem;color:rgba(255,255,255,.72);margin-top:2px}
+.voce.vuota{border-style:dashed;background:transparent;color:rgba(255,255,255,.8);text-align:center}
+.anche{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.anche button{font-size:.75rem;padding:5px 11px;border-radius:999px;border:1px solid var(--k);color:#fff;background:color-mix(in srgb,var(--k) 35%,transparent)}
+
+/* ── i tre tasti ── */
+.tasti{display:flex;justify-content:center;gap:12px;padding:6px 16px 22px;flex-wrap:wrap}
+.tasti button{min-height:48px;padding:0 22px;border-radius:999px;border:1px solid rgba(212,175,106,.55);font:400 .95rem 'Cinzel',serif;letter-spacing:.1em;color:var(--avorio);background:rgba(212,175,106,.06)}
+.tasti button.orma{background:var(--oro);color:var(--notte);border-color:var(--oro)}
+.tasti button.lenteb{border-color:rgba(201,164,92,.8)}
+.nota{text-align:center;font-size:.75rem;opacity:.5;padding-bottom:16px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="acquerello" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<header class="testa">
+  <div class="m">FELICITASMUNDI · COMUNITÀ ETERNA<b>La casa viva</b></div>
+  <div class="sett"><span class="luna" aria-hidden="true"></span>questa settimana · luna nuova · 10–16 ottobre</div>
+</header>
+
+<div class="scena-fuori">
+<div class="scena" id="scena">
+  <img class="foto" src="casa-viva-luogo.jpg" alt="Una stanza luminosa: una finestra sulla campagna, una pianta, una statua, il divano, le librerie, la stufa, una chitarra, un tappeto con una cartella e un libro, e appeso al soffitto un intreccio a forma di goccia">
+  <div class="carta"></div>
+  <div class="velo"></div>
+
+  <!-- i fili: si vedono solo con la lente -->
+  <svg class="fili" viewBox="0 0 100 75" preserveAspectRatio="none" aria-hidden="true">
+    <path style="color:var(--terra);stroke:var(--terra)" d="M24 43 C 15 30, 8 32, 4 33"/>
+    <path style="color:var(--acqua);stroke:var(--acqua)" d="M4 33 C 30 10, 60 20, 72 40"/>
+    <path style="color:var(--etere);stroke:var(--etere)" d="M62 34 C 40 50, 20 52, 10 48"/>
+    <path style="color:var(--aria);stroke:var(--aria)" d="M62 34 C 66 50, 68 58, 70 63"/>
+    <path style="color:var(--aria);stroke:var(--aria)" d="M95 45 C 70 70, 40 60, 24 43"/>
+    <path style="color:var(--fuoco);stroke:var(--fuoco)" d="M72 40 C 50 60, 25 62, 10 48"/>
+    <path style="color:var(--nexus);stroke:var(--nexus)" d="M50 16 C 45 25, 30 35, 24 43 M50 16 C 55 25, 60 30, 62 34 M50 16 C 60 22, 70 30, 72 40"/>
+  </svg>
+
+  <!-- la casa viva: le cose della stanza -->
+  <button class="cosa" style="left:24%;top:57%;--c:var(--terra)" data-f="vicinato"><i></i><span>la finestra · il vicinato</span></button>
+  <button class="cosa sx" style="left:5%;top:44%;--c:var(--acqua);--d:.4s" data-f="emporio"><i></i><span>la pianta · l'Emporio</span></button>
+  <button class="cosa" style="left:72%;top:53%;--c:var(--fuoco);--d:.8s" data-f="assistenza"><i></i><span>la stufa · l'Assistenza</span></button>
+  <button class="cosa" style="left:62%;top:45%;--c:var(--etere);--d:1.2s" data-f="scuola"><i></i><span>i libri · la Scuola</span></button>
+  <button class="cosa sx" style="left:10%;top:64%;--c:var(--nexus);--d:1.6s" data-f="praticantato"><i></i><span>la statua · il praticantato</span></button>
+  <button class="cosa" style="left:70%;top:85%;--c:var(--aria);--d:2s" data-f="stampa"><i></i><span>la cartella · stampa</span></button>
+  <button class="cosa dx" style="left:95%;top:60%;--c:var(--aria);--d:2.4s" data-f="pubblica"><i></i><span>la chitarra · pubblica</span></button>
+  <button class="cosa" style="left:50%;top:21%;--c:var(--nexus);--d:.2s" data-f="lente"><i></i><span>guarda con il Nexus</span></button>
+
+  <!-- le presenze degli elementi -->
+  <button class="presenza" style="left:31%;top:50%;--c:var(--terra)" data-f="vicinato" aria-label="la presenza della terra"></button>
+  <button class="presenza" style="left:9%;top:30%;--c:var(--acqua);--d:1s" data-f="emporio" aria-label="la presenza dell'acqua"></button>
+  <button class="presenza" style="left:78%;top:38%;--c:var(--fuoco);--d:2s" data-f="assistenza" aria-label="la presenza del fuoco"></button>
+  <button class="presenza" style="left:88%;top:72%;--c:var(--aria);--d:.5s" data-f="pubblica" aria-label="la presenza dell'aria"></button>
+  <button class="presenza" style="left:56%;top:33%;--c:var(--etere);--d:1.5s" data-f="scuola" aria-label="la presenza dell'etere"></button>
+
+  <div class="invito" id="invito">tocca le cose della stanza</div>
+
+  <aside class="foglio" id="foglio" aria-live="polite"></aside>
+</div>
+</div>
+
+<nav class="tasti">
+  <button data-f="stampa">stampa</button>
+  <button data-f="pubblica">pubblica</button>
+  <button class="lenteb" data-f="lente">guarda con il Nexus</button>
+  <button class="orma" data-f="orma">orma</button>
+</nav>
+<p class="nota">bozza in prova · la foto è il luogo di Gab, 10 ottobre</p>
+
+<script>
+/* la forma delle presenze: una goccia di luce con due occhi */
+document.querySelectorAll(".presenza").forEach(function(p){
+  p.innerHTML = '<svg viewBox="0 0 40 40"><defs><radialGradient id="g'+Math.random().toString(36).slice(2)+'"></radialGradient></defs>'+
+    '<path d="M20 3 C 30 12, 35 20, 35 26 A 15 13 0 0 1 5 26 C 5 20, 10 12, 20 3 Z" fill="var(--c)" fill-opacity=".85" stroke="#fff" stroke-opacity=".6" stroke-width="1"/>'+
+    '<ellipse cx="15" cy="25" rx="2.2" ry="3" fill="#0A0C1A"/><ellipse cx="25" cy="25" rx="2.2" ry="3" fill="#0A0C1A"/>'+
+    '<circle cx="15.8" cy="24" r=".8" fill="#fff"/><circle cx="25.8" cy="24" r=".8" fill="#fff"/></svg>';
+});
+
+var APP = "https://app.felicitasmundi.com/communitas-aeterna/index.html";
+var EL = {terra:"#AA8844",acqua:"#4488BB",fuoco:"#CC6644",aria:"#669944",etere:"#9966CC",nexus:"#C9A45C"};
+function v(t,s,href){ return '<a class="voce"'+(href?' href="'+href+'"':'')+'><b>'+t+'</b>'+(s?'<small>'+s+'</small>':'')+'</a>'; }
+function vuota(t){ return '<a class="voce vuota" href="'+APP+'?p=orme">+ '+t+'</a>'; }
+function anche(lista){ return '<h3>si intreccia con</h3><div class="anche">'+lista.map(function(x){
+  return '<button style="--k:'+EL[x[1]]+'" data-f="'+x[0]+'">'+x[2]+'</button>'; }).join("")+'</div>'; }
+
+var FOGLI = {
+  vicinato:{c:"terra",el:"terra · vicinati",t:"Il villaggio diffuso sardo",s:"Villaggio Felicitas · Civiltà Sarda",
+    h:'<h3>gli incontri</h3>'+v("Villaggio Felicitas · 25 ottobre","Cas’ale, Baratili · ore 10",APP+"?p=evento&e=1d8ba038-2393-49fb-9493-3511c9e3ded6")+
+      v("Felicitas Festival · 21 novembre","Centro Sociale, Baratili San Pietro",APP+"?p=evento&e=bfff97a1-3431-4939-b15e-304f14087509")+
+      '<h3>karma yoga aperti</h3>'+v("Mettere a disposizione un punto di ritiro")+v("Mappare i produttori del territorio")+
+      v("Raccogliere le richieste per il primo paniere")+v("Trovare i gruppi d'acquisto solidale già attivi")+
+      anche([["emporio","acqua","Emporio"],["pubblica","aria","pubblica"]])},
+  emporio:{c:"acqua",el:"acqua · emporio",t:"L'Emporio",s:"i prodotti da contattare, quelli per alimentarci, quelli da inserire",
+    h:'<h3>da contattare</h3>'+vuota("un produttore da contattare")+'<h3>per alimentarci</h3>'+vuota("un prodotto del territorio")+
+      '<h3>da inserire</h3>'+vuota("inserisci un prodotto")+
+      anche([["vicinato","terra","Vicinati"],["assistenza","fuoco","Assistenza"],["scuola","etere","Scuola"]])},
+  assistenza:{c:"fuoco",el:"fuoco · assistenza",t:"L'assistenza comunitaria integrata",s:"dall'assistenza spirituale alle terapie, ai trattamenti, ai percorsi e alle consulenze",
+    h:'<h3>i terapeuti della zona</h3>'+vuota("un terapeuta della zona")+'<h3>gli articoli</h3>'+
+      v("Metodo Di Bella: un ponte tra ricerca e coscienza","articolo")+
+      anche([["praticantato","nexus","praticantato"],["emporio","acqua","Emporio"]])},
+  scuola:{c:"etere",el:"etere · scuola",t:"La Scuola",s:"le realtà educative del territorio",
+    h:'<h3>i libri sugli scaffali</h3>'+v("Anima Vagabonda","Parabhakti dāsa · 18 €")+v("Bhagavad-gītā Così com'è","A.C. Bhaktivedānta Swāmī Prabhupāda")+
+      '<h3>le realtà educative</h3>'+vuota("una realtà educativa del territorio")+
+      anche([["praticantato","nexus","praticantato"],["emporio","acqua","Emporio"],["stampa","aria","stampa"]])},
+  praticantato:{c:"nexus",el:"scuola · il primo passo",t:"Il praticantato",s:"con gli esercizi, le video chiamate e i contenuti esclusivi",
+    h:v("Lunedì · ore 19","20 € a settimana, oppure karma yoga")+
+      anche([["scuola","etere","Scuola"],["assistenza","fuoco","Assistenza"]])},
+  stampa:{c:"aria",el:"aria · edizione",t:"Stampa",s:"2000 possibili prodotti da stampare",
+    h:v("Lettera d'intenti","obiettivo del Felicitas Festival")+v("Locandina presentazione","obiettivo del Felicitas Festival")+
+      anche([["scuola","etere","Scuola"],["vicinato","terra","Vicinati"]])},
+  pubblica:{c:"aria",el:"aria · pubblica",t:"Pubblica",s:"una diretta radio, una lezione a pagamento, un articolo",
+    h:v("Una diretta radio")+v("Una lezione a pagamento")+v("Un articolo")+
+      anche([["vicinato","terra","Vicinati"],["praticantato","nexus","praticantato"]])}
+};
+
+var scena = document.getElementById("scena"), foglio = document.getElementById("foglio"), invito = document.getElementById("invito");
+function apri(f){
+  if(f === "lente"){ scena.classList.toggle("lente"); invito.textContent = scena.classList.contains("lente") ? "i fili che non si vedono" : "tocca le cose della stanza"; return; }
+  if(f === "orma"){ location.href = APP + "?p=orme"; return; }
+  var d = FOGLI[f]; if(!d) return;
+  foglio.style.setProperty("--c", EL[d.c]);
+  foglio.innerHTML = '<button class="chiudi" aria-label="chiudi">×</button><div class="el">'+d.el+'</div><h2>'+d.t+'</h2><p class="sot">'+d.s+'</p>'+d.h;
+  foglio.classList.add("su"); foglio.scrollTop = 0;
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest("[data-f]");
+  if(b){ e.preventDefault(); apri(b.getAttribute("data-f")); return; }
+  if(e.target.closest(".chiudi")){ foglio.classList.remove("su"); }
+});
+</script>
+</body>
+</html>
