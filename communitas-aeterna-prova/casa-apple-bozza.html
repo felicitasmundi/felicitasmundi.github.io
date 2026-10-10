@@ -56,7 +56,7 @@ img{display:block;max-width:100%}
 .pieno{padding:0 12px 12px;background:#fff}
 .pieno .unita{height:692px}
 .pieno .pratic{height:692px}
-@media (max-width:734px){.pieno .pratic{height:640px}}
+@media (max-width:734px){.pieno .unita.pratic{height:640px}}
 @media (max-width:1068px){.hero{height:580px}.riga{grid-template-columns:1fr}.riga .unita{height:500px}.pieno .unita{height:580px}.unita .copia{padding-top:48px}}
 @media (max-width:734px){.hero{height:548px}.riga .unita{height:500px}.pieno .unita{height:548px}.unita .copia{padding:40px 24px 0}}
 
@@ -94,9 +94,12 @@ img{display:block;max-width:100%}
 /* ── praticantato ── */
 .pratic .fig img{right:8%;bottom:-6%;height:92%;width:auto;mask-image:linear-gradient(180deg,#000 70%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent)}
 .pratic .copia{text-align:center}
-.pratic .fig img.gab{left:50%;transform:translateX(-50%);bottom:0;width:min(440px,78vw);height:auto;border-radius:28px 28px 0 0;box-shadow:0 30px 80px rgba(0,0,0,.6)}
-.pratic .riga-dati{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.pratic .riga-dati span{font-size:14px;border:1px solid rgba(255,255,255,.28);border-radius:980px;padding:7px 14px;color:rgba(245,245,247,.9)}
+.pratic .fig img.gab{left:50%;transform:translateX(-50%);bottom:0;width:min(560px,100%);height:auto;border-radius:28px 28px 0 0;box-shadow:0 30px 80px rgba(0,0,0,.6);mask-image:linear-gradient(180deg,#000 50%,rgba(0,0,0,.4) 76%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 50%,rgba(0,0,0,.4) 76%,transparent)}
+.pratic .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 66%,rgba(0,0,0,.92) 100%)}
+.pratic .copia.bassa{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 28px 34px}
+.pratic .puntata{display:inline-block;font-size:12px;line-height:1;letter-spacing:.22em;font-weight:600;text-transform:uppercase;border:1px solid rgba(255,255,255,.4);border-radius:980px;padding:5px 11px 4px;margin-right:10px;vertical-align:2px;color:rgba(245,245,247,.88)}
+.pratic .s-tile.quando{margin-top:8px}
+@media (max-width:734px){.pratic .fig img.gab{width:120%;max-width:none;border-radius:22px 22px 0 0}.pratic .copia.bassa{padding:0 16px 24px}.pratic .h-tile{font-size:26px;line-height:30px}.pratic .s-tile{font-size:17px;line-height:21px}.pratic .puntata{font-size:11px;padding:4px 9px 3px;margin-right:8px}}
 @media (max-width:734px){.finestra .foto img{object-position:50% 65%}.finestra .foto::after{background:linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,0) 62%,rgba(0,0,0,.75) 100%)}}
 
 /* ── i quattro riquadri ── */
@@ -176,8 +179,11 @@ footer a+a{margin-left:14px}
   <div class="fig"><img class="gab" src="casa/gab.jpg" alt="Gabriele Dettori"></div>
   <div class="copia">
     <div class="occ">EDUCAZIONE</div>
-    <h2 class="h-tile">Discernimento,<br>strumenti per fare ordine.</h2>
-    <p class="s-tile">Ogni lunedì in diretta alle 19, con Gabriele Dettori.</p>
+  </div>
+  <div class="copia bassa">
+    <h2 class="h-tile">Strumenti per fare ordine.</h2>
+    <p class="s-tile"><span class="puntata">Puntata</span>Discernimento</p>
+    <p class="s-tile quando">Ogni lunedì in diretta alle 19, con Gabriele Dettori.</p>
     <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Entra</a></div>
   </div>
 </section>
