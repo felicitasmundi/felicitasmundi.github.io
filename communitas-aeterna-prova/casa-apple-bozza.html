@@ -98,7 +98,7 @@ img{display:block;max-width:100%}
 @media (max-width:734px){.finestra .foto img{object-position:50% 65%}.finestra .foto::after{background:linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,0) 62%,rgba(0,0,0,.75) 100%)}}
 
 /* ── i quattro riquadri ── */
-.emporio .fig img.libro{bottom:-8%;left:50%;transform:translateX(-50%) rotate(-6deg);height:62%;width:auto;box-shadow:0 30px 60px rgba(0,0,0,.25);border-radius:4px}
+.emporio .fig img.libro{bottom:-8%;left:50%;transform:translateX(-50%) rotate(-6deg);height:56%;width:auto;box-shadow:0 30px 60px rgba(0,0,0,.25);border-radius:4px}
 .mutuo .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;opacity:.95}
 .mutuo .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.25) 45%,rgba(0,0,0,0) 75%)}
 .vicinato .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 0%}
@@ -111,6 +111,9 @@ img{display:block;max-width:100%}
 /* ── festival ── */
 .festival{background:radial-gradient(ellipse at 18% 20%,rgba(212,175,106,.32),transparent 48%),radial-gradient(ellipse at 84% 70%,rgba(204,102,68,.28),transparent 50%),#0b0a14}
 .festival .fig img{left:50%;transform:translateX(-50%);bottom:-6%;width:min(78%,980px);opacity:.95;filter:drop-shadow(0 20px 50px rgba(0,0,0,.6))}
+.unita .occ{font-size:12px;letter-spacing:.3em;font-weight:600;margin-bottom:10px;color:var(--testo2)}
+.unita:not(.chiaro) .occ{color:rgba(245,245,247,.7)}
+.cielo .occ{color:var(--oro)!important}
 .festival .data{font-size:14px;letter-spacing:.28em;color:var(--oro);font-weight:600;margin-bottom:14px}
 .festival .dove{margin-top:18px;font-size:17px;color:rgba(245,245,247,.82)}
 @media (max-width:734px){.festival .fig img{width:120%;bottom:-2%}}
@@ -180,19 +183,21 @@ footer a+a{margin-left:14px}
 <div class="riga">
   <section class="unita chiaro emporio" id="emporio">
     <div class="copia">
-      <h2 class="h-tile">Emporio</h2>
-      <p class="s-tile">Prodotti e produttori. Dal produttore a chi li usa.</p>
-      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Compra</a></div>
+      <div class="occ">EMPORIO</div>
+      <h2 class="h-tile">Letture per evolvere</h2>
+      <p class="s-tile">La scelta antitumore. Giuseppe Di Bella · Macro · 27,90 €</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Acquista</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=orma&o=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Gruppo d’acquisto</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Altri</a></div>
     </div>
-    <div class="fig"><img class="libro" src="casa/libro.jpg" alt="Anima Vagabonda, di Parabhakti dāsa"></div>
+    <div class="fig"><img class="libro" src="https://copertine.hoepli.it/hoepli/xxl/978/8828/9788828527299.jpg" alt="La scelta antitumore, di Giuseppe Di Bella"></div>
   </section>
 
   <section class="unita mutuo" id="mutuo">
     <div class="fig"><img src="casa/casa.jpg" alt="Una stanza luminosa con la finestra sulla campagna"></div>
     <div class="copia">
-      <h2 class="h-tile">Mutuo aiuto</h2>
-      <p class="s-tile">Un metodo di servizio all’altro basato sul mutuo aiuto e sul karma yoga.</p>
-      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Scopri di più</a></div>
+      <div class="occ">MUTUO AIUTO</div>
+      <h2 class="h-tile">Power Series</h2>
+      <p class="s-tile">10 incontri. Si comincia da qui, e si approfondisce con il Bhakti Yoga. Con USCI.</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Partecipa</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Altri percorsi</a></div>
     </div>
   </section>
 
@@ -207,9 +212,10 @@ footer a+a{margin-left:14px}
 
   <section class="unita chiaro stampa" id="stampa">
     <div class="copia">
-      <h2 class="h-tile">Stampa</h2>
-      <p class="s-tile">Stampa e forniture per le fiere. 2000 possibili prodotti da stampare.</p>
-      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Scopri di più</a></div>
+      <div class="occ">STAMPA</div>
+      <h2 class="h-tile">Kit fiera</h2>
+      <p class="s-tile">3000 volantini, 1 roll-up, 2 striscioni e 30 maglie dell’azienda. [ prezzo da Flyeralarm ]</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Ordina</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Altri 2000 prodotti</a></div>
     </div>
     <div class="fig"><img class="a" src="casa/rivista.jpg" alt=""><img class="b" src="casa/rollup.jpg" alt=""></div>
   </section>
