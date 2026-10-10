@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Villaggi diffusi · FelicitasMundi</title>
+<!-- ⭐ 10 ottobre 2026, Gab: «ha senso provare a sviluppare un contesto dove abbiamo un'impaginazione classica come la Apple?
+     con rimandi diretti al festival ed app (su sfondo cosmo), con la finestra su multi livelli (vicinato in cui è scattata, luna
+     nuova e data), un quadrante sull'educazione, "discernimento, strumenti per far ordine", percorso settimanale, in diretta
+     lunedì ore 19, poi su sfondo bianco i quadranti di emporio, mutuo aiuto, vicinato, stampa, e poi un bel quadrante grande
+     con felicitas festival, e sotto footer». BOZZA in prova, dallo schizzo a penna di Gab. -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--oro:#D4AF6A;--avorio:#F5F0E6;--notte:#0A0C1A;--grigio:#f5f5f7;--testo:#1d1d1f;--testo2:#6e6e73;
+  --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Inter,system-ui,sans-serif;color:var(--testo);background:#fff;-webkit-font-smoothing:antialiased;line-height:1.45}
+a{color:inherit;text-decoration:none}
+.sez{padding:96px 24px;text-align:center}
+.sez h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:600;letter-spacing:-.02em;line-height:1.08}
+.sez .sot{font-size:clamp(1.1rem,2.2vw,1.55rem);color:var(--testo2);margin:12px auto 0;max-width:38ch;font-weight:400}
+.link{display:inline-block;margin:22px 10px 0;font-size:1.05rem;color:#2997ff}
+.link::after{content:" ›"}
+.tasto{display:inline-block;margin:24px 8px 0;padding:12px 24px;border-radius:999px;background:#0071e3;color:#fff;font-size:1.05rem}
+.tasto.oro{background:var(--oro);color:var(--notte)}
+.tasto.vuoto{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff}
+
+/* ── la barra ── */
+.barra{position:sticky;top:0;z-index:20;height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(10,12,26,.82);backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px);color:var(--avorio);font-size:.82rem}
+.barra .m{font:400 .95rem 'Cinzel',serif;letter-spacing:.14em}
+.barra nav{display:flex;gap:22px}
+.barra nav a{opacity:.85}
+@media (max-width:700px){.barra nav{display:none}}
+
+/* ── il cielo: festival e app ── */
+.cielo{position:relative;background:var(--notte);color:var(--avorio);overflow:hidden;padding:110px 24px 90px}
+.cielo .stelle{position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(1px 1px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 70%,#fff,transparent),
+  radial-gradient(1.5px 1.5px at 44% 15%,#fff,transparent),radial-gradient(1px 1px at 58% 55%,#fff,transparent),
+  radial-gradient(1px 1px at 72% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 86% 65%,#fff,transparent),
+  radial-gradient(1px 1px at 92% 12%,#fff,transparent),radial-gradient(1px 1px at 6% 85%,#fff,transparent),
+  radial-gradient(1px 1px at 36% 90%,#fff,transparent),radial-gradient(1px 1px at 64% 82%,#fff,transparent),
+  radial-gradient(1px 1px at 80% 92%,#fff,transparent),radial-gradient(1.5px 1.5px at 20% 45%,#fff,transparent);
+  opacity:.75;animation:brilla 7s ease-in-out infinite}
+@keyframes brilla{50%{opacity:.4}}
+.cielo .velo{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 110%,rgba(140,110,200,.28),transparent 60%);pointer-events:none}
+.cielo .dentro{position:relative;max-width:900px;margin:0 auto;text-align:center}
+.cielo .occ{font-size:.78rem;letter-spacing:.32em;color:var(--oro);margin-bottom:18px}
+.cielo h1{font:600 clamp(2.6rem,7vw,4.8rem)/1.02 'Cinzel',serif;letter-spacing:.02em}
+.cielo h1 small{display:block;font:400 clamp(1.1rem,2.6vw,1.6rem) 'Cormorant Garamond',serif;font-style:italic;letter-spacing:0;color:rgba(245,240,230,.75);margin-top:10px}
+.cielo p{font-size:clamp(1.05rem,2vw,1.35rem);color:rgba(245,240,230,.85);max-width:52ch;margin:26px auto 0}
+
+/* ── la finestra a più livelli ── */
+.finestra{position:relative;background:var(--notte);padding:0 0 80px}
+.finestra .quadro{position:relative;max-width:1200px;margin:0 auto;border-radius:28px;overflow:hidden;aspect-ratio:4/3;background:#000}
+@media (max-width:700px){.finestra .quadro{border-radius:0;aspect-ratio:3/4}}
+.finestra img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.livello{position:absolute;left:0;right:0;padding:18px 26px;display:flex;align-items:center;gap:12px;color:#fff;font-size:.95rem;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.livello b{font-weight:600}
+.livello.alto{top:0;background:linear-gradient(rgba(10,12,26,.7),transparent)}
+.livello.basso{bottom:0;background:linear-gradient(transparent,rgba(10,12,26,.78));justify-content:space-between;flex-wrap:wrap}
+.livello .luna{width:16px;height:16px;border-radius:50%;background:#0A0C1A;border:1.5px solid rgba(245,240,230,.9);box-shadow:0 0 10px rgba(212,175,106,.5)}
+.livello .pill{background:rgba(245,240,230,.14);border:1px solid rgba(245,240,230,.35);border-radius:999px;padding:6px 14px;backdrop-filter:blur(8px)}
+.finestra .sotto{max-width:900px;margin:34px auto 0;text-align:center;color:rgba(245,240,230,.8);font-size:1.05rem;padding:0 24px}
+
+/* ── educazione ── */
+.edu{background:#000;color:#fff}
+.edu .q{max-width:1100px;margin:0 auto;border-radius:28px;background:radial-gradient(ellipse at 30% 0%,rgba(153,102,204,.35),transparent 55%),#111;padding:80px 32px}
+.edu .occ{font-size:.78rem;letter-spacing:.3em;color:#b9a3e3;margin-bottom:14px}
+.edu h2{color:#fff}
+.edu .sot{color:rgba(255,255,255,.72)}
+.edu .riga{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.edu .riga span{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:9px 18px;font-size:.98rem}
+
+/* ── i quadranti bianchi ── */
+.griglia{background:var(--grigio);padding:14px}
+.griglia .g{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:820px){.griglia .g{grid-template-columns:1fr}}
+.quad{background:#fff;border-radius:24px;padding:64px 28px;text-align:center;min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.quad .occ{font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--c);margin-bottom:12px}
+.quad h2{font-size:clamp(1.9rem,3.6vw,2.6rem);font-weight:600;letter-spacing:-.02em}
+.quad .sot{font-size:1.12rem;color:var(--testo2);max-width:36ch;margin:10px auto 0}
+.quad .segno{width:72px;height:72px;border-radius:50%;margin:30px auto 0;background:color-mix(in srgb,var(--c) 14%,white);display:flex;align-items:center;justify-content:center}
+.quad .segno i{width:30px;height:30px;border-radius:50%;background:var(--c);display:block}
+.quad .voci{margin:22px 0 0;list-style:none;color:var(--testo2);font-size:.98rem;line-height:1.7}
+
+/* ── il festival ── */
+.festival{background:var(--grigio);padding:14px 14px 14px}
+.festival .q{max-width:1400px;margin:0 auto;border-radius:24px;overflow:hidden;position:relative;min-height:620px;display:flex;align-items:flex-end;
+  background:linear-gradient(180deg,rgba(10,12,26,.1),rgba(10,12,26,.85)),radial-gradient(ellipse at 20% 20%,rgba(212,175,106,.35),transparent 50%),radial-gradient(ellipse at 80% 60%,rgba(204,102,68,.35),transparent 50%),#1b1530;color:#fff;padding:64px 32px;text-align:left}
+.festival .occ{font-size:.78rem;letter-spacing:.3em;color:var(--oro);margin-bottom:12px}
+.festival h2{font:600 clamp(2.4rem,6vw,4.4rem)/1.02 'Cinzel',serif;letter-spacing:.02em}
+.festival .sot{font-size:clamp(1.1rem,2.2vw,1.5rem);color:rgba(255,255,255,.82);margin-top:12px;max-width:44ch}
+.festival .dati{display:flex;gap:28px;flex-wrap:wrap;margin-top:26px;font-size:1.05rem}
+.festival .dati b{display:block;font-size:.72rem;letter-spacing:.24em;color:var(--oro);font-weight:400;margin-bottom:4px}
+
+/* ── piede ── */
+footer{background:var(--grigio);color:var(--testo2);font-size:.8rem;padding:40px 24px 60px;text-align:center;border-top:1px solid #d2d2d7}
+footer p{margin:6px 0}
+footer a{color:#424245;margin:0 10px}
+</style>
+</head>
+<body>
+
+<header class="barra">
+  <a class="m" href="#">FELICITASMUNDI</a>
+  <nav><a href="#vicinato">Vicinato</a><a href="#emporio">Emporio</a><a href="#mutuo">Mutuo aiuto</a><a href="#stampa">Stampa</a><a href="#educazione">Praticantato</a><a href="#festival">Festival</a><a href="https://app.felicitasmundi.com/communitas-aeterna/index.html">App</a></nav>
+</header>
+
+<!-- il cielo: festival e app -->
+<section class="cielo">
+  <div class="stelle"></div><div class="velo"></div>
+  <div class="dentro">
+    <div class="occ">COMUNITÀ ETERNA</div>
+    <h1>Villaggi diffusi<small>FelicitasMundi</small></h1>
+    <p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p>
+    <a class="tasto oro" href="#festival">Felicitas Festival</a>
+    <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna/index.html">L’app</a>
+  </div>
+</section>
+
+<!-- la finestra a più livelli -->
+<section class="finestra" id="vicinato">
+  <div class="quadro">
+    <img src="finestra-vicinato.jpg" alt="Una finestra ad arco aperta sul mare e su una scogliera verde">
+    <div class="livello alto"><span class="pill">vicinato · [ dove è stata scattata ]</span></div>
+    <div class="livello basso">
+      <span><span class="luna" aria-hidden="true"></span>&nbsp; <b>luna nuova</b> · sabato 10 ottobre</span>
+      <span class="pill">Villaggio Felicitas · Civiltà Sarda</span>
+    </div>
+  </div>
+  <p class="sotto">Ogni finestra è un vicinato. Dietro la foto ci sono le persone, i prodotti, i bisogni e gli incontri di quel luogo.</p>
+</section>
+
+<!-- educazione -->
+<section class="sez edu" id="educazione">
+  <div class="q">
+    <div class="occ">SCUOLA · IL PRIMO PASSO</div>
+    <h2>Discernimento,<br>strumenti per fare ordine</h2>
+    <p class="sot">Il praticantato: percorso settimanale, in diretta lunedì ore 19.</p>
+    <div class="riga"><span>20 € a settimana</span><span>oppure karma yoga</span><span>luna nuova · luna piena</span></div>
+    <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Entra nel praticantato</a>
+  </div>
+</section>
+
+<!-- i quattro quadranti -->
+<section class="griglia">
+  <div class="g">
+    <article class="quad" id="emporio" style="--c:var(--acqua)">
+      <div class="occ">acqua</div>
+      <h2>Emporio</h2>
+      <p class="sot">Prodotti e produttori. Dal produttore direttamente a chi li usa.</p>
+      <div class="segno"><i></i></div>
+      <ul class="voci"><li>Anima Vagabonda · Parabhakti dāsa</li><li>Bhagavad-gītā Così com’è</li><li>Nexus · strumenti di coscienza</li></ul>
+      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Apri l’Emporio</a>
+    </article>
+    <article class="quad" id="mutuo" style="--c:var(--fuoco)">
+      <div class="occ">fuoco</div>
+      <h2>Mutuo aiuto</h2>
+      <p class="sot">Un metodo di servizio all’altro basato sul mutuo aiuto e sul karma yoga: dall’assistenza spirituale alle terapie, ai trattamenti, ai percorsi e alle consulenze.</p>
+      <div class="segno"><i></i></div>
+      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Apri il mutuo aiuto</a>
+    </article>
+    <article class="quad" style="--c:var(--terra)">
+      <div class="occ">terra</div>
+      <h2>Vicinato</h2>
+      <p class="sot">Le comunità del territorio: cosa c’è bisogno e cosa si offre, con i calendari aggiornati.</p>
+      <div class="segno"><i></i></div>
+      <ul class="voci"><li>Villaggio Felicitas · 25 ottobre · Cas’ale, Baratili · ore 10</li><li>Mettere a disposizione un punto di ritiro</li><li>Mappare i produttori del territorio</li></ul>
+      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=orma&o=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Apri il villaggio</a>
+    </article>
+    <article class="quad" id="stampa" style="--c:var(--aria)">
+      <div class="occ">aria</div>
+      <h2>Stampa</h2>
+      <p class="sot">Stampa e forniture per le fiere. 2000 possibili prodotti da stampare.</p>
+      <div class="segno"><i></i></div>
+      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Apri l’Edizione</a>
+    </article>
+  </div>
+</section>
+
+<!-- il festival -->
+<section class="festival" id="festival">
+  <div class="q">
+    <div>
+      <div class="occ">21 NOVEMBRE 2026</div>
+      <h2>Felicitas Festival</h2>
+      <p class="sot">Felicitas Festival è il contesto stagionale ed itinerante tra i vicinati.</p>
+      <div class="dati">
+        <div><b>DOVE</b>Centro Sociale · Baratili San Pietro, Oristano</div>
+        <div><b>QUANDO</b>sabato 21 novembre, dalle 10</div>
+        <div><b>COSA</b>mestieri antichi · emporio · mutuo aiuto · conferenze</div>
+      </div>
+      <a class="tasto oro" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=bfff97a1-3431-4939-b15e-304f14087509">Ci sarò</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Felicitas Omnia S.r.l.s. · Sassari · P.IVA 03075740906 · FelicitasMundi · Comunità Eterna</p>
+  <p><a href="https://app.felicitasmundi.com/communitas-aeterna/privacy.html">Privacy</a><a href="https://app.felicitasmundi.com/communitas-aeterna/condizioni.html">Condizioni</a><a href="https://app.felicitasmundi.com/communitas-aeterna/index.html">App</a></p>
+  <p>bozza in prova · 10 ottobre 2026</p>
+</footer>
+
+</body>
+</html>
