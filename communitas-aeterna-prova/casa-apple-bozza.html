@@ -50,10 +50,12 @@ img{display:block;max-width:100%}
 .unita .copia{position:relative;z-index:2;padding-top:53px}
 .unita.chiaro .s-tile,.unita.chiaro .s-hero{color:var(--testo)}
 .hero{height:692px}
+.cielo.hero{height:auto;min-height:692px;padding-bottom:72px}
 .riga{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;background:#fff}
 .riga .unita{height:580px;border-radius:0}
 .pieno{padding:0 12px 12px;background:#fff}
 .pieno .unita{height:692px}
+.pieno .pratic{height:auto;min-height:0;padding-bottom:64px}
 @media (max-width:1068px){.hero{height:580px}.riga{grid-template-columns:1fr}.riga .unita{height:500px}.pieno .unita{height:580px}.unita .copia{padding-top:48px}}
 @media (max-width:734px){.hero{height:548px}.riga .unita{height:500px}.pieno .unita{height:548px}.unita .copia{padding:40px 24px 0}}
 
@@ -72,7 +74,7 @@ img{display:block;max-width:100%}
   radial-gradient(1px 1px at 44% 30%,#fff,transparent),radial-gradient(1px 1px at 88% 36%,#fff,transparent),radial-gradient(1px 1px at 70% 6%,#fff,transparent)}
 .cielo .copia{padding-top:96px}
 .cielo .occ{font-size:12px;letter-spacing:.3em;color:var(--oro);margin-bottom:22px;font-weight:600}
-.cielo .nexus3d{position:relative;width:min(360px,70vw);aspect-ratio:1;margin:28px auto 0}
+.cielo .nexus3d{position:relative;width:min(380px,72vw);aspect-ratio:1;margin:64px auto 0}
 @media (max-width:734px){.cielo .copia{padding-top:72px}.cielo .nexus3d{margin-top:16px}}
 
 /* ── finestra a più livelli ── */
@@ -89,22 +91,21 @@ img{display:block;max-width:100%}
 
 /* ── praticantato ── */
 .pratic .fig img{right:8%;bottom:-6%;height:92%;width:auto;mask-image:linear-gradient(180deg,#000 70%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent)}
-.pratic .copia{text-align:left;padding-left:9%;max-width:60%}
-.pratic .ctas{justify-content:flex-start}
+.pratic .copia{text-align:center}
 .pratic .riga-dati{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .pratic .riga-dati span{font-size:14px;border:1px solid rgba(255,255,255,.28);border-radius:980px;padding:7px 14px;color:rgba(245,245,247,.9)}
-@media (max-width:1068px){.pratic .copia{max-width:100%;padding:48px 24px 0;text-align:center}.pratic .ctas{justify-content:center}.pratic .riga-dati{justify-content:center}.pratic .fig img{right:50%;transform:translateX(50%);height:46%;bottom:-8%}}
 @media (max-width:734px){.finestra .foto img{object-position:50% 65%}.finestra .foto::after{background:linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,0) 62%,rgba(0,0,0,.75) 100%)}}
 
 /* ── i quattro riquadri ── */
-.emporio .fig img.libro{bottom:-8%;left:50%;transform:translateX(-50%) rotate(-6deg);height:56%;width:auto;box-shadow:0 30px 60px rgba(0,0,0,.25);border-radius:4px}
-.mutuo .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;opacity:.95}
-.mutuo .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.25) 45%,rgba(0,0,0,0) 75%)}
+.emporio .fig img.libro{bottom:7%;left:50%;transform:translateX(-50%);height:54%;width:auto;box-shadow:0 30px 60px rgba(0,0,0,.25);border-radius:4px}
+.mutuo .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 35%}
+.mutuo .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.5) 42%,rgba(0,0,0,0) 70%)}
 .vicinato .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 0%}
 .vicinato .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.55) 38%,rgba(0,0,0,0) 68%)}
 .unita.chiaro.stampa{background:#e2d5c2}
-.stampa .fig img.a{left:50%;transform:translateX(-50%);bottom:-10%;height:68%;width:auto}
-.stampa .fig img.b{display:none}
+.stampa .fig.kit{display:grid;grid-template-columns:repeat(4,1fr);align-items:end;top:auto;height:60%;padding:0 2%;gap:0}
+.stampa .fig.kit img{position:static;width:100%;height:auto;object-fit:contain}
+@media (max-width:734px){.stampa .fig.kit{grid-template-columns:repeat(2,1fr);height:58%}}
 @media (max-width:734px){.emporio .fig img.libro{height:54%}}
 
 /* ── festival ── */
@@ -144,7 +145,7 @@ footer a+a{margin-left:14px}
   <div class="copia">
     <div class="occ">COMUNITÀ ETERNA</div>
     <h1 class="h-hero">Villaggi diffusi.</h1>
-    <p class="s-hero">FelicitasMundi. Il primo è la Sardegna.</p>
+    <p class="s-hero">Il primo è la Sardegna.</p>
     <div class="ctas"><a class="cta" href="#festival">Felicitas Festival</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html">Entra nell’app</a></div>
     <div class="nexus3d"><ak-nexus3d aria-hidden="true"></ak-nexus3d></div>
   </div>
@@ -168,9 +169,10 @@ footer a+a{margin-left:14px}
 <!-- educazione -->
 <div class="pieno" id="praticantato">
 <section class="unita pratic">
-  <div class="fig"><img src="casa/figura.jpg" alt=""></div>
   <div class="copia">
+    <div class="occ">EDUCAZIONE</div>
     <h2 class="h-tile">Discernimento,<br>strumenti per fare ordine.</h2>
+    <p class="s-tile">Ogni lunedì in diretta alle 19, con Gabriele Dettori.</p>
     <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Entra</a></div>
   </div>
 </section>
@@ -189,11 +191,11 @@ footer a+a{margin-left:14px}
   </section>
 
   <section class="unita mutuo" id="mutuo">
-    <div class="fig"><img src="casa/casa.jpg" alt="Una stanza luminosa con la finestra sulla campagna"></div>
+    <div class="fig"><img src="casa/krishna.jpg" alt="Le divinità del tempio di Prabhupada Desh"></div>
     <div class="copia">
       <div class="occ">MUTUO AIUTO</div>
       <h2 class="h-tile">Power Series</h2>
-      <p class="s-tile">10 incontri. Si comincia da qui, e si approfondisce con il Bhakti Yoga. Con USCI.</p>
+      <p class="s-tile">Dieci incontri per cominciare. Poi il Bhakti Yoga, sette livelli da dieci incontri. Con i devoti dell’USCI.</p>
       <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Partecipa</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Altri percorsi</a></div>
     </div>
   </section>
@@ -214,15 +216,14 @@ footer a+a{margin-left:14px}
       <p class="s-tile">2500 volantini, 1 roll-up, 2 striscioni e 30 maglie dell’azienda. 387,66 €</p>
       <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Ordina</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Altri 2000 prodotti</a></div>
     </div>
-    <div class="fig"><img class="a" src="casa/rivista.jpg" alt=""><img class="b" src="casa/rollup.jpg" alt=""></div>
+    <div class="fig kit"><img src="casa/kit-volantino.jpg" alt="volantini"><img src="casa/kit-rollup.jpg" alt="roll-up"><img src="casa/kit-bandiera.jpg" alt="striscioni"><img src="casa/kit-tshirt.jpg" alt="maglie"></div>
   </section>
 </div>
 
 <!-- il festival -->
 <div class="pieno" id="festival">
 <section class="unita festival">
-  <div class="fig"><img src="casa/sigillo.png" alt="Il sigillo di FelicitasMundi"></div>
-  <div class="copia">
+    <div class="copia">
     <div class="data">21 NOVEMBRE 2026</div>
     <h2 class="h-hero">Felicitas Festival.</h2>
     <p class="s-hero">Il contesto stagionale ed itinerante tra i vicinati.</p>
