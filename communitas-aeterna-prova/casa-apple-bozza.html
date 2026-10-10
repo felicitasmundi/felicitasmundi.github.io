@@ -5,204 +5,243 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>Villaggi diffusi · FelicitasMundi</title>
-<!-- ⭐ 10 ottobre 2026, Gab: «ha senso provare a sviluppare un contesto dove abbiamo un'impaginazione classica come la Apple?
-     con rimandi diretti al festival ed app (su sfondo cosmo), con la finestra su multi livelli (vicinato in cui è scattata, luna
-     nuova e data), un quadrante sull'educazione, "discernimento, strumenti per far ordine", percorso settimanale, in diretta
-     lunedì ore 19, poi su sfondo bianco i quadranti di emporio, mutuo aiuto, vicinato, stampa, e poi un bel quadrante grande
-     con felicitas festival, e sotto footer». BOZZA in prova, dallo schizzo a penna di Gab. -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<!-- ⭐ 10 ottobre 2026, Gab: «un'impaginazione classica come la Apple… con rimandi diretti al festival ed app (su sfondo cosmo),
+     con la finestra su multi livelli (vicinato in cui è scattata, luna nuova e data), un quadrante sull'educazione "discernimento,
+     strumenti per far ordine", percorso settimanale, in diretta lunedì ore 19, poi su sfondo bianco i quadranti di emporio, mutuo
+     aiuto, vicinato, stampa, e poi un bel quadrante grande con felicitas festival e sotto footer».
+     Misure prese da apple.com/it il 10 ottobre: barra 44 · hero 692 · titolo 56/60 peso 600 · sottotitolo 28/32 · riquadri 702×580
+     con 12 di aria · titolo riquadro 40/44 · sottotitolo 21/25 · tasti 17 px, 11×21, raggio 980, #0071e3 · sfondi #000 e #f5f5f7. -->
 <style>
-:root{--oro:#D4AF6A;--avorio:#F5F0E6;--notte:#0A0C1A;--grigio:#f5f5f7;--testo:#1d1d1f;--testo2:#6e6e73;
-  --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC}
+:root{--nero:#000;--grigio:#f5f5f7;--testo:#1d1d1f;--testo2:#6e6e73;--chiaro:#f5f5f7;--blu:#0071e3;--blu2:#2997ff;--blu3:#0066cc;--oro:#D4AF6A}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Inter,system-ui,sans-serif;color:var(--testo);background:#fff;-webkit-font-smoothing:antialiased;line-height:1.45}
+body{font-family:"SF Pro Text","SF Pro Display",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--testo);background:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 a{color:inherit;text-decoration:none}
-.sez{padding:96px 24px;text-align:center}
-.sez h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:600;letter-spacing:-.02em;line-height:1.08}
-.sez .sot{font-size:clamp(1.1rem,2.2vw,1.55rem);color:var(--testo2);margin:12px auto 0;max-width:38ch;font-weight:400}
-.link{display:inline-block;margin:22px 10px 0;font-size:1.05rem;color:#2997ff}
-.link::after{content:" ›"}
-.tasto{display:inline-block;margin:24px 8px 0;padding:12px 24px;border-radius:999px;background:#0071e3;color:#fff;font-size:1.05rem}
-.tasto.oro{background:var(--oro);color:var(--notte)}
-.tasto.vuoto{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff}
+img{display:block;max-width:100%}
 
-/* ── la barra ── */
-.barra{position:sticky;top:0;z-index:20;height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(10,12,26,.82);backdrop-filter:saturate(1.8) blur(20px);-webkit-backdrop-filter:saturate(1.8) blur(20px);color:var(--avorio);font-size:.82rem}
-.barra .m{font:400 .95rem 'Cinzel',serif;letter-spacing:.14em}
-.barra nav{display:flex;gap:22px}
-.barra nav a{opacity:.85}
-@media (max-width:700px){.barra nav{display:none}}
+/* ── barra ── */
+.barra{position:sticky;top:0;z-index:50;height:44px;background:rgba(0,0,0,.8);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);color:#f5f5f7}
+.barra .in{max-width:1024px;margin:0 auto;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;letter-spacing:-.01em}
+.barra .m{font-size:14px;font-weight:600;letter-spacing:.06em;opacity:.95}
+.barra nav{display:flex;gap:30px}
+.barra nav a{opacity:.8;transition:opacity .2s}
+.barra nav a:hover{opacity:1}
+@media (max-width:833px){.barra nav{display:none}}
 
-/* ── il cielo: festival e app ── */
-.cielo{position:relative;background:var(--notte);color:var(--avorio);overflow:hidden;padding:110px 24px 90px}
-.cielo .stelle{position:absolute;inset:0;pointer-events:none;
-  background-image:radial-gradient(1px 1px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 70%,#fff,transparent),
-  radial-gradient(1.5px 1.5px at 44% 15%,#fff,transparent),radial-gradient(1px 1px at 58% 55%,#fff,transparent),
-  radial-gradient(1px 1px at 72% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 86% 65%,#fff,transparent),
-  radial-gradient(1px 1px at 92% 12%,#fff,transparent),radial-gradient(1px 1px at 6% 85%,#fff,transparent),
-  radial-gradient(1px 1px at 36% 90%,#fff,transparent),radial-gradient(1px 1px at 64% 82%,#fff,transparent),
-  radial-gradient(1px 1px at 80% 92%,#fff,transparent),radial-gradient(1.5px 1.5px at 20% 45%,#fff,transparent);
-  opacity:.75;animation:brilla 7s ease-in-out infinite}
-@keyframes brilla{50%{opacity:.4}}
-.cielo .velo{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 110%,rgba(140,110,200,.28),transparent 60%);pointer-events:none}
-.cielo .dentro{position:relative;max-width:900px;margin:0 auto;text-align:center}
-.cielo .occ{font-size:.78rem;letter-spacing:.32em;color:var(--oro);margin-bottom:18px}
-.cielo h1{font:600 clamp(2.6rem,7vw,4.8rem)/1.02 'Cinzel',serif;letter-spacing:.02em}
-.cielo h1 small{display:block;font:400 clamp(1.1rem,2.6vw,1.6rem) 'Cormorant Garamond',serif;font-style:italic;letter-spacing:0;color:rgba(245,240,230,.75);margin-top:10px}
-.cielo p{font-size:clamp(1.05rem,2vw,1.35rem);color:rgba(245,240,230,.85);max-width:52ch;margin:26px auto 0}
+/* ── tipografia e tasti, misure Apple ── */
+.h-hero{font-size:56px;line-height:60px;font-weight:600;letter-spacing:-.28px}
+.s-hero{font-size:28px;line-height:32px;font-weight:400;letter-spacing:.196px;margin-top:6px}
+.h-tile{font-size:40px;line-height:44px;font-weight:600}
+.s-tile{font-size:21px;line-height:25px;font-weight:400;letter-spacing:.011em;margin-top:6px}
+.ctas{display:flex;gap:14px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+.cta{display:inline-block;font-size:17px;line-height:1.17648;padding:11px 21px;border-radius:980px;background:var(--blu);color:#fff;border:1px solid transparent;transition:background .2s}
+.cta:hover{background:#0077ed}
+.cta.secondario{background:transparent;color:var(--blu2);border-color:var(--blu2)}
+.cta.secondario:hover{background:var(--blu2);color:#fff}
+.chiaro .cta.secondario{color:var(--blu3);border-color:var(--blu3)}
+.chiaro .cta.secondario:hover{background:var(--blu3);color:#fff}
+@media (max-width:1068px){.h-hero{font-size:48px;line-height:52px}.s-hero{font-size:24px;line-height:28px}.h-tile{font-size:32px;line-height:36px}.s-tile{font-size:19px;line-height:23px}}
+@media (max-width:734px){.h-hero{font-size:40px;line-height:44px;letter-spacing:0}.s-hero{font-size:21px;line-height:25px}.h-tile{font-size:32px;line-height:36px}.s-tile{font-size:19px;line-height:23px}.cta{font-size:14px;padding:8px 15px;line-height:1.28577}.ctas{gap:10px;margin-top:14px}}
 
-/* ── la finestra a più livelli ── */
-.finestra{position:relative;background:var(--notte);padding:0 0 80px}
-.finestra .quadro{position:relative;max-width:1200px;margin:0 auto;border-radius:28px;overflow:hidden;aspect-ratio:4/3;background:#000}
-@media (max-width:700px){.finestra .quadro{border-radius:0;aspect-ratio:3/4}}
-.finestra img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.livello{position:absolute;left:0;right:0;padding:18px 26px;display:flex;align-items:center;gap:12px;color:#fff;font-size:.95rem;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+/* ── unità e riquadri ── */
+.unita{position:relative;overflow:hidden;text-align:center;color:#f5f5f7;background:var(--nero)}
+.unita.chiaro{background:var(--chiaro);color:var(--testo)}
+.unita .copia{position:relative;z-index:2;padding-top:53px}
+.unita.chiaro .s-tile,.unita.chiaro .s-hero{color:var(--testo)}
+.hero{height:692px}
+.riga{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px;background:#fff}
+.riga .unita{height:580px;border-radius:0}
+.pieno{padding:0 12px 12px;background:#fff}
+.pieno .unita{height:692px}
+@media (max-width:1068px){.hero{height:580px}.riga{grid-template-columns:1fr}.riga .unita{height:500px}.pieno .unita{height:580px}.unita .copia{padding-top:48px}}
+@media (max-width:734px){.hero{height:548px}.riga .unita{height:500px}.pieno .unita{height:548px}.unita .copia{padding:40px 24px 0}}
+
+/* le immagini dentro i riquadri */
+.fig{position:absolute;left:0;right:0;bottom:0;top:0;z-index:1;pointer-events:none}
+.fig img{position:absolute}
+.fig .centro{left:50%;transform:translateX(-50%)}
+
+/* ── cielo ── */
+.cielo{background:radial-gradient(ellipse at 50% 120%,rgba(140,110,200,.35),transparent 55%),#000}
+.cielo .stelle{position:absolute;inset:0;z-index:0;opacity:.8;
+  background-image:radial-gradient(1px 1px at 8% 18%,#fff,transparent),radial-gradient(1px 1px at 22% 62%,#fff,transparent),radial-gradient(1.4px 1.4px at 37% 12%,#fff,transparent),
+  radial-gradient(1px 1px at 51% 48%,#fff,transparent),radial-gradient(1px 1px at 66% 24%,#fff,transparent),radial-gradient(1.4px 1.4px at 81% 58%,#fff,transparent),
+  radial-gradient(1px 1px at 92% 9%,#fff,transparent),radial-gradient(1px 1px at 4% 80%,#fff,transparent),radial-gradient(1px 1px at 30% 88%,#fff,transparent),
+  radial-gradient(1px 1px at 58% 78%,#fff,transparent),radial-gradient(1px 1px at 76% 86%,#fff,transparent),radial-gradient(1.4px 1.4px at 16% 40%,#fff,transparent),
+  radial-gradient(1px 1px at 44% 30%,#fff,transparent),radial-gradient(1px 1px at 88% 36%,#fff,transparent),radial-gradient(1px 1px at 70% 6%,#fff,transparent)}
+.cielo .copia{padding-top:96px}
+.cielo .occ{font-size:12px;letter-spacing:.3em;color:var(--oro);margin-bottom:22px;font-weight:600}
+.cielo .nexus{width:220px;height:220px;margin:48px auto 0;border-radius:50%;background:radial-gradient(circle,rgba(245,240,230,.98) 55%,rgba(245,240,230,0) 72%);display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 60px rgba(212,175,106,.45))}
+.cielo .nexus img{width:170px;height:170px;animation:gira 90s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+@media (max-width:734px){.cielo .copia{padding-top:72px}.cielo .nexus{width:160px;height:160px;margin-top:36px}.cielo .nexus img{width:124px;height:124px}}
+
+/* ── finestra a più livelli ── */
+.finestra .foto{position:absolute;inset:0;z-index:0}
+.finestra .foto img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.finestra .foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.08) 34%,rgba(0,0,0,0) 60%,rgba(0,0,0,.72) 100%)}
+.finestra .copia{text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.livelli{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;justify-content:space-between;align-items:flex-end;padding:0 32px 30px;gap:12px;flex-wrap:wrap}
+.livello{display:inline-flex;align-items:center;gap:9px;font-size:14px;letter-spacing:.01em;color:#fff;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.28);border-radius:980px;padding:8px 16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .livello b{font-weight:600}
-.livello.alto{top:0;background:linear-gradient(rgba(10,12,26,.7),transparent)}
-.livello.basso{bottom:0;background:linear-gradient(transparent,rgba(10,12,26,.78));justify-content:space-between;flex-wrap:wrap}
-.livello .luna{width:16px;height:16px;border-radius:50%;background:#0A0C1A;border:1.5px solid rgba(245,240,230,.9);box-shadow:0 0 10px rgba(212,175,106,.5)}
-.livello .pill{background:rgba(245,240,230,.14);border:1px solid rgba(245,240,230,.35);border-radius:999px;padding:6px 14px;backdrop-filter:blur(8px)}
-.finestra .sotto{max-width:900px;margin:34px auto 0;text-align:center;color:rgba(245,240,230,.8);font-size:1.05rem;padding:0 24px}
+.livello .luna{width:14px;height:14px;border-radius:50%;background:#000;border:1.5px solid #fff;box-shadow:0 0 8px rgba(212,175,106,.6)}
+.livello .punto{width:9px;height:9px;border-radius:50%;background:var(--oro)}
+@media (max-width:734px){.livelli{padding:0 16px 18px}.livello{font-size:12px;padding:7px 12px}}
 
-/* ── educazione ── */
-.edu{background:#000;color:#fff}
-.edu .q{max-width:1100px;margin:0 auto;border-radius:28px;background:radial-gradient(ellipse at 30% 0%,rgba(153,102,204,.35),transparent 55%),#111;padding:80px 32px}
-.edu .occ{font-size:.78rem;letter-spacing:.3em;color:#b9a3e3;margin-bottom:14px}
-.edu h2{color:#fff}
-.edu .sot{color:rgba(255,255,255,.72)}
-.edu .riga{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px}
-.edu .riga span{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:9px 18px;font-size:.98rem}
+/* ── praticantato ── */
+.pratic .fig img{right:8%;bottom:-6%;height:92%;width:auto;mask-image:linear-gradient(180deg,#000 70%,transparent);-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent)}
+.pratic .copia{text-align:left;padding-left:9%;max-width:60%}
+.pratic .ctas{justify-content:flex-start}
+.pratic .riga-dati{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.pratic .riga-dati span{font-size:14px;border:1px solid rgba(255,255,255,.28);border-radius:980px;padding:7px 14px;color:rgba(245,245,247,.9)}
+@media (max-width:1068px){.pratic .copia{max-width:100%;padding:48px 24px 0;text-align:center}.pratic .ctas{justify-content:center}.pratic .riga-dati{justify-content:center}.pratic .fig img{right:50%;transform:translateX(50%);height:46%;bottom:-8%}}
+@media (max-width:734px){.finestra .foto img{object-position:50% 65%}.finestra .foto::after{background:linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,0) 62%,rgba(0,0,0,.75) 100%)}}
 
-/* ── i quadranti bianchi ── */
-.griglia{background:var(--grigio);padding:14px}
-.griglia .g{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media (max-width:820px){.griglia .g{grid-template-columns:1fr}}
-.quad{background:#fff;border-radius:24px;padding:64px 28px;text-align:center;min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
-.quad .occ{font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--c);margin-bottom:12px}
-.quad h2{font-size:clamp(1.9rem,3.6vw,2.6rem);font-weight:600;letter-spacing:-.02em}
-.quad .sot{font-size:1.12rem;color:var(--testo2);max-width:36ch;margin:10px auto 0}
-.quad .segno{width:72px;height:72px;border-radius:50%;margin:30px auto 0;background:color-mix(in srgb,var(--c) 14%,white);display:flex;align-items:center;justify-content:center}
-.quad .segno i{width:30px;height:30px;border-radius:50%;background:var(--c);display:block}
-.quad .voci{margin:22px 0 0;list-style:none;color:var(--testo2);font-size:.98rem;line-height:1.7}
+/* ── i quattro riquadri ── */
+.emporio .fig img.libro{bottom:-8%;left:50%;transform:translateX(-50%) rotate(-6deg);height:62%;width:auto;box-shadow:0 30px 60px rgba(0,0,0,.25);border-radius:4px}
+.mutuo .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;opacity:.95}
+.mutuo .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.25) 45%,rgba(0,0,0,0) 75%)}
+.vicinato .fig img{width:100%;height:100%;object-fit:cover;object-position:50% 0%}
+.vicinato .fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.55) 38%,rgba(0,0,0,0) 68%)}
+.unita.chiaro.stampa{background:#e2d5c2}
+.stampa .fig img.a{left:50%;transform:translateX(-50%);bottom:-10%;height:68%;width:auto}
+.stampa .fig img.b{display:none}
+@media (max-width:734px){.emporio .fig img.libro{height:54%}}
 
-/* ── il festival ── */
-.festival{background:var(--grigio);padding:14px 14px 14px}
-.festival .q{max-width:1400px;margin:0 auto;border-radius:24px;overflow:hidden;position:relative;min-height:620px;display:flex;align-items:flex-end;
-  background:linear-gradient(180deg,rgba(10,12,26,.1),rgba(10,12,26,.85)),radial-gradient(ellipse at 20% 20%,rgba(212,175,106,.35),transparent 50%),radial-gradient(ellipse at 80% 60%,rgba(204,102,68,.35),transparent 50%),#1b1530;color:#fff;padding:64px 32px;text-align:left}
-.festival .occ{font-size:.78rem;letter-spacing:.3em;color:var(--oro);margin-bottom:12px}
-.festival h2{font:600 clamp(2.4rem,6vw,4.4rem)/1.02 'Cinzel',serif;letter-spacing:.02em}
-.festival .sot{font-size:clamp(1.1rem,2.2vw,1.5rem);color:rgba(255,255,255,.82);margin-top:12px;max-width:44ch}
-.festival .dati{display:flex;gap:28px;flex-wrap:wrap;margin-top:26px;font-size:1.05rem}
-.festival .dati b{display:block;font-size:.72rem;letter-spacing:.24em;color:var(--oro);font-weight:400;margin-bottom:4px}
+/* ── festival ── */
+.festival{background:radial-gradient(ellipse at 18% 20%,rgba(212,175,106,.32),transparent 48%),radial-gradient(ellipse at 84% 70%,rgba(204,102,68,.28),transparent 50%),#0b0a14}
+.festival .fig img{left:50%;transform:translateX(-50%);bottom:-6%;width:min(78%,980px);opacity:.95;filter:drop-shadow(0 20px 50px rgba(0,0,0,.6))}
+.festival .data{font-size:14px;letter-spacing:.28em;color:var(--oro);font-weight:600;margin-bottom:14px}
+.festival .dove{margin-top:18px;font-size:17px;color:rgba(245,245,247,.82)}
+@media (max-width:734px){.festival .fig img{width:120%;bottom:-2%}}
 
 /* ── piede ── */
-footer{background:var(--grigio);color:var(--testo2);font-size:.8rem;padding:40px 24px 60px;text-align:center;border-top:1px solid #d2d2d7}
-footer p{margin:6px 0}
-footer a{color:#424245;margin:0 10px}
+footer{background:var(--grigio);color:var(--testo2);font-size:12px;line-height:1.5;padding:30px 22px 48px}
+footer .in{max-width:1024px;margin:0 auto}
+footer .legale{border-bottom:1px solid #d2d2d7;padding-bottom:16px;margin-bottom:14px}
+footer .righe{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+footer a{color:#424245}
+footer a+a{margin-left:14px}
+
+/* ── apparizione allo scorrere ── */
+.copia,.fig{opacity:0;transform:translateY(14px);transition:opacity .9s ease,transform .9s ease}
+.unita.visto .copia,.unita.visto .fig{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.copia,.fig{opacity:1;transform:none;transition:none}.cielo .nexus img{animation:none}}
 </style>
 </head>
 <body>
 
-<header class="barra">
+<header class="barra"><div class="in">
   <a class="m" href="#">FELICITASMUNDI</a>
-  <nav><a href="#vicinato">Vicinato</a><a href="#emporio">Emporio</a><a href="#mutuo">Mutuo aiuto</a><a href="#stampa">Stampa</a><a href="#educazione">Praticantato</a><a href="#festival">Festival</a><a href="https://app.felicitasmundi.com/communitas-aeterna/index.html">App</a></nav>
-</header>
+  <nav><a href="#vicinato">Vicinato</a><a href="#emporio">Emporio</a><a href="#mutuo">Mutuo aiuto</a><a href="#stampa">Stampa</a><a href="#praticantato">Praticantato</a><a href="#festival">Festival</a><a href="https://app.felicitasmundi.com/communitas-aeterna/index.html">App</a></nav>
+</div></header>
 
 <!-- il cielo: festival e app -->
-<section class="cielo">
-  <div class="stelle"></div><div class="velo"></div>
-  <div class="dentro">
+<section class="unita hero cielo">
+  <div class="stelle"></div>
+  <div class="copia">
     <div class="occ">COMUNITÀ ETERNA</div>
-    <h1>Villaggi diffusi<small>FelicitasMundi</small></h1>
-    <p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p>
-    <a class="tasto oro" href="#festival">Felicitas Festival</a>
-    <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna/index.html">L’app</a>
+    <h1 class="h-hero">Villaggi diffusi.</h1>
+    <p class="s-hero">FelicitasMundi. Il primo è la Sardegna.</p>
+    <div class="ctas"><a class="cta" href="#festival">Felicitas Festival</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html">Entra nell’app</a></div>
+    <div class="nexus"><img src="casa/nexus.png" alt="Nexus, il simbolo di FelicitasMundi"></div>
   </div>
 </section>
 
 <!-- la finestra a più livelli -->
-<section class="finestra" id="vicinato">
-  <div class="quadro">
-    <img src="finestra-vicinato.jpg" alt="Una finestra ad arco aperta sul mare e su una scogliera verde">
-    <div class="livello alto"><span class="pill">vicinato · [ dove è stata scattata ]</span></div>
-    <div class="livello basso">
-      <span><span class="luna" aria-hidden="true"></span>&nbsp; <b>luna nuova</b> · sabato 10 ottobre</span>
-      <span class="pill">Villaggio Felicitas · Civiltà Sarda</span>
-    </div>
+<section class="unita hero finestra" id="vicinato">
+  <div class="foto"><img src="casa/finestra.jpg" alt="Una finestra ad arco aperta sul mare e su una scogliera verde"></div>
+  <div class="copia">
+    <h2 class="h-hero">Ogni finestra è un vicinato.</h2>
+    <p class="s-hero">Dietro la foto ci sono le persone, i prodotti, i bisogni e gli incontri di quel luogo.</p>
+    <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=orma&o=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Scopri di più</a></div>
   </div>
-  <p class="sotto">Ogni finestra è un vicinato. Dietro la foto ci sono le persone, i prodotti, i bisogni e gli incontri di quel luogo.</p>
+  <div class="livelli">
+    <span class="livello"><span class="punto"></span>vicinato · [ dove è stata scattata ]</span>
+    <span class="livello"><span class="luna"></span><b>luna nuova</b>&nbsp;· sabato 10 ottobre</span>
+    <span class="livello">Villaggio Felicitas · Civiltà Sarda</span>
+  </div>
 </section>
 
 <!-- educazione -->
-<section class="sez edu" id="educazione">
-  <div class="q">
-    <div class="occ">SCUOLA · IL PRIMO PASSO</div>
-    <h2>Discernimento,<br>strumenti per fare ordine</h2>
-    <p class="sot">Il praticantato: percorso settimanale, in diretta lunedì ore 19.</p>
-    <div class="riga"><span>20 € a settimana</span><span>oppure karma yoga</span><span>luna nuova · luna piena</span></div>
-    <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Entra nel praticantato</a>
+<div class="pieno" id="praticantato">
+<section class="unita pratic">
+  <div class="fig"><img src="casa/figura.jpg" alt=""></div>
+  <div class="copia">
+    <h2 class="h-tile">Discernimento,<br>strumenti per fare ordine.</h2>
+    <p class="s-tile">Il praticantato: percorso settimanale, in diretta lunedì ore 19.</p>
+    <div class="riga-dati"><span>20 € a settimana</span><span>oppure karma yoga</span><span>luna nuova · luna piena</span></div>
+    <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=antahkarana">Entra</a></div>
   </div>
 </section>
+</div>
 
-<!-- i quattro quadranti -->
-<section class="griglia">
-  <div class="g">
-    <article class="quad" id="emporio" style="--c:var(--acqua)">
-      <div class="occ">acqua</div>
-      <h2>Emporio</h2>
-      <p class="sot">Prodotti e produttori. Dal produttore direttamente a chi li usa.</p>
-      <div class="segno"><i></i></div>
-      <ul class="voci"><li>Anima Vagabonda · Parabhakti dāsa</li><li>Bhagavad-gītā Così com’è</li><li>Nexus · strumenti di coscienza</li></ul>
-      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Apri l’Emporio</a>
-    </article>
-    <article class="quad" id="mutuo" style="--c:var(--fuoco)">
-      <div class="occ">fuoco</div>
-      <h2>Mutuo aiuto</h2>
-      <p class="sot">Un metodo di servizio all’altro basato sul mutuo aiuto e sul karma yoga: dall’assistenza spirituale alle terapie, ai trattamenti, ai percorsi e alle consulenze.</p>
-      <div class="segno"><i></i></div>
-      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Apri il mutuo aiuto</a>
-    </article>
-    <article class="quad" style="--c:var(--terra)">
-      <div class="occ">terra</div>
-      <h2>Vicinato</h2>
-      <p class="sot">Le comunità del territorio: cosa c’è bisogno e cosa si offre, con i calendari aggiornati.</p>
-      <div class="segno"><i></i></div>
-      <ul class="voci"><li>Villaggio Felicitas · 25 ottobre · Cas’ale, Baratili · ore 10</li><li>Mettere a disposizione un punto di ritiro</li><li>Mappare i produttori del territorio</li></ul>
-      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=orma&o=5839d11d-9901-49bb-9b2f-f94236bbe2a1">Apri il villaggio</a>
-    </article>
-    <article class="quad" id="stampa" style="--c:var(--aria)">
-      <div class="occ">aria</div>
-      <h2>Stampa</h2>
-      <p class="sot">Stampa e forniture per le fiere. 2000 possibili prodotti da stampare.</p>
-      <div class="segno"><i></i></div>
-      <a class="link" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Apri l’Edizione</a>
-    </article>
-  </div>
-</section>
+<!-- i quattro riquadri -->
+<div class="riga">
+  <section class="unita chiaro emporio" id="emporio">
+    <div class="copia">
+      <h2 class="h-tile">Emporio</h2>
+      <p class="s-tile">Prodotti e produttori. Dal produttore a chi li usa.</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=emporio">Compra</a></div>
+    </div>
+    <div class="fig"><img class="libro" src="casa/libro.jpg" alt="Anima Vagabonda, di Parabhakti dāsa"></div>
+  </section>
+
+  <section class="unita mutuo" id="mutuo">
+    <div class="fig"><img src="casa/casa.jpg" alt="Una stanza luminosa con la finestra sulla campagna"></div>
+    <div class="copia">
+      <h2 class="h-tile">Mutuo aiuto</h2>
+      <p class="s-tile">Un metodo di servizio all’altro basato sul mutuo aiuto e sul karma yoga.</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=assistenza">Scopri di più</a></div>
+    </div>
+  </section>
+
+  <section class="unita vicinato">
+    <div class="fig"><img src="casa/olivi.jpg" alt="Olivi e un prato in Sardegna, con l’orma dorata di FelicitasMundi"></div>
+    <div class="copia">
+      <h2 class="h-tile">Vicinato</h2>
+      <p class="s-tile">Villaggio Felicitas · 25 ottobre · Cas’ale, Baratili · ore 10.</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=1d8ba038-2393-49fb-9493-3511c9e3ded6">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=1d8ba038-2393-49fb-9493-3511c9e3ded6">Ci sarò</a></div>
+    </div>
+  </section>
+
+  <section class="unita chiaro stampa" id="stampa">
+    <div class="copia">
+      <h2 class="h-tile">Stampa</h2>
+      <p class="s-tile">Stampa e forniture per le fiere. 2000 possibili prodotti da stampare.</p>
+      <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/stanze-tempio-bozza.html?s=edizione">Scopri di più</a></div>
+    </div>
+    <div class="fig"><img class="a" src="casa/rivista.jpg" alt=""><img class="b" src="casa/rollup.jpg" alt=""></div>
+  </section>
+</div>
 
 <!-- il festival -->
-<section class="festival" id="festival">
-  <div class="q">
-    <div>
-      <div class="occ">21 NOVEMBRE 2026</div>
-      <h2>Felicitas Festival</h2>
-      <p class="sot">Felicitas Festival è il contesto stagionale ed itinerante tra i vicinati.</p>
-      <div class="dati">
-        <div><b>DOVE</b>Centro Sociale · Baratili San Pietro, Oristano</div>
-        <div><b>QUANDO</b>sabato 21 novembre, dalle 10</div>
-        <div><b>COSA</b>mestieri antichi · emporio · mutuo aiuto · conferenze</div>
-      </div>
-      <a class="tasto oro" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=bfff97a1-3431-4939-b15e-304f14087509">Ci sarò</a>
-    </div>
+<div class="pieno" id="festival">
+<section class="unita festival">
+  <div class="fig"><img src="casa/sigillo.png" alt="Il sigillo di FelicitasMundi"></div>
+  <div class="copia">
+    <div class="data">21 NOVEMBRE 2026</div>
+    <h2 class="h-hero">Felicitas Festival.</h2>
+    <p class="s-hero">Il contesto stagionale ed itinerante tra i vicinati.</p>
+    <p class="dove">Centro Sociale · Baratili San Pietro, Oristano · dalle 10</p>
+    <div class="ctas"><a class="cta" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=bfff97a1-3431-4939-b15e-304f14087509">Scopri di più</a><a class="cta secondario" href="https://app.felicitasmundi.com/communitas-aeterna/index.html?p=evento&e=bfff97a1-3431-4939-b15e-304f14087509">Ci sarò</a></div>
   </div>
 </section>
+</div>
 
-<footer>
-  <p>Felicitas Omnia S.r.l.s. · Sassari · P.IVA 03075740906 · FelicitasMundi · Comunità Eterna</p>
-  <p><a href="https://app.felicitasmundi.com/communitas-aeterna/privacy.html">Privacy</a><a href="https://app.felicitasmundi.com/communitas-aeterna/condizioni.html">Condizioni</a><a href="https://app.felicitasmundi.com/communitas-aeterna/index.html">App</a></p>
-  <p>bozza in prova · 10 ottobre 2026</p>
-</footer>
+<footer><div class="in">
+  <p class="legale">FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p>
+  <div class="righe">
+    <span>Copyright © 2026 Felicitas Omnia S.r.l.s. · Sassari · P.IVA 03075740906</span>
+    <span><a href="https://app.felicitasmundi.com/communitas-aeterna/privacy.html">Privacy</a><a href="https://app.felicitasmundi.com/communitas-aeterna/condizioni.html">Condizioni</a><a href="https://app.felicitasmundi.com/communitas-aeterna/index.html">App</a></span>
+  </div>
+</div></footer>
 
+<script>
+(function(){
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("visto"); io.unobserve(e.target); } }); }, { threshold: .18 });
+  document.querySelectorAll(".unita").forEach(function(u){ io.observe(u); });
+})();
+</script>
 </body>
 </html>
