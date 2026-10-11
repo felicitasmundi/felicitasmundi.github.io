@@ -179,6 +179,8 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .fisso .fm-tasto{flex:1}
 @media (max-width:760px){.fisso{display:flex}}
 .lingua{font-size:11px;letter-spacing:.18em;color:var(--grigio);border:1px solid var(--riga);border-radius:980px;padding:5px 10px}
+.lingua button{font-size:11px;letter-spacing:.18em;color:var(--grigio)}.lingua button.on{color:var(--oro);font-weight:600}
+@media (max-width:860px){.nav .lingua{display:inline-block}}
 </style>
 </head>
 <body>
@@ -186,7 +188,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <div class="nav"><div class="in">
   <div class="m"><button id="apri-stanze" aria-label="la barra">☰</button><span>FELICITAS FESTIVAL · 2026</span></div>
   <div class="sez"><a href="#invito">L'invito</a><a href="#stanze">Le stanze</a><a href="#programma">Il programma</a><a href="#voci">Chi parla</a><a href="#baratili">Baratili</a><a href="#espositori">Espositori e partner</a><a href="#panieri">I panieri</a><a href="#partecipa">Partecipare</a></div>
-  <div style="display:flex;gap:10px;align-items:center"><span class="lingua">IT · <span class="ph">EN</span></span><a class="fm-tasto piccolo cta" href="#partecipa">Ci sarò</a></div>
+  <div style="display:flex;gap:10px;align-items:center;flex:none"><span class="lingua" data-lingua-ferma><button data-lingua="it" class="on">IT</button> · <button data-lingua="en">EN</button></span><a class="fm-tasto piccolo cta" href="#partecipa">Ci sarò</a></div>
 </div></div>
 <div class="trama"></div>
 
@@ -210,27 +212,34 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <!-- ═══ l'invito, in quattro lingue ═══ -->
 <section id="invito" style="padding-top:34px"><div class="in">
   <div class="sez-capo"><div><span class="fm-occ">L'INVITO</span><h2>Ti aspettiamo a Baratili.</h2></div>
-    <div class="lingue"><button class="fm-chip on" data-l="it">Italiano</button><button class="fm-chip" data-l="camp">Campidanese</button><button class="fm-chip" data-l="log">Logudorese</button><button class="fm-chip" data-l="gall">Gallurese</button></div></div>
-  <div class="invito-testo vivo" data-l="it">
+    <div class="lingue" data-lingua-ferma><button class="fm-chip on" data-l="it">Italiano</button><button class="fm-chip" data-l="en">English</button><button class="fm-chip" data-l="camp">Campidanese</button><button class="fm-chip" data-l="log">Logudorese</button><button class="fm-chip" data-l="gall">Gallurese</button></div></div>
+  <div class="invito-testo vivo" data-l="it" data-lingua-ferma>
     <p>Con piacere ti invito a partecipare al Festival Felicitas che si terrà a Baratili San Pietro il 21 novembre.</p>
     <p>Felicitas Mundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p>
     <p>Il festival è la prima occasione di incontro per conoscere la piattaforma Felicitas Mundi che integra coscienza, tecnologia e logistica nella comunità. È un'occasione per avviare l'integrazione di questo progetto con altri progetti e reti attivi nel villaggio Sardegna, a vantaggio di tutto il territorio.</p>
     <p>Dato che non siamo e non vogliamo essere isolati dal resto del mondo, ci sarà anche l'intervento di uno studioso di geopolitica che illustrerà un punto di vista originale sulla situazione internazionale.</p>
     <p>Ci farà piacere averti con noi, con le tue idee, la tua esperienza e ciò che vorrai condividere.</p>
   </div>
-  <div class="invito-testo" data-l="camp">
+  <div class="invito-testo" data-l="en" data-lingua-ferma>
+    <p>It is my pleasure to invite you to the Felicitas Festival, to be held in Baratili San Pietro on 21 November.</p>
+    <p>Felicitas Mundi is a network of diffused villages. The first is Sardinia. The diffused village is made of many neighbourhoods. Each neighbourhood represents and brings into the village its soul, its independence, its talents, its products, its peculiarities and also its needs.</p>
+    <p>The festival is the first occasion to meet and get to know the Felicitas Mundi platform, which brings consciousness, technology and logistics together in the community. It is an occasion to begin integrating this project with other projects and networks active in the Sardinia village, for the benefit of the whole territory.</p>
+    <p>Since we are not, and do not wish to be, isolated from the rest of the world, there will also be a talk by a scholar of geopolitics, who will offer an original point of view on the international situation.</p>
+    <p>We will be glad to have you with us, with your ideas, your experience and whatever you wish to share.</p>
+  </div>
+  <div class="invito-testo" data-l="camp" data-lingua-ferma>
     <p>Cun praxeri ti invitu a pigai parti a su Festival Felicitas, chi s'at a tenni a Baratili San Pietro su 21 de novembri.</p>
     <p>Felicitas Mundi est una reti de biddas difùsias. Sa prima est sa Sardigna. Sa bidda difùsia est cumposta de medas bixinaus. Dònnia bixinau portat in sa bidda s'ànima sua, s'indipendèntzia sua, is talentus suus, is produs suus, is particularidadis suas e fintzas is bisòngius suus.</p>
     <p>Su festival est sa prima ocasioni po s'atobiai e connosci sa prataforma Felicitas Mundi, chi ponit impari cuscèntzia, tecnologia e logìstica in sa comunidadi. Est un'ocasioni po cumentzai a auniri custu progetu cun àterus progetus e retis chi sunt giai ativus in sa bidda Sardigna, a profetu de totu su territòriu.</p>
     <p>Sigumenti no seus e no boleus essi isolaus de su restu de su mundu, nci at a essi fintzas s'interventu de unu studiosu de geopolìtica, chi at a presentai unu puntu de vista originali apitzus de sa situatzioni internatzionali.</p>
   </div>
-  <div class="invito-testo" data-l="log">
+  <div class="invito-testo" data-l="log" data-lingua-ferma>
     <p>Cun piaghere t'invito a participare a su Festival Felicitas, chi s'at a tènnere a Baratili San Pietro su 21 de novembre.</p>
     <p>Felicitas Mundi est una rete de biddas difusas. Sa prima est sa Sardigna. Sa bidda difusa est cumposta dae tantos bighinados. Cada bighinadu rapresentat e portat in sa bidda s'ànima sua, s'indipendèntzia sua, sos talentos suos, sos produtos suos, sas particularidades suas e fintzas sos bisòngios suos.</p>
     <p>Su festival est sa prima ocasione de s'adòbiu pro connòschere sa prataforma Felicitas Mundi, chi integrat cussèntzia, tecnologia e logìstica in sa comunidade. Est un'ocasione pro incumintzare a integrare custu progetu cun àteros progetos e retes ativos in sa bidda Sardigna, a profetu de totu su territòriu.</p>
     <p>Dadu chi no semus e no cherimus èssere isolados dae su restu de su mundu, b'at a èssere fintzas s'interventu de unu istudiosu de geopolìtica, chi at a illustrare unu puntu de vista originale subra sa situatzione internatzionale.</p>
   </div>
-  <div class="invito-testo" data-l="gall">
+  <div class="invito-testo" data-l="gall" data-lingua-ferma>
     <p>Cun piaceri t'invitu a participà a lu Festival Felicitas, chi si tinarà a Baratili San Pietro lu 21 di nuembri.</p>
     <p>Felicitas Mundi è una reti di paesi diffusi. Lu primu è la Saldigna. Lu paesi diffusu è cumpostu da tanti vicinati. Ogni vicinatu rapprisenta e polta in lu paesi l'anima soia, l'indipindenza soia, li talenti soi, li prudutti soi, li particularità soi e ancu li bisogni soi.</p>
     <p>Lu festival è la prima occasioni d'incontru pa cunniscì la piattaforma Felicitas Mundi, chi integra cuscenza, tecnulugia e logistica in la cumunità. È un'occasioni pa cumincià a integrà chistu prughjettu cun altri prughjetti e reti attivi in lu paesi Saldigna, a vantaghju di tuttu lu territoriu.</p>
@@ -382,10 +391,56 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   function $(i){return document.getElementById(i)}
   $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  document.addEventListener('fm-lingua', function(e){ var b=document.querySelector('.lingue [data-l="'+e.detail+'"]'); if(b) b.click(); });
   document.querySelectorAll('.lingue .fm-chip').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.lingue .fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.invito-testo').forEach(function(t){ t.classList.toggle('vivo', t.getAttribute('data-l')===b.getAttribute('data-l')); }); }; });
   document.querySelectorAll('.fm-carta .fm-tasto').forEach(function(b){ b.onclick=function(){ var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); }; });
 })();
 </script>
+<script>
+window.FM_EN = {
+  "L'invito":"The invitation","Le stanze":"The rooms","Il programma":"The programme","Chi parla":"Speakers","Baratili":"Baratili","Espositori e partner":"Exhibitors and partners","I panieri":"The baskets","Partecipare":"Take part","Ci sarò":"I'll be there",
+  "FELICITASMUNDI · VILLAGGIO FELICITAS · CIVILTÀ SARDA":"FELICITASMUNDI · VILLAGGIO FELICITAS · SARDINIAN CIVILISATION","la forza di essere connessi":"the strength of being connected",
+  "Sabato 21 novembre 2026 · dalle 10:00":"Saturday 21 November 2026 · from 10:00","Centro Sociale · Baratili San Pietro, Oristano":"Centro Sociale · Baratili San Pietro, Oristano",
+  "Benessere":"Wellbeing","Tecnologia":"Technology","Logistica":"Logistics","Invita chi risuona":"Invite those who resonate","La locandina":"The poster",
+  "L'INVITO":"THE INVITATION","Ti aspettiamo a Baratili.":"We await you in Baratili.","Italiano":"Italian","English":"English","Campidanese":"Campidanese","Logudorese":"Logudorese","Gallurese":"Gallurese",
+  "▶ Ascolta l'invito":"▶ Listen to the invitation","letto in italiano, campidanese, logudorese e gallurese ·":"read in Italian, Campidanese, Logudorese and Gallurese ·","[ le voci ]":"[ the voices ]",
+  "Conferenze · ospiti":"Talks · guests","Lamberto Rimondini · L'altra storia d'Italia":"Lamberto Rimondini · The other history of Italy","dottoressa Randaccio · La zona franca":"Dr Randaccio · The free zone","Gruppo Sardo Surra":"Gruppo Sardo Surra",
+  "Quattro stanze":"Four rooms","Mestieri antichi · Emporio · Mutuo aiuto · Sala conferenze":"Ancient crafts · Emporio · Mutual aid · Conference hall","Svelato per la prima volta":"Unveiled for the first time","L'app FelicitasMundi":"The FelicitasMundi app","Prima del Festival":"Before the Festival","25 ottobre · l'incontro dei vicinati":"25 October · the meeting of the neighbourhoods",
+  "LE STANZE":"THE ROOMS","Quattro stanze, una giornata.":"Four rooms, one day.","Quello che porteremo a Baratili è l'impianto strutturale della piattaforma.":"What we will bring to Baratili is the structural framework of the platform.",
+  "Mestieri antichi":"Ancient crafts","Cestineria":"Basketry","Cuoio":"Leather","Legno":"Wood","Tessitura":"Weaving","Ricamo":"Embroidery","Ceramica":"Ceramics",
+  "tutto il giorno":"all day","Un punto shop dedicato ai prodotti di FelicitasMundi e delle comunità coinvolte, gli stessi del sito. Ogni prodotto ha il QR code di Felicitas con la storia del produttore. Le promozioni dei gruppi d'acquisto: comprare insieme.":"A shop dedicated to the products of FelicitasMundi and of the communities involved, the same ones as on the site. Every product carries the Felicitas QR code with the producer's story. The buying groups' promotions: buying together.",
+  "alimenti":"food","rimedi":"remedies","oggettistica sacra":"sacred objects","abbigliamento":"clothing","oggetti di coscienza":"objects of consciousness",
+  "Mutuo aiuto":"Mutual aid","Gli operatori presentano i loro trattamenti e percorsi. Dalla mattina al pomeriggio, trattamenti da seguire.":"The practitioners present their treatments and paths. From morning to afternoon, treatments to follow.",
+  "Sala conferenze":"Conference hall","mattina e pomeriggio":"morning and afternoon","Antaḥkaraṇa, le conferenze, la musica del cuore. Il programma qui sotto.":"Antaḥkaraṇa, the talks, the music of the heart. The programme below.",
+  "IL PROGRAMMA":"THE PROGRAMME","Sabato 21 novembre.":"Saturday 21 November.","La mattina nelle stanze, il pomeriggio in sala conferenze. L'apertura va in onda sulla radio di FelicitasMundi.":"Morning in the rooms, afternoon in the conference hall. The opening goes on air on FelicitasMundi radio.",
+  "la mattina":"the morning","Antaḥkaraṇa · percorso e strumenti per vicinati":"Antaḥkaraṇa · path and tools for neighbourhoods","Strumenti pratici per fare assieme, con Gabriele Dettori. Insieme al kirtan, musica del cuore, e al cerchio di condivisione con i vicinati.":"Practical tools for doing things together, with Gabriele Dettori. Together with kirtan, music of the heart, and the sharing circle with the neighbourhoods.",
+  "Pranzo vegetariano di condivisione":"Shared vegetarian lunch","Per conoscerci e passare insieme momenti di condivisione.":"To get to know each other and spend moments of sharing together.",
+  "il pomeriggio · sala conferenze":"the afternoon · conference hall","Presentazione degli operatori locali e dei progetti di gruppo d'acquisto.":"Presentation of the local practitioners and of the buying-group projects.",
+  "Kirtan e meditazione":"Kirtan and meditation","Musica del cuore.":"Music of the heart.","La zona franca":"The free zone","Conferenza con la dottoressa Randaccio.":"Talk with Dr Randaccio.","dottoressa Randaccio":"Dr Randaccio",
+  "Momento musicale":"Musical moment","Drum circle.":"Drum circle.","Conferenza.":"Talk.","Il progetto Villaggio Felicitas":"The Villaggio Felicitas project","Che sorgerà in un terreno a Paulilatino.":"Which will rise on a plot of land in Paulilatino.",
+  "L'altra storia d'Italia":"The other history of Italy","Con Lamberto Rimondini.":"With Lamberto Rimondini.","Cena vegetariana":"Vegetarian dinner","Per chiudere la serata insieme.":"To close the evening together.",
+  "CHI PARLA":"SPEAKERS","Le voci del Festival.":"The voices of the Festival.","FelicitasMundi · Antaḥkaraṇa, percorso e strumenti per vicinati · 10:00":"FelicitasMundi · Antaḥkaraṇa, path and tools for neighbourhoods · 10:00","La zona franca · 16:00":"The free zone · 16:00","Conferenza · 17:00":"Talk · 17:00","L'altra storia d'Italia · 18:00":"The other history of Italy · 18:00",
+  "Le foto e una riga su ognuno:":"Photos and a line on each:","[ con le cose di domani ]":"[ to come ]",
+  "IL FESTIVAL PRENDE BARATILI":"THE FESTIVAL TAKES BARATILI","Dentro e fuori il Centro Sociale.":"Inside and outside the Centro Sociale.","I laboratori degli antichi mestieri, organizzati sia all'esterno sia all'interno del Centro Sociale. I punti del Festival nel paese.":"The ancient-crafts workshops, held both outside and inside the Centro Sociale. The Festival's points around the village.",
+  "le quattro stanze, la sala conferenze, i pasti":"the four rooms, the conference hall, the meals","All'aperto · i laboratori":"Outdoors · the workshops","cestineria, cuoio, legno, tessitura, ricamo, ceramica":"basketry, leather, wood, weaving, embroidery, ceramics","il luogo dell'incontro dei vicinati del 25 ottobre":"the venue of the neighbourhoods' meeting on 25 October","[ un altro punto del paese ]":"[ another point in the village ]","[ cosa ci si trova ]":"[ what is there ]",
+  "SVELATO PER LA PRIMA VOLTA":"UNVEILED FOR THE FIRST TIME","L'app FelicitasMundi.":"The FelicitasMundi app.","Il Felicitas Festival sarà la presentazione del lancio dell'applicazione FelicitasMundi.":"The Felicitas Festival will be the launch presentation of the FelicitasMundi application.",
+  "L'app del Festival è l'app di tutti i giorni.":"The Festival app is the everyday app.","Ogni prodotto dell'Emporio ha il QR code di Felicitas con la storia del produttore. Ogni operatore ha la sua scheda nel Mutuo aiuto. Chi arriva al Festival entra nell'app con un tocco, e il Festival resta: le cose da fare, la chat, il villaggio.":"Every product in the Emporio carries the Felicitas QR code with the producer's story. Every practitioner has a card in Mutual aid. Whoever comes to the Festival enters the app with one tap, and the Festival stays: the things to do, the chat, the village.",
+  "Entra nell'app":"Enter the app","Aggiungila al telefono":"Add it to your phone","Il praticantato.":"The apprenticeship.","Durante l'evento verrà proposto il praticantato per l'utilizzo della piattaforma tecnologica collegata alla coscienza FelicitasMundi, e verranno proposti anche i servizi editoriali legati alla piattaforma.":"During the event the apprenticeship for using the FelicitasMundi technological platform, linked to consciousness, will be proposed, together with the publishing services connected to the platform.","Scopri di più":"Find out more",
+  "ESPOSITORI E PARTNER":"EXHIBITORS AND PARTNERS","Chi c'è, con cosa.":"Who is there, with what.","Le realtà presenti nel territorio sardo che si autosostengono, che fanno mutuo aiuto, i gruppi di acquisto solidale e i mercati etici, con i loro progetti.":"The self-sustaining realities of the Sardinian territory, those practising mutual aid, the solidarity buying groups and the ethical markets, with their projects.",
+  "[ espositore ]":"[ exhibitor ]","[ mestiere · comune ]":"[ craft · town ]","[ partner ]":"[ partner ]","[ cosa porta ]":"[ what they bring ]","Ogni espositore e ogni partner hanno la loro scheda nell'Emporio o nel Mutuo aiuto, e il QR code di Felicitas con la loro storia.":"Every exhibitor and every partner has a card in the Emporio or in Mutual aid, and the Felicitas QR code with their story.",
+  "I PANIERI DEL FESTIVAL":"THE FESTIVAL BASKETS","Comprare insieme.":"Buying together.","Le promozioni dei gruppi d'acquisto. Si chiede insieme, si ritira al Festival.":"The buying groups' promotions. Ordered together, collected at the Festival.","PANIERE":"BASKET","[ il primo paniere ]":"[ the first basket ]","[ cosa c'è dentro · il produttore · fino a quando si chiede ]":"[ what's inside · the producer · order deadline ]","Aggiungi al paniere":"Add to the basket","[ il secondo paniere ]":"[ the second basket ]","NELL'EMPORIO":"IN THE EMPORIO","I libri":"The books","Vai all'Emporio":"Go to the Emporio",
+  "PARTECIPARE":"TAKE PART","Vieni, e porta chi risuona.":"Come, and bring those who resonate.","Un tocco: entri nell'orma del Festival. Là c'è la conversazione, quello che serve sapere, le cose da fare e gli aggiornamenti dalla squadra.":"One tap: you enter the Festival's footprint. There you find the conversation, what you need to know, the things to do and the updates from the team.",
+  "I pasti":"The meals","Pranzo vegetariano di condivisione alle 13:00 e cena vegetariana alle 19:30, acquistabili attraverso un'offerta consapevole.":"Shared vegetarian lunch at 13:00 and vegetarian dinner at 19:30, available through a conscious offering.","Prenoto il pranzo":"Book lunch","Prenoto la cena":"Book dinner",
+  "Come arrivare":"How to get there","Dove":"Where","Indirizzo":"Address","[ via e numero ]":"[ street and number ]","Dove dormire":"Where to stay","Apri la mappa":"Open the map",
+  "Condividi":"Share","La locandina da scaricare, il QR del Festival, il messaggio pronto per WhatsApp.":"The poster to download, the Festival QR, the ready message for WhatsApp.","Il QR":"The QR",
+  "IL VILLAGGIO DIETRO IL FESTIVAL":"THE VILLAGE BEHIND THE FESTIVAL","Si prepara insieme.":"Prepared together.","Per far nascere il villaggio si organizza insieme il prossimo Festival nel territorio.":"To bring the village to life, the next Festival in the territory is organised together.",
+  "L'incontro dei vicinati · 25 ottobre":"The meeting of the neighbourhoods · 25 October","Cas'ale · Baratili · dalle 10 · prima del Festival":"Cas'ale · Baratili · from 10 · before the Festival","Locandina presentazione":"Presentation poster","cosa serve · scritto da Gabriele Dettori":"what is needed · written by Gabriele Dettori","lo prendo":"I'll take it","Materiale comunicativo per emporio":"Communication material for the Emporio","La squadra del Festival":"The Festival team","la lavagna, chi c'è, le spese":"the board, who is in, the expenses",
+  "Proponiti per farne parte":"Apply to join","Si apre una chat nel Mutuo aiuto, tu e il coordinamento del Villaggio Felicitas · Civiltà Sarda. Chi coordina riceve l'avviso nell'app e per mail.":"A chat opens in Mutual aid, between you and the coordination of Villaggio Felicitas · Sardinian Civilisation. The coordinators are notified in the app and by email.","Proponiti":"Apply","Lo organizza Gabriele Dettori, con il villaggio.":"Organised by Gabriele Dettori, with the village.",
+  "Contatti stampa e partner:":"Press and partner contacts:","[ mail ]":"[ email ]","Invita":"Invite","preso da te":"taken by you",
+  "la barra":"the bar","Felicitas Festival · TRAME: la forza di essere connessi":"Felicitas Festival · TRAME: the strength of being connected"
+};
+</script>
+<script src="comune/fm-lingua.js?v=10112025"></script>
 <script src="comune/fm-statistiche.js?v=10111950" data-pagina="festival-trame"></script>
 </body>
 </html>
