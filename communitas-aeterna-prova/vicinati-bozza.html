@@ -64,6 +64,15 @@ a{color:inherit;text-decoration:none}
 .fm-carte .fm-carta .t small u{text-decoration:none;color:var(--oro)}
 .fm-carte .fm-carta .fm-tasto.piccolo{flex:none}
 
+/* la chat */
+.chat{display:flex;flex-direction:column;gap:8px}
+.m{max-width:85%;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:9px 12px;font-size:14px;line-height:1.4}
+.m b{display:block;font-size:11px;color:var(--oro);margin-bottom:3px;font-weight:600}
+.m .arg{display:inline-block;font-size:10.5px;letter-spacing:.14em;color:var(--etere);border:1px solid var(--etere);border-radius:980px;padding:2px 7px;margin-bottom:5px}
+.composi{display:flex;gap:8px;align-items:center;padding:10px 0 0}
+.composi .campo{flex:1;background:var(--carta);border:1px solid var(--riga);border-radius:980px;padding:10px 14px;font-size:14px;color:var(--grigio)}
+.composi .tondo{width:38px;height:38px;border-radius:50%;background:var(--carta);border:1px solid var(--riga);font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.composi .rec{color:#e04b4b}.composi .invia{background:var(--oro);color:var(--inchiostro);font-weight:700}
 /* spazi del villaggio: punti di ritiro, partner */
 .spazio{border:1px dashed rgba(245,240,230,.3);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--grigio);line-height:1.45;margin-bottom:8px}
 .spazio b{display:block;color:var(--avorio);font-weight:500;margin-bottom:2px}
@@ -116,6 +125,16 @@ a{color:inherit;text-decoration:none}
       <div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Fare da referente di un comune o di una zona</b><small>Dalla Gallura al Campidano.</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
       <div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Trovare i gruppi d'acquisto solidale già attivi</b><small>In Sardegna, e metterli in contatto col villaggio.</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
     </div>
+  </section>
+
+  <!-- la chat del villaggio -->
+  <section class="quad" style="--c:var(--etere)">
+    <div class="capo"><span class="fm-occ">LA CHAT DEL VILLAGGIO</span><a href="#">apri ›</a></div>
+    <div class="spiega">La chat del Villaggio Felicitas · Civiltà Sarda, integrata nella piattaforma. La leggono e la scrivono quelli che ne fanno parte.</div>
+    <div class="chat">
+      <div class="m"><b>Gabriele</b><span class="arg">25 OTTOBRE</span><br><span class="ph">[ l'ultimo messaggio ]</span></div>
+    </div>
+    <div class="composi"><button class="tondo" aria-label="allega">📎</button><div class="campo">Scrivi al villaggio…</div><button class="tondo rec" aria-label="vocale">●</button><button class="tondo invia" aria-label="invia">↑</button></div>
   </section>
 
   <!-- gli spazi del villaggio, come oggi -->
