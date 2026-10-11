@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La Bacheca · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* la cornice: sul telefono tutto schermo; sul computer una colonna da 430 */
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+
+/* testata */
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .dove{font-size:12px;color:var(--grigio)}
+.testata .io{width:30px;height:30px;border-radius:50%;background:var(--carta);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px}
+
+/* la barra «cosa stai facendo?» */
+.fare{margin:4px 18px 18px;display:flex;align-items:center;gap:10px;background:var(--carta);border:1px solid var(--oro);border-radius:980px;padding:8px 8px 8px 16px;cursor:pointer}
+.fare span{flex:1;font-family:'Cormorant Garamond',serif;font-size:19px;color:rgba(245,240,230,.85)}
+.fare b{width:38px;height:38px;border-radius:50%;background:var(--oro);color:var(--inchiostro);display:flex;align-items:center;justify-content:center;font-size:18px}
+
+/* i quadranti, nell'ordine di Gab: radio · karma yoga · calendario · post */
+.quad{padding:0 18px;margin-bottom:26px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a{font-size:12px;color:var(--grigio)}
+
+/* radio */
+.radio{position:relative;border-radius:18px;overflow:hidden;background:#000;min-height:210px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
+.radio img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;opacity:.75}
+.radio::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,.35) 55%,transparent)}
+.radio>*{position:relative;z-index:1}
+.radio .vivo{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.2em;font-weight:600;color:#fff}
+.radio .vivo i{width:8px;height:8px;border-radius:50%;background:#e04b4b;box-shadow:0 0 10px #e04b4b;animation:batte 1.4s infinite}
+@keyframes batte{0%,100%{transform:scale(1)}50%{transform:scale(1.4)}}
+.radio h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28px;line-height:1.05;margin-top:8px}
+.radio .sotto{font-size:13px;color:rgba(245,240,230,.8);margin-top:4px}
+.radio .tasti{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.radio .chiusa{font-size:11.5px;color:var(--grigio)}
+
+/* karma yoga */
+.ky .fm-carta{cursor:pointer}
+.ky .fm-carta .im{font-size:20px;color:var(--oro)}
+.ky .fm-tasto.piccolo{flex:none}
+.ky .spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:8px 0 10px}
+
+/* calendario */
+.cal{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.cal::-webkit-scrollbar{display:none}
+.giorno{flex:0 0 150px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px}
+.giorno .d{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1;color:var(--oro)}
+.giorno .m{font-size:10.5px;letter-spacing:.2em;color:var(--grigio);text-transform:uppercase;margin-top:2px}
+.giorno b{display:block;font-weight:500;font-size:13px;line-height:1.25;margin-top:10px}
+.giorno small{display:block;font-size:11.5px;color:var(--grigio);margin-top:3px}
+.giorno.luna .d{color:var(--avorio)}
+
+/* post, come film */
+.film{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory;padding-bottom:4px}
+.film::-webkit-scrollbar{display:none}
+.film .fm-tessera{flex:0 0 78%;scroll-snap-align:start}
+.film .fm-tessera .im{aspect-ratio:16/10}
+.film .fm-tessera .t b{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;line-height:1.1}
+.filtri{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px}
+.filtri::-webkit-scrollbar{display:none}
+.filtri .fm-chip{flex:none;font-size:12px;padding:6px 11px}
+
+/* la barra in basso: Bacheca · la mia orma */
+.piede{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;pointer-events:none}
+.piede .in{pointer-events:auto;width:100%;max-width:430px;display:flex;background:rgba(10,12,26,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--riga);padding:10px 18px calc(10px + env(safe-area-inset-bottom))}
+.piede button{flex:1;font-size:12px;letter-spacing:.08em;color:var(--grigio);display:flex;flex-direction:column;align-items:center;gap:3px}
+.piede button i{font-style:normal;font-size:18px}
+.piede button.on{color:var(--oro)}
+@media (min-width:700px){.piede .in{border-radius:0 0 28px 28px}}
+
+/* lo spazio di scrittura: foto grande + descrizione */
+.velo{position:fixed;inset:0;z-index:40;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}
+.velo.vivo{opacity:1;pointer-events:auto}
+.scrivi{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s cubic-bezier(.4,0,.2,1);max-height:92dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.scrivi.vivo{transform:none}
+.scrivi .maniglia{width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px}
+.scrivi h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;line-height:1.1}
+.scrivi .foto{margin-top:12px;aspect-ratio:4/3;border-radius:16px;border:1px dashed rgba(245,240,230,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--grigio);font-size:13px;cursor:pointer;overflow:hidden;position:relative}
+.scrivi .foto b{font-size:30px;color:var(--oro)}
+.scrivi .foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scrivi textarea{width:100%;margin-top:12px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px 14px;font:15px/1.5 'DM Sans',system-ui,sans-serif;color:var(--avorio);min-height:84px;resize:none;outline:none}
+.scrivi .fm-etich{margin:14px 0 7px}
+.scrivi .dati{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.scrivi .dati span{font-size:11.5px;padding:4px 9px;border-radius:980px;border:1px solid var(--riga);color:var(--grigio)}
+.scrivi .fm-tasto.pieno{margin-top:16px}
+
+/* la mia orma, riscritta: le cose da fare in cima */
+.vista{display:none}
+.vista.vivo{display:block}
+.mia .testa2{padding:0 18px 14px}
+.mia .testa2 h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05}
+.mia .testa2 .sot{font-size:13px;color:var(--grigio);margin-top:4px}
+.fare-oggi{padding:0 18px;margin-bottom:22px}
+.fare-oggi .fm-carta{margin-bottom:8px;cursor:pointer}
+.fare-oggi .fm-carta .im{font-size:20px}
+.fare-oggi .fm-carta .im.av{color:var(--oro)}
+.fare-oggi .fm-carta .im.co{color:var(--grigio)}
+.fare-oggi .fm-carta .im.sv{color:var(--fatto)}
+.fare-oggi .fm-carta .t small u{text-decoration:none;color:var(--oro)}
+.tasti-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 18px;margin-bottom:22px}
+.tasti-g button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;border:1px solid var(--riga);border-radius:12px;font-size:18px;background:var(--carta)}
+.tasti-g button b{font-weight:400;font-size:11.5px;color:var(--grigio)}
+.mie{padding:0 18px}
+.mie .fm-tessera{margin-bottom:10px}
+.mie .fm-tessera .im{aspect-ratio:16/10}
+.ph{color:var(--oro);opacity:.85}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span class="m">FELICITASMUNDI</span><span class="dove">Civiltà Sarda</span><span class="io">g</span></div>
+
+  <!-- ═══ LA BACHECA ═══ -->
+  <div class="vista vivo" id="v-bacheca">
+    <button class="fare" id="apri-scrivi"><span>Cosa stai facendo?</span><b>◉</b></button>
+
+    <!-- 1 · radio -->
+    <section class="quad" style="--c:var(--aria)">
+      <div class="capo"><span class="fm-occ">RADIO · EDIZIONE</span><a href="#">tutte le puntate ›</a></div>
+      <div class="radio"><img src="casa/gab.jpg" alt="">
+        <span class="vivo"><i></i>LUNEDÌ 12 · ORE 19 · IN DIRETTA</span>
+        <h2>Strumenti per fare ordine.</h2>
+        <div class="sotto"><span class="fm-tag" style="margin-right:6px">puntata</span>Discernimento · con Gabriele Dettori</div>
+        <div class="tasti"><button class="fm-tasto piccolo">Ascolta</button><span class="chiusa">Diretta chiusa: per i karma yoger o per chi paga.</span></div>
+      </div>
+    </section>
+
+    <!-- 2 · karma yoga -->
+    <section class="quad ky" style="--c:var(--terra)">
+      <div class="capo"><span class="fm-occ">KARMA YOGA · I BISOGNI DEL VILLAGGIO</span><a href="#">tutti e 8 ›</a></div>
+      <div class="spiega">Quello di cui il villaggio ha bisogno, per chi può fare. Si tocca «lo prendo» e la cosa entra tra le tue cose da fare.</div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">☀</div><div class="t"><b>Mettere a disposizione un punto di ritiro</b><small>Un luogo dove ricevere i pacchi del gruppo, nella tua zona.</small></div><button class="fm-tasto piccolo" data-prendo>lo prendo</button></div>
+        <div class="fm-carta"><div class="im">☀</div><div class="t"><b>Mappare i produttori del territorio</b><small>Riso, miele, olio, formaggi, vino. Nome, cosa fanno, quanto possono dare.</small></div><button class="fm-tasto piccolo" data-prendo>lo prendo</button></div>
+        <div class="fm-carta"><div class="im">☀</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>Accoglienza, sedie, registrazione dei presenti.</small></div><span class="fm-stadio in-avanzamento">preso da te</span></div>
+      </div>
+    </section>
+
+    <!-- 3 · calendario -->
+    <section class="quad" style="--c:var(--etere)">
+      <div class="capo"><span class="fm-occ">CALENDARIO</span><a href="#">tutto il mese ›</a></div>
+      <div class="cal">
+        <div class="giorno"><div class="d">12</div><div class="m">ottobre · lun</div><b>Strumenti per fare ordine</b><small>ore 19 · in diretta</small></div>
+        <div class="giorno luna"><div class="d">◐</div><div class="m">17 ottobre</div><b>Primo quarto</b><small>la luna</small></div>
+        <div class="giorno"><div class="d">25</div><div class="m">ottobre · dom</div><b>Villaggio Felicitas · Oristano</b><small>Cas'ale · Baratili · dalle 10</small></div>
+        <div class="giorno"><div class="d">21</div><div class="m">novembre · sab</div><b>Felicitas Festival</b><small>Centro Sociale · Baratili San Pietro</small></div>
+      </div>
+    </section>
+
+    <!-- 4 · post, come film -->
+    <section class="quad" style="--c:var(--oro)">
+      <div class="capo"><span class="fm-occ">QUELLO CHE PUBBLICA IL VILLAGGIO</span><a href="#">tutto ›</a></div>
+      <div class="filtri"><button class="fm-chip on">Tutto</button><button class="fm-chip">Racconti</button><button class="fm-chip">Foto</button><button class="fm-chip">Articoli</button><button class="fm-chip">Opere</button><button class="fm-chip">Puntate</button></div>
+      <div class="film">
+        <a class="fm-tessera" href="#"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><span class="fm-tag">festa</span><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>Cas'ale - Baratili · dalle 10</small></div></a>
+        <a class="fm-tessera" href="#"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg" alt=""><span class="fm-tag">articolo</span><div class="t"><b>Metodo Di Bella: un ponte tra ricerca e coscienza</b><small>20/07 · Bologna</small></div></a>
+        <a class="fm-tessera" href="#"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/07/IMG_20230222_091218-scaled.jpg" alt=""><span class="fm-tag">articolo</span><div class="t"><b>Sa Pirighedda</b><small>Oristano</small></div></a>
+        <a class="fm-tessera" href="#"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/villa-vrindavna-1-1024x768.jpg" alt=""><span class="fm-tag">articolo</span><div class="t"><b>60 anni di Hare Krishna — la Presenza Viva</b><small>26/06 · Firenze</small></div></a>
+        <a class="fm-tessera" href="#"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/07/foto-bacheca-roberta.jpeg" alt=""><span class="fm-tag">articolo</span><div class="t"><b>Idea economica per i vicinati</b><small>16/07 · Abruzzo</small></div></a>
+        <a class="fm-tessera" href="#"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/01/facciata.jpg" alt=""><span class="fm-tag">articolo</span><div class="t"><b>Una casa a Pomaia, accanto all'Istituto Lama Tzong Khapa</b><small>04/02 · Pomaia</small></div></a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ LA MIA ORMA, riscritta ═══ -->
+  <div class="vista mia" id="v-mia">
+    <div class="testa2"><h1>Le cose da fare.</h1><div class="sot">11 ottobre · san Firmino · luna nuova</div></div>
+    <button class="fare" id="apri-scrivi-2"><span>Cosa stai facendo?</span><b>◉</b></button>
+    <div class="fare-oggi">
+      <div class="fm-carta"><div class="im av">◐</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>karma yoga del villaggio · <u>in avanzamento</u></small></div><span class="fr">›</span></div>
+      <div class="fm-carta"><div class="im av">◐</div><div class="t"><b>Il flusso delle orme: la vista per stadio</b><small>nexus · <u>in avanzamento</u> · entro 04/10</small></div><span class="fr">›</span></div>
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Lettera d'intenti</b><small>Felicitas Festival · in coda</small></div><span class="fr">›</span></div>
+      <div class="fm-carta" id="presa" style="display:none"><div class="im av">◐</div><div class="t"><b id="presa-t"></b><small>karma yoga del villaggio · <u>in avanzamento</u> · appena preso</small></div><span class="fr">›</span></div>
+      <button class="fm-tasto secondario piccolo" style="margin-top:4px">+ una cosa da fare</button>
+    </div>
+    <div class="tasti-g">
+      <button>📅<b>calendario</b></button><button>€<b>costi</b></button><button>☏<b>rubrica</b></button><button>✦<b>talenti</b></button><button>▦<b>squadre</b></button><button>⌂<b>vicinato</b></button>
+    </div>
+    <div class="quad" style="--c:var(--oro)"><div class="capo"><span class="fm-occ">LE MIE ORME</span><a href="#">tutte ›</a></div></div>
+    <div class="mie">
+      <div class="fm-tessera" id="mia-foto" style="display:none"><img class="im" src="casa-viva-luogo.jpg" alt="" style="object-position:38% 50%"><span class="fm-tag oro">foto</span><div class="t"><b>Cas'ale · Baratili</b><small>oggi · <span id="mia-foto-vis">tutti</span></small></div></div>
+      <div class="fm-tessera"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><span class="fm-tag">festa</span><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>Cas'ale - Baratili · dalle 10 · 11 persone dentro</small></div></div>
+    </div>
+  </div>
+
+  <div class="piede"><div class="in"><button class="on" data-v="bacheca"><i>✦</i>Bacheca</button><button data-v="mia"><i>◉</i>La mia orma</button></div></div>
+</div>
+
+<!-- lo spazio di scrittura -->
+<div class="velo" id="velo"></div>
+<div class="scrivi" id="scrivi">
+  <div class="maniglia"></div>
+  <h2>Cosa stai facendo?</h2>
+  <div class="foto" id="foto"><b>◉</b>una foto<img id="foto-img" src="" alt="" hidden></div>
+  <textarea placeholder="Due righe: cosa stai facendo, con chi, per chi." id="descr"></textarea>
+  <div class="dati"><span>Cas'ale · Baratili</span><span>11 ottobre · luna nuova</span><span>Civiltà Sarda</span></div>
+  <div class="fm-etich">COS'È</div>
+  <div class="fm-chips" id="tipo"><button class="fm-chip on">Foto</button><button class="fm-chip">Racconto</button><button class="fm-chip">Opera</button><button class="fm-chip">Puntata</button></div>
+  <div class="fm-etich">CHI LA VEDE</div>
+  <div class="fm-chips" id="vis"><button class="fm-chip">Solo io</button><button class="fm-chip">Il vicinato</button><button class="fm-chip on">Tutti</button></div>
+  <button class="fm-tasto pieno" id="pubblica">Pubblica</button>
+  <p class="fm-nota" style="margin-top:10px">Diventa un'orma: con obiettivi, chat e chi c'è dentro. Con «Tutti» compare nella Bacheca.</p>
+</div>
+
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  function vista(v){ document.querySelectorAll('.vista').forEach(function(x){ x.classList.toggle('vivo', x.id==='v-'+v); }); document.querySelectorAll('.piede button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-v')===v); }); window.scrollTo(0,0); }
+  document.querySelectorAll('.piede button').forEach(function(b){ b.onclick=function(){ vista(b.getAttribute('data-v')); }; });
+  function apri(){ $('scrivi').classList.add('vivo'); $('velo').classList.add('vivo'); }
+  function chiudi(){ $('scrivi').classList.remove('vivo'); $('velo').classList.remove('vivo'); }
+  $('apri-scrivi').onclick=apri; $('apri-scrivi-2').onclick=apri; $('velo').onclick=chiudi;
+  $('foto').onclick=function(){ var i=$('foto-img'); i.src='casa-viva-luogo.jpg'; i.hidden=false; };
+  document.querySelectorAll('#tipo .fm-chip, #vis .fm-chip, .filtri .fm-chip').forEach(function(b){ b.onclick=function(){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; });
+  $('pubblica').onclick=function(){ chiudi(); var v=document.querySelector('#vis .on').textContent.toLowerCase(); $('mia-foto').style.display='flex'; $('mia-foto-vis').textContent=v; vista('mia'); };
+  document.querySelectorAll('[data-prendo]').forEach(function(b){ b.onclick=function(){ var c=b.closest('.fm-carta'); var t=c.querySelector('b').textContent; var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); $('presa').style.display='flex'; $('presa-t').textContent=t; }; });
+})();
+</script>
+</body>
+</html>
