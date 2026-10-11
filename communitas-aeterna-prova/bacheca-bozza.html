@@ -25,7 +25,7 @@ a{color:inherit;text-decoration:none}
 .testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
 .testata .dove{font-size:12px;color:var(--grigio)}
 .testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
-.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:min(300px,84vw);background:#10132a;box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;padding:22px 18px;display:flex;flex-direction:column;gap:6px}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}
 .stanze.vivo{transform:none}
 .stanze .fm-occ{margin-bottom:10px}
 .stanze a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;font-family:'Cinzel',serif;font-size:14px;letter-spacing:.06em}
@@ -237,18 +237,7 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <!-- la barra laterale: le stanze -->
-<nav class="stanze" id="stanze">
-  <div class="fm-occ">LE STANZE</div>
-  <a href="#" style="--c:var(--oro)"><i></i>Bacheca</a>
-  <a href="#" style="--c:var(--terra)"><i></i>Vicinati</a>
-  <a href="#" style="--c:var(--acqua)"><i></i>Emporio</a>
-  <a href="#" style="--c:var(--fuoco)"><i></i>Assistenza</a>
-  <a href="#" style="--c:var(--aria)"><i></i>Edizione</a>
-  <a href="#" style="--c:var(--etere)"><i></i>Scuola</a>
-  <a href="#" style="--c:var(--nexus)"><i></i>Antaḥkaraṇa</a>
-  <a href="#" style="--c:var(--oro)"><i></i>Account</a>
-  <div class="fine">Gabriele Dettori · Civiltà Sarda</div>
-</nav>
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
 <!-- lo spazio di scrittura -->
 <div class="velo" id="velo"></div>
 <div class="scrivi" id="scrivi">
