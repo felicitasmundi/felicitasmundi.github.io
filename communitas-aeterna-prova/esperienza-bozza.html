@@ -96,6 +96,14 @@ img{display:block;max-width:100%}
 .vuoto{padding:22px 18px;text-align:center;color:var(--grigio);font-size:13.5px;line-height:1.5}
 .vuoto b{display:block;color:var(--avorio);font-weight:500;font-family:'Cormorant Garamond',serif;font-size:21px;margin-bottom:4px}
 
+/* ── le pagine vere, dentro il telefono ── */
+.passo.vera{padding:0;overflow:hidden}
+.passo.vera iframe{position:absolute;left:0;right:0;top:54px;bottom:72px;width:100%;height:calc(100% - 126px);border:0;background:#0A0C1A}
+.nuovo-tasto{position:absolute;right:14px;bottom:84px;z-index:6;padding:11px 16px;border-radius:980px;background:var(--oro);color:#1a1405;font-weight:600;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.nuovo-tasto small{font-weight:600;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;background:#1a1405;color:var(--oro);border-radius:980px;padding:2px 6px;margin-left:6px;vertical-align:1px}
+.bollo{display:inline-block;font-size:9.5px;letter-spacing:.16em;font-weight:600;padding:2px 7px;border-radius:980px;margin-left:6px;vertical-align:2px}
+.bollo.v{background:#9ac296;color:#0b1a0b}.bollo.n{background:var(--oro);color:#1a1405}
+
 /* ── entrata, accesso, la mia orma, ritorno ── */
 .entrata{min-height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:70px 22px 90px;background:radial-gradient(ellipse at 50% 110%,rgba(140,110,200,.35),transparent 55%),#000}
 .entrata h2{font-weight:500;font-size:40px;line-height:1.05}
@@ -285,59 +293,14 @@ img{display:block;max-width:100%}
   <div class="testata"><span>✦ FELICITASMUNDI</span><span class="dove" id="dove">Civiltà Sarda</span><button class="i" id="apri-info" aria-label="la spiegazione di questa schermata">i</button></div>
   <div class="pista" id="pista">
 
-    <!-- A · l'entrata -->
-    <section class="passo pA">
-      <div class="entrata">
-        <div class="occ" style="text-align:center">COMUNITÀ ETERNA</div>
-        <h2 class="serif">Villaggi Diffusi.</h2>
-        <p>Il primo è la Sardegna.</p>
-        <img src="APP.FELICITASMUNDI/piatti/nexus-fermo.webp" onerror="this.src='casa/nexus.png'" alt="" class="nx">
-        <div class="tasti-c"><button class="primario stretto" data-vai="1">Entra nell'app</button><button class="sec">Felicitas Festival</button></div>
-        <p class="nota" style="text-align:center">Da qui arriva chi apre il link: la casa, l'invito di un amico, il QR del volantino.</p>
-      </div>
-    </section>
+    <!-- A · l'entrata: la casa vera -->
+    <section class="passo pA vera"><iframe src="casa-apple-bozza.html" loading="lazy" title=""></iframe></section>
 
-    <!-- B · l'accesso -->
-    <section class="passo pB">
-      <div class="scheda" style="padding-top:70px">
-        <div class="occ">ENTRA</div>
-        <h2>Con la tua mail.</h2>
-        <div class="campo-f">la tua mail<span class="ph">[ nome@esempio.it ]</span></div>
-        <button class="primario" id="manda-codice">Mandami il codice</button>
-        <div class="dopo-codice" id="dopo-codice">
-          <div class="etich">IL CODICE ARRIVATO PER MAIL</div>
-          <div class="cifre"><span>4</span><span>8</span><span>1</span><span>0</span><span>2</span><span>7</span></div>
-          <p class="nota">Vale solo l'ultimo arrivato. <u>mandane un altro</u></p>
-          <div class="etich">LA PRIMA VOLTA</div>
-          <div class="campo-f">nome<span class="ph">[ nome ]</span></div>
-          <div class="campo-f">cognome<span class="ph">[ cognome ]</span></div>
-          <label class="spunta"><i>✓</i>condizioni d'uso e privacy</label>
-          <button class="primario" data-vai="2">Entra</button>
-        </div>
-        <p class="nota">Niente password: ogni volta un codice nuovo alla mail. Chi entra la prima volta sceglie poi il villaggio e i suoi talenti.</p>
-      </div>
-    </section>
+    <!-- B · l'accesso: la pagina vera -->
+    <section class="passo pB vera"><iframe src="../communitas-aeterna/accesso.html" loading="lazy" title=""></iframe></section>
 
-    <!-- C · la mia orma -->
-    <section class="passo pC">
-      <div class="scheda" style="padding-top:66px">
-        <div class="occ">LA MIA ORMA</div>
-        <h2>11 ottobre · san Firmino</h2>
-        <div class="chips mini"><span>◐ luna nuova · 10 ottobre</span><span>Villaggio Felicitas · Civiltà Sarda</span></div>
-        <button class="grande-foto" data-vai="3"><span>◉</span>Una foto</button>
-        <div class="etich">LA SETTIMANA · OBIETTIVI</div>
-      </div>
-      <div class="carte">
-        <div class="carta"><div class="im stadio av">◐</div><div class="t"><b>Il flusso delle orme: la vista per stadio</b><small>nexus · <u>in avanzamento</u> · entro 04/10</small></div><span class="fr">›</span></div>
-        <div class="carta"><div class="im stadio av">◐</div><div class="t"><b>Cosa deve avere l'app per un'azienda</b><small>acqua · <u>in avanzamento</u> · entro 04/10</small></div><span class="fr">›</span></div>
-        <div class="carta"><div class="im stadio co">○</div><div class="t"><b>Lettera d'intenti</b><small>Felicitas Festival · in coda</small></div><span class="tag">LO PRENDO</span></div>
-      </div>
-      <div class="scheda" style="padding-top:14px">
-        <div class="etich">GLI ALTRI TASTI</div>
-        <div class="tasti-g"><span>📅<b>calendario</b></span><span>€<b>costi</b></span><span>☏<b>rubrica</b></span><span>☀<b>karma yoga</b></span><span>✦<b>talenti</b></span><span>▦<b>squadre</b></span></div>
-        <p class="nota">La casa di chi è dentro. Un tasto grande, la foto; il resto ha il suo posto.</p>
-      </div>
-    </section>
+    <!-- C · la mia orma: il piatto vero + il solo tasto nuovo -->
+    <section class="passo pC vera"><iframe src="APP.FELICITASMUNDI/piatti/la-mia-orma-tempio-piatto.html" loading="lazy" title=""></iframe><button class="nuovo-tasto" data-vai="3">◉ Una foto <small>nuovo</small></button></section>
 
     <!-- 1 · lo scatto -->
     <section class="passo p1">
@@ -373,54 +336,8 @@ img{display:block;max-width:100%}
       </div>
     </section>
 
-    <!-- 3 · dentro l'orma -->
-    <section class="passo p2b">
-      <div class="foto43 bassa"><img class="base" src="casa-viva-luogo.jpg" alt="">
-        <div class="sopra"><div class="occ">DENTRO L'ORMA · FOTO</div><h2>Cas'ale · Baratili</h2><div class="chips mini"><span>pubblica</span><span>Villaggio Felicitas – Civiltà Sarda</span><span>sabato 10 ottobre</span></div></div>
-      </div>
-      <div class="linguette" id="linguette"><button data-l="obiettivi" class="on">Obiettivi <b>2</b></button><button data-l="chat">Chat</button><button data-l="dentro">Chi c'è dentro <b>1</b></button><button data-l="pubblica">Pubblica</button></div>
-
-      <div class="ling vivo" data-l="obiettivi">
-        <div class="carte">
-          <button class="carta"><div class="im stadio av">◐</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>karma yoga preso · <u>in avanzamento</u> · Accoglienza, sedie, registrazione dei presenti.</small></div><span class="fr">›</span></button>
-          <button class="carta"><div class="im stadio co">○</div><div class="t"><b>Mettere a disposizione un punto di ritiro</b><small>karma yoga · <u>in coda</u> · Un luogo dove ricevere i pacchi del gruppo, nella tua zona.</small></div><span class="fr">›</span></button>
-          <button class="aggiungi"><b>+</b>Un obiettivo, con la data «entro il»</button>
-        </div>
-        <div class="scheda" style="padding-top:12px"><div class="etich">IL CAMMINO DI UN OBIETTIVO</div><div class="chips stadi"><span class="co">○ in coda</span><span>→</span><span class="av">◐ in avanzamento</span><span>→</span><span class="sv">● sviluppato</span></div><p class="nota">Lo stadio lo cambia chi è dentro. Un obiettivo preso dal villaggio (karma yoga) entra qui «in avanzamento».</p></div>
-      </div>
-
-      <div class="ling" data-l="chat">
-        <div class="vuoto"><b>Ancora nessun messaggio.</b>Chi è dentro legge e scrive. I file allegati li vede chi è dentro.</div>
-        <div class="composi"><button class="tondo" aria-label="allega">📎</button><div class="campo">Scrivi…</div><button class="tondo rec" aria-label="registra un vocale">●</button><button class="tondo invia" aria-label="invia">↑</button></div>
-        <p class="nota" style="padding:0 18px">Un vocale è un file audio nell'orma. Una puntata registrata della radio è la stessa cosa, con «Cos'è → Puntata».</p>
-      </div>
-
-      <div class="ling" data-l="dentro">
-        <div class="carte">
-          <div class="carta"><img class="im" src="casa/gab.jpg" alt="" style="border-radius:50%"><div class="t"><b>Gabriele Dettori</b><small>ha aperto l'orma · coordina</small></div><span class="tag">COORDINA</span></div>
-          <div class="carta"><div class="im" style="display:flex;align-items:center;justify-content:center;font-size:20px;border-radius:50%;border:1px dashed rgba(245,240,230,.4);background:none"><span class="ph">?</span></div><div class="t"><b class="ph">[ chi proponi ]</b><small>dalla rubrica · riceve il codice dell'orma</small></div><span class="tag">PROPONI</span></div>
-        </div>
-        <p class="nota" style="padding:12px 18px 0">«Coordina» lo dà chi guida il villaggio. Gli altri tasti sono karma yoga: ognuno prende quello che può fare.</p>
-      </div>
-
-      <div class="ling" data-l="pubblica">
-        <div class="scheda" style="padding-top:12px">
-          <div class="etich">COS'È</div>
-          <div class="chips"><button class="on">Foto</button><button>Racconto</button><button>Opera</button><button>Puntata</button></div>
-          <div class="etich">CHI LA VEDE</div>
-          <div class="chips"><button>Solo io</button><button>Il vicinato</button><button class="on">Tutti</button></div>
-          <div class="etich">COLLEGA · OGNI COSA NELLA FOTO A CHI LA FA</div>
-          <div class="carte" style="padding:0">
-            <div class="carta"><div class="im" style="display:flex;align-items:center;justify-content:center;font-size:18px;--c:var(--acqua);color:var(--acqua)">●</div><div class="t"><b>la pianta → Mappare i produttori del territorio</b><small>karma yoga</small></div></div>
-            <div class="carta"><div class="im" style="display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--etere)">●</div><div class="t"><b>i libri → Strumenti per fare ordine</b><small>puntata Discernimento · lunedì alle 19</small></div></div>
-            <div class="carta"><div class="im" style="display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--nexus)">●</div><div class="t"><b>il quadro → Metodo Di Bella: un ponte tra ricerca e coscienza</b><small>articolo</small></div></div>
-            <button class="aggiungi"><b>+</b>Tocca un punto della foto e scegli a cosa collegarlo</button>
-          </div>
-          <button class="primario" id="vedi-bacheca">Vedi nella Bacheca</button>
-          <p class="nota">Con «Tutti» la foto compare nella Bacheca del villaggio e nella lente di chi guarda. Con «Solo io» resta nell'orma.</p>
-        </div>
-      </div>
-    </section>
+    <!-- 3 · dentro l'orma: il piatto vero -->
+    <section class="passo p2b vera"><iframe src="APP.FELICITASMUNDI/piatti/dentro-orma-piatto.html" loading="lazy" title=""></iframe><button class="nuovo-tasto" id="vedi-bacheca">Pubblica → Bacheca <small>nuovo</small></button></section>
 
     <!-- 4 · la lente -->
     <section class="passo p3">
@@ -634,14 +551,14 @@ img{display:block;max-width:100%}
 <script>
 (function(){
   var PASSI = [
-    { n:"L'entrata", t:"Da dove si arriva.",
-      p:"Chi apre il link — dalla casa, da un invito, dal QR di un volantino — trova Villaggi Diffusi e un tasto: Entra nell'app.",
+    { n:"L'entrata", t:"La parte iniziale di felicitasmundi.com.",
+      p:"La pagina vera: in alto Villaggi Diffusi; scorrendo, tutto il resto — finestra, educazione, emporio, mutuo aiuto, karma yoga, stampa, festival.",
       db:"La casa è <code>casa-apple-bozza.html</code>. «Entra nell'app» porta a <code>communitas-aeterna/index.html</code>; da ospite, le stanze del fare chiedono l'accesso e poi tornano dove si voleva andare." },
-    { n:"L'accesso", t:"Con la mail, senza password.",
-      p:"La mail, un codice di sei cifre, e la prima volta nome, cognome e la spunta su condizioni d'uso e privacy. Poi si sceglie il villaggio e i talenti.",
+    { n:"L'accesso", t:"accesso.html, identico.",
+      p:"La pagina vera dell'app, col Nexus fatto a mano. Niente di inventato.",
       db:"<code>fm-accesso.js</code>: codice OTP via mail (vale solo l'ultimo), <code>persone</code> con nome e cognome, l'accettazione registrata. Chi entra la prima volta passa dalla soglia di Antaḥkaraṇa (<code>fm-soglia.js</code>) e dal percorso dei talenti." },
-    { n:"La mia orma", t:"La casa di chi è dentro.",
-      p:"Il giorno, il santo, la luna, il villaggio. Un tasto grande: Una foto. Sotto, gli obiettivi della settimana con «lo prendo»; poi gli altri tasti — calendario, costi, rubrica, karma yoga, talenti, squadre.",
+    { n:"La mia orma", t:"Il piatto vero, più un tasto.",
+      p:"La mia orma com'è stata disegnata (piatto del 3 ottobre). L'unica aggiunta è il tasto «Una foto», segnato «nuovo».",
       db:"Oggi la mia orma (<code>fm-orma-tempio.js</code>) mostra già: data, <code>santi</code>, <code>lune</code>, gli obiettivi con <code>stadio</code> ed <code>entro_il</code>, «lo prendo», «affida a», talenti, squadre, ore messe. Il tasto «Una foto» è la novità." },
     { n:"Lo scatto", t:"Una foto, un tasto.",
       p:"Dal telefono: si apre l'app, si scatta. Luogo, giorno e luna sono già lì.",
@@ -649,8 +566,8 @@ img{display:block;max-width:100%}
     { n:"L'orma", t:"La foto è già un'orma.",
       p:"Una scheda sola: cos'è, chi la vede, pubblica. Niente altro da compilare. Il resto — calendario, costi, rubrica, karma yoga — ha i suoi tasti.",
       db:"<code>orme.tipo</code>: foto · racconto · opera · puntata sono quattro tipi nuovi (l'enum ne ha 30, questi mancano: si aggiungono dopo la conferma del modello). <code>orme.visibilita</code>: solo_me · vicinato · pubblico, come oggi. Vicinati: 0 righe, quindi «Il vicinato» per ora non isola nessuno." },
-    { n:"Dentro l'orma", t:"Obiettivi, chat, chi c'è dentro, pubblica.",
-      p:"L'orma della foto si apre come ogni orma di oggi: gli obiettivi col loro stadio, la chat con i file e i vocali, chi c'è dentro con «coordina», e la linguetta Pubblica: cos'è, chi la vede, e i collegamenti fra le cose nella foto e chi le fa.",
+    { n:"Dentro l'orma", t:"Il piatto vero di ogni orma.",
+      p:"L'orma della foto si apre come ogni orma di oggi (piatto «Dentro un'orma»): obiettivi, chat, chi c'è dentro. L'unica aggiunta è il passaggio alla Bacheca, segnato «nuovo».",
       db:"Tutto esiste già: <code>orme.orma_madre_id</code> (gli obiettivi sono orme figlie), <code>orme.stadio</code> in_coda · in_avanzamento · sviluppato (<code>fm_cambia_stadio</code>), <code>orma_messaggi</code> + <code>orma_file</code> (la chat e gli allegati, letti da chi è dentro), <code>orma_persone</code> con <code>ruolo</code> coordinatore (<code>fm_nomina</code>, solo tu), <code>orme.visibilita</code>. I collegamenti sono <code>collegamenti</code>: una riga per punto della foto." },
     { n:"La lente", t:"Cambi sguardo e il mondo rivela un altro strato.",
       p:"Sulla stessa foto, quattro sguardi: vicinato, emporio, educazione, festival. Il mondo si fa grigio e le cose importanti si accendono, con fili che le uniscono.",
@@ -673,6 +590,7 @@ img{display:block;max-width:100%}
       p:"Quando qualcuno prende un obiettivo o scrive nella chat, arriva l'avviso: nell'app, e per mail a fine giornata. Un tocco e si è dentro l'orma della foto.",
       db:"<code>notifiche</code> (destinatario, tipo, testo, <code>porta_a</code>, canale mail) — oggi 4 righe, tipo «orma_presa». Le mail partono dal cron <code>avvisi-mail</code> e dal riassunto <code>fm_riassunto_fine_giornata</code>. Esiste già <code>fm_notifica_orma_presa</code>." }
   ];
+  var VERA = {"L'entrata":1,"L'accesso":1,"La mia orma":1,"Dentro l'orma":1};
   var n = 0, N = PASSI.length;
   var pista = $("pista"), punti = $("punti"), elenco = $("elenco"), gt = $("guida-testo"), info = $("info-dentro");
   function $(id){ return document.getElementById(id); }
@@ -684,7 +602,7 @@ img{display:block;max-width:100%}
     var d = document.createElement("i"); d.onclick = function(){ vai(i); }; punti.appendChild(d);
   });
   function testoGuida(p, i){
-    var h = '<div class="occ">' + (i+1) + ' · ' + p.n.toUpperCase() + '</div><h2>' + p.t + '</h2><p>' + p.p + '</p>';
+    var h = '<div class="occ">' + (i+1) + ' · ' + p.n.toUpperCase() + (VERA[p.n] ? '<span class="bollo v">PAGINA VERA</span>' : '<span class="bollo n">NUOVO · DA CONFERMARE</span>') + '</div><h2>' + p.t + '</h2><p>' + p.p + '</p>';
     if(p.li) h += '<ul>' + p.li.map(function(x){ return '<li>' + x + '</li>'; }).join('') + '</ul>';
     h += '<div class="db"><b>DAL DATABASE</b>' + p.db + '</div>';
     return h;
@@ -722,9 +640,9 @@ img{display:block;max-width:100%}
   $("pubblica").onclick = function(){ vai(5); };
   $("vedi-bacheca").onclick = function(){ vai(9); };
   Array.prototype.forEach.call(document.querySelectorAll("[data-vai]"), function(b){ b.onclick = function(){ vai(parseInt(b.getAttribute("data-vai"),10)); }; });
-  $("manda-codice").onclick = function(){ $("dopo-codice").classList.add("vivo"); this.style.display="none"; };
+  
   /* 3 · le linguette dentro l'orma */
-  Array.prototype.forEach.call(document.querySelectorAll("#linguette button"), function(b){ b.onclick = function(){ Array.prototype.forEach.call(document.querySelectorAll("#linguette button"), function(x){ x.classList.remove("on"); }); b.classList.add("on"); Array.prototype.forEach.call(document.querySelectorAll(".p2b .ling"), function(d){ d.classList.toggle("vivo", d.getAttribute("data-l")===b.getAttribute("data-l")); }); }; });
+  if($("linguette")) Array.prototype.forEach.call(document.querySelectorAll("#linguette button"), function(b){ b.onclick = function(){ Array.prototype.forEach.call(document.querySelectorAll("#linguette button"), function(x){ x.classList.remove("on"); }); b.classList.add("on"); Array.prototype.forEach.call(document.querySelectorAll(".p2b .ling"), function(d){ d.classList.toggle("vivo", d.getAttribute("data-l")===b.getAttribute("data-l")); }); }; });
   Array.prototype.forEach.call(document.querySelectorAll(".p2b .ling .chips"), function(c){ Array.prototype.forEach.call(c.querySelectorAll("button"), function(b){ b.onclick = function(){ Array.prototype.forEach.call(c.querySelectorAll("button"), function(x){ x.classList.remove("on"); }); b.classList.add("on"); }; }); });
 
   /* 3 · la lente */
