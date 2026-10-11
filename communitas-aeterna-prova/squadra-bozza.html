@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La squadra · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:60px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}.stanze.vivo{transform:none}
+.testa{padding:6px 18px 14px}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+.testa .fm-riga{font-size:13px}
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a{font-size:12px;color:var(--grigio)}
+.quad .spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px}
+.fm-carte .fm-carta .im.av{color:var(--oro);font-size:20px}.fm-carte .fm-carta .im.co{color:var(--grigio);font-size:20px}.fm-carte .fm-carta .im.sv{color:var(--fatto);font-size:20px}
+.fm-carte .fm-carta .t small u{text-decoration:none;color:var(--oro)}
+.fm-carte .fm-carta .fm-tasto.piccolo{flex:none}
+/* la lavagna */
+.lavagna{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory;padding-bottom:4px}
+.lavagna::-webkit-scrollbar{display:none}
+.colonna{flex:0 0 82%;scroll-snap-align:start;background:rgba(245,240,230,.04);border:1px solid var(--riga);border-radius:14px;padding:10px}
+.colonna .cap{font-size:11px;letter-spacing:.18em;font-weight:600;margin-bottom:8px}
+.colonna .cap.co{color:var(--grigio)}.colonna .cap.av{color:var(--oro)}.colonna .cap.sv{color:var(--fatto)}
+.task{background:var(--carta);border:1px solid var(--riga);border-radius:11px;padding:10px 11px;margin-bottom:8px;cursor:pointer}
+.task b{display:block;font-weight:500;font-size:13.5px;line-height:1.25}
+.task small{display:block;font-size:11.5px;color:var(--grigio);margin-top:3px;line-height:1.35}
+.task small u{text-decoration:none;color:var(--oro)}
+.task .dati{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--grigio)}
+.task .dati i{font-style:normal;color:var(--avorio)}
+.task.vuota{border-style:dashed;background:none;color:var(--grigio);font-size:12px;text-align:center;line-height:1.4;cursor:default}
+.ph{color:var(--oro);opacity:.85}
+/* il foglio della task */
+.foglio{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:88dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.foglio.vivo{transform:none}
+.foglio .maniglia{width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px}
+.foglio h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1}
+.foglio .fm-etich{margin:14px 0 7px}
+.foglio .righe{border-top:1px solid var(--riga);margin-top:10px}
+.foglio .fm-riga span.ph{text-align:right}
+.foglio .tasti{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.spazio{border:1px dashed rgba(245,240,230,.3);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--grigio);line-height:1.45;margin-bottom:8px}
+.spazio b{display:block;color:var(--avorio);font-weight:500;margin-bottom:2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)">Squadre</span></div>
+
+  <div class="testa">
+    <div class="fm-occ">SQUADRA · DAL PROGETTO</div>
+    <h1>Felicitas Festival</h1>
+    <div class="sot">La squadra che organizza il Festival del 21 novembre a Baratili San Pietro. Nasce dal progetto: le cose da fare del Festival diventano le task della lavagna.</div>
+    <div style="margin-top:12px"><div class="fm-riga"><b>Capofila</b><span>Gabriele Dettori</span></div><div class="fm-riga"><b>Dal · al</b><span>11 ottobre · 21 novembre</span></div><div class="fm-riga"><b>Posti</b><span class="ph">[ ]</span></div></div>
+  </div>
+
+  <section class="quad" style="--c:var(--oro)">
+    <div class="capo"><span class="fm-occ">CHI C'È</span></div>
+    <div class="fm-carte">
+      <div class="fm-carta"><img class="im tonda" src="casa/gab.jpg" alt=""><div class="t"><b>Gabriele Dettori</b><small>capofila · coordina il villaggio</small></div><span class="fm-tag">capofila</span></div>
+      <div class="fm-carta"><div class="im tonda" style="border:1px dashed rgba(245,240,230,.4);background:none"><span class="ph">?</span></div><div class="t"><b class="ph">[ chi entra nella squadra ]</b><small>si propone, o lo propone il capofila · ruolo · responsabile</small></div><button class="fm-tasto piccolo secondario">proponi</button></div>
+    </div>
+  </section>
+
+  <section class="quad" style="--c:var(--fuoco)">
+    <div class="capo"><span class="fm-occ">LA LAVAGNA</span><a href="#">tutta ›</a></div>
+    <div class="spiega">Ogni cosa da fare del progetto è una task. Chi la prende, le ore previste, le note. A «sviluppato», chi ha fatto la segna e il capofila conferma.</div>
+    <div class="lavagna">
+      <div class="colonna"><div class="cap co">○ IN CODA</div>
+        <div class="task" data-t="Locandina presentazione"><b>Locandina presentazione</b><small>scritto da Gabriele Dettori</small><div class="dati"><span>chi: <i class="ph">[ ]</i></span><span>ore previste: <i class="ph">[ ]</i></span></div></div>
+        <div class="task" data-t="Lettera d'intenti"><b>Lettera d'intenti</b><small>Con: attrezzi e allestimento, prodotti da vendere (10%).</small><div class="dati"><span>chi: <i class="ph">[ ]</i></span></div></div>
+        <div class="task" data-t="Dimostrazione"><b>Dimostrazione</b><small>scritto da Gabriele Dettori</small><div class="dati"><span>chi: <i class="ph">[ ]</i></span></div></div>
+        <div class="task" data-t="Materiale comunicativo per emporio"><b>Materiale comunicativo per emporio</b><small>scritto da Gabriele Dettori</small><div class="dati"><span>chi: <i class="ph">[ ]</i></span></div></div>
+        <div class="task" data-t="Media partner"><b>Media partner</b><small>Da contattare fase 2.</small><div class="dati"><span>chi: <i class="ph">[ ]</i></span></div></div>
+        <div class="task vuota">+ una task</div>
+      </div>
+      <div class="colonna"><div class="cap av">◐ IN AVANZAMENTO</div>
+        <div class="task" data-t="Dare una mano all'incontro dell'11"><b>Dare una mano all'incontro dell'11</b><small>karma yoga · dal villaggio · <u>presa dal vicinato di Baratili</u></small><div class="dati"><span>chi: <i>Gabriele</i></span><span>ore previste: <i class="ph">[ ]</i></span></div></div>
+      </div>
+      <div class="colonna"><div class="cap sv">● SVILUPPATO</div>
+        <div class="task vuota">chi ha fatto la segna · il capofila conferma<br>poi ore e talenti vanno nel registro</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quad" style="--c:var(--acqua)">
+    <div class="capo"><span class="fm-occ">DELLA SQUADRA</span></div>
+    <div class="spazio"><b>Le spese</b>Legate alla lavagna e all'orma del progetto: descrizione, importo, giorno.</div>
+    <div class="spazio"><b>I documenti</b>Quello che la squadra scrive e si passa.</div>
+    <div class="spazio"><b>La chat</b>La chat del progetto, dentro l'orma del Festival.</div>
+  </section>
+</div>
+
+<div class="velo" id="velo"></div>
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+
+<div class="foglio" id="foglio">
+  <div class="maniglia"></div>
+  <div class="fm-occ">LA TASK</div>
+  <h2 id="foglio-t"></h2>
+  <div class="righe">
+    <div class="fm-riga"><b>Chi la prende</b><span class="ph">[ dalla squadra ]</span></div>
+    <div class="fm-riga"><b>Ore previste</b><span class="ph">[ ]</span></div>
+    <div class="fm-riga"><b>Talenti</b><span class="ph">[ ]</span></div>
+    <div class="fm-riga"><b>Entro il</b><span class="ph">[ ]</span></div>
+    <div class="fm-riga"><b>Dall'orma</b><span>Felicitas Festival</span></div>
+  </div>
+  <div class="fm-etich">NOTE</div>
+  <div class="fm-campo"><input placeholder="una nota per la squadra"></div>
+  <div class="tasti"><button class="fm-tasto piccolo">la prendo</button><button class="fm-tasto piccolo secondario">fatta</button><button class="fm-tasto piccolo secondario">conferma · capofila</button></div>
+</div>
+
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('foglio').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  document.querySelectorAll('.task[data-t]').forEach(function(t){ t.onclick=function(){ $('foglio-t').textContent=t.getAttribute('data-t'); $('foglio').classList.add('vivo'); $('velo').classList.add('vivo'); }; });
+})();
+</script>
+</body>
+</html>

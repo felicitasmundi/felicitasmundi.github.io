@@ -47,6 +47,8 @@ a{color:inherit;text-decoration:none}
 .quad .capo a{font-size:12px;color:var(--grigio)}
 
 /* radio */
+.radio-foto{border-radius:18px;overflow:hidden;aspect-ratio:16/10}.radio-foto img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.radio-testo{padding:12px 2px 0}.radio-testo .vivo{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.2em;font-weight:600}.radio-testo .vivo i{width:8px;height:8px;border-radius:50%;background:#e04b4b;box-shadow:0 0 10px #e04b4b;animation:batte 1.4s infinite}.radio-testo h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:27px;line-height:1.05;margin-top:6px}.radio-testo .sotto{font-size:13px;color:rgba(245,240,230,.8);margin-top:4px}.radio-testo .tasti{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center}.radio-testo .chiusa{font-size:11.5px;color:var(--grigio)}
 .radio{position:relative;border-radius:18px;overflow:hidden;background:#000;min-height:210px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
 .radio img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;opacity:.75}
 .radio::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,.35) 55%,transparent)}
@@ -146,6 +148,9 @@ a{color:inherit;text-decoration:none}
 .mie{padding:0 18px}
 .mie .fm-tessera{margin-bottom:10px}
 .mie .fm-tessera .im{aspect-ratio:16/10}
+.tempo{padding:0 18px;display:flex;flex-direction:column;gap:8px}
+.tempo .mese{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--oro);margin:12px 0 2px}
+.tempo .fm-carta .im{font-size:20px;color:var(--grigio)}
 .ph{color:var(--oro);opacity:.85}
 </style>
 </head>
@@ -160,7 +165,8 @@ a{color:inherit;text-decoration:none}
     <!-- 1 · radio -->
     <section class="quad" style="--c:var(--aria)">
       <div class="capo"><span class="fm-occ">RADIO · EDIZIONE</span><a href="#">tutte le puntate ›</a></div>
-      <div class="radio"><img src="casa/gab.jpg" alt="">
+      <div class="radio-foto"><img src="casa/gab.jpg" alt=""></div>
+      <div class="radio-testo">
         <span class="vivo"><i></i>LUNEDÌ 12 · ORE 19 · IN DIRETTA</span>
         <h2>Strumenti per fare ordine.</h2>
         <div class="sotto"><span class="fm-tag" style="margin-right:6px">puntata</span>Discernimento · con Gabriele Dettori</div>
@@ -229,7 +235,25 @@ a{color:inherit;text-decoration:none}
     <div class="quad" style="--c:var(--oro)"><div class="capo"><span class="fm-occ">LE MIE ORME</span><a href="#">tutte ›</a></div></div>
     <div class="mie">
       <a class="fm-tessera" id="mia-foto" href="orma-bozza.html" style="display:none"><img class="im" src="casa-viva-luogo.jpg" alt="" style="object-position:38% 50%"><span class="fm-tag oro">foto</span><div class="t"><b>Cas'ale · Baratili</b><small>oggi · <span id="mia-foto-vis">tutti</span></small></div></a>
-      <div class="fm-tessera"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><span class="fm-tag">festa</span><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>Cas'ale - Baratili · dalle 10 · 11 persone dentro</small></div></div>
+      <div class="fm-tessera"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><span class="fm-tag">festa</span><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>Cas'ale - Baratili · dalle 10</small></div></div>
+    </div>
+    <div class="quad" style="--c:var(--oro);margin-top:6px"><div class="capo"><span class="fm-occ">L'ORMA</span><a href="#">tutto ›</a></div><div class="spiega" style="font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px">Tutto quello che hai fatto nel tempo, e altre cose. Mese per mese.</div></div>
+    <div class="tempo">
+      <div class="mese">ottobre 2026</div>
+      <a class="fm-carta" href="orma-bozza.html"><img class="im" src="casa-viva-luogo.jpg" alt="" style="object-position:38% 50%"><div class="t"><b>Cas'ale · Baratili</b><small>azione · 11 ottobre</small></div><span class="fr">›</span></a>
+      <div class="fm-carta"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>festa · aperta da te</small></div><span class="fr">›</span></div>
+      <div class="fm-carta"><div class="im" style="color:var(--fatto)">●</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>karma yoga · in avanzamento</small></div><span class="fr">›</span></div>
+      <div class="mese">settembre 2026</div>
+      <div class="fm-carta"><div class="im">○</div><div class="t"><b>Praticantato, alla luna piena</b><small>incontro · 26 settembre</small></div><span class="fr">›</span></div>
+      <div class="fm-carta"><div class="im">○</div><div class="t"><b>Praticantato, il primo incontro</b><small>incontro · 11 settembre · alla luna nuova</small></div><span class="fr">›</span></div>
+      <div class="mese">luglio 2026</div>
+      <div class="fm-carta"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg" alt=""><div class="t"><b>Metodo Di Bella: un ponte tra ricerca e coscienza</b><small>articolo · 20 luglio · Bologna</small></div><span class="fr">›</span></div>
+      <div class="fm-carta"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/07/foto-bacheca-roberta.jpeg" alt=""><div class="t"><b>Idea economica per i vicinati</b><small>articolo · 16 luglio · Abruzzo</small></div><span class="fr">›</span></div>
+      <div class="mese">giugno 2026</div>
+      <div class="fm-carta"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/villa-vrindavna-1-1024x768.jpg" alt=""><div class="t"><b>60 anni di Hare Krishna — la Presenza Viva</b><small>articolo · 26 giugno · Firenze</small></div><span class="fr">›</span></div>
+      <div class="mese">altre cose</div>
+      <div class="fm-carta"><div class="im">✦</div><div class="t"><b>I talenti radice</b><small>Alchimia · Costruisco · <span class="ph">[ … ]</span></small></div><span class="fr">›</span></div>
+      <div class="fm-carta"><div class="im">▦</div><div class="t"><b>Le squadre</b><small>Felicitas Festival · capofila</small></div><span class="fr">›</span></div>
     </div>
   </div>
 

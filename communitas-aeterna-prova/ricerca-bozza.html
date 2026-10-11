@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ricerca · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:60px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}.stanze.vivo{transform:none}
+.testa{padding:6px 18px 14px}
+.testa .fm-occ{color:var(--etere)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+.cerca{margin:12px 18px 6px;display:flex;align-items:center;gap:10px;background:var(--carta);border:1px solid var(--riga);border-radius:980px;padding:10px 16px;font-size:15px;color:var(--grigio)}
+.cerca b{color:var(--oro);font-weight:400}
+.argomenti{display:flex;gap:6px;flex-wrap:wrap;padding:8px 18px 18px}
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a{font-size:12px;color:var(--grigio)}
+.quad .spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px}
+.arg{display:none}.arg.vivo{display:block}
+.arg h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;line-height:1.08;padding:0 18px 4px}
+.arg .da{font-size:12.5px;color:var(--grigio);padding:0 18px 14px;line-height:1.5}
+.fm-carte .fm-carta .im.libro{background:#2a2240}
+.fm-carte .fm-carta .t small u{text-decoration:none;color:var(--oro)}
+.ph{color:var(--oro);opacity:.85}
+.m{background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:9px 12px;font-size:13.5px;line-height:1.4;margin-bottom:8px}
+.m b{display:block;font-size:11px;color:var(--oro);margin-bottom:3px;font-weight:600}
+.m small{display:block;font-size:11px;color:var(--grigio);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)">Scuola · Ricerca</span></div>
+
+  <div class="testa">
+    <div class="fm-occ">ETERE · SCUOLA · RICERCA</div>
+    <h1>La conoscenza, per argomento.</h1>
+    <div class="sot">Quello che nasce nelle chat e nei racconti, raccolto per argomento e collegato a prodotti, operatori e vicinati.</div>
+  </div>
+  <div class="cerca"><span>⌕</span><span>cerca un argomento <b>·</b> <span class="ph">[ … ]</span></span></div>
+  <div class="argomenti" id="argomenti">
+    <button class="fm-chip on" data-a="dibella">Metodo Di Bella</button>
+    <button class="fm-chip" data-a="discernimento">Discernimento</button>
+    <button class="fm-chip" data-a="ritiro">Punto di ritiro</button>
+    <button class="fm-chip" data-a="bhakti">Bhakti Yoga</button>
+    <button class="fm-chip" data-a="energia">Energia</button>
+  </div>
+
+  <!-- Metodo Di Bella -->
+  <div class="arg vivo" data-a="dibella">
+    <h2>Metodo Di Bella</h2>
+    <div class="da">Argomento nato da un articolo e da un'intervista. Si collega a un libro dell'Emporio.</div>
+    <section class="quad" style="--c:var(--etere)">
+      <div class="capo"><span class="fm-occ">RACCONTI E ARTICOLI</span></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg" alt=""><div class="t"><b>Metodo Di Bella: un ponte tra ricerca e coscienza</b><small>articolo · 20 luglio · Bologna · Gabriele Dettori</small></div><span class="fr">›</span></div>
+        <div class="fm-carta"><div class="im" style="color:var(--aria)">▶</div><div class="t"><b>Intervista Di Bella</b><small>audio · 1:51:14 · dall'archivio di felicitasmundi.com</small></div><span class="fr">›</span></div>
+      </div>
+    </section>
+    <section class="quad" style="--c:var(--acqua)">
+      <div class="capo"><span class="fm-occ">NELL'EMPORIO</span></div>
+      <div class="fm-carte"><div class="fm-carta"><img class="im libro" src="casa/di-bella.jpg" alt=""><div class="t"><b>La scelta antitumore</b><small>Giuseppe Di Bella · Macro · 27,90 €</small></div><span class="fr">›</span></div></div>
+    </section>
+    <section class="quad" style="--c:var(--fuoco)">
+      <div class="capo"><span class="fm-occ">OPERATORI E VICINATI</span></div>
+      <div class="fm-carte"><div class="fm-carta"><div class="im" style="border:1px dashed rgba(245,240,230,.4);background:none"><span class="ph">?</span></div><div class="t"><b class="ph">[ un operatore che ne parla ]</b><small>Assistenza · <span class="ph">[ vicinato ]</span></small></div></div></div>
+    </section>
+    <section class="quad" style="--c:var(--etere)">
+      <div class="capo"><span class="fm-occ">DALLE CHAT, CON QUESTO ARGOMENTO</span></div>
+      <div class="m"><b>Gabriele · Villaggio Felicitas · Civiltà Sarda</b><span class="ph">[ un messaggio con l'argomento «Metodo Di Bella» ]</span><small>ogni messaggio con un argomento finisce qui, per chi è dentro quell'orma</small></div>
+    </section>
+  </div>
+
+  <!-- Discernimento -->
+  <div class="arg" data-a="discernimento">
+    <h2>Discernimento</h2>
+    <div class="da">Una delle sette virtù universali. La mente che distingue il reale dall'illusorio. È la puntata di «Strumenti per fare ordine».</div>
+    <section class="quad" style="--c:var(--aria)">
+      <div class="capo"><span class="fm-occ">DIRETTE E PUNTATE</span></div>
+      <div class="fm-carte"><div class="fm-carta"><img class="im" src="casa/gab.jpg" alt=""><div class="t"><b>Strumenti per fare ordine · Discernimento</b><small>diretta · lunedì 12 ottobre alle 19 · con Gabriele Dettori</small></div><span class="fr">›</span></div></div>
+    </section>
+    <section class="quad" style="--c:var(--etere)">
+      <div class="capo"><span class="fm-occ">DAL GLOSSARIO</span></div>
+      <div class="m"><b>Discernimento</b>Una delle sette virtù universali. La mente che distingue il reale dall'illusorio. Nell'approccio da FelicitasMundi, è la capacità di riconoscere le priorità, separare ciò che nutre da ciò che consuma.<small>glossario di giugno · enciclopedia</small></div>
+    </section>
+    <section class="quad" style="--c:var(--fuoco)">
+      <div class="capo"><span class="fm-occ">PERCORSI</span></div>
+      <div class="fm-carte"><div class="fm-carta"><div class="im">✦</div><div class="t"><b>Antaḥkaraṇa · il percorso dei talenti</b><small>Scuola</small></div><span class="fr">›</span></div></div>
+    </section>
+  </div>
+
+  <!-- Punto di ritiro -->
+  <div class="arg" data-a="ritiro">
+    <h2>Punto di ritiro</h2>
+    <div class="da">Un luogo del vicinato che riceve i pacchi del gruppo, con gli orari e chi lo tiene.</div>
+    <section class="quad" style="--c:var(--terra)">
+      <div class="capo"><span class="fm-occ">BISOGNI E VICINATI</span></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Mettere a disposizione un punto di ritiro</b><small>karma yoga · Villaggio Felicitas · Civiltà Sarda</small></div><span class="fr">›</span></div>
+        <div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Portare i pacchi dal punto di ritiro</b><small>karma yoga · A chi non può andare, nel raggio di pochi chilometri.</small></div><span class="fr">›</span></div>
+        <div class="fm-carta"><div class="im" style="color:var(--terra)">B</div><div class="t"><b>Baratili San Pietro · Oristano</b><small>vicinato · Cas'ale</small></div><span class="fr">›</span></div>
+      </div>
+    </section>
+    <section class="quad" style="--c:var(--acqua)">
+      <div class="capo"><span class="fm-occ">NELL'EMPORIO</span></div>
+      <div class="fm-carte"><div class="fm-carta"><div class="im">▦</div><div class="t"><b>Il paniere del villaggio</b><small>quello che si chiede insieme ai produttori e ai partner</small></div><span class="fr">›</span></div></div>
+    </section>
+  </div>
+
+  <!-- Bhakti Yoga -->
+  <div class="arg" data-a="bhakti">
+    <h2>Bhakti Yoga</h2>
+    <div class="da">I corsi dell'USCI nell'Assistenza, i libri nell'Emporio.</div>
+    <section class="quad" style="--c:var(--fuoco)">
+      <div class="capo"><span class="fm-occ">OPERATORI E PERCORSI</span></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><img class="im" src="casa/krishna.jpg" alt="" style="object-position:50% 20%"><div class="t"><b>Power Series</b><small>USCI · a distanza</small></div><span class="fr">›</span></div>
+        <div class="fm-carta"><div class="im">✦</div><div class="t"><b>Bhakti Yoga</b><small>USCI · a distanza · i principi, la filosofia e la pratica</small></div><span class="fr">›</span></div>
+        <div class="fm-carta"><div class="im">✦</div><div class="t"><b>Gita Manjari</b><small>USCI · a distanza</small></div><span class="fr">›</span></div>
+      </div>
+    </section>
+    <section class="quad" style="--c:var(--acqua)">
+      <div class="capo"><span class="fm-occ">NELL'EMPORIO</span></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><img class="im libro" src="../communitas-aeterna/articoli/2026/anima-vagabonda-copertina.jpg" alt=""><div class="t"><b>Anima Vagabonda</b><small>Parabhakti dāsa · 18,00 €</small></div><span class="fr">›</span></div>
+        <div class="fm-carta"><div class="im libro"></div><div class="t"><b>Bhagavad-gītā Così com'è</b><small>A.C. Bhaktivedānta Swāmī Prabhupāda</small></div><span class="fr">›</span></div>
+      </div>
+    </section>
+    <section class="quad" style="--c:var(--etere)">
+      <div class="capo"><span class="fm-occ">RACCONTI E ARTICOLI</span></div>
+      <div class="fm-carte"><div class="fm-carta"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/villa-vrindavna-1-1024x768.jpg" alt=""><div class="t"><b>60 anni di Hare Krishna — la Presenza Viva</b><small>articolo · 26 giugno · Firenze</small></div><span class="fr">›</span></div></div>
+    </section>
+  </div>
+
+  <!-- Energia -->
+  <div class="arg" data-a="energia">
+    <h2>Energia</h2>
+    <div class="da">Pannelli, legna, impianti condivisi: un bisogno del villaggio, ancora senza racconti.</div>
+    <section class="quad" style="--c:var(--terra)">
+      <div class="capo"><span class="fm-occ">BISOGNI</span></div>
+      <div class="fm-carte"><div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Censire chi lavora sull'energia</b><small>karma yoga · per capire cosa si può comprare insieme</small></div><span class="fr">›</span></div></div>
+    </section>
+    <section class="quad" style="--c:var(--etere)">
+      <div class="capo"><span class="fm-occ">RACCONTI E ARTICOLI</span></div>
+      <div class="m"><span class="ph">[ ancora nessun racconto con questo argomento ]</span><small>il primo nasce da una chat o da un racconto con l'argomento «Energia»</small></div>
+    </section>
+  </div>
+</div>
+
+<div class="velo" id="velo"></div>
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  document.querySelectorAll('#argomenti .fm-chip').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('#argomenti .fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.arg').forEach(function(a){ a.classList.toggle('vivo', a.getAttribute('data-a')===b.getAttribute('data-a')); }); window.scrollTo(0,0); }; });
+})();
+</script>
+</body>
+</html>
