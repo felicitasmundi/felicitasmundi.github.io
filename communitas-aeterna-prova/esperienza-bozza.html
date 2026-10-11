@@ -96,6 +96,32 @@ img{display:block;max-width:100%}
 .vuoto{padding:22px 18px;text-align:center;color:var(--grigio);font-size:13.5px;line-height:1.5}
 .vuoto b{display:block;color:var(--avorio);font-weight:500;font-family:'Cormorant Garamond',serif;font-size:21px;margin-bottom:4px}
 
+/* ── entrata, accesso, la mia orma, ritorno ── */
+.entrata{min-height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:70px 22px 90px;background:radial-gradient(ellipse at 50% 110%,rgba(140,110,200,.35),transparent 55%),#000}
+.entrata h2{font-weight:500;font-size:40px;line-height:1.05}
+.entrata>p:not(.nota){font-size:18px;color:rgba(245,240,230,.85);margin-top:6px}
+.entrata .nx{width:190px;margin:26px auto 22px;filter:drop-shadow(0 0 30px rgba(212,175,106,.35))}
+.tasti-c{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.primario.stretto{width:auto;margin:0;padding:11px 20px;font-size:15px}
+.sec{padding:11px 20px;border-radius:980px;border:1px solid var(--oro);color:var(--oro);font-size:15px}
+.campo-f{display:flex;flex-direction:column;gap:3px;font-size:11px;letter-spacing:.14em;color:var(--grigio);border:1px solid var(--riga);border-radius:12px;padding:9px 12px;margin-top:10px;text-transform:uppercase}
+.campo-f span{font-size:15px;letter-spacing:0;text-transform:none}
+.dopo-codice{display:none}
+.dopo-codice.vivo{display:block}
+.cifre{display:flex;gap:6px}
+.cifre span{flex:1;text-align:center;font-size:22px;padding:10px 0;border:1px solid var(--oro);border-radius:10px}
+.spunta{display:flex;gap:10px;align-items:center;font-size:13.5px;margin-top:12px}
+.spunta i{width:20px;height:20px;border-radius:5px;background:var(--oro);color:#1a1405;font-style:normal;font-size:13px;display:flex;align-items:center;justify-content:center}
+.grande-foto{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;margin:18px 0 6px;padding:22px;border-radius:20px;background:linear-gradient(135deg,rgba(212,175,106,.28),rgba(212,175,106,.08));border:1px solid var(--oro);font-family:'Cormorant Garamond',serif;font-size:26px}
+.grande-foto span{font-size:28px;color:var(--oro)}
+.tasti-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tasti-g span{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px;border:1px solid var(--riga);border-radius:12px;font-size:18px}
+.tasti-g b{font-weight:400;font-size:11.5px;color:var(--grigio)}
+.carta u,.carte u{text-decoration:none;color:var(--oro)}
+.notifica{position:absolute;left:12px;right:12px;top:60px;z-index:5;background:rgba(40,42,60,.92);border-radius:18px;padding:12px 14px;font-size:13px;line-height:1.4;box-shadow:0 14px 40px rgba(0,0,0,.5);backdrop-filter:blur(14px);animation:scende .7s cubic-bezier(.3,1.4,.5,1) both}
+.notifica b{display:block;font-size:11px;letter-spacing:.06em;color:var(--oro);font-weight:600;margin-bottom:3px}
+@keyframes scende{from{transform:translateY(-120px);opacity:0}to{transform:none;opacity:1}}
+
 /* ── 1 · scatto ── */
 .p1 .cam{position:absolute;inset:0;background:#000}
 .p1 .cam img{width:100%;height:100%;object-fit:cover;object-position:38% 50%}
@@ -258,6 +284,60 @@ img{display:block;max-width:100%}
 <div class="tel"><div class="schermo" id="schermo">
   <div class="testata"><span>✦ FELICITASMUNDI</span><span class="dove" id="dove">Civiltà Sarda</span><button class="i" id="apri-info" aria-label="la spiegazione di questa schermata">i</button></div>
   <div class="pista" id="pista">
+
+    <!-- A · l'entrata -->
+    <section class="passo pA">
+      <div class="entrata">
+        <div class="occ" style="text-align:center">COMUNITÀ ETERNA</div>
+        <h2 class="serif">Villaggi Diffusi.</h2>
+        <p>Il primo è la Sardegna.</p>
+        <img src="APP.FELICITASMUNDI/piatti/nexus-fermo.webp" onerror="this.src='casa/nexus.png'" alt="" class="nx">
+        <div class="tasti-c"><button class="primario stretto" data-vai="1">Entra nell'app</button><button class="sec">Felicitas Festival</button></div>
+        <p class="nota" style="text-align:center">Da qui arriva chi apre il link: la casa, l'invito di un amico, il QR del volantino.</p>
+      </div>
+    </section>
+
+    <!-- B · l'accesso -->
+    <section class="passo pB">
+      <div class="scheda" style="padding-top:70px">
+        <div class="occ">ENTRA</div>
+        <h2>Con la tua mail.</h2>
+        <div class="campo-f">la tua mail<span class="ph">[ nome@esempio.it ]</span></div>
+        <button class="primario" id="manda-codice">Mandami il codice</button>
+        <div class="dopo-codice" id="dopo-codice">
+          <div class="etich">IL CODICE ARRIVATO PER MAIL</div>
+          <div class="cifre"><span>4</span><span>8</span><span>1</span><span>0</span><span>2</span><span>7</span></div>
+          <p class="nota">Vale solo l'ultimo arrivato. <u>mandane un altro</u></p>
+          <div class="etich">LA PRIMA VOLTA</div>
+          <div class="campo-f">nome<span class="ph">[ nome ]</span></div>
+          <div class="campo-f">cognome<span class="ph">[ cognome ]</span></div>
+          <label class="spunta"><i>✓</i>condizioni d'uso e privacy</label>
+          <button class="primario" data-vai="2">Entra</button>
+        </div>
+        <p class="nota">Niente password: ogni volta un codice nuovo alla mail. Chi entra la prima volta sceglie poi il villaggio e i suoi talenti.</p>
+      </div>
+    </section>
+
+    <!-- C · la mia orma -->
+    <section class="passo pC">
+      <div class="scheda" style="padding-top:66px">
+        <div class="occ">LA MIA ORMA</div>
+        <h2>11 ottobre · san Firmino</h2>
+        <div class="chips mini"><span>◐ luna nuova · 10 ottobre</span><span>Villaggio Felicitas · Civiltà Sarda</span></div>
+        <button class="grande-foto" data-vai="3"><span>◉</span>Una foto</button>
+        <div class="etich">LA SETTIMANA · OBIETTIVI</div>
+      </div>
+      <div class="carte">
+        <div class="carta"><div class="im stadio av">◐</div><div class="t"><b>Il flusso delle orme: la vista per stadio</b><small>nexus · <u>in avanzamento</u> · entro 04/10</small></div><span class="fr">›</span></div>
+        <div class="carta"><div class="im stadio av">◐</div><div class="t"><b>Cosa deve avere l'app per un'azienda</b><small>acqua · <u>in avanzamento</u> · entro 04/10</small></div><span class="fr">›</span></div>
+        <div class="carta"><div class="im stadio co">○</div><div class="t"><b>Lettera d'intenti</b><small>Felicitas Festival · in coda</small></div><span class="tag">LO PRENDO</span></div>
+      </div>
+      <div class="scheda" style="padding-top:14px">
+        <div class="etich">GLI ALTRI TASTI</div>
+        <div class="tasti-g"><span>📅<b>calendario</b></span><span>€<b>costi</b></span><span>☏<b>rubrica</b></span><span>☀<b>karma yoga</b></span><span>✦<b>talenti</b></span><span>▦<b>squadre</b></span></div>
+        <p class="nota">La casa di chi è dentro. Un tasto grande, la foto; il resto ha il suo posto.</p>
+      </div>
+    </section>
 
     <!-- 1 · lo scatto -->
     <section class="passo p1">
@@ -524,6 +604,25 @@ img{display:block;max-width:100%}
       </div>
     </section>
 
+    <!-- Z · il ritorno -->
+    <section class="passo pZ">
+      <div class="notifica"><b>✦ FelicitasMundi · ora</b><span>Alessandra ha preso «Mettere a disposizione un punto di ritiro» nella tua foto Cas'ale · Baratili.</span></div>
+      <div class="scheda" style="padding-top:150px">
+        <div class="occ">IL RITORNO</div>
+        <h2>Qualcuno ha risposto alla tua foto.</h2>
+        <div class="carte" style="padding:0">
+          <button class="carta" data-vai="5"><img class="im" src="casa-viva-luogo.jpg" alt="" style="object-position:38% 50%"><div class="t"><b>Cas'ale · Baratili</b><small>1 obiettivo preso · 1 messaggio nuovo</small></div><span class="tag">APRI</span></button>
+        </div>
+        <div class="etich">COME ARRIVA</div>
+        <div class="righe">
+          <div class="riga"><b>nell'app</b><span>il numero sulla campanella</span></div>
+          <div class="riga"><b>per mail</b><span>riassunto a fine giornata</span></div>
+          <div class="riga"><b>dal tocco</b><span>dritto dentro l'orma</span></div>
+        </div>
+        <p class="nota">Il giro si chiude dove è cominciato: dalla foto. Oggi nel database ci sono già avvisi così: «Alessandra ora fa parte di Villaggio Felicitas – Civiltà Sarda».</p>
+      </div>
+    </section>
+
   </div>
 
   <div class="nav"><button class="fr" id="prima" aria-label="prima">‹</button><div class="punti" id="punti"></div><button class="fr" id="dopo" aria-label="dopo">›</button></div>
@@ -535,6 +634,15 @@ img{display:block;max-width:100%}
 <script>
 (function(){
   var PASSI = [
+    { n:"L'entrata", t:"Da dove si arriva.",
+      p:"Chi apre il link — dalla casa, da un invito, dal QR di un volantino — trova Villaggi Diffusi e un tasto: Entra nell'app.",
+      db:"La casa è <code>casa-apple-bozza.html</code>. «Entra nell'app» porta a <code>communitas-aeterna/index.html</code>; da ospite, le stanze del fare chiedono l'accesso e poi tornano dove si voleva andare." },
+    { n:"L'accesso", t:"Con la mail, senza password.",
+      p:"La mail, un codice di sei cifre, e la prima volta nome, cognome e la spunta su condizioni d'uso e privacy. Poi si sceglie il villaggio e i talenti.",
+      db:"<code>fm-accesso.js</code>: codice OTP via mail (vale solo l'ultimo), <code>persone</code> con nome e cognome, l'accettazione registrata. Chi entra la prima volta passa dalla soglia di Antaḥkaraṇa (<code>fm-soglia.js</code>) e dal percorso dei talenti." },
+    { n:"La mia orma", t:"La casa di chi è dentro.",
+      p:"Il giorno, il santo, la luna, il villaggio. Un tasto grande: Una foto. Sotto, gli obiettivi della settimana con «lo prendo»; poi gli altri tasti — calendario, costi, rubrica, karma yoga, talenti, squadre.",
+      db:"Oggi la mia orma (<code>fm-orma-tempio.js</code>) mostra già: data, <code>santi</code>, <code>lune</code>, gli obiettivi con <code>stadio</code> ed <code>entro_il</code>, «lo prendo», «affida a», talenti, squadre, ore messe. Il tasto «Una foto» è la novità." },
     { n:"Lo scatto", t:"Una foto, un tasto.",
       p:"Dal telefono: si apre l'app, si scatta. Luogo, giorno e luna sono già lì.",
       db:"La foto sale nel bucket <code>pubblico</code> (o <code>riservato</code> con «Solo io»). L'orma nasce con <code>luogo</code>, <code>accaduto_il</code>, <code>orma_madre_id</code> = il villaggio. La luna viene da <code>lune</code>." },
@@ -560,7 +668,10 @@ img{display:block;max-width:100%}
       db:"<code>orme</code> con <code>visibilita = pubblico</code> + <code>orma_file</code>, filtrate per <code>tipo</code>. Oggi nel database: 5 articoli, 1 festa, 8 karma yoga, 0 foto, 0 opere, 0 puntate (<code>rubrica_radio</code> vuota, nessuna registrazione). Le dirette restano solo se si registrano: AzuraCast lo sa fare." },
     { n:"Il libro", t:"Il libro, l'articolo scritto, gli articoli dal web.",
       p:"Il libro di Di Bella mostra chi ne parla: l'articolo scritto qui e gli articoli dal web. L'articolo, dall'altra parte, mostra il libro. E ogni articolo ha il suo «chi lo vede».",
-      db:"<code>legami</code>: da prodotto → a orma articolo, relazione «raccontato nel percorso» (tavola pronta, 0 righe oggi). Gli articoli dal web sono orme <code>articolo</code> con <code>articolo_url</code>. Pubblico = chi è entrato (le policy anon vedono solo feste, villaggi e mappa): «anche senza account» è una regola nuova, da scrivere dopo la conferma del modello." }
+      db:"<code>legami</code>: da prodotto → a orma articolo, relazione «raccontato nel percorso» (tavola pronta, 0 righe oggi). Gli articoli dal web sono orme <code>articolo</code> con <code>articolo_url</code>. Pubblico = chi è entrato (le policy anon vedono solo feste, villaggi e mappa): «anche senza account» è una regola nuova, da scrivere dopo la conferma del modello." },
+    { n:"Il ritorno", t:"Qualcuno ha risposto alla tua foto.",
+      p:"Quando qualcuno prende un obiettivo o scrive nella chat, arriva l'avviso: nell'app, e per mail a fine giornata. Un tocco e si è dentro l'orma della foto.",
+      db:"<code>notifiche</code> (destinatario, tipo, testo, <code>porta_a</code>, canale mail) — oggi 4 righe, tipo «orma_presa». Le mail partono dal cron <code>avvisi-mail</code> e dal riassunto <code>fm_riassunto_fine_giornata</code>. Esiste già <code>fm_notifica_orma_presa</code>." }
   ];
   var n = 0, N = PASSI.length;
   var pista = $("pista"), punti = $("punti"), elenco = $("elenco"), gt = $("guida-testo"), info = $("info-dentro");
@@ -585,8 +696,8 @@ img{display:block;max-width:100%}
     Array.prototype.forEach.call(elenco.querySelectorAll("button"), function(b, k){ b.classList.toggle("on", k===n); });
     gt.innerHTML = testoGuida(PASSI[n], n); info.innerHTML = testoGuida(PASSI[n], n);
     $("prima").disabled = n===0; $("dopo").disabled = n===N-1;
-    $("dove").textContent = n===0 ? "Civiltà Sarda" : (n+1) + " · " + PASSI[n].n;
-    if(n===3) accendi(stratoVivo);
+    $("dove").textContent = (n+1) + " · " + PASSI[n].n;
+    if(n===6) accendi(stratoVivo);
     if(location.hash !== "#" + (n+1)) history.replaceState(null, "", "#" + (n+1));
   }
   $("prima").onclick = function(){ vai(n-1); }; $("dopo").onclick = function(){ vai(n+1); };
@@ -601,15 +712,17 @@ img{display:block;max-width:100%}
   $("chiudi-info").onclick = function(){ $("info").classList.remove("vivo"); };
 
   /* 1 · lo scatto */
-  $("scatto").onclick = function(){ var l = $("lampo"); l.classList.remove("va"); void l.offsetWidth; l.classList.add("va"); setTimeout(function(){ vai(1); }, 420); };
+  $("scatto").onclick = function(){ var l = $("lampo"); l.classList.remove("va"); void l.offsetWidth; l.classList.add("va"); setTimeout(function(){ vai(4); }, 420); };
 
   /* 2 · le scelte */
   function sceglie(id, poi){ var box = $(id); Array.prototype.forEach.call(box.querySelectorAll("button"), function(b){ b.onclick = function(){ Array.prototype.forEach.call(box.querySelectorAll("button"), function(x){ x.classList.remove("on"); }); b.classList.add("on"); if(poi) poi(b.textContent.trim().toLowerCase()); }; }); }
   sceglie("tipi", function(t){ ["opera","racconto","puntata"].forEach(function(k){ $("sotto-"+k).classList.toggle("vivo", t===k); }); });
   sceglie("visi"); sceglie("vis7");
   Array.prototype.forEach.call(document.querySelectorAll("#sotto-opera .chips"), function(c){ Array.prototype.forEach.call(c.querySelectorAll("button"), function(b){ b.onclick = function(){ Array.prototype.forEach.call(c.querySelectorAll("button"), function(x){ x.classList.remove("on"); }); b.classList.add("on"); }; }); });
-  $("pubblica").onclick = function(){ vai(2); };
-  $("vedi-bacheca").onclick = function(){ vai(6); };
+  $("pubblica").onclick = function(){ vai(5); };
+  $("vedi-bacheca").onclick = function(){ vai(9); };
+  Array.prototype.forEach.call(document.querySelectorAll("[data-vai]"), function(b){ b.onclick = function(){ vai(parseInt(b.getAttribute("data-vai"),10)); }; });
+  $("manda-codice").onclick = function(){ $("dopo-codice").classList.add("vivo"); this.style.display="none"; };
   /* 3 · le linguette dentro l'orma */
   Array.prototype.forEach.call(document.querySelectorAll("#linguette button"), function(b){ b.onclick = function(){ Array.prototype.forEach.call(document.querySelectorAll("#linguette button"), function(x){ x.classList.remove("on"); }); b.classList.add("on"); Array.prototype.forEach.call(document.querySelectorAll(".p2b .ling"), function(d){ d.classList.toggle("vivo", d.getAttribute("data-l")===b.getAttribute("data-l")); }); }; });
   Array.prototype.forEach.call(document.querySelectorAll(".p2b .ling .chips"), function(c){ Array.prototype.forEach.call(c.querySelectorAll("button"), function(b){ b.onclick = function(){ Array.prototype.forEach.call(c.querySelectorAll("button"), function(x){ x.classList.remove("on"); }); b.classList.add("on"); }; }); });
