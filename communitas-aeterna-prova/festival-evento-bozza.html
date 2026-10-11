@@ -54,6 +54,12 @@ a{color:inherit;text-decoration:none}
 .apertura .testo .tasti .fm-tasto{font-size:16px;padding:14px 26px}
 @media (max-width:860px){.apertura .visual{grid-template-columns:1fr;gap:18px;padding:16px 0 10px}.apertura .visual img{border-radius:16px}.apertura .testo{text-align:center}.apertura .testo .tre,.apertura .testo .tasti{justify-content:center}}
 
+/* l'invito in quattro lingue */
+.lingue{display:flex;gap:6px;flex-wrap:wrap}
+.invito-testo{display:none;max-width:760px}
+.invito-testo.vivo{display:block}
+.invito-testo p{font-family:'Cormorant Garamond',serif;font-size:clamp(19px,2.1vw,23px);line-height:1.45;margin-bottom:14px}
+.ascolta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px}
 /* la striscia col tema, come alle fiere */
 .striscia{border-top:1px solid var(--riga);border-bottom:1px solid var(--riga);background:#0a0a0f}
 .striscia .in{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding:18px 22px}
@@ -62,6 +68,7 @@ a{color:inherit;text-decoration:none}
 .striscia .voce{display:flex;flex-direction:column;gap:3px}
 .striscia .voce small{font-size:10.5px;letter-spacing:.24em;color:var(--grigio);text-transform:uppercase}
 .striscia .voce b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:20px}
+.striscia .voce.ospiti b{font-size:18px;line-height:1.2}
 
 /* ── sezioni ── */
 section{padding:60px 0 14px}
@@ -156,7 +163,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <div class="nav"><div class="in">
   <div class="m"><button id="apri-stanze" aria-label="la barra">☰</button><span>FELICITAS FESTIVAL · 2026</span></div>
-  <div class="sez"><a href="#stanze">Le stanze</a><a href="#programma">Il programma</a><a href="#voci">Chi parla</a><a href="#baratili">Baratili</a><a href="#espositori">Espositori e partner</a><a href="#panieri">I panieri</a><a href="#partecipa">Partecipare</a></div>
+  <div class="sez"><a href="#invito">L'invito</a><a href="#stanze">Le stanze</a><a href="#programma">Il programma</a><a href="#voci">Chi parla</a><a href="#baratili">Baratili</a><a href="#espositori">Espositori e partner</a><a href="#panieri">I panieri</a><a href="#partecipa">Partecipare</a></div>
   <div style="display:flex;gap:10px;align-items:center"><span class="lingua">IT · <span class="ph">EN</span></span><a class="fm-tasto piccolo cta" href="#partecipa">Ci sarò</a></div>
 </div></div>
 <div class="trama"></div>
@@ -177,9 +184,39 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </div></div>
 
+
+<!-- ═══ l'invito, in quattro lingue ═══ -->
+<section id="invito" style="padding-top:34px"><div class="in">
+  <div class="sez-capo"><div><span class="fm-occ">L'INVITO</span><h2>Ti aspettiamo a Baratili.</h2></div>
+    <div class="lingue"><button class="fm-chip on" data-l="it">Italiano</button><button class="fm-chip" data-l="camp">Campidanese</button><button class="fm-chip" data-l="log">Logudorese</button><button class="fm-chip" data-l="gall">Gallurese</button></div></div>
+  <div class="invito-testo vivo" data-l="it">
+    <p>21 novembre ti aspettiamo a Baratili San Pietro per il Felicitas Festival: una giornata per conoscerci, condividere idee e dare vita a nuove collaborazioni.</p>
+    <p>FelicitasMundi, il primo villaggio diffuso della Sardegna, nasce dall'incontro di tanti vicinati. Ciascuno mantiene la propria autonomia e porta con sé persone, talenti, prodotti e peculiarità, ma anche bisogni che, insieme, possiamo ascoltare e affrontare.</p>
+    <p>Il festival sarà la prima occasione per scoprire la piattaforma FelicitasMundi e come scienza, tecnologia e logistica possano mettersi al servizio della comunità. Sarà anche un momento per incontrare gli altri progetti e le reti già attivi in Sardegna, unire le forze e costruire opportunità per tutto il territorio.</p>
+    <p>Un'isola di relazioni che avvicina luoghi e persone e che vuole guardare anche oltre i propri confini: uno studioso di geopolitica ci offrirà una prospettiva originale sulla situazione internazionale.</p>
+    <p>Ci farà piacere averti con noi, con le tue idee, la tua esperienza e ciò che vorrai condividere.</p>
+  </div>
+  <div class="invito-testo" data-l="camp">
+    <p>Cun praxeri ti invitu a pigai parti a su Festival Felicitas, chi s'at a tenni a Baratili San Pietro su 21 de novembri.</p>
+    <p>Felicitas Mundi est una reti de biddas difùsias. Sa prima est sa Sardigna. Sa bidda difùsia est cumposta de medas bixinaus. Dònnia bixinau portat in sa bidda s'ànima sua, s'indipendèntzia sua, is talentus suus, is produs suus, is particularidadis suas e fintzas is bisòngius suus.</p>
+    <p>Su festival est sa prima ocasioni po s'atobiai e connosci sa prataforma Felicitas Mundi, chi ponit impari cuscèntzia, tecnologia e logìstica in sa comunidadi. Est un'ocasioni po cumentzai a auniri custu progetu cun àterus progetus e retis chi sunt giai ativus in sa bidda Sardigna, a profetu de totu su territòriu.</p>
+    <p>Sigumenti no seus e no boleus essi isolaus de su restu de su mundu, nci at a essi fintzas s'interventu de unu studiosu de geopolìtica, chi at a presentai unu puntu de vista originali apitzus de sa situatzioni internatzionali.</p>
+  </div>
+  <div class="invito-testo" data-l="log">
+    <p class="ph">[ l'invito in logudorese ]</p>
+  </div>
+  <div class="invito-testo" data-l="gall">
+    <p>Cun piaceri t'invitu a participà a lu Festival Felicitas, chi si tinarà a Baratili San Pietro lu 21 di nuembri.</p>
+    <p>Felicitas Mundi è una reti di paesi diffusi. Lu primu è la Saldigna. Lu paesi diffusu è cumpostu da tanti vicinati. Ogni vicinatu rapprisenta e polta in lu paesi l'anima soia, l'indipindenza soia, li talenti soi, li prudutti soi, li particularità soi e ancu li bisogni soi.</p>
+    <p>Lu festival è la prima occasioni d'incontru pa cunniscì la piattaforma Felicitas Mundi, chi integra cuscenza, tecnulugia e logistica in la cumunità. È un'occasioni pa cumincià a integrà chistu prughjettu cun altri prughjetti e reti attivi in lu paesi Saldigna, a vantaghju di tuttu lu territoriu.</p>
+    <p>Postu chi no semu e no vulemu esse isolati da lu restu di lu mundu, ci sarà ancu l'interventu d'unu studiosu di geopulitica, chi prisintarà un puntu di vista originali nantu à la situazioni internaziunali.</p>
+  </div>
+  <div class="ascolta"><button class="fm-tasto piccolo secondario">▶ Ascolta l'invito</button><span class="fm-nota">letto in italiano, campidanese, logudorese e gallurese · <span class="ph">[ le voci ]</span></span></div>
+</div></section>
+
 <div class="striscia"><div class="in">
-  <div class="voce"><small>L'edizione</small><b>TRAME · la prima</b></div>
-  <div class="voce"><small>Quattro stanze</small><b>Mestieri antichi · Emporio · Assistenza · Sala conferenze</b></div>
+  <div class="voce ospiti"><small>Conferenze · ospiti</small><b>Lamberto Rimondini · L'altra storia d'Italia</b><b>dottoressa Randaccio · La zona franca</b><b>Gruppo Sardo Surra</b></div>
+  <div class="voce"><small>Quattro stanze</small><b>Mestieri antichi · Emporio · Mutuo aiuto · Sala conferenze</b></div>
   <div class="voce"><small>Svelato per la prima volta</small><b>L'app FelicitasMundi</b></div>
   <div class="voce"><small>Prima del Festival</small><b>25 ottobre · l'incontro dei vicinati</b></div>
 </div></div>
@@ -193,7 +230,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="pad" style="--c:var(--acqua)"><h3>Emporio</h3><div class="ore">tutto il giorno</div>
       <p>Un punto shop dedicato ai prodotti di FelicitasMundi e delle comunità coinvolte, gli stessi del sito. Ogni prodotto ha il QR code di Felicitas con la storia del produttore. Le promozioni dei gruppi d'acquisto: comprare insieme.</p>
       <div class="chips"><span>alimenti</span><span>rimedi</span><span>oggettistica sacra</span><span>abbigliamento</span><span>oggetti di coscienza</span></div></div>
-    <div class="pad" style="--c:var(--fuoco)"><h3>Assistenza comunitaria integrata</h3><div class="ore">tutto il giorno</div>
+    <div class="pad" style="--c:var(--fuoco)"><h3>Mutuo aiuto</h3><div class="ore">tutto il giorno</div>
       <p>Gli operatori presentano i loro trattamenti e percorsi. Dalla mattina al pomeriggio, trattamenti da seguire.</p></div>
     <div class="pad" style="--c:var(--oro)"><h3>Sala conferenze</h3><div class="ore">mattina e pomeriggio</div>
       <p>Antaḥkaraṇa, le conferenze, la musica del cuore. Il programma qui sotto.</p></div>
@@ -208,13 +245,13 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="riga-p"><div class="ora">10:00</div><div><h4>Antaḥkaraṇa · percorso e strumenti per vicinati</h4><p>Strumenti pratici per fare assieme, con Gabriele Dettori. Insieme al kirtan, musica del cuore, e al cerchio di condivisione con i vicinati.</p><div class="con"><img src="casa/gab.jpg" alt="">Gabriele Dettori</div></div></div>
     <div class="riga-p"><div class="ora">13:00</div><div><h4 class="verde">Pranzo vegetariano di condivisione</h4><p>Per conoscerci e passare insieme momenti di condivisione.</p></div></div>
     <div class="parte">il pomeriggio · sala conferenze</div>
-    <div class="riga-p"><div class="ora">15:00–15:30</div><div><h4>Assistenza comunitaria integrata</h4><p>Presentazione degli operatori locali e dei progetti di gruppo d'acquisto.</p></div></div>
+    <div class="riga-p"><div class="ora">15:00–15:30</div><div><h4>Mutuo aiuto</h4><p>Presentazione degli operatori locali e dei progetti di gruppo d'acquisto.</p></div></div>
     <div class="riga-p"><div class="ora">15:30–16:00</div><div><h4 class="viola">Kirtan e meditazione</h4><p>Musica del cuore.</p></div></div>
     <div class="riga-p"><div class="ora">16:00–16:40</div><div><h4>La zona franca</h4><p>Conferenza con la dottoressa Randaccio.</p><div class="con"><i>R</i>dottoressa Randaccio</div></div></div>
     <div class="riga-p"><div class="ora">16:40–17:00</div><div><h4 class="viola">Momento musicale</h4><p>Drum circle.</p></div></div>
     <div class="riga-p"><div class="ora">17:00–17:40</div><div><h4>Gruppo Sardo Surra</h4><p>Conferenza.</p><div class="con"><i>S</i>Gruppo Sardo Surra</div></div></div>
     <div class="riga-p"><div class="ora">17:40–18:00</div><div><h4>Il progetto Villaggio Felicitas</h4><p>Che sorgerà in un terreno a Paulilatino.</p></div></div>
-    <div class="riga-p"><div class="ora">18:00–19:30</div><div><h4>L'altra storia</h4><p>Con Lamberto Rimondini.</p><div class="con"><i>LR</i>Lamberto Rimondini</div></div></div>
+    <div class="riga-p"><div class="ora">18:00–19:30</div><div><h4>L'altra storia d'Italia</h4><p>Con Lamberto Rimondini.</p><div class="con"><i>LR</i>Lamberto Rimondini</div></div></div>
     <div class="riga-p"><div class="ora">19:30</div><div><h4 class="verde">Cena vegetariana</h4><p>Per chiudere la serata insieme.</p></div></div>
   </div>
 </div></section>
@@ -226,7 +263,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="tess"><div class="im"><img src="casa/gab.jpg" alt=""></div><div class="t"><b>Gabriele Dettori</b><small>FelicitasMundi · Antaḥkaraṇa, percorso e strumenti per vicinati · 10:00</small></div></div>
     <div class="tess"><div class="im">R</div><div class="t"><b>dottoressa Randaccio</b><small>La zona franca · 16:00</small></div></div>
     <div class="tess"><div class="im">S</div><div class="t"><b>Gruppo Sardo Surra</b><small>Conferenza · 17:00</small></div></div>
-    <div class="tess"><div class="im">LR</div><div class="t"><b>Lamberto Rimondini</b><small>L'altra storia · 18:00</small></div></div>
+    <div class="tess"><div class="im">LR</div><div class="t"><b>Lamberto Rimondini</b><small>L'altra storia d'Italia · 18:00</small></div></div>
   </div>
   <p class="fm-nota" style="margin-top:12px">Le foto e una riga su ognuno: <span class="ph">[ con le cose di domani ]</span></p>
 </div></section>
@@ -249,7 +286,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <section id="app"><div class="in">
   <div class="sez-capo"><div><span class="fm-occ">SVELATO PER LA PRIMA VOLTA</span><h2>L'app FelicitasMundi.</h2></div><p>Il Felicitas Festival sarà la presentazione del lancio dell'applicazione FelicitasMundi.</p></div>
   <div class="svela">
-    <div class="blocco oro"><h4>L'app del Festival è l'app di tutti i giorni.</h4><p>Ogni prodotto dell'Emporio ha il QR code di Felicitas con la storia del produttore. Ogni operatore ha la sua scheda nell'Assistenza. Chi arriva al Festival entra nell'app con un tocco, e il Festival resta: le cose da fare, la chat, il villaggio.</p><div class="tasti"><a class="fm-tasto" href="../communitas-aeterna/index.html">Entra nell'app</a><a class="fm-tasto secondario" href="felicitas-app.html">Aggiungila al telefono</a></div></div>
+    <div class="blocco oro"><h4>L'app del Festival è l'app di tutti i giorni.</h4><p>Ogni prodotto dell'Emporio ha il QR code di Felicitas con la storia del produttore. Ogni operatore ha la sua scheda nel Mutuo aiuto. Chi arriva al Festival entra nell'app con un tocco, e il Festival resta: le cose da fare, la chat, il villaggio.</p><div class="tasti"><a class="fm-tasto" href="../communitas-aeterna/index.html">Entra nell'app</a><a class="fm-tasto secondario" href="felicitas-app.html">Aggiungila al telefono</a></div></div>
     <div class="blocco"><h4>Il praticantato.</h4><p>Durante l'evento verrà proposto il praticantato per l'utilizzo della piattaforma tecnologica collegata alla coscienza FelicitasMundi, e verranno proposti anche i servizi editoriali legati alla piattaforma.</p><div class="tasti"><a class="fm-tasto secondario" href="#">Scopri di più</a></div></div>
   </div>
 </div></section>
@@ -263,7 +300,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="tess vuota"><div class="im">+</div><div class="t"><b class="ph">[ partner ]</b><small><span class="ph">[ cosa porta ]</span></small></div></div>
     <div class="tess vuota"><div class="im">+</div><div class="t"><b class="ph">[ partner ]</b><small><span class="ph">[ cosa porta ]</span></small></div></div>
   </div>
-  <p class="fm-nota" style="margin-top:12px">Ogni espositore e ogni partner hanno la loro scheda nell'Emporio o nell'Assistenza, e il QR code di Felicitas con la loro storia.</p>
+  <p class="fm-nota" style="margin-top:12px">Ogni espositore e ogni partner hanno la loro scheda nell'Emporio o nel Mutuo aiuto, e il QR code di Felicitas con la loro storia.</p>
 </div></section>
 
 <!-- ═══ i panieri ═══ -->
@@ -297,7 +334,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Materiale comunicativo per emporio</b><small>cosa serve · scritto da Gabriele Dettori</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
       <a class="fm-carta" href="squadra-bozza.html"><div class="im">▦</div><div class="t"><b>La squadra del Festival</b><small>la lavagna, chi c'è, le spese</small></div><span class="fr">›</span></a>
     </div>
-    <div class="blocco"><h4>Proponiti per farne parte</h4><p>Si apre una chat nell'Assistenza, tu e il coordinamento del Villaggio Felicitas · Civiltà Sarda. Chi coordina riceve l'avviso nell'app e per mail.</p><div class="tasti"><a class="fm-tasto" href="vicinati-bozza.html">Proponiti</a></div><p style="margin-top:14px">Lo organizza Gabriele Dettori, con il villaggio.</p></div>
+    <div class="blocco"><h4>Proponiti per farne parte</h4><p>Si apre una chat nel Mutuo aiuto, tu e il coordinamento del Villaggio Felicitas · Civiltà Sarda. Chi coordina riceve l'avviso nell'app e per mail.</p><div class="tasti"><a class="fm-tasto" href="vicinati-bozza.html">Proponiti</a></div><p style="margin-top:14px">Lo organizza Gabriele Dettori, con il villaggio.</p></div>
   </div>
 </div></section>
 
@@ -313,6 +350,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   function $(i){return document.getElementById(i)}
   $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  document.querySelectorAll('.lingue .fm-chip').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.lingue .fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.invito-testo').forEach(function(t){ t.classList.toggle('vivo', t.getAttribute('data-l')===b.getAttribute('data-l')); }); }; });
   document.querySelectorAll('.fm-carta .fm-tasto').forEach(function(b){ b.onclick=function(){ var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); }; });
 })();
 </script>
