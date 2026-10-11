@@ -24,12 +24,21 @@ a{color:inherit;text-decoration:none}
 .testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
 .testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
 .testata .dove{font-size:12px;color:var(--grigio)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:min(300px,84vw);background:#10132a;box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;padding:22px 18px;display:flex;flex-direction:column;gap:6px}
+.stanze.vivo{transform:none}
+.stanze .fm-occ{margin-bottom:10px}
+.stanze a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;font-family:'Cinzel',serif;font-size:14px;letter-spacing:.06em}
+.stanze a i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.stanze a:hover{background:rgba(245,240,230,.06)}
+.stanze .fine{margin-top:auto;font-size:12px;color:var(--grigio)}
 .testata .io{width:30px;height:30px;border-radius:50%;background:var(--carta);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px}
 
 /* la barra «cosa stai facendo?» */
 .fare{margin:4px 18px 18px;display:flex;align-items:center;gap:10px;background:var(--carta);border:1px solid var(--oro);border-radius:980px;padding:8px 8px 8px 16px;cursor:pointer}
 .fare span{flex:1;font-family:'Cormorant Garamond',serif;font-size:19px;color:rgba(245,240,230,.85)}
-.fare b{width:38px;height:38px;border-radius:50%;background:var(--oro);color:var(--inchiostro);display:flex;align-items:center;justify-content:center;font-size:18px}
+.fare b{width:40px;height:40px;border-radius:50%;background:var(--notte);border:2px solid var(--oro);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 14px rgba(212,175,106,.35)}
+.fare b img{width:40px;height:40px;border-radius:50%}
 
 /* i quadranti, nell'ordine di Gab: radio · karma yoga · calendario · post */
 .quad{padding:0 18px;margin-bottom:26px}
@@ -100,6 +109,22 @@ a{color:inherit;text-decoration:none}
 .scrivi .dati span{font-size:11.5px;padding:4px 9px;border-radius:980px;border:1px solid var(--riga);color:var(--grigio)}
 .scrivi .fm-tasto.pieno{margin-top:16px}
 
+.forma{display:none}.forma.vivo{display:block}
+.tre-foto{display:flex;gap:6px;margin-top:10px}.tre-foto .fm-chip{font-size:12px;padding:6px 10px}
+.scrivi .foto.piccola{aspect-ratio:auto;padding:14px;flex-direction:row;margin-top:10px}
+.scrivi .foto.piccola b{font-size:20px}
+.campo-t{width:100%;margin-top:10px;background:var(--carta);border:1px solid var(--riga);border-radius:12px;padding:11px 14px;font:15px 'DM Sans',system-ui,sans-serif;color:var(--avorio);outline:none}
+.due-c{display:flex;gap:8px}.due-c .campo-t{flex:1}
+.audio-f{margin-top:10px;display:flex;align-items:center;gap:12px;border:1px dashed rgba(245,240,230,.4);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--grigio)}
+.audio-f b{font-size:22px;color:var(--oro)}.audio-f small{display:block;font-size:11px;color:var(--oro);margin-top:2px}
+.audio-f.spento{opacity:.55}
+.scrivi .dati .fm-chip small{font-size:11px;color:var(--grigio);margin-left:4px}
+.scrivi .dati .fm-chip.on small{color:var(--inchiostro)}
+.scrivi .dati{gap:6px}
+.stampa{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);z-index:70;width:min(360px,90vw);background:#10132a;border:1px solid var(--oro);border-radius:20px;padding:20px;opacity:0;pointer-events:none;transition:all .3s;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+.stampa.vivo{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.stampa h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;margin:6px 0 4px}
+.stampa p{font-size:13.5px;color:var(--grigio);line-height:1.5;margin-bottom:12px}
 /* la mia orma, riscritta: le cose da fare in cima */
 .vista{display:none}
 .vista.vivo{display:block}
@@ -124,11 +149,11 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 <div class="app">
-  <div class="testata"><span class="m">FELICITASMUNDI</span><span class="dove">Civiltà Sarda</span><span class="io">g</span></div>
+  <div class="testata"><button class="menu" id="apri-stanze" aria-label="le stanze">☰</button><span class="m">FELICITASMUNDI</span><span class="dove">Civiltà Sarda</span><span class="io">g</span></div>
 
   <!-- ═══ LA BACHECA ═══ -->
   <div class="vista vivo" id="v-bacheca">
-    <button class="fare" id="apri-scrivi"><span>Cosa stai facendo?</span><b>◉</b></button>
+    <button class="fare" id="apri-scrivi"><span>Cosa stai facendo?</span><b><img src="APP.FELICITASMUNDI/piatti/orma.png" alt=""></b></button>
 
     <!-- 1 · radio -->
     <section class="quad" style="--c:var(--aria)">
@@ -137,7 +162,12 @@ a{color:inherit;text-decoration:none}
         <span class="vivo"><i></i>LUNEDÌ 12 · ORE 19 · IN DIRETTA</span>
         <h2>Strumenti per fare ordine.</h2>
         <div class="sotto"><span class="fm-tag" style="margin-right:6px">puntata</span>Discernimento · con Gabriele Dettori</div>
-        <div class="tasti"><button class="fm-tasto piccolo">Ascolta</button><span class="chiusa">Diretta chiusa: per i karma yoger o per chi paga.</span></div>
+        <div class="tasti"><button class="fm-tasto piccolo">Prenota</button><span class="chiusa">Diretta per i karma yoger o per chi prenota.</span></div>
+      </div>
+      <div class="fm-carte" style="margin-top:10px">
+        <div class="fm-carta"><div class="im" style="color:var(--aria)">◉</div><div class="t"><b>Puntata sul Discernimento</b><small>Strumenti per fare ordine · la puntata</small></div><button class="fm-tasto piccolo secondario">Ascolta</button></div>
+        <div class="fm-carta"><div class="im" style="color:var(--aria)">▶</div><div class="t"><b>Intervista Di Bella</b><small>1:51:14 · dall'archivio audio di felicitasmundi.com</small></div><button class="fm-tasto piccolo secondario">Ascolta</button></div>
+        <div class="fm-carta"><div class="im" style="color:var(--aria)">▶</div><div class="t"><b>Io presento Oristano</b><small>20:28 · dall'archivio audio</small></div><button class="fm-tasto piccolo secondario">Ascolta</button></div>
       </div>
     </section>
 
@@ -181,7 +211,7 @@ a{color:inherit;text-decoration:none}
   <!-- ═══ LA MIA ORMA, riscritta ═══ -->
   <div class="vista mia" id="v-mia">
     <div class="testa2"><h1>Le cose da fare.</h1><div class="sot">11 ottobre · san Firmino · luna nuova</div></div>
-    <button class="fare" id="apri-scrivi-2"><span>Cosa stai facendo?</span><b>◉</b></button>
+    <button class="fare" id="apri-scrivi-2"><span>Cosa stai facendo?</span><b><img src="APP.FELICITASMUNDI/piatti/orma.png" alt=""></b></button>
     <div class="fare-oggi">
       <div class="fm-carta"><div class="im av">◐</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>karma yoga del villaggio · <u>in avanzamento</u></small></div><span class="fr">›</span></div>
       <div class="fm-carta"><div class="im av">◐</div><div class="t"><b>Il flusso delle orme: la vista per stadio</b><small>nexus · <u>in avanzamento</u> · entro 04/10</small></div><span class="fr">›</span></div>
@@ -202,20 +232,90 @@ a{color:inherit;text-decoration:none}
   <div class="piede"><div class="in"><button class="on" data-v="bacheca"><i>✦</i>Bacheca</button><button data-v="mia"><i>◉</i>La mia orma</button></div></div>
 </div>
 
+<!-- la barra laterale: le stanze -->
+<nav class="stanze" id="stanze">
+  <div class="fm-occ">LE STANZE</div>
+  <a href="#" style="--c:var(--terra)"><i></i>Vicinati</a>
+  <a href="#" style="--c:var(--acqua)"><i></i>Emporio</a>
+  <a href="#" style="--c:var(--fuoco)"><i></i>Assistenza</a>
+  <a href="#" style="--c:var(--aria)"><i></i>Edizione</a>
+  <a href="#" style="--c:var(--etere)"><i></i>Scuola</a>
+  <a href="#" style="--c:var(--nexus)"><i></i>Antaḥkaraṇa</a>
+  <a href="#" style="--c:var(--oro)"><i></i>Account</a>
+  <div class="fine">Gabriele Dettori · Civiltà Sarda</div>
+</nav>
 <!-- lo spazio di scrittura -->
 <div class="velo" id="velo"></div>
 <div class="scrivi" id="scrivi">
   <div class="maniglia"></div>
   <h2>Cosa stai facendo?</h2>
-  <div class="foto" id="foto"><b>◉</b>una foto<img id="foto-img" src="" alt="" hidden></div>
-  <textarea placeholder="Due righe: cosa stai facendo, con chi, per chi." id="descr"></textarea>
-  <div class="dati"><span>Cas'ale · Baratili</span><span>11 ottobre · luna nuova</span><span>Civiltà Sarda</span></div>
-  <div class="fm-etich">COS'È</div>
-  <div class="fm-chips" id="tipo"><button class="fm-chip on">Foto</button><button class="fm-chip">Racconto</button><button class="fm-chip">Opera</button><button class="fm-chip">Puntata</button></div>
+  <div class="fm-etich" style="margin-top:10px">COS'È</div>
+  <div class="fm-chips" id="tipo"><button class="fm-chip on" data-f="azione">Azione</button><button class="fm-chip" data-f="racconto">Racconto</button><button class="fm-chip" data-f="opera">Opera</button><button class="fm-chip" data-f="articolo">Articolo</button><button class="fm-chip" data-f="diretta">Diretta</button></div>
+
+  <!-- AZIONE -->
+  <div class="forma vivo" data-f="azione">
+    <div class="tre-foto"><button class="fm-chip">◉ scatta</button><button class="fm-chip">⌸ dal telefono</button><button class="fm-chip">▦ una galleria</button></div>
+    <div class="foto" id="foto"><b>◉</b>la foto<img id="foto-img" src="" alt="" hidden></div>
+    <textarea placeholder="Descrizione" id="descr"></textarea>
+  </div>
+  <!-- RACCONTO -->
+  <div class="forma" data-f="racconto">
+    <input class="campo-t" placeholder="Titolo">
+    <textarea placeholder="Il primo paragrafo"></textarea>
+    <button class="fm-chip" style="margin-top:8px">+ un paragrafo</button>
+    <div class="foto piccola"><b>◉</b>una foto, con la didascalia</div>
+    <input class="campo-t" placeholder="Didascalia">
+  </div>
+  <!-- OPERA -->
+  <div class="forma" data-f="opera">
+    <div class="foto piccola"><b>◉</b>la foto dell'opera</div>
+    <textarea placeholder="Descrizione"></textarea>
+    <div class="audio-f"><b>♪</b>un file audio<small>musica donata, non coperta da diritti</small></div>
+  </div>
+  <!-- ARTICOLO -->
+  <div class="forma" data-f="articolo">
+    <input class="campo-t" placeholder="Titolo">
+    <div class="fm-etich">SOTTOTITOLO</div>
+    <div class="fm-chips"><button class="fm-chip on">ricerca</button><button class="fm-chip">approfondimenti</button><button class="fm-chip">novità</button></div>
+    <textarea placeholder="Il testo"></textarea>
+    <div class="foto piccola"><b>◉</b>una foto</div>
+  </div>
+  <!-- DIRETTA -->
+  <div class="forma" data-f="diretta">
+    <div class="fm-chips"><button class="fm-chip on">una puntata</button><button class="fm-chip">una lezione a pagamento</button></div>
+    <div class="due-c"><input class="campo-t" placeholder="Data" value="lunedì 12 ottobre"><input class="campo-t" placeholder="Orario" value="19:00"></div>
+    <textarea placeholder="Descrizione"></textarea>
+    <div class="fm-nota" id="nota-diretta">La diretta va confermata dal villaggio. La lezione ha un costo: <span class="ph">[ € ]</span>.</div>
+    <button class="fm-tasto pieno" style="margin-top:10px;background:var(--manca);border-color:var(--manca);color:#fff">Vai in onda</button>
+    <div class="audio-f spento"><b>♪</b>a fine diretta resta qui il file audio<small>trascrizione · la fai tu</small></div>
+  </div>
+
+  <div class="fm-etich">DOVE · QUANDO · CIVILTÀ</div>
+  <div class="dati">
+    <button class="fm-chip on">Baratili San Pietro <small>· cerca un comune</small></button>
+    <button class="fm-chip on">oggi</button><button class="fm-chip">ieri</button><button class="fm-chip">un altro giorno</button>
+    <button class="fm-chip on">Civiltà Sarda</button>
+  </div>
+  <div class="fm-etich">CON CHI · IL LEGAME</div>
+  <div class="dati">
+    <button class="fm-chip">+ con chi <small>· dalla rubrica</small></button>
+    <button class="fm-chip">+ un bisogno</button><button class="fm-chip">+ un prodotto</button><button class="fm-chip">+ un evento</button>
+  </div>
+  <div class="fm-etich">LA STANZA</div>
+  <div class="fm-chips" id="stanza-chips"><button class="fm-chip elemento on" style="--c:var(--terra)"><i></i>Vicinati</button><button class="fm-chip elemento" style="--c:var(--acqua)"><i></i>Emporio</button><button class="fm-chip elemento" style="--c:var(--fuoco)"><i></i>Assistenza</button><button class="fm-chip elemento" style="--c:var(--aria)"><i></i>Edizione</button><button class="fm-chip elemento" style="--c:var(--etere)"><i></i>Scuola</button></div>
   <div class="fm-etich">CHI LA VEDE</div>
-  <div class="fm-chips" id="vis"><button class="fm-chip">Solo io</button><button class="fm-chip">Il vicinato</button><button class="fm-chip on">Tutti</button></div>
+  <div class="fm-chips" id="vis"><button class="fm-chip">Solo io</button><button class="fm-chip">Il vicinato</button><button class="fm-chip on">Il villaggio</button></div>
   <button class="fm-tasto pieno" id="pubblica">Pubblica</button>
-  <p class="fm-nota" style="margin-top:10px">Diventa un'orma: con obiettivi, chat e chi c'è dentro. Con «Tutti» compare nella Bacheca.</p>
+  <p class="fm-nota" style="margin-top:10px">Diventa un'orma, con le cose da fare, la chat e chi c'è dentro. Con «Il villaggio» compare nella Bacheca di tutti quelli del villaggio.</p>
+</div>
+
+<!-- la finestrella «stampa», dopo un racconto -->
+<div class="stampa" id="stampa">
+  <div class="fm-occ">STAMPA · EDIZIONE</div>
+  <h3>Vuoi stamparlo?</h3>
+  <p>Il racconto può diventare carta: scegli il formato e vai all'Edizione.</p>
+  <div class="fm-chips"><button class="fm-chip">volantino A5</button><button class="fm-chip">opuscolo</button><button class="fm-chip">libro</button><button class="fm-chip">manifesto</button></div>
+  <div style="display:flex;gap:8px;margin-top:14px"><button class="fm-tasto" id="stampa-si">Vai all'Edizione</button><button class="fm-tasto secondario" id="stampa-no">Non ora</button></div>
 </div>
 
 <script>
@@ -225,10 +325,15 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll('.piede button').forEach(function(b){ b.onclick=function(){ vista(b.getAttribute('data-v')); }; });
   function apri(){ $('scrivi').classList.add('vivo'); $('velo').classList.add('vivo'); }
   function chiudi(){ $('scrivi').classList.remove('vivo'); $('velo').classList.remove('vivo'); }
-  $('apri-scrivi').onclick=apri; $('apri-scrivi-2').onclick=apri; $('velo').onclick=chiudi;
+  $('apri-scrivi').onclick=apri; $('apri-scrivi-2').onclick=apri; $('velo').onclick=function(){ chiudi(); $('stanze').classList.remove('vivo'); $('stampa').classList.remove('vivo'); };
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  document.querySelectorAll('#tipo .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); document.querySelectorAll('.forma').forEach(function(x){ x.classList.toggle('vivo', x.getAttribute('data-f')===f); }); }); });
+  document.querySelectorAll('.scrivi .dati .fm-chip, .tre-foto .fm-chip, .forma .fm-chips .fm-chip, #stanza-chips .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ if(b.closest('.fm-chips')){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); } else { b.classList.toggle('on'); } }); });
+  $('stampa-no').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); vista('mia'); };
+  $('stampa-si').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('foto').onclick=function(){ var i=$('foto-img'); i.src='casa-viva-luogo.jpg'; i.hidden=false; };
   document.querySelectorAll('#tipo .fm-chip, #vis .fm-chip, .filtri .fm-chip').forEach(function(b){ b.onclick=function(){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; });
-  $('pubblica').onclick=function(){ chiudi(); var v=document.querySelector('#vis .on').textContent.toLowerCase(); $('mia-foto').style.display='flex'; $('mia-foto-vis').textContent=v; vista('mia'); };
+  $('pubblica').onclick=function(){ chiudi(); var v=document.querySelector('#vis .on').textContent.toLowerCase(); var f=document.querySelector('#tipo .on').getAttribute('data-f'); $('mia-foto').style.display='flex'; $('mia-foto-vis').textContent=v; document.querySelector('#mia-foto .fm-tag').textContent=f; if(f==='racconto'){ $('stampa').classList.add('vivo'); $('velo').classList.add('vivo'); } else { vista('mia'); } };
   document.querySelectorAll('[data-prendo]').forEach(function(b){ b.onclick=function(){ var c=b.closest('.fm-carta'); var t=c.querySelector('b').textContent; var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); $('presa').style.display='flex'; $('presa-t').textContent=t; }; });
 })();
 </script>
