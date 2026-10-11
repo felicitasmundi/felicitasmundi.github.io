@@ -1,0 +1,99 @@
+/* ═══════════════════════════════════════════════════════════════
+   FELICITASMUNDI · I PEZZI COMUNI · fm-comune.css
+   Un file solo per colori, caratteri, tasti, carte, chip, etichette.
+   Ogni pagina nuova lo carica e usa queste classi; non si ricopia niente.
+   Nato l'11 ottobre 2026 (Gab: «inizia a sviluppare un'area pezzi comuni,
+   con testi, glossario, tasti, carte, colori»).
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1 · i colori (presi dai piatti veri) ── */
+:root{
+  --notte:#0A0C1A;      /* il fondo dell'app */
+  --scafo:#060916;      /* il fondo più scuro, dietro le finestre */
+  --carta:#141830;      /* il fondo delle carte */
+  --avorio:#F5F0E6;     /* il testo */
+  --grigio:#9A978F;     /* il testo secondario */
+  --riga:rgba(245,240,230,.12);
+  --oro:#D4AF6A;        /* l'accento: occhielli, tasti, cose scelte */
+  --oro-scuro:#C8A055;
+  --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
+  --terra-f:#EFE3D2; --acqua-f:#D3E3EE; --fuoco-f:#EEDAD3; --aria-f:#DEEDD4; --etere-f:#E3D6F0;
+  --nexus:#8C2F39;      /* il rosso del Nexus disegnato a mano */
+  --fatto:#6E9E5A;      /* sviluppato · fatto */
+  --manca:#B4574A;      /* manca · errore */
+  --svil:#5A7A8C;       /* sviluppo */
+  --blu:#0071E3;        /* solo nella casa (misure Apple) */
+  --inchiostro:#1A1405; /* il testo sopra l'oro */
+}
+
+/* ── 2 · i caratteri ── */
+.fm-cinzel{font-family:'Cinzel',serif}                                  /* titoli di stanza, nomi */
+.fm-serif{font-family:'Cormorant Garamond',Georgia,serif}               /* titoli e frasi */
+.fm-sans{font-family:'DM Sans',system-ui,sans-serif}                    /* testo, tasti, dati */
+.fm-h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:34px;line-height:1.08}
+.fm-h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:27px;line-height:1.12}
+.fm-h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:22px;line-height:1.15}
+.fm-testo{font-family:'DM Sans',system-ui,sans-serif;font-size:14.5px;line-height:1.55}
+.fm-nota{font-family:'DM Sans',system-ui,sans-serif;font-size:12.5px;line-height:1.5;color:var(--grigio)}
+.fm-occ{font-family:'DM Sans',system-ui,sans-serif;font-size:10.5px;letter-spacing:.28em;font-weight:600;color:var(--oro);text-transform:uppercase}
+.fm-etich{font-family:'DM Sans',system-ui,sans-serif;font-size:11px;letter-spacing:.2em;color:var(--grigio);text-transform:uppercase}
+
+/* ── 3 · i tasti ── */
+.fm-tasto{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;font-weight:600;padding:12px 22px;border-radius:980px;background:var(--oro);color:var(--inchiostro);border:1px solid var(--oro);cursor:pointer;text-decoration:none;transition:filter .2s}
+.fm-tasto:hover{filter:brightness(1.06)}
+.fm-tasto.secondario{background:transparent;color:var(--oro);}
+.fm-tasto.secondario:hover{background:rgba(212,175,106,.12)}
+.fm-tasto.piccolo{font-size:13px;padding:7px 13px;font-weight:500}
+.fm-tasto.pieno{display:flex;width:100%}
+.fm-tasto.spento{opacity:.45;pointer-events:none}
+.fm-tasto.elemento{background:var(--c,var(--oro));border-color:var(--c,var(--oro));color:#fff}
+
+/* ── 4 · i chip (scelte, stati, filtri) ── */
+.fm-chip{display:inline-flex;align-items:center;gap:7px;font-family:'DM Sans',system-ui,sans-serif;font-size:13px;padding:7px 13px;border-radius:980px;border:1px solid rgba(245,240,230,.3);color:rgba(245,240,230,.85);background:none;cursor:pointer}
+.fm-chip.on{background:var(--oro);border-color:var(--oro);color:var(--inchiostro);font-weight:500}
+.fm-chip.elemento i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.fm-chip.elemento.on{background:color-mix(in srgb,var(--c) 22%,transparent);border-color:var(--c);color:#fff}
+.fm-chips{display:flex;gap:7px;flex-wrap:wrap}
+
+/* gli stadi di un obiettivo: le tre parole decise il 3 ottobre */
+.fm-stadio{display:inline-flex;align-items:center;gap:6px;font-family:'DM Sans',system-ui,sans-serif;font-size:12px;padding:4px 10px;border-radius:980px;border:1px solid currentColor}
+.fm-stadio.in-coda{color:var(--grigio)}
+.fm-stadio.in-avanzamento{color:var(--oro)}
+.fm-stadio.sviluppato{color:var(--fatto)}
+.fm-stadio::before{content:"○"}
+.fm-stadio.in-avanzamento::before{content:"◐"}
+.fm-stadio.sviluppato::before{content:"●"}
+
+/* l'etichetta piccola in maiuscoletto (ORMA · WEB · COORDINA · NUOVO) */
+.fm-tag{display:inline-block;font-family:'DM Sans',system-ui,sans-serif;font-size:9.5px;letter-spacing:.16em;font-weight:600;text-transform:uppercase;padding:3px 7px;border-radius:980px;border:1px solid rgba(245,240,230,.3);color:#fff;background:rgba(10,12,26,.6)}
+.fm-tag.oro{background:var(--oro);color:var(--inchiostro);border-color:var(--oro)}
+.fm-tag.vero{background:var(--fatto);color:#0b1a0b;border-color:var(--fatto)}
+
+/* ── 5 · le carte ── */
+.fm-carta{display:flex;gap:12px;align-items:center;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:10px 12px;color:var(--avorio);text-align:left;width:100%;font-family:'DM Sans',system-ui,sans-serif}
+.fm-carta .im{width:54px;height:54px;border-radius:10px;object-fit:cover;flex:none;background:#1c2040;display:flex;align-items:center;justify-content:center;font-size:22px}
+.fm-carta .im.tonda{border-radius:50%}
+.fm-carta .im.libro{width:44px;height:62px;border-radius:3px}
+.fm-carta .t{flex:1;min-width:0}
+.fm-carta .t b{display:block;font-weight:500;font-size:14px;line-height:1.25}
+.fm-carta .t small{display:block;font-size:12px;color:var(--grigio);margin-top:3px;line-height:1.3}
+.fm-carta .fr{color:var(--grigio);font-size:18px}
+.fm-carte{display:flex;flex-direction:column;gap:8px}
+
+/* la tessera della Bacheca: foto grande e titolo, come un film */
+.fm-tessera{position:relative;border-radius:14px;overflow:hidden;background:var(--carta);border:1px solid var(--riga);color:var(--avorio);display:flex;flex-direction:column;text-align:left}
+.fm-tessera .im{width:100%;aspect-ratio:1;object-fit:cover;background:#1c2040}
+.fm-tessera .im.film{aspect-ratio:16/9}
+.fm-tessera .t{padding:9px 10px 10px;font-family:'DM Sans',system-ui,sans-serif}
+.fm-tessera .t b{display:block;font-weight:500;font-size:13px;line-height:1.25}
+.fm-tessera .t small{display:block;font-size:11px;color:var(--grigio);margin-top:3px}
+.fm-tessera .fm-tag{position:absolute;left:8px;top:8px}
+
+/* ── 6 · i campi ── */
+.fm-campo{display:flex;flex-direction:column;gap:3px;font-family:'DM Sans',system-ui,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--grigio);border:1px solid var(--riga);border-radius:12px;padding:9px 12px}
+.fm-campo input,.fm-campo textarea{font:15px/1.4 'DM Sans',system-ui,sans-serif;color:var(--avorio);background:none;border:0;outline:none;letter-spacing:0;text-transform:none}
+.fm-riga{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--riga);font-family:'DM Sans',system-ui,sans-serif;font-size:13.5px}
+.fm-riga b{font-weight:500;color:var(--grigio)}
+
+/* ── 7 · i segnaposti (mai in pagine pubblicate) ── */
+.fm-ph{color:var(--oro);opacity:.85}

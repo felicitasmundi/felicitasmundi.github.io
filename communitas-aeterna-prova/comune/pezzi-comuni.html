@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I pezzi comuni · FelicitasMundi</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fm-comune.css?v=10111500">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.pagina{max-width:1040px;margin:0 auto;padding:40px 22px 100px}
+.testa{margin-bottom:34px;border-bottom:1px solid var(--riga);padding-bottom:22px}
+.testa p{color:var(--grigio);font-size:14px;max-width:640px;line-height:1.55;margin-top:10px}
+.indice{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.indice a{font-size:12.5px;color:var(--avorio);text-decoration:none;border:1px solid var(--riga);border-radius:980px;padding:6px 12px}
+section{margin-top:44px}
+section>h2{margin-bottom:6px}
+section>.sot{color:var(--grigio);font-size:13.5px;margin-bottom:18px;line-height:1.5}
+.gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.col{border-radius:12px;overflow:hidden;border:1px solid var(--riga)}
+.col i{display:block;height:56px;background:var(--c)}
+.col b{display:block;font-size:12px;padding:8px 10px 2px;font-weight:500}
+.col small{display:block;font-size:11px;color:var(--grigio);padding:0 10px 9px;font-family:ui-monospace,Menlo,monospace}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 14px}
+.nome{font-size:11px;letter-spacing:.14em;color:var(--grigio);text-transform:uppercase;margin:16px 0 6px;font-family:ui-monospace,Menlo,monospace;letter-spacing:.04em;text-transform:none}
+.due{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.due{grid-template-columns:1fr}}
+.voce{border-top:1px solid var(--riga);padding:16px 0}
+.voce h3{font-family:'Cinzel',serif;font-weight:500;font-size:16px;letter-spacing:.06em;margin-bottom:6px}
+.voce h3 small{font-family:'DM Sans',system-ui,sans-serif;letter-spacing:0;font-size:11px;color:var(--grigio);margin-left:8px;text-transform:uppercase;letter-spacing:.14em}
+.voce p{font-size:14.5px;line-height:1.55;max-width:720px}
+.voce p+p{margin-top:6px}
+.voce .da{font-size:11.5px;color:var(--grigio);margin-top:6px}
+.voce q{font-family:'Cormorant Garamond',Georgia,serif;font-size:17px;quotes:"«" "»"}
+code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:rgba(255,255,255,.08);padding:1px 6px;border-radius:5px}
+.regola{border-left:2px solid var(--oro);background:rgba(212,175,106,.06);padding:12px 14px;font-size:13.5px;line-height:1.55;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="pagina">
+  <div class="testa">
+    <div class="fm-occ">FELICITASMUNDI · PEZZI COMUNI · BOZZA</div>
+    <h1 class="fm-h1" style="margin-top:8px">Un posto solo per le cose che si ripetono.</h1>
+    <p>Colori, caratteri, tasti, chip, carte, campi e le parole del glossario. Ogni pagina nuova carica <code>comune/fm-comune.css</code> e usa questi pezzi; si corregge qui e cambia dappertutto. I colori e i caratteri sono presi dai piatti veri (la mia orma, dentro l'orma, accesso, vicinati). I testi del glossario sono le parole di Gab, con la data e la fonte.</p>
+    <div class="indice"><a href="#colori">colori</a><a href="#caratteri">caratteri</a><a href="#tasti">tasti</a><a href="#chip">chip e stati</a><a href="#carte">carte</a><a href="#campi">campi</a><a href="#glossario">glossario</a><a href="#regole">regole dei testi</a></div>
+  </div>
+
+  <section id="colori">
+    <h2 class="fm-h2">I colori</h2>
+    <div class="sot">Variabili CSS, uguali in tutti i piatti. L'oro è l'accento; i cinque elementi colorano le stanze; il rosso è il Nexus disegnato a mano.</div>
+    <div class="gr">
+      <div class="col" style="--c:var(--notte)"><i></i><b>notte</b><small>#0A0C1A · fondo</small></div>
+      <div class="col" style="--c:var(--carta)"><i></i><b>carta</b><small>#141830 · carte</small></div>
+      <div class="col" style="--c:var(--avorio)"><i></i><b>avorio</b><small>#F5F0E6 · testo</small></div>
+      <div class="col" style="--c:var(--grigio)"><i></i><b>grigio</b><small>#9A978F · secondario</small></div>
+      <div class="col" style="--c:var(--oro)"><i></i><b>oro</b><small>#D4AF6A · accento</small></div>
+      <div class="col" style="--c:var(--terra)"><i></i><b>terra</b><small>#AA8844 · Vicinati</small></div>
+      <div class="col" style="--c:var(--acqua)"><i></i><b>acqua</b><small>#4488BB · Emporio</small></div>
+      <div class="col" style="--c:var(--fuoco)"><i></i><b>fuoco</b><small>#CC6644 · Assistenza</small></div>
+      <div class="col" style="--c:var(--aria)"><i></i><b>aria</b><small>#669944 · Edizione</small></div>
+      <div class="col" style="--c:var(--etere)"><i></i><b>etere</b><small>#9966CC · Scuola</small></div>
+      <div class="col" style="--c:var(--nexus)"><i></i><b>nexus</b><small>#8C2F39 · il segno</small></div>
+      <div class="col" style="--c:var(--fatto)"><i></i><b>fatto</b><small>#6E9E5A · sviluppato</small></div>
+      <div class="col" style="--c:var(--manca)"><i></i><b>manca</b><small>#B4574A · errore</small></div>
+    </div>
+  </section>
+
+  <section id="caratteri">
+    <h2 class="fm-h2">I caratteri</h2>
+    <div class="sot">Tre famiglie, come nei piatti: Cinzel per i nomi delle stanze, Cormorant Garamond per titoli e frasi, DM Sans per testo, tasti e dati.</div>
+    <div class="nome">.fm-cinzel</div><div class="fm-cinzel" style="font-size:22px;letter-spacing:.08em">LA MIA ORMA · VICINATI · EMPORIO</div>
+    <div class="nome">.fm-h1 · .fm-h2 · .fm-h3</div><div class="fm-h1">Villaggi Diffusi.</div><div class="fm-h2">Il primo è la Sardegna.</div><div class="fm-h3">Strumenti per fare ordine.</div>
+    <div class="nome">.fm-testo · .fm-nota · .fm-occ · .fm-etich</div>
+    <p class="fm-testo" style="max-width:640px">Il villaggio raccoglie la domanda del territorio: libri, prodotti, percorsi e terapie. Chi ha bisogno lo chiede al villaggio, il villaggio lo chiede insieme ai produttori e ai partner, e il costo si divide tra chi partecipa.</p>
+    <p class="fm-nota">Una nota: dodici e mezzo, grigia.</p>
+    <div class="fila"><span class="fm-occ">EDUCAZIONE</span><span class="fm-etich">CHI LA VEDE</span></div>
+  </section>
+
+  <section id="tasti">
+    <h2 class="fm-h2">I tasti</h2>
+    <div class="sot">Uno primario per pagina, oro pieno. Il secondario ha solo il bordo. Il piccolo sta nelle carte. Le parole dei tasti sono verbi o cose, mai frasi.</div>
+    <div class="nome">.fm-tasto · .secondario · .piccolo · .spento · .elemento</div>
+    <div class="fila"><button class="fm-tasto">Pubblica</button><button class="fm-tasto secondario">Scopri di più</button><button class="fm-tasto piccolo">lo prendo</button><button class="fm-tasto piccolo secondario">affida a</button><button class="fm-tasto spento">Paga la mia parte</button><button class="fm-tasto elemento" style="--c:var(--acqua)">Aggiungi al paniere</button></div>
+    <div class="nome">.fm-tasto.pieno</div>
+    <div style="max-width:360px"><button class="fm-tasto pieno">Entra</button></div>
+  </section>
+
+  <section id="chip">
+    <h2 class="fm-h2">Chip e stati</h2>
+    <div class="sot">Le scelte (una sola accesa), i filtri, i cinque elementi, e i tre stadi di un obiettivo.</div>
+    <div class="nome">.fm-chips › .fm-chip(.on)</div>
+    <div class="fm-chips"><button class="fm-chip">Solo io</button><button class="fm-chip">Il vicinato</button><button class="fm-chip on">Tutti</button></div>
+    <div class="nome">.fm-chip.elemento</div>
+    <div class="fm-chips" style="margin-top:8px"><button class="fm-chip elemento on" style="--c:var(--terra)"><i></i>Vicinati</button><button class="fm-chip elemento" style="--c:var(--acqua)"><i></i>Emporio</button><button class="fm-chip elemento" style="--c:var(--fuoco)"><i></i>Assistenza</button><button class="fm-chip elemento" style="--c:var(--aria)"><i></i>Edizione</button><button class="fm-chip elemento" style="--c:var(--etere)"><i></i>Scuola</button></div>
+    <div class="nome">.fm-stadio.in-coda · .in-avanzamento · .sviluppato</div>
+    <div class="fila"><span class="fm-stadio in-coda">in coda</span><span class="fm-stadio in-avanzamento">in avanzamento</span><span class="fm-stadio sviluppato">sviluppato</span></div>
+    <div class="nome">.fm-tag · .oro · .vero</div>
+    <div class="fila"><span class="fm-tag">orma</span><span class="fm-tag">web</span><span class="fm-tag oro">nuovo</span><span class="fm-tag vero">pagina vera</span><span class="fm-tag">coordina</span><span class="fm-tag">karma yoga</span></div>
+  </section>
+
+  <section id="carte">
+    <h2 class="fm-h2">Le carte</h2>
+    <div class="sot">La carta in riga (immagine, titolo, sotto-riga, freccia) per elenchi; la tessera con la foto grande per la Bacheca.</div>
+    <div class="due">
+      <div>
+        <div class="nome">.fm-carte › .fm-carta</div>
+        <div class="fm-carte">
+          <button class="fm-carta"><div class="im">☀</div><div class="t"><b>Mappare i produttori del territorio</b><small>karma yoga · Riso, miele, olio, formaggi, vino.</small></div><span class="fr">›</span></button>
+          <button class="fm-carta"><div class="im libro" style="background:#2a2240"></div><div class="t"><b>Anima Vagabonda</b><small>Parabhakti dāsa · 18,00 €</small></div><span class="fr">›</span></button>
+          <div class="fm-carta"><div class="im tonda" style="font-size:16px">g</div><div class="t"><b>Gabriele Dettori</b><small>ha aperto l'orma</small></div><span class="fm-tag">coordina</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="nome">.fm-tessera (.im.film = come un film)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fm-tessera"><div class="im film"></div><span class="fm-tag">articolo</span><div class="t"><b>Metodo Di Bella: un ponte tra ricerca e coscienza</b><small>20/07 · Bologna</small></div></div>
+          <div class="fm-tessera"><div class="im film"></div><span class="fm-tag">festa</span><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>Cas'ale - Baratili · dalle 10</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="campi">
+    <h2 class="fm-h2">I campi</h2>
+    <div class="sot">L'etichetta piccola sopra, il valore grande sotto. Le righe dato · valore per le schede.</div>
+    <div class="due">
+      <div><div class="nome">.fm-campo</div><label class="fm-campo">la tua mail<input placeholder="nome@esempio.it"></label></div>
+      <div><div class="nome">.fm-riga</div><div class="fm-riga"><b>Dove</b><span>Cas'ale · Baratili</span></div><div class="fm-riga"><b>Quando</b><span>sabato 10 ottobre · luna nuova</span></div></div>
+    </div>
+  </section>
+
+  <section id="glossario">
+    <h2 class="fm-h2">Il glossario</h2>
+    <div class="sot">Le parole della piattaforma, con la definizione già scritta: parole di Gab, data e fonte. Dove manca una definizione c'è un segnaposto, e si scrive insieme.</div>
+
+    <div class="voce"><h3>Orma<small>la parola resta · 11 ottobre</small></h3>
+      <p><q>Un'orma è un punto che ha lasciato una traccia; un bisogno è un punto che cerca.</q> <q>Cercare è guardare; lasciare un'orma è agire.</q> <q>Un'orma è fatta per tornare.</q></p>
+      <p class="da">Cruscotto. Il perché per le persone: <span class="fm-ph">[ da scrivere con le parole di Gab ]</span></p></div>
+
+    <div class="voce"><h3>Villaggio Felicitas</h3>
+      <p><q>L'area attiva in un territorio ampio, legata a una civiltà e alla sua radice linguistica. Dentro il villaggio si propongono i vicinati.</q></p>
+      <p><q>I villaggi sono i contesti culturali e linguistici che prendono un'area vasta.</q></p>
+      <p class="da">Lettera d'intenti v2, 10 ottobre · Gab, 11 ottobre. Le prime civiltà: sarda, tuscia, romagnola, emiliana, piceni. La parola «micelio» resta solo nel database.</p></div>
+
+    <div class="voce"><h3>Vicinato</h3>
+      <p><q>I vicinati sono i gruppi localizzati.</q> <q>Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</q></p>
+      <p class="da">Gab, 11 ottobre · Lettera d'intenti v2.</p></div>
+
+    <div class="voce"><h3>Karma yoga</h3>
+      <p><q>L'azione disinteressata, messa a disposizione per la comunità, attività che ripulisce dalle azioni del passato, ponendoti in un senso di servizio.</q></p>
+      <p><q>Ognuno porta le sue proposte e prende un bisogno del gruppo. Il karma yoga comincia quando si comincia a fare, e il servizio fatto diventa un racconto: così il gruppo riconosce il talento e il valore di chi partecipa.</q></p>
+      <p class="da">Gab · SQL 43, 3 ottobre. Il racconto del servizio va nella Bacheca, con foto e descrizione (11 ottobre).</p></div>
+
+    <div class="voce"><h3>Praticantato</h3>
+      <p><q>Servire per almeno quattro ore dà accesso al praticantato e agli scambi. Supportare in un bisogno pubblico è già servizio.</q></p>
+      <p>Praticantato 20 € a settimana: incontro di gruppo settimanale online con registrazione; Antaḥkaraṇa secondo livello; lezioni riservate della Scuola. <q>Chi entra come ospite trova una base presettata del praticantato.</q></p>
+      <p class="da">Regola del canone (fm-chiuso) · Antaḥkaraṇa «Come funziona», 3 ottobre · Gab, 11 ottobre. Il nome al posto del sanscrito nella comunicazione diretta: <span class="fm-ph">[ da decidere ]</span></p></div>
+
+    <div class="voce"><h3>Coordina</h3>
+      <p><q>Coordina è il nucleo operativo della civiltà.</q> Lo dà solo Gab; gli altri tasti sono karma yoga.</p>
+      <p class="da">Gab, 8 ottobre · SQL 50.</p></div>
+
+    <div class="voce"><h3>Obiettivo · in coda, in avanzamento, sviluppato</h3>
+      <p>Le tre parole dello stadio. <q>Lo stato dell'obiettivo lo cambia chi ha generato l'orma, i coordinatori di quel villaggio e che hanno la responsabilità su quell'obiettivo, e chi effettivamente deve fare quell'obiettivo.</q></p>
+      <p class="da">Gab, 3 ottobre · SQL 45.</p></div>
+
+    <div class="voce"><h3>Chi la vede · Solo io, Il vicinato, Tutti</h3>
+      <p>Le tre visibilità di ogni cosa pubblicata (nel database: solo_me · vicinato · pubblico). Oggi «Tutti» vuol dire chi è entrato; aprire anche a chi non ha l'account è una regola da scrivere.</p></div>
+
+    <div class="voce"><h3>Felicitas Festival</h3>
+      <p><q>Il contesto stagionale ed itinerante tra i vicinati.</q> 21 novembre 2026, Centro Sociale, Baratili San Pietro.</p>
+      <p class="da">Lettera d'intenti v2.</p></div>
+
+    <div class="voce"><h3>Le cinque stanze</h3>
+      <p><b style="color:var(--terra)">Terra · Vicinati</b> — <q>i luoghi e le persone vicine a te, e quello di cui c'è bisogno</q> · <b style="color:var(--acqua)">Acqua · Emporio</b> — <q>quello che si compra, si scambia e si dona, e chi lo porta</q> · <b style="color:var(--fuoco)">Fuoco · Assistenza</b> — <q>chi risponde a un bisogno: spiritualità, trattamenti, consulenze, mutuo aiuto</q> · <b style="color:var(--aria)">Aria · Edizione</b> — <q>le opere, la radio, e quello che si stampa e si distribuisce</q> · <b style="color:var(--etere)">Etere · Scuola</b> — <q>le lezioni, le formazioni, e la ricerca che le accompagna</q>.</p>
+      <p class="da">Tavola stanze del database. Nella casa: Mutuo aiuto al posto di Assistenza comunitaria integrata; Educazione per la Scuola.</p></div>
+
+    <div class="voce"><h3>Strumenti per fare ordine · Discernimento</h3>
+      <p>Il format radio e la puntata. Ogni lunedì in diretta alle 19, con Gabriele Dettori. La diretta del 12 ottobre è chiusa: per i karma yoger o per chi paga.</p>
+      <p class="da">Gab, 10 e 11 ottobre.</p></div>
+
+    <div class="voce"><h3>Nexus</h3>
+      <p><q>Nexus vuol dire collegamento.</q> Il segno disegnato a mano, e la valuta interna del tempo (accantonato il discorso euro/nexus, 10 ottobre).</p>
+      <p class="da">Gab, 9 ottobre.</p></div>
+
+    <div class="voce"><h3>Bacheca</h3>
+      <p>Il posto dove si arriva, dove si vede quello che pubblicano tutti nel villaggio, anche la radio: <q>prima il quadrante radio, poi karma yoga, calendario, e post</q>. Il racconto del servizio vive qui.</p>
+      <p class="da">Gab, 11 ottobre. Definizione per le persone: <span class="fm-ph">[ da scrivere ]</span></p></div>
+
+    <div class="voce"><h3>Cosa stai facendo?</h3>
+      <p><q>Passare nel fare, nell'atto pratico nel "cosa stai facendo?"</q> — la barra con cui dalla Bacheca si passa all'orma.</p>
+      <p class="da">Gab, 11 ottobre. Da disegnare.</p></div>
+  </section>
+
+  <section id="regole">
+    <h2 class="fm-h2">Le regole dei testi</h2>
+    <div class="sot">Valgono per ogni parola pubblicata.</div>
+    <div class="regola"><q>Se c'è un contesto, quel contesto deve essere raccontato, non citato come una cosa probabile.</q> Niente «per esempio», niente «quando ci sarà». (2 ottobre)</div>
+    <div class="regola">Niente «micelio» nei testi dell'app; «Spazio Vivo» tolto dappertutto; Macro Edizioni non si nomina nei testi pubblicati. Il Megafono non compare nella finestra dell'ospite.</div>
+    <div class="regola">Mai «non è X, è Y». Mai possessivi come «il tuo villaggio». I segnaposti <span class="fm-ph">[ così ]</span> si vedono nelle bozze e non arrivano mai in una pagina pubblicata.</div>
+    <div class="regola">Le parole dei tasti: verbi o cose. Pubblica · Entra · lo prendo · affida a · Scopri di più · Acquista · Gruppo d'acquisto.</div>
+  </section>
+</div>
+</body>
+</html>
