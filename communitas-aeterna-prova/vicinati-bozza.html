@@ -73,6 +73,15 @@ a{color:inherit;text-decoration:none}
 .composi .campo{flex:1;background:var(--carta);border:1px solid var(--riga);border-radius:980px;padding:10px 14px;font-size:14px;color:var(--grigio)}
 .composi .tondo{width:38px;height:38px;border-radius:50%;background:var(--carta);border:1px solid var(--riga);font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
 .composi .rec{color:#e04b4b}.composi .invia{background:var(--oro);color:var(--inchiostro);font-weight:700}
+/* il foglio «proponiti» */
+.foglio{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:90dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.foglio.vivo{transform:none}
+.foglio .maniglia{width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px}
+.foglio h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;line-height:1.1;margin-top:6px}
+.foglio textarea{width:100%;margin-top:12px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px 14px;font:15px/1.5 'DM Sans',system-ui,sans-serif;color:var(--avorio);min-height:96px;resize:none;outline:none}
+.foglio .fm-tasto.pieno{margin-top:12px}
+.foglio .arriva{margin-top:16px}.foglio .arriva .fm-etich{margin-bottom:6px}
+.foglio .mandato{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(110,158,90,.15);border:1px solid var(--fatto);font-size:13.5px}
 /* spazi del villaggio: punti di ritiro, partner */
 .spazio{border:1px dashed rgba(245,240,230,.3);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--grigio);line-height:1.45;margin-bottom:8px}
 .spazio b{display:block;color:var(--avorio);font-weight:500;margin-bottom:2px}
@@ -101,7 +110,7 @@ a{color:inherit;text-decoration:none}
   <section class="quad" style="--c:var(--terra)">
     <div class="capo"><span class="fm-occ">I VICINATI</span><a href="#">la mappa ›</a></div>
     <div class="vic vivo"><div class="segno">B</div><div class="t"><b>Baratili San Pietro · Oristano</b><small>Cas'ale, il luogo dell'incontro del 25</small></div><span class="fm-tag vero">attivo</span></div>
-    <div class="vic apri"><div class="segno">+</div><div class="t"><b>Proponiti per farne parte</b><small>dal comune in cui vivi · chi coordina il villaggio ti accoglie</small></div></div>
+    <button class="vic apri" id="proponiti" style="width:100%;text-align:left"><div class="segno">+</div><div class="t"><b>Proponiti per farne parte</b><small>si apre la chat col coordinamento del villaggio</small></div></button>
     <div class="spiega" style="margin-top:8px">Nessuno apre un vicinato da solo: ci si propone per farne parte. Il villaggio si attiva organizzando insieme il Festival.</div>
   </section>
 
@@ -147,12 +156,29 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <div class="velo" id="velo"></div>
+<div class="foglio" id="foglio">
+  <div class="maniglia"></div>
+  <div class="fm-occ">CHAT COL COORDINAMENTO · VILLAGGIO FELICITAS · CIVILTÀ SARDA</div>
+  <h2>Proponiti per farne parte.</h2>
+  <p class="fm-nota" style="margin-top:6px">Scrivi a chi coordina il villaggio: da dove vieni, cosa porti, cosa cerchi. È una chat dentro il gruppo del villaggio: ci si conosce qui.</p>
+  <div class="fm-chips" style="margin-top:12px"><span class="fm-chip on">Baratili San Pietro</span><span class="fm-chip">cerca il comune</span></div>
+  <textarea placeholder="Il messaggio al coordinamento"></textarea>
+  <button class="fm-tasto pieno" id="manda">Manda</button>
+  <div class="arriva">
+    <div class="fm-etich">COSA SUCCEDE</div>
+    <div class="fm-riga"><b>nell'app</b><span>una notifica a chi coordina il villaggio</span></div>
+    <div class="fm-riga"><b>per mail</b><span>un avviso a ognuno di loro</span></div>
+    <div class="fm-riga"><b>poi</b><span>ti rispondono in chat e ti accolgono</span></div>
+  </div>
+</div>
 <nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
 <script>
 (function(){
   function $(i){return document.getElementById(i)}
   $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
-  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('foglio').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  $('proponiti').onclick=function(){ $('foglio').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('manda').onclick=function(){ $('manda').textContent='Mandato · la risposta arriva in chat'; $('manda').disabled=true; };
   document.querySelectorAll('.fm-carta .fm-tasto').forEach(function(b){ b.onclick=function(){ var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); }; });
 })();
 </script>
