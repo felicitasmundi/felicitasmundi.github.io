@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Felicitas Festival · evento · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:60px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}.stanze.vivo{transform:none}
+.foto{margin:0 18px 14px;border-radius:18px;overflow:hidden;aspect-ratio:16/10}.foto img{width:100%;height:100%;object-fit:cover}
+.testa{padding:0 18px 14px}
+.testa .fm-occ{color:var(--fuoco)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:34px;line-height:1.02;margin-top:6px}
+.testa .righe{margin-top:12px}
+.testa .fm-riga{font-size:13.5px}
+.tasti{display:flex;gap:8px;padding:4px 18px 20px;flex-wrap:wrap}
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a{font-size:12px;color:var(--grigio)}
+.quad .spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px}
+.racconto h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:22px;line-height:1.1;margin:16px 0 6px}
+.racconto p{font-size:14.5px;line-height:1.6;margin-bottom:10px}
+.racconto ul{margin:0 0 10px 18px;font-size:14.5px;line-height:1.6}
+.racconto .altro{display:none}.racconto.aperto .altro{display:block}
+.programma{display:flex;flex-direction:column;gap:8px}
+.ora{display:flex;gap:12px;align-items:flex-start;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px}
+.ora b{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1;color:var(--oro);width:54px;flex:none}
+.ora .t{flex:1}.ora .t strong{display:block;font-weight:500;font-size:14px}.ora .t small{display:block;font-size:12px;color:var(--grigio);margin-top:3px;line-height:1.35}
+.fm-carte .fm-carta .im.co{color:var(--grigio);font-size:20px}
+.fm-carte .fm-carta .fm-tasto.piccolo{flex:none}
+.chi{display:flex;align-items:center;gap:10px;font-size:13.5px}
+.chi img{width:34px;height:34px;border-radius:50%}
+.chi small{display:block;color:var(--grigio);font-size:12px}
+.entra{margin:0 18px 24px;border:1px solid var(--oro);border-radius:16px;padding:14px 16px}
+.entra h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:22px;line-height:1.1}
+.entra p{font-size:13.5px;color:var(--grigio);line-height:1.5;margin:6px 0 12px}
+.ph{color:var(--oro);opacity:.85}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)">evento</span></div>
+
+  <div class="foto"><img src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""></div>
+  <div class="testa">
+    <div class="fm-occ">FESTA · VILLAGGIO FELICITAS · CIVILTÀ SARDA</div>
+    <h1>Felicitas Festival</h1>
+    <div class="righe">
+      <div class="fm-riga"><b>Quando</b><span>sabato 21 novembre 2026 · dalle 10</span></div>
+      <div class="fm-riga"><b>Dove</b><span>Baratili San Pietro · Centro Sociale</span></div>
+      <div class="fm-riga"><b>Lo organizza</b><span>Gabriele Dettori · il villaggio</span></div>
+    </div>
+  </div>
+  <div class="tasti"><button class="fm-tasto">Ci sarò</button><button class="fm-tasto secondario">Invita chi risuona</button></div>
+
+  <section class="quad racconto" id="racconto" style="--c:var(--fuoco)">
+    <div class="capo"><span class="fm-occ">L'INIZIATIVA</span></div>
+    <p>L'evento Felicitas Festival è una proposta che nasce dalla piattaforma FelicitasMundi, piattaforma che connette e supporta lo sviluppo economico e sociale di comunità contadine e spirituali dei territori nazionali.</p>
+    <p>Il Felicitas Festival sarà la presentazione del lancio dell'applicazione FelicitasMundi, che permette la facilitazione della connessione tra comunità, famiglie, aziende agricole, operatori terapeutici e insegnanti che vivono in contesti rurali e contadini, e che difficilmente riescono a entrare in connessione, se non attraverso le ordinarie piattaforme virtuali.</p>
+    <div class="altro">
+      <p>Noi invece cerchiamo di proporre uno strumento innovativo che unisce coscienza e tecnologia, e che tende a facilitare l'acquisto di beni — prodotti alimentari, rimedi e oggettistica —, l'acquisto di trattamenti, assistenza e consulenza, l'acquisto di lezioni; e a facilitare l'interscambio di doni, di prodotti, di rimedi naturali, per trovare un modo di sostenere e accompagnare all'autosufficienza alimentare ed energetica.</p>
+      <h3>Il programma</h3>
+      <p>Quello che porteremo a Baratili, attraverso questo festival, è proprio l'impianto strutturale della piattaforma: cinque macroaree.</p>
+      <p>Una è dedicata alle realtà presenti nel territorio sardo che si autosostengono, che fanno mutuo aiuto, ai gruppi di acquisto solidale e ai mercati etici, che vengono presentati con i loro progetti; dando risalto alle figure lavorative ancora vive che portano avanti la conoscenza tradizionale di mestieri prevalentemente artigianali: l'intreccio dei cesti, i prodotti in legno, in ferro, in ceramica, e gli strumenti musicali.</p>
+      <p>L'incontro partirà verso le 10 di mattina, con i laboratori legati agli antichi mestieri, organizzati sia all'esterno sia all'interno del Centro Sociale; e con un momento in cui si parlerà di come creare coordinamento e cooperazione tra le varie comunità sarde coinvolte — comunità formate normalmente da artigiani, agricoltori, terapeuti, insegnanti e famiglie.</p>
+      <h3>L'Emporio</h3>
+      <p>Un'area sarà quella dell'Emporio, che permetterà la distribuzione di alimenti che vengono da produttori locali: riso, miele, caffè, birra, vino, olio e formaggi. Avremo cooperative di allevatori, produttori di fitoterapici e cosmesi, vivai, e tutti i prodotti artigianali.</p>
+      <p>Questi prodotti non saranno allestiti in un classico spazio fieristico con più stand: ci sarà un unico spazio comune in cui saranno proposti.</p>
+      <h3>L'Assistenza</h3>
+      <p>Un'altra area sarà legata all'Assistenza: l'assistenza comunitaria integrata, con operatori che faranno consulenze e trattamenti in ambito di medicina integrata; l'assistenza legata alla fiscalità privilegiata e alla zona franca sarda; e operatori di psicologia infantile e pedagogia, che potranno proporre laboratori ed esperienze per i bambini.</p>
+      <h3>La Scuola</h3>
+      <p>Durante il pomeriggio ci saranno le conferenze, legate all'ambito della Scuola:</p>
+      <ul><li>Lamberto Rimondini, che parla di geopolitica</li><li>la conferenza sulla Zona Franca, con la Randaccio</li><li>altri ospiti provenienti da più settori culturali e sociali della Sardegna</li></ul>
+      <h3>Il praticantato</h3>
+      <p>Durante l'evento verrà proposto il praticantato per l'utilizzo della piattaforma tecnologica collegata alla coscienza FelicitasMundi, e verranno proposti anche i servizi editoriali legati alla piattaforma.</p>
+      <h3>I pasti</h3>
+      <p>Durante l'evento — da definire se solo a pranzo o anche a cena — è prevista la possibilità che una realtà locale autorizzata si occupi del catering, acquistabile attraverso un'offerta consapevole.</p>
+    </div>
+    <button class="fm-tasto piccolo secondario" id="leggi">leggi tutto</button>
+  </section>
+
+  <section class="quad" style="--c:var(--oro)">
+    <div class="capo"><span class="fm-occ">LA GIORNATA</span></div>
+    <div class="programma">
+      <div class="ora"><b>10</b><div class="t"><strong>I laboratori degli antichi mestieri</strong><small>fuori e dentro il Centro Sociale · cesti, legno, ferro, ceramica, strumenti musicali</small></div></div>
+      <div class="ora"><b>·</b><div class="t"><strong>Coordinamento e cooperazione tra le comunità sarde</strong><small>artigiani, agricoltori, terapeuti, insegnanti e famiglie</small></div></div>
+      <div class="ora"><b>·</b><div class="t"><strong>L'Emporio</strong><small>un unico spazio comune · riso, miele, caffè, birra, vino, olio e formaggi</small></div></div>
+      <div class="ora"><b>·</b><div class="t"><strong>L'Assistenza</strong><small>consulenze e trattamenti · zona franca · laboratori per i bambini</small></div></div>
+      <div class="ora"><b>pom.</b><div class="t"><strong>Le conferenze della Scuola</strong><small>Lamberto Rimondini · la Zona Franca · altri ospiti</small></div></div>
+      <div class="ora"><b>·</b><div class="t"><strong>Il praticantato e i servizi editoriali</strong><small>la piattaforma, proposta a chi c'è</small></div></div>
+    </div>
+  </section>
+
+  <section class="quad" style="--c:var(--terra)">
+    <div class="capo"><span class="fm-occ">PRIMA DEL FESTIVAL</span><a href="vicinati-bozza.html">il villaggio ›</a></div>
+    <div class="fm-carte"><div class="fm-carta"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><div class="t"><b>L'incontro dei vicinati · 25 ottobre</b><small>Cas'ale · Baratili · dalle 10 · si prepara il Festival insieme</small></div><span class="fr">›</span></div></div>
+  </section>
+
+  <section class="quad" style="--c:var(--fuoco)">
+    <div class="capo"><span class="fm-occ">COSA SERVE PER IL FESTIVAL</span><a href="squadra-bozza.html">la squadra ›</a></div>
+    <div class="spiega">Le cose da fare, scritte da chi coordina. Chi lo sente ne prende una.</div>
+    <div class="fm-carte">
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Locandina presentazione</b><small>scritto da Gabriele Dettori</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Dimostrazione</b><small>scritto da Gabriele Dettori</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Materiale comunicativo per emporio</b><small>scritto da Gabriele Dettori</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+    </div>
+  </section>
+
+  <section class="quad" style="--c:var(--oro)">
+    <div class="capo"><span class="fm-occ">LO ORGANIZZA</span></div>
+    <div class="chi"><img src="casa/gab.jpg" alt=""><div>Gabriele Dettori<small>coordina il Villaggio Felicitas · Civiltà Sarda</small></div></div>
+  </section>
+
+  <div class="entra" id="entra">
+    <h3>Per partecipare davvero, entra.</h3>
+    <p>Da fuori vedi l'evento. Entrando trovi la chat del Festival, le cose da fare, la squadra, e puoi proporti per far parte del villaggio.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="fm-tasto piccolo">Entra</button><button class="fm-tasto piccolo secondario">Proponiti per farne parte</button></div>
+  </div>
+</div>
+
+<div class="velo" id="velo"></div>
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  $('leggi').onclick=function(){ var r=$('racconto'); r.classList.toggle('aperto'); $('leggi').textContent=r.classList.contains('aperto')?'chiudi':'leggi tutto'; };
+  document.querySelectorAll('.fm-carta .fm-tasto').forEach(function(b){ b.onclick=function(){ var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); }; });
+})();
+</script>
+</body>
+</html>
