@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vicinati · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:60px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}.stanze.vivo{transform:none}
+
+.testa{padding:6px 18px 14px}
+.testa .fm-occ{color:var(--terra)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+
+/* il villaggio nasce col festival */
+.nasce{margin:0 18px 22px;border-radius:18px;overflow:hidden;position:relative;background:#000;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
+.nasce img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.7}
+.nasce::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.94),rgba(0,0,0,.4) 50%,transparent)}
+.nasce>*{position:relative;z-index:1}
+.nasce .data{font-size:10.5px;letter-spacing:.24em;font-weight:600;color:var(--oro)}
+.nasce h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28px;line-height:1.05;margin-top:6px}
+.nasce p{font-size:13px;color:rgba(245,240,230,.85);margin-top:6px;line-height:1.45}
+.nasce .conta{display:flex;gap:14px;margin-top:12px}
+.nasce .conta b{display:block;font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1;color:var(--oro)}
+.nasce .conta small{font-size:11px;color:var(--grigio)}
+.nasce .tasti{display:flex;gap:8px;margin-top:12px}
+
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a{font-size:12px;color:var(--grigio)}
+.quad .spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px}
+
+/* i vicinati */
+.vic{display:flex;gap:12px;align-items:center;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px;margin-bottom:8px}
+.vic .segno{width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;border:1px solid var(--terra);color:var(--terra)}
+.vic.vivo .segno{background:var(--terra);color:#fff}
+.vic .t{flex:1;min-width:0}
+.vic .t b{display:block;font-weight:500;font-size:14.5px}
+.vic .t small{display:block;font-size:12px;color:var(--grigio);margin-top:3px;line-height:1.35}
+.vic.apri{border-style:dashed;background:none}
+.vic.apri .segno{border-style:dashed}
+.ph{color:var(--oro);opacity:.85}
+
+/* le cose da fare del festival */
+.fm-carte .fm-carta .im.av{color:var(--oro);font-size:20px}.fm-carte .fm-carta .im.co{color:var(--grigio);font-size:20px}
+.fm-carte .fm-carta .t small u{text-decoration:none;color:var(--oro)}
+.fm-carte .fm-carta .fm-tasto.piccolo{flex:none}
+
+/* spazi del villaggio: punti di ritiro, partner */
+.spazio{border:1px dashed rgba(245,240,230,.3);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--grigio);line-height:1.45;margin-bottom:8px}
+.spazio b{display:block;color:var(--avorio);font-weight:500;margin-bottom:2px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)">Vicinati</span></div>
+
+  <div class="testa">
+    <div class="fm-occ">TERRA · VICINATI</div>
+    <h1>Villaggio Felicitas · Civiltà Sarda</h1>
+    <div class="sot">I vicinati sono i gruppi localizzati. Il villaggio è il contesto culturale e linguistico che li tiene insieme.</div>
+  </div>
+
+  <!-- il villaggio nasce col festival -->
+  <div class="nasce">
+    <img src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt="">
+    <div class="data">IL VILLAGGIO NASCE COSÌ</div>
+    <h2>Felicitas Festival · 21 novembre</h2>
+    <p>Per far nascere il villaggio si organizza insieme il prossimo Festival nel territorio. Prima, l'incontro dei vicinati: 25 ottobre, Cas'ale · Baratili, dalle 10.</p>
+    <div class="conta"><div><b>1</b><small>vicinato attivo</small></div><div><b>1 / 8</b><small>cose prese</small></div><div><b>5</b><small>cose da fare</small></div></div>
+    <div class="tasti"><button class="fm-tasto piccolo">Ci sarò il 25</button><button class="fm-tasto piccolo secondario">Invita chi risuona</button></div>
+  </div>
+
+  <!-- i vicinati -->
+  <section class="quad" style="--c:var(--terra)">
+    <div class="capo"><span class="fm-occ">I VICINATI</span><a href="#">la mappa ›</a></div>
+    <div class="vic vivo"><div class="segno">B</div><div class="t"><b>Baratili San Pietro · Oristano</b><small>attivo · Cas'ale, il luogo dell'incontro del 25 · punto di ritiro: <span class="ph">[ orari ]</span></small></div><span class="fm-tag vero">attivo</span></div>
+    <div class="vic"><div class="segno">P</div><div class="t"><b>Paulilatino</b><small>in formazione · Sa Pirighedda, un piccolo gruppo di unità abitative indipendenti</small></div><span class="fm-tag">in formazione</span></div>
+    <div class="vic apri"><div class="segno">+</div><div class="t"><b>Apri un vicinato</b><small>cerca il comune · <span class="ph">[ comune ]</span> · diventa attivo quando prende una cosa del Festival</small></div></div>
+    <div class="spiega" style="margin-top:8px">Un vicinato nasce da un comune e da chi lo apre. Diventa attivo quando partecipa: prende un bisogno, porta una proposta, tiene un punto di ritiro.</div>
+  </section>
+
+  <!-- le cose da fare per il festival -->
+  <section class="quad" style="--c:var(--fuoco)">
+    <div class="capo"><span class="fm-occ">COSA SERVE PER IL FESTIVAL</span><a href="#">tutto ›</a></div>
+    <div class="spiega">Le cose da fare del Festival, scritte da chi coordina. Ogni vicinato ne prende una.</div>
+    <div class="fm-carte">
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Locandina presentazione</b><small>scritto da Gabriele Dettori · in coda</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Dimostrazione</b><small>scritto da Gabriele Dettori · in coda</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Materiale comunicativo per emporio</b><small>scritto da Gabriele Dettori · in coda</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+      <div class="fm-carta"><div class="im av">◐</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>karma yoga · <u>in avanzamento</u> · preso dal vicinato di Baratili</small></div><span class="fm-stadio in-avanzamento">preso</span></div>
+    </div>
+  </section>
+
+  <!-- i bisogni del territorio -->
+  <section class="quad" style="--c:var(--terra)">
+    <div class="capo"><span class="fm-occ">I BISOGNI DEL TERRITORIO</span><a href="#">tutti e 8 ›</a></div>
+    <div class="fm-carte">
+      <div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Mappare i produttori del territorio</b><small>Riso, miele, olio, formaggi, vino.</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+      <div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Fare da referente di un comune o di una zona</b><small>Dalla Gallura al Campidano.</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+      <div class="fm-carta"><div class="im" style="color:var(--oro)">☀</div><div class="t"><b>Trovare i gruppi d'acquisto solidale già attivi</b><small>In Sardegna, e metterli in contatto col villaggio.</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+    </div>
+  </section>
+
+  <!-- gli spazi del villaggio, come oggi -->
+  <section class="quad" style="--c:var(--acqua)">
+    <div class="capo"><span class="fm-occ">GLI SPAZI DEL VILLAGGIO</span></div>
+    <div class="spazio"><b>I pacchetti del villaggio</b>Il paniere: quello che si chiede insieme ai produttori e ai partner.</div>
+    <div class="spazio"><b>I punti di ritiro</b>Qui ci saranno i nomi dei luoghi di ritiro e gli orari.</div>
+    <div class="spazio"><b>I partner</b>Qui ci saranno i partner che cooperano col villaggio.</div>
+  </section>
+</div>
+
+<div class="velo" id="velo"></div>
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  document.querySelectorAll('.fm-carta .fm-tasto').forEach(function(b){ b.onclick=function(){ var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); }; });
+})();
+</script>
+</body>
+</html>
