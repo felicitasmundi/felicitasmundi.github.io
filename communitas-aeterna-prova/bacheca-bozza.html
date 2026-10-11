@@ -196,8 +196,9 @@ a{color:inherit;text-decoration:none}
     <!-- 4 · post, come film -->
     <section class="quad" style="--c:var(--oro)">
       <div class="capo"><span class="fm-occ">QUELLO CHE PUBBLICA IL VILLAGGIO</span><a href="#">tutto ›</a></div>
-      <div class="filtri"><button class="fm-chip on">Tutto</button><button class="fm-chip">Racconti</button><button class="fm-chip">Foto</button><button class="fm-chip">Articoli</button><button class="fm-chip">Opere</button><button class="fm-chip">Puntate</button></div>
+      <div class="filtri"><button class="fm-chip on">Tutto</button><button class="fm-chip">Azioni</button><button class="fm-chip">Racconti</button><button class="fm-chip">Opere</button><button class="fm-chip">Articoli</button><button class="fm-chip">Dirette</button></div>
       <div class="film">
+        <a class="fm-tessera" href="orma-bozza.html" id="post-mio" style="display:none"><img class="im" src="casa-viva-luogo.jpg" alt="" style="object-position:38% 50%"><span class="fm-tag oro">azione</span><div class="t"><b>Cas'ale · Baratili</b><small>Gabriele · oggi</small></div></a>
         <a class="fm-tessera" href="#"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><span class="fm-tag">festa</span><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>Cas'ale - Baratili · dalle 10</small></div></a>
         <a class="fm-tessera" href="#"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg" alt=""><span class="fm-tag">articolo</span><div class="t"><b>Metodo Di Bella: un ponte tra ricerca e coscienza</b><small>20/07 · Bologna</small></div></a>
         <a class="fm-tessera" href="#"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/07/IMG_20230222_091218-scaled.jpg" alt=""><span class="fm-tag">articolo</span><div class="t"><b>Sa Pirighedda</b><small>Oristano</small></div></a>
@@ -334,7 +335,7 @@ a{color:inherit;text-decoration:none}
   $('stampa-si').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('foto').onclick=function(){ var i=$('foto-img'); i.src='casa-viva-luogo.jpg'; i.hidden=false; };
   document.querySelectorAll('#tipo .fm-chip, #vis .fm-chip, .filtri .fm-chip').forEach(function(b){ b.onclick=function(){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; });
-  $('pubblica').onclick=function(){ chiudi(); var v=document.querySelector('#vis .on').textContent.toLowerCase(); var f=document.querySelector('#tipo .on').getAttribute('data-f'); $('mia-foto').style.display='flex'; $('mia-foto-vis').textContent=v; document.querySelector('#mia-foto .fm-tag').textContent=f; if(f==='racconto'){ $('stampa').classList.add('vivo'); $('velo').classList.add('vivo'); } else { vista('mia'); } };
+  $('pubblica').onclick=function(){ chiudi(); var v=document.querySelector('#vis .on').textContent.toLowerCase(); var f=document.querySelector('#tipo .on').getAttribute('data-f'); $('mia-foto').style.display='flex'; $('post-mio').style.display='flex'; document.querySelector('#post-mio .fm-tag').textContent=f; $('mia-foto-vis').textContent=v; document.querySelector('#mia-foto .fm-tag').textContent=f; if(f==='racconto'){ $('stampa').classList.add('vivo'); $('velo').classList.add('vivo'); } else { vista('mia'); } };
   document.querySelectorAll('[data-prendo]').forEach(function(b){ b.onclick=function(){ var c=b.closest('.fm-carta'); var t=c.querySelector('b').textContent; var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); $('presa').style.display='flex'; $('presa-t').textContent=t; }; });
 })();
 </script>
