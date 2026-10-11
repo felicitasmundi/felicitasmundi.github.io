@@ -29,6 +29,7 @@ a{color:inherit;text-decoration:none}
 .testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
 
 /* il villaggio nasce col festival */
+.nasce-foto{margin:0 18px 14px;border-radius:18px;overflow:hidden;aspect-ratio:16/10}.nasce-foto img{width:100%;height:100%;object-fit:cover}
 .nasce{margin:0 18px 22px;border-radius:18px;overflow:hidden;position:relative;background:#000;min-height:230px;display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
 .nasce img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.7}
 .nasce::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.94),rgba(0,0,0,.4) 50%,transparent)}
@@ -78,23 +79,21 @@ a{color:inherit;text-decoration:none}
     <div class="sot">I vicinati sono i gruppi localizzati. Il villaggio è il contesto culturale e linguistico che li tiene insieme.</div>
   </div>
 
-  <!-- il villaggio nasce col festival -->
-  <div class="nasce">
-    <img src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt="">
-    <div class="data">IL VILLAGGIO NASCE COSÌ</div>
-    <h2>Felicitas Festival · 21 novembre</h2>
-    <p>Per far nascere il villaggio si organizza insieme il prossimo Festival nel territorio. Prima, l'incontro dei vicinati: 25 ottobre, Cas'ale · Baratili, dalle 10.</p>
-    <div class="conta"><div><b>1</b><small>vicinato attivo</small></div><div><b>1 / 8</b><small>cose prese</small></div><div><b>5</b><small>cose da fare</small></div></div>
-    <div class="tasti"><button class="fm-tasto piccolo">Ci sarò il 25</button><button class="fm-tasto piccolo secondario">Invita chi risuona</button></div>
-  </div>
+  <!-- il villaggio nasce col festival: foto sola, testo sotto -->
+  <div class="nasce-foto"><img src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""></div>
+  <section class="quad" style="--c:var(--fuoco)">
+    <div class="capo"><span class="fm-occ">IL VILLAGGIO NASCE COSÌ</span></div>
+    <h2 class="fm-h2">Felicitas Festival · 21 novembre</h2>
+    <p class="fm-testo" style="margin-top:8px">Per far nascere il villaggio si organizza insieme il prossimo Festival nel territorio. Prima, l'incontro dei vicinati: 25 ottobre, Cas'ale · Baratili, dalle 10.</p>
+    <div style="display:flex;gap:8px;margin-top:12px"><button class="fm-tasto piccolo">Ci sarò il 25</button><button class="fm-tasto piccolo secondario">Invita chi risuona</button></div>
+  </section>
 
   <!-- i vicinati -->
   <section class="quad" style="--c:var(--terra)">
     <div class="capo"><span class="fm-occ">I VICINATI</span><a href="#">la mappa ›</a></div>
-    <div class="vic vivo"><div class="segno">B</div><div class="t"><b>Baratili San Pietro · Oristano</b><small>attivo · Cas'ale, il luogo dell'incontro del 25 · punto di ritiro: <span class="ph">[ orari ]</span></small></div><span class="fm-tag vero">attivo</span></div>
-    <div class="vic"><div class="segno">P</div><div class="t"><b>Paulilatino</b><small>in formazione · Sa Pirighedda, un piccolo gruppo di unità abitative indipendenti</small></div><span class="fm-tag">in formazione</span></div>
-    <div class="vic apri"><div class="segno">+</div><div class="t"><b>Apri un vicinato</b><small>cerca il comune · <span class="ph">[ comune ]</span> · diventa attivo quando prende una cosa del Festival</small></div></div>
-    <div class="spiega" style="margin-top:8px">Un vicinato nasce da un comune e da chi lo apre. Diventa attivo quando partecipa: prende un bisogno, porta una proposta, tiene un punto di ritiro.</div>
+    <div class="vic vivo"><div class="segno">B</div><div class="t"><b>Baratili San Pietro · Oristano</b><small>Cas'ale, il luogo dell'incontro del 25</small></div><span class="fm-tag vero">attivo</span></div>
+    <div class="vic apri"><div class="segno">+</div><div class="t"><b>Proponiti per farne parte</b><small>dal comune in cui vivi · chi coordina il villaggio ti accoglie</small></div></div>
+    <div class="spiega" style="margin-top:8px">Nessuno apre un vicinato da solo: ci si propone per farne parte. Il villaggio si attiva organizzando insieme il Festival.</div>
   </section>
 
   <!-- le cose da fare per il festival -->
