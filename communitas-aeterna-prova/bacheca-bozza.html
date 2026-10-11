@@ -84,6 +84,7 @@ a{color:inherit;text-decoration:none}
 .filtri{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px}
 .filtri::-webkit-scrollbar{display:none}
 .filtri .fm-chip{flex:none;font-size:12px;padding:6px 11px}
+#f-dove{margin-bottom:6px}
 
 /* la barra in basso: Bacheca · la mia orma */
 .piede{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;pointer-events:none}
@@ -196,6 +197,7 @@ a{color:inherit;text-decoration:none}
     <!-- 4 · post, come film -->
     <section class="quad" style="--c:var(--oro)">
       <div class="capo"><span class="fm-occ">QUELLO CHE PUBBLICA IL VILLAGGIO</span><a href="#">tutto ›</a></div>
+      <div class="filtri" id="f-dove"><button class="fm-chip elemento on" style="--c:var(--terra)"><i></i>Il villaggio · Civiltà Sarda</button><button class="fm-chip elemento" style="--c:var(--terra)"><i></i>Il vicinato · <span class="ph">[ il mio ]</span></button><button class="fm-chip" style="opacity:.55">Tutti i villaggi · da decidere</button></div>
       <div class="filtri"><button class="fm-chip on">Tutto</button><button class="fm-chip">Azioni</button><button class="fm-chip">Racconti</button><button class="fm-chip">Opere</button><button class="fm-chip">Articoli</button><button class="fm-chip">Dirette</button></div>
       <div class="film">
         <a class="fm-tessera" href="orma-bozza.html" id="post-mio" style="display:none"><img class="im" src="casa-viva-luogo.jpg" alt="" style="object-position:38% 50%"><span class="fm-tag oro">azione</span><div class="t"><b>Cas'ale · Baratili</b><small>Gabriele · oggi</small></div></a>
@@ -334,7 +336,7 @@ a{color:inherit;text-decoration:none}
   $('stampa-no').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); vista('mia'); };
   $('stampa-si').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('foto').onclick=function(){ var i=$('foto-img'); i.src='casa-viva-luogo.jpg'; i.hidden=false; };
-  document.querySelectorAll('#tipo .fm-chip, #vis .fm-chip, .filtri .fm-chip').forEach(function(b){ b.onclick=function(){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; });
+  document.querySelectorAll('#tipo .fm-chip, #vis .fm-chip, .filtri .fm-chip:not([style*=opacity])').forEach(function(b){ b.onclick=function(){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; });
   $('pubblica').onclick=function(){ chiudi(); var v=document.querySelector('#vis .on').textContent.toLowerCase(); var f=document.querySelector('#tipo .on').getAttribute('data-f'); $('mia-foto').style.display='flex'; $('post-mio').style.display='flex'; document.querySelector('#post-mio .fm-tag').textContent=f; $('mia-foto-vis').textContent=v; document.querySelector('#mia-foto .fm-tag').textContent=f; if(f==='racconto'){ $('stampa').classList.add('vivo'); $('velo').classList.add('vivo'); } else { vista('mia'); } };
   document.querySelectorAll('[data-prendo]').forEach(function(b){ b.onclick=function(){ var c=b.closest('.fm-carta'); var t=c.querySelector('b').textContent; var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); $('presa').style.display='flex'; $('presa-t').textContent=t; }; });
 })();
