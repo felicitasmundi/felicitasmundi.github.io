@@ -108,6 +108,7 @@ a{color:inherit;text-decoration:none}
 .scrivi .fm-etich{margin:14px 0 7px}
 .scrivi .dati{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .scrivi .dati span{font-size:11.5px;padding:4px 9px;border-radius:980px;border:1px solid var(--riga);color:var(--grigio)}
+#altro .fm-etich:first-child{margin-top:8px}
 .scrivi .fm-tasto.pieno{margin-top:16px}
 
 .forma{display:none}.forma.vivo{display:block}
@@ -294,6 +295,9 @@ a{color:inherit;text-decoration:none}
     <div class="audio-f spento"><b>♪</b>a fine diretta resta qui il file audio<small>trascrizione · la fai tu</small></div>
   </div>
 
+  <div class="dati" style="margin-top:12px"><span>Baratili San Pietro</span><span>oggi · luna nuova</span><span>Civiltà Sarda</span></div>
+  <button class="fm-chip" id="apri-altro" style="margin-top:10px">+ aggiungi: con chi, un legame, la stanza, un altro giorno</button>
+  <div id="altro" style="display:none">
   <div class="fm-etich">DOVE · QUANDO · CIVILTÀ</div>
   <div class="dati">
     <button class="fm-chip on">Baratili San Pietro <small>· cerca un comune</small></button>
@@ -307,6 +311,7 @@ a{color:inherit;text-decoration:none}
   </div>
   <div class="fm-etich">LA STANZA</div>
   <div class="fm-chips" id="stanza-chips"><button class="fm-chip elemento on" style="--c:var(--terra)"><i></i>Vicinati</button><button class="fm-chip elemento" style="--c:var(--acqua)"><i></i>Emporio</button><button class="fm-chip elemento" style="--c:var(--fuoco)"><i></i>Assistenza</button><button class="fm-chip elemento" style="--c:var(--aria)"><i></i>Edizione</button><button class="fm-chip elemento" style="--c:var(--etere)"><i></i>Scuola</button></div>
+  </div>
   <div class="fm-etich">CHI LA VEDE</div>
   <div class="fm-chips" id="vis"><button class="fm-chip">Solo io</button><button class="fm-chip">Il vicinato</button><button class="fm-chip on">Il villaggio</button></div>
   <button class="fm-tasto pieno" id="pubblica">Pubblica</button>
@@ -335,6 +340,7 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll('.scrivi .dati .fm-chip, .tre-foto .fm-chip, .forma .fm-chips .fm-chip, #stanza-chips .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ if(b.closest('.fm-chips')){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); } else { b.classList.toggle('on'); } }); });
   $('stampa-no').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); vista('mia'); };
   $('stampa-si').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('apri-altro').onclick=function(){ $('altro').style.display='block'; $('apri-altro').style.display='none'; };
   $('foto').onclick=function(){ var i=$('foto-img'); i.src='casa-viva-luogo.jpg'; i.hidden=false; };
   document.querySelectorAll('#tipo .fm-chip, #vis .fm-chip, .filtri .fm-chip:not([style*=opacity])').forEach(function(b){ b.onclick=function(){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; });
   $('pubblica').onclick=function(){ chiudi(); var v=document.querySelector('#vis .on').textContent.toLowerCase(); var f=document.querySelector('#tipo .on').getAttribute('data-f'); $('mia-foto').style.display='flex'; $('post-mio').style.display='flex'; document.querySelector('#post-mio .fm-tag').textContent=f; $('mia-foto-vis').textContent=v; document.querySelector('#mia-foto .fm-tag').textContent=f; if(f==='racconto'){ $('stampa').classList.add('vivo'); $('velo').classList.add('vivo'); } else { vista('mia'); } };
