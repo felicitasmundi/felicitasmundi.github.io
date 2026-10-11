@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dentro l'orma · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:40px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+
+/* la testata sopra la foto */
+.testata{position:absolute;left:0;right:0;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:linear-gradient(180deg,rgba(10,12,26,.85),transparent)}
+.testata button{font-size:12px;letter-spacing:.1em;color:var(--avorio)}
+.testata .fm-tag{background:rgba(10,12,26,.6)}
+
+/* la foto, con le cose che si toccano */
+.foto{position:relative;width:100%;aspect-ratio:4/3;background:#000;overflow:hidden}
+.foto img.base{width:100%;height:100%;object-fit:cover;object-position:38% 50%}
+.punto{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:7px;color:var(--c,var(--oro));opacity:0;pointer-events:none;transition:opacity .4s}
+.foto.tocca .punto{opacity:1;pointer-events:auto}
+.punto i{width:13px;height:13px;border-radius:50%;background:var(--c,var(--oro));box-shadow:0 0 0 3px rgba(255,255,255,.25),0 0 14px var(--c,var(--oro));animation:batte 2.2s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes batte{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.punto span{font-size:11px;font-weight:500;color:#fff;background:rgba(10,12,26,.72);border:1px solid rgba(255,255,255,.25);padding:4px 9px;border-radius:980px;white-space:nowrap;backdrop-filter:blur(8px)}
+.punto.sx{flex-direction:row-reverse}
+.punto.nuovo i{background:none;border:1.5px dashed #fff;box-shadow:none;animation:none}
+.tocca-tasto{position:absolute;right:12px;bottom:12px;z-index:4}
+.foto .galleria{position:absolute;left:12px;bottom:14px;z-index:4;display:flex;gap:4px}
+.foto .galleria i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5)}
+.foto .galleria i.on{background:#fff;width:16px;border-radius:3px}
+
+/* la barra laterale: le stanze (uguale alla Bacheca) */
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:min(300px,84vw);background:#10132a;box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;padding:22px 18px;display:flex;flex-direction:column;gap:6px}
+.stanze.vivo{transform:none}.stanze .fm-occ{margin-bottom:10px}
+.stanze a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;font-family:'Cinzel',serif;font-size:14px;letter-spacing:.06em;color:inherit;text-decoration:none}
+.stanze a i{width:10px;height:10px;border-radius:50%;background:var(--c)}.stanze .fine{margin-top:auto;font-size:12px;color:var(--grigio)}
+/* il corpo */
+.corpo{padding:16px 18px 0}
+.corpo h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28px;line-height:1.08}
+.corpo .chi{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;color:var(--grigio)}
+.corpo .chi img{width:22px;height:22px;border-radius:50%}
+.corpo .dati{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.corpo .dati span{font-size:11.5px;padding:4px 9px;border-radius:980px;border:1px solid var(--riga);color:rgba(245,240,230,.85)}
+.corpo .dati span.el{border-color:var(--c);color:var(--c)}
+.corpo .descr{margin-top:14px;font-size:14.5px;line-height:1.55}
+.corpo .descr .ph{color:var(--oro);opacity:.85}
+
+/* le linguette */
+.linguette{display:flex;gap:2px;padding:14px 18px 0;border-bottom:1px solid var(--riga);margin-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.linguette::-webkit-scrollbar{display:none}
+.linguette button{flex:none;font-size:12.5px;padding:8px 10px;color:var(--grigio);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.linguette button b{font-weight:500;color:var(--oro);margin-left:3px}
+.linguette button.on{color:var(--avorio);border-bottom-color:var(--oro)}
+.ling{display:none;padding:0 18px}
+.ling.vivo{display:block}
+.fm-carte .fm-carta .im.av{color:var(--oro);font-size:20px}.fm-carte .fm-carta .im.co{color:var(--grigio);font-size:20px}.fm-carte .fm-carta .im.sv{color:var(--fatto);font-size:20px}
+.fm-carte .fm-carta .t small u{text-decoration:none;color:var(--oro)}
+.fm-carte .fm-carta .fm-tasto.piccolo{flex:none}
+.riga-tasti{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+/* il racconto del servizio fatto */
+.racconto{margin-top:12px;border:1px solid var(--fatto);border-radius:16px;overflow:hidden;background:var(--carta)}
+.racconto .fm-occ{color:var(--fatto);padding:10px 12px 0}
+.racconto .f{aspect-ratio:16/9;background:#1c2040;display:flex;align-items:center;justify-content:center;color:var(--grigio);font-size:13px;margin:8px 12px 0;border-radius:10px;border:1px dashed rgba(245,240,230,.35)}
+.racconto .f b{font-size:22px;color:var(--oro);margin-right:8px}
+.racconto textarea{width:100%;background:none;border:0;padding:10px 12px;font:14.5px/1.5 'DM Sans',system-ui,sans-serif;color:var(--avorio);min-height:64px;resize:none;outline:none}
+.racconto .piede{display:flex;justify-content:space-between;align-items:center;padding:0 12px 12px;font-size:12px;color:var(--grigio)}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:8px}
+.m{max-width:85%;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:9px 12px;font-size:14px;line-height:1.4}
+.m b{display:block;font-size:11px;color:var(--oro);margin-bottom:3px;font-weight:600}
+.m.mio{align-self:flex-end;background:rgba(212,175,106,.14);border-color:rgba(212,175,106,.35)}
+.m .arg{display:inline-block;font-size:10.5px;letter-spacing:.14em;color:var(--etere);border:1px solid var(--etere);border-radius:980px;padding:2px 7px;margin-bottom:5px}
+.composi{display:flex;gap:8px;align-items:center;padding:12px 0 4px}
+.composi .campo{flex:1;background:var(--carta);border:1px solid var(--riga);border-radius:980px;padding:10px 14px;font-size:14px;color:var(--grigio)}
+.composi .tondo{width:38px;height:38px;border-radius:50%;background:var(--carta);border:1px solid var(--riga);font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.composi .rec{color:#e04b4b}.composi .invia{background:var(--oro);color:var(--inchiostro);font-weight:700}
+
+/* pubblica / stato */
+.stato{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.foglio-v{margin-top:16px;border-top:1px solid var(--riga);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button id="apri-stanze" style="font-size:20px;color:var(--oro);margin-right:10px">☰</button><button>‹ BACHECA</button></span><span class="fm-tag">azione</span><button>···</button></div>
+
+  <div class="foto" id="foto">
+    <img class="base" src="casa-viva-luogo.jpg" alt="">
+    <button class="punto" style="left:6%;top:44%;--c:var(--acqua)"><i></i><span>la pianta → Mappare i produttori</span></button>
+    <button class="punto sx" style="left:62%;top:45%;--c:var(--etere);--d:.4s"><i></i><span>i libri → Strumenti per fare ordine</span></button>
+    <button class="punto sx" style="left:50%;top:24%;--c:var(--nexus);--d:.8s"><i></i><span>il quadro → Metodo Di Bella</span></button>
+    <button class="punto" style="left:24%;top:60%;--c:var(--terra);--d:1.2s"><i></i><span>la finestra → 25 ottobre · Oristano</span></button>
+    <button class="punto nuovo" style="left:80%;top:78%;--c:#fff;--d:1.6s"><i></i><span>+ tocca una cosa e collegala</span></button>
+    <div class="galleria"><i class="on"></i><i></i><i></i></div>
+    <button class="fm-tasto piccolo tocca-tasto" id="tocca">le cose nella foto</button>
+  </div>
+
+  <div class="corpo">
+    <h1>Cas'ale · Baratili</h1>
+    <div class="chi"><img src="casa/gab.jpg" alt="">Gabriele Dettori · oggi, 11 ottobre · luna nuova</div>
+    <div class="dati"><span class="el" style="--c:var(--terra)">Vicinati</span><span>Baratili San Pietro</span><span>Civiltà Sarda</span><span>lo vede il villaggio</span></div>
+    <p class="descr"><span class="ph">[ la descrizione scritta nel gesto ]</span></p>
+  </div>
+
+  <div class="linguette" id="linguette">
+    <button class="on" data-l="fare">Le cose da fare <b>2</b></button>
+    <button data-l="chat">Chat <b>1</b></button>
+    <button data-l="dentro">Chi c'è dentro <b>1</b></button>
+    <button data-l="legami">Legami <b>4</b></button>
+    <button data-l="pubblica">Chi la vede</button>
+  </div>
+
+  <!-- le cose da fare -->
+  <div class="ling vivo" data-l="fare">
+    <div class="fm-carte">
+      <div class="fm-carta"><div class="im av">◐</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>karma yoga del villaggio · <u>in avanzamento</u> · presa da te</small></div><button class="fm-tasto piccolo secondario" id="fatto">fatto</button></div>
+      <div class="fm-carta"><div class="im co">○</div><div class="t"><b>Mettere a disposizione un punto di ritiro</b><small>karma yoga del villaggio · in coda</small></div><button class="fm-tasto piccolo">lo prendo</button></div>
+    </div>
+    <div class="racconto" id="racconto" style="display:none">
+      <div class="fm-occ">SVILUPPATO · IL RACCONTO</div>
+      <div class="f"><b>◉</b>una foto di quello che è stato fatto</div>
+      <textarea placeholder="Descrizione: cosa è stato fatto, con chi, per chi."></textarea>
+      <div class="piede"><span>ore messe: <span class="ph">[ ]</span></span><button class="fm-tasto piccolo">Pubblica nella Bacheca</button></div>
+    </div>
+    <div class="riga-tasti"><button class="fm-tasto piccolo secondario">+ una cosa da fare</button><button class="fm-tasto piccolo secondario">affida a…</button></div>
+    <p class="fm-nota" style="margin-top:12px">Lo stadio lo cambia chi ha aperto l'orma, chi coordina il villaggio e chi deve fare la cosa. A «sviluppato» si apre il racconto: foto e descrizione, e va nella Bacheca.</p>
+  </div>
+
+  <!-- chat -->
+  <div class="ling" data-l="chat">
+    <div class="chat">
+      <div class="m"><b>Gabriele</b><span class="arg">PUNTO DI RITIRO</span><br><span class="ph">[ il primo messaggio ]</span></div>
+    </div>
+    <div class="composi"><button class="tondo" aria-label="allega">📎</button><div class="campo">Scrivi…</div><button class="tondo rec" aria-label="vocale">●</button><button class="tondo invia" aria-label="invia">↑</button></div>
+    <p class="fm-nota">Ogni messaggio può avere un argomento: così la conoscenza che nasce qui si ritrova per argomento nella Ricerca. Allegati e vocali li vede chi è dentro.</p>
+  </div>
+
+  <!-- chi c'è dentro -->
+  <div class="ling" data-l="dentro">
+    <div class="fm-carte">
+      <div class="fm-carta"><img class="im tonda" src="casa/gab.jpg" alt=""><div class="t"><b>Gabriele Dettori</b><small>ha aperto l'orma</small></div><span class="fm-tag">coordina</span></div>
+      <div class="fm-carta"><div class="im tonda" style="border:1px dashed rgba(245,240,230,.4);background:none"><span class="ph">?</span></div><div class="t"><b class="ph">[ chi proponi ]</b><small>dalla rubrica · riceve il codice dell'orma</small></div><button class="fm-tasto piccolo secondario">proponi</button></div>
+    </div>
+    <p class="fm-nota" style="margin-top:12px">«Coordina» lo dà chi guida il villaggio. Gli altri tasti sono karma yoga.</p>
+  </div>
+
+  <!-- legami -->
+  <div class="ling" data-l="legami">
+    <div class="fm-carte">
+      <div class="fm-carta"><div class="im" style="color:var(--acqua)">●</div><div class="t"><b>la pianta → Mappare i produttori del territorio</b><small>karma yoga · bisogno del villaggio</small></div></div>
+      <div class="fm-carta"><div class="im" style="color:var(--etere)">●</div><div class="t"><b>i libri → Strumenti per fare ordine</b><small>diretta · lunedì alle 19</small></div></div>
+      <div class="fm-carta"><div class="im" style="color:var(--nexus)">●</div><div class="t"><b>il quadro → Metodo Di Bella: un ponte tra ricerca e coscienza</b><small>articolo</small></div></div>
+      <div class="fm-carta"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""><div class="t"><b>la finestra → Villaggio Felicitas - 25 ottobre Oristano</b><small>festa · Cas'ale - Baratili</small></div></div>
+    </div>
+    <div class="riga-tasti"><button class="fm-tasto piccolo secondario">+ con chi</button><button class="fm-tasto piccolo secondario">+ un bisogno</button><button class="fm-tasto piccolo secondario">+ un prodotto</button><button class="fm-tasto piccolo secondario">+ un evento</button></div>
+    <p class="fm-nota" style="margin-top:12px">Ogni legame è una cosa nella foto collegata a chi la fa, la vende, ne parla. Si tocca la foto, si sceglie il punto, si sceglie a cosa legarlo.</p>
+  </div>
+
+  <!-- chi la vede -->
+  <div class="ling" data-l="pubblica">
+    <div class="fm-etich">CHI LA VEDE</div>
+    <div class="fm-chips"><button class="fm-chip">Solo io</button><button class="fm-chip">Il vicinato</button><button class="fm-chip on">Il villaggio</button></div>
+    <div class="fm-etich" style="margin-top:14px">LA STANZA</div>
+    <div class="fm-chips"><button class="fm-chip elemento on" style="--c:var(--terra)"><i></i>Vicinati</button><button class="fm-chip elemento" style="--c:var(--acqua)"><i></i>Emporio</button><button class="fm-chip elemento" style="--c:var(--fuoco)"><i></i>Assistenza</button><button class="fm-chip elemento" style="--c:var(--aria)"><i></i>Edizione</button><button class="fm-chip elemento" style="--c:var(--etere)"><i></i>Scuola</button></div>
+    <div class="fm-etich" style="margin-top:14px">L'ORMA</div>
+    <div class="stato"><span class="fm-stadio in-avanzamento">in avanzamento</span><span class="fm-chip" style="font-size:12px">dorme</span><span class="fm-chip" style="font-size:12px">chiudi</span></div>
+    <div class="foglio-v"><button class="fm-tasto pieno">Salva</button><p class="fm-nota" style="margin-top:10px">Con «Il villaggio» l'orma sta nella Bacheca di tutti quelli del villaggio. «Tutti i villaggi» non c'è: è una regola da scrivere.</p></div>
+  </div>
+</div>
+
+<div class="velo" id="velo"></div>
+<nav class="stanze" id="stanze">
+  <div class="fm-occ">LE STANZE</div>
+  <a href="bacheca-bozza.html" style="--c:var(--oro)"><i></i>Bacheca</a>
+  <a href="#" style="--c:var(--terra)"><i></i>Vicinati</a>
+  <a href="#" style="--c:var(--acqua)"><i></i>Emporio</a>
+  <a href="#" style="--c:var(--fuoco)"><i></i>Assistenza</a>
+  <a href="#" style="--c:var(--aria)"><i></i>Edizione</a>
+  <a href="#" style="--c:var(--etere)"><i></i>Scuola</a>
+  <a href="#" style="--c:var(--nexus)"><i></i>Antaḥkaraṇa</a>
+  <a href="#" style="--c:var(--oro)"><i></i>Account</a>
+  <div class="fine">Gabriele Dettori · Civiltà Sarda</div>
+</nav>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); }; $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  $('tocca').onclick=function(){ $('foto').classList.toggle('tocca'); };
+  document.querySelectorAll('#linguette button').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('#linguette button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.ling').forEach(function(d){ d.classList.toggle('vivo', d.getAttribute('data-l')===b.getAttribute('data-l')); }); }; });
+  $('fatto').onclick=function(){ var c=$('fatto').closest('.fm-carta'); c.querySelector('.im').className='im sv'; c.querySelector('.im').textContent='●'; c.querySelector('small').innerHTML='karma yoga del villaggio · <u>sviluppato</u> · fatto da te'; var s=document.createElement('span'); s.className='fm-stadio sviluppato'; s.textContent='sviluppato'; $('fatto').replaceWith(s); $('racconto').style.display='block'; };
+  document.querySelectorAll('.fm-chips').forEach(function(c){ c.querySelectorAll('.fm-chip').forEach(function(b){ b.onclick=function(){ c.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; }); });
+})();
+</script>
+</body>
+</html>
