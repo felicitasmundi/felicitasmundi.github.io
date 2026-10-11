@@ -87,6 +87,10 @@ section{padding:60px 0 14px}
 .pad p{font-size:15px;line-height:1.6;margin-top:12px}
 .pad .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
 .pad .chips span{font-size:13px;padding:6px 12px;border-radius:980px;border:1px solid rgba(245,240,230,.3)}
+.mestieri{display:flex;flex-direction:column;margin-top:14px;border-top:1px solid var(--riga)}
+.mes{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px solid var(--riga)}
+.mes b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:21px}
+.mes span{font-size:14px;color:rgba(245,240,230,.85)}
 
 /* il programma */
 .giorno{border:1px solid var(--riga);border-radius:22px;padding:10px 24px 20px;background:#0a0a0f}
@@ -226,7 +230,13 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="sez-capo"><div><span class="fm-occ">LE STANZE</span><h2>Quattro stanze, una giornata.</h2></div><p>Quello che porteremo a Baratili è l'impianto strutturale della piattaforma.</p></div>
   <div class="padiglioni">
     <div class="pad" style="--c:var(--terra)"><h3>Mestieri antichi</h3><div class="ore">10:00–13:00 · 15:00–18:00</div>
-      <div class="chips"><span>cesti di giunco intrecciati</span><span>esposizione di oggetti d'uso</span><span>laboratori di ceramica</span><span>launeddas: come si producono</span><span>artigianato di canne</span><span>la vernaccia, il vino locale</span><span>lavorazione del cuoio</span><span>distillati</span></div></div>
+      <div class="mestieri">
+        <div class="mes"><b>Cestineria</b><span>Rosalba Piras</span></div>
+        <div class="mes"><b>Cuoio</b><span>Graziano Viale</span></div>
+        <div class="mes"><b>Legno</b><span>Federico Coni</span></div>
+        <div class="mes"><b>Tessitura</b><span>Su Trobasciu</span></div>
+        <div class="mes"><b>Ricamo</b><span>Maria Luisa Frongia</span></div>
+      </div></div>
     <div class="pad" style="--c:var(--acqua)"><h3>Emporio</h3><div class="ore">tutto il giorno</div>
       <p>Un punto shop dedicato ai prodotti di FelicitasMundi e delle comunità coinvolte, gli stessi del sito. Ogni prodotto ha il QR code di Felicitas con la storia del produttore. Le promozioni dei gruppi d'acquisto: comprare insieme.</p>
       <div class="chips"><span>alimenti</span><span>rimedi</span><span>oggettistica sacra</span><span>abbigliamento</span><span>oggetti di coscienza</span></div></div>
@@ -275,7 +285,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="foto"><img src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""></div>
     <div class="punti">
       <div class="punto" style="--c:var(--oro)"><i></i><div><b>Centro Sociale · Baratili San Pietro</b><small>le quattro stanze, la sala conferenze, i pasti</small></div></div>
-      <div class="punto" style="--c:var(--terra)"><i></i><div><b>All'aperto · i laboratori</b><small>cesti di giunco, ceramica, launeddas, canne, cuoio</small></div></div>
+      <div class="punto" style="--c:var(--terra)"><i></i><div><b>All'aperto · i laboratori</b><small>cestineria, cuoio, legno, tessitura, ricamo</small></div></div>
       <div class="punto" style="--c:var(--terra)"><i></i><div><b>Cas'ale · Baratili</b><small>il luogo dell'incontro dei vicinati del 25 ottobre</small></div></div>
       <div class="punto" style="--c:var(--acqua)"><i></i><div><b class="ph">[ un altro punto del paese ]</b><small><span class="ph">[ cosa ci si trova ]</span></small></div></div>
     </div>
