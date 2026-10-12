@@ -152,6 +152,42 @@ a{color:inherit;text-decoration:none}
 .tempo .mese{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--oro);margin:12px 0 2px}
 .tempo .fm-carta .im{font-size:20px;color:var(--grigio)}
 .ph{color:var(--oro);opacity:.85}
+
+/* il praticantato, in cima a la mia orma: la base presettata (12 ott) */
+.prat{margin:0 18px 22px;background:var(--carta);border:1px solid rgba(140,47,57,.55);border-radius:18px;padding:14px 16px}
+.prat .fm-occ{color:var(--nexus)}
+.prat h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:22px;line-height:1.1;margin-top:4px}
+.prat .da{font-size:12px;color:var(--grigio);margin-top:4px}
+.prat .passi{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.prat .ps{display:flex;gap:10px;align-items:flex-start;border-left:2px solid var(--nexus);border-radius:0 12px 12px 0;background:rgba(10,12,26,.5);padding:9px 11px}
+.prat .ps .n{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--nexus);color:var(--nexus);display:grid;place-items:center;font-family:'Cinzel',serif;font-size:11px;filter:brightness(1.4)}
+.prat .ps b{display:block;font-weight:500;font-size:13.5px;line-height:1.3}
+.prat .ps small{display:block;font-size:12px;color:var(--grigio);margin-top:2px;line-height:1.4}
+.prat .ps .st{flex:none;align-self:center}
+.prat .tasti{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.prat .studio{font-size:12px;color:var(--grigio);margin-top:10px;line-height:1.45}
+/* il foglio «che cos'è il praticantato»: il testo della pagina di oggi, tale e quale */
+.leggi{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:92dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.leggi.vivo{transform:none}
+.leggi .maniglia{width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px}
+.leggi h2{font-family:'Cinzel',serif;font-weight:500;font-size:22px;line-height:1.15;margin-top:4px}
+.leggi .arco{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(212,175,106,.85);margin-top:8px;line-height:1.6}
+.leggi h3{font-family:'Cinzel',serif;font-weight:500;font-size:14px;color:var(--oro);margin:18px 0 6px;padding-bottom:5px;border-bottom:1px solid var(--riga)}
+.leggi h3 i{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--grigio);margin-left:8px;text-transform:none;letter-spacing:0}
+.leggi p{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;color:rgba(245,240,230,.86);margin-bottom:8px}
+.leggi p b{font-weight:400;color:var(--avorio)}
+.leggi ul{list-style:none;padding:0}.leggi li{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.5;color:rgba(245,240,230,.8);padding-left:14px;position:relative;margin-bottom:3px}
+.leggi li::before{content:'·';position:absolute;left:2px;color:var(--etere)}
+.leggi .tp{display:flex;gap:10px;background:rgba(10,12,26,.5);border-left:2px solid var(--etere);border-radius:0 10px 10px 0;padding:9px 11px;margin-bottom:6px}
+.leggi .tp .q{flex:none;width:34px;font-family:'Cinzel',serif;font-size:12px;color:var(--oro)}
+.leggi .tp .d{font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.45;color:rgba(245,240,230,.84)}
+.leggi .tp .d b{font-weight:400;color:var(--avorio)}
+.leggi .fase{background:rgba(10,12,26,.5);border:1px solid var(--riga);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.leggi .fase b{display:block;font-family:'Cinzel',serif;font-weight:500;font-size:13px;color:var(--oro);margin-bottom:4px}
+.leggi .fase .pr{font-size:12px;color:var(--grigio);margin-top:4px}
+.leggi .perno{border:1px solid rgba(140,47,57,.5);border-radius:14px;background:rgba(140,47,57,.09);padding:12px 14px;margin:12px 0}
+.leggi .perno p{margin:0}
+.leggi .chiudi{margin-top:16px;width:100%;justify-content:center}
 </style>
 </head>
 <body>
@@ -222,6 +258,20 @@ a{color:inherit;text-decoration:none}
   <div class="vista mia" id="v-mia">
     <div class="testa2"><h1>Le cose da fare.</h1><div class="sot">11 ottobre · san Firmino · luna nuova</div></div>
     <button class="fare" id="apri-scrivi-2"><span>Cosa stai facendo?</span><b><img src="APP.FELICITASMUNDI/piatti/orma.png" alt=""></b></button>
+    <div class="prat" id="prat">
+      <div class="fm-occ">IL PRATICANTATO</div>
+      <h2>Il percorso, in cinque passaggi.</h2>
+      <div class="da">la base da cui parti · scritto dal praticantato · Gabriele Dettori</div>
+      <div class="passi">
+        <div class="ps"><span class="n">①</span><div><b>La centratura dentro i cinque elementi</b><small>In che modo la propria memoria e la propria focalizzazione si inquadrano grazie all'utilizzo degli elementi, e al disegno della geometria sacra.</small></div><span class="fm-stadio in-coda st">in coda</span></div>
+        <div class="ps"><span class="n">②</span><div><b>Lo sviluppo del progetto sogno</b><small>Da qui nasce quello che poi porterai alla comunità, o vengono dati suggerimenti per il tuo servizio già in essere.</small></div><span class="fm-stadio in-coda st">in coda</span></div>
+        <div class="ps"><span class="n">③</span><div><b>L'interazione con la comunità</b><small>Le ore di praticantato, il karma yoga, aiutare nel luogo, dare una mano online.</small></div><span class="fm-stadio in-coda st">in coda</span></div>
+        <div class="ps"><span class="n">④</span><div><b>Si inseriscono persone dentro un team</b><small>Quello che hai cominciato da solo diventa il lavoro di un gruppo.</small></div><span class="fm-stadio in-coda st">in coda</span></div>
+        <div class="ps"><span class="n">⑤</span><div><b>E quel team alimenta le aree centrali</b><small>Emporio, Assistenza, Scuola, Edizione, Vicinati.</small></div><span class="fm-stadio in-coda st">in coda</span></div>
+      </div>
+      <div class="tasti"><button class="fm-tasto piccolo" id="apri-prat" data-s="che cos'è il praticantato">Che cos'è il praticantato</button><button class="fm-tasto piccolo secondario" data-s="il percorso dei talenti">Il percorso dei talenti</button></div>
+      <div class="studio">Il percorso dei talenti: <span class="fm-ph">[ in studio ]</span> — praticantato e talenti, insieme, fanno il costo.</div>
+    </div>
     <div class="fare-oggi">
       <a class="fm-carta" href="orma-bozza.html"><div class="im av">◐</div><div class="t"><b>Dare una mano all'incontro dell'11</b><small>karma yoga del villaggio · scritto da Gabriele Dettori · <u>in avanzamento</u></small></div><span class="fr">›</span></a>
       <div class="fm-carta"><div class="im av">◐</div><div class="t"><b>Il flusso delle orme: la vista per stadio</b><small>tuo obiettivo · <u>in avanzamento</u> · entro 04/10</small></div><span class="fr">›</span></div>
@@ -261,6 +311,42 @@ a{color:inherit;text-decoration:none}
 </div>
 
 <!-- la barra laterale: le stanze -->
+<div class="leggi" id="leggi">
+  <div class="maniglia"></div>
+  <div class="fm-occ" style="color:var(--nexus)">CHE COS'È IL PRATICANTATO</div>
+  <h2>Praticantato</h2>
+  <div class="arco">dal progetto sogno alla cooperazione per una civiltà evoluta</div>
+  <h3>Che cos'è</h3>
+  <p>Il praticantato guarda <b>la natura del nostro essere</b>, propone <b>strumenti di centratura</b> che facilitino la realizzazione del progetto dell'anima in una <b>visione di cooperazione</b>.</p>
+  <p>Ci troviamo ad avere <b>l'esigenza di riallinearci</b> — allineare la mente, il cervello e l'anima. Riconnettiamoci tra di noi, valorizziamo gli scambi autentici, segnamo le orme del nostro percorso, perchè possano essere <b>i solchi del cammino dell'altro</b> e <b>il tracciato assoluto di un anima che unisce tutte le anime</b>, e che viene nutrita dall'esperienza della vita.</p>
+  <div class="perno"><p>Il <b>praticantato è un percorso introspettivo, creativo, spirituale</b>, per <b>facilitare le relazioni genuine</b>.</p></div>
+  <h3>Il ritmo: il ciclo della luna <i>luna nuova — luna piena</i></h3>
+  <p>L'accompagnamento segue il <b>ritmo dei cicli lunari</b> (luna nuova — luna piena). Gli incontri di gruppo avvengono <b>in diretta con Gabriele</b>, tutor e ideatore di felicitas.</p>
+  <p>Dentro ogni ciclo vengono proposti <b>esercizi</b>, che ognuno sviluppa da solo nel proprio quotidiano, <b>contenuti di ricerca</b> (appunti, video di lezioni, link utili) e <b>gli incontri</b>, che si fanno insieme.</p>
+  <p>Vengono inoltre dati <b>suggerimenti pratici per l'utilizzo degli strumenti di Felicitas</b> (integrator, le orme, il megafono, la stampa di opere), per l'utilizzo da parte dei team e vicinati.</p>
+  <h3>Come si sviluppa la diretta</h3>
+  <div class="tp"><span class="q">10′</span><div class="d"><b>L'apertura — il tema della luna.</b> Da dove nasce, e perché adesso.</div></div>
+  <div class="tp"><span class="q">50′</span><div class="d"><b>La centratura dentro i cinque elementi.</b> In che modo la propria memoria e la propria focalizzazione si inquadrano grazie agli elementi e al disegno della geometria sacra. E la formula da cui tutto nasce. Dentro, il testo che regge il tema — vedico, esoterico, o dalla nostra ricerca. E la parte concreta: dove segni la tua orma, come apri un bisogno, cosa succede quando qualcuno lo prende.</div></div>
+  <div class="tp"><span class="q">20′</span><div class="d"><b>Gli esercizi fino alla luna successiva.</b> Quello che ognuno porta a casa e fa da solo.</div></div>
+  <h3>Gli esercizi <i>si fanno da soli</i></h3>
+  <p>Sono <b>modi di guardarsi mentre si vive</b>.</p>
+  <ul><li>l'attenzione a come si muovono i pensieri</li><li>l'utilizzo delle parole</li><li>il respiro</li><li>il corpo nello spazio</li><li>e rendersi conto di quante cose si iniziano nel quotidiano che poi non si portano a termine</li></ul>
+  <p>E gli esercizi si scrivono nelle proprie <b>orme</b>. Le orme diventano il quaderno. Alla luna successiva sono già lì, in ordine di tempo, e si legge il cammino invece di ricordarlo.</p>
+  <h3>Il percorso, in cinque passaggi</h3>
+  <p><b>Il lavoro è ramificato.</b> Comincia dentro una persona sola, e arriva a tenere in piedi la comunità.</p>
+  <div class="tp"><span class="q">①</span><div class="d"><b>La centratura dentro i cinque elementi</b> In che modo la propria memoria e la propria focalizzazione si inquadrano grazie all'utilizzo degli elementi, e al disegno della geometria sacra.</div></div>
+  <div class="tp"><span class="q">②</span><div class="d"><b>Lo sviluppo del progetto sogno</b> Da qui nasce quello che poi porterai alla comunità, o vengono dati suggerimenti per il tuo servizio già in essere.</div></div>
+  <div class="tp"><span class="q">③</span><div class="d"><b>L'interazione con la comunità</b> Le ore di praticantato, il karma yoga, aiutare nel luogo, dare una mano online. Si conosce la comunità, si vengono a conoscere i bisogni, e si interagisce cooperando con questi.</div></div>
+  <div class="tp"><span class="q">④</span><div class="d"><b>Si inseriscono persone dentro un team</b> Quello che hai cominciato da solo diventa il lavoro di un gruppo.</div></div>
+  <div class="tp"><span class="q">⑤</span><div class="d"><b>E quel team alimenta le aree centrali</b> Emporio, Assistenza, Scuola, Edizione, Vicinati. Il percorso arriva a tenere in piedi la comunità.</div></div>
+  <h3>Le tre fasi <i>e cosa costano</i></h3>
+  <div class="fase"><b>① Start — usare lo strumento</b><ul><li>l'accesso pieno: creare team, partecipare alle classi, scambiare, collegare, fare le orme</li><li>la base per l'utilizzo dello strumento</li><li>l'accesso al tour come contesto di scambio</li></ul><div class="pr">prezzo: <span class="fm-ph">[ in attesa ]</span></div></div>
+  <div class="fase"><b>② La pratica — il percorso alla cooperazione</b><ul><li>l'incontro di ogni fase lunare, in diretta</li><li>gli esercizi del ciclo</li><li>la centratura dentro i cinque elementi</li><li>lo sviluppo del progetto sogno</li></ul><div class="pr">prezzo: <span class="fm-ph">[ in attesa ]</span></div></div>
+  <div class="fase"><b>③ Ritiri, viaggi e tour</b><ul><li>chi già partecipa al percorso online paga solo i costi vivi</li><li>il tour di lancio, portando la propria musica, i propri scambi</li></ul><div class="pr">prezzo: <span class="fm-ph">[ in attesa ]</span></div></div>
+  <h3>Il percorso dei talenti</h3>
+  <p><span class="fm-ph">[ in studio ]</span> — praticantato e talenti, insieme, fanno il costo.</p>
+  <button class="fm-tasto pieno chiudi" id="chiudi-prat">Torna a la mia orma</button>
+</div>
 <nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
 <!-- lo spazio di scrittura -->
 <div class="velo" id="velo"></div>
@@ -347,7 +433,10 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll('.piede button').forEach(function(b){ b.onclick=function(){ vista(b.getAttribute('data-v')); }; });
   function apri(){ $('scrivi').classList.add('vivo'); $('velo').classList.add('vivo'); }
   function chiudi(){ $('scrivi').classList.remove('vivo'); $('velo').classList.remove('vivo'); }
-  $('apri-scrivi').onclick=apri; $('apri-scrivi-2').onclick=apri; $('velo').onclick=function(){ chiudi(); $('stanze').classList.remove('vivo'); $('stampa').classList.remove('vivo'); };
+  $('apri-scrivi').onclick=apri; $('apri-scrivi-2').onclick=apri; $('velo').onclick=function(){ chiudi(); $('stanze').classList.remove('vivo'); $('stampa').classList.remove('vivo'); $('leggi').classList.remove('vivo'); };
+  $('apri-prat').onclick=function(){ $('leggi').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('chiudi-prat').onclick=function(){ $('leggi').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  try{ var q=new URLSearchParams(location.search); if(q.get('v')==='mia'){ vista('mia'); } if(q.get('praticantato')){ vista('mia'); $('apri-prat').onclick(); } }catch(e){}
   $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
   document.querySelectorAll('#tipo .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); document.querySelectorAll('.forma').forEach(function(x){ x.classList.toggle('vivo', x.getAttribute('data-f')===f); }); }); });
   document.querySelectorAll('.scrivi .dati .fm-chip, .tre-foto .fm-chip, .forma .fm-chips .fm-chip, #stanza-chips .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ if(b.closest('.fm-chips')){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); } else { b.classList.toggle('on'); } }); });

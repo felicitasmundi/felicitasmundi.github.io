@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>I miei dati · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+/* ═══ I MIEI DATI · si apre dalla barra laterale (la barra resta identica).
+   I campi di oggi (?p=account: Nome, Foto, Biografia, Telefono, Che lingua parli)
+   + Cognome, Comune, Il mio vicinato, Proponiti. Dati veri di Gab dal database. ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:60px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}.stanze.vivo{transform:none}
+
+.testa{padding:6px 18px 16px;display:flex;gap:14px;align-items:center}
+.testa .foto{width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--oro)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28px;line-height:1.05}
+.testa .sot{font-size:13px;color:var(--grigio);margin-top:4px;line-height:1.45}
+
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a{font-size:12px;color:var(--grigio)}
+.campi{display:flex;flex-direction:column;gap:8px}
+.campo{background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:10px 14px}
+.campo label{display:block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--grigio);margin-bottom:3px}
+.campo input,.campo textarea{width:100%;background:none;border:0;outline:none;font:15px/1.45 'DM Sans',system-ui,sans-serif;color:var(--avorio);resize:none}
+.campo .val{font-size:15px;line-height:1.45}
+.campo .val.ph{color:var(--oro);opacity:.85}
+.campo .fotoriga{display:flex;align-items:center;gap:12px}
+.campo .fotoriga img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.tasti{display:flex;gap:8px;margin-top:12px}
+
+/* il vicinato */
+.vic{display:flex;gap:12px;align-items:center;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px;margin-bottom:8px}
+.vic .segno{width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;border:1px solid var(--terra);color:var(--terra)}
+.vic .t{flex:1;min-width:0}
+.vic .t b{display:block;font-weight:500;font-size:14.5px}
+.vic .t small{display:block;font-size:12px;color:var(--grigio);margin-top:3px;line-height:1.35}
+.spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px}
+.ruoli{display:flex;flex-direction:column;gap:6px}
+.fm-riga b{min-width:110px}
+
+/* il foglio «proponiti» — come deciso l'11 (18:14): una chat ad hoc nel Mutuo aiuto */
+.foglio{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:90dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.foglio.vivo{transform:none}
+.foglio .maniglia{width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px}
+.foglio h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;line-height:1.1;margin-top:6px}
+.foglio textarea{width:100%;margin-top:12px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px 14px;font:15px/1.5 'DM Sans',system-ui,sans-serif;color:var(--avorio);min-height:96px;resize:none;outline:none}
+.foglio .fm-tasto.pieno{margin-top:12px}
+.foglio .arriva{margin-top:16px}.foglio .arriva .fm-etich{margin-bottom:6px}
+.nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+.nota-bozza b{color:var(--oro);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)">I miei dati</span></div>
+
+  <div class="testa">
+    <img class="foto" src="../communitas-aeterna/persone/gabriele-dettori.jpg" alt="">
+    <div><h1>Gabriele Dettori</h1><div class="sot">Fondatore · guida del praticantato antaḥkaraṇa</div></div>
+  </div>
+
+  <div class="quad"><div class="capo"><span class="fm-occ">CHI SONO</span><a href="#" id="modifica">modifica</a></div>
+    <div class="campi">
+      <div class="campo"><label>Nome</label><div class="val">Gabriele</div></div>
+      <div class="campo"><label>Cognome</label><div class="val">Dettori</div></div>
+      <div class="campo"><label>Foto</label><div class="fotoriga"><img src="../communitas-aeterna/persone/gabriele-dettori.jpg" alt=""><span class="fm-nota">cambia la foto</span></div></div>
+      <div class="campo"><label>Biografia</label><div class="val" style="font-size:14px">Ho iniziato a scrivere a dodici anni; a diciassette ho scritto Simò, spettacolo che è andata in scena nel teatro di Olbia. Ho studiato produzione cinematografica a Cinecittà e conduzione televisiva a Milano. Per una decina d'anni mi sono occupato di eventi.<br>Dal 2009 al 2014, con il Comune di Olbia, ho dato vita a «Giovani per Olbia». Il 27 aprile 2019, finito il romanzo «La rinascita di Marcolì», è arrivata la svolta: Villa Vrindavana, Pomaia, la Bhagavad-gītā. Il 17 maggio 2021 è nata FelicitasMundi: uno spazio condiviso per artisti, terapeuti, agricoltori e gruppi locali, basato sugli insegnamenti spirituali.</div></div>
+      <div class="campo"><label>Telefono</label><div class="val ph">[ vuoto ]</div></div>
+      <div class="campo"><label>Che lingua parli</label><div class="val">italiano</div></div>
+      <div class="campo"><label>Comune</label><div class="val">Olbia</div></div>
+    </div>
+  </div>
+
+  <div class="quad" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">IL MIO VILLAGGIO</span><a href="gruppo-bozza.html">apri ›</a></div>
+    <div class="vic"><span class="segno">✦</span><div class="t"><b>Villaggio Felicitas · Civiltà Sarda</b><small>coordini il villaggio · nucleo</small></div></div>
+  </div>
+
+  <div class="quad" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">IL MIO VICINATO</span></div>
+    <div class="spiega">I vicinati sono i gruppi localizzati. Nessuno può attivare un vicinato, ma può proporsi per farne parte.</div>
+    <div class="vic" id="vic-no"><span class="segno" style="border-style:dashed">·</span><div class="t"><b>Non sei ancora in un vicinato</b><small>Proponiti: si apre una chat con chi coordina il villaggio.</small></div><button class="fm-tasto piccolo" id="proponiti">Proponiti</button></div>
+    <div class="vic" id="vic-si" style="display:none"><span class="segno" style="background:var(--terra);color:#fff">✦</span><div class="t"><b>Baratili San Pietro · Oristano</b><small>proposta mandata · in attesa del coordinamento</small></div></div>
+  </div>
+
+  <div class="quad"><div class="capo"><span class="fm-occ">I MIEI RUOLI</span></div>
+    <div class="ruoli">
+      <div class="fm-riga"><b>nel villaggio</b><span>coordinatore · Civiltà Sarda</span></div>
+      <div class="fm-riga"><b>karma yoga</b><span>no</span></div>
+      <div class="fm-riga"><b>praticantato</b><span>nuovo</span></div>
+      <div class="fm-riga"><b>team partner</b><span class="fm-ph">[ nessuno ]</span></div>
+    </div>
+  </div>
+
+  <div class="quad"><div class="capo"><span class="fm-occ">ACCOUNT</span></div>
+    <div class="ruoli">
+      <div class="fm-riga"><b>mail</b><span>quella con cui entri</span></div>
+      <div class="fm-riga"><b>avvisi per mail</b><span>sì</span></div>
+      <div class="fm-riga"><b>condizioni</b><span><a href="../communitas-aeterna/condizioni.html" style="color:var(--oro)">condizioni</a> · <a href="../communitas-aeterna/privacy.html" style="color:var(--oro)">privacy</a></span></div>
+    </div>
+    <div class="tasti"><button class="fm-tasto piccolo secondario">Esci</button></div>
+  </div>
+
+  <div class="nota-bozza"><b>bozza</b> — si apre dalla barra laterale, che resta identica. Campi di oggi + Cognome e Comune (già nel database: persone.cognome, persone.comune_cod). «Il mio vicinato» legge persone.vicinato_id; «Proponiti» apre la chat ad hoc nel Mutuo aiuto col coordinamento del villaggio (decisione dell'11 ottobre, 18:14): notifica nell'app + mail ai coordinatori — SQL dopo la conferma del modello.</div>
+</div>
+<div class="velo" id="velo"></div>
+<div class="foglio" id="foglio">
+  <div class="maniglia"></div>
+  <div class="fm-occ" style="color:var(--fuoco)">MUTUO AIUTO · UNA CHAT PER TE COL COORDINAMENTO</div>
+  <h2>Proponiti per farne parte.</h2>
+  <p class="fm-nota" style="margin-top:6px">Scrivi a chi coordina il villaggio: da dove vieni, cosa porti, cosa cerchi. È una chat ad hoc, nel Mutuo aiuto: tu e chi coordina il villaggio, per conoscersi.</p>
+  <div class="fm-chips" style="margin-top:12px"><span class="fm-chip on">Baratili San Pietro</span><span class="fm-chip">cerca il comune</span></div>
+  <textarea placeholder="Il messaggio al coordinamento"></textarea>
+  <button class="fm-tasto pieno" id="manda">Manda</button>
+  <div class="arriva">
+    <div class="fm-etich">COSA SUCCEDE</div>
+    <div class="fm-riga"><b>nell'app</b><span>una notifica a chi coordina il villaggio</span></div>
+    <div class="fm-riga"><b>per mail</b><span>un avviso a ognuno di loro</span></div>
+    <div class="fm-riga"><b>poi</b><span>ti rispondono in chat e ti accolgono</span></div>
+  </div>
+</div>
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('foglio').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  $('proponiti').onclick=function(){ $('foglio').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('manda').onclick=function(){ $('manda').textContent='Mandato · la risposta arriva in chat'; $('manda').disabled=true; setTimeout(function(){ $('foglio').classList.remove('vivo'); $('velo').classList.remove('vivo'); $('vic-no').style.display='none'; $('vic-si').style.display='flex'; },900); };
+  $('modifica').onclick=function(e){ e.preventDefault(); };
+})();
+</script>
+<script src="comune/fm-statistiche.js?v=10111950" data-pagina="account-bozza"></script>
+</body>
+</html>

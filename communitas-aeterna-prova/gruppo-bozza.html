@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Il gruppo · Civiltà Sarda · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+/* ═══ IL GRUPPO · i quattro livelli (Gab, 12 ottobre):
+   il villaggio è il gruppo da cui ognuno parte · ognuno può essere taggato col vicinato
+   di appartenenza · nuclei dei villaggi e responsabili vicinati (ex Gruppi Cooperativi)
+   · i partner hanno il loro team, accesso ristretto, collegato a villaggio/vicinato.
+   Ogni livello: chat · obiettivi · eventi · pubblicazione stampa. Persone vere dal database. ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:60px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}.stanze.vivo{transform:none}
+
+.foto{margin:0 18px 14px;border-radius:18px;overflow:hidden;aspect-ratio:16/10}.foto img{width:100%;height:100%;object-fit:cover}
+.testa{padding:0 18px 16px}
+.testa .fm-occ{color:var(--terra)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+
+/* i livelli, come linguette */
+.livelli{display:flex;gap:6px;padding:0 18px;margin-bottom:16px;overflow:auto;scrollbar-width:none}
+.livelli::-webkit-scrollbar{display:none}
+.livelli button{flex:none;font-size:12.5px;padding:7px 12px;border-radius:980px;border:1px solid var(--riga);color:var(--grigio);white-space:nowrap}
+.livelli button.on{border-color:var(--terra);color:var(--avorio);background:rgba(170,136,68,.18)}
+.liv{display:none}.liv.vivo{display:block}
+
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a,.quad .capo button{font-size:12px;color:var(--grigio)}
+.quad .spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px}
+
+/* le persone */
+.pers{display:flex;gap:10px;overflow:auto;scrollbar-width:none;padding-bottom:4px}
+.pers::-webkit-scrollbar{display:none}
+.p{flex:none;width:86px;text-align:center}
+.p .c{width:56px;height:56px;border-radius:50%;margin:0 auto 6px;background:var(--carta);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--oro);overflow:hidden}
+.p .c img{width:100%;height:100%;object-fit:cover}
+.p.coord .c{border-color:var(--oro)}
+.p b{display:block;font-weight:500;font-size:12.5px;line-height:1.25}
+.p small{display:block;font-size:11px;color:var(--grigio);margin-top:2px}
+.p.vuoto .c{border-style:dashed;color:var(--grigio)}
+
+/* le quattro cose di ogni livello */
+.cose{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cosa{background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:11px 12px;min-height:76px}
+.cosa b{display:block;font-family:'Cinzel',serif;font-weight:500;font-size:12px;letter-spacing:.06em;color:var(--c,var(--oro))}
+.cosa span{display:block;font-size:12.5px;color:var(--grigio);margin-top:4px;line-height:1.4}
+.cosa .n{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--avorio);line-height:1;margin-top:6px}
+
+/* le cose da fare */
+.fm-carte .fm-carta{margin-bottom:8px}
+.fm-carte .fm-carta .im{font-size:20px;color:var(--grigio)}
+.fm-carte .fm-carta .t small u{text-decoration:none;color:var(--oro)}
+.fm-carte .fm-carta .fm-tasto.piccolo{flex:none}
+
+/* la chat */
+.chat{display:flex;flex-direction:column;gap:8px}
+.m{max-width:85%;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:9px 12px;font-size:14px;line-height:1.4}
+.m b{display:block;font-size:11px;color:var(--oro);margin-bottom:3px;font-weight:600}
+.composi{display:flex;gap:8px;align-items:center;padding:10px 0 0}
+.composi .campo{flex:1;background:var(--carta);border:1px solid var(--riga);border-radius:980px;padding:10px 14px;font-size:14px;color:var(--grigio)}
+.composi .tondo{width:38px;height:38px;border-radius:50%;background:var(--oro);color:var(--inchiostro);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+
+/* il vicinato come etichetta */
+.vic{display:flex;gap:12px;align-items:center;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px;margin-bottom:8px}
+.vic .segno{width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;border:1px solid var(--terra);color:var(--terra)}
+.vic.vivo .segno{background:var(--terra);color:#fff}
+.vic .t{flex:1;min-width:0}
+.vic .t b{display:block;font-weight:500;font-size:14.5px}
+.vic .t small{display:block;font-size:12px;color:var(--grigio);margin-top:3px;line-height:1.35}
+
+.ristretto{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grigio);border:1px solid var(--riga);border-radius:980px;padding:4px 9px;margin-top:8px}
+.nota-bozza{margin:10px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+.nota-bozza b{color:var(--oro);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)">Il gruppo</span></div>
+
+  <div class="foto"><img src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt=""></div>
+  <div class="testa">
+    <div class="fm-occ">TERRA · IL GRUPPO DA CUI PARTI</div>
+    <h1>Villaggio Felicitas · Civiltà Sarda</h1>
+    <div class="sot">Il villaggio è il gruppo da cui ognuno parte. Dentro, ognuno è taggato col vicinato di appartenenza. Ogni livello ha chat, obiettivi, eventi e pubblicazione stampa.</div>
+  </div>
+
+  <div class="livelli">
+    <button class="on" data-l="villaggio">Il villaggio</button>
+    <button data-l="vicinato">Il mio vicinato</button>
+    <button data-l="nucleo">Nucleo e responsabili</button>
+    <button data-l="partner">Team partner</button>
+  </div>
+
+  <!-- ═══ 1 · IL VILLAGGIO ═══ -->
+  <div class="liv vivo" id="l-villaggio">
+    <div class="quad" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">CHI C'È DENTRO</span><a href="account-bozza.html">proponiti ›</a></div>
+      <div class="pers">
+        <div class="p coord"><div class="c"><img src="../communitas-aeterna/persone/gabriele-dettori.jpg" alt=""></div><b>Gabriele Dettori</b><small>coordina</small></div>
+        <div class="p coord"><div class="c">A</div><b>Alessandra Raggio</b><small>coordina</small></div>
+        <div class="p coord"><div class="c">M</div><b>Marco Caddeo</b><small>coordina</small></div>
+        <div class="p coord"><div class="c">G</div><b>Giovanni Greco</b><small>coordina</small></div>
+        <div class="p vuoto"><div class="c">+</div><b>chi si propone</b><small>dal 25 ottobre</small></div>
+      </div>
+    </div>
+
+    <div class="quad" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">LE QUATTRO COSE DEL VILLAGGIO</span></div>
+      <div class="cose">
+        <button class="cosa" data-va="chat-v"><b>CHAT</b><span>la chat del villaggio</span></button>
+        <button class="cosa" data-va="ob-v"><b>OBIETTIVI</b><span>karma yoga e cose da fare</span></button>
+        <button class="cosa" data-va="ev-v"><b>EVENTI</b><span>le feste del villaggio</span><div class="n">25 ott · 21 nov</div></button>
+        <button class="cosa" data-va="st-v"><b>STAMPA</b><span>pubblicare e stampare come villaggio</span><div class="n">·</div></button>
+      </div>
+    </div>
+
+    <div class="quad" id="ev-v" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">GLI EVENTI</span></div>
+      <div class="fm-carte">
+        <a class="fm-carta" href="festival-evento-bozza.html"><img class="im" src="casa/festival-trame-og.jpg" alt="" style="width:54px;height:54px;object-fit:cover;border-radius:10px"><div class="t"><b>Felicitas Festival · TRAME</b><small>21 novembre 2026 · Baratili San Pietro</small></div><span class="fr">›</span></a>
+        <div class="fm-carta"><img class="im" src="../communitas-aeterna/articoli/2026/incontro-11-ottobre.jpg" alt="" style="width:54px;height:54px;object-fit:cover;border-radius:10px"><div class="t"><b>Villaggio Felicitas - 25 ottobre Oristano</b><small>Cas'ale - Baratili · dalle 10</small></div><span class="fr">›</span></div>
+      </div>
+    </div>
+
+    <div class="quad" id="ob-v" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">GLI OBIETTIVI · KARMA YOGA</span><a href="bacheca-bozza.html">tutti ›</a></div>
+      <div class="spiega">Scritti dal villaggio. Chi li prende, li porta nelle sue cose da fare.</div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">○</div><div class="t"><b>Mappare i produttori del territorio</b><small>scritto da Gabriele Dettori · coordina il villaggio · in coda</small></div><button class="fm-tasto piccolo" data-prendo>lo prendo</button></div>
+        <div class="fm-carta"><div class="im">○</div><div class="t"><b>Mettere a disposizione un punto di ritiro</b><small>scritto da Gabriele Dettori · coordina il villaggio · in coda</small></div><button class="fm-tasto piccolo" data-prendo>lo prendo</button></div>
+        <div class="fm-carta"><div class="im">○</div><div class="t"><b>Fare da referente di un comune o di una zona</b><small>scritto da Gabriele Dettori · coordina il villaggio · in coda</small></div><button class="fm-tasto piccolo" data-prendo>lo prendo</button></div>
+      </div>
+    </div>
+
+    <div class="quad" id="chat-v" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">LA CHAT DEL VILLAGGIO</span></div>
+      <div class="chat">
+        <div class="m"><b>Gabriele Dettori · coordina</b>Buongiorno a tutti stelline col guscio</div>
+      </div>
+      <div class="composi"><div class="campo">Scrivi al villaggio…</div><button class="tondo">↑</button></div>
+    </div>
+  </div>
+
+  <!-- ═══ 2 · IL VICINATO ═══ -->
+  <div class="liv" id="l-vicinato">
+    <div class="quad" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">IL VICINATO</span></div>
+      <div class="spiega">L'etichetta che ognuno porta: il gruppo localizzato dentro il villaggio. Nessuno può attivare un vicinato, ma può proporsi per farne parte.</div>
+      <div class="vic vivo"><span class="segno">✦</span><div class="t"><b>Baratili San Pietro · Oristano</b><small>il vicinato del Festival · chi lo coordina: <span class="fm-ph">[ da nominare ]</span></small></div></div>
+      <div class="vic" style="border-style:dashed;background:none"><span class="segno" style="border-style:dashed">·</span><div class="t"><b>Il tuo vicinato</b><small>Non sei ancora in un vicinato.</small></div><a class="fm-tasto piccolo" href="account-bozza.html">Proponiti</a></div>
+    </div>
+    <div class="quad" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">LE QUATTRO COSE DEL VICINATO</span></div>
+      <div class="cose">
+        <div class="cosa"><b>CHAT</b><span>tra chi è nel vicinato</span></div>
+        <div class="cosa"><b>OBIETTIVI</b><span>i bisogni del territorio</span></div>
+        <div class="cosa"><b>EVENTI</b><span>le feste del vicinato</span><div class="n">21 nov</div></div>
+        <div class="cosa"><b>STAMPA</b><span>pubblicare e stampare come vicinato</span><div class="n">·</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 3 · NUCLEO E RESPONSABILI ═══ -->
+  <div class="liv" id="l-nucleo">
+    <div class="quad" style="--c:var(--nexus)"><div class="capo"><span class="fm-occ">NUCLEO DEL VILLAGGIO E RESPONSABILI DEI VICINATI</span></div>
+      <div class="spiega">Era «Gruppi Cooperativi». Ora: chi coordina il villaggio e chi risponde di un vicinato. Un gruppo chat per loro.</div>
+      <div class="pers">
+        <div class="p coord"><div class="c"><img src="../communitas-aeterna/persone/gabriele-dettori.jpg" alt=""></div><b>Gabriele Dettori</b><small>nucleo · coordina</small></div>
+        <div class="p coord"><div class="c">A</div><b>Alessandra Raggio</b><small>coordina</small></div>
+        <div class="p coord"><div class="c">M</div><b>Marco Caddeo</b><small>coordina</small></div>
+        <div class="p coord"><div class="c">G</div><b>Giovanni Greco</b><small>coordina</small></div>
+        <div class="p vuoto"><div class="c">·</div><b>responsabile</b><small>Baratili S.P. · <span class="fm-ph">[ da nominare ]</span></small></div>
+      </div>
+      <span class="ristretto">◌ solo chi coordina</span>
+    </div>
+    <div class="quad" style="--c:var(--nexus)"><div class="capo"><span class="fm-occ">LA CHAT DEL COORDINAMENTO</span></div>
+      <div class="chat">
+        <div class="m"><b>qui arrivano anche le proposte</b>Chi si propone per un vicinato scrive in una chat ad hoc nel Mutuo aiuto: notifica nell'app e mail a ognuno di voi.</div>
+      </div>
+      <div class="composi"><div class="campo">Scrivi al coordinamento…</div><button class="tondo">↑</button></div>
+    </div>
+    <div class="quad" style="--c:var(--nexus)"><div class="capo"><span class="fm-occ">LE COSE DEL COORDINAMENTO</span></div>
+      <div class="fm-carte">
+        <a class="fm-carta" href="squadra-bozza.html"><div class="im">▦</div><div class="t"><b>Felicitas Festival · la squadra</b><small>5 cose da fare · la lavagna</small></div><span class="fr">›</span></a>
+        <div class="fm-carta"><div class="im">○</div><div class="t"><b>Chi coordina può nominare</b><small>un responsabile di vicinato · un coordinatore</small></div><span class="fr">›</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 4 · TEAM PARTNER ═══ -->
+  <div class="liv" id="l-partner">
+    <div class="quad" style="--c:var(--acqua)"><div class="capo"><span class="fm-occ">I TEAM DEI PARTNER</span></div>
+      <div class="spiega">Un partner ha il suo team con le stesse cose — chat, obiettivi, eventi, stampa — ma con accesso ristretto al team, collegato al villaggio o al vicinato.</div>
+      <div class="vic" style="border-style:dashed;background:none"><span class="segno" style="border-style:dashed;border-color:var(--acqua);color:var(--acqua)">+</span><div class="t"><b class="fm-ph">[ il primo team partner ]</b><small>collegato a: Civiltà Sarda · <span class="fm-ph">[ vicinato ]</span></small></div><span class="ristretto" style="margin:0">◌ ristretto</span></div>
+    </div>
+    <div class="quad" style="--c:var(--acqua)"><div class="capo"><span class="fm-occ">LE QUATTRO COSE DEL TEAM</span></div>
+      <div class="cose">
+        <div class="cosa"><b>CHAT</b><span>solo il team</span></div>
+        <div class="cosa"><b>OBIETTIVI</b><span>la lavagna del team</span></div>
+        <div class="cosa"><b>EVENTI</b><span>gli eventi del team, anche nel villaggio</span></div>
+        <div class="cosa"><b>STAMPA</b><span>pubblicare e stampare come team</span></div>
+      </div>
+    </div>
+    <div class="quad"><div class="capo"><span class="fm-occ">COSA VEDE IL VILLAGGIO</span></div>
+      <div class="ruoli">
+        <div class="fm-riga"><b>il team</b><span>che esiste, e a cosa è collegato</span></div>
+        <div class="fm-riga"><b>dentro</b><span>solo chi è nel team</span></div>
+        <div class="fm-riga"><b>in bacheca</b><span>quello che il team decide di pubblicare al villaggio</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota-bozza"><b>bozza · i quattro livelli</b> — persone vere: i coordinatori del villaggio dal database (orma del villaggio Civiltà Sarda, ruolo «coordinatore»). Vicinati: la tavola è vuota, Baratili San Pietro è il vicinato del Festival. Nucleo oggi: 1 persona. Team partner: la tavola «squadre» è vuota. Le regole di chi vede cosa (le autorizzazioni «da capo») vanno riscritte in SQL dopo la conferma del modello. «Stampa»: chi paga la stampa del gruppo è da decidere.</div>
+</div>
+<div class="velo" id="velo"></div>
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  document.querySelectorAll('.livelli button').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.livelli button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.liv').forEach(function(x){ x.classList.toggle('vivo', x.id==='l-'+b.getAttribute('data-l')); }); window.scrollTo(0,0); }; });
+  document.querySelectorAll('[data-va]').forEach(function(b){ b.onclick=function(){ var t=$(b.getAttribute('data-va')); if(t) t.scrollIntoView({behavior:'smooth',block:'start'}); }; });
+  document.querySelectorAll('[data-prendo]').forEach(function(b){ b.onclick=function(){ var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); }; });
+  try{ var l=new URLSearchParams(location.search).get('l'); if(l){ var b=document.querySelector('.livelli [data-l="'+l+'"]'); if(b) b.onclick(); } }catch(e){}
+})();
+</script>
+<script src="comune/fm-statistiche.js?v=10111950" data-pagina="gruppo-bozza"></script>
+</body>
+</html>

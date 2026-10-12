@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La soglia · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+/* ═══ LA SOGLIA · si vede solo la prima volta, dopo il primo accesso. Poi: Bacheca.
+   Le tre righe sono parole di Gab (12 settembre), verbatim — da fm-soglia.js.
+   Nessun testo sopra l'immagine: la figura sola, i testi sotto. ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:32px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 6px}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .salta{font-size:12.5px;color:var(--grigio)}
+.fig{margin:6px 18px 0;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative}
+.fig::before{content:"";position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle,rgba(212,175,106,.22),transparent 68%)}
+.fig img{position:relative;width:84%;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(ellipse 62% 74% at 50% 50%,#000 0,#000 52%,rgba(0,0,0,.55) 74%,transparent 92%);mask-image:radial-gradient(ellipse 62% 74% at 50% 50%,#000 0,#000 52%,rgba(0,0,0,.55) 74%,transparent 92%)}
+.testa{padding:4px 18px 16px;text-align:center}
+.testa .fm-occ{color:var(--oro)}
+.testa h1{font-family:'Cinzel',serif;font-weight:500;font-size:28px;line-height:1.1;margin-top:8px}
+.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:8px;line-height:1.5}
+.tre{padding:0 18px;display:flex;flex-direction:column;gap:8px}
+.rg{background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:14px 16px}
+.rg b{display:block;font-family:'Cinzel',serif;font-weight:500;font-size:13.5px;letter-spacing:.06em;color:var(--oro);margin-bottom:5px}
+.rg p{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.45;color:rgba(245,240,230,.88)}
+.giu{padding:22px 18px 0;display:flex;flex-direction:column;gap:10px}
+.giu .fm-tasto{width:100%;justify-content:center}
+.piede{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--grigio);margin-top:18px;padding:0 18px}
+.nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+.nota-bozza b{color:var(--oro);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span class="m">FELICITASMUNDI</span><a class="salta" href="bacheca-bozza.html" data-s="salta">salta ›</a></div>
+
+  <div class="fig"><img src="APP.FELICITASMUNDI/piatti/ak-fig.webp" alt=""></div>
+
+  <div class="testa">
+    <div class="fm-occ">PRIMA SOGLIA · APERTA A TUTTI</div>
+    <h1>Antaḥkaraṇa</h1>
+    <div class="sot">C'è un percorso di praticantato dietro. Un minimo di info di cosa può succedere e cosa puoi fare dentro.</div>
+  </div>
+
+  <div class="tre">
+    <div class="rg"><b>Quello che fai</b><p>tenere traccia della giornata, attivare squadre, proporre attività nei vicinati, partecipare a festival e mercati, espandere la comunità</p></div>
+    <div class="rg"><b>Quello che condividi</b><p>ricerca, formazioni, articoli, persone e luoghi in risonanza, assistenza comunitaria integrata, i tuoi prodotti in scambio o in vendita</p></div>
+    <div class="rg"><b>Quello che ricevi</b><p>karma yoga, ospitalità, pubblicazione e stampa, lezioni, strumenti di coscienza, alimenti, rimedi, prenotazioni e pagamenti</p></div>
+  </div>
+
+  <div class="giu">
+    <a class="fm-tasto pieno" href="bacheca-bozza.html" id="entra" data-s="entra nella bacheca">Entra nella Bacheca</a>
+    <a class="fm-tasto secondario" href="bacheca-bozza.html?v=mia&praticantato=1" data-s="che cos'è il praticantato">Che cos'è il praticantato</a>
+  </div>
+  <div class="piede">Ponte verso l'Evoluzione della Specie Umana</div>
+
+  <div class="nota-bozza"><b>bozza · come funziona</b> — si vede una volta sola, dopo il primo accesso: il database segna «soglia vista» (SQL 54, fm_soglia_vista) e da lì in poi dopo l'accesso si va dritti in Bacheca, da qualsiasi telefono. Da la mia orma si riapre «Che cos'è il praticantato». Il nome in sanscrito nella comunicazione diretta: da decidere.</div>
+</div>
+<script>
+(function(){
+  /* in bozza, finché SQL 54 non è lanciato, «vista» si ricorda qui sul telefono */
+  document.getElementById('entra').addEventListener('click',function(){ try{ localStorage.setItem('fm_soglia_vista','1'); }catch(e){} });
+})();
+</script>
+<script src="comune/fm-statistiche.js?v=10111950" data-pagina="soglia-bozza"></script>
+</body>
+</html>
