@@ -3,124 +3,190 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>La diretta · bozza</title>
+<title>La diretta del villaggio</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
 <style>
-/* ═══ LA DIRETTA · la diretta del villaggio (Gab, 22:10: «non è una chat vocale, è una diretta.. la diretta del villaggio») (12 ottobre, Gab: «quello che fa Telegram … attivare i microfoni,
-   una piccola regia interna … registrare quella call … parlare e registrare l'audio, semplicemente»).
-   Vera: entra nella sala LiveKit col gettone di sala-gettone (LiveKit Cloud, piano gratis).
-   La registrazione la fa questo computer (nessun costo): mescola le voci e salva il file. ═══ */
+/* ═══ LA SALA DELLA DIRETTA · disegno (12 ottobre 22:14, Gab): «mostrami la schermata come se ci fossero 10 persone di
+   vicinati differenti, ed un ospite · come si vede se sono organizzatore, e quindi posso bloccare gli audio · bello come se
+   davvero fosse una sala radio, dove posso vedere qualcosa in più del nome, ma posso anche condividere file, avere una chat
+   per scrivere · registrazione può farla solo chi ha attivato o i coordinatori · posso anche mandare fuori un disturbatore».
+   ?io=coordina (chi coordina) · ?io=ospite (un ospite). Persone vere dove ci sono; le altre: [ persona ] col suo vicinato. ═══ */
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+.onda.fuori .vu i{animation:none;height:18%;opacity:.5}
 html,body{height:100%}
 body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:150px}
 @media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
-.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
 
-.testa{padding:6px 18px 14px}
-.testa .fm-occ{color:var(--terra)}
-.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
-.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+/* la consolle in alto: in onda, il titolo, il tempo, le barre */
+.onda{margin:0 18px 14px;border-radius:22px;background:radial-gradient(120% 90% at 50% 0%,#1a1440 0%,#0d1026 55%,var(--carta) 100%);border:1px solid rgba(212,175,106,.35);padding:16px 16px 14px;position:relative;overflow:hidden}
+.onda::before{content:"";position:absolute;inset:-40% -20% auto;height:140%;background:radial-gradient(circle at 50% 30%,rgba(224,75,75,.14),transparent 55%);pointer-events:none}
+.onda .riga1{display:flex;align-items:center;justify-content:space-between;position:relative}
+.onda .live{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.24em;font-weight:600;color:#ff6b6b}
+.onda .live i{width:9px;height:9px;border-radius:50%;background:#ff4d4d;box-shadow:0 0 0 0 rgba(255,77,77,.6);animation:pulsa 1.6s infinite}
+@keyframes pulsa{0%{box-shadow:0 0 0 0 rgba(255,77,77,.6)}70%{box-shadow:0 0 0 9px rgba(255,77,77,0)}100%{box-shadow:0 0 0 0 rgba(255,77,77,0)}}
+.onda .tempo{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--avorio);letter-spacing:.04em}
+.onda h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28px;line-height:1.05;margin-top:10px;position:relative}
+.onda .sot{font-size:12.5px;color:var(--grigio);margin-top:4px;position:relative}
+.onda .vu{display:flex;align-items:flex-end;gap:3px;height:34px;margin-top:14px;position:relative}
+.onda .vu i{flex:1;background:linear-gradient(180deg,var(--oro),rgba(212,175,106,.25));border-radius:2px;animation:vu 1.1s ease-in-out infinite alternate;transform-origin:bottom}
+.onda .vu i:nth-child(odd){animation-duration:.9s}.onda .vu i:nth-child(3n){animation-duration:1.4s}.onda .vu i:nth-child(5n){animation-duration:.7s}
+@keyframes vu{from{height:18%}to{height:100%}}
+.onda .chi-parla{display:flex;align-items:center;gap:10px;margin-top:12px;position:relative}
+.onda .chi-parla img,.onda .chi-parla .c{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--oro)}
+.onda .chi-parla b{display:block;font-weight:500;font-size:14px}
+.onda .chi-parla small{display:block;font-size:11.5px;color:var(--grigio)}
+.onda .reg{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:10.5px;letter-spacing:.14em;color:#ff6b6b;border:1px solid rgba(255,107,107,.5);border-radius:980px;padding:4px 9px}
+.onda .reg i{width:7px;height:7px;border-radius:50%;background:#ff4d4d}
 
-.sala{margin:0 18px 18px;background:var(--carta);border:1px solid var(--riga);border-radius:20px;padding:16px}
-.sala .stato{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grigio)}
-.sala .stato i{width:8px;height:8px;border-radius:50%;background:var(--grigio)}
-.sala .stato.dentro i{background:var(--fatto)}
-.sala .stato.onda i{background:#e04b4b;box-shadow:0 0 0 4px rgba(224,75,75,.25)}
-.sala h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1;margin-top:8px}
-.sala .chi{font-size:13px;color:var(--grigio);margin-top:4px;line-height:1.45}
-.sala .tasti{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.sala .tasti .fm-tasto{flex:1;justify-content:center}
-.sala .esito{font-size:12.5px;color:var(--grigio);margin-top:10px;min-height:16px}
-.sala .esito.err{color:var(--manca)}
-
-/* chi c'è: cerchi */
-.pers{display:flex;gap:10px;overflow:auto;scrollbar-width:none;padding:4px 0}
-.pers::-webkit-scrollbar{display:none}
-.p{flex:none;width:76px;text-align:center}
-.p .c{width:54px;height:54px;border-radius:50%;margin:0 auto 6px;background:var(--notte);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--oro)}
-.p.parla .c{border-color:var(--oro);box-shadow:0 0 0 3px rgba(212,175,106,.25)}
-.p b{display:block;font-weight:500;font-size:12px;line-height:1.25}
-.p small{display:block;font-size:11px;color:var(--grigio);margin-top:2px}
-
-/* la registrazione */
-.reg{margin:0 18px 18px;border:1px solid var(--riga);border-radius:20px;padding:16px}
-.reg .capo{display:flex;align-items:center;justify-content:space-between}
-.reg .capo .fm-occ{color:#e04b4b}
-.reg .tempo{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--avorio)}
-.reg p{font-size:12.5px;color:var(--grigio);line-height:1.5;margin-top:6px}
-.reg .tasti{display:flex;gap:8px;margin-top:12px}
-.reg .tasti .fm-tasto{flex:1;justify-content:center}
-.reg .file{display:none;margin-top:12px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px}
-.reg .file audio{width:100%;margin-top:8px}
-.reg .file b{font-weight:500;font-size:14px}
-.reg .file small{display:block;font-size:12px;color:var(--grigio);margin-top:3px}
-.quad{padding:0 18px;margin-bottom:24px}
+/* chi c'è: le tessere, con qualcosa in più del nome */
+.quad{padding:0 18px;margin-bottom:18px}
 .quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
 .quad .capo .fm-occ{color:var(--terra)}
-.fm-carte .fm-carta{margin-bottom:8px}
-.fm-carte .fm-carta .im{font-size:20px;color:var(--terra)}
+.quad .capo span.n{font-size:12px;color:var(--grigio)}
+.griglia{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pt{background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:10px 8px 9px;text-align:center;position:relative}
+.pt .c{width:48px;height:48px;border-radius:50%;margin:0 auto 6px;background:var(--notte);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--oro);overflow:hidden}
+.pt .c img{width:100%;height:100%;object-fit:cover}
+.pt.parla .c{border-color:var(--oro);box-shadow:0 0 0 3px rgba(212,175,106,.28)}
+.pt.parla::after{content:"";position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--fatto)}
+.pt.muto .c{border-color:var(--manca);opacity:.75}
+.pt.mano::before{content:"✋";position:absolute;top:6px;left:8px;font-size:13px}
+.pt b{display:block;font-weight:500;font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt small{display:block;font-size:10.5px;color:var(--grigio);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt .vic{display:inline-block;margin-top:5px;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);border:1px solid rgba(170,136,68,.5);border-radius:980px;padding:2px 7px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt .ruolo{color:var(--oro)}
+.pt.ospite .vic{color:var(--grigio);border-color:var(--riga)}
+.pt .regia{display:none;gap:4px;justify-content:center;margin-top:7px}
+.coordina .pt .regia{display:flex}
+.pt .regia button{width:26px;height:26px;border-radius:50%;border:1px solid var(--riga);font-size:12px;display:flex;align-items:center;justify-content:center}
+.pt .regia button.fuori{color:var(--manca);border-color:rgba(180,87,74,.5)}
+.pt .regia button.on{background:var(--oro);color:var(--inchiostro);border-color:var(--oro)}
+
+/* le linguette: chat · file */
+.lingue{display:flex;gap:6px;padding:0 18px 12px}
+.lingue button{font-size:12.5px;padding:7px 12px;border-radius:980px;border:1px solid var(--riga);color:var(--grigio)}
+.lingue button.on{border-color:var(--oro);color:var(--avorio);background:rgba(212,175,106,.14)}
+.pannello{display:none}.pannello.vivo{display:block}
+.chat{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow:auto}
+.velo{position:fixed;inset:0;z-index:45;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.scheda.vivo{transform:none!important}
+.m{max-width:85%;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:9px 12px;font-size:14px;line-height:1.4}
+.m b{display:block;font-size:11px;color:var(--oro);margin-bottom:3px;font-weight:600}
+.m.io{align-self:flex-end;border-color:rgba(212,175,106,.45)}
+.m .sys{font-size:12px;color:var(--grigio);font-style:italic}
+.composi{display:flex;gap:8px;align-items:center;padding:10px 0 0}
+.composi .campo{flex:1;background:var(--carta);border:1px solid var(--riga);border-radius:980px;padding:10px 14px;font-size:14px;color:var(--grigio)}
+.composi .tondo{width:38px;height:38px;border-radius:50%;background:var(--oro);color:var(--inchiostro);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.file-riga{display:flex;align-items:center;gap:12px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.file-riga .ic{width:40px;height:40px;border-radius:10px;background:var(--notte);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--aria);flex:none}
+.file-riga b{display:block;font-weight:500;font-size:14px}
+.file-riga small{display:block;font-size:12px;color:var(--grigio);margin-top:2px}
+.file-riga .fm-tasto{flex:none}
+
+/* la regia di chi coordina */
+.regia-box{margin:0 18px 18px;border:1px solid rgba(140,47,57,.6);border-radius:18px;padding:12px 14px;background:rgba(140,47,57,.08);display:none}
+.coordina .regia-box{display:block}
+.regia-box .fm-occ{color:var(--nexus)}
+.regia-box .fila{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.regia-box p{font-size:12.5px;color:var(--grigio);margin-top:8px;line-height:1.45}
+
+/* la plancia in basso: microfono · mano · registra · file */
+.plancia{position:fixed;left:0;right:0;bottom:62px;z-index:31;display:flex;justify-content:center;pointer-events:none}
+.plancia .in{pointer-events:auto;width:calc(100% - 36px);max-width:394px;display:flex;justify-content:space-around;align-items:center;background:rgba(16,19,42,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(212,175,106,.35);border-radius:22px;padding:10px 8px}
+.plancia button{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.06em;color:var(--grigio);min-width:60px}
+.plancia button i{width:44px;height:44px;border-radius:50%;background:var(--carta);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-size:18px;font-style:normal;color:var(--avorio)}
+.plancia button.on i{background:var(--oro);color:var(--inchiostro);border-color:var(--oro)}
+.plancia button.rec i{color:#ff6b6b;border-color:rgba(255,107,107,.5)}
+.plancia button.rec.on i{background:#ff4d4d;color:#fff;border-color:#ff4d4d}
+.plancia button[disabled]{opacity:.35}
+.vista{display:flex;gap:6px;padding:0 18px 12px}
+.vista a{font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:980px;border:1px dashed rgba(245,240,230,.3);color:var(--grigio)}
+.vista a.on{border-style:solid;border-color:var(--oro);color:var(--oro)}
 .nota-bozza{margin:10px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
 .nota-bozza b{color:var(--oro);font-weight:600}
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app" id="app">
   <div id="fm-stanze" data-attiva=""></div>
 
-  <div class="testa">
-    <div class="fm-occ">TERRA · CIVILTÀ SARDA · LA DIRETTA</div>
-    <h1>La diretta del villaggio.</h1>
-    <div class="sot">Chi entra sente. Chi ha una voce apre il microfono. Chi coordina può registrare: a fine chiamata il file audio resta nella Bacheca come Diretta.</div>
+  <!-- ═══ la consolle ═══ -->
+  <div class="onda fuori" id="onda">
+    <div class="riga1"><span class="live" id="live" style="color:var(--grigio)"><i style="background:var(--grigio);animation:none"></i><span id="live-t">FUORI · CIVILTÀ SARDA</span></span><span class="tempo" id="tempo">00:00</span></div>
+    <h1>Strumenti per fare ordine.</h1>
+    <div class="sot" id="chi">puntata · Discernimento · la diretta del villaggio</div>
+    <div class="vu" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="chi-parla"><div class="c" id="cp-c" style="display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--oro)">·</div><div><b id="cp-nome">nessuno sta parlando</b><small id="cp-sot">entra per sentire</small></div><span class="reg" id="reg-segno" style="display:none"><i></i>REC</span></div>
+    <div class="tasti" style="display:flex;gap:8px;margin-top:12px;position:relative"><button class="fm-tasto pieno" id="entra" style="flex:1;justify-content:center" data-s="entra nella diretta">Entra</button><button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla diretta">Esci</button></div>
+    <div class="esito" id="esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px;position:relative"></div>
   </div>
 
-  <div class="sala">
-    <div class="stato" id="stato"><i></i><span id="stato-t">fuori</span></div>
-    <h2 id="titolo">Strumenti per fare ordine.</h2>
-    <div class="chi" id="chi">puntata · Discernimento · con Gabriele Dettori</div>
-    <div class="pers" id="pers" style="margin-top:12px"></div>
-    <div class="tasti">
-      <button class="fm-tasto pieno" id="entra" data-s="entra nella diretta">Entra</button>
-      <button class="fm-tasto" id="mic" hidden data-s="microfono">Apri il microfono</button>
-      <button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla diretta">Esci</button>
-    </div>
-    <div class="esito" id="esito"></div>
-    <div id="suoni" hidden></div>
+  <!-- ═══ la regia (solo chi coordina) ═══ -->
+  <div class="regia-box">
+    <div class="fm-occ">LA REGIA · SEI TU CHE COORDINI</div>
+    <div class="fila"><button class="fm-tasto piccolo" id="silenzia" data-s="silenzia tutti">Silenzia tutti</button></div>
+    <p>Su ogni persona: 🎙 toglie o ridà il microfono · ✋ dà la parola · ⨯ manda fuori. Chi è mandato fuori non rientra in questa diretta. La registrazione la fa chi ha aperto la diretta o chi coordina.</p>
   </div>
 
-  <div class="reg">
-    <div class="capo"><span class="fm-occ">● REGISTRA</span><span class="tempo" id="tempo">00:00</span></div>
-    <p>Registra questo computer: mescola tutte le voci della sala e salva un file audio. Nessun costo, nessun limite di minuti. Il telefono spegne lo schermo: si registra dal computer.</p>
-    <div class="tasti">
-      <button class="fm-tasto" id="reg-via" disabled data-s="registra">Registra</button>
-      <button class="fm-tasto secondario" id="reg-stop" hidden data-s="ferma la registrazione">Ferma</button>
-    </div>
-    <div class="file" id="file">
-      <b id="file-nome">la registrazione</b><small id="file-info"></small>
-      <audio id="file-audio" controls></audio>
-      <div class="esito" id="pub-esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px"></div>
-      <div class="tasti" style="margin-top:10px"><a class="fm-tasto piccolo" id="file-scarica" download>Scarica il file</a><button class="fm-tasto piccolo secondario" id="pubblica" data-s="pubblica come diretta">Pubblica come Diretta</button></div>
+  <!-- ═══ chi c'è ═══ -->
+  <div class="quad"><div class="capo"><span class="fm-occ">CHI C'È</span><span class="n" id="quanti"></span></div>
+    <div class="griglia">
     </div>
   </div>
 
-  <div class="quad"><div class="capo"><span class="fm-occ">COME SI USA</span></div>
-    <div class="fm-carte">
-      <div class="fm-carta"><div class="im">①</div><div class="t"><b>Entra</b><small>si entra con un tocco: il navigatore non fa suonare una pagina che nessuno ha toccato</small></div></div>
-      <div class="fm-carta"><div class="im">②</div><div class="t"><b>Apri il microfono</b><small>il tasto c'è solo per chi ha una voce: lo decide il gettone, non la pagina</small></div></div>
-      <div class="fm-carta"><div class="im">③</div><div class="t"><b>Registra</b><small>dal computer di chi coordina, dall'inizio alla fine; «Ferma» salva il file</small></div></div>
-      <div class="fm-carta"><div class="im">④</div><div class="t"><b>Pubblica come Diretta</b><small>il file audio in Bacheca, con «trascrizione · la fai tu»</small></div></div>
+  <!-- ═══ chat · file ═══ -->
+  <div class="lingue"><button class="on" data-p="chat">Chat</button><button data-p="file">File condivisi</button><button data-p="info">La puntata</button></div>
+  <div class="quad pannello vivo" id="p-chat">
+    <div class="chat">
     </div>
+    <div class="composi"><input class="campo" id="chat-campo" placeholder="Scrivi in sala…" style="font:inherit;color:var(--avorio);outline:none"><button class="tondo" id="chat-manda" data-s="manda in chat">↑</button></div>
+  </div>
+  <div class="quad pannello" id="p-file">
+    <div id="file-lista"></div>
+    <label class="fm-tasto piccolo" style="margin-top:4px;cursor:pointer">+ condividi un file<input type="file" id="file-in" hidden></label>
+    <div class="esito" id="file-esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px"></div>
+  </div>
+  <div class="quad" id="reg-box" style="display:none">
+    <div class="capo"><span class="fm-occ" style="color:#ff6b6b">● LA REGISTRAZIONE</span><span class="n" id="reg-info"></span></div>
+    <audio id="file-audio" controls style="width:100%"></audio>
+    <div style="display:flex;gap:8px;margin-top:10px"><a class="fm-tasto piccolo" id="file-scarica" download>Scarica il file</a><button class="fm-tasto piccolo secondario" id="pubblica" data-s="pubblica come diretta">Pubblica come Diretta</button></div>
+    <div class="esito" id="pub-esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px"></div>
+  </div>
+  <div class="quad pannello" id="p-info">
+    <div class="fm-riga"><b>cos'è</b><span>la diretta del villaggio Civiltà Sarda</span></div>
+    <div class="fm-riga"><b>chi può parlare</b><span>chi ha una voce (lo decide il gettone)</span></div>
+    <div class="fm-riga"><b>chi registra</b><span>chi ha aperto la diretta, o chi coordina</span></div>
+    <div class="fm-riga"><b>alla fine</b><span>il file audio in Bacheca come Diretta · trascrizione: la fai tu</span></div>
+    <div class="fm-riga"><b>chi la vede</b><span>il villaggio · gli ospiti solo ascoltano</span></div>
+    <div class="fm-riga"><b>la voce registrata</b><span id="consenso-riga">si accetta entrando · <a href="#" id="rileggi" style="color:var(--oro)">rileggi</a></span></div>
   </div>
 
-  <div class="nota-bozza"><b>bozza · vera</b> — entra davvero nella sala LiveKit con sala-gettone (i segreti LIVEKIT_URL · LIVEKIT_API_KEY · LIVEKIT_API_SECRET in Supabase, piano Build gratis: 5.000 minuti-persona al mese, 100 connessioni). La registrazione è del navigatore (MediaRecorder): nessun minuto di registrazione a LiveKit. Il file si scarica, e con «Pubblica come Diretta» va nel deposito «dirette» e in Bacheca come orma di tipo diretta (SQL 55: solo chi coordina il villaggio o il nucleo). La regia (togliere la parola a qualcuno) chiede una funzione server: dopo. Appunto: quando le lezioni a pagamento partono, un VPS (Aruba) con LiveKit nostro.</div>
+  <div class="nota-bozza"><b>la sala della diretta · viva</b> — entra nella sala LiveKit (sala-gettone: chi coordina parla e ha la regia; chi è entrato scrive in chat; gli ospiti sentono). La regia passa da sala-regia, che controlla chi chiama. La registrazione la fa questo computer; «Pubblica come Diretta» carica il file nel deposito «dirette» e scrive l'orma in Bacheca (SQL 55). I file condivisi vanno nello stesso deposito, cartella «file». Prima di entrare si accetta l'uso della propria voce (testo di Gab, 12 ottobre; da far rileggere a chi di dovere).</div>
 </div>
+
 <div class="velo" id="velo"></div>
+<div class="scheda" id="consenso" style="position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:90dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)">
+  <div style="width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px"></div>
+  <div class="fm-occ" style="color:var(--oro)">PRIMA DI ENTRARE · LA TUA VOCE</div>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1;margin-top:6px">Gli audio registrati</h2>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.5;margin-top:10px;color:rgba(245,240,230,.9)">Gli audio registrati potranno essere usati dentro la piattaforma e presentati in eventi Felicitas o legati agli operatori. Entrando dichiari di accettare che saranno utilizzati audio dove potrebbe sentirsi la tua voce.</p>
+  <p class="fm-nota" style="margin-top:8px"><span class="fm-ph">[ testo da far rileggere a chi cura le condizioni d'uso ]</span></p>
+  <div style="display:flex;gap:8px;margin-top:14px"><button class="fm-tasto pieno" id="accetto" style="flex:1;justify-content:center">Accetto ed entro</button><button class="fm-tasto secondario" id="rifiuto">Non entro</button></div>
+</div>
+<div class="plancia"><div class="in">
+  <button id="b-mic" disabled><i>🎙</i>microfono</button>
+  <button id="b-mano" disabled><i>✋</i>la mano</button>
+  <button id="b-rec" class="rec" disabled><i>●</i>registra</button>
+  <button id="b-file" disabled><i>⎘</i>un file</button>
+</div></div>
 
 <script src="comune/fm-riga.js?v=10122220"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -128,96 +194,140 @@ a{color:inherit;text-decoration:none}
 (function(){
   function $(i){return document.getElementById(i)}
   var FM_URL="https://gfnveesogkfvkrdudpfg.supabase.co", FM_CHIAVE="sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
-  var db = supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" } });
-  var ultimo=null, VILLAGGIO='5839d11d-9901-49bb-9b2f-f94236bbe2a1';
-  var stanza=null, ctx=null, dest=null, rec=null, pezzi=[], t0=0, orologio=null, sorgenti=[];
+  var db=supabase.createClient(FM_URL,FM_CHIAVE,{auth:{flowType:"implicit"}});
+  var VILLAGGIO='5839d11d-9901-49bb-9b2f-f94236bbe2a1';
+  var stanza=null, io={}, ctx=null, dest=null, rec=null, pezzi=[], t0=0, orologio=null, t1=0, orologio2=null, ultimo=null, sorgenti=[];
+  var enc=new TextEncoder(), dec=new TextDecoder();
 
-  function dice(t,male){ var e=$('esito'); e.className='esito'+(male?' err':''); e.textContent=t||''; }
-  function stato(k,t){ $('stato').className='stato '+(k||''); $('stato-t').textContent=t; }
+  function dice(t,m){ var e=$('esito'); e.style.color=m?'var(--manca)':'var(--grigio)'; e.textContent=t||''; }
+  function meta(p){ try{ return JSON.parse(p.metadata||'{}'); }catch(e){ return {}; } }
+  function iniz(n){ return (n||'?').trim().charAt(0).toUpperCase(); }
 
-  function conta(){
-    if(!stanza) return;
-    var box=$('pers'); box.innerHTML='';
-    function cerchio(nome, parla, me){ var d=document.createElement('div'); d.className='p'+(parla?' parla':''); d.innerHTML='<div class="c">'+(nome||'?').trim().charAt(0).toUpperCase()+'</div><b></b><small></small>'; d.querySelector('b').textContent=nome||'—'; d.querySelector('small').textContent=me?(parla?'tu · in onda':'tu'):(parla?'parla':'ascolta'); box.appendChild(d); }
-    cerchio(stanza.localParticipant.name||'tu', stanza.localParticipant.isMicrophoneEnabled, true);
-    stanza.remoteParticipants.forEach(function(p){ cerchio(p.name||p.identity, p.audioTrackPublications.size>0, false); });
+  /* le tessere: chi c'è, con ruolo e comune */
+  function tessere(){
+    if(!stanza) return; var g=document.querySelector('.griglia'); g.innerHTML='';
+    var lista=[stanza.localParticipant]; stanza.remoteParticipants.forEach(function(p){ lista.push(p); });
+    var attivi={}; (stanza.activeSpeakers||[]).forEach(function(p){ attivi[p.identity]=true; });
+    lista.forEach(function(p){
+      var m=meta(p), me=(p===stanza.localParticipant), mic=false, muto=false;
+      p.audioTrackPublications.forEach(function(pub){ mic=true; if(pub.isMuted) muto=true; });
+      var parla=mic&&!muto, d=document.createElement('div');
+      d.className='pt'+(parla?' parla':'')+(mic&&muto?' muto':'')+(m.ospite?' ospite':'');
+      var nome=p.name||(m.ospite?'ospite':p.identity);
+      var stato=m.ospite?'senza account · solo ascolto':(parla?(attivi[p.identity]?'sta parlando':'in onda'):'ascolta');
+      d.innerHTML='<div class="c">'+(m.ospite?'○':iniz(nome))+'</div><b></b><small class="'+(m.coordina?'ruolo':'')+'"></small><span class="vic"></span>'+
+        '<div class="regia"><button data-az="muta" title="microfono">'+(mic&&muto?'🚫':'🎙')+'</button><button data-az="parola" title="parola">✋</button><button data-az="fuori" class="fuori" title="fuori">⨯</button></div>';
+      d.querySelector('b').textContent=nome+(me?' · tu':'');
+      d.querySelector('small').textContent=(m.ruolo?m.ruolo+' · ':'')+stato;
+      d.querySelector('.vic').textContent=m.ospite?'ospite':(m.comune||'—');
+      if(me||m.ospite){ d.querySelectorAll('.regia button').forEach(function(b){ if(b.getAttribute('data-az')!=='fuori'||me) b.disabled=true; }); }
+      d.querySelectorAll('.regia button').forEach(function(b){ b.onclick=function(){ regia(b.getAttribute('data-az'), p.identity, b); }; });
+      g.appendChild(d);
+    });
+    /* chi sta parlando, in consolle */
+    var chiP=(stanza.activeSpeakers||[])[0];
+    if(chiP){ var mm=meta(chiP); $('cp-c').textContent=iniz(chiP.name||'?'); $('cp-nome').textContent=chiP.name||'ospite'; $('cp-sot').textContent='sta parlando'+(mm.coordina?' · coordina il villaggio':'')+(mm.comune?' · '+mm.comune:''); }
+    else { $('cp-c').textContent='·'; $('cp-nome').textContent='nessuno sta parlando'; $('cp-sot').textContent=String(stanza.numParticipants||1)+' in sala'; }
   }
 
+  /* la regia: passa dal server */
+  function regia(az, chi, b){
+    if(!io.coordina) return; if(b) b.disabled=true;
+    var corpo={azione:az, chi:chi}; if(az==='parola'){ corpo.si=!(b&&b.classList.contains('on')); }
+    db.functions.invoke('sala-regia',{body:corpo}).then(function(r){
+      if(r.error) throw r.error; var d=r.data||{}; if(d.errore) throw new Error(d.errore);
+      if(az==='parola'&&b) b.classList.toggle('on', d.si); 
+      chat_sys(az==='muta'?'🎙 microfono chiuso da chi coordina':az==='fuori'?'⨯ una persona è stata mandata fuori':az==='parola'?(d.si?'✋ data la parola':'✋ tolta la parola'):'🔇 tutti i microfoni chiusi');
+      setTimeout(tessere,600);
+    }).catch(function(e){ dice('Regia: '+(e&&e.message?e.message:'—'),true); }).finally(function(){ if(b) b.disabled=false; });
+  }
+  $('silenzia').onclick=function(){ regia('silenzia_tutti','',null); };
+
+  /* la chat scritta: messaggi dati nella sala */
+  function chat_riga(nome, testo, io_){ var box=document.querySelector('.chat'); var d=document.createElement('div'); d.className='m'+(io_?' io':''); d.innerHTML='<b></b>'; d.querySelector('b').textContent=nome; d.appendChild(document.createTextNode(testo)); box.appendChild(d); box.scrollTop=box.scrollHeight; }
+  function chat_sys(t){ var box=document.querySelector('.chat'); var d=document.createElement('div'); d.className='m'; d.innerHTML='<span class="sys"></span>'; d.querySelector('.sys').textContent=t; box.appendChild(d); box.scrollTop=box.scrollHeight; }
+  function manda(){ var t=$('chat-campo').value.trim(); if(!t||!stanza) return; if(!io.entrato){ dice('Per scrivere entra con il tuo account.',true); return; }
+    stanza.localParticipant.publishData(enc.encode(JSON.stringify({t:'chat',n:io.nome||'io',m:t})),{reliable:true}).then(function(){ chat_riga(io.nome||'io',t,true); $('chat-campo').value=''; }).catch(function(e){ dice('Chat: '+(e&&e.message?e.message:'—'),true); }); }
+  $('chat-manda').onclick=manda; $('chat-campo').addEventListener('keydown',function(e){ if(e.key==='Enter') manda(); });
+
+  /* i file condivisi: nel deposito dirette/<villaggio>/file/ */
+  function file_riga(nome, via, chi){ var box=$('file-lista'); var d=document.createElement('div'); d.className='file-riga'; d.innerHTML='<div class="ic">◫</div><div style="flex:1;min-width:0"><b></b><small></small></div><a class="fm-tasto piccolo secondario" target="_blank" rel="noopener">apri</a>'; d.querySelector('b').textContent=nome; d.querySelector('small').textContent='condiviso da '+chi; var a=d.querySelector('a'); a.href='#'; a.onclick=function(ev){ ev.preventDefault(); db.storage.from('dirette').createSignedUrl(via,3600).then(function(r){ if(r.data&&r.data.signedUrl) window.open(r.data.signedUrl,'_blank'); else dice('Il file non si apre: entra con il tuo account.',true); }); }; box.appendChild(d); }
+  $('file-in').addEventListener('change',function(){
+    var f=$('file-in').files[0]; if(!f||!stanza) return; if(!io.entrato){ $('file-esito').textContent='Per condividere entra con il tuo account.'; return; }
+    var via=VILLAGGIO+'/file/'+Date.now()+'-'+f.name.replace(/[^\w.\-]+/g,'_'); $('file-esito').textContent='Carico…';
+    db.storage.from('dirette').upload(via,f,{contentType:f.type||'application/octet-stream'}).then(function(r){ if(r.error) throw r.error; $('file-esito').textContent='Condiviso.';
+      file_riga(f.name,via,io.nome||'te'); return stanza.localParticipant.publishData(enc.encode(JSON.stringify({t:'file',n:io.nome||'',nome:f.name,via:via})),{reliable:true}); })
+    .catch(function(e){ $('file-esito').textContent='Non caricato: '+(e&&e.message?e.message:'—')+(io.coordina?'':' (il deposito scrive chi coordina)'); });
+  });
+  $('b-file').onclick=function(){ document.querySelectorAll('.lingue button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-p')==='file')}); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo',p.id==='p-file'); }); $('file-in').click(); };
+
+  /* entrare */
   function entra(){
-    if(typeof LivekitClient==='undefined'){
-      dice('Un momento…'); var lk=document.createElement('script'); lk.src='https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js'; lk.onload=entra; lk.onerror=function(){ dice('La sala non si è caricata. Ricarica la pagina.',true); }; document.head.appendChild(lk); return;
-    }
+    if(typeof LivekitClient==='undefined'){ dice('Un momento…'); var lk=document.createElement('script'); lk.src='https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js'; lk.onload=entra; lk.onerror=function(){ dice('La sala non si è caricata. Ricarica la pagina.',true); }; document.head.appendChild(lk); return; }
     dice('Un momento…'); $('entra').disabled=true;
     db.functions.invoke('sala-gettone').then(function(r){
-      if(r.error) throw r.error;
-      var d=r.data||{}; if(!d.gettone) throw new Error('nessun gettone');
-      stanza=new LivekitClient.Room({ adaptiveStream:true });
-      stanza.on(LivekitClient.RoomEvent.TrackSubscribed,function(track){ if(track.kind!=='audio') return; var e=track.attach(); e.autoplay=true; $('suoni').appendChild(e); mescola(track); conta(); });
-      stanza.on(LivekitClient.RoomEvent.TrackUnsubscribed,function(track){ track.detach().forEach(function(e){e.remove();}); conta(); });
-      ['ParticipantConnected','ParticipantDisconnected','TrackPublished','TrackUnpublished','ActiveSpeakersChanged'].forEach(function(q){ stanza.on(LivekitClient.RoomEvent[q],conta); });
-      stanza.on(LivekitClient.RoomEvent.Disconnected,fuori);
+      if(r.error) throw r.error; var d=r.data||{}; if(!d.gettone) throw new Error(d.errore||'nessun gettone'); io=d;
+      stanza=new LivekitClient.Room({adaptiveStream:true});
+      var E=LivekitClient.RoomEvent;
+      stanza.on(E.TrackSubscribed,function(track){ if(track.kind!=='audio') return; var el=track.attach(); el.autoplay=true; $('suoni').appendChild(el); mescola(track); tessere(); });
+      stanza.on(E.TrackUnsubscribed,function(track){ track.detach().forEach(function(el){el.remove();}); tessere(); });
+      ['ParticipantConnected','ParticipantDisconnected','TrackPublished','TrackUnpublished','TrackMuted','TrackUnmuted','ActiveSpeakersChanged','ParticipantMetadataChanged','ParticipantPermissionsChanged'].forEach(function(q){ if(E[q]) stanza.on(E[q],tessere); });
+      stanza.on(E.ParticipantPermissionsChanged,function(){ var ok=stanza.localParticipant.permissions&&stanza.localParticipant.permissions.canPublish; $('b-mic').disabled=!ok; if(ok) chat_sys('✋ hai la parola'); });
+      stanza.on(E.DataReceived,function(payload,p){ try{ var m=JSON.parse(dec.decode(payload)); if(m.t==='chat') chat_riga(m.n||(p&&p.name)||'?',m.m,false); if(m.t==='file') file_riga(m.nome,m.via,m.n||(p&&p.name)||'?'); if(m.t==='mano') chat_sys('✋ '+(m.n||(p&&p.name)||'qualcuno')+' alza la mano'); }catch(e){} });
+      stanza.on(E.Disconnected,function(){ fuori('Sei fuori dalla sala.'); });
       return stanza.connect(d.dove,d.gettone).then(function(){ return stanza.startAudio().catch(function(){}); }).then(function(){
-        stato('dentro','dentro'); $('entra').hidden=true; $('esci').hidden=false; $('mic').hidden=!d.parla; $('reg-via').disabled=false; dice(d.entrato?'':'senza account: solo ascolto'); conta();
+        $('onda').classList.remove('fuori'); $('live-t').textContent='IN SALA · CIVILTÀ SARDA'; $('live').style.color='#ff6b6b'; var i=$('live').querySelector('i'); i.style.background='#ff4d4d'; i.style.animation='';
+        $('entra').hidden=true; $('esci').hidden=false; $('b-mic').disabled=!d.parla; $('b-mano').disabled=!d.entrato; $('b-rec').disabled=!d.coordina; $('b-file').disabled=!d.entrato;
+        if(d.coordina) document.getElementById('app').classList.add('coordina');
+        dice(d.entrato?'':'Senza account: senti, non parli.'); t1=Date.now(); orologio2=setInterval(function(){ var s=Math.floor((Date.now()-t1)/1000); $('tempo').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
+        tessere();
       });
     }).catch(function(e){ $('entra').disabled=false; dice('La sala non si apre: '+(e&&e.message?e.message:'—'),true); });
   }
-  function microfono(){
-    if(!stanza) return; var acceso=stanza.localParticipant.isMicrophoneEnabled; dice(acceso?'Chiudo…':'Apro…');
-    stanza.localParticipant.setMicrophoneEnabled(!acceso).then(function(){
-      $('mic').textContent=acceso?'Apri il microfono':'Chiudi il microfono'; stato(acceso?'dentro':'onda', acceso?'dentro':'in onda'); dice('');
-      if(!acceso){ var pub=null; stanza.localParticipant.audioTrackPublications.forEach(function(p){ pub=p; }); if(pub&&pub.track) mescola(pub.track); }
-      conta();
-    }).catch(function(e){ dice('Il microfono non si apre: '+(e&&e.message?e.message:'—'),true); });
-  }
-  function esci(){ if(rec&&rec.state==='recording') ferma(); if(stanza) stanza.disconnect(); fuori(); }
-  function fuori(){ stanza=null; $('suoni').innerHTML=''; stato('','fuori'); $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; $('mic').hidden=true; $('mic').textContent='Apri il microfono'; $('reg-via').disabled=true; $('pers').innerHTML=''; }
+  function fuori(t){ if(rec&&rec.state==='recording') ferma(); if(stanza){ try{ stanza.disconnect(); }catch(e){} } stanza=null; clearInterval(orologio2); $('suoni').innerHTML=''; $('onda').classList.add('fuori'); $('live-t').textContent='FUORI · CIVILTÀ SARDA'; $('live').style.color='var(--grigio)'; var i=$('live').querySelector('i'); i.style.background='var(--grigio)'; i.style.animation='none'; $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; ['b-mic','b-mano','b-rec','b-file'].forEach(function(k){ $(k).disabled=true; $(k).classList.remove('on'); }); document.querySelector('.griglia').innerHTML=''; document.getElementById('app').classList.remove('coordina'); dice(t||''); }
+  $('esci').onclick=function(){ fuori(''); };
 
-  /* la registrazione: tutte le voci (e il mio microfono) in un solo flusso */
-  function mescola(track){
-    if(!ctx||!track||!track.mediaStreamTrack) return;
-    try{ var s=new MediaStream([track.mediaStreamTrack]); var n=ctx.createMediaStreamSource(s); n.connect(dest); sorgenti.push(n); }catch(e){}
-  }
-  function registra(){
-    if(!stanza) return;
-    ctx=new (window.AudioContext||window.webkitAudioContext)(); dest=ctx.createMediaStreamDestination(); sorgenti=[];
+  /* il consenso prima di entrare: parole di Gab, 12 ottobre */
+  $('entra').onclick=function(){ var ok=false; try{ ok=localStorage.getItem('fm_voce_ok')==='1'; }catch(e){} if(ok) entra(); else { $('consenso').classList.add('vivo'); $('velo').classList.add('vivo'); } };
+  $('accetto').onclick=function(){ try{ localStorage.setItem('fm_voce_ok','1'); }catch(e){} $('consenso').classList.remove('vivo'); $('velo').classList.remove('vivo'); entra(); };
+  $('rifiuto').onclick=function(){ $('consenso').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  $('rileggi').onclick=function(e){ e.preventDefault(); $('consenso').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  $('velo').onclick=function(){ $('consenso').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+
+  /* microfono · mano */
+  $('b-mic').onclick=function(){ if(!stanza) return; var acceso=stanza.localParticipant.isMicrophoneEnabled; dice(acceso?'Chiudo…':'Apro…');
+    stanza.localParticipant.setMicrophoneEnabled(!acceso).then(function(){ $('b-mic').classList.toggle('on',!acceso); dice(''); if(!acceso){ var pub=null; stanza.localParticipant.audioTrackPublications.forEach(function(p){pub=p;}); if(pub&&pub.track) mescola(pub.track); } tessere(); })
+    .catch(function(e){ dice('Il microfono non si apre: '+(e&&e.message?e.message:'—'),true); }); };
+  $('b-mano').onclick=function(){ if(!stanza||!io.entrato) return; $('b-mano').classList.add('on'); stanza.localParticipant.publishData(enc.encode(JSON.stringify({t:'mano',n:io.nome||''})),{reliable:true}).then(function(){ chat_sys('✋ hai alzato la mano'); }).catch(function(){}); };
+
+  /* la registrazione (il computer di chi coordina) */
+  function mescola(track){ if(!ctx||!track||!track.mediaStreamTrack) return; try{ var n=ctx.createMediaStreamSource(new MediaStream([track.mediaStreamTrack])); n.connect(dest); sorgenti.push(n); }catch(e){} }
+  function registra(){ if(!stanza) return; ctx=new (window.AudioContext||window.webkitAudioContext)(); dest=ctx.createMediaStreamDestination(); sorgenti=[];
     stanza.remoteParticipants.forEach(function(p){ p.audioTrackPublications.forEach(function(pub){ if(pub.track) mescola(pub.track); }); });
     stanza.localParticipant.audioTrackPublications.forEach(function(pub){ if(pub.track) mescola(pub.track); });
     var tipo=['audio/webm;codecs=opus','audio/mp4','audio/webm'].filter(function(t){ return window.MediaRecorder&&MediaRecorder.isTypeSupported(t); })[0];
     if(!tipo){ dice('Questo navigatore non sa registrare.',true); return; }
     pezzi=[]; rec=new MediaRecorder(dest.stream,{mimeType:tipo});
     rec.ondataavailable=function(e){ if(e.data&&e.data.size) pezzi.push(e.data); };
-    rec.onstop=function(){
-      var blob=new Blob(pezzi,{type:tipo}); var url=URL.createObjectURL(blob); ultimo={blob:blob,tipo:tipo};
-      var nome='diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+(tipo.indexOf('mp4')>=0?'.m4a':'.webm');
-      $('file').style.display='block'; $('file-nome').textContent=nome; $('file-info').textContent=Math.round(blob.size/1024)+' KB · '+$('tempo').textContent; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome;
-    };
-    rec.start(1000); t0=Date.now(); orologio=setInterval(function(){ var s=Math.floor((Date.now()-t0)/1000); $('tempo').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },500);
-    $('reg-via').hidden=true; $('reg-stop').hidden=false; $('file').style.display='none';
-  }
-  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); $('reg-via').hidden=false; $('reg-stop').hidden=true; }
+    rec.onstop=function(){ var blob=new Blob(pezzi,{type:tipo}); ultimo={blob:blob,tipo:tipo,secondi:Math.round((Date.now()-t0)/1000)}; var url=URL.createObjectURL(blob);
+      var nome='diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+(tipo.indexOf('mp4')>=0?'.m4a':'.webm'); ultimo.nome=nome;
+      $('reg-box').style.display='block'; $('reg-info').textContent=nome+' · '+Math.round(blob.size/1024)+' KB'; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome; $('pubblica').disabled=false; $('pubblica').textContent='Pubblica come Diretta'; $('pub-esito').textContent=''; };
+    rec.start(1000); t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); chat_sys('● la registrazione è partita'); }
+  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); $('reg-segno').style.display='none'; $('b-rec').classList.remove('on'); chat_sys('■ la registrazione è ferma'); }
+  $('b-rec').onclick=function(){ if($('b-rec').disabled) return; if(rec&&rec.state==='recording') ferma(); else registra(); };
 
+  /* la Diretta in Bacheca (SQL 55) */
+  $('pubblica').onclick=function(){ if(!ultimo) return; var e=$('pub-esito'); e.textContent='Carico il file…'; $('pubblica').disabled=true; var via='dirette/'+VILLAGGIO+'/'+ultimo.nome;
+    db.storage.from('dirette').upload(VILLAGGIO+'/'+ultimo.nome, ultimo.blob,{contentType:ultimo.tipo,upsert:false}).then(function(r){ if(r.error) throw r.error; e.textContent='Scrivo la Diretta in Bacheca…';
+      return db.rpc('fm_pubblica_diretta',{p_villaggio:VILLAGGIO,p_titolo:document.querySelector('.onda h1').textContent,p_descrizione:$('chi').textContent+' · registrazione della diretta del villaggio · trascrizione: la fai tu',p_indirizzo:via,p_dimensione:ultimo.blob.size,p_secondi:ultimo.secondi}); })
+    .then(function(r){ if(r.error) throw r.error; e.textContent='Pubblicata in Bacheca come Diretta.'; $('pubblica').textContent='Pubblicata ✓'; })
+    .catch(function(err){ $('pubblica').disabled=false; e.textContent='Non pubblicata: '+(err&&err.message?err.message:'—'); }); };
 
-  /* la Diretta in Bacheca (SQL 55): il file nel deposito «dirette», poi fm_pubblica_diretta */
-  $('pubblica').onclick=function(){
-    if(!ultimo){ return; }
-    var e=$('pub-esito'); e.textContent='Carico il file…'; $('pubblica').disabled=true;
-    var nome=$('file-nome').textContent; var via='dirette/'+VILLAGGIO+'/'+nome; var sec=Math.round((Date.now()-t0)/1000);
-    db.auth.getUser().then(function(u){
-      if(!u.data||!u.data.user) throw new Error('entra prima');
-      return db.storage.from('dirette').upload(VILLAGGIO+'/'+nome, ultimo.blob, { contentType: ultimo.tipo, upsert:false });
-    }).then(function(r){
-      if(r.error) throw r.error;
-      e.textContent='Scrivo la Diretta in Bacheca…';
-      return db.rpc('fm_pubblica_diretta',{ p_villaggio:VILLAGGIO, p_titolo:$('titolo').textContent, p_descrizione:$('chi').textContent+' · registrazione della diretta del villaggio · trascrizione: la fai tu', p_indirizzo:via, p_dimensione:ultimo.blob.size, p_secondi:sec });
-    }).then(function(r){
-      if(r.error) throw r.error;
-      e.textContent='Pubblicata in Bacheca come Diretta.'; $('pubblica').textContent='Pubblicata ✓';
-    }).catch(function(err){ $('pubblica').disabled=false; e.textContent='Non pubblicata: '+(err&&err.message?err.message:'—'); });
-  };
-  $('entra').onclick=entra; $('mic').onclick=microfono; $('esci').onclick=esci; $('reg-via').onclick=registra; $('reg-stop').onclick=ferma;
+  document.querySelectorAll('.lingue button').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.lingue button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo', p.id==='p-'+b.getAttribute('data-p')); }); }; });
   window.addEventListener('pagehide',function(){ if(stanza) stanza.disconnect(); });
 })();
 </script>
-<script src="comune/fm-statistiche.js?v=10111950" data-pagina="diretta-bozza"></script>
+<div id="suoni" hidden></div>
+<script src="comune/fm-statistiche.js?v=10111950" data-pagina="diretta-sala-bozza"></script>
 </body>
 </html>
