@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La voce · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+/* ═══ LA VOCE · la chat vocale del gruppo (12 ottobre, Gab: «quello che fa Telegram … attivare i microfoni,
+   una piccola regia interna … registrare quella call … parlare e registrare l'audio, semplicemente»).
+   Vera: entra nella sala LiveKit col gettone di sala-gettone (LiveKit Cloud, piano gratis).
+   La registrazione la fa questo computer (nessun costo): mescola le voci e salva il file. ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+
+.testa{padding:6px 18px 14px}
+.testa .fm-occ{color:var(--terra)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+
+.sala{margin:0 18px 18px;background:var(--carta);border:1px solid var(--riga);border-radius:20px;padding:16px}
+.sala .stato{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grigio)}
+.sala .stato i{width:8px;height:8px;border-radius:50%;background:var(--grigio)}
+.sala .stato.dentro i{background:var(--fatto)}
+.sala .stato.onda i{background:#e04b4b;box-shadow:0 0 0 4px rgba(224,75,75,.25)}
+.sala h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1;margin-top:8px}
+.sala .chi{font-size:13px;color:var(--grigio);margin-top:4px;line-height:1.45}
+.sala .tasti{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.sala .tasti .fm-tasto{flex:1;justify-content:center}
+.sala .esito{font-size:12.5px;color:var(--grigio);margin-top:10px;min-height:16px}
+.sala .esito.err{color:var(--manca)}
+
+/* chi c'è: cerchi */
+.pers{display:flex;gap:10px;overflow:auto;scrollbar-width:none;padding:4px 0}
+.pers::-webkit-scrollbar{display:none}
+.p{flex:none;width:76px;text-align:center}
+.p .c{width:54px;height:54px;border-radius:50%;margin:0 auto 6px;background:var(--notte);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--oro)}
+.p.parla .c{border-color:var(--oro);box-shadow:0 0 0 3px rgba(212,175,106,.25)}
+.p b{display:block;font-weight:500;font-size:12px;line-height:1.25}
+.p small{display:block;font-size:11px;color:var(--grigio);margin-top:2px}
+
+/* la registrazione */
+.reg{margin:0 18px 18px;border:1px solid var(--riga);border-radius:20px;padding:16px}
+.reg .capo{display:flex;align-items:center;justify-content:space-between}
+.reg .capo .fm-occ{color:#e04b4b}
+.reg .tempo{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--avorio)}
+.reg p{font-size:12.5px;color:var(--grigio);line-height:1.5;margin-top:6px}
+.reg .tasti{display:flex;gap:8px;margin-top:12px}
+.reg .tasti .fm-tasto{flex:1;justify-content:center}
+.reg .file{display:none;margin-top:12px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px}
+.reg .file audio{width:100%;margin-top:8px}
+.reg .file b{font-weight:500;font-size:14px}
+.reg .file small{display:block;font-size:12px;color:var(--grigio);margin-top:3px}
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--terra)}
+.fm-carte .fm-carta{margin-bottom:8px}
+.fm-carte .fm-carta .im{font-size:20px;color:var(--terra)}
+.nota-bozza{margin:10px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+.nota-bozza b{color:var(--oro);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="fm-stanze" data-attiva=""></div>
+
+  <div class="testa">
+    <div class="fm-occ">TERRA · CIVILTÀ SARDA · LA VOCE</div>
+    <h1>La chat vocale del villaggio.</h1>
+    <div class="sot">Chi entra sente. Chi ha una voce apre il microfono. Chi coordina può registrare: a fine chiamata il file audio resta nella Bacheca come Diretta.</div>
+  </div>
+
+  <div class="sala">
+    <div class="stato" id="stato"><i></i><span id="stato-t">fuori</span></div>
+    <h2 id="titolo">Strumenti per fare ordine.</h2>
+    <div class="chi" id="chi">puntata · Discernimento · con Gabriele Dettori</div>
+    <div class="pers" id="pers" style="margin-top:12px"></div>
+    <div class="tasti">
+      <button class="fm-tasto pieno" id="entra" data-s="entra nella voce">Entra</button>
+      <button class="fm-tasto" id="mic" hidden data-s="microfono">Apri il microfono</button>
+      <button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla voce">Esci</button>
+    </div>
+    <div class="esito" id="esito"></div>
+    <div id="suoni" hidden></div>
+  </div>
+
+  <div class="reg">
+    <div class="capo"><span class="fm-occ">● REGISTRA</span><span class="tempo" id="tempo">00:00</span></div>
+    <p>Registra questo computer: mescola tutte le voci della sala e salva un file audio. Nessun costo, nessun limite di minuti. Il telefono spegne lo schermo: si registra dal computer.</p>
+    <div class="tasti">
+      <button class="fm-tasto" id="reg-via" disabled data-s="registra">Registra</button>
+      <button class="fm-tasto secondario" id="reg-stop" hidden data-s="ferma la registrazione">Ferma</button>
+    </div>
+    <div class="file" id="file">
+      <b id="file-nome">la registrazione</b><small id="file-info"></small>
+      <audio id="file-audio" controls></audio>
+      <div class="tasti" style="margin-top:10px"><a class="fm-tasto piccolo" id="file-scarica" download>Scarica il file</a><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html">Pubblica come Diretta <span class="fm-ph">[ dopo l'ok ]</span></a></div>
+    </div>
+  </div>
+
+  <div class="quad"><div class="capo"><span class="fm-occ">COME SI USA</span></div>
+    <div class="fm-carte">
+      <div class="fm-carta"><div class="im">①</div><div class="t"><b>Entra</b><small>si entra con un tocco: il navigatore non fa suonare una pagina che nessuno ha toccato</small></div></div>
+      <div class="fm-carta"><div class="im">②</div><div class="t"><b>Apri il microfono</b><small>il tasto c'è solo per chi ha una voce: lo decide il gettone, non la pagina</small></div></div>
+      <div class="fm-carta"><div class="im">③</div><div class="t"><b>Registra</b><small>dal computer di chi coordina, dall'inizio alla fine; «Ferma» salva il file</small></div></div>
+      <div class="fm-carta"><div class="im">④</div><div class="t"><b>Pubblica come Diretta</b><small>il file audio in Bacheca, con «trascrizione · la fai tu»</small></div></div>
+    </div>
+  </div>
+
+  <div class="nota-bozza"><b>bozza · vera</b> — entra davvero nella sala LiveKit con sala-gettone (i segreti LIVEKIT_URL · LIVEKIT_API_KEY · LIVEKIT_API_SECRET in Supabase, piano Build gratis: 5.000 minuti-persona al mese, 100 connessioni). La registrazione è del navigatore (MediaRecorder): nessun minuto di registrazione a LiveKit. Il file si scarica; il caricamento nel deposito e la Diretta in Bacheca arrivano con l'ok al modello. La regia (togliere la parola a qualcuno) chiede una funzione server: dopo. Appunto: quando le lezioni a pagamento partono, un VPS (Aruba) con LiveKit nostro.</div>
+</div>
+<div class="velo" id="velo"></div>
+
+<script src="comune/fm-riga.js?v=10122055"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  var FM_URL="https://gfnveesogkfvkrdudpfg.supabase.co", FM_CHIAVE="sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+  var db = supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" } });
+  var stanza=null, ctx=null, dest=null, rec=null, pezzi=[], t0=0, orologio=null, sorgenti=[];
+
+  function dice(t,male){ var e=$('esito'); e.className='esito'+(male?' err':''); e.textContent=t||''; }
+  function stato(k,t){ $('stato').className='stato '+(k||''); $('stato-t').textContent=t; }
+
+  function conta(){
+    if(!stanza) return;
+    var box=$('pers'); box.innerHTML='';
+    function cerchio(nome, parla, me){ var d=document.createElement('div'); d.className='p'+(parla?' parla':''); d.innerHTML='<div class="c">'+(nome||'?').trim().charAt(0).toUpperCase()+'</div><b></b><small></small>'; d.querySelector('b').textContent=nome||'—'; d.querySelector('small').textContent=me?(parla?'tu · in onda':'tu'):(parla?'parla':'ascolta'); box.appendChild(d); }
+    cerchio(stanza.localParticipant.name||'tu', stanza.localParticipant.isMicrophoneEnabled, true);
+    stanza.remoteParticipants.forEach(function(p){ cerchio(p.name||p.identity, p.audioTrackPublications.size>0, false); });
+  }
+
+  function entra(){
+    if(typeof LivekitClient==='undefined'){
+      dice('Un momento…'); var lk=document.createElement('script'); lk.src='https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js'; lk.onload=entra; lk.onerror=function(){ dice('La sala non si è caricata. Ricarica la pagina.',true); }; document.head.appendChild(lk); return;
+    }
+    dice('Un momento…'); $('entra').disabled=true;
+    db.functions.invoke('sala-gettone').then(function(r){
+      if(r.error) throw r.error;
+      var d=r.data||{}; if(!d.gettone) throw new Error('nessun gettone');
+      stanza=new LivekitClient.Room({ adaptiveStream:true });
+      stanza.on(LivekitClient.RoomEvent.TrackSubscribed,function(track){ if(track.kind!=='audio') return; var e=track.attach(); e.autoplay=true; $('suoni').appendChild(e); mescola(track); conta(); });
+      stanza.on(LivekitClient.RoomEvent.TrackUnsubscribed,function(track){ track.detach().forEach(function(e){e.remove();}); conta(); });
+      ['ParticipantConnected','ParticipantDisconnected','TrackPublished','TrackUnpublished','ActiveSpeakersChanged'].forEach(function(q){ stanza.on(LivekitClient.RoomEvent[q],conta); });
+      stanza.on(LivekitClient.RoomEvent.Disconnected,fuori);
+      return stanza.connect(d.dove,d.gettone).then(function(){ return stanza.startAudio().catch(function(){}); }).then(function(){
+        stato('dentro','dentro'); $('entra').hidden=true; $('esci').hidden=false; $('mic').hidden=!d.parla; $('reg-via').disabled=false; dice(d.entrato?'':'senza account: solo ascolto'); conta();
+      });
+    }).catch(function(e){ $('entra').disabled=false; dice('La sala non si apre: '+(e&&e.message?e.message:'—'),true); });
+  }
+  function microfono(){
+    if(!stanza) return; var acceso=stanza.localParticipant.isMicrophoneEnabled; dice(acceso?'Chiudo…':'Apro…');
+    stanza.localParticipant.setMicrophoneEnabled(!acceso).then(function(){
+      $('mic').textContent=acceso?'Apri il microfono':'Chiudi il microfono'; stato(acceso?'dentro':'onda', acceso?'dentro':'in onda'); dice('');
+      if(!acceso){ var pub=null; stanza.localParticipant.audioTrackPublications.forEach(function(p){ pub=p; }); if(pub&&pub.track) mescola(pub.track); }
+      conta();
+    }).catch(function(e){ dice('Il microfono non si apre: '+(e&&e.message?e.message:'—'),true); });
+  }
+  function esci(){ if(rec&&rec.state==='recording') ferma(); if(stanza) stanza.disconnect(); fuori(); }
+  function fuori(){ stanza=null; $('suoni').innerHTML=''; stato('','fuori'); $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; $('mic').hidden=true; $('mic').textContent='Apri il microfono'; $('reg-via').disabled=true; $('pers').innerHTML=''; }
+
+  /* la registrazione: tutte le voci (e il mio microfono) in un solo flusso */
+  function mescola(track){
+    if(!ctx||!track||!track.mediaStreamTrack) return;
+    try{ var s=new MediaStream([track.mediaStreamTrack]); var n=ctx.createMediaStreamSource(s); n.connect(dest); sorgenti.push(n); }catch(e){}
+  }
+  function registra(){
+    if(!stanza) return;
+    ctx=new (window.AudioContext||window.webkitAudioContext)(); dest=ctx.createMediaStreamDestination(); sorgenti=[];
+    stanza.remoteParticipants.forEach(function(p){ p.audioTrackPublications.forEach(function(pub){ if(pub.track) mescola(pub.track); }); });
+    stanza.localParticipant.audioTrackPublications.forEach(function(pub){ if(pub.track) mescola(pub.track); });
+    var tipo=['audio/webm;codecs=opus','audio/mp4','audio/webm'].filter(function(t){ return window.MediaRecorder&&MediaRecorder.isTypeSupported(t); })[0];
+    if(!tipo){ dice('Questo navigatore non sa registrare.',true); return; }
+    pezzi=[]; rec=new MediaRecorder(dest.stream,{mimeType:tipo});
+    rec.ondataavailable=function(e){ if(e.data&&e.data.size) pezzi.push(e.data); };
+    rec.onstop=function(){
+      var blob=new Blob(pezzi,{type:tipo}); var url=URL.createObjectURL(blob);
+      var nome='diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+(tipo.indexOf('mp4')>=0?'.m4a':'.webm');
+      $('file').style.display='block'; $('file-nome').textContent=nome; $('file-info').textContent=Math.round(blob.size/1024)+' KB · '+$('tempo').textContent; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome;
+    };
+    rec.start(1000); t0=Date.now(); orologio=setInterval(function(){ var s=Math.floor((Date.now()-t0)/1000); $('tempo').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },500);
+    $('reg-via').hidden=true; $('reg-stop').hidden=false; $('file').style.display='none';
+  }
+  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); $('reg-via').hidden=false; $('reg-stop').hidden=true; }
+
+  $('entra').onclick=entra; $('mic').onclick=microfono; $('esci').onclick=esci; $('reg-via').onclick=registra; $('reg-stop').onclick=ferma;
+  window.addEventListener('pagehide',function(){ if(stanza) stanza.disconnect(); });
+})();
+</script>
+<script src="comune/fm-statistiche.js?v=10111950" data-pagina="voce-bozza"></script>
+</body>
+</html>
