@@ -4588,6 +4588,11 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     /* ⭐ 3 ottobre 16:22, Gab: «uno senza accesso non ci deve andare là». Da ospite le stanze del fare
        (account, la mia orma, chat, carrello…) non si aprono: si va all'accesso, e dopo si torna qui. */
     if(ospite && SOLO_DENTRO.indexOf(id) >= 0){ fmChiediAccesso(id); return; }
+    /* ⭐ 12 ottobre, Gab: «come possiamo fare per far in modo che le vecchie pagine non siano più visibili?» → «ok procedi».
+       In prova le rotte «si rifà» della mappa delle pagine portano alle bozze nuove; la produzione resta accesa com'è.
+       La soglia non c'è più (Gab, 12 ott: «meglio fare un bel lancio sul sito, poi sarà nella bacheca che creiamo il banner»): dopo l'accesso, Bacheca. */
+    var NUOVE = { soglia:"bacheca-bozza.html", orme:"bacheca-bozza.html?vista=mia", vicinati:"gruppo-bozza.html", gruppi:"gruppo-bozza.html?l=nucleo", account:"account-bozza.html", lavagna:"squadra-bozza.html" };
+    if(!ospite && NUOVE[id]){ location.href = NUOVE[id]; return; }
     /* ⭐ uscendo dalla consolle si esce anche dalla sala: il microfono non
        resta aperto in una stanza che non si vede più */
     if(id !== "consolle" && typeof salaEsci === "function") salaEsci();
