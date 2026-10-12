@@ -193,19 +193,22 @@ a{color:inherit;text-decoration:none}
 .banner-prat .t{padding:12px 14px 14px}
 .banner-prat .t b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:20px;line-height:1.15}
 .banner-prat .t small{display:block;font-size:12.5px;color:var(--grigio);margin-top:6px;line-height:1.45}
+.testa-b{padding:6px 18px 10px}.testa-b .fm-occ{color:var(--terra)}.testa-b h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}.testa-b .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+.piede button i svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round}
 </style>
 </head>
 <body>
 <div class="app">
-  <div id="fm-stanze" data-attiva="vicinati"></div>
+  <div id="fm-stanze" data-attiva=""></div>
 
   <!-- ═══ LA BACHECA ═══ -->
   <div class="vista vivo" id="v-bacheca">
+    <div class="testa-b"><div class="fm-occ">TERRA · VICINATI</div><h1>La Bacheca.</h1><div class="sot">La bacheca dei villaggi e dei vicinati: quello che pubblicano i villaggi, e i contenuti di chi partecipa.</div></div>
     <button class="fare" id="apri-scrivi"><span>Cosa stai facendo?</span><b><img src="APP.FELICITASMUNDI/piatti/orma.png" alt=""></b></button>
 
     <!-- 1 · radio -->
     <section class="quad" style="--c:var(--aria)">
-      <div class="capo"><span class="fm-occ">RADIO · EDIZIONE</span><a href="#">tutte le puntate ›</a></div>
+      <div class="capo"><span class="fm-occ">LA RADIO</span><a href="#">tutte le puntate ›</a></div>
       <div class="radio-foto"><img src="casa/gab.jpg" alt=""></div>
       <div class="radio-testo">
         <span class="vivo"><i></i>LUNEDÌ 12 · ORE 19 · IN DIRETTA</span>
@@ -321,7 +324,7 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
 
-  <div class="piede"><div class="in"><button class="on" data-v="bacheca"><i>✦</i>Bacheca</button><button data-v="mia"><i>◉</i>La mia orma</button></div></div>
+  <div class="piede"><div class="in"><button class="on" data-v="bacheca"><i id="cubo">✦</i>Bacheca</button><button data-v="mia"><i>◉</i>La mia orma</button></div></div>
 </div>
 
 <!-- la barra laterale: le stanze -->
@@ -462,6 +465,7 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll('[data-prendo]').forEach(function(b){ b.onclick=function(){ var c=b.closest('.fm-carta'); var t=c.querySelector('b').textContent; var s=document.createElement('span'); s.className='fm-stadio in-avanzamento'; s.textContent='preso da te'; b.replaceWith(s); $('presa').style.display='flex'; $('presa-t').textContent=t; }; });
 })();
 </script>
-<script src="comune/fm-riga.js?v=10122030"></script>
+<script src="comune/fm-riga.js?v=10122040"></script>
+<script>try{ document.getElementById("cubo").innerHTML = window.FM_CUBO; }catch(e){}</script>
 </body>
 </html>
