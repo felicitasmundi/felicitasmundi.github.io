@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>La voce · bozza</title>
+<title>La diretta · bozza</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
 <style>
-/* ═══ LA VOCE · la chat vocale del gruppo (12 ottobre, Gab: «quello che fa Telegram … attivare i microfoni,
+/* ═══ LA DIRETTA · la diretta del villaggio (Gab, 22:10: «non è una chat vocale, è una diretta.. la diretta del villaggio») (12 ottobre, Gab: «quello che fa Telegram … attivare i microfoni,
    una piccola regia interna … registrare quella call … parlare e registrare l'audio, semplicemente»).
    Vera: entra nella sala LiveKit col gettone di sala-gettone (LiveKit Cloud, piano gratis).
    La registrazione la fa questo computer (nessun costo): mescola le voci e salva il file. ═══ */
@@ -75,8 +75,8 @@ a{color:inherit;text-decoration:none}
   <div id="fm-stanze" data-attiva=""></div>
 
   <div class="testa">
-    <div class="fm-occ">TERRA · CIVILTÀ SARDA · LA VOCE</div>
-    <h1>La chat vocale del villaggio.</h1>
+    <div class="fm-occ">TERRA · CIVILTÀ SARDA · LA DIRETTA</div>
+    <h1>La diretta del villaggio.</h1>
     <div class="sot">Chi entra sente. Chi ha una voce apre il microfono. Chi coordina può registrare: a fine chiamata il file audio resta nella Bacheca come Diretta.</div>
   </div>
 
@@ -86,9 +86,9 @@ a{color:inherit;text-decoration:none}
     <div class="chi" id="chi">puntata · Discernimento · con Gabriele Dettori</div>
     <div class="pers" id="pers" style="margin-top:12px"></div>
     <div class="tasti">
-      <button class="fm-tasto pieno" id="entra" data-s="entra nella voce">Entra</button>
+      <button class="fm-tasto pieno" id="entra" data-s="entra nella diretta">Entra</button>
       <button class="fm-tasto" id="mic" hidden data-s="microfono">Apri il microfono</button>
-      <button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla voce">Esci</button>
+      <button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla diretta">Esci</button>
     </div>
     <div class="esito" id="esito"></div>
     <div id="suoni" hidden></div>
@@ -198,6 +198,6 @@ a{color:inherit;text-decoration:none}
   window.addEventListener('pagehide',function(){ if(stanza) stanza.disconnect(); });
 })();
 </script>
-<script src="comune/fm-statistiche.js?v=10111950" data-pagina="voce-bozza"></script>
+<script src="comune/fm-statistiche.js?v=10111950" data-pagina="diretta-bozza"></script>
 </body>
 </html>
