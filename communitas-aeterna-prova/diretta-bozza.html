@@ -166,21 +166,13 @@ a{color:inherit;text-decoration:none}
     <div class="fm-riga"><b>chi registra</b><span>chi ha aperto la diretta, o chi coordina</span></div>
     <div class="fm-riga"><b>alla fine</b><span>il file audio in Bacheca come Diretta · trascrizione: la fai tu</span></div>
     <div class="fm-riga"><b>chi la vede</b><span>il villaggio · gli ospiti solo ascoltano</span></div>
-    <div class="fm-riga"><b>la voce registrata</b><span id="consenso-riga">si accetta entrando · <a href="#" id="rileggi" style="color:var(--oro)">rileggi</a></span></div>
+    <div class="fm-riga"><b>la voce registrata</b><span>accettata all'accesso · <a href="../communitas-aeterna/privacy.html#s6a" style="color:var(--oro)">privacy, sez. 6a</a></span></div>
   </div>
 
-  <div class="nota-bozza"><b>la sala della diretta · viva</b> — entra nella sala LiveKit (sala-gettone: chi coordina parla e ha la regia; chi è entrato scrive in chat; gli ospiti sentono). La regia passa da sala-regia, che controlla chi chiama. La registrazione la fa questo computer; «Pubblica come Diretta» carica il file nel deposito «dirette» e scrive l'orma in Bacheca (SQL 55). I file condivisi vanno nello stesso deposito, cartella «file». Prima di entrare si accetta l'uso della propria voce (testo di Gab, 12 ottobre; da far rileggere a chi di dovere).</div>
+  <div class="nota-bozza"><b>la sala della diretta · viva</b> — entra nella sala LiveKit (sala-gettone: chi coordina parla e ha la regia; chi è entrato scrive in chat; gli ospiti sentono). La regia passa da sala-regia, che controlla chi chiama. La registrazione la fa questo computer; «Pubblica come Diretta» carica il file nel deposito «dirette» e scrive l'orma in Bacheca (SQL 55). I file condivisi vanno nello stesso deposito, cartella «file». La voce registrata: accettata all'accesso (privacy, sez. 6a).</div>
 </div>
 
 <div class="velo" id="velo"></div>
-<div class="scheda" id="consenso" style="position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:90dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)">
-  <div style="width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px"></div>
-  <div class="fm-occ" style="color:var(--oro)">PRIMA DI ENTRARE · LA TUA VOCE</div>
-  <h2 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1;margin-top:6px">Gli audio registrati</h2>
-  <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.5;margin-top:10px;color:rgba(245,240,230,.9)">Gli audio registrati potranno essere usati dentro la piattaforma e presentati in eventi Felicitas o legati agli operatori. Entrando dichiari di accettare che saranno utilizzati audio dove potrebbe sentirsi la tua voce.</p>
-  <p class="fm-nota" style="margin-top:8px"><span class="fm-ph">[ testo da far rileggere a chi cura le condizioni d'uso ]</span></p>
-  <div style="display:flex;gap:8px;margin-top:14px"><button class="fm-tasto pieno" id="accetto" style="flex:1;justify-content:center">Accetto ed entro</button><button class="fm-tasto secondario" id="rifiuto">Non entro</button></div>
-</div>
 <div class="plancia"><div class="in">
   <button id="b-mic" disabled><i>🎙</i>microfono</button>
   <button id="b-mano" disabled><i>✋</i>la mano</button>
@@ -288,11 +280,9 @@ a{color:inherit;text-decoration:none}
   $('esci').onclick=function(){ fuori(''); };
 
   /* il consenso prima di entrare: parole di Gab, 12 ottobre */
-  $('entra').onclick=function(){ var ok=false; try{ ok=localStorage.getItem('fm_voce_ok')==='1'; }catch(e){} if(ok) entra(); else { $('consenso').classList.add('vivo'); $('velo').classList.add('vivo'); } };
-  $('accetto').onclick=function(){ try{ localStorage.setItem('fm_voce_ok','1'); }catch(e){} $('consenso').classList.remove('vivo'); $('velo').classList.remove('vivo'); entra(); };
-  $('rifiuto').onclick=function(){ $('consenso').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
-  $('rileggi').onclick=function(e){ e.preventDefault(); $('consenso').classList.add('vivo'); $('velo').classList.add('vivo'); };
-  $('velo').onclick=function(){ $('consenso').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  /* 22:30, Gab: «togli quel testo prima di ogni diretta, mettilo semplicemente su privacy, uno quando entra da accesso accetta» → privacy.html sez. 6a, patto 2026-10-12 */
+  $('entra').onclick=entra;
+  $('velo').onclick=function(){ $('velo').classList.remove('vivo'); };
 
   /* microfono · mano */
   $('b-mic').onclick=function(){ if(!stanza) return; var acceso=stanza.localParticipant.isMicrophoneEnabled; dice(acceso?'Chiudo…':'Apro…');

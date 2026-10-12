@@ -37,7 +37,7 @@
   /* ⭐ dopo l'ingresso, se non si torna da nessuna parte:
      chi non ha ancora un talento va alla SOGLIA, non alla home —
      se no si trova una pagina che non gli dice cosa fare. */
-  var PATTO_VERSIONE = "2026-09-23";    /* la versione delle condizioni */
+  var PATTO_VERSIONE = "2026-10-12";    /* la versione delle condizioni — 12 ottobre: la privacy ha la sez. 6a, le dirette e la tua voce */
   /* ⭐ indirizzi ASSOLUTI: da accesso.html «index.html» relativo può
      puntare al posto sbagliato e il salto fallisce in silenzio. Si parte
      dalla cartella della pagina d'accesso, che è quella del guscio. */
