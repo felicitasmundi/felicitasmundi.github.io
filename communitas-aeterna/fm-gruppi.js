@@ -409,7 +409,7 @@ var GRUPPI = `<style>
       <span class="txt">
         <span class="ct"><span class="el">Nexus</span><b>Sviluppo della rete di connessione</b></span>
         <span class="rg guida"><span class="ru">La guida</span><span class="pe" data-chi="svil.guida"></span></span>
-        <span class="nota">FelicitasMundi è come una rete di miceli.</span>
+        <span class="nota">FelicitasMundi è una rete.</span>
         <span class="fa">In questo spazio c&rsquo;è chi si prende cura del praticantato
           che mette insieme le funzionalità, i manutentori e chi cura il tour di
           lancio.</span>

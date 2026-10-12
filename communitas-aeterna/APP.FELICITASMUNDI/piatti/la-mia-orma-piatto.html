@@ -447,7 +447,7 @@ document.querySelector('[data-g="apri-comune"]').addEventListener('click',functi
       if(info.area && info.area.lat!=null){
         L.circle([info.area.lat, info.area.lon], { radius: info.area.raggio,
           color:'#C8A055', weight:1, opacity:.55, fillColor:'#C8A055', fillOpacity:.08 })
-          .addTo(strato).bindTooltip('Micelio ' + (info.areaNome||''), {sticky:true});
+          .addTo(strato).bindTooltip('Villaggio ' + (info.areaNome||''), {sticky:true});
       }
       /* i vicinati dell'area */
       (info.vicinati||[]).forEach(function(v){

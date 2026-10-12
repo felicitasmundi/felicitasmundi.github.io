@@ -1302,17 +1302,17 @@ const ICONE = {
 const INDICI = [
   {
     el:'terra', colore:'#AA8844', nome:'Vicinati', pagina:'index.html?p=vicinati', aperta:false,
-    sub:'Una soglia che si aprirà',
+    sub:'Una soglia',
     domanda:'Il Vicinato è dove la Comunità si incontra: si offre un talento, si chiede una mano, ci si riconosce. Sta nascendo ora \u2014 i primi vicinati si stanno formando. Puoi essere tra i primi a mettere qualcosa in circolo.',
     azioni:[
       {label:'Offri un talento', tipo:'form', form:'offri'},
-      {label:'Entra in Vicinato', tipo:'link', url:'terra.html', ghost:true},
+      {label:'Entra in Vicinato', tipo:'link', url:'index.html?p=vicinati', ghost:true},
     ],
     nota:'I primi gesti del vicinato appariranno qui.',
   },
   {
     el:'acqua', colore:'#4488BB', nome:'Emporio', pagina:'index.html?p=emporio', aperta:false,
-    sub:'Una soglia che si aprirà',
+    sub:'Una soglia',
     domanda:'L\u2019Emporio \u00e8 il luogo dove i frutti e i talenti della Comunit\u00e0 passano di mano: in dono, in scambio o in vendita. Stiamo aprendo le prime botteghe. Se hai qualcosa da offrire, puoi proporlo da subito.',
     azioni:[
       {label:'Inserisci in scambio', tipo:'form', form:'prodotto'},
@@ -1322,21 +1322,21 @@ const INDICI = [
   },
   {
     el:'aria', colore:'#669944', nome:'Megafono', pagina:'index.html?p=edizione', aperta:false,
-    sub:'Una soglia che si aprirà',
+    sub:'Una soglia',
     domanda:'Il Megafono \u00e8 la voce della Comunit\u00e0: messaggi in bacheca, diari di bordo, articoli che seguono il ciclo lunare. La bacheca \u00e8 aperta \u2014 la tua voce pu\u00f2 essere una delle prime.',
     azioni:[
       {label:'Lascia un messaggio', tipo:'form', form:'messaggio'},
-      {label:'Entra nel Megafono', tipo:'link', url:'aria.html', ghost:true},
+      {label:'Entra nel Megafono', tipo:'link', url:'index.html?p=edizione', ghost:true},
     ],
     nota:'I primi messaggi e articoli appariranno qui.',
   },
   {
     el:'etere', colore:'#9966CC', nome:'Scuola Itinerante', pagina:'index.html?p=scuola', aperta:false,
-    sub:'Una soglia che si aprirà',
-    domanda:'La Scuola Itinerante custodisce e trasmette la conoscenza: ricerche, studi, saperi condivisi. Sta muovendo i primi passi \u2014 operatori e studenti potranno presto portare i propri contributi.',
+    sub:'Una soglia',
+    domanda:'La Scuola Itinerante custodisce e trasmette la conoscenza: ricerche, studi, saperi condivisi. Operatori e studenti portano i propri contributi.',
     azioni:[
       {label:'Proponi un contenuto', tipo:'form', form:'ricerca'},
-      {label:'Entra nella Scuola', tipo:'link', url:'etere.html', ghost:true},
+      {label:'Entra nella Scuola', tipo:'link', url:'index.html?p=scuola', ghost:true},
     ],
     nota:'I primi contributi di ricerca appariranno qui.',
   },
@@ -1410,17 +1410,17 @@ function toggleIdx(i){
 ══════════════════════════════════════════════════════════ */
 const FORMS = {
   offri:{ titolo:'Offri un talento', campi:[
-    {label:'Cosa offri?', tipo:'textarea', ph:'es. aiuto per l\'orto, lezioni di chitarra…'},
+    {label:'Cosa offri?', tipo:'textarea', ph:'cosa offri'},
     {label:'Per quanto tempo?', tipo:'select', opt:['Questa settimana','Questo mese','Fino a quando serve']},
   ], cta:'Metti in circolo', azione:'POST /wp-json/fm/v1/scambi' },
   prodotto:{ titolo:'Inserisci un prodotto in scambio', campi:[
-    {label:'Cosa metti in scambio?', tipo:'textarea', ph:'es. ceramiche, miele, ortaggi…'},
+    {label:'Cosa metti in scambio?', tipo:'textarea', ph:'cosa metti in scambio'},
     {label:'Cosa cerchi in cambio?', tipo:'text', ph:'opzionale'},
   ], cta:'Pubblica in scambio', azione:'POST /wp-json/fm/v1/emporio' },
   vendita:{ titolo:'Richiedi vendita', campi:[
     {label:'Prodotto', tipo:'text', ph:'nome del prodotto'},
     {label:'Descrizione', tipo:'textarea', ph:'descrivi il prodotto…'},
-    {label:'Prezzo proposto (€)', tipo:'text', ph:'es. 15'},
+    {label:'Prezzo proposto (€)', tipo:'text', ph:'in euro'},
   ], cta:'Invia richiesta', azione:'POST /wp-json/fm/v1/vendita' },
   messaggio:{ titolo:'Lascia un messaggio in bacheca', campi:[
     {label:'Il tuo messaggio', tipo:'textarea', ph:'scrivi alla Comunità…'},
@@ -1569,6 +1569,9 @@ var LETTURE = [];
 
 function leggiIndice(){
   /* la coda ?v= scavalca la cache di Aruba senza chiedere niente al server */
+  /* ⭐ 12 ott: l'indice non esiste (404 a ogni apertura): niente chiamata, le letture stanno nel guscio */
+  INDICE_MUTO = true;
+  return Promise.resolve([]);
   return fetch('/communitas-aeterna/articoli.json?v=' + Date.now())
     .then(function(r){
       if(!r.ok){ console.warn('[FM] l\'indice risponde', r.status); return null; }

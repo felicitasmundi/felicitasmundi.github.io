@@ -18,7 +18,7 @@
    ⛔ E non tocca il disegno di Design: se ne sta per conto suo.
    ════════════════════════════════════════════════════════════════ */
 
-var FM_CASA = "https://felicitasmundi.github.io/communitas-aeterna/";
+var FM_CASA = "https://app.felicitasmundi.com/communitas-aeterna/";
 
 /* chi pubblica — vale per ogni pagina */
 var FM_CHI = {

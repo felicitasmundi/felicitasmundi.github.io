@@ -1005,7 +1005,7 @@
         sul computer allunga la striscia. Prima viveva solo sul telefono
         e sul computer non c'era niente da toccare: si apriva soltanto
         indovinando che tutta la striscia fosse un tasto. */
-  #r-apri{display:flex;flex:0 0 auto;width:2.2rem;height:2.2rem;border-radius:0.3rem;
+  #r-apri{display:flex;flex:0 0 auto;width:2.75rem;height:2.75rem;border-radius:0.3rem;
     border:1px solid var(--line);background:linear-gradient(to bottom,rgba(245,240,230,0.1),rgba(2,4,12,0.4));
     box-shadow:inset 0 1px 0 rgba(245,240,230,0.18),inset 0 -1px 0 rgba(2,4,12,0.7);
     color:var(--oro-ch);font-family:'DM Sans',sans-serif;font-size:var(--t-eti);line-height:1;
@@ -1113,10 +1113,10 @@
   @media(max-width:40rem){
     body:not(.radio-aperta) .r-freq{display:block;flex:1 1 0;min-width:0}
     body:not(.radio-aperta) .r-brano{margin-top:0;line-height:1.2}
-    body:not(.radio-aperta) #r-apri{display:flex;width:2rem;height:2rem}
+    body:not(.radio-aperta) #r-apri{display:flex;width:2.75rem;height:2.75rem} /* ⭐ 12 ott: tocco da 44 px */
     body:not(.radio-aperta) #pl{padding-top:0.2rem;padding-bottom:0.2rem;min-height:0}
     body:not(.radio-aperta) .r-striscia{padding-top:0.15rem;padding-bottom:0.15rem;gap:0.5rem}
-    body:not(.radio-aperta) #apri-barra{top:0.4rem;width:2.3rem;height:2.3rem}
+    body:not(.radio-aperta) #apri-barra{top:0.3rem;width:2.75rem;height:2.75rem} /* ⭐ 12 ott: tocco da 44 px */
   }
 
   /* ══ IL TELAIO CEDE SPAZIO QUANDO LO SPAZIO MANCA ═══════════════════
@@ -4165,7 +4165,40 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
   var FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var NEXUS_IMG   = "nexus.png";   /* ⭐ il file accanto: WordPress non si sveglia */
   var MARCHIO_IMG = "FM_sigillo_corniceoro_HR.png";
-  var db = window.supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" } });
+  /* ⭐ 8 ottobre 11:23, Gab: «nel telefono c'è ancora la stessa lentezza in tutte le pagine».
+     ① La stessa domanda al database partiva più volte insieme (fino a 4 copie): ora le copie uguali,
+        mentre la prima è in viaggio o appena tornata (1,5 s), aspettano la stessa risposta.
+        Ogni scrittura (POST/PATCH/DELETE) svuota questa memoria, così non si legge mai il vecchio.
+     ② «Chi sono» si chiedeva al server 6 volte a ogni pagina: ora lo dice la sessione salvata nel
+        telefono. I permessi veri li controlla comunque il database, a ogni domanda. */
+  var fmGemelle = {};
+  function fmFetch(url, opz){
+    var metodo = ((opz && opz.method) || "GET").toUpperCase();
+    if(metodo !== "GET" || !/\/rest\/v1\//.test(String(url))){ fmGemelle = {}; return fetch(url, opz); }
+    var h = opz && opz.headers, aut = "";
+    try { aut = h ? (typeof h.get === "function" ? h.get("Authorization") : (h.Authorization || h.authorization)) || "" : ""; } catch(e){}
+    var k = String(url) + "|" + aut.slice(-24), ora = Date.now(), v = fmGemelle[k];
+    if(v && (v.inViaggio || ora - v.t < 1500)) return v.p.then(function(r){ return r.clone(); });
+    var voce = { t: ora, inViaggio: true };
+    voce.p = fetch(url, opz).then(function(r){ voce.inViaggio = false; voce.t = Date.now(); if(!r.ok) delete fmGemelle[k]; return r; },
+                                  function(e){ delete fmGemelle[k]; throw e; });
+    fmGemelle[k] = voce;
+    return voce.p.then(function(r){ return r.clone(); });
+  }
+  var db = window.supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" }, global: { fetch: fmFetch } });
+  (function(){
+    var vero = db.auth.getUser.bind(db.auth);
+    db.auth.getUser = async function(jwt){
+      if(jwt) return vero(jwt);
+      try {
+        var s = await db.auth.getSession();
+        var u = s && s.data && s.data.session && s.data.session.user;
+        if(u) return { data: { user: u }, error: null };
+      } catch(e){}
+      return vero();
+    };
+    db.auth.onAuthStateChange(function(){ fmGemelle = {}; });
+  })();
 
   var io=null, permessi=[], scelta=null, nomi={}, vista="spazio", stanza="sviluppo";
   /* quale voce del ramo è accesa: `sottoRichiesta` la porta dentro a vai() */
@@ -4746,16 +4779,27 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     }
   }
 
-  /* chiede alla radio cosa sta suonando */
+  /* chiede alla radio cosa sta suonando.
+     ⭐ 12 ottobre (controllo del lunedì): se la radio non risponde due volte, lo si dice nel player
+        e non la si interroga più ogni 15 secondi — si riprova ogni 5 minuti. Niente chiamate a vuoto. */
+  var radioGiu = 0, radioRiprovaA = 0;
   function cosaSuona(){
+    if(radioGiu >= 2 && Date.now() < radioRiprovaA) return;
     fetch(FM_ADESSO, {cache:"no-store"})
-      .then(function(r){ return r.json(); })
+      .then(function(r){ if(!r.ok) throw new Error("radio " + r.status); return r.json(); })
       .then(function(d){
+        radioGiu = 0;
         var n = d && d.now_playing && d.now_playing.song;
         if(!n) return;
         scriviBrano(n.title || "", n.artist || "");
       })
-      .catch(function(){ /* se la radio non risponde, resta quello che c'è */ });
+      .catch(function(){
+        radioGiu++;
+        if(radioGiu >= 2){
+          radioRiprovaA = Date.now() + 5*60*1000;
+          var b = $("r-brano"); if(b) b.textContent = "la radio è spenta · la diretta è nella Bacheca";
+        }
+      });
   }
 
   /* ── le scadenze, dal Cruscotto. Solo il nucleo le vede, in Plancia. ── */
@@ -5013,9 +5057,10 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
     au.addEventListener("error", function(){
       if(ripiegato || !au.getAttribute("src")) return;
       ripiegato = true;
+      /* ⭐ 12 ottobre: il ripiego si dice, non si tace */
+      var b = $("r-brano"); if(b) b.textContent = "la radio \u00e8 spenta \u00b7 canto conservato";
       au.src = FM_RIPIEGO; au.load();
-      var p = au.play(); if(p && p.catch) p.catch(function(){ segniRadio(false); });
-      scriviBrano("Hare K\u1E5B\u1E63\u1E47a Maha Mantra", "Visnujana Swami");
+      var p = au.play(); if(p && p.catch) p.catch(function(){ segniRadio(false); if(b) b.textContent = "la radio \u00e8 spenta"; });
     });
 
     var t = $("play"); if(t) t.addEventListener("click", accendiSpegni);
@@ -5964,7 +6009,7 @@ var ELEMENTI = ["terra","acqua","fuoco","aria","etere"];
        fatto che sorveglia la stanza: nucleo() legge `persone.nucleo`, e
        due verità sulla stessa porta prima o poi divergono. Una colonna in
        più sulla riga che già si legge — nessuna domanda in più. */
-    return db.from("persone").select("id,nome,grado,livello_n,anthakarana,nucleo").eq("id",sess.user.id).maybeSingle()
+    return db.from("persone").select("id,nome,grado,livello_n,nucleo").eq("id",sess.user.id).maybeSingle()
       .then(function(p){
         ospite = false;
         /* ⭐ TOCCATO NEL GUSCIO ㊲ — VIA IL GRADO DI RIPIEGO.

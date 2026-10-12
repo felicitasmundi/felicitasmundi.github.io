@@ -172,9 +172,16 @@
     var u = await db.auth.getUser();
     var id = u && u.data && u.data.user && u.data.user.id;
     if (!id) throw new Error("nessuna sessione");
+    /* ⭐ 12 ottobre (controllo del lunedì): il patto copre condizioni e privacy insieme — all'accesso si accettano
+       «le condizioni d'uso e l'informativa sulla privacy» — quindi si scrivono anche i tre campi del consenso
+       (consenso_dati_il, consenso_uso_il, consenso_versione), che prima nessun file scriveva. */
+    var adesso = new Date().toISOString();
     var r = await db.from("persone").update({
-      condizioni_accettate: new Date().toISOString(),
-      condizioni_versione: PATTO_VERSIONE
+      condizioni_accettate: adesso,
+      condizioni_versione: PATTO_VERSIONE,
+      consenso_dati_il: adesso,
+      consenso_uso_il: adesso,
+      consenso_versione: PATTO_VERSIONE
     }).eq("id", id);
     if (r.error) throw r.error;
   }
