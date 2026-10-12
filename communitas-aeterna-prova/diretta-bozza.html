@@ -104,7 +104,8 @@ a{color:inherit;text-decoration:none}
     <div class="file" id="file">
       <b id="file-nome">la registrazione</b><small id="file-info"></small>
       <audio id="file-audio" controls></audio>
-      <div class="tasti" style="margin-top:10px"><a class="fm-tasto piccolo" id="file-scarica" download>Scarica il file</a><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html">Pubblica come Diretta <span class="fm-ph">[ dopo l'ok ]</span></a></div>
+      <div class="esito" id="pub-esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px"></div>
+      <div class="tasti" style="margin-top:10px"><a class="fm-tasto piccolo" id="file-scarica" download>Scarica il file</a><button class="fm-tasto piccolo secondario" id="pubblica" data-s="pubblica come diretta">Pubblica come Diretta</button></div>
     </div>
   </div>
 
@@ -117,7 +118,7 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
 
-  <div class="nota-bozza"><b>bozza · vera</b> — entra davvero nella sala LiveKit con sala-gettone (i segreti LIVEKIT_URL · LIVEKIT_API_KEY · LIVEKIT_API_SECRET in Supabase, piano Build gratis: 5.000 minuti-persona al mese, 100 connessioni). La registrazione è del navigatore (MediaRecorder): nessun minuto di registrazione a LiveKit. Il file si scarica; il caricamento nel deposito e la Diretta in Bacheca arrivano con l'ok al modello. La regia (togliere la parola a qualcuno) chiede una funzione server: dopo. Appunto: quando le lezioni a pagamento partono, un VPS (Aruba) con LiveKit nostro.</div>
+  <div class="nota-bozza"><b>bozza · vera</b> — entra davvero nella sala LiveKit con sala-gettone (i segreti LIVEKIT_URL · LIVEKIT_API_KEY · LIVEKIT_API_SECRET in Supabase, piano Build gratis: 5.000 minuti-persona al mese, 100 connessioni). La registrazione è del navigatore (MediaRecorder): nessun minuto di registrazione a LiveKit. Il file si scarica, e con «Pubblica come Diretta» va nel deposito «dirette» e in Bacheca come orma di tipo diretta (SQL 55: solo chi coordina il villaggio o il nucleo). La regia (togliere la parola a qualcuno) chiede una funzione server: dopo. Appunto: quando le lezioni a pagamento partono, un VPS (Aruba) con LiveKit nostro.</div>
 </div>
 <div class="velo" id="velo"></div>
 
@@ -128,6 +129,7 @@ a{color:inherit;text-decoration:none}
   function $(i){return document.getElementById(i)}
   var FM_URL="https://gfnveesogkfvkrdudpfg.supabase.co", FM_CHIAVE="sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var db = supabase.createClient(FM_URL, FM_CHIAVE, { auth: { flowType: "implicit" } });
+  var ultimo=null, VILLAGGIO='5839d11d-9901-49bb-9b2f-f94236bbe2a1';
   var stanza=null, ctx=null, dest=null, rec=null, pezzi=[], t0=0, orologio=null, sorgenti=[];
 
   function dice(t,male){ var e=$('esito'); e.className='esito'+(male?' err':''); e.textContent=t||''; }
@@ -185,7 +187,7 @@ a{color:inherit;text-decoration:none}
     pezzi=[]; rec=new MediaRecorder(dest.stream,{mimeType:tipo});
     rec.ondataavailable=function(e){ if(e.data&&e.data.size) pezzi.push(e.data); };
     rec.onstop=function(){
-      var blob=new Blob(pezzi,{type:tipo}); var url=URL.createObjectURL(blob);
+      var blob=new Blob(pezzi,{type:tipo}); var url=URL.createObjectURL(blob); ultimo={blob:blob,tipo:tipo};
       var nome='diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+(tipo.indexOf('mp4')>=0?'.m4a':'.webm');
       $('file').style.display='block'; $('file-nome').textContent=nome; $('file-info').textContent=Math.round(blob.size/1024)+' KB · '+$('tempo').textContent; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome;
     };
@@ -194,6 +196,24 @@ a{color:inherit;text-decoration:none}
   }
   function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); $('reg-via').hidden=false; $('reg-stop').hidden=true; }
 
+
+  /* la Diretta in Bacheca (SQL 55): il file nel deposito «dirette», poi fm_pubblica_diretta */
+  $('pubblica').onclick=function(){
+    if(!ultimo){ return; }
+    var e=$('pub-esito'); e.textContent='Carico il file…'; $('pubblica').disabled=true;
+    var nome=$('file-nome').textContent; var via='dirette/'+VILLAGGIO+'/'+nome; var sec=Math.round((Date.now()-t0)/1000);
+    db.auth.getUser().then(function(u){
+      if(!u.data||!u.data.user) throw new Error('entra prima');
+      return db.storage.from('dirette').upload(VILLAGGIO+'/'+nome, ultimo.blob, { contentType: ultimo.tipo, upsert:false });
+    }).then(function(r){
+      if(r.error) throw r.error;
+      e.textContent='Scrivo la Diretta in Bacheca…';
+      return db.rpc('fm_pubblica_diretta',{ p_villaggio:VILLAGGIO, p_titolo:$('titolo').textContent, p_descrizione:$('chi').textContent+' · registrazione della diretta del villaggio · trascrizione: la fai tu', p_indirizzo:via, p_dimensione:ultimo.blob.size, p_secondi:sec });
+    }).then(function(r){
+      if(r.error) throw r.error;
+      e.textContent='Pubblicata in Bacheca come Diretta.'; $('pubblica').textContent='Pubblicata ✓';
+    }).catch(function(err){ $('pubblica').disabled=false; e.textContent='Non pubblicata: '+(err&&err.message?err.message:'—'); });
+  };
   $('entra').onclick=entra; $('mic').onclick=microfono; $('esci').onclick=esci; $('reg-via').onclick=registra; $('reg-stop').onclick=ferma;
   window.addEventListener('pagehide',function(){ if(stanza) stanza.disconnect(); });
 })();
