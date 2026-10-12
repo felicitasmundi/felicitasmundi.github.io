@@ -88,14 +88,7 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 <div class="app">
-  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)" id="dove">Emporio</span></div>
-
-  <div class="quattro">
-    <button class="on" data-s="emporio" style="--c:var(--acqua)"><i></i>Emporio</button>
-    <button data-s="mutuo" style="--c:var(--fuoco)"><i></i>Mutuo aiuto</button>
-    <button data-s="edizione" style="--c:var(--aria)"><i></i>Edizione</button>
-    <button data-s="scuola" style="--c:var(--etere)"><i></i>Scuola</button>
-  </div>
+  <div id="fm-stanze" data-attiva="emporio"></div>
 
   <!-- ═══ EMPORIO · acqua ═══ -->
   <div class="st vivo" id="s-emporio" style="--c:var(--acqua)">
@@ -259,14 +252,13 @@ a{color:inherit;text-decoration:none}
 <div class="scheda" id="sc-tulasi"><div class="maniglia"></div><h2>Tulasi Manjari</h2><div class="chi">Gabriele Dettori · spirituale · a distanza · in dono</div><p>Serie di incontri per conoscere e approfondire il significato spirituale della sacra pianta di Tulasi, Srimati Tulasi Devi, e il suo ruolo nella tradizione del Bhakti Yoga.</p><div class="az"><span class="fm-tasto pieno">prenota</span><span class="fm-tasto secondario">scrivi</span></div></div>
 <div class="scheda" id="sc-kit"><div class="maniglia"></div><img src="casa/rollup.jpg" alt=""><h2>Kit fiera</h2><div class="chi">Edizione · esposizione e fiere</div><p>2500 volantini, 1 roll-up, 2 striscioni e 30 maglie dell'azienda.</p><div class="pr">387,66 € <small style="font-size:13px;color:var(--grigio)">listino · IVA <span class="fm-ph">[ da confermare ]</span></small></div><div class="az"><span class="fm-tasto pieno">Ordina</span><span class="fm-tasto secondario">configura</span></div><div class="fm-riga" style="margin-top:14px"><b>poi</b><span>il configuratore: formato, carta, quante copie</span></div></div>
 
-<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<nav class="stanze" id="stanze" hidden></nav>
+<script src="comune/fm-riga.js?v=10122030"></script>
 <script>
 (function(){
   function $(i){return document.getElementById(i)}
   var NOMI={emporio:"Emporio",mutuo:"Mutuo aiuto",edizione:"Edizione",scuola:"Scuola"};
-  function stanza(s){ document.querySelectorAll('.quattro button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-s')===s); }); document.querySelectorAll('.st').forEach(function(x){ x.classList.toggle('vivo', x.id==='s-'+s); }); $('dove').textContent=NOMI[s]||s; window.scrollTo(0,0); }
-  document.querySelectorAll('.quattro button').forEach(function(b){ b.onclick=function(){ stanza(b.getAttribute('data-s')); try{ history.replaceState(null,'','?s='+b.getAttribute('data-s')); }catch(e){} }; });
-  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  function stanza(s){ document.querySelectorAll('.fm-stanze .voci a').forEach(function(a){ a.classList.toggle('on', (a.getAttribute('data-s')||'')==='riga '+s); }); document.querySelectorAll('.st').forEach(function(x){ x.classList.toggle('vivo', x.id==='s-'+s); }); window.scrollTo(0,0); }
   function chiudi(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); document.querySelectorAll('.scheda').forEach(function(x){x.classList.remove('vivo')}); }
   $('velo').onclick=chiudi;
   document.querySelectorAll('[data-apri]').forEach(function(b){ b.onclick=function(){ var s=$(b.getAttribute('data-apri')); if(s){ s.classList.add('vivo'); $('velo').classList.add('vivo'); } }; });

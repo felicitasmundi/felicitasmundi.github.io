@@ -93,7 +93,8 @@ img{display:block;max-width:100%}
 </head>
 <body>
 <div class="app">
-  <div class="testata"><span><button id="apri-stanze" style="font-size:20px;color:var(--oro);margin-right:10px">☰</button><button>‹ BACHECA</button></span><span class="fm-tag">azione</span><button>···</button></div>
+  <div id="fm-stanze" data-attiva="vicinati"></div>
+  <div class="testata"><span><a href="bacheca-bozza.html">‹ BACHECA</a></span><span class="fm-tag">azione</span><button>···</button></div>
 
   <div class="foto" id="foto">
     <img class="base" src="casa-viva-luogo.jpg" alt="">
@@ -176,16 +177,16 @@ img{display:block;max-width:100%}
 </div>
 
 <div class="velo" id="velo"></div>
-<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<nav class="stanze" id="stanze" hidden></nav>
 <script>
 (function(){
-  function $(i){return document.getElementById(i)}
-  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); }; $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
+  function $(i){return document.getElementById(i)} $('velo').onclick=function(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
   $('tocca').onclick=function(){ $('foto').classList.toggle('tocca'); };
   document.querySelectorAll('#linguette button').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('#linguette button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.ling').forEach(function(d){ d.classList.toggle('vivo', d.getAttribute('data-l')===b.getAttribute('data-l')); }); }; });
   $('fatto').onclick=function(){ var c=$('fatto').closest('.fm-carta'); c.querySelector('.im').className='im sv'; c.querySelector('.im').textContent='●'; c.querySelector('small').innerHTML='karma yoga del villaggio · <u>sviluppato</u> · fatto da te'; var s=document.createElement('span'); s.className='fm-stadio sviluppato'; s.textContent='sviluppato'; $('fatto').replaceWith(s); $('racconto').style.display='block'; };
   document.querySelectorAll('.fm-chips').forEach(function(c){ c.querySelectorAll('.fm-chip').forEach(function(b){ b.onclick=function(){ c.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; }); });
 })();
 </script>
+<script src="comune/fm-riga.js?v=10122030"></script>
 </body>
 </html>

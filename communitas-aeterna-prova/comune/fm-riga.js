@@ -1,0 +1,53 @@
+/* ═══════════════════════════════════════════════════════════════
+   FELICITASMUNDI · LA RIGA DELLE STANZE · comune/fm-riga.js
+   Gab, 12 ottobre 2026 (20:25): «a me piace l'idea di non aver la barra laterale e
+   mostrare direttamente in alto di ogni pagina la riga con emporio mutuo aiuto edizione
+   scuola, con l'aggiunta dei simboli» · «in questo caso la bacheca è il vicinato, e quindi
+   possiamo mettere logo vicinati in quella voce».
+
+   Cinque voci, i cinque solidi della tavola «stanze»:
+     cubo → Vicinati (la Bacheca) · icosaedro → Emporio · tetraedro → Mutuo aiuto ·
+     ottaedro → Edizione · dodecaedro → Scuola.
+   Niente ☰, niente barra laterale. A destra la foto: i miei dati.
+
+   In una pagina:  <div id="fm-stanze" data-attiva="emporio"></div>  in cima a .app,
+   poi  <script src="comune/fm-riga.js"></script>
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  var S = {
+    cubo:       '<svg viewBox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21 4 16.5v-9L12 3Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg>',
+    icosaedro:  '<svg viewBox="0 0 24 24"><path d="M12 2 21 8v8l-9 6-9-6V8l9-6Z"/><path d="M12 2 7 10h10L12 2ZM3 8l4 2M21 8l-4 2M7 10l-4 6M17 10l4 6M7 10l5 12M17 10l-5 12M3 16h18"/></svg>',
+    tetraedro:  '<svg viewBox="0 0 24 24"><path d="M12 3 21 19H3L12 3Z"/><path d="M12 3v10M3 19l9-6M21 19l-9-6"/></svg>',
+    ottaedro:   '<svg viewBox="0 0 24 24"><path d="M12 2 21 12l-9 10L3 12 12 2Z"/><path d="M3 12h18M12 2 7.5 12 12 22M12 2l4.5 10L12 22"/></svg>',
+    dodecaedro: '<svg viewBox="0 0 24 24"><path d="M12 2.5 21 9l-3.4 10.5H6.4L3 9l9-6.5Z"/><path d="M12 8.5 16 11.5l-1.5 4.5h-5L8 11.5l4-3Z"/><path d="M12 2.5v6M21 9l-5 2.5M3 9l5 2.5M6.4 19.5l3.1-3.5M17.6 19.5l-3.1-3.5"/></svg>'
+  };
+  var VOCI = [
+    ["vicinati", "Vicinati",    "cubo",       "terra", "bacheca-bozza.html"],
+    ["emporio",  "Emporio",     "icosaedro",  "acqua", "stanze-bozza.html?s=emporio"],
+    ["mutuo",    "Mutuo aiuto", "tetraedro",  "fuoco", "stanze-bozza.html?s=mutuo"],
+    ["edizione", "Edizione",    "ottaedro",   "aria",  "stanze-bozza.html?s=edizione"],
+    ["scuola",   "Scuola",      "dodecaedro", "etere", "stanze-bozza.html?s=scuola"]
+  ];
+  var css = ".fm-stanze{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,var(--notte) 82%,transparent);padding:10px 10px 6px}" +
+    ".fm-stanze .capo{display:flex;align-items:center;justify-content:space-between;padding:0 8px 8px}" +
+    ".fm-stanze .capo .marca{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.14em;color:var(--oro)}" +
+    ".fm-stanze .capo .io{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid var(--oro);display:block}.fm-stanze .capo .io img{width:100%;height:100%;object-fit:cover}" +
+    ".fm-stanze .voci{display:flex;justify-content:space-between;gap:2px}" +
+    ".fm-stanze .voci a{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px 7px;border-radius:12px;color:var(--grigio);text-decoration:none;min-width:0}" +
+    ".fm-stanze .voci a svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}" +
+    ".fm-stanze .voci a span{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.04em;line-height:1.1;text-align:center;white-space:nowrap}" +
+    ".fm-stanze .voci a.on{color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}" +
+    ".fm-stanze .voci a:hover{color:var(--c)}" +
+    "@media (min-width:700px){.fm-stanze .voci a{flex-direction:row;gap:8px;padding:8px 10px}.fm-stanze .voci a span{font-size:11.5px}}";
+  var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+
+  var box = document.getElementById("fm-stanze"); if (!box) return;
+  var attiva = box.getAttribute("data-attiva") || "";
+  var foto = box.getAttribute("data-foto") || "../communitas-aeterna/persone/gabriele-dettori.jpg";
+  var h = '<div class="capo"><a class="marca" href="bacheca-bozza.html">FELICITASMUNDI</a><a class="io" href="account-bozza.html" aria-label="i miei dati"><img src="' + foto + '" alt=""></a></div><nav class="voci" aria-label="le stanze">';
+  VOCI.forEach(function (v) {
+    h += '<a href="' + v[4] + '" style="--c:var(--' + v[3] + ')" class="' + (v[0] === attiva ? "on" : "") + '" data-s="riga ' + v[0] + '">' + S[v[2]] + '<span>' + v[1] + '</span></a>';
+  });
+  h += "</nav>";
+  box.className = "fm-stanze"; box.innerHTML = h;
+})();
