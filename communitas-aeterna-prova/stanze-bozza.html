@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Le stanze · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+/* ═══ LE QUATTRO STANZE col settaggio nuovo (12 ottobre, Gab: «3»).
+   Emporio · Mutuo aiuto · Edizione · Scuola. Una pagina, quattro stanze: ?s=emporio|mutuo|edizione|scuola.
+   Regole: foto sola, titoli e testi sotto; niente conteggi non chiesti; le righe delle stanze
+   sono quelle della tavola «stanze» (verbatim); le cose sono quelle vere del database. ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:70px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
+.testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
+.testata .menu{font-size:20px;color:var(--oro);margin-right:8px}
+.velo{position:fixed;inset:0;z-index:55;background:rgba(5,6,13,.6);opacity:0;pointer-events:none;transition:opacity .3s}.velo.vivo{opacity:1;pointer-events:auto}
+.stanze{position:fixed;top:0;bottom:0;left:0;z-index:60;width:17rem;max-width:88vw;background:rgba(4,8,20,.96);box-shadow:20px 0 60px rgba(0,0,0,.6);transform:translateX(-105%);transition:transform .35s;overflow:hidden}.stanze.vivo{transform:none}
+
+/* le quattro linguette */
+.quattro{display:flex;gap:6px;padding:0 18px 14px;overflow:auto;scrollbar-width:none}
+.quattro::-webkit-scrollbar{display:none}
+.quattro button{flex:none;display:flex;align-items:center;gap:7px;font-size:12.5px;padding:7px 12px;border-radius:980px;border:1px solid var(--riga);color:var(--grigio);white-space:nowrap}
+.quattro button i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.quattro button.on{border-color:var(--c);color:var(--avorio);background:color-mix(in srgb,var(--c) 18%,transparent)}
+.st{display:none}.st.vivo{display:block}
+
+.foto{margin:0 18px 14px;border-radius:18px;overflow:hidden;aspect-ratio:16/10;background:var(--carta)}.foto img{width:100%;height:100%;object-fit:cover}
+.testa{padding:0 18px 14px}
+.testa .fm-occ{color:var(--c)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
+.testa .tasti{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.porte{display:flex;gap:6px;flex-wrap:wrap;padding:0 18px 18px}
+
+.quad{padding:0 18px;margin-bottom:24px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--c,var(--oro))}
+.quad .capo a{font-size:12px;color:var(--grigio)}
+.quad .spiega{font-size:12.5px;color:var(--grigio);line-height:1.5;margin:-4px 0 10px}
+
+/* le cose, come film */
+.film{display:flex;gap:10px;overflow:auto;scrollbar-width:none;padding-bottom:4px;margin:0 -18px;padding-left:18px;padding-right:18px}
+.film::-webkit-scrollbar{display:none}
+.film .fm-tessera{flex:none;width:170px}
+.film .fm-tessera .im{aspect-ratio:3/4;object-fit:cover}
+.film .fm-tessera .vuoto{aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;background:var(--carta);color:var(--oro);font-family:'Cormorant Garamond',serif;font-size:26px}
+.fm-tessera .t{padding:10px 12px 12px}
+.fm-tessera .t b{display:block;font-weight:500;font-size:14px;line-height:1.25}
+.fm-tessera .t small{display:block;font-size:12px;color:var(--grigio);margin-top:3px;line-height:1.35}
+.fm-tessera .t .pr{display:block;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--oro);margin-top:6px}
+.fm-tessera .t .az{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+
+/* le carte in colonna */
+.fm-carte .fm-carta{margin-bottom:8px}
+.fm-carte .fm-carta .im{font-size:20px;color:var(--c)}
+.fm-carte .fm-carta .fm-tasto.piccolo{flex:none}
+.fm-carte .fm-carta .t small{line-height:1.4}
+
+/* la scheda che si apre */
+.scheda{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:92dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.scheda.vivo{transform:none}
+.scheda .maniglia{width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px}
+.scheda img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:16px}
+.scheda h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;line-height:1.1;margin-top:12px}
+.scheda .chi{font-size:13px;color:var(--grigio);margin-top:4px}
+.scheda p{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;margin-top:12px;color:rgba(245,240,230,.88)}
+.scheda .pr{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--oro);margin-top:12px}
+.scheda .az{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.scheda .az .fm-tasto{flex:1;justify-content:center}
+.scheda .fm-riga{margin-top:6px}
+.nota-bozza{margin:10px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+.nota-bozza b{color:var(--oro);font-weight:600}
+.fam{background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:11px 13px;margin-bottom:8px}
+.fam b{display:block;font-weight:500;font-size:14px}
+.fam small{display:block;font-size:12px;color:var(--grigio);margin-top:3px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="testata"><span><button class="menu" id="apri-stanze" aria-label="la barra">☰</button><span class="m">FELICITASMUNDI</span></span><span style="font-size:12px;color:var(--grigio)" id="dove">Emporio</span></div>
+
+  <div class="quattro">
+    <button class="on" data-s="emporio" style="--c:var(--acqua)"><i></i>Emporio</button>
+    <button data-s="mutuo" style="--c:var(--fuoco)"><i></i>Mutuo aiuto</button>
+    <button data-s="edizione" style="--c:var(--aria)"><i></i>Edizione</button>
+    <button data-s="scuola" style="--c:var(--etere)"><i></i>Scuola</button>
+  </div>
+
+  <!-- ═══ EMPORIO · acqua ═══ -->
+  <div class="st vivo" id="s-emporio" style="--c:var(--acqua)">
+    <div class="foto"><img src="casa/di-bella.jpg" alt=""></div>
+    <div class="testa">
+      <div class="fm-occ">ACQUA · EMPORIO</div>
+      <h1>Emporio</h1>
+      <div class="sot">quello che si compra, si scambia e si dona, e chi lo porta</div>
+      <div class="tasti"><a class="fm-tasto piccolo secondario" href="../communitas-aeterna/invito.html">invita produttori</a><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html">cosa stai facendo?</a></div>
+    </div>
+    <div class="porte"><span class="fm-chip on">tutti</span><span class="fm-chip">alimenti</span><span class="fm-chip">rimedi</span><span class="fm-chip">cosmesi</span><span class="fm-chip">oggettistica</span><span class="fm-chip">abbigliamento</span><span class="fm-chip">arredo</span><span class="fm-chip">oggetti sacri</span><span class="fm-chip">libri e stampati</span><span class="fm-chip">digitale</span></div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">LIBRI E STAMPATI</span><a href="#">tutti ›</a></div>
+      <div class="film">
+        <button class="fm-tessera" data-apri="sc-dibella"><img class="im" src="casa/di-bella.jpg" alt=""><div class="t"><b>La scelta antitumore</b><small>Giuseppe Di Bella</small><span class="pr">27,90 €</span><div class="az"><span class="fm-tasto piccolo">Acquista</span><span class="fm-tasto piccolo secondario">Gruppo d'acquisto</span></div></div></button>
+        <button class="fm-tessera" data-apri="sc-anima"><img class="im" src="../communitas-aeterna/articoli/2026/anima-vagabonda-copertina.jpg" alt=""><div class="t"><b>Anima Vagabonda</b><small>Parabhakti dāsa</small><span class="pr">18,00 €</span><div class="az"><span class="fm-tasto piccolo">Acquista</span></div></div></button>
+        <button class="fm-tessera"><img class="im" src="../communitas-aeterna/APP.FELICITASMUNDI/piatti/bhagavad-gita.jpg" alt=""><div class="t"><b>Bhagavad-gītā Così com'è</b><small>A.C. Bhaktivedānta Swāmī Prabhupāda</small><span class="pr fm-ph">[ prezzo ]</span></div></button>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">STRUMENTI DI COSCIENZA</span></div>
+      <div class="film">
+        <button class="fm-tessera"><img class="im" src="../communitas-aeterna/APP.FELICITASMUNDI/piatti/nexus-mano.jpg" alt=""><div class="t"><b>Nexus</b><small>Strumenti di Coscienza</small><span class="pr fm-ph">[ prezzo ]</span></div></button>
+        <div class="fm-tessera"><div class="vuoto">+</div><div class="t"><b>Il tuo prodotto</b><small>Ogni prodotto ha il QR code di Felicitas con la storia del produttore.</small></div></div>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">I GRUPPI D'ACQUISTO</span></div>
+      <div class="spiega">Le promozioni dei gruppi d'acquisto: comprare insieme.</div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">◎</div><div class="t"><b>Il primo paniere</b><small>raccoglie le richieste · scritto da Gabriele Dettori · coordina il villaggio</small></div><a class="fm-tasto piccolo" href="gruppo-bozza.html">entra</a></div>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">SI SCAMBIA · SI DONA</span></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">○</div><div class="t"><b class="fm-ph">[ qui non c'è ancora niente ]</b><small>Quando qualcuno mette una cosa in scambio o in dono, compare qui.</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MUTUO AIUTO · fuoco ═══ -->
+  <div class="st" id="s-mutuo" style="--c:var(--fuoco)">
+    <div class="foto" style="aspect-ratio:auto"><img src="casa/krishna.jpg" alt=""></div>
+    <div class="testa">
+      <div class="fm-occ">FUOCO · MUTUO AIUTO</div>
+      <h1>Mutuo aiuto</h1>
+      <div class="sot">chi risponde a un bisogno: spiritualità, trattamenti, consulenze, mutuo aiuto</div>
+      <div class="tasti"><a class="fm-tasto piccolo secondario" href="../communitas-aeterna/invito.html">invita operatori</a><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html">cosa stai facendo?</a></div>
+    </div>
+    <div class="porte"><span class="fm-chip on">tutti</span><span class="fm-chip">spirituale</span><span class="fm-chip">terapeutico</span><span class="fm-chip">consulenze</span><span class="fm-chip">percorsi</span></div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">SPIRITUALE · I PERCORSI</span></div>
+      <div class="spiega">Con i devoti dell'USCI. In dono, a distanza.</div>
+      <div class="fm-carte">
+        <button class="fm-carta" data-apri="sc-power"><div class="im">✦</div><div class="t"><b>Power Series</b><small>Gabriele Dettori · a distanza · in dono</small></div><span class="fm-tasto piccolo">prenota</span></button>
+        <button class="fm-carta" data-apri="sc-bhakti"><div class="im">✦</div><div class="t"><b>Bhakti Yoga</b><small>Gabriele Dettori · a distanza · in dono</small></div><span class="fm-tasto piccolo">prenota</span></button>
+        <button class="fm-carta" data-apri="sc-vriksa"><div class="im">✦</div><div class="t"><b>Bhakti Vriksa</b><small>Gabriele Dettori · a distanza · in dono</small></div><span class="fm-tasto piccolo">prenota</span></button>
+        <button class="fm-carta" data-apri="sc-gita"><div class="im">✦</div><div class="t"><b>Gita Manjari</b><small>Gabriele Dettori · a distanza · in dono</small></div><span class="fm-tasto piccolo">prenota</span></button>
+        <button class="fm-carta" data-apri="sc-tulasi"><div class="im">✦</div><div class="t"><b>Tulasi Manjari</b><small>Gabriele Dettori · a distanza · in dono</small></div><span class="fm-tasto piccolo">prenota</span></button>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">TERAPEUTICO · CONSULENZE</span></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">○</div><div class="t"><b class="fm-ph">[ qui non c'è ancora niente ]</b><small>Gli operatori presentano i loro trattamenti e percorsi.</small></div></div>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">UNA CHAT COL COORDINAMENTO</span></div>
+      <div class="spiega">Chi si propone per un vicinato scrive qui: una chat ad hoc, tu e chi coordina il villaggio.</div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">◌</div><div class="t"><b>Proponiti per farne parte</b><small>notifica nell'app e mail a chi coordina</small></div><a class="fm-tasto piccolo" href="account-bozza.html">apri</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ EDIZIONE · aria ═══ -->
+  <div class="st" id="s-edizione" style="--c:var(--aria)">
+    <div class="foto"><img src="casa/rivista.jpg" alt=""></div>
+    <div class="testa">
+      <div class="fm-occ">ARIA · EDIZIONE</div>
+      <h1>Edizione</h1>
+      <div class="sot">le opere, la radio, e quello che si stampa e si distribuisce</div>
+      <div class="tasti"><a class="fm-tasto piccolo secondario" href="../communitas-aeterna/invito.html">invita chi scrive</a><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html">cosa stai facendo?</a></div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">LA RADIO</span><a href="bacheca-bozza.html">in Bacheca ›</a></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">▶</div><div class="t"><b>Strumenti per fare ordine.</b><small>puntata · Discernimento · ogni lunedì in diretta alle 19, con Gabriele Dettori</small></div><a class="fm-tasto piccolo" href="bacheca-bozza.html">Prenota</a></div>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">LE OPERE</span></div>
+      <div class="film">
+        <div class="fm-tessera"><div class="vuoto">+</div><div class="t"><b class="fm-ph">[ nessuna opera ancora ]</b><small>Scrivi un racconto in Bacheca: quando pubblichi, «Vuoi stamparlo?» porta qui.</small></div></div>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">STAMPA · E TI ARRIVA A CASA</span><a href="#">tutti ›</a></div>
+      <div class="spiega">Oltre alla stampa proponiamo supporti per l'esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</div>
+      <div class="film">
+        <button class="fm-tessera" data-apri="sc-kit"><img class="im" src="casa/rollup.jpg" alt="" style="aspect-ratio:3/4"><div class="t"><b>Kit fiera</b><small>2500 volantini, 1 roll-up, 2 striscioni e 30 maglie</small><span class="pr">387,66 €</span><div class="az"><span class="fm-tasto piccolo">Ordina</span></div></div></button>
+        <button class="fm-tessera"><img class="im" src="casa/kit-volantino.jpg" alt=""><div class="t"><b>Carta stampata</b><small>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</small></div></button>
+        <button class="fm-tessera"><img class="im" src="casa/libro.jpg" alt=""><div class="t"><b>Libri e cataloghi</b><small>libri, riviste, cataloghi, fascicoli</small></div></button>
+        <button class="fm-tessera"><img class="im" src="casa/kit-tshirt.jpg" alt=""><div class="t"><b>Abbigliamento</b><small>magliette, felpe, tessuti personalizzati</small></div></button>
+      </div>
+      <div style="margin-top:12px">
+        <div class="fam"><b>Agende e calendari</b><small>agende, calendari, quaderni e taccuini</small></div>
+        <div class="fam"><b>Esposizione e fiere</b><small>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</small></div>
+        <div class="fam"><b>Confezioni e imballaggi</b><small>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</small></div>
+        <div class="fam"><b>Gadget e regali</b><small>penne, cordini, portabadge, borse, borracce</small></div>
+        <div class="fam"><b>I servizi</b><small>grafica, impaginazione, correzione, consegna</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCUOLA · etere ═══ -->
+  <div class="st" id="s-scuola" style="--c:var(--etere)">
+    <div class="foto"><img src="casa/figura.jpg" alt="" style="object-position:50% 30%"></div>
+    <div class="testa">
+      <div class="fm-occ">ETERE · SCUOLA</div>
+      <h1>Scuola</h1>
+      <div class="sot">le lezioni, le formazioni, e la ricerca che le accompagna</div>
+      <div class="tasti"><a class="fm-tasto piccolo secondario" href="../communitas-aeterna/invito.html">invita chi insegna</a><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html">cosa stai facendo?</a></div>
+    </div>
+    <div class="porte"><span class="fm-chip on">tutte</span><span class="fm-chip">lezioni</span><span class="fm-chip">online</span><span class="fm-chip">ricerca</span></div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">IL PRATICANTATO</span><a href="bacheca-bozza.html?vista=mia&praticantato=1">che cos'è ›</a></div>
+      <div class="fm-carte">
+        <a class="fm-carta" href="bacheca-bozza.html?vista=mia&praticantato=1"><img class="im" src="casa/gab.jpg" alt="" style="width:54px;height:54px;object-fit:cover;border-radius:10px"><div class="t"><b>Dal progetto sogno alla cooperazione per una civiltà evoluta.</b><small>gli incontri di gruppo in diretta con Gabriele · luna nuova — luna piena</small></div><span class="fr">›</span></a>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">LE LEZIONI</span></div>
+      <div class="fm-carte">
+        <div class="fm-carta"><div class="im">○</div><div class="t"><b class="fm-ph">[ nessuna classe ancora ]</b><small>Una diretta può essere una puntata o una lezione a pagamento: si apre da «Cosa stai facendo?».</small></div></div>
+      </div>
+    </div>
+
+    <div class="quad"><div class="capo"><span class="fm-occ">LA RICERCA</span><a href="ricerca-bozza.html">per argomento ›</a></div>
+      <div class="film">
+        <a class="fm-tessera" href="ricerca-bozza.html"><img class="im" src="https://www.felicitasmundi.com/wp-content/uploads/2026/06/di-bella-e-giovanni.jpg" alt=""><div class="t"><b>Metodo Di Bella</b><small>articoli, racconti, chi ne parla</small></div></a>
+        <a class="fm-tessera" href="ricerca-bozza.html"><div class="vuoto">◎</div><div class="t"><b>Discernimento</b><small>la puntata, gli appunti</small></div></a>
+        <a class="fm-tessera" href="ricerca-bozza.html"><div class="vuoto">◎</div><div class="t"><b>Bhakti Yoga</b><small>i percorsi, i testi</small></div></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota-bozza"><b>bozza · le quattro stanze</b> — righe delle stanze dalla tavola «stanze» (verbatim); prodotti, servizi, classi e opere dal database (3 prodotti, 5 percorsi USCI, 0 classi, 0 opere pubblicate); «La scelta antitumore» e il Kit fiera come nella casa (10 ott). «Assistenza» qui si chiama Mutuo aiuto: nel database la stanza e i tipi dei servizi si chiamano ancora «assistenza» — da riallineare quando decidi. Carrello, paniere e configuratore: pagine a parte (punto 5).</div>
+</div>
+
+<div class="velo" id="velo"></div>
+
+<div class="scheda" id="sc-dibella"><div class="maniglia"></div><img src="casa/di-bella.jpg" alt=""><h2>La scelta antitumore</h2><div class="chi">Giuseppe Di Bella · libri e stampati</div><p class="fm-ph">[ il racconto del libro ]</p><div class="pr">27,90 €</div><div class="az"><span class="fm-tasto pieno">Acquista</span><span class="fm-tasto secondario">Gruppo d'acquisto</span></div><div class="fm-riga" style="margin-top:14px"><b>come arriva</b><span class="fm-ph">[ trasporto ]</span></div><div class="fm-riga"><b>la storia</b><span>il QR code di Felicitas con la storia del produttore</span></div></div>
+<div class="scheda" id="sc-anima"><div class="maniglia"></div><img src="../communitas-aeterna/articoli/2026/anima-vagabonda-copertina.jpg" alt="" style="object-fit:contain;background:#000"><h2>Anima Vagabonda</h2><div class="chi">Parabhakti dāsa · libri e stampati</div><p>Nasce da un'esperienza personale, da un cammino di ricerca che ha condotto l'autore a confrontarsi con le domande più profonde sull'esistenza e sul senso del nostro passaggio sulla Terra.</p><div class="pr">18,00 €</div><div class="az"><span class="fm-tasto pieno">Acquista</span><a class="fm-tasto secondario" href="../communitas-aeterna/articoli/2026/anima-vagabonda.html">leggi l'articolo</a></div></div>
+<div class="scheda" id="sc-power"><div class="maniglia"></div><h2>Power Series</h2><div class="chi">Gabriele Dettori · spirituale · a distanza · in dono</div><p>Serie di incontri dedicati ad accrescere la consapevolezza delle forze (power) che ci circondano, con l'obiettivo di imparare ad utilizzarle per favorire la nostra crescita personale.</p><p>Dieci incontri per cominciare. Poi il Bhakti Yoga, sette livelli da dieci incontri. Con i devoti dell'USCI.</p><div class="az"><span class="fm-tasto pieno">prenota</span><span class="fm-tasto secondario">scrivi</span></div></div>
+<div class="scheda" id="sc-bhakti"><div class="maniglia"></div><h2>Bhakti Yoga</h2><div class="chi">Gabriele Dettori · spirituale · a distanza · in dono</div><p>Un percorso per approfondire i principi, la filosofia e la pratica del Bhakti Yoga, comprendendone il valore nella vita quotidiana.</p><div class="az"><span class="fm-tasto pieno">prenota</span><span class="fm-tasto secondario">scrivi</span></div></div>
+<div class="scheda" id="sc-vriksa"><div class="maniglia"></div><h2>Bhakti Vriksa</h2><div class="chi">Gabriele Dettori · spirituale · a distanza · in dono</div><p>Un percorso graduale composto da incontri interattivi, dove i partecipanti vengono guidati attraverso un programma di studio che copre vari aspetti della vita spirituale.</p><div class="az"><span class="fm-tasto pieno">prenota</span><span class="fm-tasto secondario">scrivi</span></div></div>
+<div class="scheda" id="sc-gita"><div class="maniglia"></div><h2>Gita Manjari</h2><div class="chi">Gabriele Dettori · spirituale · a distanza · in dono</div><p>Il corso presenta l'approccio corretto alla Bhagavad-gita attraverso le narrazioni della Gita Mahatmya, una raccolta di 18 racconti associati ai 18 capitoli della Bhagavad-gita.</p><div class="az"><span class="fm-tasto pieno">prenota</span><span class="fm-tasto secondario">scrivi</span></div></div>
+<div class="scheda" id="sc-tulasi"><div class="maniglia"></div><h2>Tulasi Manjari</h2><div class="chi">Gabriele Dettori · spirituale · a distanza · in dono</div><p>Serie di incontri per conoscere e approfondire il significato spirituale della sacra pianta di Tulasi, Srimati Tulasi Devi, e il suo ruolo nella tradizione del Bhakti Yoga.</p><div class="az"><span class="fm-tasto pieno">prenota</span><span class="fm-tasto secondario">scrivi</span></div></div>
+<div class="scheda" id="sc-kit"><div class="maniglia"></div><img src="casa/rollup.jpg" alt=""><h2>Kit fiera</h2><div class="chi">Edizione · esposizione e fiere</div><p>2500 volantini, 1 roll-up, 2 striscioni e 30 maglie dell'azienda.</p><div class="pr">387,66 € <small style="font-size:13px;color:var(--grigio)">listino · IVA <span class="fm-ph">[ da confermare ]</span></small></div><div class="az"><span class="fm-tasto pieno">Ordina</span><span class="fm-tasto secondario">configura</span></div><div class="fm-riga" style="margin-top:14px"><b>poi</b><span>il configuratore: formato, carta, quante copie</span></div></div>
+
+<nav class="stanze" id="stanze"><iframe src="APP.FELICITASMUNDI/piatti/barra-piatto.html" title="La barra" style="width:100%;height:100%;border:0;background:transparent"></iframe></nav>
+<script>
+(function(){
+  function $(i){return document.getElementById(i)}
+  var NOMI={emporio:"Emporio",mutuo:"Mutuo aiuto",edizione:"Edizione",scuola:"Scuola"};
+  function stanza(s){ document.querySelectorAll('.quattro button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-s')===s); }); document.querySelectorAll('.st').forEach(function(x){ x.classList.toggle('vivo', x.id==='s-'+s); }); $('dove').textContent=NOMI[s]||s; window.scrollTo(0,0); }
+  document.querySelectorAll('.quattro button').forEach(function(b){ b.onclick=function(){ stanza(b.getAttribute('data-s')); try{ history.replaceState(null,'','?s='+b.getAttribute('data-s')); }catch(e){} }; });
+  $('apri-stanze').onclick=function(){ $('stanze').classList.add('vivo'); $('velo').classList.add('vivo'); };
+  function chiudi(){ $('stanze').classList.remove('vivo'); $('velo').classList.remove('vivo'); document.querySelectorAll('.scheda').forEach(function(x){x.classList.remove('vivo')}); }
+  $('velo').onclick=chiudi;
+  document.querySelectorAll('[data-apri]').forEach(function(b){ b.onclick=function(){ var s=$(b.getAttribute('data-apri')); if(s){ s.classList.add('vivo'); $('velo').classList.add('vivo'); } }; });
+  document.querySelectorAll('.porte .fm-chip').forEach(function(c){ c.onclick=function(){ c.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); c.classList.add('on'); }; });
+  try{ var s=new URLSearchParams(location.search).get('s'); if(s && NOMI[s]) stanza(s); }catch(e){}
+})();
+</script>
+<script src="comune/fm-statistiche.js?v=10111950" data-pagina="stanze-bozza"></script>
+</body>
+</html>
