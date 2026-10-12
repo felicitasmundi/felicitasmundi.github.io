@@ -54,4 +54,20 @@
   });
   h += "</nav>";
   box.className = "fm-stanze"; box.innerHTML = h;
+
+  /* 20:50, Gab: «dovrebbe comunque rimanere fissa in basso la barra con scritto bacheca ed orma» —
+     il piede in ogni pagina. La Bacheca ha già il suo (coi due tasti che cambiano vista): lì non si aggiunge. */
+  if (!document.querySelector(".piede")) {
+    var cssP = ".fm-piede{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;pointer-events:none}" +
+      ".fm-piede .in{pointer-events:auto;width:100%;max-width:430px;display:flex;background:rgba(10,12,26,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--riga);padding:8px 0 calc(8px + env(safe-area-inset-bottom))}" +
+      ".fm-piede a{flex:1;font-size:12px;letter-spacing:.08em;color:var(--grigio);display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none}" +
+      ".fm-piede a i{font-style:normal;font-size:18px;line-height:22px}.fm-piede a i svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round}" +
+      ".fm-piede a.on{color:var(--oro)}" +
+      "@media (min-width:700px){.fm-piede .in{border-radius:0 0 28px 28px}}";
+    var sp = document.createElement("style"); sp.textContent = cssP; document.head.appendChild(sp);
+    var piede = document.createElement("div"); piede.className = "fm-piede";
+    var qui = location.pathname.split("/").pop();
+    piede.innerHTML = '<div class="in"><a href="bacheca-bozza.html" class="' + (qui === "bacheca-bozza.html" ? "on" : "") + '" data-s="piede bacheca"><i>' + S.cubo + '</i>Bacheca</a><a href="bacheca-bozza.html?vista=mia" data-s="piede la mia orma"><i>◉</i>La mia orma</a></div>';
+    document.body.appendChild(piede);
+  }
 })();
