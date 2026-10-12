@@ -36,8 +36,8 @@
     ".fm-stanze .capo{display:flex;align-items:center;justify-content:space-between;padding:0 8px 8px}" +
     ".fm-stanze .capo .marca{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.14em;color:var(--oro)}" +
     ".fm-stanze .capo .io{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid var(--oro);display:block}.fm-stanze .capo .io img{width:100%;height:100%;object-fit:cover}" +
-    ".fm-stanze .voci{display:flex;gap:2px}.fm-stanze .voci a.staccata{margin-left:auto;flex:0 0 auto;padding-left:10px;padding-right:10px;border-left:1px solid var(--riga);border-radius:0 12px 12px 0}" +
-    ".fm-stanze .voci a{flex:0 1 20%;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px 7px;border-radius:12px;color:var(--grigio);text-decoration:none;min-width:0}" +
+    ".fm-stanze .voci{display:flex;gap:2px}.fm-stanze .voci a.staccata{margin-left:6px;flex:0 0 auto;padding-left:10px;padding-right:10px;border-left:1px solid var(--riga);border-radius:0 12px 12px 0}" +
+    ".fm-stanze .voci a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px 7px;border-radius:12px;color:var(--grigio);text-decoration:none;min-width:0}" +
     ".fm-stanze .voci a svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}" +
     ".fm-stanze .voci a span{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.04em;line-height:1.1;text-align:center;white-space:nowrap}" +
     ".fm-stanze .voci a.on{color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}" +
