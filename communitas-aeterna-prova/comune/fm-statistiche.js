@@ -42,12 +42,9 @@
     var corpo = JSON.stringify({ p_pagina: pagina, p_sessione: sessione, p_evento: evento, p_dettaglio: dettaglio || null, p_secondi: secondi == null ? null : Math.round(secondi), p_larghezza: larghezza, p_lingua: lingua, p_da: daDove });
     var dove = FM_URL + "/rest/v1/rpc/fm_segna_lettura";
     try {
-      if (ultimo && navigator.sendBeacon) {
-        /* all'uscita il navigatore non aspetta: sendBeacon parte da solo, con la chiave nell'indirizzo */
-        navigator.sendBeacon(dove + "?apikey=" + FM_CHIAVE, new Blob([corpo], { type: "application/json" }));
-        return;
-      }
-      fetch(dove, { method: "POST", keepalive: true, headers: { "Content-Type": "application/json", "apikey": FM_CHIAVE, "Authorization": "Bearer " + FM_CHIAVE }, body: corpo }).catch(function () {});
+      /* ⭐ 12 ott (controllo): sendBeacon manda i cookie e il server risponde «*» → il navigatore lo blocca (CORS).
+         fetch con keepalive parte lo stesso all'uscita, senza cookie. */
+      fetch(dove, { method: "POST", keepalive: true, credentials: "omit", headers: { "Content-Type": "application/json", "apikey": FM_CHIAVE, "Authorization": "Bearer " + FM_CHIAVE }, body: corpo }).catch(function () {});
     } catch (e) {}
   }
 
