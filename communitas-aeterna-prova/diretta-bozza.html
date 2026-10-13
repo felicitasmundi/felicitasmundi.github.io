@@ -200,7 +200,7 @@ a{color:inherit;text-decoration:none}
   var CH='fm_diretta', CHIAVE_PUNTATA='mutuo-credito', lasciando=false, actx=null, analizza=null, spettroVivo=false;
   var PUNTATA=(function(){ try{ var k=new URLSearchParams(location.search).get('puntata'); if(k&&PUNTATE[k]){ CHIAVE_PUNTATA=k; document.getElementById('titolo').textContent=PUNTATE[k].titolo; document.getElementById('chi').textContent=PUNTATE[k].chi; document.title=PUNTATE[k].titolo+' · la diretta del villaggio'; return PUNTATE[k]; } }catch(e){} return PUNTATE['mutuo-credito']; })();
   var stanza=null, io={}, ctx=null, dest=null, rec=null, pezzi=[], t0=0, orologio=null, t1=0, orologio2=null, ultimo=null, sorgenti=[];
-  var enc=new TextEncoder(), dec=new TextDecoder(), mani={};   /* la mano alzata sta sulla tessera per un minuto */
+  var enc=new TextEncoder(), dec=new TextDecoder(), mani={}, parlaPrima=null;   /* la mano alzata sta sulla tessera per un minuto */
 
   /* il segno: la diretta ti segue nelle altre pagine (comune/fm-diretta.js legge «fm_diretta») — 13 ott 20:38, Gab: «tienila sempre attiva» */
   function segna(mic){ try{ var s=JSON.parse(localStorage.getItem(CH)||'null')||{}; if(mic===undefined) mic=!!s.mic; localStorage.setItem(CH, JSON.stringify({puntata:CHIAVE_PUNTATA, titolo:PUNTATA.titolo, mic:!!mic, t:(s.puntata===CHIAVE_PUNTATA&&s.t)||Date.now()})); }catch(e){} }
@@ -278,7 +278,7 @@ a{color:inherit;text-decoration:none}
 
   /* la chat scritta: messaggi dati nella sala */
   function chat_riga(nome, testo, io_){ var box=document.querySelector('.chat'); var d=document.createElement('div'); d.className='m'+(io_?' io':''); d.innerHTML='<b></b>'; d.querySelector('b').textContent=nome; d.appendChild(document.createTextNode(testo)); box.appendChild(d); box.scrollTop=box.scrollHeight; }
-  function chat_sys(t){ var box=document.querySelector('.chat'); var d=document.createElement('div'); d.className='m'; d.innerHTML='<span class="sys"></span>'; d.querySelector('.sys').textContent=t; box.appendChild(d); box.scrollTop=box.scrollHeight; }
+  var avvisoT=null; function chat_sys(t){ dice(t); clearTimeout(avvisoT); avvisoT=setTimeout(function(){ if($('esito').textContent===t) dice(''); },4000); }
   function manda(){ var t=$('chat-campo').value.trim(); if(!t||!stanza) return; if(!io.entrato){ dice('Per scrivere entra con il tuo account.',true); return; }
     stanza.localParticipant.publishData(enc.encode(JSON.stringify({t:'chat',n:io.nome||'io',m:t})),{reliable:true}).then(function(){ chat_riga(io.nome||'io',t,true); $('chat-campo').value=''; }).catch(function(e){ dice('Chat: '+(e&&e.message?e.message:'—'),true); }); }
   $('chat-manda').onclick=manda; $('chat-campo').addEventListener('keydown',function(e){ if(e.key==='Enter') manda(); });
@@ -305,13 +305,13 @@ a{color:inherit;text-decoration:none}
       stanza.on(E.TrackSubscribed,function(track){ if(track.kind!=='audio') return; var el=track.attach(); el.autoplay=true; el.muted=inPausa; $('suoni').appendChild(el); mescola(track); ascolta(track); tessere(); });
       stanza.on(E.TrackUnsubscribed,function(track){ track.detach().forEach(function(el){el.remove();}); tessere(); });
       ['ParticipantConnected','ParticipantDisconnected','TrackPublished','TrackUnpublished','TrackMuted','TrackUnmuted','ActiveSpeakersChanged','ParticipantMetadataChanged','ParticipantPermissionsChanged'].forEach(function(q){ if(E[q]) stanza.on(E[q],tessere); });
-      stanza.on(E.ParticipantPermissionsChanged,function(){ var ok=stanza.localParticipant.permissions&&stanza.localParticipant.permissions.canPublish; $('b-mic').disabled=!ok; if(ok) chat_sys('✋ hai la parola'); });
+      stanza.on(E.ParticipantPermissionsChanged,function(){ var ok=!!(stanza.localParticipant.permissions&&stanza.localParticipant.permissions.canPublish); $('b-mic').disabled=!ok; if(ok!==parlaPrima){ parlaPrima=ok; if(ok) chat_sys('✋ hai la parola'); else chat_sys('✋ la parola è tolta'); } });
       stanza.on(E.DataReceived,function(payload,p){ try{ var m=JSON.parse(dec.decode(payload)); if(m.t==='chat') chat_riga(m.n||(p&&p.name)||'?',m.m,false); if(m.t==='file') file_riga(m.nome,m.via,m.n||(p&&p.name)||'?'); if(m.t==='mano'&&p){ mani[p.identity]=Date.now(); tessere(); } }catch(e){} });
       stanza.on(E.AudioPlaybackStatusChanged,function(){ $('suono').hidden=stanza.canPlaybackAudio; });
       stanza.on(E.Disconnected,function(){ if(lasciando) return; cancellaSegno(); fuori('Sei fuori dalla sala.'); });
       return stanza.connect(d.dove,d.gettone).then(function(){ return stanza.startAudio().then(function(){ $('suono').hidden=true; }).catch(function(){ $('suono').hidden=false; }); }).then(function(){ segna();
         $('onda').classList.remove('fuori'); $('pausa').hidden=false; pausaSala(false); lettore(); $('live-t').textContent='IN SALA · CIVILTÀ SARDA'; $('live').style.color='#ff6b6b'; var i=$('live').querySelector('i'); i.style.background='#ff4d4d'; i.style.animation='';
-        $('entra').hidden=true; $('esci').hidden=false; $('ospite-dati').hidden=true; $('b-mic').disabled=!d.parla; $('b-mano').disabled=!d.entrato; $('b-rec').disabled=!d.coordina; $('b-file').disabled=!d.entrato;
+        $('entra').hidden=true; $('esci').hidden=false; $('ospite-dati').hidden=true; parlaPrima=!!d.parla; $('b-mic').disabled=!d.parla; $('b-mano').disabled=!d.entrato; $('b-rec').disabled=!d.coordina; $('b-file').disabled=!d.entrato;
         if(d.coordina) document.getElementById('app').classList.add('coordina');
         dice(d.entrato?'':'Senza account: senti e parli; chi coordina può chiuderti il microfono.'); t1=Date.now(); orologio2=setInterval(function(){ var s=Math.floor((Date.now()-t1)/1000); $('tempo').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
         tessere();
