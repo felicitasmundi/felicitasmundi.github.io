@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Come funziona · bozza</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<style>
+/* ═══ COME FUNZIONA · 13 ottobre 2026 (Gab, 12:03–12:16)
+   Si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account.
+   Sette parti + il pre-mortem: tre modi di stare · cosa dà Felicitas in più · la memoria del cruscotto, disegnata
+   com'è davvero (niente «second brain») · cosa c'è sotto, in trasparenza · i conti aperti · detta e basta ·
+   i prezzi. I numeri tra [ ] sono di Gab, ancora da fissare. ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+
+.testa{padding:8px 18px 18px}
+.testa .fm-occ{color:var(--oro)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:32px;line-height:1.05;margin-top:6px}
+.testa .sot{font-size:14px;color:var(--grigio);margin-top:8px;line-height:1.5}
+
+.parte{padding:0 18px;margin-bottom:30px}
+.parte .capo{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.parte .capo .n{font-family:'Cinzel',serif;font-size:12px;color:var(--oro);letter-spacing:.1em}
+.parte .capo h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1}
+.parte p{font-size:14px;line-height:1.55;color:rgba(245,240,230,.88)}
+.parte p + p{margin-top:8px}
+
+/* tre modi di stare */
+.modi{display:flex;flex-direction:column;gap:8px}
+.modo{display:flex;gap:12px;align-items:flex-start;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px 14px}
+.modo .seg{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--oro);display:grid;place-items:center;font-family:'Cinzel',serif;font-size:11px;color:var(--oro)}
+.modo b{display:block;font-weight:500;font-size:14.5px}
+.modo small{display:block;font-size:12.5px;color:var(--grigio);line-height:1.45;margin-top:3px}
+.modo .pr{flex:none;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--oro);align-self:center}
+
+/* le cinque cose in più */
+.piu{display:flex;flex-direction:column;gap:6px}
+.piu > div{display:flex;gap:12px;align-items:flex-start;border-left:2px solid var(--oro);padding:8px 12px;background:rgba(20,24,48,.6);border-radius:0 12px 12px 0}
+.piu i{font-style:normal;font-family:'Cinzel',serif;font-size:12px;color:var(--oro);line-height:1.5;flex:none}
+.piu b{display:block;font-weight:500;font-size:14px;line-height:1.3}
+.piu small{display:block;font-size:12.5px;color:var(--grigio);line-height:1.45;margin-top:2px}
+
+/* la memoria del cruscotto: il foglio vero */
+.foglio{background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:14px;overflow:hidden}
+.formula{text-align:center;font-family:'Cormorant Garamond',serif;line-height:1.25;padding:6px 0 12px;border-bottom:1px solid var(--riga)}
+.formula .r{font-size:17px}
+.formula .l{display:block;width:150px;height:1px;background:var(--avorio);margin:4px auto}
+.formula .eq{font-size:13.5px;color:var(--oro);letter-spacing:.06em;margin-top:6px;font-family:'Cinzel',serif}
+.lune{display:flex;align-items:center;justify-content:space-between;padding:12px 4px 6px}
+.lune .luna{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--grigio);font-size:10px;letter-spacing:.06em}
+.lune .luna i{width:22px;height:22px;border-radius:50%;border:1px solid var(--grigio);display:block;background:linear-gradient(90deg,var(--grigio) 50%,transparent 50%);opacity:.5}
+.lune .luna.piena i{background:var(--grigio)}
+.lune .luna.nuova i{background:transparent}
+.lune .luna.ora{color:var(--oro)}.lune .luna.ora i{border-color:var(--oro);background:transparent;opacity:1;box-shadow:0 0 12px rgba(212,175,106,.5)}
+.lune .filo{flex:1;height:1px;background:var(--riga);margin:0 4px;position:relative;top:-9px}
+.lune .arch{font-size:10px;color:var(--grigio);letter-spacing:.1em;align-self:flex-start;padding-top:6px}
+.righe{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.riga-m{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.4;padding:6px 8px;border-radius:8px;background:rgba(10,12,26,.55);border-left:3px solid var(--c)}
+.riga-m .q{flex:none;font-family:'DM Sans',sans-serif;font-size:10.5px;color:var(--grigio);letter-spacing:.02em;padding-top:1px;white-space:nowrap}
+.riga-m .e{flex:none;width:8px;height:8px;border-radius:50%;background:var(--c);margin-top:5px}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:10.5px;letter-spacing:.08em;color:var(--grigio)}
+.legenda span{display:inline-flex;align-items:center;gap:5px}.legenda i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.leggo{margin-top:12px;padding-top:12px;border-top:1px solid var(--riga);display:flex;gap:10px;align-items:flex-start}
+.leggo .oc{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--oro);display:grid;place-items:center;color:var(--oro);font-size:14px}
+.leggo p{font-size:13px;line-height:1.5}
+
+/* cosa c'è sotto */
+.sotto{display:flex;flex-direction:column;gap:6px}
+.sotto .fm-riga{align-items:flex-start}
+.sotto .fm-riga b{flex:none;width:110px;font-weight:500;font-size:13px;color:var(--oro)}
+.sotto .fm-riga span{font-size:13px;line-height:1.45;color:rgba(245,240,230,.88)}
+
+/* i conti */
+.conti{width:100%;border-collapse:collapse;font-size:12.5px}
+.conti th,.conti td{padding:7px 6px;border-bottom:1px solid var(--riga);text-align:right;vertical-align:top}
+.conti th{font-weight:500;color:var(--grigio);font-size:11px;letter-spacing:.06em}
+.conti td:first-child,.conti th:first-child{text-align:left}
+.conti tr.resta td{color:var(--oro);font-weight:500}
+.conti tr.tot td{border-bottom:0}
+.conti .meno{color:var(--grigio)}
+
+/* detta e basta */
+.detta{display:flex;flex-direction:column;gap:8px}
+.vocale{display:flex;gap:10px;align-items:center;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:10px 12px}
+.vocale .mic{flex:none;width:34px;height:34px;border-radius:50%;background:var(--oro);color:var(--inchiostro);display:grid;place-items:center;font-size:15px}
+.vocale .onda{flex:1;display:flex;gap:2px;align-items:center;height:22px}
+.vocale .onda i{display:block;width:3px;border-radius:2px;background:var(--grigio);height:var(--h)}
+.vocale .dove{flex:none;font-size:11px;letter-spacing:.08em;color:var(--oro);text-align:right;line-height:1.3}
+.detta .dice{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:rgba(245,240,230,.9);padding:0 4px}
+.detta .ar{font-size:11px;letter-spacing:.14em;color:var(--grigio);text-align:center;padding:2px 0}
+
+/* il pre-mortem */
+.pm{background:var(--carta);border:1px solid rgba(140,47,57,.55);border-radius:16px;padding:14px 16px}
+.pm .fm-occ{color:var(--nexus);filter:brightness(1.5)}
+.pm h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:20px;margin-top:4px;line-height:1.15}
+.pm ol{margin:10px 0 0 18px;font-size:13px;line-height:1.5;color:rgba(245,240,230,.88)}
+.pm ol li+li{margin-top:4px}
+
+/* i prezzi */
+.prezzi{display:flex;flex-direction:column;gap:10px}
+.piano{background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:14px 16px}
+.piano.oro{border-color:var(--oro);box-shadow:0 0 0 1px rgba(212,175,106,.25)}
+.piano .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.piano .top b{font-family:'Cinzel',serif;font-weight:400;font-size:13px;letter-spacing:.1em}
+.piano .top .pr{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--oro);line-height:1}
+.piano .top .pr small{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grigio);margin-left:4px}
+.piano ul{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:5px}
+.piano li{font-size:13px;line-height:1.45;padding-left:16px;position:relative;color:rgba(245,240,230,.9)}
+.piano li::before{content:"·";position:absolute;left:4px;color:var(--oro)}
+.piano li.no{color:var(--grigio)}.piano li.no::before{content:"–"}
+.piano .tasti{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.piano .conta{font-size:11.5px;color:var(--grigio)}
+.data{font-size:11px;color:var(--grigio);letter-spacing:.06em;text-align:center;margin-top:14px}
+
+.nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+.nota-bozza b{color:var(--oro);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="fm-stanze" data-attiva=""></div>
+
+  <div class="testa">
+    <div class="fm-occ">FELICITASMUNDI</div>
+    <h1>Come funziona.</h1>
+    <div class="sot">Tre modi di stare in Felicitas, cosa c'è sotto, dove vanno i soldi. Tutto qui, aperto.</div>
+  </div>
+
+  <!-- 1 · tre modi di stare -->
+  <section class="parte">
+    <div class="capo"><span class="n">1</span><h2>Tre modi di stare.</h2></div>
+    <div class="modi">
+      <div class="modo"><span class="seg">O</span><div><b>Ospite</b><small>Vede la Bacheca, le stanze, gli eventi; può anche accedere ai percorsi gratuiti.</small></div><span class="pr">0</span></div>
+      <div class="modo"><span class="seg">KY</span><div><b>Karma yoga</b><small>Il patto senza quota: <span class="fm-ph">[ cosa include, parole di Gab ]</span>. I lavori con l'AI si pagano a lavoro singolo.</small></div><span class="pr">0</span></div>
+      <div class="modo"><span class="seg">10</span><div><b>Felicitas</b><small>Il gruppo, la bacheca, gli obiettivi, gli eventi, la diretta, la Stampa. Il tuo cruscotto, scritto a mano.</small></div><span class="pr">10 €</span></div>
+      <div class="modo"><span class="seg">26</span><div><b>Felicitas con l'AI</b><small>Tutto il 10 più la memoria che lavora con te: trascrizione, impaginazione, editing, traduzione, conversione, guida. E la voce che scrive per te.</small></div><span class="pr">26 €</span></div>
+    </div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">La stampa delle cose (opuscoli, kit fiera, carta) si paga a parte, sempre, nella stanza Stampa.</p>
+  </section>
+
+  <!-- 2 · cosa ti dà Felicitas in più -->
+  <section class="parte">
+    <div class="capo"><span class="n">2</span><h2>Perché 26 qui e non 20 a un'AI.</h2></div>
+    <div class="piu">
+      <div><i>1</i><div><b>Dei 26, l'AI è 16. I 10 sono Felicitas.</b><small>Chi paga 20 a un'AI ha solo l'AI, e poi deve costruirsi il gruppo, la bacheca, gli eventi, la stampa, la diretta.</small></div></div>
+      <div><i>2</i><div><b>L'AI conosce già il tuo lavoro.</b><small>Non parte da zero a ogni chat: ha il tuo cruscotto coi 5 elementi, le tue orme, il tuo villaggio, le tue dirette. Altrove quella memoria la costruisci e la mantieni tu.</small></div></div>
+      <div><i>3</i><div><b>Il lavoro atterra dove serve.</b><small>La trascrizione finisce nella puntata, l'impaginato in Stampa, la notizia in Edizione, l'obiettivo nel gruppo. Con un'AI generica ti resta un file da portare in giro.</small></div></div>
+      <div><i>4</i><div><b>I dati stanno in Italia, da noi.</b><small>Voce, testi e memoria sui server di Felicitas. Nessun terzo li tiene.</small></div></div>
+      <div><i>5</i><div><b>Il praticantato e la comunità.</b><small>Il percorso in cinque passaggi, i vicinati, le persone. Nessuna AI te li dà.</small></div></div>
+    </div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Quello che non diciamo: che la nostra AI sia più potente. Sotto c'è la stessa. Quello che diamo in più è il posto dove lavora e la memoria che ha.</p>
+  </section>
+
+  <!-- 3 · la memoria del cruscotto, disegnata com'è -->
+  <section class="parte">
+    <div class="capo"><span class="n">3</span><h2>La memoria: il tuo cruscotto.</h2></div>
+    <p>Non un cervello disegnato. Un foglio, quello vero: in cima la formula, sotto i cicli della luna, dentro ogni ciclo le righe datate di quello che hai deciso, ognuna nel suo elemento.</p>
+    <div class="foglio" style="margin-top:12px">
+      <div class="formula">
+        <div class="r">( 5 elementi + sviluppo ) × Nexus</div>
+        <span class="l"></span>
+        <div class="r">falso ego</div>
+        <div class="eq">= FELICITASMUNDI</div>
+      </div>
+      <div class="lune">
+        <span class="arch">ARCHIVIO ‹</span>
+        <div class="luna"><i></i>ago</div><span class="filo"></span>
+        <div class="luna piena"><i></i>set</div><span class="filo"></span>
+        <div class="luna nuova ora"><i></i>11 ott · ora</div><span class="filo"></span>
+        <div class="luna nuova" style="opacity:.35"><i></i>nov</div>
+      </div>
+      <div class="righe">
+        <div class="riga-m" style="--c:var(--aria)"><span class="q">12 ott · 20:53</span><span class="e"></span><span>l'ipotesi: 10 al mese senza nulla, 26 con l'AI</span></div>
+        <div class="riga-m" style="--c:var(--fuoco)"><span class="q">13 ott · 10:29</span><span class="e"></span><span>la diretta funziona, provata dal vivo</span></div>
+        <div class="riga-m" style="--c:var(--aria)"><span class="q">13 ott · 10:38</span><span class="e"></span><span>la trascrizione sta dentro un pacchetto</span></div>
+        <div class="riga-m" style="--c:var(--terra)"><span class="q">13 ott · 12:14</span><span class="e"></span><span>costi, rubrica e calendario, anche a voce</span></div>
+      </div>
+      <div class="legenda"><span style="--c:var(--terra)"><i></i>TERRA</span><span style="--c:var(--acqua)"><i></i>ACQUA</span><span style="--c:var(--fuoco)"><i></i>FUOCO</span><span style="--c:var(--aria)"><i></i>ARIA</span><span style="--c:var(--etere)"><i></i>ETERE</span></div>
+      <div class="leggo"><span class="oc">◉</span><p>Quando chiedi un lavoro, l'AI legge prima queste righe. Per questo oggi sa che i prezzi sono 10 e 26: glielo hai detto il 12 ottobre, e non l'ha dimenticato.</p></div>
+    </div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Accanto al cruscotto c'è il metodo a mano: i post-it, il foglio di ogni giorno, l'archivio chiuso a ogni luna. Il cruscotto digitale lo segue, non lo sostituisce.</p>
+  </section>
+
+  <!-- 4 · cosa c'è sotto -->
+  <section class="parte">
+    <div class="capo"><span class="n">4</span><h2>Cosa c'è sotto.</h2></div>
+    <div class="sotto">
+      <div class="fm-riga"><b>la voce</b><span>la trascrive Whisper, un programma aperto, sul server di Felicitas in Italia. L'audio non esce da lì.</span></div>
+      <div class="fm-riga"><b>i testi</b><span>i lavori di testo (impaginare, correggere, tradurre, guidare) li fa Claude, di Anthropic, su tua richiesta e solo con il testo di quel lavoro. Anthropic dichiara di non usare i dati dei clienti dell'API per addestrare i modelli <span class="fm-ph">[ riga da verificare sulle condizioni, prima della pubblicazione ]</span>.</span></div>
+      <div class="fm-riga"><b>la memoria</b><span>il tuo cruscotto, le orme, i gruppi, le chat: su Supabase, il database di Felicitas. L'AI lo legge quando glielo chiedi; non lo tiene.</span></div>
+      <div class="fm-riga"><b>la diretta</b><span>LiveKit, server in Europa, solo per il passaggio della voce in tempo reale. La registrazione la fa il navigatore di chi coordina.</span></div>
+    </div>
+  </section>
+
+  <!-- 5 · i conti, aperti -->
+  <section class="parte">
+    <div class="capo"><span class="n">5</span><h2>Dove vanno i 26 euro.</h2></div>
+    <table class="conti">
+      <thead><tr><th></th><th>uso normale</th><th>uso al tetto</th></tr></thead>
+      <tbody>
+        <tr><td>prezzo</td><td>26,00 €</td><td>26,00 €</td></tr>
+        <tr><td class="meno">IVA 22 %</td><td class="meno">− 4,69 €</td><td class="meno">− 4,69 €</td></tr>
+        <tr><td>a Felicitas Omnia</td><td>21,31 €</td><td>21,31 €</td></tr>
+        <tr><td class="meno">i testi (token)</td><td class="meno">≈ − 1,70 €</td><td class="meno">≈ − 10,40 €</td></tr>
+        <tr><td class="meno">la voce (server Whisper, diviso tra chi paga)</td><td class="meno">≈ − 1,00 €</td><td class="meno">≈ − 1,00 €</td></tr>
+        <tr><td class="meno">incasso con carta</td><td class="meno">− 0,65 €</td><td class="meno">− 0,65 €</td></tr>
+        <tr class="resta"><td>resta prima delle imposte</td><td>≈ 18 €</td><td>≈ 9 €</td></tr>
+        <tr><td class="meno">imposte sull'utile (IRES + IRAP)</td><td class="meno">≈ − 5 €</td><td class="meno">≈ − 2,5 €</td></tr>
+        <tr class="resta tot"><td>resta a Felicitas</td><td>≈ 13 €</td><td>≈ 6,5 €</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Con quello che resta si paga <span class="fm-ph">[ parole di Gab: il database, la diretta, il lavoro di chi tiene in piedi Felicitas, le suddivisioni del piano ]</span>. «Uso normale» vuol dire una decina di lavori e due trascrizioni al mese; «al tetto» vuol dire tutto il mese, ogni giorno.</p>
+  </section>
+
+  <!-- 6 · detta e basta -->
+  <section class="parte">
+    <div class="capo"><span class="n">6</span><h2>Detta e basta.</h2></div>
+    <p>Costi, rubrica e calendario si possono scrivere anche solo mandando un vocale. Il sistema lo capisce, lo mette al posto giusto e ti chiede conferma con un tocco.</p>
+    <div class="detta" style="margin-top:12px">
+      <div class="vocale"><span class="mic">🎙</span><span class="onda"><i style="--h:6px"></i><i style="--h:14px"></i><i style="--h:20px"></i><i style="--h:10px"></i><i style="--h:16px"></i><i style="--h:8px"></i><i style="--h:18px"></i><i style="--h:12px"></i><i style="--h:6px"></i><i style="--h:15px"></i><i style="--h:9px"></i></span><span class="dove">📅<br>CALENDARIO</span></div>
+      <div class="dice">«giovedì alle 19 la diretta con Guido Grossi e Vittorino Crivello»</div>
+      <div class="ar">▾ diventa</div>
+      <div class="fm-carta"><div class="im" style="font-size:20px">📅</div><div class="t"><b>Mutuo credito cooperativo</b><small>giovedì 16 ottobre · ore 19 · la diretta del villaggio</small></div><span class="fr">conferma ›</span></div>
+      <div class="vocale" style="margin-top:6px"><span class="mic">🎙</span><span class="onda"><i style="--h:9px"></i><i style="--h:17px"></i><i style="--h:7px"></i><i style="--h:20px"></i><i style="--h:12px"></i><i style="--h:6px"></i><i style="--h:15px"></i><i style="--h:19px"></i><i style="--h:8px"></i><i style="--h:11px"></i><i style="--h:5px"></i></span><span class="dove">€<br>COSTI</span></div>
+      <div class="dice">«il kit fiera, trecentottantasette e sessantasei»</div>
+      <div class="ar">▾ diventa</div>
+      <div class="fm-carta"><div class="im" style="font-size:20px">€</div><div class="t"><b>Kit fiera · 387,66 €</b><small>Stampa · 13 ottobre</small></div><span class="fr">conferma ›</span></div>
+      <div class="vocale" style="margin-top:6px"><span class="mic">🎙</span><span class="onda"><i style="--h:12px"></i><i style="--h:6px"></i><i style="--h:18px"></i><i style="--h:9px"></i><i style="--h:20px"></i><i style="--h:14px"></i><i style="--h:7px"></i><i style="--h:16px"></i><i style="--h:10px"></i><i style="--h:5px"></i><i style="--h:13px"></i></span><span class="dove">☏<br>RUBRICA</span></div>
+      <div class="dice">«segna Marco Caddeo, coordinatore, Civiltà Sarda»</div>
+      <div class="ar">▾ diventa</div>
+      <div class="fm-carta"><div class="im tonda" style="font-family:'Cormorant Garamond',serif;font-size:18px">M</div><div class="t"><b>Marco Caddeo</b><small>coordinatore · Villaggio Felicitas · Civiltà Sarda</small></div><span class="fr">conferma ›</span></div>
+    </div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">I vocali brevi non si contano nel tetto. La rubrica è tua e privata: quello che detti resta a te.</p>
+  </section>
+
+  <!-- 7 · il pre-mortem -->
+  <section class="parte">
+    <div class="capo"><span class="n">7</span><h2>Prima di partire, il pre-mortem.</h2></div>
+    <p>Quando apri un obiettivo o un progetto nel gruppo, prima di costruire l'AI ti dice tre cose: cosa ha capito, dove la tua idea non torna con quello che hai già scritto nel cruscotto, e cosa può andare storto. Poi si parte. È il modo in cui Felicitas è stata costruita.</p>
+    <div class="pm" style="margin-top:12px">
+      <div class="fm-occ">PRE-MORTEM · ESEMPIO VERO</div>
+      <h3>Obiettivo: la diretta di giovedì 16, ore 19</h3>
+      <ol>
+        <li>Il Mac deve restare acceso durante la registrazione: se va in stop, la registrazione si ferma.</li>
+        <li>Nel testo di presentazione ci sono due parole da confermare prima di pubblicare.</li>
+        <li>La stessa persona da due apparecchi: risolto il 13 ottobre, ma va riprovato prima della diretta.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 8 · i prezzi -->
+  <section class="parte">
+    <div class="capo"><span class="n">8</span><h2>Scegli.</h2></div>
+    <div class="prezzi">
+      <div class="piano">
+        <div class="top"><b>FELICITAS</b><span class="pr">10 €<small>al mese, IVA inclusa</small></span></div>
+        <ul>
+          <li>il gruppo a quattro livelli: villaggio, vicinato, nucleo, team</li>
+          <li>chat, obiettivi, eventi, la diretta del villaggio</li>
+          <li>la Stampa (i lavori di stampa si pagano a parte)</li>
+          <li>il tuo cruscotto, scritto a mano</li>
+          <li class="no">niente lavori con l'AI (si comprano singoli)</li>
+        </ul>
+        <div class="tasti"><button class="fm-tasto piccolo secondario" data-s="scegli 10">Scegli</button></div>
+      </div>
+      <div class="piano oro">
+        <div class="top"><b>FELICITAS CON L'AI</b><span class="pr">26 €<small>al mese, IVA inclusa</small></span></div>
+        <ul>
+          <li>tutto il 10</li>
+          <li>la memoria che lavora con te, sempre</li>
+          <li>la guida: chiedi come fare, senza conteggio</li>
+          <li>detta costi, rubrica, calendario: senza conteggio</li>
+          <li>i lavori con file: trascrizione, impaginazione, editing, traduzione, conversione, pdf da audio, pagina html o sito</li>
+          <li>il pre-mortem su ogni obiettivo</li>
+        </ul>
+        <div class="tasti"><button class="fm-tasto piccolo" data-s="scegli 26">Scegli</button><span class="conta">tetto di sicurezza: <span class="fm-ph">[ 60 ]</span> lavori con file e <span class="fm-ph">[ 10 ]</span> ore di trascrizione al mese</span></div>
+      </div>
+      <div class="piano">
+        <div class="top"><b>UN LAVORO</b><span class="pr"><span class="fm-ph">[ € ]</span></span></div>
+        <ul>
+          <li>per chi non ha il 26: una trascrizione, un'impaginazione, una traduzione, una conversione — paghi quel pezzo</li>
+          <li>si compra nel momento in cui serve, dal tasto del lavoro</li>
+        </ul>
+      </div>
+    </div>
+    <div class="data">PREZZI E CONTI AL 13 OTTOBRE 2026 · QUANDO CAMBIANO, CAMBIA QUESTA PAGINA</div>
+  </section>
+
+  <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). Il tasto «Scegli» non fa ancora niente: il pagamento arriva alla conferma del modello.</div>
+</div>
+<script src="comune/fm-riga.js?v=10131230"></script>
+<script src="comune/fm-statistiche.js?v=10121420"></script>
+</body>
+</html>

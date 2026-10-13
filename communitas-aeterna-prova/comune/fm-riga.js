@@ -20,7 +20,9 @@
     tetraedro:  '<svg viewBox="0 0 24 24"><path d="M12 3 21 19H3L12 3Z"/><path d="M12 3v10M3 19l9-6M21 19l-9-6"/></svg>',
     ottaedro:   '<svg viewBox="0 0 24 24"><path d="M12 2 21 12l-9 10L3 12 12 2Z"/><path d="M3 12h18M12 2 7.5 12 12 22M12 2l4.5 10L12 22"/></svg>',
     stampante:  '<svg viewBox="0 0 24 24"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 13h10v8H7z"/><path d="M17 11h1"/></svg>',
-    dodecaedro: '<svg viewBox="0 0 24 24"><path d="M12 2.5 21 9l-3.4 10.5H6.4L3 9l9-6.5Z"/><path d="M12 8.5 16 11.5l-1.5 4.5h-5L8 11.5l4-3Z"/><path d="M12 2.5v6M21 9l-5 2.5M3 9l5 2.5M6.4 19.5l3.1-3.5M17.6 19.5l-3.1-3.5"/></svg>'
+    dodecaedro: '<svg viewBox="0 0 24 24"><path d="M12 2.5 21 9l-3.4 10.5H6.4L3 9l9-6.5Z"/><path d="M12 8.5 16 11.5l-1.5 4.5h-5L8 11.5l4-3Z"/><path d="M12 2.5v6M21 9l-5 2.5M3 9l5 2.5M6.4 19.5l3.1-3.5M17.6 19.5l-3.1-3.5"/></svg>',
+    /* 13 ott, Gab: «sistemiamo un loghetto per accedere ai piani» — il seme: un cerchio con il punto, apre «Come funziona» */
+    seme:       '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3"/></svg>'
   };
   /* 20:38, Gab: in alto Emporio · Mutuo aiuto · Edizione · Scuola, vicini; «come ultimo simbolo a destra scrivi stampa, con la forma
      della stampante», leggermente staccato. Vicinati non sta qui: è la Bacheca, nel piede, col cubo. */
@@ -36,6 +38,8 @@
     ".fm-stanze .capo{display:flex;align-items:center;justify-content:space-between;padding:0 8px 8px}" +
     ".fm-stanze .capo .marca{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.14em;color:var(--oro)}" +
     ".fm-stanze .capo .io{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid var(--oro);display:block}.fm-stanze .capo .io img{width:100%;height:100%;object-fit:cover}" +
+    ".fm-stanze .capo .destra{display:flex;align-items:center;gap:12px}" +
+    ".fm-stanze .capo .seme{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--oro)}.fm-stanze .capo .seme svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round}.fm-stanze .capo .seme.on{background:rgba(212,175,106,.14)}" +
     ".fm-stanze .voci{display:flex;gap:2px}.fm-stanze .voci a.staccata{margin-left:6px;flex:0 0 auto;padding-left:10px;padding-right:10px;border-left:1px solid var(--riga);border-radius:0 12px 12px 0}" +
     ".fm-stanze .voci a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px 7px;border-radius:12px;color:var(--grigio);text-decoration:none;min-width:0}" +
     ".fm-stanze .voci a svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}" +
@@ -48,7 +52,8 @@
   var box = document.getElementById("fm-stanze"); if (!box) return;
   var attiva = box.getAttribute("data-attiva") || "";
   var foto = box.getAttribute("data-foto") || "../communitas-aeterna/persone/gabriele-dettori.jpg";
-  var h = '<div class="capo"><a class="marca" href="bacheca-bozza.html">FELICITASMUNDI</a><a class="io" href="account-bozza.html" aria-label="i miei dati"><img src="' + foto + '" alt=""></a></div><nav class="voci" aria-label="le stanze">';
+  var quiPag = location.pathname.split("/").pop();
+  var h = '<div class="capo"><a class="marca" href="bacheca-bozza.html">FELICITASMUNDI</a><div class="destra"><a class="seme' + (quiPag === "come-funziona-bozza.html" ? " on" : "") + '" href="come-funziona-bozza.html" aria-label="come funziona" data-s="riga come funziona">' + S.seme + '</a><a class="io" href="account-bozza.html" aria-label="i miei dati"><img src="' + foto + '" alt=""></a></div></div><nav class="voci" aria-label="le stanze">';
   VOCI.forEach(function (v) {
     h += '<a href="' + v[4] + '" style="--c:var(--' + v[3] + ')" class="' + (v[0] === attiva ? "on" : "") + (v[0] === "stampa" ? " staccata" : "") + '" data-s="riga ' + v[0] + '">' + S[v[2]] + '<span>' + v[1] + '</span></a>';
   });
