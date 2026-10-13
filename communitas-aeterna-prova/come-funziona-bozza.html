@@ -126,6 +126,9 @@ a{color:inherit;text-decoration:none}
 .piano.qui{border-color:var(--oro)}
 .piano .qui-s{display:none;align-self:flex-start;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.16em;color:var(--inchiostro);background:var(--oro);border-radius:980px;padding:4px 10px;margin-bottom:8px}
 .piano.qui .qui-s{display:inline-block}
+.piano .vai{display:none;margin-top:8px}
+.piano.qui .vai{display:flex}
+.piano.qui [data-cassa],.piano.qui [data-s="scegli ospite"],.piano.qui [data-s="proponiti"]{display:none}
 .piano.qui .fm-tasto[data-s="scegli ospite"],.piano.qui .fm-tasto[data-s="scegli praticante"]{display:none}
 .piano.oro{border-color:var(--oro);box-shadow:0 0 0 1px rgba(212,175,106,.25)}
 .piano ul{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:5px}
@@ -201,7 +204,7 @@ a{color:inherit;text-decoration:none}
       <div class="piano" data-piano="karma_yoga">
         <span class="qui-s">SEI QUI</span><div class="nome">Praticante · karma yoga</div><div class="per">Chi dà una mano, segue e porta a termine obiettivi dei gruppi operativi, chi mette a disposizione luoghi e tempo.</div>
         <div class="pr">0 €<small>il patto: obiettivi, non ore</small></div>
-        <a class="fm-tasto piccolo secondario" href="vicinati-bozza.html" data-s="scegli praticante">Proponiti</a>
+        <a class="fm-tasto piccolo secondario" href="bacheca-bozza.html#karma-yoga" data-s="scegli praticante">Proponiti</a>
         <div class="tutto">Tutto dell'ospite, più:</div>
         <ul>
           <li>attivare un profilo privato</li>
@@ -220,6 +223,9 @@ a{color:inherit;text-decoration:none}
         <span class="qui-s">SEI QUI</span><div class="nome">Villaggio</div>
         <div class="pr">10 €<small>al mese, IVA inclusa</small></div>
         <button class="fm-tasto piccolo secondario" data-s="scegli 10" data-cassa="villaggio">Scegli</button>
+        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html?vista=mia" data-s="vai villaggio">Vai alla mia orma</a>
+        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html#karma-yoga" data-s="vai karma_yoga">Prendi un compito</a>
+        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html" data-s="vai ospite">Vai in Bacheca</a>
         <div class="tutto">Tutto del praticante, più le proprie cose: il proprio lavoro, il proprio team, i propri prodotti.</div>
         <ul>
           <li>il team partner: le stesse informazioni, con accesso ristretto al gruppo, collegato al villaggio e al vicinato</li>
@@ -234,6 +240,7 @@ a{color:inherit;text-decoration:none}
         <span class="qui-s">SEI QUI</span><div class="nome">Bottega</div>
         <div class="pr">26 €<small>al mese, IVA inclusa</small></div>
         <button class="fm-tasto piccolo" data-s="scegli 26" data-cassa="bottega">Scegli</button>
+        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html?vista=mia" data-s="vai bottega">Vai alla mia orma</a>
         <div class="tutto">Tutto del Villaggio, più:</div>
         <ul>
           <li>la memoria che lavora con te, sempre</li>
@@ -426,7 +433,7 @@ a{color:inherit;text-decoration:none}
           pianoMio=vivo?d.piano:null;
           segna(vivo?d.piano:base);
           var pr=document.querySelector('[data-cassa="praticantato"]');
-          if(pr&&d.praticantato_fino_al&&new Date(d.praticantato_fino_al)>ora){ pr.textContent="Sei nel praticantato · fino al "+new Date(d.praticantato_fino_al).toLocaleDateString("it-IT"); pr.disabled=true; pr.classList.add("secondario"); }
+          if(pr&&d.praticantato_fino_al&&new Date(d.praticantato_fino_al)>ora){ pr.textContent="Sei nel praticantato · fino al "+new Date(d.praticantato_fino_al).toLocaleDateString("it-IT")+" · vai nel percorso ›"; pr.classList.add("secondario"); pr.onclick=function(ev){ ev.stopImmediatePropagation(); location.href="bacheca-bozza.html?vista=mia&praticantato=1"; }; }
         }, function(){ segna(base); });
       });
     }).catch(function(e){ console.log("come funziona · sessione", e); });
@@ -472,7 +479,7 @@ a{color:inherit;text-decoration:none}
     db.functions.invoke("stripe-cassa",{body:{azione:"avvia",piano:piano,motivo:motivo||"",torna:location.origin+location.pathname}}).then(function(r){
       var d=(r&&r.data)||{};
       if(d.gia){ chiudiCassa(); mostra("Hai già "+(NOMI[d.piano]||d.piano)+(d.fino?" · fino al "+new Date(d.fino).toLocaleDateString("it-IT"):"")+"."); chiSono(); return; }
-      if(d.cambiato){ chiudiCassa(); mostra("Fatto: da "+(NOMI[d.da]||d.da)+" a "+(NOMI[d.piano]||d.piano)+(d.conguaglio?" · conguaglio "+Number(d.conguaglio).toLocaleString("it-IT",{minimumFractionDigits:2})+" €":"")+". Il piano è acceso."); riguarda(); return; }
+      if(d.cambiato){ chiudiCassa(); mostra("Fatto: da "+(NOMI[d.da]||d.da)+" a "+(NOMI[d.piano]||d.piano)+(d.conguaglio?" · conguaglio "+Number(d.conguaglio).toLocaleString("it-IT",{minimumFractionDigits:2})+" €":"")+". Il piano è acceso.", false, dove(d.piano)); riguarda(); return; }
       if(!d.segreto){ erroreCassa((d.errore||"non riesco a preparare il pagamento")+". Scrivi a chi coordina."); paga.disabled=false; paga.textContent=paga.dataset.modo==="cambia"?"Cambia piano":"Paga"; return; }
       var somma = d.cambio ? Number(d.conguaglio) : Number(d.importo);
       document.getElementById("cassa-prezzo").innerHTML=Number(d.importo).toLocaleString("it-IT",{minimumFractionDigits:2})+' €<small>'+(PERIODO[d.periodo]||"")+' · IVA inclusa'+(d.cambio?' · oggi il conguaglio: '+somma.toLocaleString("it-IT",{minimumFractionDigits:2})+' €':'')+'</small>';
@@ -502,7 +509,7 @@ a{color:inherit;text-decoration:none}
     stripe.confirmPayment({elements:elements,confirmParams:{return_url:torna},redirect:"if_required"}).then(function(r){
       if(r.error){ paga.disabled=false; paga.textContent=t; erroreCassa(r.error.message||"il pagamento non è andato"); return; }
       /* niente verifica della banca: siamo ancora qui. Si dice grazie e si rilegge il piano */
-      var n=NOMI[cassaAperta]||"il piano"; chiudiCassa(); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto."); riguarda();
+      var n=NOMI[cassaAperta]||"il piano"; chiudiCassa(); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto.", false, dove(cassaAperta)); riguarda();
     });
   });
   document.querySelectorAll("[data-cassa]").forEach(function(b){
@@ -511,10 +518,12 @@ a{color:inherit;text-decoration:none}
       apriCassa(b.getAttribute("data-cassa"));
     });
   });
-  function mostra(testo, male){ var e=document.getElementById("esito"); if(!e) return; e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=testo; e.scrollIntoView({block:"center"}); }
+  /* dove si va dopo: Villaggio e Bottega → la mia orma; praticantato → il percorso (Gab, 18:15) */
+  function dove(piano){ return piano==="praticantato" ? {href:"bacheca-bozza.html?vista=mia&praticantato=1",testo:"Vai nel percorso ›"} : {href:"bacheca-bozza.html?vista=mia",testo:"Vai alla mia orma ›"}; }
+  function mostra(testo, male, poi){ var e=document.getElementById("esito"); if(!e) return; e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=testo; if(poi){ var a=document.createElement("a"); a.href=poi.href; a.textContent=poi.testo; a.className="fm-tasto piccolo"; a.style.marginLeft="10px"; e.appendChild(a); } e.scrollIntoView({block:"center"}); }
   try{
     var q=new URLSearchParams(location.search);
-    if(q.get("pagato")){ var n={villaggio:"il Villaggio",bottega:"la Bottega",praticantato:"il praticantato Antaḥkaraṇa"}[q.get("pagato")]||q.get("pagato"); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto. Se non lo vedi, ricarica la pagina o segnala un problema dall'account."); history.replaceState(null,"",location.pathname); riguarda(); }
+    if(q.get("pagato")){ var n={villaggio:"il Villaggio",bottega:"la Bottega",praticantato:"il praticantato Antaḥkaraṇa"}[q.get("pagato")]||q.get("pagato"); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto. Se non lo vedi, ricarica la pagina o segnala un problema dall'account.", false, dove(q.get("pagato"))); history.replaceState(null,"",location.pathname); riguarda(); }
     if(q.get("annullato")){ mostra("Pagamento annullato: niente è stato addebitato."); history.replaceState(null,"",location.pathname); }
   }catch(e){}
 })();

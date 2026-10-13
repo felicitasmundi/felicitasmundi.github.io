@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Carta stampata · Stampa · FelicitasMundi</title>
+<meta name="description" content="Carta stampata: volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi. Stampati e portati dove serve, al prezzo pubblico di Flyeralarm, su carta naturale o riciclata dove si può.">
+<link rel="canonical" href="https://app.felicitasmundi.com/communitas-aeterna-prova/stampa-carta-stampata.html">
+<meta property="og:title" content="Carta stampata · Stampa · FelicitasMundi">
+<meta property="og:description" content="Carta stampata: volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi. Stampati e portati dove serve, al prezzo pubblico di Flyeralarm, su carta naturale o riciclata dove si può.">
+<meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna-prova/casa/nexus.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10131608">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:var(--fm-larghezza,430px);margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.foto{margin:0 18px 14px;border-radius:18px;overflow:hidden;aspect-ratio:16/10;background:var(--carta);display:grid;place-items:center;font-size:54px;color:var(--aria)}.foto img{width:100%;height:100%;object-fit:cover}
+.testa{padding:0 18px 14px}
+.testa .fm-occ{color:var(--aria)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-family:'Cormorant Garamond',serif;font-size:18px;color:rgba(245,240,230,.88);margin-top:8px;line-height:1.4}
+.quad{padding:0 18px;margin-bottom:22px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--aria)}
+.tre{display:flex;flex-direction:column;gap:8px}
+.tre .box{background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:12px 14px}
+.tre .box .eti{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;color:var(--oro);margin-bottom:6px}
+.tre .box p{font-size:14px;line-height:1.5;color:rgba(245,240,230,.9)}
+.prezzo{background:var(--carta);border:1px solid var(--oro);border-radius:18px;padding:14px 16px}
+.prezzo .grande{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--oro);line-height:1}
+.prezzo .grande small{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--grigio);margin-left:6px}
+.prezzo .nota{font-size:12px;color:var(--grigio);margin-top:6px;line-height:1.45}
+.conta{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.conta label{font-size:13px;color:var(--grigio)}
+.conta input{width:84px;background:#0A0C1A;border:1px solid rgba(245,240,230,.14);border-radius:12px;color:var(--avorio);font:17px 'DM Sans',sans-serif;padding:8px 10px;text-align:center}
+.conta .tot{margin-left:auto;font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--oro)}
+.conta .tot small{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grigio);margin-left:4px}
+.bottega{margin-top:12px;font-size:13px;line-height:1.5;color:rgba(245,240,230,.85);border-top:1px solid var(--riga);padding-top:10px}
+.bottega a{color:var(--oro)}
+textarea{width:100%;margin-top:10px;min-height:64px;background:#0A0C1A;border:1px solid rgba(245,240,230,.14);border-radius:12px;color:var(--avorio);font:13px 'DM Sans',sans-serif;padding:8px 10px;resize:vertical}
+.tasti{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.esito{margin:0 18px 18px;padding:12px 14px;border:1px solid var(--oro);border-radius:14px;font-size:14px;line-height:1.5}
+.altri{display:flex;flex-direction:column;gap:6px}
+.altri a{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:10px 12px;font-size:14px}
+.altri a small{color:var(--grigio);font-size:12px}
+.altri a .pr{color:var(--oro);white-space:nowrap}
+.carta-p{font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:rgba(245,240,230,.85)}
+.carta-p + .carta-p{margin-top:8px}
+.nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="fm-stanze" data-attiva="stampa"></div>
+  <div class="foto"><img src="casa/kit-volantino.jpg" alt=""></div>
+  <div class="testa">
+    <div class="fm-occ">STAMPA · E TI ARRIVA A CASA</div>
+    <h1>Carta stampata</h1>
+    <div class="sot">volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</div>
+  </div>
+  <div class="quad"><div class="capo"><span class="fm-occ">COME FUNZIONA</span></div>
+    <div class="tre">
+      <div class="box"><div class="eti">SCEGLIERE</div><p>Formato, carta, copie, e il prezzo che cambia. Le copie si scelgono fra quelle che si possono davvero fare.</p></div>
+      <div class="box"><div class="eti">IL FILE</div><p>Si carica il PDF, e si controlla prima di ordinare: risoluzione · margini · colori. Se non hai il file, l'impaginazione è un servizio di Edizione.</p></div>
+      <div class="box"><div class="eti">IL PREZZO</div><p>Il prezzo pubblico di Flyeralarm, IVA e trasporto a parte. Formati, carte, quantità e prezzi veri li dà il configuratore quando c'è la chiave.</p></div>
+    </div>
+  </div>
+  <div class="quad">
+    <div class="tasti"><a class="fm-tasto pieno" href="stampa-bozza.html?apri=sc-conf" data-s="configura carta-stampata">Scegli formato, carta e copie</a><a class="fm-tasto secondario" href="servizio-impaginazione.html">Prima l'impaginazione ›</a></div>
+  </div>
+  <div class="quad"><div class="capo"><span class="fm-occ">LA CARTA CHE SCEGLIAMO</span></div>
+    <p class="carta-p">Cerchiamo materiali naturali: volantini in carta riciclata o naturale, riciclabili al 100%. Manifesti su cartoncino con oltre il 90% di fibre di legno riciclate. Bicchieri, tovaglioli e confezioni per alimenti biodegradabili, che si smaltiscono nell&#x27;organico.</p>
+    <p class="carta-p">E dove si può, la stampa a impatto climatico zero: un piccolo sovrapprezzo che va in progetti di protezione del clima certificati.</p>
+  </div>
+  <div class="quad"><div class="capo"><span class="fm-occ">LE ALTRE FAMIGLIE</span><a href="stampa-bozza.html">la Stampa ›</a></div>
+    <div class="altri"><a href="stampa-libri-cataloghi.html"><span>Libri e cataloghi<br><small>libri, riviste, cataloghi, fascicoli</small></span><span class="pr">›</span></a><a href="stampa-agende-calendari.html"><span>Agende e calendari<br><small>agende, calendari, quaderni e taccuini</small></span><span class="pr">›</span></a><a href="stampa-esposizione-fiere.html"><span>Esposizione e fiere<br><small>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</small></span><span class="pr">›</span></a><a href="stampa-confezioni-imballaggi.html"><span>Confezioni e imballaggi<br><small>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</small></span><span class="pr">›</span></a><a href="stampa-gadget-regali.html"><span>Gadget e regali<br><small>penne, cordini, portabadge, borse, borracce</small></span><span class="pr">›</span></a><a href="stampa-abbigliamento.html"><span>Abbigliamento<br><small>magliette, felpe, tessuti personalizzati</small></span><span class="pr">›</span></a><a href="stampa-foto.html"><span>Foto<br><small>stampa foto su richiesta</small></span><span class="pr">›</span></a></div>
+  </div>
+  <div class="nota-bozza"><b>bozza</b> — la pagina della famiglia «Carta stampata» della Stampa (13 ott, 18:15: «compreso la pagina della stampa»), indicizzabile. Testi della Stampa, tali e quali. Prezzo = prezzo pubblico Flyeralarm (deciso il 3 ott); il configuratore vero arriva con la chiave. Nessun ordine parte da qui.</div>
+</div>
+
+
+<script src="comune/fm-riga.js?v=10131605"></script>
+<script src="comune/fm-statistiche.js?v=10122255" data-pagina="stampa-carta-stampata"></script>
+</body>
+</html>

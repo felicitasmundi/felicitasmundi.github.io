@@ -111,14 +111,15 @@ a{color:inherit;text-decoration:none}
 
   <div class="quad" id="famiglie"><div class="capo"><span class="fm-occ">LE FAMIGLIE</span></div>
     <div class="fam">
-      <a href="#" data-apri="sc-conf"><img src="casa/kit-volantino.jpg" alt=""><div class="t"><b>Carta stampata</b><small>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</small></div></a>
-      <a href="#" data-apri="sc-conf"><img src="casa/libro.jpg" alt=""><div class="t"><b>Libri e cataloghi</b><small>libri, riviste, cataloghi, fascicoli</small></div></a>
-      <a href="#" data-apri="sc-conf"><img src="casa/rivista.jpg" alt=""><div class="t"><b>Agende e calendari</b><small>agende, calendari, quaderni e taccuini</small></div></a>
-      <a href="#" data-apri="sc-conf"><img src="casa/kit-rollup.jpg" alt=""><div class="t"><b>Esposizione e fiere</b><small>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</small></div></a>
-      <a href="#" data-apri="sc-conf"><div class="vuoto">▢</div><div class="t"><b>Confezioni e imballaggi</b><small>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</small></div></a>
-      <a href="#" data-apri="sc-conf"><div class="vuoto">◇</div><div class="t"><b>Gadget e regali</b><small>penne, cordini, portabadge, borse, borracce</small></div></a>
-      <a href="#" data-apri="sc-conf"><img src="casa/kit-tshirt.jpg" alt=""><div class="t"><b>Abbigliamento</b><small>magliette, felpe, tessuti personalizzati</small></div></a>
-      <a href="#" data-apri="sc-conf"><div class="vuoto">✎</div><div class="t"><b>I servizi</b><small>grafica, impaginazione, correzione, consegna · stampa a impatto climatico zero, campionario carta</small></div></a>
+      <a href="stampa-carta-stampata.html"><img src="casa/kit-volantino.jpg" alt=""><div class="t"><b>Carta stampata</b><small>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</small></div></a>
+      <a href="stampa-libri-cataloghi.html"><img src="casa/libro.jpg" alt=""><div class="t"><b>Libri e cataloghi</b><small>libri, riviste, cataloghi, fascicoli</small></div></a>
+      <a href="stampa-agende-calendari.html"><img src="casa/rivista.jpg" alt=""><div class="t"><b>Agende e calendari</b><small>agende, calendari, quaderni e taccuini</small></div></a>
+      <a href="stampa-esposizione-fiere.html"><img src="casa/kit-rollup.jpg" alt=""><div class="t"><b>Esposizione e fiere</b><small>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</small></div></a>
+      <a href="stampa-confezioni-imballaggi.html"><div class="vuoto">▢</div><div class="t"><b>Confezioni e imballaggi</b><small>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</small></div></a>
+      <a href="stampa-gadget-regali.html"><div class="vuoto">◇</div><div class="t"><b>Gadget e regali</b><small>penne, cordini, portabadge, borse, borracce</small></div></a>
+      <a href="stampa-abbigliamento.html"><img src="casa/kit-tshirt.jpg" alt=""><div class="t"><b>Abbigliamento</b><small>magliette, felpe, tessuti personalizzati</small></div></a>
+      <a href="servizi-bozza.html"><div class="vuoto">✎</div><div class="t"><b>I servizi</b><small>editing, traduzione, impaginazione, locandina e grafica, libro e catalogo: in Edizione, a quantità</small></div></a>
+      <a href="stampa-foto.html"><div class="vuoto">◎</div><div class="t"><b>Foto</b><small>stampa foto su richiesta</small></div></a>
     </div>
   </div>
 
@@ -170,6 +171,8 @@ a{color:inherit;text-decoration:none}
   function $(i){return document.getElementById(i)}
   $('velo').onclick=function(){ $('velo').classList.remove('vivo'); document.querySelectorAll('.scheda').forEach(function(x){x.classList.remove('vivo')}); };
   document.querySelectorAll('[data-apri]').forEach(function(b){ b.onclick=function(e){ e.preventDefault(); $(b.getAttribute('data-apri')).classList.add('vivo'); $('velo').classList.add('vivo'); }; });
+  /* dalle pagine delle famiglie: ?apri=sc-conf apre subito il configuratore (13 ott) */
+  try{ var ap=new URLSearchParams(location.search).get('apri'); if(ap&&$(ap)){ $(ap).classList.add('vivo'); $('velo').classList.add('vivo'); } }catch(e){}
   document.querySelectorAll('.scheda .fm-chips .fm-chip').forEach(function(c){ c.onclick=function(){ c.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); c.classList.add('on'); }; });
   $('avanti').onclick=function(){ $('avanti').textContent='il file: [ carica il PDF ]'; };
 })();

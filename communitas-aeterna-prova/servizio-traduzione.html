@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Traduzione · FelicitasMundi</title>
+<meta name="description" content="Traduzione di un testo con l&#x27;AI, segnata come tale e riletta da chi parla la lingua: 2 € a cartella, minimo 10 €. Compresa nella Bottega.">
+<link rel="canonical" href="https://app.felicitasmundi.com/communitas-aeterna-prova/servizio-traduzione.html">
+<meta property="og:title" content="Traduzione · FelicitasMundi">
+<meta property="og:description" content="Traduzione di un testo con l&#x27;AI, segnata come tale e riletta da chi parla la lingua: 2 € a cartella, minimo 10 €. Compresa nella Bottega.">
+<meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna-prova/casa/nexus.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10131608">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.app{max-width:var(--fm-larghezza,430px);margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+@media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
+.foto{margin:0 18px 14px;border-radius:18px;overflow:hidden;aspect-ratio:16/10;background:var(--carta);display:grid;place-items:center;font-size:54px;color:var(--aria)}.foto img{width:100%;height:100%;object-fit:cover}
+.testa{padding:0 18px 14px}
+.testa .fm-occ{color:var(--aria)}
+.testa h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}
+.testa .sot{font-family:'Cormorant Garamond',serif;font-size:18px;color:rgba(245,240,230,.88);margin-top:8px;line-height:1.4}
+.quad{padding:0 18px;margin-bottom:22px}
+.quad .capo{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.quad .capo .fm-occ{color:var(--aria)}
+.tre{display:flex;flex-direction:column;gap:8px}
+.tre .box{background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:12px 14px}
+.tre .box .eti{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;color:var(--oro);margin-bottom:6px}
+.tre .box p{font-size:14px;line-height:1.5;color:rgba(245,240,230,.9)}
+.prezzo{background:var(--carta);border:1px solid var(--oro);border-radius:18px;padding:14px 16px}
+.prezzo .grande{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--oro);line-height:1}
+.prezzo .grande small{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--grigio);margin-left:6px}
+.prezzo .nota{font-size:12px;color:var(--grigio);margin-top:6px;line-height:1.45}
+.conta{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.conta label{font-size:13px;color:var(--grigio)}
+.conta input{width:84px;background:#0A0C1A;border:1px solid rgba(245,240,230,.14);border-radius:12px;color:var(--avorio);font:17px 'DM Sans',sans-serif;padding:8px 10px;text-align:center}
+.conta .tot{margin-left:auto;font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--oro)}
+.conta .tot small{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grigio);margin-left:4px}
+.bottega{margin-top:12px;font-size:13px;line-height:1.5;color:rgba(245,240,230,.85);border-top:1px solid var(--riga);padding-top:10px}
+.bottega a{color:var(--oro)}
+textarea{width:100%;margin-top:10px;min-height:64px;background:#0A0C1A;border:1px solid rgba(245,240,230,.14);border-radius:12px;color:var(--avorio);font:13px 'DM Sans',sans-serif;padding:8px 10px;resize:vertical}
+.tasti{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.esito{margin:0 18px 18px;padding:12px 14px;border:1px solid var(--oro);border-radius:14px;font-size:14px;line-height:1.5}
+.altri{display:flex;flex-direction:column;gap:6px}
+.altri a{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:10px 12px;font-size:14px}
+.altri a small{color:var(--grigio);font-size:12px}
+.altri a .pr{color:var(--oro);white-space:nowrap}
+.carta-p{font-family:'Cormorant Garamond',serif;font-size:16px;line-height:1.5;color:rgba(245,240,230,.85)}
+.carta-p + .carta-p{margin-top:8px}
+.nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="fm-stanze" data-attiva="edizione"></div>
+
+  <div class="testa">
+    <div class="fm-occ">EDIZIONE · I SERVIZI</div>
+    <h1>Traduzione</h1>
+    <div class="sot">Lo stesso testo, in un&#x27;altra lingua.</div>
+  </div>
+
+  <div class="quad">
+    <div class="tre">
+      <div class="box"><div class="eti">COSA DAI</div><p>Un articolo, la scheda di un prodotto, l&#x27;invito a un evento. In italiano.</p></div>
+      <div class="box"><div class="eti">COSA RICEVI</div><p>Il testo tradotto con l&#x27;AI e segnato come tale; la rilettura è karma yoga di chi parla quella lingua.</p></div>
+      <div class="box"><div class="eti">DOVE FINISCE</div><p>Nella stessa pagina, col tasto IT/EN in alto; nelle lingue dei villaggi quando ci sarà qualcuno che le parla.</p></div>
+    </div>
+  </div>
+
+  <div class="quad"><div class="capo"><span class="fm-occ">IL PREZZO · A QUANTITÀ</span></div>
+    <div class="prezzo">
+      <div class="grande">2 €<small>a cartella · minimo 10 € · IVA inclusa</small></div>
+      <div class="nota">una cartella è 1.800 battute, spazi compresi. Il lavoro lo fa l'AI con la memoria Felicitas; una persona lo guarda prima di consegnarlo.</div>
+      <div class="conta"><label for="q">quante cartelle</label><input id="q" type="number" min="1" step="1" value="10" inputmode="numeric"><div class="tot"><span id="tot"></span><small>in tutto</small></div></div>
+      <div class="bottega">Nella <b>Bottega</b> (26 € al mese) questo lavoro è compreso, senza conteggio. <a href="come-funziona-bozza.html">Come funziona ›</a></div>
+      <textarea id="nota" placeholder="di cosa si tratta, in due righe (facoltativo)"></textarea>
+      <div class="tasti"><button class="fm-tasto pieno" id="chiedi" data-s="chiedi traduzione">Chiedi questo lavoro</button></div>
+      <div class="nota" style="margin-top:8px">Quando si paga: <span class="fm-ph">[ alla richiesta · alla consegna ]</span>. La richiesta arriva a chi coordina, che ti scrive.</div>
+    </div>
+  </div>
+  <div class="esito" id="esito" hidden></div>
+
+  <div class="quad"><div class="capo"><span class="fm-occ">GLI ALTRI SERVIZI</span><a href="servizi-bozza.html">tutti ›</a></div>
+    <div class="altri"><a href="servizio-editing.html"><span>Editing<br><small>Un testo corretto, riordinato, con il tuo tono.</small></span><span class="pr">2 € a cartella</span></a><a href="servizio-impaginazione.html"><span>Impaginazione<br><small>Un documento pronto per la stampa.</small></span><span class="pr">3 € a pagina</span></a><a href="servizio-locandina-grafica.html"><span>Locandina · grafica<br><small>L&#x27;evento in un foglio da appendere. Un&#x27;idea che si vede.</small></span><span class="pr">15 € a pagina</span></a><a href="servizio-libro-catalogo.html"><span>Libro · catalogo<br><small>Le pagine impaginate, con la copertina.</small></span><span class="pr">2 € a pagina</span></a>
+      <a href="stampa-bozza.html"><span>Stampa<br><small>quello che fai, stampato e portato dove serve</small></span><span class="pr">prezzo Flyeralarm</span></a>
+    </div>
+  </div>
+
+  <div class="nota-bozza"><b>bozza</b> — pagina del servizio «Traduzione», in Edizione (Gab, 13 ott 18:08: «i servizi impaginazione ecc vanno su edizione»), indicizzabile: una pagina per servizio, aperta a chi non è entrato, da mettere nella sitemap quando esce dalla prova. Prezzo a quantità: 2 € a cartella, minimo 10 € (proposta del 13 ott 18:12, «ok su tutto» alle 18:15). «Chiedi questo lavoro» scrive una richiesta in <code>segnalazioni</code> (tipo lavoro): la cassa del lavoro singolo arriva dopo.</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var P=2, MIN=10;
+  var q=document.getElementById("q"), tot=document.getElementById("tot");
+  function eur(n){ return n.toLocaleString("it-IT",{minimumFractionDigits:2,maximumFractionDigits:2})+" €"; }
+  function conta(){ var n=Math.max(1,parseInt(q.value||"1",10)); var t=Math.max(MIN,n*P); tot.textContent=eur(t); return {n:n,t:t}; }
+  q.addEventListener("input", conta); conta();
+  var db=null; try{ db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}); }catch(e){}
+  function mostra(t,male){ var e=document.getElementById("esito"); e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=t; e.scrollIntoView({block:"center"}); }
+  document.getElementById("chiedi").addEventListener("click", function(){
+    var b=this; if(!db){ mostra("Il collegamento non si è caricato: ricarica la pagina.", true); return; }
+    db.auth.getSession().then(function(r){
+      var sess=r&&r.data&&r.data.session; if(!sess){ location.href="accesso.html"; return; }
+      var c=conta(); b.disabled=true; b.textContent="un momento…";
+      var rif="traduzione · "+c.n+" cartelle · "+eur(c.t);
+      return db.from("segnalazioni").insert({persona_id:sess.user.id, tipo:"lavoro", riferimento:rif, testo:(document.getElementById("nota").value||"").trim()||null, stato:"aperta"}).then(function(z){
+        b.disabled=false; b.textContent="Chiedi questo lavoro";
+        if(z&&z.error){ mostra("Non sono riuscito a mandare la richiesta: "+z.error.message, true); return; }
+        mostra("Richiesta arrivata: "+rif+". Chi coordina ti scrive.");
+      });
+    }).catch(function(e){ mostra("Qualcosa non va: "+(e&&e.message||e), true); });
+  });
+})();
+</script>
+<script src="comune/fm-riga.js?v=10131605"></script>
+<script src="comune/fm-statistiche.js?v=10122255" data-pagina="servizio-traduzione"></script>
+</body>
+</html>
