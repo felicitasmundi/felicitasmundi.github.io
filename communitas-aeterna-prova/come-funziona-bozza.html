@@ -173,7 +173,7 @@ a{color:inherit;text-decoration:none}
       <div class="piano" data-piano="villaggio">
         <span class="qui-s">SEI QUI</span><div class="nome">Villaggio</div><div class="per">Per chi vive il villaggio senza il patto.</div>
         <div class="pr">10 €<small>al mese, IVA inclusa</small></div>
-        <button class="fm-tasto piccolo secondario" data-s="scegli 10">Scegli</button>
+        <button class="fm-tasto piccolo secondario" data-s="scegli 10" data-cassa="villaggio">Scegli</button>
         <div class="tutto">Tutto del praticante, più:</div>
         <ul>
           <li>senza il patto: partecipi come vuoi</li>
@@ -187,7 +187,7 @@ a{color:inherit;text-decoration:none}
       <div class="piano oro" data-piano="bottega">
         <span class="qui-s">SEI QUI</span><div class="nome">Bottega</div><div class="per">Per chi crea, insegna, produce, e vuole fare con poche persone il lavoro di tanti.</div>
         <div class="pr">26 €<small>al mese, IVA inclusa</small></div>
-        <button class="fm-tasto piccolo" data-s="scegli 26">Scegli</button>
+        <button class="fm-tasto piccolo" data-s="scegli 26" data-cassa="bottega">Scegli</button>
         <div class="tutto">Tutto del Villaggio, più:</div>
         <ul>
           <li>la memoria che lavora con te, sempre</li>
@@ -266,7 +266,9 @@ a{color:inherit;text-decoration:none}
       <div class="legenda"><span style="--c:var(--terra)"><i></i>TERRA</span><span style="--c:var(--acqua)"><i></i>ACQUA</span><span style="--c:var(--fuoco)"><i></i>FUOCO</span><span style="--c:var(--aria)"><i></i>ARIA</span><span style="--c:var(--etere)"><i></i>ETERE</span><span style="--c:var(--nexus)"><i></i>NEXUS</span></div>
       <div class="leggo"><span class="oc">◉</span><p>Il cruscotto è di chi segue il praticantato: dentro ci sono le scelte prese e gli obiettivi dati, al ritmo e coi simboli del funzionamento della Coscienza. Chi ha la Bottega lo ha come memoria che lavora: l'AI legge queste righe prima di rispondere.</p></div>
     </div>
-    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Il praticantato Antaḥkaraṇa costa 20 € a settimana, a parte dai piani, e si apre da la mia orma: «Che cos'è il praticantato» e il percorso dei talenti.</p>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><button class="fm-tasto piccolo" data-s="scegli praticantato" data-cassa="praticantato">Entra nel praticantato · 20 € a settimana</button><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html?vista=mia&praticantato=1" data-s="che cos'è il praticantato">Che cos'è il praticantato</a></div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">A parte dai piani. Il percorso dei talenti si apre da la mia orma.</p>
+    <div id="esito" hidden style="margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--carta);border:1px solid var(--oro);font-size:13.5px;line-height:1.45"></div>
   </section>
 
   <!-- 4 · cosa c'è sotto -->
@@ -340,24 +342,52 @@ a{color:inherit;text-decoration:none}
 
   <div class="data" style="padding:0 18px">PREZZI E CONTI AL 13 OTTOBRE 2026 · QUANDO CAMBIANO, CAMBIA QUESTA PAGINA</div>
 
-  <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I nomi «Villaggio» e «Bottega» per i piani 10 e 26: scelti da Gab il 13 ott, 13:41. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). Il tasto «Scegli» non fa ancora niente: il pagamento arriva alla conferma del modello.</div>
+  <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I nomi «Villaggio» e «Bottega» per i piani 10 e 26: scelti da Gab il 13 ott, 13:41. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). «Scegli» e «Entra nel praticantato» aprono il pagamento con Stripe (funzione stripe-cassa) appena SQL 59 è lanciato e i prezzi sono collegati; il piano si accende col webhook.</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* Gab, 13 ottobre: «se uno vede ospite da ospite, è gia dentro, quindi dovrebbe essere collegato al database, e se è account ospite, esce "sei qua"».
-   Chi è dentro: si legge persone.grado; ospite → Ospite; karma_yoga e sopra → Praticante · karma yoga.
-   Villaggio e Bottega si accendono quando esisterà persone.piano (Stripe, dopo l'ok di Gab). Chi non è dentro vede «Entra». */
+   Chi è dentro: persone.grado e persone.piano (SQL 59). Villaggio/Bottega dal piano; praticantato da praticantato_fino_al;
+   altrimenti ospite → Ospite, karma_yoga e sopra → Praticante · karma yoga. Chi non è dentro vede «Entra».
+   «Scegli» → la funzione stripe-cassa apre il pagamento; «Entra nel praticantato» idem. Al ritorno ?pagato=… si dice grazie. */
 (function(){
-  try{
-    var db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}});
-    db.auth.getSession().then(function(r){
-      var sess=r&&r.data&&r.data.session; if(!sess) return;
+  var db;
+  try{ db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}); }catch(e){ console.log("come funziona", e); return; }
+  var sess=null;
+  function segna(piano){ document.querySelectorAll('.piano.qui').forEach(function(x){x.classList.remove('qui')}); var el=document.querySelector('.piano[data-piano="'+piano+'"]'); if(el){ el.classList.add("qui"); el.scrollIntoView({inline:"start",block:"nearest"}); } }
+  function chiSono(){
+    return db.auth.getSession().then(function(r){
+      sess=r&&r.data&&r.data.session; if(!sess) return;
       return db.from("persone").select("grado").eq("id",sess.user.id).maybeSingle().then(function(q){
-        var p=(q&&q.data)||{}; var piano=p.piano||((p.grado&&p.grado!=="ospite")?"karma_yoga":"ospite");
-        var el=document.querySelector('.piano[data-piano="'+piano+'"]'); if(el){ el.classList.add("qui"); el.scrollIntoView({inline:"start",block:"nearest"}); }
+        var p=(q&&q.data)||{}; var base=(p.grado&&p.grado!=="ospite")?"karma_yoga":"ospite";
+        /* il piano: colonna che arriva con SQL 59; se manca, si resta sul grado */
+        return db.from("persone").select("piano,piano_fino_al,praticantato_fino_al").eq("id",sess.user.id).maybeSingle().then(function(z){
+          var d=(z&&z.data)||{}; var ora=new Date();
+          var vivo=d.piano&&(!d.piano_fino_al||new Date(d.piano_fino_al)>ora);
+          segna(vivo?d.piano:base);
+          var pr=document.querySelector('[data-cassa="praticantato"]');
+          if(pr&&d.praticantato_fino_al&&new Date(d.praticantato_fino_al)>ora){ pr.textContent="Sei nel praticantato · fino al "+new Date(d.praticantato_fino_al).toLocaleDateString("it-IT"); pr.disabled=true; pr.classList.add("secondario"); }
+        }, function(){ segna(base); });
       });
     }).catch(function(e){ console.log("come funziona · sessione", e); });
-  }catch(e){ console.log("come funziona", e); }
+  }
+  chiSono();
+  document.querySelectorAll("[data-cassa]").forEach(function(b){
+    b.addEventListener("click", function(){
+      if(!sess){ location.href="accesso.html"; return; }
+      var piano=b.getAttribute("data-cassa"); b.disabled=true; var t=b.textContent; b.textContent="un momento…";
+      db.functions.invoke("stripe-cassa",{body:{azione:"cassa",piano:piano,torna:location.origin+location.pathname}}).then(function(r){
+        var d=(r&&r.data)||{}; if(d.url){ location.href=d.url; return; }
+        b.disabled=false; b.textContent=t; mostra((d.errore||"non riesco ad aprire il pagamento")+". Scrivi a chi coordina.", true);
+      }, function(e){ b.disabled=false; b.textContent=t; mostra("non riesco ad aprire il pagamento: "+(e&&e.message||e), true); });
+    });
+  });
+  function mostra(testo, male){ var e=document.getElementById("esito"); if(!e) return; e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=testo; e.scrollIntoView({block:"center"}); }
+  try{
+    var q=new URLSearchParams(location.search);
+    if(q.get("pagato")){ var n={villaggio:"il Villaggio",bottega:"la Bottega",praticantato:"il praticantato Antaḥkaraṇa"}[q.get("pagato")]||q.get("pagato"); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto. Se non lo vedi, ricarica la pagina o segnala un problema dall'account."); history.replaceState(null,"",location.pathname); setTimeout(chiSono, 4000); }
+    if(q.get("annullato")){ mostra("Pagamento annullato: niente è stato addebitato."); history.replaceState(null,"",location.pathname); }
+  }catch(e){}
 })();
 </script>
 <script src="comune/fm-riga.js?v=10131230"></script>

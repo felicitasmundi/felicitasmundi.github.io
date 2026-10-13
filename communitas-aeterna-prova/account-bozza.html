@@ -89,7 +89,15 @@ a{color:inherit;text-decoration:none}
   </div>
 
   <div class="quad"><div class="capo"><span class="fm-occ">IL MIO PACCHETTO</span><a href="come-funziona-bozza.html">come funziona ›</a></div>
-    <a class="fm-carta" href="come-funziona-bozza.html" data-s="account il mio pacchetto"><div class="im" style="color:var(--oro)"><svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3"/></svg></div><div class="t"><b>Ospite</b><small>Tre modi di stare in Felicitas: ospite, karma yoga, 10 o 26 € al mese. Cosa c'è sotto e dove vanno i soldi.</small></div><span class="fr">›</span></a>
+    <a class="fm-carta" href="come-funziona-bozza.html" data-s="account il mio pacchetto"><div class="im" style="color:var(--oro)"><svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3"/></svg></div><div class="t"><b id="pacch-nome">Ospite</b><small id="pacch-sotto">I piani: Ospite, Praticante · karma yoga, Villaggio 10 €, Bottega 26 €. Come sono realizzati i servizi e dove vanno i soldi.</small></div><span class="fr">›</span></a>
+    <div class="tasti" style="flex-wrap:wrap"><button class="fm-tasto piccolo secondario" id="portale" data-s="account portale stripe">Fatture, carta, disdetta</button><button class="fm-tasto piccolo secondario" id="segnala" data-s="account segnala problema">Segnala un problema tecnico</button></div>
+    <div id="segnala-foglio" hidden style="margin-top:10px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px 14px">
+      <div class="fm-occ" style="color:var(--manca)">PROBLEMA TECNICO</div>
+      <p style="font-size:13px;color:var(--grigio);line-height:1.45;margin-top:6px">Un pagamento che non si vede, una pagina che non si apre, una cosa che non funziona. Arriva a chi tiene Felicitas nel riassunto della giornata.</p>
+      <textarea id="segnala-testo" rows="3" placeholder="cosa è successo, e dove" style="width:100%;margin-top:10px;background:var(--notte);color:var(--avorio);border:1px solid var(--riga);border-radius:10px;padding:10px;font:inherit;font-size:14px"></textarea>
+      <div class="tasti"><button class="fm-tasto piccolo" id="segnala-manda">Manda</button><button class="fm-tasto piccolo secondario" id="segnala-chiudi">Annulla</button></div>
+      <div id="segnala-esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px"></div>
+    </div>
   </div>
 
   <div class="quad" style="--c:var(--terra)"><div class="capo"><span class="fm-occ">IL MIO VILLAGGIO</span><a href="gruppo-bozza.html">apri ›</a></div>
@@ -146,6 +154,50 @@ a{color:inherit;text-decoration:none}
   $('proponiti').onclick=function(){ $('foglio').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('manda').onclick=function(){ $('manda').textContent='Mandato · la risposta arriva in chat'; $('manda').disabled=true; setTimeout(function(){ $('foglio').classList.remove('vivo'); $('velo').classList.remove('vivo'); $('vic-no').style.display='none'; $('vic-si').style.display='flex'; },900); };
   $('modifica').onclick=function(e){ e.preventDefault(); };
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Il mio pacchetto: legge persone.piano (SQL 59), apre il portale di Stripe (fatture, carta, disdetta: funzione stripe-cassa, azione portale),
+   e il tasto per i problemi tecnici scrive in segnalazioni (tipo 'tecnico'): Gab, 13 ottobre, «ci vuole un tasto per indicare eventuali problemi tecnici». */
+(function(){
+  var db; try{ db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}); }catch(e){ return; }
+  var sess=null, NOMI={villaggio:"Villaggio",bottega:"Bottega"};
+  db.auth.getSession().then(function(r){
+    sess=r&&r.data&&r.data.session; if(!sess) return;
+    db.from("persone").select("grado").eq("id",sess.user.id).maybeSingle().then(function(q){
+      var g=(q&&q.data&&q.data.grado)||"ospite"; var nome=document.getElementById("pacch-nome");
+      if(nome) nome.textContent=(g==="ospite")?"Ospite":"Praticante · karma yoga";
+      db.from("persone").select("piano,piano_fino_al,praticantato_fino_al").eq("id",sess.user.id).maybeSingle().then(function(z){
+        var d=(z&&z.data)||{}; var ora=new Date(); var parti=[];
+        if(d.piano&&(!d.piano_fino_al||new Date(d.piano_fino_al)>ora)){ if(nome) nome.textContent=NOMI[d.piano]||d.piano; parti.push("fino al "+new Date(d.piano_fino_al).toLocaleDateString("it-IT")); }
+        if(d.praticantato_fino_al&&new Date(d.praticantato_fino_al)>ora) parti.push("praticantato fino al "+new Date(d.praticantato_fino_al).toLocaleDateString("it-IT"));
+        var sotto=document.getElementById("pacch-sotto"); if(sotto&&parti.length) sotto.textContent=parti.join(" · ");
+      }, function(){});
+    });
+  });
+  var portale=document.getElementById("portale");
+  if(portale) portale.addEventListener("click", function(){
+    if(!sess){ location.href="accesso.html"; return; }
+    portale.disabled=true; var t=portale.textContent; portale.textContent="un momento…";
+    db.functions.invoke("stripe-cassa",{body:{azione:"portale",torna:location.origin+location.pathname}}).then(function(r){
+      var d=(r&&r.data)||{}; if(d.url){ location.href=d.url; return; } portale.disabled=false; portale.textContent=t; alert(d.errore||"non riesco ad aprire il portale");
+    }, function(){ portale.disabled=false; portale.textContent=t; });
+  });
+  var seg=document.getElementById("segnala"), foglio=document.getElementById("segnala-foglio");
+  if(seg) seg.addEventListener("click", function(){ if(!sess){ location.href="accesso.html"; return; } foglio.hidden=false; document.getElementById("segnala-testo").focus(); });
+  var chiudi=document.getElementById("segnala-chiudi"); if(chiudi) chiudi.addEventListener("click", function(){ foglio.hidden=true; });
+  var manda=document.getElementById("segnala-manda");
+  if(manda) manda.addEventListener("click", function(){
+    var testo=(document.getElementById("segnala-testo").value||"").trim(); var esito=document.getElementById("segnala-esito");
+    if(testo.length<5){ esito.textContent="scrivi cosa è successo"; return; }
+    manda.disabled=true;
+    db.from("segnalazioni").insert({persona_id:sess.user.id,tipo:"tecnico",testo:testo,riferimento:"account · "+new Date().toISOString().slice(0,10),stato:"aperta"}).then(function(r){
+      manda.disabled=false;
+      if(r.error){ esito.textContent="non sono riuscito a mandarla: "+r.error.message; return; }
+      esito.textContent="Mandata. Arriva nel riassunto della giornata."; document.getElementById("segnala-testo").value="";
+    });
+  });
 })();
 </script>
 <script src="comune/fm-riga.js?v=10131230"></script>
