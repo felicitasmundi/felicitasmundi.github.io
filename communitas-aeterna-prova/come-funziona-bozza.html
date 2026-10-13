@@ -118,11 +118,11 @@ a{color:inherit;text-decoration:none}
   .testa,.parte,.nota-bozza,.data{max-width:720px;margin-left:auto;margin-right:auto}
   .parte.larga{max-width:1084px}
   .parte.larga .capo,.parte.larga > p{max-width:720px;margin-left:auto;margin-right:auto}
-  .prezzi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible;margin:0;padding:4px 0 8px}
+  .prezzi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;margin:0;padding:4px 0 8px}
   .piano{flex:none}
   .scorri{display:none}
 }
-@media (min-width:1500px){ html body .app{max-width:calc(96vw / 1.22)} .prezzi{grid-template-columns:repeat(5,minmax(0,1fr))} .parte.larga{max-width:none;margin-left:0;margin-right:0} }
+@media (min-width:1500px){ html body .app{max-width:calc(96vw / 1.22)} .prezzi{grid-template-columns:repeat(4,minmax(0,1fr))} .parte.larga{max-width:none;margin-left:0;margin-right:0} }
 .piano.qui{border-color:var(--oro)}
 .piano .qui-s{display:none;align-self:flex-start;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.16em;color:var(--inchiostro);background:var(--oro);border-radius:980px;padding:4px 10px;margin-bottom:8px}
 .piano.qui .qui-s{display:inline-block}
@@ -205,7 +205,7 @@ a{color:inherit;text-decoration:none}
           <li>acquistare lezioni</li>
           <li>raccontare e testimoniare: un'esperienza, un corso, un prodotto, il praticantato, le cose della propria giornata</li>
           <li>condividere quello che racconta</li>
-          <li class="no">i lavori con l'AI: a lavoro singolo</li>
+          <li class="no">i lavori con l'AI</li>
         </ul>
       </div>
       <div class="piano" data-piano="villaggio">
@@ -219,7 +219,7 @@ a{color:inherit;text-decoration:none}
           <li>mettere in vendita i propri prodotti, col vaglio</li>
           <li>mettere il proprio calendario, se ha eventi o laboratori</li>
           <li>preparare il libro, stamparlo e distribuirlo</li>
-          <li class="no">i lavori con l'AI: a lavoro singolo</li>
+          <li class="no">i lavori con l'AI</li>
         </ul>
       </div>
       <div class="piano oro" data-piano="bottega">
@@ -240,21 +240,6 @@ a{color:inherit;text-decoration:none}
           <li>il pre-mortem su ogni obiettivo</li>
         </ul>
         <div class="conta">Tetto di sicurezza: <span class="fm-ph">[ 60 ]</span> lavori con file e <span class="fm-ph">[ 10 ]</span> ore di trascrizione al mese.</div>
-      </div>
-      <div class="piano">
-        <div class="nome">Un lavoro</div>
-        <div class="pr ph"><span class="fm-ph">[ € ]</span></div>
-        <button class="fm-tasto piccolo secondario" data-s="scegli un lavoro">Dal tasto del lavoro</button>
-        <div class="tutto">La possibilità di acquistare il singolo lavoro:</div>
-        <ul>
-          <li>una trascrizione</li>
-          <li>un'impaginazione</li>
-          <li>un editing</li>
-          <li>una traduzione</li>
-          <li>una conversione, un pdf da un audio</li>
-          <li>un grafico, un diagramma di flusso, una mappa mentale</li>
-          <li>una locandina, un libro, un catalogo impaginati</li>
-        </ul>
       </div>
     </div>
     <div class="scorri">SCORRI DI LATO ›</div>
