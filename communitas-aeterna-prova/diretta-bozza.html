@@ -183,7 +183,7 @@ a{color:inherit;text-decoration:none}
   <button id="b-file" disabled><i>⎘</i>un file</button>
 </div></div>
 
-<script src="comune/fm-riga.js?v=10132055"></script>
+<script src="comune/fm-riga.js?v=10132105"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
@@ -361,7 +361,8 @@ a{color:inherit;text-decoration:none}
 
   document.querySelectorAll('.lingue button').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.lingue button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo', p.id==='p-'+b.getAttribute('data-p')); }); }; });
   window.addEventListener('pagehide',function(){ lasciando=true; if(stanza) stanza.disconnect(); });
-  /* tornando dalle altre pagine col segno acceso: rientro da solo */
+  /* tornando dalle altre pagine col segno acceso: rientro da solo — anche quando il navigatore ridà la pagina dalla sua cache (pageshow) */
+  window.addEventListener('pageshow',function(e){ if(!e.persisted) return; stanza=null; fuori(''); if(segnoVivo()) entra(); });
   if(segnoVivo()) entra();
 })();
 </script>
