@@ -193,6 +193,20 @@ a{color:inherit;text-decoration:none}
 .banner-prat .t{padding:12px 14px 14px}
 .banner-prat .t b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:20px;line-height:1.15}
 .banner-prat .t small{display:block;font-size:12.5px;color:var(--grigio);margin-top:6px;line-height:1.45}
+/* i miei ordini di stampa */
+.ordini .fm-carta{align-items:flex-start;flex-wrap:wrap}
+.ordini .fm-carta .im{font-size:22px;color:var(--oro)}
+.ordini .fm-carta .t small{white-space:normal}
+.ordini .fm-carta .t small b{font-weight:500;color:var(--avorio)}
+.ordini .fm-carta .t small .no{color:var(--manca)}
+.ordini .fm-carta .t small .si{color:var(--fatto)}
+.ordini .fm-carta .t .motivi{margin:6px 0 0 0;padding-left:14px;font-size:12px;color:var(--grigio);line-height:1.4}
+.ordini .fm-carta .t .motivi li{margin:2px 0}
+.ordini .fm-carta .t{flex:1 1 calc(100% - 66px)}
+.ordini .fm-carta .ric{flex:none;margin:2px 0 0 66px}
+.ordini .fm-carta .esito{width:100%;padding-left:66px;font-size:12.5px;color:var(--grigio);line-height:1.45;margin-top:2px}
+.ordini .fm-carta .esito:empty{display:none}
+.ordini .fm-carta input[type=file]{display:none}
 .testa-b{padding:6px 18px 10px}.testa-b .fm-occ{color:var(--terra)}.testa-b h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:30px;line-height:1.05;margin-top:6px}.testa-b .sot{font-size:13.5px;color:var(--grigio);margin-top:6px;line-height:1.5}
 .piede button i svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round}
 </style>
@@ -296,6 +310,13 @@ a{color:inherit;text-decoration:none}
     <div class="tasti-g">
       <button>📅<b>calendario</b></button><button>€<b>costi</b></button><button>☏<b>rubrica</b></button><button>✦<b>talenti</b></button><button>▦<b>squadre</b></button><button>⌂<b>vicinato</b></button>
     </div>
+    <!-- i miei ordini di stampa (13 ott 22:46: gli ordini a Flyeralarm partono dal server; qui lo stato in parole e «Ricarica il file» se respinto).
+         Si vede solo se ce ne sono: lo riempie lo script in fondo, dalla funzione stampa-ordine (azioni miei · stato · ricarica). -->
+    <section class="quad ordini" id="ordini-stampa" hidden style="--c:var(--oro)">
+      <div class="capo"><span class="fm-occ">I MIEI ORDINI DI STAMPA</span><a href="stampa-bozza.html">la Stampa ›</a></div>
+      <div class="fm-carte" id="ordini-lista"></div>
+      <div class="fm-nota" style="margin-top:8px">Il file lo verifica Flyeralarm. Se lo respinge, correggilo e ricaricalo da qui: l'ordine va avanti col file nuovo.</div>
+    </section>
     <div class="quad" style="--c:var(--oro)"><div class="capo"><span class="fm-occ">LE MIE ORME</span><a href="#">tutte ›</a></div></div>
     <div class="mie">
       <a class="fm-tessera" id="mia-foto" href="orma-bozza.html" style="display:none"><img class="im" src="casa-viva-luogo.jpg" alt="" style="object-position:38% 50%"><span class="fm-tag oro">foto</span><div class="t"><b>Cas'ale · Baratili</b><small>oggi · <span id="mia-foto-vis">tutti</span></small></div></a>
@@ -489,6 +510,80 @@ a{color:inherit;text-decoration:none}
       });
     });
   }).catch(function(){ box.innerHTML=''; });
+})();
+</script>
+<script src="comune/fm-cassa.js?v=10132350"></script>
+<script>
+/* i miei ordini di stampa (13 ott 22:46: gli ordini a Flyeralarm partono dal server). La funzione stampa-ordine: «miei» le mie righe,
+   «stato» rilegge da Flyeralarm le righe aperte, «ricarica» manda un file nuovo (nel deposito stampa/<uid>/) su una riga respinta o senza file.
+   Il riquadro si vede solo se c'è la sessione e ci sono ordini. Sessione e client da fm-cassa.js. */
+(function(){
+  var sez=document.getElementById('ordini-stampa'), lista=document.getElementById('ordini-lista');
+  if(!sez||!lista||!window.FMCassa) return;
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(k){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[k];}); }
+  function data(m){ try{ return new Date(m).toLocaleDateString('it-IT',{day:'numeric',month:'long'}); }catch(e){ return ''; } }
+  var PAROLE={pagato:'pagato',confermato:'pagato',ordinato:'ordinato',in_produzione:'in produzione',file_respinto:'ordinato',spedito:'spedito',annullato:'annullato',errore:'c\'è un problema: lo guarda chi coordina'};
+  function fileParole(o){
+    if(!o.file_percorso) return '<span class="no">manca il file</span>';
+    if(o.controllo_esito==='respinto'||o.stato==='file_respinto') return '<span class="no">file respinto</span>';
+    if(o.controllo_esito==='accettato') return '<span class="si">file accettato</span>';
+    if(o.controllo_esito==='in_verifica') return 'file in verifica';
+    return 'file caricato';
+  }
+  function finale(o){ return ['in_produzione','spedito','annullato'].indexOf(o.stato)>=0; }
+  function puoRicaricare(o){ return !finale(o) && o.stato!=='errore' && (!o.file_percorso || o.controllo_esito==='respinto' || o.stato==='file_respinto'); }
+  function chiama(corpo){ return FMCassa.client().functions.invoke('stampa-ordine',{body:corpo}).then(function(r){ if(r.error) throw r.error; var d=r.data||{}; if(d.errore) throw new Error(d.errore); return d; }); }
+  function disegna(o, el){
+    el.innerHTML='<div class="im">⎙</div><div class="t"><b></b><small></small></div>';
+    el.querySelector('b').textContent=o.prodotto_nome||'stampa';
+    var sm=el.querySelector('small');
+    sm.innerHTML=esc(o.quantita)+(Number(o.quantita)===1?' copia':' copie')+' · '+esc(data(o.creato_il))+' · <b>'+esc(PAROLE[o.stato]||o.stato)+'</b> · '+fileParole(o)+(o.demo?' · prova':'');
+    var t=el.querySelector('.t');
+    if((o.controllo_esito==='respinto'||o.stato==='file_respinto')&&o.controllo_motivi&&o.controllo_motivi.length){
+      var ul=document.createElement('ul'); ul.className='motivi';
+      o.controllo_motivi.forEach(function(m){ var li=document.createElement('li'); li.textContent=String(m); ul.appendChild(li); });
+      t.appendChild(ul);
+    }
+    if(o.tracking){
+      var tr=document.createElement('small'); tr.style.marginTop='6px';
+      String(o.tracking).split(' · ').forEach(function(p,i){
+        var u=/https?:\/\/\S+/.exec(p); var a=document.createElement(u?'a':'span'); if(u){ a.href=u[0]; a.target='_blank'; a.rel='noopener'; a.style.color='var(--oro)'; }
+        a.textContent=(i?' · ':'')+'segui il pacco'+(p.replace(/https?:\/\/\S+/,'').trim()?' ('+p.replace(/https?:\/\/\S+/,'').trim()+')':''); tr.appendChild(a);
+      });
+      t.appendChild(tr);
+    }
+    if(puoRicaricare(o)){
+      var b=document.createElement('button'); b.type='button'; b.className='fm-tasto piccolo ric'; b.textContent=o.file_percorso?'Ricarica il file':'Carica il file';
+      var inp=document.createElement('input'); inp.type='file'; inp.accept='application/pdf,.pdf,application/zip,.zip';
+      var es=document.createElement('div'); es.className='esito';
+      b.onclick=function(){ inp.click(); };
+      inp.onchange=function(){
+        var fl=inp.files&&inp.files[0]; if(!fl) return;
+        b.disabled=true; es.textContent='carico '+fl.name+'…';
+        FMCassa.sessione().then(function(sess){
+          if(!sess){ location.href='accesso.html'; return; }
+          var nome=sess.user.id+'/ricarica-'+Date.now()+'-'+fl.name.replace(/[^\w.\-]+/g,'_');
+          return FMCassa.client().storage.from('stampa').upload(nome,fl,{contentType:fl.type||'application/pdf',upsert:false}).then(function(r){
+            if(r.error) throw new Error(r.error.message);
+            es.textContent='Flyeralarm sta verificando il file…';
+            return chiama({azione:'ricarica',ordine:o.id,file:'stampa/'+nome});
+          }).then(function(d){ if(d&&d.ordine) disegna(d.ordine,el); });
+        }).catch(function(e){ b.disabled=false; es.textContent='non sono riuscito: '+(e&&e.message?e.message:'riprova'); });
+      };
+      el.appendChild(b); el.appendChild(inp); el.appendChild(es);
+    }
+  }
+  FMCassa.sessione().then(function(sess){
+    if(!sess) return;
+    return chiama({azione:'miei'}).then(function(d){
+      var ord=d.ordini||[]; if(!ord.length) return;
+      sez.hidden=false; lista.innerHTML='';
+      var aperti=[];
+      ord.forEach(function(o){ var el=document.createElement('div'); el.className='fm-carta'; el.id='ord-'+o.id; disegna(o,el); lista.appendChild(el); if(!finale(o)&&(o.flyeralarm_ordine_id||o.controllo_esito==='in_verifica')) aperti.push(o); });
+      /* le righe aperte si rileggono da Flyeralarm, una per volta, al massimo sei */
+      aperti.slice(0,6).reduce(function(p,o){ return p.then(function(){ return chiama({azione:'stato',ordine:o.id}).then(function(d2){ var n=(d2.ordini||[])[0]; var el=document.getElementById('ord-'+o.id); if(n&&el) disegna(n,el); }).catch(function(){}); }); },Promise.resolve());
+    });
+  }).catch(function(){});
 })();
 </script>
 <script>try{ document.getElementById("cubo").innerHTML = window.FM_CUBO; }catch(e){}</script>
