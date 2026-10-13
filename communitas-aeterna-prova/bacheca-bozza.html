@@ -208,25 +208,15 @@ a{color:inherit;text-decoration:none}
 
     <!-- 1 · radio -->
     <section class="quad" style="--c:var(--aria)">
-      <div class="capo"><span class="fm-occ">LA RADIO</span><a href="#">tutte le puntate ›</a></div>
-      <!-- stasera, 13 ottobre ore 21 (Gab, 20:23) -->
-      <div class="radio-testo" style="margin-bottom:12px">
-        <span class="vivo"><i></i>STASERA · ORE 21 · LA DIRETTA DEL VILLAGGIO</span>
-        <h2>Felicitas Festival · incontro con Surra</h2>
-        <div class="sotto"><span class="fm-tag" style="margin-right:6px">diretta</span>con Marco e Gabriele</div>
-        <div class="tasti"><a class="fm-tasto piccolo" href="diretta-bozza.html?puntata=surra">Entra nella diretta</a></div>
-      </div>
+      <div class="capo"><span class="fm-occ">LA RADIO</span><a href="#puntate">le puntate ›</a></div>
+      <!-- 13 ott 23:18, Gab: «la diretta è conclusa, dopo diventa puntata» — le puntate registrate, dal database (orme di tipo diretta del villaggio) -->
+      <div id="puntate" class="fm-carte" style="margin-bottom:12px"></div>
       <div class="radio-foto"><img src="casa/cerchio-fuoco.jpg" alt=""></div>
       <div class="radio-testo">
         <span class="vivo"><i></i>GIOVEDÌ 16 · ORE 19 · LA DIRETTA DEL VILLAGGIO</span>
         <h2>Mutuo credito cooperativo</h2>
         <div class="sotto"><span class="fm-tag" style="margin-right:6px">diretta</span>con Guido Grossi e Vittorino Crivello · a cura di Gabriele Dettori e Marco Caddeo</div>
         <div class="tasti"><a class="fm-tasto piccolo" href="diretta-bozza.html?puntata=mutuo-credito">Entra nella diretta</a><span class="chiusa">Diretta per i karma yoger o per chi prenota.</span></div>
-      </div>
-      <div class="fm-carte" style="margin-top:10px">
-        <div class="fm-carta"><div class="im" style="color:var(--aria)">◉</div><div class="t"><b>Puntata sul Discernimento</b><small>Strumenti per fare ordine · la puntata</small></div><button class="fm-tasto piccolo secondario">Ascolta</button></div>
-        <div class="fm-carta"><div class="im" style="color:var(--aria)">▶</div><div class="t"><b>Intervista Di Bella</b><small>1:51:14 · dall'archivio audio di felicitasmundi.com</small></div><button class="fm-tasto piccolo secondario">Ascolta</button></div>
-        <div class="fm-carta"><div class="im" style="color:var(--aria)">▶</div><div class="t"><b>Io presento Oristano</b><small>20:28 · dall'archivio audio</small></div><button class="fm-tasto piccolo secondario">Ascolta</button></div>
       </div>
     </section>
 
@@ -473,6 +463,34 @@ a{color:inherit;text-decoration:none}
 })();
 </script>
 <script src="comune/fm-riga.js?v=10132105"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* le puntate: le dirette registrate del villaggio (orme di tipo «diretta», file audio nel deposito «dirette»). Le ascolta chi è entrato. */
+(function(){
+  var box=document.getElementById('puntate'); if(!box||typeof supabase==='undefined') return;
+  var db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}});
+  var VILLAGGIO='5839d11d-9901-49bb-9b2f-f94236bbe2a1';
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(k){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[k];}); }
+  function data(m){ try{ return new Date(m).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}); }catch(e){ return ''; } }
+  db.auth.getSession().then(function(r){
+    if(!(r.data&&r.data.session)){ box.innerHTML='<div class="fm-carta"><div class="im" style="color:var(--aria)">◉</div><div class="t"><b>Le puntate</b><small>le dirette registrate le ascolta chi è entrato</small></div><a class="fm-tasto piccolo secondario" href="accesso.html">Entra</a></div>'; return; }
+    return db.from('orme').select('id,titolo,contenuto,momento,orma_file(indirizzo,dimensione,tipo)').eq('tipo','diretta').eq('orma_madre_id',VILLAGGIO).order('momento',{ascending:false}).limit(6).then(function(q){
+      if(q.error||!q.data||!q.data.length){ box.innerHTML=''; return; }
+      box.innerHTML='';
+      q.data.forEach(function(o){
+        var f=(o.orma_file||[]).filter(function(x){ return x.tipo==='audio'; })[0];
+        var d=document.createElement('div'); d.className='fm-carta';
+        d.innerHTML='<div class="im" style="color:var(--aria)">◉</div><div class="t" style="flex:1;min-width:0"><b></b><small></small><div class="suono" style="margin-top:6px"></div></div>'+(f?'<button class="fm-tasto piccolo secondario">Ascolta</button>':'');
+        d.querySelector('b').textContent=o.titolo; d.querySelector('small').textContent='puntata · '+data(o.momento)+(f&&f.dimensione?' · '+Math.round(f.dimensione/1048576)+' MB':'');
+        var b=d.querySelector('button'); if(b&&f){ b.onclick=function(){ b.disabled=true; b.textContent='…';
+          db.storage.from('dirette').createSignedUrl(f.indirizzo.replace(/^dirette\//,''),3600).then(function(u){ if(!(u.data&&u.data.signedUrl)){ b.textContent='non si apre'; return; }
+            var a=document.createElement('audio'); a.controls=true; a.autoplay=true; a.style.width='100%'; a.src=u.data.signedUrl; d.querySelector('.suono').appendChild(a); b.remove(); }); }; }
+        box.appendChild(d);
+      });
+    });
+  }).catch(function(){ box.innerHTML=''; });
+})();
+</script>
 <script>try{ document.getElementById("cubo").innerHTML = window.FM_CUBO; }catch(e){}</script>
 </body>
 </html>
