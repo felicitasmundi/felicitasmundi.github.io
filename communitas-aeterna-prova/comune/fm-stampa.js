@@ -79,6 +79,9 @@
       "#fm-stampa .fms-card button{background:#0A0C1A;border:1px solid rgba(245,240,230,.14);border-radius:12px;padding:10px 8px;color:inherit;font:13px 'DM Sans',system-ui,sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}" +
       "#fm-stampa .fms-card button.on{border-color:var(--oro,#D4AF6A);box-shadow:0 0 0 1px rgba(212,175,106,.35)}" +
       "#fm-stampa .fms-card button i{display:block;width:34px;height:34px;border:1.5px solid var(--oro,#D4AF6A);border-radius:4px}" +
+      "#fm-stampa .fms-card button small{font-size:10.5px;color:var(--grigio,#9A978F);line-height:1.25}" +
+      "#fm-stampa .fms-sped{display:flex;gap:6px;margin-bottom:10px}#fm-stampa .fms-sped button{flex:1;font:13px 'DM Sans',system-ui,sans-serif;border:1px solid var(--riga,rgba(245,240,230,.14));border-radius:12px;padding:8px 6px;color:rgba(245,240,230,.9);background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center}#fm-stampa .fms-sped button small{font-size:11px;color:var(--grigio,#9A978F)}#fm-stampa .fms-sped button.on{border-color:var(--oro,#D4AF6A);background:rgba(212,175,106,.12)}" +
+      "#fm-stampa .fms-avanti{margin-top:12px;display:flex;width:100%;justify-content:center;font:600 14px 'DM Sans',system-ui,sans-serif;padding:11px 16px;border-radius:980px;background:none;color:var(--oro,#D4AF6A);border:1px solid var(--oro,#D4AF6A);cursor:pointer}" +
       "#fm-stampa .fms-card button i.q{width:34px;height:34px}#fm-stampa .fms-card button i.r{width:40px;height:28px}#fm-stampa .fms-card button i.o{border-radius:50%}#fm-stampa .fms-card button i.d{width:30px;height:40px}#fm-stampa .fms-card button i.s{border-style:dashed}" +
       "#fm-stampa table.fms-prezzi{width:100%;border-collapse:collapse;font-size:13.5px}#fm-stampa table.fms-prezzi th{font-family:'Cinzel',serif;font-weight:500;font-size:10px;letter-spacing:.12em;color:var(--grigio,#9A978F);text-align:right;padding:4px 6px}#fm-stampa table.fms-prezzi th:first-child{text-align:left}" +
       "#fm-stampa table.fms-prezzi td{padding:8px 6px;border-top:1px solid rgba(245,240,230,.08);text-align:right;cursor:pointer}#fm-stampa table.fms-prezzi td:first-child{text-align:left;font-weight:600}" +
@@ -142,6 +145,17 @@
     }).catch(function () { passi.innerHTML = '<div class="fms-attesa">Flyeralarm non risponde: riprova fra un momento</div>'; });
   }
   var conf = null, ordine = [], nomiScelti = {};
+  /* la spiegazione sotto il modello (Gab, 20:15: «cosa vuol dire formato din?») */
+  function spiega(nome) {
+    var n = nome.toLowerCase();
+    if (/formato din/.test(n)) return "A3 · A4 · A5 · A6 · A7 · DIN lungo";
+    if (/rettangol/.test(n)) return "altre misure rettangolari";
+    if (/quadrat/.test(n)) return "9,8 · 14,8 · 21 cm";
+    if (/rotond|oval/.test(n)) return "tondo o ovale";
+    if (/special|personalizz/.test(n)) return "cuore, stella, albero…";
+    if (/misura/.test(n)) return "la misura la dici tu";
+    return "";
+  }
   function forma(nome) { /* il disegnino della card del modello */
     var n = nome.toLowerCase();
     if (/quadrat/.test(n)) return "q"; if (/rotond|oval|cerch/.test(n)) return "o"; if (/lungo|vertical|alto/.test(n)) return "d"; if (/special|personalizz|misura|forma/.test(n)) return "s"; return "r";
@@ -163,7 +177,8 @@
         if (i === 0 && ids.length <= 9) {
           var cards = h("div", "fms-card");
           ids.forEach(function (id) {
-            var b = h("button", String(scelte[aid]) === String(id) ? "on" : "", "<i class=\"" + forma(valori[id]) + "\"></i><span>" + esc(valori[id]) + "</span>"); b.type = "button";
+            var sp = spiega(valori[id]);
+            var b = h("button", String(scelte[aid]) === String(id) ? "on" : "", "<i class=\"" + forma(valori[id]) + "\"></i><span>" + esc(valori[id]) + "</span>" + (sp ? "<small>" + esc(sp) + "</small>" : "")); b.type = "button";
             b.onclick = function () { scegliAttr(aid, id, passi); };
             cards.appendChild(b);
           });
@@ -200,27 +215,35 @@
       var qs = (v && v.quantities) || [];
       variante.data_sheet = v && v.data_sheet; variante.attributes = (v && v.attributes) || [];
       if (!qs.length) { corpo.innerHTML = '<div class="fms-attesa">nessuna quantità disponibile per questa scelta</div>'; return; }
-      var tipiSp = []; qs.forEach(function (q) { (q.shippings || []).forEach(function (s) { if (tipiSp.indexOf(s.type) < 0) tipiSp.push(s.type); }); });
-      var tab = h("table", "fms-prezzi"), thead = "<tr><th>copie</th>";
-      tipiSp.forEach(function (t) { var s0 = null; qs.some(function (q) { return (q.shippings || []).some(function (s) { if (s.type === t) { s0 = s; return true; } }); }); thead += "<th>" + esc(t) + (s0 ? "<br>" + s0.from + "–" + s0.to + " gg" : "") + "</th>"; });
-      tab.innerHTML = thead + "</tr>";
-      qs.forEach(function (q) {
-        var tr = document.createElement("tr"), html = "<td>" + q.quantity + "</td>";
-        tipiSp.forEach(function (t) { var s = (q.shippings || []).filter(function (x) { return x.type === t; })[0]; html += "<td data-t=\"" + esc(t) + "\">" + (s ? eur(s.msrp_price) : "—") + "</td>"; });
-        tr.innerHTML = html;
-        Array.prototype.forEach.call(tr.querySelectorAll("td[data-t]"), function (td) {
-          td.onclick = function () {
-            var s = (q.shippings || []).filter(function (x) { return x.type === td.getAttribute("data-t"); })[0]; if (!s) return;
+      var tipiSp = []; qs.forEach(function (q) { (q.shippings || []).forEach(function (s) { if (!tipiSp.some(function (x) { return x.type === s.type; })) tipiSp.push({ type: s.type, from: s.from, to: s.to }); }); });
+      var spedScelta = (tipiSp.filter(function (x) { return x.type === "Standard"; })[0] || tipiSp[0]).type;
+      corpo.innerHTML = "";
+      /* prima la consegna (Standard · Express…), poi le copie col prezzo di quella consegna */
+      var sped = h("div", "fms-sped"); corpo.appendChild(sped);
+      var tab = h("table", "fms-prezzi"); corpo.appendChild(tab);
+      corpo.appendChild(h("div", "fms-nota", "il prezzo comprende la consegna scelta · IVA " + (qs[0].vat || 22) + " % a parte · tocca le copie che vuoi"));
+      function disegnaTab() {
+        sped.innerHTML = "";
+        tipiSp.forEach(function (ts) {
+          var b = h("button", ts.type === spedScelta ? "on" : "", "<span>" + esc(ts.type) + "</span><small>" + ts.from + "–" + ts.to + " giorni lavorativi</small>"); b.type = "button";
+          b.onclick = function () { spedScelta = ts.type; quantita = null; pp.querySelector(".capo span").textContent = "scegli le copie"; document.getElementById("fms-opzioni").classList.add("spento"); document.getElementById("fms-checkout").classList.add("spento"); disegnaTab(); };
+          sped.appendChild(b);
+        });
+        tab.innerHTML = "<tr><th>copie</th><th>prezzo · " + esc(spedScelta) + "</th></tr>";
+        qs.forEach(function (q) {
+          var s = (q.shippings || []).filter(function (x) { return x.type === spedScelta; })[0]; if (!s) return;
+          var tr = document.createElement("tr"); tr.innerHTML = "<td>" + q.quantity + "</td><td>" + eur(s.msrp_price) + "</td>";
+          if (quantita && quantita.q.id === q.id) tr.classList.add("on");
+          tr.onclick = function () {
             Array.prototype.forEach.call(tab.querySelectorAll("tr"), function (r) { r.classList.remove("on"); }); tr.classList.add("on");
             quantita = { q: q, sp: s, vat: q.vat || 22 };
             pp.querySelector(".capo span").textContent = q.quantity + " copie · " + s.type + " · " + eur(s.msrp_price);
             opzioniPasso(n);
           };
+          tab.appendChild(tr);
         });
-        tab.appendChild(tr);
-      });
-      corpo.innerHTML = ""; corpo.appendChild(tab);
-      corpo.appendChild(h("div", "fms-nota", "prezzi con la consegna compresa · IVA " + (qs[0].vat || 22) + " % a parte · tocca il prezzo che vuoi"));
+      }
+      disegnaTab();
     }).catch(function () { corpo.innerHTML = '<div class="fms-attesa">Flyeralarm non risponde: riprova fra un momento</div>'; });
   }
   /* 7 · opzioni (verifica del file, contributo per il clima, angoli…) */
@@ -232,20 +255,22 @@
     opzScelte = {};
     fetchJ("/v2/catalog/options/variant/" + variante.id + "/amount/" + quantita.q.quantity + "/shipping/" + encodeURIComponent(quantita.sp.type)).then(function (j) {
       opzioni = j || {}; corpo.innerHTML = "";
-      var chiavi = Object.keys(opzioni);
+      /* via il contributo per il clima (Gab, 20:21: «togli contributo finanziario a clima … flyeralarm neanche lo deve sapere») */
+      var chiavi = Object.keys(opzioni).filter(function (k) { return !/clima|climate/i.test((opzioni[k] || {}).name || ""); });
       if (!chiavi.length) { corpo.innerHTML = '<div class="fms-nota">nessuna opzione per questo prodotto</div>'; checkout(n); return; }
       chiavi.forEach(function (k) {
         var g = opzioni[k], blocco = h("div", "fms-opz", '<div class="nome">' + esc(g.name) + '</div>');
         var ids = Object.keys(g.options || {});
         ids.forEach(function (oid, i) {
           var o = g.options[oid], lab = h("label", null, '<span><input type="radio" name="opz-' + esc(k) + '" value="' + esc(oid) + '"' + (i === 0 ? " checked" : "") + '>' + esc(o.name) + '</span><span class="pr">' + (Number(o.msrpRawNettoPrice) ? "+ " + eur(o.msrpRawNettoPrice) : "compreso") + '</span>');
-          lab.querySelector("input").onchange = function () { opzScelte[k] = oid; checkout(n); };
+          lab.querySelector("input").onchange = function () { opzScelte[k] = oid; var pc = document.getElementById("fms-checkout"); if (!pc.classList.contains("spento")) checkout(n); };
           if (i === 0) opzScelte[k] = oid;
           blocco.appendChild(lab);
         });
         corpo.appendChild(blocco);
       });
-      checkout(n);
+      var av = h("button", "fms-avanti", "Avanti → checkout e upload"); av.type = "button"; av.onclick = function () { checkout(n); }; corpo.appendChild(av);
+      po.scrollIntoView({ block: "start", behavior: "smooth" });
     }).catch(function () { corpo.innerHTML = '<div class="fms-nota">le opzioni non si sono caricate: si va avanti senza</div>'; opzioni = {}; checkout(n); });
   }
   function descrizione() {
@@ -262,6 +287,8 @@
     pc.querySelector(".capo span").textContent = eur(tot);
     var corpo = h("div", "corpo");
     var t = h("div", "fms-tot", '<div class="g">' + eur(tot) + '<small>IVA inclusa</small></div><div class="r">' + esc(descrizione()) + ' · ' + quantita.q.quantity + ' copie<br>' + eur(netto) + ' + IVA ' + iva + ' % · consegna ' + esc(quantita.sp.type) + ' in ' + quantita.sp.from + '–' + quantita.sp.to + ' giorni lavorativi' + (costoOpzioni() ? ' · opzioni ' + eur(costoOpzioni()) : '') + '</div>');
+    var indBox = h("div", "fms-file", "<b>Dove va consegnato</b>"); var indSc = h("div"); indBox.appendChild(indSc); t.appendChild(indBox);
+    var indirizzo = ""; FMCassa.indirizzi(indSc, function (x) { indirizzo = x; });
     var fileBox = h("div", "fms-file", "<b>Il file di stampa</b> (PDF, fino a 100 MB)" + (variante.data_sheet ? ' · <a href="' + esc(variante.data_sheet) + '" target="_blank" rel="noopener" style="color:var(--oro,#D4AF6A)">le misure del file ›</a>' : ""));
     var inp = document.createElement("input"); inp.type = "file"; inp.accept = "application/pdf,.pdf,application/zip,.zip"; fileBox.appendChild(inp);
     var stato = h("div", "fms-nota", "lo puoi caricare ora o dopo il pagamento: senza il file l'ordine non parte"); fileBox.appendChild(stato);
@@ -283,12 +310,13 @@
       });
     };
     paga.onclick = function () {
+      if (!indirizzo) { alert("Scegli o aggiungi l'indirizzo di consegna."); return; }
       var opz = Object.keys(opzScelte).map(function (k) { return { gruppo: k, id: opzScelte[k], nome: (opzioni[k].options[opzScelte[k]] || {}).name || "" }; });
       FMCassa.apri({
         azione: "stampa",
-        corpo: { gruppo: String(gruppo.id), variante: String(variante.id), quantita_id: String(quantita.q.id), spedizione: quantita.sp.type, opzioni: opz, descrizione: descrizione(), file: file || "" },
+        corpo: { gruppo: String(gruppo.id), variante: String(variante.id), quantita_id: String(quantita.q.id), spedizione: quantita.sp.type, opzioni: opz, descrizione: descrizione(), file: file || "", indirizzo: indirizzo },
         titolo: gruppo.n, sotto: "IVA inclusa · consegna " + quantita.sp.type,
-        righe: [descrizione(), quantita.q.quantity + " copie", eur(netto) + " + IVA " + iva + " %"].concat(opz.filter(function (o) { return o.nome; }).map(function (o) { return o.nome; })).concat([file ? "file caricato" : "file da caricare dopo"]),
+        righe: [descrizione(), quantita.q.quantity + " copie", eur(netto) + " + IVA " + iva + " %"].concat(opz.filter(function (o) { return o.nome; }).map(function (o) { return o.nome; })).concat(["consegna a: " + indirizzo, file ? "file caricato" : "file da caricare dopo"]),
         grazie: "Pagato. L'ordine è arrivato a chi coordina" + (file ? ", col tuo file." : ": carica il file appena puoi, oppure mandalo a chi coordina."),
         dopo: function () { paga.disabled = true; paga.textContent = "Pagato"; }
       });

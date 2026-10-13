@@ -114,7 +114,8 @@
     b.onclick = function () {
       var righe = stato.map(function (s, i) { var r = RIGHE[i]; return { nome: r.nome + " · " + (s.nomi["Formato"] || s.nomi["Colore di fondo"] || "") + (r.taglie ? " · " + Object.keys(r.taglie).map(function (k) { return r.taglie[k] + " " + k; }).join(" ") : ""), variante: String(s.variante.id), quantita_id: String(s.quantita.q.id) }; });
       var elencoFile = Object.keys(files).map(function (k) { return files[k]; }).join(" ; ");
-      FMCassa.apri({ azione: "kit", corpo: { righe: righe, file: elencoFile }, titolo: "Kit fiera", sotto: "IVA inclusa · consegna Standard",
+      if (!window.__kitIndirizzo) { alert("Scegli o aggiungi l'indirizzo di consegna."); return; }
+      FMCassa.apri({ azione: "kit", corpo: { righe: righe, file: elencoFile, indirizzo: window.__kitIndirizzo }, titolo: "Kit fiera", sotto: "IVA inclusa · consegna Standard",
         righe: righe.map(function (r, i) { return stato[i].quantita.q.quantity + " × " + r.nome + " · " + eur(stato[i].quantita.sp.msrp_price); }),
         grazie: "Pagato. Il kit è in mano a chi coordina: manda in stampa le quattro righe coi tuoi file e ti scrive.",
         dopo: function () { b.disabled = true; b.textContent = "Pagato"; } });
@@ -148,6 +149,8 @@
       };
     });
     t.appendChild(fb);
+    var indBox = h("div", "file", "<b>Dove va consegnato</b>"); var indSc = h("div"); indBox.appendChild(indSc); t.appendChild(indBox);
+    window.__kitIndirizzo = ""; FMCassa.indirizzi(indSc, function (x) { window.__kitIndirizzo = x; });
     var b = h("button", "paga", "Ordina e paga"); b.type = "button"; b.id = "kit-paga"; b.disabled = true; t.appendChild(b);
     t.appendChild(h("div", "attesa", "Pagato, chi coordina manda in stampa le righe del kit coi tuoi file; ti arrivano col corriere."));
     box.appendChild(t);

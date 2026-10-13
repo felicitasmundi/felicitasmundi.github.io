@@ -89,5 +89,52 @@
       if (typeof corrente.dopo === "function") { try { corrente.dopo(corrente.dati || {}); } catch (e) {} }
     });
   }
-  window.FMCassa = { apri: apri, sessione: sessione, client: client, eur: eur };
+  /* gli indirizzi di consegna: al massimo tre, in persone.indirizzi (SQL 62), col tasto «aggiungi» (Gab, 13 ott 20:21).
+     indirizzi(contenitore, quandoScelto) disegna le scelte e chiama quandoScelto(testo) a ogni scelta. */
+  function indirizzi(cont, cb) {
+    cont.innerHTML = "";
+    var st = document.createElement("style"); st.textContent = ".fmi .scelte{display:flex;flex-direction:column;gap:6px}.fmi label{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.4;padding:8px 10px;border:1px solid rgba(245,240,230,.14);border-radius:12px;cursor:pointer}.fmi label.on{border-color:#D4AF6A}.fmi input[type=radio]{margin-top:3px}.fmi .nuovo{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.fmi .nuovo input{min-height:38px;padding:0 10px;border-radius:10px;border:1px solid rgba(245,240,230,.2);background:#0A0C1A;color:#F5F0E6;font:13px 'DM Sans',system-ui,sans-serif}.fmi .nuovo input.largo{grid-column:1/-1}.fmi .agg{margin-top:8px;font:600 13px 'DM Sans',system-ui,sans-serif;color:#D4AF6A;background:none;border:1px solid rgba(212,175,106,.5);border-radius:980px;padding:8px 14px;cursor:pointer}.fmi .nota{font-size:12px;color:#9A978F;margin-top:6px;line-height:1.45}";
+    cont.appendChild(st); cont.className = (cont.className || "") + " fmi";
+    var lista = document.createElement("div"); lista.className = "scelte"; cont.appendChild(lista);
+    var sotto = document.createElement("div"); cont.appendChild(sotto);
+    var salvati = [], scelto = -1, uid = null;
+    function testo(a) { return [a.nome, a.via, (a.cap || "") + " " + (a.citta || "") + (a.prov ? " (" + a.prov + ")" : ""), a.tel ? "tel. " + a.tel : ""].filter(function (x) { return x && x.trim(); }).join(" · "); }
+    function disegna() {
+      lista.innerHTML = "";
+      salvati.forEach(function (a, i) {
+        var l = document.createElement("label"); l.className = i === scelto ? "on" : "";
+        l.innerHTML = '<input type="radio" name="fmi-ind"' + (i === scelto ? " checked" : "") + '><span>' + testo(a).replace(/[&<>]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[k]; }) + '</span>';
+        l.querySelector("input").onchange = function () { scelto = i; disegna(); cb(testo(a)); };
+        lista.appendChild(l);
+      });
+      sotto.innerHTML = "";
+      if (!salvati.length) sotto.appendChild(Object.assign(document.createElement("div"), { className: "nota", textContent: "Dove va consegnato: aggiungi un indirizzo." }));
+      if (salvati.length < 3) {
+        var b = document.createElement("button"); b.type = "button"; b.className = "agg"; b.textContent = salvati.length ? "+ aggiungi un indirizzo" : "+ aggiungi l'indirizzo"; sotto.appendChild(b);
+        b.onclick = function () {
+          b.hidden = true;
+          var f = document.createElement("div"); f.className = "nuovo";
+          f.innerHTML = '<input class="largo" placeholder="nome e cognome (o l\'attività)"><input class="largo" placeholder="via e numero"><input placeholder="CAP"><input placeholder="città"><input placeholder="provincia"><input placeholder="telefono per il corriere"><button type="button" class="agg largo">Salva questo indirizzo</button>';
+          sotto.appendChild(f);
+          var inp = f.querySelectorAll("input");
+          f.querySelector("button").onclick = function () {
+            var a = { nome: inp[0].value.trim(), via: inp[1].value.trim(), cap: inp[2].value.trim(), citta: inp[3].value.trim(), prov: inp[4].value.trim(), tel: inp[5].value.trim() };
+            if (!a.nome || !a.via || !a.cap || !a.citta) { alert("servono nome, via, CAP e città"); return; }
+            salvati.push(a); scelto = salvati.length - 1; disegna(); cb(testo(a));
+            if (uid) client().from("persone").update({ indirizzi: salvati }).eq("id", uid).then(function (r) { if (r.error) console.log("indirizzi", r.error.message); });
+          };
+        };
+      } else sotto.appendChild(Object.assign(document.createElement("div"), { className: "nota", textContent: "Al massimo tre indirizzi: per cambiarne uno, scrivi a chi coordina." }));
+    }
+    sessione().then(function (sess) {
+      if (!sess) { disegna(); return; }
+      uid = sess.user.id;
+      return client().from("persone").select("indirizzi").eq("id", uid).maybeSingle().then(function (r) {
+        salvati = (r && r.data && Array.isArray(r.data.indirizzi)) ? r.data.indirizzi.slice(0, 3) : [];
+        if (salvati.length) { scelto = 0; cb(testo(salvati[0])); }
+        disegna();
+      }, function () { disegna(); });
+    });
+  }
+  window.FMCassa = { apri: apri, sessione: sessione, client: client, eur: eur, indirizzi: indirizzi };
 })();

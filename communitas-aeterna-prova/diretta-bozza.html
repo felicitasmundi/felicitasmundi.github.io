@@ -121,7 +121,7 @@ a{color:inherit;text-decoration:none}
   <!-- ═══ la consolle ═══ -->
   <div class="onda fuori" id="onda">
     <div class="riga1"><span class="live" id="live" style="color:var(--grigio)"><i style="background:var(--grigio);animation:none"></i><span id="live-t">FUORI · CIVILTÀ SARDA</span></span><span class="tempo" id="tempo">00:00</span></div>
-    <h1>Mutuo credito cooperativo</h1>
+    <h1 id="titolo">Mutuo credito cooperativo</h1>
     <div class="sot" id="chi">giovedì 16 ottobre · ore 19 · con Guido Grossi e Vittorino Crivello · a cura di Gabriele Dettori e Marco Caddeo</div>
     <div class="vu" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="chi-parla"><div class="c" id="cp-c" style="display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--oro)">·</div><div><b id="cp-nome">nessuno sta parlando</b><small id="cp-sot">entra per sentire</small></div><span class="reg" id="reg-segno" style="display:none"><i></i>REC</span></div>
@@ -195,6 +195,13 @@ a{color:inherit;text-decoration:none}
   var FM_URL="https://gfnveesogkfvkrdudpfg.supabase.co", FM_CHIAVE="sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var db=supabase.createClient(FM_URL,FM_CHIAVE,{auth:{flowType:"implicit"}});
   var VILLAGGIO='5839d11d-9901-49bb-9b2f-f94236bbe2a1';
+  /* le puntate: ?puntata=… sceglie titolo e sottotitolo (13 ott 20:23, Gab: «aggiungi puntata, oggi alle 21 - titolo Felicitas Festival - incontro con Surra, con Marco e Gabriele»).
+     Gli ospiti col link entrano senza account: sentono; chi coordina dà loro la parola dalla regia. */
+  var PUNTATE={
+    'surra':{titolo:'Felicitas Festival · incontro con Surra', chi:'martedì 13 ottobre · ore 21 · con Marco e Gabriele'},
+    'mutuo-credito':{titolo:'Mutuo credito cooperativo', chi:'giovedì 16 ottobre · ore 19 · con Guido Grossi e Vittorino Crivello · a cura di Gabriele Dettori e Marco Caddeo'}
+  };
+  var PUNTATA=(function(){ try{ var k=new URLSearchParams(location.search).get('puntata'); if(k&&PUNTATE[k]){ document.getElementById('titolo').textContent=PUNTATE[k].titolo; document.getElementById('chi').textContent=PUNTATE[k].chi; document.title=PUNTATE[k].titolo+' · la diretta del villaggio'; return PUNTATE[k]; } }catch(e){} return PUNTATE['mutuo-credito']; })();
   var stanza=null, io={}, ctx=null, dest=null, rec=null, pezzi=[], t0=0, orologio=null, t1=0, orologio2=null, ultimo=null, sorgenti=[];
   var enc=new TextEncoder(), dec=new TextDecoder();
 
@@ -316,7 +323,7 @@ a{color:inherit;text-decoration:none}
   /* la Diretta in Bacheca (SQL 55) */
   $('pubblica').onclick=function(){ if(!ultimo) return; var e=$('pub-esito'); e.textContent='Carico il file…'; $('pubblica').disabled=true; var via='dirette/'+VILLAGGIO+'/'+ultimo.nome;
     db.storage.from('dirette').upload(VILLAGGIO+'/'+ultimo.nome, ultimo.blob,{contentType:ultimo.tipo,upsert:false}).then(function(r){ if(r.error) throw r.error; e.textContent='Scrivo la Diretta in Bacheca…';
-      return db.rpc('fm_pubblica_diretta',{p_villaggio:VILLAGGIO,p_titolo:'Mutuo credito cooperativo',p_descrizione:$('chi').textContent+' · registrazione della diretta del villaggio · trascrizione: la fai tu',p_indirizzo:via,p_dimensione:ultimo.blob.size,p_secondi:ultimo.secondi}); })
+      return db.rpc('fm_pubblica_diretta',{p_villaggio:VILLAGGIO,p_titolo:PUNTATA.titolo,p_descrizione:$('chi').textContent+' · registrazione della diretta del villaggio · trascrizione: la fai tu',p_indirizzo:via,p_dimensione:ultimo.blob.size,p_secondi:ultimo.secondi}); })
     .then(function(r){ if(r.error) throw r.error; e.textContent='Pubblicata in Bacheca come Diretta.'; $('pubblica').textContent='Pubblicata ✓'; })
     .catch(function(err){ $('pubblica').disabled=false; e.textContent='Non pubblicata: '+(err&&err.message?err.message:'—'); }); };
 
