@@ -11,7 +11,7 @@
 (function () {
   "use strict";
   var URL_FA = "https://gfnveesogkfvkrdudpfg.supabase.co/functions/v1/flyeralarm?p=";
-  var IMG = "stampa/";
+  var IMG = "stampa/"; var IMGV = "?v=10132030";
   /* i tipi di prodotto, per famiglia: nome · quali gruppi di Flyeralarm (per nome) · quale versione si apre per prima · immagine */
   var TIPI = {
     carta: [
