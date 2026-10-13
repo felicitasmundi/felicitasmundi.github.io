@@ -20,6 +20,17 @@
     abiti:      { cat: ["abbigliamento & tessuti", "abbigliamento promozionale", "t-shirts", "giacche", "prodotti tessili"] },
     foto:       { nome: /fotolibr|foto retro|foto da parete|calendari fotografici|stampe fotografiche|cornici per foto/i }
   };
+  /* i prodotti che si cercano per primi, in cima alla lista; il primo si apre da solo (Gab, 18:32: «subito i dati per scegliere formato carta copie e prezzo») */
+  var PRIMI = {
+    carta: [/^Volantini classici/i, /^Manifesti in stampa digitale/i, /^Manifesti classici/i, /^Biglietti da visita classici/i, /^Pieghevoli classici/i, /^Cartoline/i, /^Adesivi classici/i, /^Cartelline/i],
+    libri: [/^Brochure/i, /^Riviste/i, /^Libri/i, /^Cataloghi/i, /^Opuscoli/i],
+    agende: [/^Agende/i, /^Calendari da parete/i, /^Calendari/i, /^Quaderni/i, /^Blocchi/i],
+    fiere: [/^Roll-Up Classic, sistema incl/i, /^Roll-Up Basic, sistema incl/i, /^Striscioni/i, /^Banner/i, /^Bandiere/i, /^Totem/i, /^Display/i],
+    confezioni: [/^Shopper/i, /^Borse/i, /^Sacchetti/i, /^Scatole/i, /^Bicchieri/i, /^Tovaglioli/i],
+    gadget: [/^Penne a sfera/i, /^Matite/i, /^Borracce/i, /^Portachiavi/i, /^Cordini/i, /^Portabadge/i, /^Tazze/i],
+    abiti: [/^T-shirt/i, /^Magliette/i, /^Felpe/i, /^Polo/i, /^Grembiul/i],
+    foto: [/^Fotolibri con copertina rigida/i, /^Fotolibri con copertina flessibile/i, /^Fotolibro/i, /^Foto da parete/i, /^Calendari fotografici/i]
+  };
   var ORDINE_ATTR = /formato|modello|materiale|carta|rifinitura|stampa|colore|taglia|pagine|facciate|copertina|rilegatura|dimension/i;
   var box, fam, catalogo = null, gruppo = null, varianti = null, scelte = {}, variante = null, quantita = null, file = null;
 
@@ -62,6 +73,9 @@
     box.innerHTML = "";
     var lista = catalogo.filter(famiglia).filter(function (g) { return !/campion/i.test(g.n); });
     lista.sort(function (a, b) { return a.n.localeCompare(b.n, "it"); });
+    var P = PRIMI[fam] || [], testa = [];
+    P.forEach(function (re) { lista.forEach(function (g) { if (re.test(g.n) && testa.indexOf(g) < 0) testa.push(g); }); });
+    lista = testa.concat(lista.filter(function (g) { return testa.indexOf(g) < 0; }));
     var cerca = h("input", "fms-cerca"); cerca.type = "search"; cerca.placeholder = "cerca fra " + lista.length + " prodotti";
     var ul = h("div", "fms-lista"), altri = h("button", "fms-altri", "mostra altri ›");
     var mostrati = 0, filtro = "";
@@ -83,13 +97,16 @@
     passo.appendChild(cerca); passo.appendChild(ul); passo.appendChild(altri);
     box.appendChild(passo); render(true);
     box.appendChild(h("div", "fms-passo", '<div id="fms-scelte"></div><div id="fms-copie"></div><div id="fms-fine"></div>'));
+    /* il primo prodotto si apre da solo: formato, carta, copie e prezzo subito */
+    if (lista.length) { var primo = ul.firstChild; if (primo && primo.classList) { primo.classList.add("on"); scegliSenzaScorrere(lista[0]); } }
   }
   /* 2 · le scelte */
-  function scegli(g) {
+  function scegliSenzaScorrere(g) { scegli(g, true); }
+  function scegli(g, fermo) {
     gruppo = g; varianti = null; scelte = {}; variante = null; quantita = null;
     var s = document.getElementById("fms-scelte"); s.innerHTML = '<span class="fm-occ">' + esc(g.n.toUpperCase()) + '</span><div class="fms-attesa">leggo formati, carte e copie…</div>';
     document.getElementById("fms-copie").innerHTML = ""; document.getElementById("fms-fine").innerHTML = "";
-    s.scrollIntoView({ block: "start", behavior: "smooth" });
+    if (!fermo) s.scrollIntoView({ block: "start", behavior: "smooth" });
     fetch(URL_FA + "/v2/catalog/groups/" + g.id + "/variants").then(function (r) { return r.json(); }).then(function (j) {
       varianti = (j && j.data) || [];
       if (!varianti.length) { s.innerHTML = '<span class="fm-occ">' + esc(g.n.toUpperCase()) + '</span><div class="fms-attesa">per questo prodotto Flyeralarm non dà scelte da qui: scrivi a chi coordina</div>'; return; }
