@@ -348,8 +348,9 @@ a{color:inherit;text-decoration:none}
     rec.onstop=function(){ var blob=new Blob(pezzi,{type:tipo}); ultimo={blob:blob,tipo:tipo,secondi:Math.round((Date.now()-t0)/1000)}; var url=URL.createObjectURL(blob);
       var nome='diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+(tipo.indexOf('mp4')>=0?'.m4a':'.webm'); ultimo.nome=nome;
       $('reg-box').style.display='block'; $('reg-info').textContent=nome+' · '+Math.round(blob.size/1024)+' KB'; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome; $('pubblica').disabled=false; $('pubblica').textContent='Pubblica come Diretta'; $('pub-esito').textContent=''; };
-    rec.start(1000); t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); chat_sys('● la registrazione è partita'); }
-  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); $('reg-segno').style.display='none'; $('b-rec').classList.remove('on'); chat_sys('■ la registrazione è ferma'); }
+    rec.start(1000); t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i>■</i>ferma 00:00'; chat_sys('● la registrazione è partita');
+    clearInterval(orologio); orologio=setInterval(function(){ var s=Math.floor((Date.now()-t0)/1000), t=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); $('reg-segno').innerHTML='<i></i>REC '+t; $('b-rec').innerHTML='<i>■</i>ferma '+t; },1000); }
+  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); $('reg-segno').style.display='none'; $('reg-segno').innerHTML='<i></i>REC'; $('b-rec').classList.remove('on'); $('b-rec').innerHTML='<i>●</i>registra'; chat_sys('■ la registrazione è ferma: il file è qui sotto'); }
   $('b-rec').onclick=function(){ if($('b-rec').disabled) return; if(rec&&rec.state==='recording') ferma(); else registra(); };
 
   /* la Diretta in Bacheca (SQL 55) */
@@ -360,6 +361,7 @@ a{color:inherit;text-decoration:none}
     .catch(function(err){ $('pubblica').disabled=false; e.textContent='Non pubblicata: '+(err&&err.message?err.message:'—'); }); };
 
   document.querySelectorAll('.lingue button').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.lingue button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo', p.id==='p-'+b.getAttribute('data-p')); }); }; });
+  window.addEventListener('beforeunload',function(e){ if(rec&&rec.state==='recording'){ e.preventDefault(); e.returnValue='La registrazione è in corso: se esci la perdi. Prima premi ferma.'; return e.returnValue; } });
   window.addEventListener('pagehide',function(){ lasciando=true; if(stanza) stanza.disconnect(); });
   /* tornando dalle altre pagine col segno acceso: rientro da solo — anche quando il navigatore ridà la pagina dalla sua cache (pageshow) */
   window.addEventListener('pageshow',function(e){ if(!e.persisted) return; stanza=null; fuori(''); if(segnoVivo()) entra(); });
