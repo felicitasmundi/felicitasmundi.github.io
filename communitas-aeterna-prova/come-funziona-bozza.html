@@ -112,6 +112,10 @@ a{color:inherit;text-decoration:none}
 .piano .tutto{font-size:12px;color:var(--grigio);margin-top:14px;padding-top:12px;border-top:1px solid var(--riga)}
 .piano .conta{font-size:11.5px;color:var(--grigio);margin-top:10px;line-height:1.4}
 .scorri{font-size:10.5px;letter-spacing:.14em;color:var(--grigio);text-align:center;margin-top:2px}
+.piano.qui{border-color:var(--oro)}
+.piano .qui-s{display:none;align-self:flex-start;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.16em;color:var(--inchiostro);background:var(--oro);border-radius:980px;padding:4px 10px;margin-bottom:8px}
+.piano.qui .qui-s{display:inline-block}
+.piano.qui .fm-tasto[data-s="scegli ospite"],.piano.qui .fm-tasto[data-s="scegli praticante"]{display:none}
 .piano.oro{border-color:var(--oro);box-shadow:0 0 0 1px rgba(212,175,106,.25)}
 .piano ul{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:5px}
 .piano li{font-size:13px;line-height:1.45;padding-left:16px;position:relative;color:rgba(245,240,230,.9)}
@@ -138,8 +142,8 @@ a{color:inherit;text-decoration:none}
   <section class="parte">
     <div class="capo"><span class="n">1</span><h2>Scegli come stare.</h2></div>
     <div class="prezzi">
-      <div class="piano">
-        <div class="nome">Ospite</div><div class="per">Per chi guarda e ascolta.</div>
+      <div class="piano" data-piano="ospite">
+        <span class="qui-s">SEI QUI</span><div class="nome">Ospite</div><div class="per">Per chi guarda e ascolta.</div>
         <div class="pr">0 €</div>
         <a class="fm-tasto piccolo secondario" href="accesso.html" data-s="scegli ospite">Entra</a>
         <div class="tutto">Senza quota e senza patto:</div>
@@ -152,8 +156,8 @@ a{color:inherit;text-decoration:none}
           <li>il simbolo Stampa (i lavori di stampa si pagano a parte)</li>
         </ul>
       </div>
-      <div class="piano">
-        <div class="nome">Praticante · karma yoga</div><div class="per">Chi dà una mano, segue e porta a termine obiettivi dei gruppi operativi, chi mette a disposizione luoghi e tempo.</div>
+      <div class="piano" data-piano="karma_yoga">
+        <span class="qui-s">SEI QUI</span><div class="nome">Praticante · karma yoga</div><div class="per">Chi dà una mano, segue e porta a termine obiettivi dei gruppi operativi, chi mette a disposizione luoghi e tempo.</div>
         <div class="pr">0 €<small>il patto: obiettivi, non ore</small></div>
         <a class="fm-tasto piccolo secondario" href="vicinati-bozza.html" data-s="scegli praticante">Proponiti</a>
         <div class="tutto">Tutto dell'ospite, più:</div>
@@ -166,8 +170,8 @@ a{color:inherit;text-decoration:none}
           <li class="no">i lavori con l'AI: a lavoro singolo</li>
         </ul>
       </div>
-      <div class="piano">
-        <div class="nome">Villaggio</div><div class="per">Per chi vive il villaggio senza il patto.</div>
+      <div class="piano" data-piano="villaggio">
+        <span class="qui-s">SEI QUI</span><div class="nome">Villaggio</div><div class="per">Per chi vive il villaggio senza il patto.</div>
         <div class="pr">10 €<small>al mese, IVA inclusa</small></div>
         <button class="fm-tasto piccolo secondario" data-s="scegli 10">Scegli</button>
         <div class="tutto">Tutto del praticante, più:</div>
@@ -180,8 +184,8 @@ a{color:inherit;text-decoration:none}
           <li class="no">i lavori con l'AI: a lavoro singolo</li>
         </ul>
       </div>
-      <div class="piano oro">
-        <div class="nome">Bottega</div><div class="per">Per chi crea, insegna, produce, e vuole fare con poche persone il lavoro di tanti.</div>
+      <div class="piano oro" data-piano="bottega">
+        <span class="qui-s">SEI QUI</span><div class="nome">Bottega</div><div class="per">Per chi crea, insegna, produce, e vuole fare con poche persone il lavoro di tanti.</div>
         <div class="pr">26 €<small>al mese, IVA inclusa</small></div>
         <button class="fm-tasto piccolo" data-s="scegli 26">Scegli</button>
         <div class="tutto">Tutto del Villaggio, più:</div>
@@ -338,6 +342,24 @@ a{color:inherit;text-decoration:none}
 
   <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I nomi «Villaggio» e «Bottega» per i piani 10 e 26: scelti da Gab il 13 ott, 13:41. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). Il tasto «Scegli» non fa ancora niente: il pagamento arriva alla conferma del modello.</div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Gab, 13 ottobre: «se uno vede ospite da ospite, è gia dentro, quindi dovrebbe essere collegato al database, e se è account ospite, esce "sei qua"».
+   Chi è dentro: si legge persone.grado; ospite → Ospite; karma_yoga e sopra → Praticante · karma yoga.
+   Villaggio e Bottega si accendono quando esisterà persone.piano (Stripe, dopo l'ok di Gab). Chi non è dentro vede «Entra». */
+(function(){
+  try{
+    var db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}});
+    db.auth.getSession().then(function(r){
+      var sess=r&&r.data&&r.data.session; if(!sess) return;
+      return db.from("persone").select("grado").eq("id",sess.user.id).maybeSingle().then(function(q){
+        var p=(q&&q.data)||{}; var piano=p.piano||((p.grado&&p.grado!=="ospite")?"karma_yoga":"ospite");
+        var el=document.querySelector('.piano[data-piano="'+piano+'"]'); if(el){ el.classList.add("qui"); el.scrollIntoView({inline:"start",block:"nearest"}); }
+      });
+    }).catch(function(e){ console.log("come funziona · sessione", e); });
+  }catch(e){ console.log("come funziona", e); }
+})();
+</script>
 <script src="comune/fm-riga.js?v=10131230"></script>
 <script src="comune/fm-statistiche.js?v=10121420"></script>
 </body>
