@@ -32,16 +32,9 @@ a{color:inherit;text-decoration:none}
 .parte .capo{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
 .parte .capo .n{font-family:'Cinzel',serif;font-size:12px;color:var(--oro);letter-spacing:.1em}
 .parte .capo h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1}
+.parte .sotto-t{font-size:12px;letter-spacing:.14em;color:var(--oro);margin:-4px 0 10px;font-family:'Cinzel',serif}
 .parte p{font-size:14px;line-height:1.55;color:rgba(245,240,230,.88)}
 .parte p + p{margin-top:8px}
-
-/* tre modi di stare */
-.modi{display:flex;flex-direction:column;gap:8px}
-.modo{display:flex;gap:12px;align-items:flex-start;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:12px 14px}
-.modo .seg{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--oro);display:grid;place-items:center;font-family:'Cinzel',serif;font-size:11px;color:var(--oro)}
-.modo b{display:block;font-weight:500;font-size:14.5px}
-.modo small{display:block;font-size:12.5px;color:var(--grigio);line-height:1.45;margin-top:3px}
-.modo .pr{flex:none;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--oro);align-self:center}
 
 /* le cinque cose in più */
 .piu{display:flex;flex-direction:column;gap:6px}
@@ -83,7 +76,7 @@ a{color:inherit;text-decoration:none}
 /* i conti */
 .conti{width:100%;border-collapse:collapse;font-size:12.5px}
 .conti th,.conti td{padding:7px 6px;border-bottom:1px solid var(--riga);text-align:right;vertical-align:top}
-.conti th{font-weight:500;color:var(--grigio);font-size:11px;letter-spacing:.06em}
+.conti th{font-weight:500;color:var(--grigio);font-size:11px;letter-spacing:.06em}.conti th small{display:block;font-weight:400;letter-spacing:0;font-size:10.5px;line-height:1.3;margin-top:2px;color:var(--grigio)}
 .conti td:first-child,.conti th:first-child{text-align:left}
 .conti tr.resta td{color:var(--oro);font-weight:500}
 .conti tr.tot td{border-bottom:0}
@@ -106,20 +99,24 @@ a{color:inherit;text-decoration:none}
 .pm ol{margin:10px 0 0 18px;font-size:13px;line-height:1.5;color:rgba(245,240,230,.88)}
 .pm ol li+li{margin-top:4px}
 
-/* i prezzi */
-.prezzi{display:flex;flex-direction:column;gap:10px}
-.piano{background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:14px 16px}
+/* i piani, come li scrive ClickUp: una colonna per piano, tutto l'elenco; si scorrono di lato */
+.prezzi{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 18px 12px;margin:0 -18px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.prezzi::-webkit-scrollbar{display:none}
+.piano{flex:0 0 292px;scroll-snap-align:start;background:var(--carta);border:1px solid var(--riga);border-radius:16px;padding:16px;display:flex;flex-direction:column}
+.piano .nome{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.05}
+.piano .per{font-size:12.5px;color:var(--grigio);margin-top:3px;line-height:1.4;min-height:36px}
+.piano .pr{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--oro);line-height:1;margin-top:12px}
+.piano .pr small{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grigio);margin-left:4px}
+.piano .pr.ph{font-size:30px}
+.piano .fm-tasto{margin-top:12px}
+.piano .tutto{font-size:12px;color:var(--grigio);margin-top:14px;padding-top:12px;border-top:1px solid var(--riga)}
+.piano .conta{font-size:11.5px;color:var(--grigio);margin-top:10px;line-height:1.4}
+.scorri{font-size:10.5px;letter-spacing:.14em;color:var(--grigio);text-align:center;margin-top:2px}
 .piano.oro{border-color:var(--oro);box-shadow:0 0 0 1px rgba(212,175,106,.25)}
-.piano .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.piano .top b{font-family:'Cinzel',serif;font-weight:400;font-size:13px;letter-spacing:.1em}
-.piano .top .pr{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--oro);line-height:1}
-.piano .top .pr small{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grigio);margin-left:4px}
-.piano ul{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:5px}
+.piano ul{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:5px}
 .piano li{font-size:13px;line-height:1.45;padding-left:16px;position:relative;color:rgba(245,240,230,.9)}
 .piano li::before{content:"·";position:absolute;left:4px;color:var(--oro)}
 .piano li.no{color:var(--grigio)}.piano li.no::before{content:"–"}
-.piano .tasti{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.piano .conta{font-size:11.5px;color:var(--grigio)}
 .data{font-size:11px;color:var(--grigio);letter-spacing:.06em;text-align:center;margin-top:14px}
 
 .nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
@@ -134,19 +131,88 @@ a{color:inherit;text-decoration:none}
     <div class="fm-occ">FELICITASMUNDI</div>
     <h1>Come funziona.</h1>
     <div class="sot" style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.3;color:var(--avorio)">Risparmiare tempo e fare con poche persone ciò che prima avresti dovuto fare con tanti, per poter vivere più tempo nel manifestare talento, esprimere creatività e vivere la comunità.</div>
-    <div class="sot">Tre modi di stare in Felicitas, cosa c'è sotto, dove vanno i soldi. Tutto qui, aperto.</div>
+    <div class="sot">I piani, come sono realizzati i servizi, dove vanno i soldi. Tutto qui, aperto.</div>
   </div>
 
-  <!-- 1 · tre modi di stare -->
+  <!-- 1 · scegli: i piani, uno accanto all'altro, con tutto l'elenco -->
   <section class="parte">
-    <div class="capo"><span class="n">1</span><h2>Tre modi di stare.</h2></div>
-    <div class="modi">
-      <div class="modo"><span class="seg">O</span><div><b>Ospite</b><small>Vede la Bacheca, le stanze, gli eventi; può anche accedere ai percorsi gratuiti.</small></div><span class="pr">0</span></div>
-      <div class="modo"><span class="seg">KY</span><div><b>Karma yoga</b><small>Il patto senza quota: <span class="fm-ph">[ cosa include, parole di Gab ]</span>. I lavori con l'AI si pagano a lavoro singolo.</small></div><span class="pr">0</span></div>
-      <div class="modo"><span class="seg">10</span><div><b>Felicitas</b><small>Il gruppo, la bacheca, gli obiettivi, gli eventi, la diretta, la Stampa. Il tuo cruscotto, scritto a mano.</small></div><span class="pr">10 €</span></div>
-      <div class="modo"><span class="seg">26</span><div><b>Felicitas con l'AI</b><small>Tutto il 10 più la memoria che lavora con te: trascrizione, impaginazione, editing, traduzione, conversione, guida. E la voce che scrive per te.</small></div><span class="pr">26 €</span></div>
+    <div class="capo"><span class="n">1</span><h2>Scegli come stare.</h2></div>
+    <div class="prezzi">
+      <div class="piano">
+        <div class="nome">Ospite</div><div class="per">Per chi guarda e ascolta.</div>
+        <div class="pr">0 €</div>
+        <button class="fm-tasto piccolo secondario" data-s="scegli ospite">Entra</button>
+        <div class="tutto">Senza quota e senza patto:</div>
+        <ul>
+          <li>la Bacheca dei villaggi e dei vicinati</li>
+          <li>le stanze: Emporio, Mutuo aiuto, Edizione, Scuola</li>
+          <li>gli eventi del villaggio</li>
+          <li>i percorsi gratuiti</li>
+          <li>la diretta del villaggio, in ascolto</li>
+          <li>il simbolo Stampa (i lavori di stampa si pagano a parte)</li>
+        </ul>
+      </div>
+      <div class="piano">
+        <div class="nome">Praticante</div><div class="per">Chi dà una mano, segue e porta a termine obiettivi dei gruppi operativi, chi mette a disposizione luoghi e tempo.</div>
+        <div class="pr">0 €<small>il patto</small></div>
+        <button class="fm-tasto piccolo secondario" data-s="scegli praticante">Proponiti</button>
+        <div class="tutto">Tutto dell'ospite, più:</div>
+        <ul>
+          <li>la tua orma: obiettivi, cose fatte, karma yoga</li>
+          <li>il villaggio e il vicinato: chat, obiettivi, eventi</li>
+          <li>prendi e porti a termine gli obiettivi dei gruppi operativi</li>
+          <li>metti a disposizione luoghi e tempo</li>
+          <li>parli nella diretta del villaggio</li>
+          <li class="no">i lavori con l'AI: a lavoro singolo</li>
+        </ul>
+      </div>
+      <div class="piano">
+        <div class="nome">Villaggio <span class="fm-ph" style="font-size:12px">[ nome ]</span></div><div class="per">Per chi vive il villaggio senza il patto delle ore.</div>
+        <div class="pr">10 €<small>al mese, IVA inclusa</small></div>
+        <button class="fm-tasto piccolo secondario" data-s="scegli 10">Scegli</button>
+        <div class="tutto">Tutto del praticante, più:</div>
+        <ul>
+          <li>nessun patto di ore: partecipi come vuoi</li>
+          <li>il tuo gruppo: nucleo e team, con chat, obiettivi, eventi</li>
+          <li>crei eventi e dirette del tuo gruppo</li>
+          <li>pubblichi in Edizione le notizie del gruppo</li>
+          <li>calendario, costi, rubrica, scritti a mano</li>
+          <li class="no">i lavori con l'AI: a lavoro singolo</li>
+        </ul>
+      </div>
+      <div class="piano oro">
+        <div class="nome">Bottega <span class="fm-ph" style="font-size:12px">[ nome ]</span></div><div class="per">Per chi crea, insegna, produce, e vuole fare con poche persone il lavoro di tanti.</div>
+        <div class="pr">26 €<small>al mese, IVA inclusa</small></div>
+        <button class="fm-tasto piccolo" data-s="scegli 26">Scegli</button>
+        <div class="tutto">Tutto del Villaggio, più:</div>
+        <ul>
+          <li>la memoria che lavora con te, sempre</li>
+          <li>la guida: chiedi come fare, senza conteggio</li>
+          <li>detta e organizza: costi, rubrica, calendario a voce, senza conteggio</li>
+          <li>trascrizione delle dirette e delle lezioni</li>
+          <li>impaginazione, editing, traduzione</li>
+          <li>conversione di file, pdf da un audio</li>
+          <li>una pagina html o un sito, guidati</li>
+          <li>il pre-mortem su ogni obiettivo</li>
+        </ul>
+        <div class="conta">Tetto di sicurezza: <span class="fm-ph">[ 60 ]</span> lavori con file e <span class="fm-ph">[ 10 ]</span> ore di trascrizione al mese.</div>
+      </div>
+      <div class="piano">
+        <div class="nome">Un lavoro</div><div class="per">Per chi non ha la Bottega e ne ha bisogno una volta.</div>
+        <div class="pr ph"><span class="fm-ph">[ € ]</span></div>
+        <button class="fm-tasto piccolo secondario" data-s="scegli un lavoro">Dal tasto del lavoro</button>
+        <div class="tutto">Si paga quel pezzo:</div>
+        <ul>
+          <li>una trascrizione</li>
+          <li>un'impaginazione</li>
+          <li>un editing</li>
+          <li>una traduzione</li>
+          <li>una conversione, un pdf da un audio</li>
+        </ul>
+      </div>
     </div>
-    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">La stampa delle cose (opuscoli, kit fiera, carta) si paga a parte, sempre, nella stanza Stampa.</p>
+    <div class="scorri">SCORRI DI LATO ›</div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Sotto, cosa si ha davvero con ogni piano, e dove vanno i soldi.</p>
   </section>
 
   <!-- 2 · cosa ti dà Felicitas in più -->
@@ -154,7 +220,7 @@ a{color:inherit;text-decoration:none}
     <div class="capo"><span class="n">2</span><h2>Perché 26 qui e non 20 a un'AI.</h2></div>
     <div class="piu">
       <div><i>1</i><div><b>Dei 26, l'AI è 16. I 10 sono Felicitas.</b><small>Chi paga 20 a un'AI ha solo l'AI, e poi deve costruirsi il gruppo, la bacheca, gli eventi, la stampa, la diretta.</small></div></div>
-      <div><i>2</i><div><b>L'AI conosce già il tuo lavoro.</b><small>Non parte da zero a ogni chat: ha il tuo cruscotto coi 5 elementi, le tue orme, il tuo villaggio, le tue dirette. Altrove quella memoria la costruisci e la mantieni tu.</small></div></div>
+      <div><i>2</i><div><b>L'AI conosce già il tuo lavoro.</b><small>Non parte da zero a ogni chat: ha le tue orme, il tuo gruppo, le tue dirette, quello che hai dettato. Altrove quella memoria la costruisci e la mantieni tu.</small></div></div>
       <div><i>3</i><div><b>Il lavoro atterra dove serve.</b><small>La trascrizione finisce nella puntata, l'impaginato in Stampa, la notizia in Edizione, l'obiettivo nel gruppo. Con un'AI generica ti resta un file da portare in giro.</small></div></div>
       <div><i>4</i><div><b>I dati stanno in Italia, da noi.</b><small>Voce, testi e memoria sui server di Felicitas. Nessun terzo li tiene.</small></div></div>
       <div><i>5</i><div><b>Il praticantato e la comunità.</b><small>Il percorso in cinque passaggi, i vicinati, le persone. Nessuna AI te li dà.</small></div></div>
@@ -162,10 +228,12 @@ a{color:inherit;text-decoration:none}
     <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Quello che non diciamo: che la nostra AI sia più potente. Sotto c'è la stessa. Quello che diamo in più è il posto dove lavora e la memoria che ha.</p>
   </section>
 
-  <!-- 3 · la memoria del cruscotto, disegnata com'è -->
+  <!-- 3 · ordine nella memoria · il praticantato Antaḥkaraṇa (Gab, 13 ott 13:14) -->
   <section class="parte">
-    <div class="capo"><span class="n">3</span><h2>La memoria: il tuo cruscotto.</h2></div>
-    <p>Non un cervello disegnato. Un foglio, quello vero: in cima la formula, sotto i cicli della luna, dentro ogni ciclo le righe datate di quello che hai deciso, ognuna nel suo elemento.</p>
+    <div class="capo"><span class="n">3</span><h2>Ordine nella memoria.</h2></div>
+    <div class="sotto-t">IL PRATICANTATO ANTAḤKARAṆA</div>
+    <p>L'utilizzo di varie piattaforme ci porta a frammentare comunicazioni, idee, compiti da svolgere, che portano a disperdere tempo ed energia; la mancanza di una pratica chiara che ci pone a riacquisire fiducia in noi stessi, coerenza tra pensiero, parola ed azione, attenzione indomabile e tecniche per far ordine nella mente e nella memoria.</p>
+    <p>Il praticantato è la pratica: la memoria virtuale connessa alla memoria dell'essere. Ritmo lunare, obiettivi settimanali, esercizi dell'attenzione, scrittura creativa e tecniche di coscienza per collegarli tra loro. Dentro il lavoro si discute anche delle sette virtù.</p>
     <div class="foglio" style="margin-top:12px">
       <div class="formula">
         <div class="r">( 5 elementi + sviluppo ) × Nexus</div>
@@ -175,30 +243,31 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="lune">
         <span class="arch">ARCHIVIO ‹</span>
-        <div class="luna"><i></i>ago</div><span class="filo"></span>
-        <div class="luna piena"><i></i>set</div><span class="filo"></span>
-        <div class="luna nuova ora"><i></i>11 ott · ora</div><span class="filo"></span>
-        <div class="luna nuova" style="opacity:.35"><i></i>nov</div>
+        <div class="luna"><i></i>luna 1</div><span class="filo"></span>
+        <div class="luna piena"><i></i>luna 2</div><span class="filo"></span>
+        <div class="luna nuova ora"><i></i>luna nuova · ora</div><span class="filo"></span>
+        <div class="luna nuova" style="opacity:.35"><i></i>prossima</div>
       </div>
       <div class="righe">
-        <div class="riga-m" style="--c:var(--aria)"><span class="q">12 ott · 20:53</span><span class="e"></span><span>l'ipotesi: 10 al mese senza nulla, 26 con l'AI</span></div>
-        <div class="riga-m" style="--c:var(--fuoco)"><span class="q">13 ott · 10:29</span><span class="e"></span><span>la diretta funziona, provata dal vivo</span></div>
-        <div class="riga-m" style="--c:var(--aria)"><span class="q">13 ott · 10:38</span><span class="e"></span><span>la trascrizione sta dentro un pacchetto</span></div>
-        <div class="riga-m" style="--c:var(--terra)"><span class="q">13 ott · 12:14</span><span class="e"></span><span>costi, rubrica e calendario, anche a voce</span></div>
+        <div class="riga-m" style="--c:var(--terra)"><span class="q">settimana 1</span><span class="e"></span><span>l'obiettivo della settimana</span></div>
+        <div class="riga-m" style="--c:var(--fuoco)"><span class="q">ogni giorno</span><span class="e"></span><span>l'esercizio dell'attenzione</span></div>
+        <div class="riga-m" style="--c:var(--aria)"><span class="q">settimana 2</span><span class="e"></span><span>la scrittura creativa</span></div>
+        <div class="riga-m" style="--c:var(--etere)"><span class="q">settimana 3</span><span class="e"></span><span>una scelta presa, e il perché</span></div>
+        <div class="riga-m" style="--c:var(--nexus)"><span class="q">luna piena</span><span class="e"></span><span>le sette virtù: dove sono nel lavoro</span></div>
       </div>
-      <div class="legenda"><span style="--c:var(--terra)"><i></i>TERRA</span><span style="--c:var(--acqua)"><i></i>ACQUA</span><span style="--c:var(--fuoco)"><i></i>FUOCO</span><span style="--c:var(--aria)"><i></i>ARIA</span><span style="--c:var(--etere)"><i></i>ETERE</span></div>
-      <div class="leggo"><span class="oc">◉</span><p>Quando chiedi un lavoro, l'AI legge prima queste righe. Per questo oggi sa che i prezzi sono 10 e 26: glielo hai detto il 12 ottobre, e non l'ha dimenticato.</p></div>
+      <div class="legenda"><span style="--c:var(--terra)"><i></i>TERRA</span><span style="--c:var(--acqua)"><i></i>ACQUA</span><span style="--c:var(--fuoco)"><i></i>FUOCO</span><span style="--c:var(--aria)"><i></i>ARIA</span><span style="--c:var(--etere)"><i></i>ETERE</span><span style="--c:var(--nexus)"><i></i>NEXUS</span></div>
+      <div class="leggo"><span class="oc">◉</span><p>Il cruscotto è di chi segue il praticantato: dentro ci sono le scelte prese e gli obiettivi dati, al ritmo e coi simboli del funzionamento della Coscienza. Chi ha la Bottega lo ha come memoria che lavora: l'AI legge queste righe prima di rispondere.</p></div>
     </div>
-    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Accanto al cruscotto c'è il metodo a mano: i post-it, il foglio di ogni giorno, l'archivio chiuso a ogni luna. Il cruscotto digitale lo segue, non lo sostituisce.</p>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Il praticantato si apre da la mia orma: «Che cos'è il praticantato» e il percorso dei talenti.</p>
   </section>
 
   <!-- 4 · cosa c'è sotto -->
   <section class="parte">
-    <div class="capo"><span class="n">4</span><h2>Cosa c'è sotto.</h2></div>
+    <div class="capo"><span class="n">4</span><h2>Come sono realizzati i servizi.</h2></div>
     <div class="sotto">
       <div class="fm-riga"><b>la voce</b><span>la trascrive Whisper, un programma aperto, sul server di Felicitas in Italia. L'audio non esce da lì.</span></div>
       <div class="fm-riga"><b>i testi</b><span>i lavori di testo (impaginare, correggere, tradurre, guidare) li fa Claude, di Anthropic, su tua richiesta e solo con il testo di quel lavoro. Anthropic dichiara di non usare i dati dei clienti dell'API per addestrare i modelli <span class="fm-ph">[ riga da verificare sulle condizioni, prima della pubblicazione ]</span>.</span></div>
-      <div class="fm-riga"><b>la memoria</b><span>il tuo cruscotto, le orme, i gruppi, le chat: su Supabase, il database di Felicitas. L'AI lo legge quando glielo chiedi; non lo tiene.</span></div>
+      <div class="fm-riga"><b>la memoria</b><span>le orme, i gruppi, le chat, il cruscotto del praticantato: su Supabase, il database di Felicitas. L'AI li legge quando glielo chiedi; non li tiene.</span></div>
       <div class="fm-riga"><b>la diretta</b><span>LiveKit, server in Europa, solo per il passaggio della voce in tempo reale. La registrazione la fa il navigatore di chi coordina.</span></div>
     </div>
   </section>
@@ -206,8 +275,10 @@ a{color:inherit;text-decoration:none}
   <!-- 5 · i conti, aperti -->
   <section class="parte">
     <div class="capo"><span class="n">5</span><h2>Dove vanno i 26 euro.</h2></div>
+    <div class="sotto-t">USO NORMALE · USO AL TETTO</div>
+    <p style="margin-bottom:10px">Uso normale: una decina di lavori e due trascrizioni al mese. Uso al tetto: tutti i lavori e tutte le ore che il piano permette, ogni mese. I costi cambiano, il prezzo no.</p>
     <table class="conti">
-      <thead><tr><th></th><th>uso normale</th><th>uso al tetto</th></tr></thead>
+      <thead><tr><th></th><th>uso normale<small>≈10 lavori · 2 trascrizioni</small></th><th>uso al tetto<small>[ 60 ] lavori · [ 10 ] ore</small></th></tr></thead>
       <tbody>
         <tr><td>prezzo</td><td>26,00 €</td><td>26,00 €</td></tr>
         <tr><td class="meno">IVA 22 %</td><td class="meno">− 4,69 €</td><td class="meno">− 4,69 €</td></tr>
@@ -220,26 +291,26 @@ a{color:inherit;text-decoration:none}
         <tr class="resta tot"><td>resta a Felicitas</td><td>≈ 13 €</td><td>≈ 6,5 €</td></tr>
       </tbody>
     </table>
-    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Con quello che resta si paga <span class="fm-ph">[ parole di Gab: il database, la diretta, il lavoro di chi tiene in piedi Felicitas, le suddivisioni del piano ]</span>. «Uso normale» vuol dire una decina di lavori e due trascrizioni al mese; «al tetto» vuol dire tutto il mese, ogni giorno.</p>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">Con quello che resta si paga <span class="fm-ph">[ parole di Gab: il database, la diretta, il lavoro di chi tiene in piedi Felicitas, le suddivisioni del piano ]</span>.</p>
   </section>
 
   <!-- 6 · detta e basta -->
   <section class="parte">
-    <div class="capo"><span class="n">6</span><h2>Detta e basta.</h2></div>
+    <div class="capo"><span class="n">6</span><h2>Detta e organizza.</h2></div>
     <p>Costi, rubrica e calendario si possono scrivere anche solo mandando un vocale. Il sistema lo capisce, lo mette al posto giusto e ti chiede conferma con un tocco.</p>
     <div class="detta" style="margin-top:12px">
       <div class="vocale"><span class="mic">🎙</span><span class="onda"><i style="--h:6px"></i><i style="--h:14px"></i><i style="--h:20px"></i><i style="--h:10px"></i><i style="--h:16px"></i><i style="--h:8px"></i><i style="--h:18px"></i><i style="--h:12px"></i><i style="--h:6px"></i><i style="--h:15px"></i><i style="--h:9px"></i></span><span class="dove">📅<br>CALENDARIO</span></div>
-      <div class="dice">«giovedì alle 19 la diretta con Guido Grossi e Vittorino Crivello»</div>
+      <div class="dice">«giovedì alle 19 la diretta del villaggio, con due ospiti»</div>
       <div class="ar">▾ diventa</div>
-      <div class="fm-carta"><div class="im" style="font-size:20px">📅</div><div class="t"><b>Mutuo credito cooperativo</b><small>giovedì 16 ottobre · ore 19 · la diretta del villaggio</small></div><span class="fr">conferma ›</span></div>
+      <div class="fm-carta"><div class="im" style="font-size:20px">📅</div><div class="t"><b>La diretta del villaggio</b><small>giovedì 16 ottobre · ore 19 · con due ospiti</small></div><span class="fr">conferma ›</span></div>
       <div class="vocale" style="margin-top:6px"><span class="mic">🎙</span><span class="onda"><i style="--h:9px"></i><i style="--h:17px"></i><i style="--h:7px"></i><i style="--h:20px"></i><i style="--h:12px"></i><i style="--h:6px"></i><i style="--h:15px"></i><i style="--h:19px"></i><i style="--h:8px"></i><i style="--h:11px"></i><i style="--h:5px"></i></span><span class="dove">€<br>COSTI</span></div>
       <div class="dice">«il kit fiera, trecentottantasette e sessantasei»</div>
       <div class="ar">▾ diventa</div>
       <div class="fm-carta"><div class="im" style="font-size:20px">€</div><div class="t"><b>Kit fiera · 387,66 €</b><small>Stampa · 13 ottobre</small></div><span class="fr">conferma ›</span></div>
       <div class="vocale" style="margin-top:6px"><span class="mic">🎙</span><span class="onda"><i style="--h:12px"></i><i style="--h:6px"></i><i style="--h:18px"></i><i style="--h:9px"></i><i style="--h:20px"></i><i style="--h:14px"></i><i style="--h:7px"></i><i style="--h:16px"></i><i style="--h:10px"></i><i style="--h:5px"></i><i style="--h:13px"></i></span><span class="dove">☏<br>RUBRICA</span></div>
-      <div class="dice">«segna Marco Caddeo, coordinatore, Civiltà Sarda»</div>
+      <div class="dice">«segna il centro sociale di Baratili, è dove si fa il festival»</div>
       <div class="ar">▾ diventa</div>
-      <div class="fm-carta"><div class="im tonda" style="font-family:'Cormorant Garamond',serif;font-size:18px">M</div><div class="t"><b>Marco Caddeo</b><small>coordinatore · Villaggio Felicitas · Civiltà Sarda</small></div><span class="fr">conferma ›</span></div>
+      <div class="fm-carta"><div class="im tonda" style="font-family:'Cormorant Garamond',serif;font-size:18px">C</div><div class="t"><b>Centro Sociale · Baratili San Pietro</b><small>luogo · il Felicitas Festival, 21 novembre</small></div><span class="fr">conferma ›</span></div>
     </div>
     <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">I vocali brevi non si contano nel tetto. La rubrica è tua e privata: quello che detti resta a te.</p>
   </section>
@@ -259,45 +330,9 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
-  <!-- 8 · i prezzi -->
-  <section class="parte">
-    <div class="capo"><span class="n">8</span><h2>Scegli.</h2></div>
-    <div class="prezzi">
-      <div class="piano">
-        <div class="top"><b>FELICITAS</b><span class="pr">10 €<small>al mese, IVA inclusa</small></span></div>
-        <ul>
-          <li>il gruppo a quattro livelli: villaggio, vicinato, nucleo, team</li>
-          <li>chat, obiettivi, eventi, la diretta del villaggio</li>
-          <li>la Stampa (i lavori di stampa si pagano a parte)</li>
-          <li>il tuo cruscotto, scritto a mano</li>
-          <li class="no">niente lavori con l'AI (si comprano singoli)</li>
-        </ul>
-        <div class="tasti"><button class="fm-tasto piccolo secondario" data-s="scegli 10">Scegli</button></div>
-      </div>
-      <div class="piano oro">
-        <div class="top"><b>FELICITAS CON L'AI</b><span class="pr">26 €<small>al mese, IVA inclusa</small></span></div>
-        <ul>
-          <li>tutto il 10</li>
-          <li>la memoria che lavora con te, sempre</li>
-          <li>la guida: chiedi come fare, senza conteggio</li>
-          <li>detta costi, rubrica, calendario: senza conteggio</li>
-          <li>i lavori con file: trascrizione, impaginazione, editing, traduzione, conversione, pdf da audio, pagina html o sito</li>
-          <li>il pre-mortem su ogni obiettivo</li>
-        </ul>
-        <div class="tasti"><button class="fm-tasto piccolo" data-s="scegli 26">Scegli</button><span class="conta">tetto di sicurezza: <span class="fm-ph">[ 60 ]</span> lavori con file e <span class="fm-ph">[ 10 ]</span> ore di trascrizione al mese</span></div>
-      </div>
-      <div class="piano">
-        <div class="top"><b>UN LAVORO</b><span class="pr"><span class="fm-ph">[ € ]</span></span></div>
-        <ul>
-          <li>per chi non ha il 26: una trascrizione, un'impaginazione, una traduzione, una conversione — paghi quel pezzo</li>
-          <li>si compra nel momento in cui serve, dal tasto del lavoro</li>
-        </ul>
-      </div>
-    </div>
-    <div class="data">PREZZI E CONTI AL 13 OTTOBRE 2026 · QUANDO CAMBIANO, CAMBIA QUESTA PAGINA</div>
-  </section>
+  <div class="data" style="padding:0 18px">PREZZI E CONTI AL 13 OTTOBRE 2026 · QUANDO CAMBIANO, CAMBIA QUESTA PAGINA</div>
 
-  <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). Il tasto «Scegli» non fa ancora niente: il pagamento arriva alla conferma del modello.</div>
+  <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I nomi «Villaggio» e «Bottega» per i piani 10 e 26 sono una proposta (13 ott): Gab non li ha ancora scelti. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). Il tasto «Scegli» non fa ancora niente: il pagamento arriva alla conferma del modello.</div>
 </div>
 <script src="comune/fm-riga.js?v=10131230"></script>
 <script src="comune/fm-statistiche.js?v=10121420"></script>
