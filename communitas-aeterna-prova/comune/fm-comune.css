@@ -97,3 +97,14 @@
 
 /* ── 7 · i segnaposti (mai in pagine pubblicate) ── */
 .fm-ph{color:var(--oro);opacity:.85}
+
+/* ── 8 · la grandezza giusta su ogni schermo (Gab, 13 ottobre: «chiunque apra da qualunque desktop si trovi una grandezza
+      giusta, e chiunque apra dal telefono trova grandezza giusta … i testi sono ancora un po' piccoli») ──
+   Una regola sola per tutte le pagine: la colonna .app e i fogli che le stanno sotto prendono --fm-larghezza,
+   e tutto si ingrandisce di --fm-zoom (telefono 1.12 · computer 1.22). Le pagine non ripetono niente. */
+:root{--fm-larghezza:430px;--fm-zoom:1.12}
+@media (min-width:700px){:root{--fm-larghezza:min(760px, calc(96vw / 1.22));--fm-zoom:1.22}}
+@media (min-width:1000px){:root{--fm-larghezza:min(820px, calc(96vw / 1.22))}}
+html body .app{zoom:var(--fm-zoom);width:calc(100% / var(--fm-zoom));max-width:var(--fm-larghezza)}
+html body .fm-piede,html body .piede{zoom:var(--fm-zoom)}
+html body .fm-piede .in,html body .piede .in{max-width:var(--fm-larghezza)}

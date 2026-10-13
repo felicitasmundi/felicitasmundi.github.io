@@ -7,14 +7,14 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10131540">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 img{display:block;max-width:100%}
-.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+.app{max-width:var(--fm-larghezza,430px);margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
 @media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
 
 /* la testata sopra la foto */
@@ -187,6 +187,6 @@ img{display:block;max-width:100%}
   document.querySelectorAll('.fm-chips').forEach(function(c){ c.querySelectorAll('.fm-chip').forEach(function(b){ b.onclick=function(){ c.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); }; }); });
 })();
 </script>
-<script src="comune/fm-riga.js?v=10131230"></script>
+<script src="comune/fm-riga.js?v=10131540"></script>
 </body>
 </html>

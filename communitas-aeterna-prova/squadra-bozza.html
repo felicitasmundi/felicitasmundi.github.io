@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="comune/fm-comune.css?v=10111510">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10131540">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -15,7 +15,7 @@ body{background:var(--notte);color:var(--avorio);font-family:'DM Sans',system-ui
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-.app{max-width:430px;margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
+.app{max-width:var(--fm-larghezza,430px);margin:0 auto;min-height:100dvh;background:var(--notte);position:relative;padding-bottom:90px}
 @media (min-width:700px){body{background:#05060d}.app{box-shadow:0 0 0 1px var(--riga),0 40px 100px rgba(0,0,0,.6);margin:24px auto;min-height:calc(100dvh - 48px);border-radius:28px;overflow:hidden}}
 .testata{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;background:linear-gradient(180deg,var(--notte) 70%,transparent)}
 .testata .m{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro)}
@@ -49,7 +49,7 @@ a{color:inherit;text-decoration:none}
 .task.vuota{border-style:dashed;background:none;color:var(--grigio);font-size:12px;text-align:center;line-height:1.4;cursor:default}
 .ph{color:var(--oro);opacity:.85}
 /* il foglio della task */
-.foglio{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:430px;background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:88dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.foglio{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0 auto;max-width:var(--fm-larghezza,430px);background:#10132a;border-radius:24px 24px 0 0;padding:14px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .4s;max-height:88dvh;overflow:auto;box-shadow:0 -20px 60px rgba(0,0,0,.6)}
 .foglio.vivo{transform:none}
 .foglio .maniglia{width:38px;height:4px;border-radius:2px;background:rgba(245,240,230,.3);margin:0 auto 14px}
 .foglio h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1}
@@ -135,6 +135,6 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll('.task[data-t]').forEach(function(t){ t.onclick=function(){ $('foglio-t').textContent=t.getAttribute('data-t'); $('foglio').classList.add('vivo'); $('velo').classList.add('vivo'); }; });
 })();
 </script>
-<script src="comune/fm-riga.js?v=10131230"></script>
+<script src="comune/fm-riga.js?v=10131540"></script>
 </body>
 </html>
