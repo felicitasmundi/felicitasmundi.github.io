@@ -43,7 +43,8 @@
     ".fm-stanze .voci{display:flex;gap:2px}.fm-stanze .voci a.staccata{margin-left:6px;flex:0 0 auto;padding-left:10px;padding-right:10px;border-left:1px solid var(--riga);border-radius:0 12px 12px 0}" +
     ".fm-stanze .voci a{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px 7px;border-radius:12px;color:var(--grigio);text-decoration:none;min-width:0}" +
     ".fm-stanze .voci a svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linejoin:round;stroke-linecap:round}" +
-    ".fm-stanze .voci a span{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.04em;line-height:1.1;text-align:center;white-space:nowrap}" +
+    ".fm-stanze .voci a span{font-family:'Cinzel',serif;font-size:min(9.5px, 2.35vw);letter-spacing:.02em;line-height:1.1;text-align:center;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}" +
+    /* 13 ott 20:12, Gab: «nel telefono i simboli si sovrappongono … aggiusta a livello sistemico»: la scritta si stringe con lo schermo e non esce mai dalla sua casella */
     ".fm-stanze .voci a.on{color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}" +
     ".fm-stanze .voci a:hover{color:var(--c)}" +
     "@media (min-width:700px){.fm-stanze .voci a{flex-direction:row;gap:8px;padding:8px 10px}.fm-stanze .voci a span{font-size:11.5px}}";

@@ -107,7 +107,7 @@
     var griglia = h("div", "fms-tipi");
     (TIPI[fam] || []).forEach(function (t) {
       var gs = gruppiDi(t); if (!gs.length) return;
-      var b = h("button", "fms-tipo", '<img src="' + IMG + t[3] + '.jpg" alt=""><div class="t">' + esc(t[0]) + '<small>' + gs.length + (gs.length === 1 ? " versione" : " versioni") + '</small></div>'); b.type = "button";
+      var b = h("button", "fms-tipo", '<img src="' + IMG + t[3] + '.jpg' + IMGV + '" alt=""><div class="t">' + esc(t[0]) + '<small>' + gs.length + (gs.length === 1 ? " versione" : " versioni") + '</small></div>'); b.type = "button";
       b.onclick = function () { apriTipo(t, gs); };
       griglia.appendChild(b);
     });
