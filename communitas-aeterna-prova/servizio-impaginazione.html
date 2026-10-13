@@ -79,10 +79,10 @@ textarea{width:100%;margin-top:10px;min-height:64px;background:#0A0C1A;border:1p
       <div class="grande">3 €<small>a pagina · minimo 15 € · IVA inclusa</small></div>
       <div class="nota">le pagine del documento finito, in A4 o A5. Il lavoro lo fa l'AI con la memoria Felicitas; una persona lo guarda prima di consegnarlo.</div>
       <div class="conta"><label for="q">quante pagine</label><input id="q" type="number" min="1" step="1" value="8" inputmode="numeric"><div class="tot"><span id="tot"></span><small>in tutto</small></div></div>
+      <textarea id="nota" placeholder="il testo, o il link a dove sta; e cosa vuoi che venga fuori"></textarea>
+      <div class="nota" style="margin-top:8px"><b>Un file</b> (PDF o ZIP), se ce l'hai: <input id="file" type="file" accept="application/pdf,.pdf,application/zip,.zip" style="display:block;margin-top:6px;font-size:13px;color:var(--grigio)"><span id="file-stato"></span></div>
+      <div class="tasti"><button class="fm-tasto pieno" id="acquista" data-s="acquista impaginazione">Acquista</button></div>
       <div class="bottega">Nella <b>Bottega</b> (26 € al mese) questo lavoro è compreso, senza conteggio. <a href="come-funziona-bozza.html">Come funziona ›</a></div>
-      <textarea id="nota" placeholder="di cosa si tratta, in due righe (facoltativo)"></textarea>
-      <div class="tasti"><button class="fm-tasto pieno" id="chiedi" data-s="chiedi impaginazione">Chiedi questo lavoro</button></div>
-      <div class="nota" style="margin-top:8px">Quando si paga: <span class="fm-ph">[ alla richiesta · alla consegna ]</span>. La richiesta arriva a chi coordina, che ti scrive.</div>
     </div>
   </div>
   <div class="esito" id="esito" hidden></div>
@@ -93,31 +93,29 @@ textarea{width:100%;margin-top:10px;min-height:64px;background:#0A0C1A;border:1p
     </div>
   </div>
 
-  <div class="nota-bozza"><b>bozza</b> — pagina del servizio «Impaginazione», in Edizione (Gab, 13 ott 18:08: «i servizi impaginazione ecc vanno su edizione»), indicizzabile: una pagina per servizio, aperta a chi non è entrato, da mettere nella sitemap quando esce dalla prova. Prezzo a quantità: 3 € a pagina, minimo 15 € (proposta del 13 ott 18:12, «ok su tutto» alle 18:15). «Chiedi questo lavoro» scrive una richiesta in <code>segnalazioni</code> (tipo lavoro): la cassa del lavoro singolo arriva dopo.</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="comune/fm-cassa.js?v=10131900"></script>
 <script>
 (function(){
-  var P=3, MIN=15;
-  var q=document.getElementById("q"), tot=document.getElementById("tot");
-  function eur(n){ return n.toLocaleString("it-IT",{minimumFractionDigits:2,maximumFractionDigits:2})+" €"; }
-  function conta(){ var n=Math.max(1,parseInt(q.value||"1",10)); var t=Math.max(MIN,n*P); tot.textContent=eur(t); return {n:n,t:t}; }
+  var P=3, MIN=15, file=null;
+  var q=document.getElementById("q"), tot=document.getElementById("tot"), b=document.getElementById("acquista");
+  function conta(){ var n=Math.max(1,parseInt(q.value||"1",10)); var t=Math.max(MIN,n*P); tot.textContent=FMCassa.eur(t); b.textContent="Acquista · "+FMCassa.eur(t); return {n:n,t:t}; }
   q.addEventListener("input", conta); conta();
-  var db=null; try{ db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}); }catch(e){}
-  function mostra(t,male){ var e=document.getElementById("esito"); e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=t; e.scrollIntoView({block:"center"}); }
-  document.getElementById("chiedi").addEventListener("click", function(){
-    var b=this; if(!db){ mostra("Il collegamento non si è caricato: ricarica la pagina.", true); return; }
-    db.auth.getSession().then(function(r){
-      var sess=r&&r.data&&r.data.session; if(!sess){ location.href="accesso.html"; return; }
-      var c=conta(); b.disabled=true; b.textContent="un momento…";
-      var rif="impaginazione · "+c.n+" pagine · "+eur(c.t);
-      return db.from("segnalazioni").insert({persona_id:sess.user.id, tipo:"lavoro", riferimento:rif, testo:(document.getElementById("nota").value||"").trim()||null, stato:"aperta"}).then(function(z){
-        b.disabled=false; b.textContent="Chiedi questo lavoro";
-        if(z&&z.error){ mostra("Non sono riuscito a mandare la richiesta: "+z.error.message, true); return; }
-        mostra("Richiesta arrivata: "+rif+". Chi coordina ti scrive.");
-      });
-    }).catch(function(e){ mostra("Qualcosa non va: "+(e&&e.message||e), true); });
+  var inp=document.getElementById("file"), st=document.getElementById("file-stato");
+  inp.onchange=function(){ var fl=inp.files&&inp.files[0]; if(!fl) return; st.textContent=" carico "+fl.name+"…";
+    FMCassa.sessione().then(function(sess){ if(!sess){ location.href="accesso.html"; return; }
+      var nome=sess.user.id+"/"+Date.now()+"-"+fl.name.replace(/[^\w.\-]+/g,"_");
+      return FMCassa.client().storage.from("stampa").upload(nome, fl, {contentType:fl.type||"application/pdf", upsert:false}).then(function(r){
+        if(r.error){ st.textContent=" non sono riuscito a caricare il file: "+r.error.message; return; } file="stampa/"+nome; st.textContent=" file caricato: "+fl.name; }); }); };
+  b.addEventListener("click", function(){
+    var c=conta();
+    FMCassa.apri({ azione:"lavoro", corpo:{servizio:"impaginazione", quantita:c.n, nota:(document.getElementById("nota").value||"").trim(), file:file||""},
+      titolo:"Impaginazione", righe:[c.n+" pagine", "3 € a pagina, minimo 15 €", file?"file caricato":"senza file"],
+      grazie:"Pagato. Il lavoro è in mano a chi coordina: ti scrive quando è pronto, e lo trovi nella tua orma.",
+      dopo:function(){ b.disabled=true; b.textContent="Pagato"; } });
   });
 })();
 </script>
