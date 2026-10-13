@@ -165,6 +165,8 @@
           return FMCassa.client().storage.from("stampa").upload(nome, fl, { contentType: fl.type || "application/pdf", upsert: false }).then(function (r2) {
             if (r2.error) { st.textContent = "non sono riuscito a caricare il file: " + r2.error.message; return; }
             files[r.nome] = "stampa/" + nome; st.textContent = "caricato: " + fl.name;
+            var i = RIGHE.indexOf(r), s = stato[i];
+            if (s && s.variante && s.quantita) { var ver = h("div", "attesa", ""); st.parentNode.insertBefore(ver, st.nextSibling); FMCassa.verifica({ file: files[r.nome], variante: String(s.variante.id), quantita: s.quantita.q.quantity }, ver, function (esito) { if (esito === 2) { delete files[r.nome]; st.textContent = "respinto: carica un file corretto"; } }); }
           });
         });
       };

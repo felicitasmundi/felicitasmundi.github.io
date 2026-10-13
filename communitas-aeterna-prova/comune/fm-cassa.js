@@ -136,5 +136,24 @@
       }, function () { disegna(); });
     });
   }
-  window.FMCassa = { apri: apri, sessione: sessione, client: client, eur: eur, indirizzi: indirizzi };
+  /* 13 ott 22:43, Gab: «è già strutturato in modo che il lavoro sia automatizzato» — la verifica del file la fa Flyeralarm, da qui, senza ordine
+     e senza costo (stampa-verifica → check_print_data). verifica({file, variante, quantita}, el, cb): scrive l'esito in el e chiama cb(1 accettato · 2 respinto · 0 fermo). */
+  function verifica(dati, el, cb) {
+    el.textContent = "Flyeralarm sta verificando il file…";
+    return client().functions.invoke("stampa-verifica", { body: dati }).then(function (r) {
+      if (r.error) throw r.error; var d = r.data || {}; if (d.errore) throw new Error(d.errore); if (!d.controllo) throw new Error("nessun controllo");
+      var giri = 0;
+      function leggi() {
+        return client().functions.invoke("stampa-verifica", { body: { controllo: d.controllo } }).then(function (r2) {
+          if (r2.error) throw r2.error; var e = r2.data || {}; if (e.errore) throw new Error(e.errore);
+          if (e.stato === 1) { el.innerHTML = "<b style=\"color:var(--fatto,#7fb77e)\">✓ file verificato da Flyeralarm: va bene per la stampa</b>"; if (cb) cb(1, e); return; }
+          if (e.stato === 2) { el.innerHTML = "<b style=\"color:var(--manca,#e07a5f)\">⚠ Flyeralarm ha respinto il file</b>" + (e.motivi && e.motivi.length ? "<br>" + e.motivi.map(function (m) { return String(m).replace(/[&<>]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[k]; }); }).join("<br>") : "") + "<br>Correggilo e caricalo di nuovo."; if (cb) cb(2, e); return; }
+          if (++giri > 40) { el.textContent = "La verifica di Flyeralarm non ha ancora risposto: puoi andare avanti, l'esito arriva a chi coordina."; if (cb) cb(0, e); return; }
+          el.textContent = "Flyeralarm sta verificando il file… (" + (giri * 3) + " s)"; return new Promise(function (ok) { setTimeout(ok, 3000); }).then(leggi);
+        });
+      }
+      return leggi();
+    }).catch(function (e) { el.textContent = "La verifica non è partita: " + (e && e.message ? e.message : "—") + ". Il file resta caricato: lo guarda chi coordina."; if (cb) cb(0, { errore: e && e.message }); });
+  }
+  window.FMCassa = { apri: apri, sessione: sessione, client: client, eur: eur, indirizzi: indirizzi, verifica: verifica };
 })();

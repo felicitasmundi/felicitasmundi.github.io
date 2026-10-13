@@ -291,12 +291,12 @@
     var indirizzo = ""; FMCassa.indirizzi(indSc, function (x) { indirizzo = x; });
     var fileBox = h("div", "fms-file", "<b>Il file di stampa</b> (PDF, fino a 100 MB)" + (variante.data_sheet ? ' · <a href="' + esc(variante.data_sheet) + '" target="_blank" rel="noopener" style="color:var(--oro,#D4AF6A)">le misure del file ›</a>' : ""));
     var inp = document.createElement("input"); inp.type = "file"; inp.accept = "application/pdf,.pdf,application/zip,.zip"; fileBox.appendChild(inp);
-    var stato = h("div", "fms-nota", "lo puoi caricare ora o dopo il pagamento: senza il file l'ordine non parte"); fileBox.appendChild(stato);
+    var stato = h("div", "fms-nota", "lo puoi caricare ora o dopo il pagamento: senza il file l'ordine non parte. Appena caricato, Flyeralarm lo verifica e ti dice se va bene."); fileBox.appendChild(stato);
     t.appendChild(fileBox);
     var paga = h("button", "fms-paga", "Ordina e paga " + eur(tot)); paga.type = "button"; t.appendChild(paga);
     t.appendChild(h("div", "fms-nota", "Pagato, l'ordine lo manda in stampa chi coordina, col tuo file; ti arriva col corriere."));
     corpo.appendChild(t); pc.appendChild(corpo);
-    file = null;
+    file = null; var respinto = false;
     inp.onchange = function () {
       var fl = inp.files && inp.files[0]; if (!fl) return;
       stato.textContent = "carico " + fl.name + "…";
@@ -306,11 +306,17 @@
         return FMCassa.client().storage.from("stampa").upload(nome, fl, { contentType: fl.type || "application/pdf", upsert: false }).then(function (r) {
           if (r.error) { stato.textContent = "non sono riuscito a caricare il file: " + r.error.message; return; }
           file = "stampa/" + nome; stato.textContent = "file caricato: " + fl.name;
+          var ver = fileBox.querySelector(".fms-verifica") || h("div", "fms-nota fms-verifica", ""); fileBox.appendChild(ver);
+          respinto = false; paga.disabled = false; paga.textContent = "Ordina e paga " + eur(tot);
+          FMCassa.verifica({ file: file, variante: String(variante.id), quantita: quantita.q.quantity }, ver, function (esito) {
+            if (esito === 2) { respinto = true; paga.disabled = true; paga.textContent = "Il file è stato respinto: caricane uno corretto"; }
+          });
         });
       });
     };
     paga.onclick = function () {
       if (!indirizzo) { alert("Scegli o aggiungi l'indirizzo di consegna."); return; }
+      if (respinto) { alert("Flyeralarm ha respinto il file: caricane uno corretto prima di pagare."); return; }
       var opz = Object.keys(opzScelte).map(function (k) { return { gruppo: k, id: opzScelte[k], nome: (opzioni[k].options[opzScelte[k]] || {}).name || "" }; });
       FMCassa.apri({
         azione: "stampa",
