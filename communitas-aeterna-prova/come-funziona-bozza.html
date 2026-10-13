@@ -134,6 +134,28 @@ a{color:inherit;text-decoration:none}
 .piano li.no{color:var(--grigio)}.piano li.no::before{content:"–"}
 .data{font-size:11px;color:var(--grigio);letter-spacing:.06em;text-align:center;margin-top:14px}
 
+/* la cassa: una finestra nostra, col riquadro della carta di Stripe dentro (Gab, 13 ott: «3») */
+.velo{position:fixed;inset:0;z-index:70;background:rgba(4,6,14,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none}
+.velo.vivo{display:block}
+.cassa{position:fixed;left:0;right:0;bottom:0;z-index:80;margin:0 auto;max-width:var(--fm-larghezza,430px);background:#10132a;border-radius:24px 24px 0 0;padding:16px 18px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px rgba(0,0,0,.6);transform:translateY(105%);transition:transform .35s;max-height:92dvh;overflow:auto}
+.cassa.vivo{transform:none}
+@media (min-width:700px){.cassa{bottom:auto;top:50%;transform:translateY(-50%) scale(.98);opacity:0;pointer-events:none;border-radius:24px;max-width:520px;max-height:90dvh}.cassa.vivo{transform:translateY(-50%);opacity:1;pointer-events:auto}}
+.cassa .capo{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.cassa .capo .fm-occ{color:var(--oro)}
+.cassa h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28px;line-height:1.05;margin-top:4px}
+.cassa .chiudi{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--riga);color:var(--grigio);display:grid;place-items:center;font-size:18px}
+.cassa .prezzo{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--oro);line-height:1;margin-top:10px}
+.cassa .prezzo small{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--grigio);margin-left:6px}
+.cassa ul.incl{list-style:none;margin:10px 0 0;display:flex;flex-direction:column;gap:4px}
+.cassa ul.incl li{font-size:13px;line-height:1.4;padding-left:14px;position:relative;color:rgba(245,240,230,.9)}
+.cassa ul.incl li::before{content:"·";position:absolute;left:3px;color:var(--oro)}
+.cassa .carta{margin-top:14px;min-height:120px}
+.cassa .carta .attesa{font-size:13px;color:var(--grigio);padding:18px 0;text-align:center}
+.cassa .paga{margin-top:14px}
+.cassa .riga-f{font-size:11.5px;color:var(--grigio);line-height:1.5;margin-top:10px;text-align:center}
+.cassa .riga-f a{color:var(--oro)}
+.cassa .err{margin-top:10px;font-size:13px;color:var(--manca);line-height:1.45}
+.cassa .sicuro{display:flex;align-items:center;justify-content:center;gap:6px;font-size:10.5px;letter-spacing:.14em;color:var(--grigio);margin-top:12px}
 .nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
 .nota-bozza b{color:var(--oro);font-weight:600}
 </style>
@@ -353,9 +375,23 @@ a{color:inherit;text-decoration:none}
 
   <div class="data" style="padding:0 18px">PREZZI E CONTI AL 13 OTTOBRE 2026 · QUANDO CAMBIANO, CAMBIA QUESTA PAGINA</div>
 
-  <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I nomi «Villaggio» e «Bottega» per i piani 10 e 26: scelti da Gab il 13 ott, 13:41. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). «Scegli» e «Entra nel praticantato» aprono il pagamento con Stripe (funzione stripe-cassa) appena SQL 59 è lanciato e i prezzi sono collegati; il piano si accende col webhook.</div>
+  <div class="velo" id="velo"></div>
+  <div class="cassa" id="cassa" role="dialog" aria-modal="true" aria-labelledby="cassa-nome">
+    <div class="capo"><div><div class="fm-occ">IL PAGAMENTO</div><h2 id="cassa-nome">[ piano ]</h2></div><button class="chiudi" id="cassa-chiudi" aria-label="chiudi">×</button></div>
+    <div class="prezzo" id="cassa-prezzo"></div>
+    <ul class="incl" id="cassa-incl"></ul>
+    <div class="carta" id="cassa-carta"><div class="attesa">preparo il pagamento…</div></div>
+    <div class="err" id="cassa-err" hidden></div>
+    <button class="fm-tasto pieno paga" id="cassa-paga" disabled>Paga</button>
+    <div class="riga-f">IVA inclusa · si rinnova da solo · si disdice quando vuoi da «Fatture, carta, disdetta» nell'account · <a href="../communitas-aeterna/condizioni.html">condizioni</a> · <a href="../communitas-aeterna/privacy.html">privacy</a></div>
+    <div class="sicuro">PAGAMENTO SICURO · LA CARTA LA VEDE SOLO STRIPE</div>
+  </div>
+
+  <div class="nota-bozza"><b>bozza</b> — si apre dal loghetto nella riga delle stanze e dalla riga «Il mio pacchetto» nell'account. I nomi «Villaggio» e «Bottega» per i piani 10 e 26: scelti da Gab il 13 ott, 13:41. I numeri tra [ ] e le righe «parole di Gab» sono da fissare. I conti vengono da <code>16_piano economico/AI-nei-26-euro_conti-token_2026-10-12.md</code>; il tetto è una proposta (13 ott, 12:08). «Scegli» e «Entra nel praticantato» aprono la cassa nostra col riquadro della carta di Stripe dentro (funzione stripe-cassa, azione «avvia»); il piano si accende col webhook.</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>window.FM_STRIPE_PK = "";</script><!-- la chiave pubblicabile di Stripe (pk_…): pubblica, la mette Gab -->
 <script>
 /* Gab, 13 ottobre: «se uno vede ospite da ospite, è gia dentro, quindi dovrebbe essere collegato al database, e se è account ospite, esce "sei qua"».
    Chi è dentro: persone.grado e persone.piano (SQL 59). Villaggio/Bottega dal piano; praticantato da praticantato_fino_al;
@@ -385,14 +421,55 @@ a{color:inherit;text-decoration:none}
     }).catch(function(e){ console.log("come funziona · sessione", e); });
   }
   chiSono();
+  /* la cassa nostra (Gab, 13 ott, 15:50: «3»): il foglio è nostro, dentro c'è il riquadro della carta di Stripe */
+  var STRIPE_PK = window.FM_STRIPE_PK || "";
+  var stripe=null, elements=null, cassaAperta=null;
+  var NOMI={villaggio:"Villaggio",bottega:"Bottega",praticantato:"Praticantato Antaḥkaraṇa"};
+  var PERIODO={mese:"al mese",settimana:"a settimana"};
+  var velo=document.getElementById("velo"), cassa=document.getElementById("cassa");
+  function chiudiCassa(){ cassa.classList.remove("vivo"); velo.classList.remove("vivo"); cassaAperta=null; }
+  document.getElementById("cassa-chiudi").addEventListener("click", chiudiCassa); velo.addEventListener("click", chiudiCassa);
+  function erroreCassa(t){ var e=document.getElementById("cassa-err"); e.hidden=false; e.textContent=t; }
+  function apriCassa(piano){
+    cassaAperta=piano;
+    document.getElementById("cassa-nome").textContent=NOMI[piano]||piano;
+    document.getElementById("cassa-prezzo").textContent="";
+    var incl=document.getElementById("cassa-incl"); incl.innerHTML="";
+    var col=document.querySelector('.piano[data-piano="'+piano+'"]');
+    if(col){ col.querySelectorAll("ul li:not(.no)").forEach(function(li,i){ if(i<6){ var x=document.createElement("li"); x.textContent=li.textContent; incl.appendChild(x);} }); }
+    if(piano==="praticantato"){ ["l'incontro di gruppo settimanale online, con registrazione","le lezioni riservate della Scuola","il cruscotto coi cinque elementi"].forEach(function(t){ var x=document.createElement("li"); x.textContent=t; incl.appendChild(x); }); }
+    document.getElementById("cassa-carta").innerHTML='<div class="attesa">preparo il pagamento…</div>';
+    document.getElementById("cassa-err").hidden=true;
+    var paga=document.getElementById("cassa-paga"); paga.disabled=true; paga.textContent="Paga";
+    cassa.classList.add("vivo"); velo.classList.add("vivo");
+    db.functions.invoke("stripe-cassa",{body:{azione:"avvia",piano:piano,torna:location.origin+location.pathname}}).then(function(r){
+      var d=(r&&r.data)||{};
+      if(!d.segreto){ erroreCassa((d.errore||"non riesco a preparare il pagamento")+". Scrivi a chi coordina."); return; }
+      document.getElementById("cassa-prezzo").innerHTML=Number(d.importo).toLocaleString("it-IT",{minimumFractionDigits:2})+' €<small>'+(PERIODO[d.periodo]||"")+' · IVA inclusa</small>';
+      if(!STRIPE_PK){ erroreCassa("manca la chiave pubblicabile di Stripe nella pagina"); return; }
+      if(!window.Stripe){ erroreCassa("Stripe non si è caricato: ricarica la pagina"); return; }
+      stripe=stripe||window.Stripe(STRIPE_PK,{locale:"it"});
+      elements=stripe.elements({clientSecret:d.segreto,appearance:{theme:"night",labels:"floating",variables:{colorPrimary:"#D4AF6A",colorBackground:"#0A0C1A",colorText:"#F5F0E6",colorTextSecondary:"#9A978F",colorDanger:"#B4574A",fontFamily:"'DM Sans', system-ui, sans-serif",borderRadius:"12px",spacingUnit:"4px"},rules:{".Input":{border:"1px solid rgba(245,240,230,.14)",boxShadow:"none"},".Input:focus":{border:"1px solid #D4AF6A",boxShadow:"0 0 0 1px rgba(212,175,106,.35)"},".Tab":{border:"1px solid rgba(245,240,230,.14)"},".Tab--selected":{border:"1px solid #D4AF6A",color:"#F5F0E6"}}},fonts:[{cssSrc:"https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"}]});
+      document.getElementById("cassa-carta").innerHTML="";
+      var el=elements.create("payment",{layout:"tabs"}); el.mount("#cassa-carta");
+      el.on("ready", function(){ paga.disabled=false; paga.textContent="Paga "+Number(d.importo).toLocaleString("it-IT",{minimumFractionDigits:2})+" € "+(PERIODO[d.periodo]||""); });
+      el.on("change", function(ev){ if(ev.error){ erroreCassa(ev.error.message); } else { document.getElementById("cassa-err").hidden=true; } });
+    }, function(e){ erroreCassa("non riesco a preparare il pagamento: "+(e&&e.message||e)); });
+  }
+  document.getElementById("cassa-paga").addEventListener("click", function(){
+    if(!stripe||!elements||!cassaAperta) return;
+    var paga=this; paga.disabled=true; var t=paga.textContent; paga.textContent="un momento…";
+    var torna=location.origin+location.pathname+"?pagato="+cassaAperta;
+    stripe.confirmPayment({elements:elements,confirmParams:{return_url:torna},redirect:"if_required"}).then(function(r){
+      if(r.error){ paga.disabled=false; paga.textContent=t; erroreCassa(r.error.message||"il pagamento non è andato"); return; }
+      /* niente verifica della banca: siamo ancora qui. Si dice grazie e si rilegge il piano */
+      chiudiCassa(); mostra("Grazie. Il pagamento è arrivato: "+(NOMI[cassaAperta]||"il piano")+" si accende entro un minuto."); setTimeout(chiSono, 4000); setTimeout(chiSono, 12000);
+    });
+  });
   document.querySelectorAll("[data-cassa]").forEach(function(b){
     b.addEventListener("click", function(){
       if(!sess){ location.href="accesso.html"; return; }
-      var piano=b.getAttribute("data-cassa"); b.disabled=true; var t=b.textContent; b.textContent="un momento…";
-      db.functions.invoke("stripe-cassa",{body:{azione:"cassa",piano:piano,torna:location.origin+location.pathname}}).then(function(r){
-        var d=(r&&r.data)||{}; if(d.url){ location.href=d.url; return; }
-        b.disabled=false; b.textContent=t; mostra((d.errore||"non riesco ad aprire il pagamento")+". Scrivi a chi coordina.", true);
-      }, function(e){ b.disabled=false; b.textContent=t; mostra("non riesco ad aprire il pagamento: "+(e&&e.message||e), true); });
+      apriCassa(b.getAttribute("data-cassa"));
     });
   });
   function mostra(testo, male){ var e=document.getElementById("esito"); if(!e) return; e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=testo; e.scrollIntoView({block:"center"}); }
