@@ -369,6 +369,8 @@ a{color:inherit;text-decoration:none}
   function chiSono(){
     return db.auth.getSession().then(function(r){
       sess=r&&r.data&&r.data.session; if(!sess) return;
+      /* chi è dentro non «entra» più: il tasto dell'Ospite sparisce (il grado sale da solo e non scende mai) */
+      document.querySelectorAll('[data-s="scegli ospite"]').forEach(function(b){ b.hidden=true; });
       return db.from("persone").select("grado").eq("id",sess.user.id).maybeSingle().then(function(q){
         var p=(q&&q.data)||{}; var base=(p.grado&&p.grado!=="ospite")?"karma_yoga":"ospite";
         /* il piano: colonna che arriva con SQL 59; se manca, si resta sul grado */
