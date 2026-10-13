@@ -112,6 +112,16 @@ a{color:inherit;text-decoration:none}
 .piano .tutto{font-size:12px;color:var(--grigio);margin-top:14px;padding-top:12px;border-top:1px solid var(--riga)}
 .piano .conta{font-size:11.5px;color:var(--grigio);margin-top:10px;line-height:1.4}
 .scorri{font-size:10.5px;letter-spacing:.14em;color:var(--grigio);text-align:center;margin-top:2px}
+/* sul computer la pagina si allarga: i cinque piani in fila, il resto in una colonna leggibile (Gab, 13 ott: «dal mac me la fa vedere in modalità telefono») */
+@media (min-width:1000px){
+  .app{max-width:1120px}
+  .testa,.parte,.nota-bozza,.data{max-width:720px;margin-left:auto;margin-right:auto}
+  .parte.larga{max-width:1084px}
+  .parte.larga .capo,.parte.larga > p{max-width:720px;margin-left:auto;margin-right:auto}
+  .prezzi{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible;margin:0;padding:4px 0 8px}
+  .piano{flex:none}
+  .scorri{display:none}
+}
 .piano.qui{border-color:var(--oro)}
 .piano .qui-s{display:none;align-self:flex-start;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.16em;color:var(--inchiostro);background:var(--oro);border-radius:980px;padding:4px 10px;margin-bottom:8px}
 .piano.qui .qui-s{display:inline-block}
@@ -139,7 +149,7 @@ a{color:inherit;text-decoration:none}
   </div>
 
   <!-- 1 · scegli: i piani, uno accanto all'altro, con tutto l'elenco -->
-  <section class="parte">
+  <section class="parte larga">
     <div class="capo"><span class="n">1</span><h2>Scegli come stare.</h2></div>
     <div class="prezzi">
       <div class="piano" data-piano="ospite">
