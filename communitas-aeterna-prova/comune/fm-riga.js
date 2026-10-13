@@ -49,6 +49,18 @@
     "@media (min-width:700px){.fm-stanze .voci a{flex-direction:row;gap:8px;padding:8px 10px}.fm-stanze .voci a span{font-size:11.5px}}";
   var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
+  /* 13 ott: il cosmo dietro tutto — la rete neuronale di Design (fm-cosmo.js), in un livello fisso sotto la pagina */
+  try {
+    if (!document.querySelector(".fm-cosmo")) {
+      var fondo = document.createElement("div"); fondo.className = "fm-cosmo"; fondo.setAttribute("aria-hidden", "true");
+      fondo.innerHTML = "<ak-cosmo></ak-cosmo>";
+      document.body.insertBefore(fondo, document.body.firstChild);
+      if (!(window.customElements && customElements.get("ak-cosmo"))) {
+        var sc = document.createElement("script"); sc.src = "fm-cosmo.js?v=10131605"; document.head.appendChild(sc);
+      }
+    }
+  } catch (e) { console.log("cosmo", e); }
+
   var box = document.getElementById("fm-stanze"); if (!box) return;
   var attiva = box.getAttribute("data-attiva") || "";
   var foto = box.getAttribute("data-foto") || "../communitas-aeterna/persone/gabriele-dettori.jpg";
