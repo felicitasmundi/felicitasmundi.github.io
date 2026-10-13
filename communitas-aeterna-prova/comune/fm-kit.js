@@ -109,6 +109,7 @@
     var netto = 0, iva = 22; pronte.forEach(function (s) { netto += Number(s.quantita.sp.msrp_price); iva = s.quantita.vat || iva; });
     netto = Math.round(netto * 100) / 100; var tot = Math.round(netto * (1 + iva / 100) * 100) / 100;
     t.querySelector(".g").innerHTML = eur(tot) + "<small>IVA inclusa</small>";
+    try { localStorage.setItem("fm_kit_prezzo", JSON.stringify({ tot: tot, netto: netto, t: Date.now() })); } catch (e) { }
     t.querySelector(".r").textContent = eur(netto) + " + IVA " + iva + " % · " + pronte.length + " righe · consegna Standard compresa · prezzo pubblico Flyeralarm";
     var b = document.getElementById("kit-paga"); b.disabled = false; b.textContent = "Ordina e paga " + eur(tot);
     b.onclick = function () {
@@ -121,7 +122,27 @@
         dopo: function () { b.disabled = true; b.textContent = "Pagato"; } });
     };
   }
+  /* solo il prezzo del kit, in un'altra pagina (la Stampa): <div data-kit-prezzo></div> — 13 ott 22:40, Gab: «In stampa non si legge il costo kit».
+     Le quattro righe coi formati fissi, la quantità di base, la consegna Standard, l'IVA: lo stesso conto della pagina del kit. Si ricorda 6 ore. */
+  function soloPrezzo(el) {
+    function scrivi(tot) { el.innerHTML = eur(tot) + ' <small style="font-size:12px;color:var(--grigio,#9A978F)">IVA inclusa · consegna compresa · cambiando le righe cambia</small>'; }
+    try { var c = JSON.parse(localStorage.getItem("fm_kit_prezzo") || "null"); if (c && c.tot && Date.now() - c.t < 6 * 3600 * 1000) { scrivi(c.tot); return; } } catch (e) { }
+    el.innerHTML = '<small style="font-size:12px;color:var(--grigio,#9A978F)">leggo il prezzo da Flyeralarm…</small>';
+    Promise.all(RIGHE.map(function (r) {
+      return risolvi(r, null).then(function (x) { if (!x.id) throw new Error(r.nome); return fetchJ("/v2/catalog/variants/" + x.id); }).then(function (v) {
+        var qs = (v && v.quantities) || [], q = qs.filter(function (x) { return x.quantity >= r.quanti; })[0] || qs[qs.length - 1]; if (!q) throw new Error(r.nome);
+        var sp = (q.shippings || []).filter(function (x) { return x.type === "Standard"; })[0] || (q.shippings || [])[0];
+        return { netto: Number(sp.msrp_price), vat: q.vat || 22 };
+      });
+    })).then(function (righe) {
+      var netto = 0, iva = 22; righe.forEach(function (r) { netto += r.netto; iva = r.vat || iva; });
+      netto = Math.round(netto * 100) / 100; var tot = Math.round(netto * (1 + iva / 100) * 100) / 100;
+      try { localStorage.setItem("fm_kit_prezzo", JSON.stringify({ tot: tot, netto: netto, t: Date.now() })); } catch (e) { }
+      scrivi(tot);
+    }).catch(function () { el.innerHTML = '<small style="font-size:12px;color:var(--grigio,#9A978F)">il prezzo lo vedi nella pagina del kit, riga per riga</small>'; });
+  }
   function avvia() {
+    var solo = document.querySelector("[data-kit-prezzo]"); if (solo && !document.getElementById("fm-kit")) { soloPrezzo(solo); return; }
     box = document.getElementById("fm-kit"); if (!box) return; css();
     RIGHE.forEach(function (r, i) {
       var el = h("div", "riga", '<div class="attesa">' + esc(r.nome) + ': leggo formati e prezzi…</div>'); box.appendChild(el);
