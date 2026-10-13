@@ -62,6 +62,11 @@
     }
   } catch (e) { console.log("cosmo", e); }
 
+  /* 13 ott 20:38, Gab: «se uno si muove dalla pagina chat, finisce la conversazione.. tienila sempre attiva» —
+     se nella sala della diretta è rimasto il segno (fm_diretta), la diretta ti segue: comune/fm-diretta.js rientra in sala
+     e mette in alto la pillola «● titolo» con play/pausa e microfono. Si carica solo se il segno c'è. */
+  try { if (localStorage.getItem("fm_diretta")) { var sd = document.createElement("script"); sd.src = "comune/fm-diretta.js?v=10132055"; document.head.appendChild(sd); } } catch (e) { }
+
   var box = document.getElementById("fm-stanze"); if (!box) return;
   var attiva = box.getAttribute("data-attiva") || "";
   var foto = box.getAttribute("data-foto") || "../communitas-aeterna/persone/gabriele-dettori.jpg";
