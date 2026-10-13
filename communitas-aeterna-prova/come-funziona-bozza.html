@@ -155,6 +155,14 @@ a{color:inherit;text-decoration:none}
 .cassa .riga-f{font-size:11.5px;color:var(--grigio);line-height:1.5;margin-top:10px;text-align:center}
 .cassa .riga-f a{color:var(--oro)}
 .cassa .err{margin-top:10px;font-size:13px;color:var(--manca);line-height:1.45}
+.cassa .perche{margin-top:14px;border-top:1px solid var(--riga);padding-top:12px}
+.cassa .perche .fm-occ{color:var(--oro);margin-bottom:8px}
+.cassa .perche .scelte{display:flex;flex-wrap:wrap;gap:6px}
+.cassa .perche label{font-size:12.5px;border:1px solid var(--riga);border-radius:980px;padding:5px 10px;color:rgba(245,240,230,.85);cursor:pointer}
+.cassa .perche input{display:none}
+.cassa .perche input:checked+span{color:var(--inchiostro)}
+.cassa .perche label:has(input:checked){background:var(--oro);border-color:var(--oro);color:var(--inchiostro)}
+.cassa .perche textarea{width:100%;margin-top:8px;min-height:54px;background:#0A0C1A;border:1px solid rgba(245,240,230,.14);border-radius:12px;color:var(--chiaro,#F5F0E6);font:13px 'DM Sans',system-ui,sans-serif;padding:8px 10px;resize:vertical}
 .cassa .sicuro{display:flex;align-items:center;justify-content:center;gap:6px;font-size:10.5px;letter-spacing:.14em;color:var(--grigio);margin-top:12px}
 .nota-bozza{margin:26px 18px 0;padding:10px 12px;border:1px dashed rgba(245,240,230,.25);border-radius:12px;font-size:11.5px;color:var(--grigio);line-height:1.5}
 .nota-bozza b{color:var(--oro);font-weight:600}
@@ -370,6 +378,18 @@ a{color:inherit;text-decoration:none}
     <div class="capo"><div><div class="fm-occ">IL PAGAMENTO</div><h2 id="cassa-nome">[ piano ]</h2></div><button class="chiudi" id="cassa-chiudi" aria-label="chiudi">×</button></div>
     <div class="prezzo" id="cassa-prezzo"></div>
     <ul class="incl" id="cassa-incl"></ul>
+    <div class="perche" id="cassa-perche" hidden>
+      <div class="fm-occ">PERCHÉ CAMBI? · <span id="cassa-da"></span></div>
+      <div class="scelte">
+        <label><input type="radio" name="motivo" value="costa troppo"><span>costa troppo</span></label>
+        <label><input type="radio" name="motivo" value="manca qualcosa"><span>manca qualcosa</span></label>
+        <label><input type="radio" name="motivo" value="non lo uso"><span>non lo uso</span></label>
+        <label><input type="radio" name="motivo" value="mi serve di più"><span>mi serve di più</span></label>
+        <label><input type="radio" name="motivo" value="troppo complicato"><span>troppo complicato</span></label>
+        <label><input type="radio" name="motivo" value="altro"><span>altro</span></label>
+      </div>
+      <textarea id="cassa-motivo" placeholder="se vuoi, due parole: le legge chi coordina"></textarea>
+    </div>
     <div class="carta" id="cassa-carta"><div class="attesa">preparo il pagamento…</div></div>
     <div class="err" id="cassa-err" hidden></div>
     <button class="fm-tasto pieno paga" id="cassa-paga" disabled>Paga</button>
@@ -390,7 +410,7 @@ a{color:inherit;text-decoration:none}
 (function(){
   var db;
   try{ db=supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}); }catch(e){ console.log("come funziona", e); return; }
-  var sess=null;
+  var sess=null, pianoMio=null; /* il piano vivo di chi è dentro, per il cambio */
   function segna(piano){ document.querySelectorAll('.piano.qui').forEach(function(x){x.classList.remove('qui')}); var el=document.querySelector('.piano[data-piano="'+piano+'"]'); if(el){ el.classList.add("qui"); el.scrollIntoView({inline:"start",block:"nearest"}); } }
   function chiSono(){
     return db.auth.getSession().then(function(r){
@@ -403,6 +423,7 @@ a{color:inherit;text-decoration:none}
         return db.from("persone").select("piano,piano_fino_al,praticantato_fino_al").eq("id",sess.user.id).maybeSingle().then(function(z){
           var d=(z&&z.data)||{}; var ora=new Date();
           var vivo=d.piano&&(!d.piano_fino_al||new Date(d.piano_fino_al)>ora);
+          pianoMio=vivo?d.piano:null;
           segna(vivo?d.piano:base);
           var pr=document.querySelector('[data-cassa="praticantato"]');
           if(pr&&d.praticantato_fino_al&&new Date(d.praticantato_fino_al)>ora){ pr.textContent="Sei nel praticantato · fino al "+new Date(d.praticantato_fino_al).toLocaleDateString("it-IT"); pr.disabled=true; pr.classList.add("secondario"); }
@@ -428,32 +449,60 @@ a{color:inherit;text-decoration:none}
     var col=document.querySelector('.piano[data-piano="'+piano+'"]');
     if(col){ col.querySelectorAll("ul li:not(.no)").forEach(function(li,i){ if(i<6){ var x=document.createElement("li"); x.textContent=li.textContent; incl.appendChild(x);} }); }
     if(piano==="praticantato"){ ["l'incontro di gruppo settimanale online, con registrazione","le lezioni riservate della Scuola","il cruscotto coi cinque elementi"].forEach(function(t){ var x=document.createElement("li"); x.textContent=t; incl.appendChild(x); }); }
-    document.getElementById("cassa-carta").innerHTML='<div class="attesa">preparo il pagamento…</div>';
     document.getElementById("cassa-err").hidden=true;
     var paga=document.getElementById("cassa-paga"); paga.disabled=true; paga.textContent="Paga";
+    var perche=document.getElementById("cassa-perche"); perche.hidden=true;
     cassa.classList.add("vivo"); velo.classList.add("vivo");
-    db.functions.invoke("stripe-cassa",{body:{azione:"avvia",piano:piano,torna:location.origin+location.pathname}}).then(function(r){
+    /* cambio di piano (Gab, 17:45): prima il perché, poi si cambia. Lo stesso abbonamento cambia prezzo, col conguaglio */
+    var cambio = pianoMio && piano!=="praticantato" && pianoMio!==piano;
+    if(cambio){
+      perche.hidden=false; document.getElementById("cassa-da").textContent="da "+(NOMI[pianoMio]||pianoMio)+" a "+(NOMI[piano]||piano);
+      document.querySelectorAll('#cassa-perche input').forEach(function(i){ i.checked=false; }); document.getElementById("cassa-motivo").value="";
+      document.getElementById("cassa-carta").innerHTML='<div class="attesa">il conguaglio si paga con la carta già salvata; se serve, qui compare il riquadro della carta</div>';
+      paga.disabled=false; paga.textContent="Cambia piano"; paga.dataset.modo="cambia";
+      return;
+    }
+    paga.dataset.modo="paga";
+    document.getElementById("cassa-carta").innerHTML='<div class="attesa">preparo il pagamento…</div>';
+    avvia(piano, "");
+  }
+  function motivoScelto(){ var r=document.querySelector('#cassa-perche input:checked'); var t=document.getElementById("cassa-motivo").value.trim(); return [r&&r.value, t].filter(Boolean).join(" · "); }
+  function avvia(piano, motivo){
+    var paga=document.getElementById("cassa-paga");
+    db.functions.invoke("stripe-cassa",{body:{azione:"avvia",piano:piano,motivo:motivo||"",torna:location.origin+location.pathname}}).then(function(r){
       var d=(r&&r.data)||{};
-      if(!d.segreto){ erroreCassa((d.errore||"non riesco a preparare il pagamento")+". Scrivi a chi coordina."); return; }
-      document.getElementById("cassa-prezzo").innerHTML=Number(d.importo).toLocaleString("it-IT",{minimumFractionDigits:2})+' €<small>'+(PERIODO[d.periodo]||"")+' · IVA inclusa</small>';
+      if(d.gia){ chiudiCassa(); mostra("Hai già "+(NOMI[d.piano]||d.piano)+(d.fino?" · fino al "+new Date(d.fino).toLocaleDateString("it-IT"):"")+"."); chiSono(); return; }
+      if(d.cambiato){ chiudiCassa(); mostra("Fatto: da "+(NOMI[d.da]||d.da)+" a "+(NOMI[d.piano]||d.piano)+(d.conguaglio?" · conguaglio "+Number(d.conguaglio).toLocaleString("it-IT",{minimumFractionDigits:2})+" €":"")+". Il piano è acceso."); riguarda(); return; }
+      if(!d.segreto){ erroreCassa((d.errore||"non riesco a preparare il pagamento")+". Scrivi a chi coordina."); paga.disabled=false; paga.textContent=paga.dataset.modo==="cambia"?"Cambia piano":"Paga"; return; }
+      var somma = d.cambio ? Number(d.conguaglio) : Number(d.importo);
+      document.getElementById("cassa-prezzo").innerHTML=Number(d.importo).toLocaleString("it-IT",{minimumFractionDigits:2})+' €<small>'+(PERIODO[d.periodo]||"")+' · IVA inclusa'+(d.cambio?' · oggi il conguaglio: '+somma.toLocaleString("it-IT",{minimumFractionDigits:2})+' €':'')+'</small>';
       if(!STRIPE_PK){ erroreCassa("manca la chiave pubblicabile di Stripe nella pagina"); return; }
       if(!window.Stripe){ erroreCassa("Stripe non si è caricato: ricarica la pagina"); return; }
       stripe=stripe||window.Stripe(STRIPE_PK,{locale:"it"});
       elements=stripe.elements({clientSecret:d.segreto,appearance:{theme:"night",labels:"floating",variables:{colorPrimary:"#D4AF6A",colorBackground:"#0A0C1A",colorText:"#F5F0E6",colorTextSecondary:"#9A978F",colorDanger:"#B4574A",fontFamily:"'DM Sans', system-ui, sans-serif",borderRadius:"12px",spacingUnit:"4px"},rules:{".Input":{border:"1px solid rgba(245,240,230,.14)",boxShadow:"none"},".Input:focus":{border:"1px solid #D4AF6A",boxShadow:"0 0 0 1px rgba(212,175,106,.35)"},".Tab":{border:"1px solid rgba(245,240,230,.14)"},".Tab--selected":{border:"1px solid #D4AF6A",color:"#F5F0E6"}}},fonts:[{cssSrc:"https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"}]});
       document.getElementById("cassa-carta").innerHTML="";
       var el=elements.create("payment",{layout:"tabs"}); el.mount("#cassa-carta");
-      el.on("ready", function(){ paga.disabled=false; paga.textContent="Paga "+Number(d.importo).toLocaleString("it-IT",{minimumFractionDigits:2})+" € "+(PERIODO[d.periodo]||""); });
+      el.on("ready", function(){ paga.disabled=false; paga.dataset.modo="paga"; paga.textContent="Paga "+somma.toLocaleString("it-IT",{minimumFractionDigits:2})+" € "+(d.cambio?"ora":(PERIODO[d.periodo]||"")); });
       el.on("change", function(ev){ if(ev.error){ erroreCassa(ev.error.message); } else { document.getElementById("cassa-err").hidden=true; } });
     }, function(e){ erroreCassa("non riesco a preparare il pagamento: "+(e&&e.message||e)); });
   }
+  /* dopo un pagamento o un cambio: si rilegge il piano finché SEI QUI non si sposta (il webhook arriva in pochi secondi) */
+  function riguarda(){ [2000,5000,10000,20000].forEach(function(ms){ setTimeout(chiSono, ms); }); }
   document.getElementById("cassa-paga").addEventListener("click", function(){
-    if(!stripe||!elements||!cassaAperta) return;
+    if(!cassaAperta) return;
+    if(this.dataset.modo==="cambia"){
+      var m=motivoScelto(); if(!m){ erroreCassa("Dimmi il perché, anche solo con un tocco."); return; }
+      this.disabled=true; this.textContent="un momento…"; document.getElementById("cassa-err").hidden=true;
+      document.getElementById("cassa-carta").innerHTML='<div class="attesa">cambio il piano…</div>';
+      avvia(cassaAperta, m); return;
+    }
+    if(!stripe||!elements) return;
     var paga=this; paga.disabled=true; var t=paga.textContent; paga.textContent="un momento…";
     var torna=location.origin+location.pathname+"?pagato="+cassaAperta;
     stripe.confirmPayment({elements:elements,confirmParams:{return_url:torna},redirect:"if_required"}).then(function(r){
       if(r.error){ paga.disabled=false; paga.textContent=t; erroreCassa(r.error.message||"il pagamento non è andato"); return; }
       /* niente verifica della banca: siamo ancora qui. Si dice grazie e si rilegge il piano */
-      chiudiCassa(); mostra("Grazie. Il pagamento è arrivato: "+(NOMI[cassaAperta]||"il piano")+" si accende entro un minuto."); setTimeout(chiSono, 4000); setTimeout(chiSono, 12000);
+      var n=NOMI[cassaAperta]||"il piano"; chiudiCassa(); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto."); riguarda();
     });
   });
   document.querySelectorAll("[data-cassa]").forEach(function(b){
@@ -465,7 +514,7 @@ a{color:inherit;text-decoration:none}
   function mostra(testo, male){ var e=document.getElementById("esito"); if(!e) return; e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=testo; e.scrollIntoView({block:"center"}); }
   try{
     var q=new URLSearchParams(location.search);
-    if(q.get("pagato")){ var n={villaggio:"il Villaggio",bottega:"la Bottega",praticantato:"il praticantato Antaḥkaraṇa"}[q.get("pagato")]||q.get("pagato"); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto. Se non lo vedi, ricarica la pagina o segnala un problema dall'account."); history.replaceState(null,"",location.pathname); setTimeout(chiSono, 4000); }
+    if(q.get("pagato")){ var n={villaggio:"il Villaggio",bottega:"la Bottega",praticantato:"il praticantato Antaḥkaraṇa"}[q.get("pagato")]||q.get("pagato"); mostra("Grazie. Il pagamento è arrivato: "+n+" si accende entro un minuto. Se non lo vedi, ricarica la pagina o segnala un problema dall'account."); history.replaceState(null,"",location.pathname); riguarda(); }
     if(q.get("annullato")){ mostra("Pagamento annullato: niente è stato addebitato."); history.replaceState(null,"",location.pathname); }
   }catch(e){}
 })();
