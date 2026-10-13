@@ -1,38 +1,58 @@
-/* ═══ FM-STAMPA · il configuratore vero, dentro la pagina della famiglia · 13 ottobre 2026 ═══
-   Gab, 18:32: «dopo che scegli carta stampata, non mi devi spiegare come funziona, ma me lo devi far funzionare,
-   quindi mettimi subito i dati per scegliere formato carta copie e prezzo».
-   1 il prodotto (dal catalogo Flyeralarm, stampa/catalogo.json, filtrato per famiglia)
-   2 le scelte (formato, materiale, rifinitura, stampa…): le varianti vere di Flyeralarm, una scelta alla volta
-   3 le copie, col prezzo vero (prezzo pubblico Flyeralarm, consegna Standard; + IVA)
-   4 il file PDF (nel bucket «stampa», nella propria cartella) e il pagamento (FMCassa, azione «stampa»)
-   Uso: <div id="fm-stampa" data-famiglia="carta"></div> + fm-cassa.js prima di questo file.
-   ⛔ Nessun ordine parte da qui verso Flyeralarm: l'ordine vero lo fa chi coordina, col file e il pagamento già arrivati. */
+/* ═══ FM-STAMPA · il configuratore, come su Flyeralarm · 13 ottobre 2026, v2 ═══
+   Gab, 19:51: «tu tocchi il prodotto "volantino": prima ti crea la descrizione del prodotto, subito la configurazione dove scegli
+   con delle card il modello, poi le altre voci poste su un menu a tendina, quindi vedi cosa stai scegliendo, non hai l'elenco
+   completo di tutti, ma lo scegli … 1 Modello · 2 Formato · 3 Materiale · 4 Rifinitura · 5 Stampa · 6 Prezzo base · 7 Opzioni ·
+   8 Checkout e upload … e vale per tutte le famiglie».
+   Tre livelli: famiglia → i tipi di prodotto (quadranti) → il prodotto: descrizione, poi i passi numerati.
+   Dentro una famiglia le altre famiglie non si vedono; si torna col tasto ‹ in alto.
+   I dati sono quelli veri di Flyeralarm (catalogo, varianti, quantità coi prezzi, opzioni), letti dalla funzione «flyeralarm».
+   ⛔ Nessun ordine parte da qui verso Flyeralarm: paga la persona, l'ordine vero lo fa chi coordina col file.
+   Uso: <div id="fm-stampa" data-famiglia="carta" data-nome="Carta stampata"></div> + fm-cassa.js prima di questo file. */
 (function () {
   "use strict";
   var URL_FA = "https://gfnveesogkfvkrdudpfg.supabase.co/functions/v1/flyeralarm?p=";
-  var FAMIGLIE = {
-    carta:      { cat: ["prodotti di stampa", "pieghevoli, depliant e opuscoli", "adesivi", "cartelline e folder", "buste da lettera", "menù e portamenù"], no: /fotolibr|calendar|agend|quadern|rivist|catalog|libr|cd e dvd/i },
-    libri:      { cat: ["riviste", "libri", "cataloghi", "pieghevoli, depliant e opuscoli"], nome: /libr|rivist|catalog|opuscol|brochure|fascicol/i, no: /fotolibr/i },
-    agende:     { cat: ["quaderni e blocchi per appunti", "calendari"], nome: /calendar|agend|quadern|taccuin|blocc/i, no: /fotograf/i },
-    fiere:      { cat: ["elementi per stand fieristici", "roll-up e display", "bandiere & stendardi", "banconi / desk promozionali", "fondali e pop up per fiere", "display pubblicitari", "insegne e pannelli pubblicitari ", "insegne e pannelli pubblicitari", "pellicole e pellicole adesive"] },
-    confezioni: { cat: ["scatole e confezioni", "imballaggi per prodotti", "sacchetti e buste in carta", "bicchieri in carta e coppette", "borse, buste e shopper"] },
-    gadget:     { cat: ["gadget pubblicitari", "tazze", "penne e matite", "portachiavi", "borse, buste e shopper", "tazze, bicchieri e cucina"], no: /campion|dolci|snack|cioccolat|cookie|toblerone|frutta/i },
-    abiti:      { cat: ["abbigliamento & tessuti", "abbigliamento promozionale", "t-shirts", "giacche", "prodotti tessili"] },
-    foto:       { nome: /fotolibr|foto retro|foto da parete|calendari fotografici|stampe fotografiche|cornici per foto/i }
+  var IMG = "stampa/";
+  /* i tipi di prodotto, per famiglia: nome · quali gruppi di Flyeralarm (per nome) · quale versione si apre per prima · immagine */
+  var TIPI = {
+    carta: [
+      ["Volantini", /^Volantini/i, /classici/i, "volantino"], ["Manifesti e locandine", /^Manifesti|^Poster|^Locandin/i, /stampa digitale e offset|classici/i, "poster"],
+      ["Biglietti da visita", /^Biglietti da visita/i, /classici/i, "biglietti"], ["Pieghevoli", /^Pieghevoli|^Depliant/i, /classici/i, "pieghevole"],
+      ["Cartoline", /^Cartoline/i, /classiche|classici/i, "volantino"], ["Adesivi", /^Adesivi|^Etichette/i, /classici|su foglio/i, "adesivi"],
+      ["Cartelline", /^Cartelline|^Folder/i, /classiche|classici/i, "pieghevole"], ["Buste e carta intestata", /^Buste|^Carta intestata|^Blocchi/i, /classic/i, "volantino"]
+    ],
+    libri: [
+      ["Riviste", /^Riviste/i, /classiche|punto metallico/i, "rivista"], ["Brochure e cataloghi", /^Brochure|^Catalog/i, /classic|budget/i, "rivista"],
+      ["Libri", /^Libri/i, /brossura|classic/i, "rivista"], ["Opuscoli e fascicoli", /^Opuscol|^Fascicol|^Pieghevoli/i, /classic/i, "pieghevole"], ["Menù", /^Men[uù]/i, /classic/i, "rivista"]
+    ],
+    agende: [
+      ["Agende", /^Agende/i, /classic/i, "agenda"], ["Calendari", /^Calendari/i, /parete|classic/i, "poster"],
+      ["Quaderni e taccuini", /^Quadern|^Taccuin|^Notes/i, /classic/i, "agenda"], ["Blocchi per appunti", /^Blocc/i, /classic/i, "agenda"]
+    ],
+    fiere: [
+      ["Roll-up", /^Roll-?up/i, /Classic, sistema incl/i, "rollup"], ["Striscioni e banner", /^Striscion|^Banner/i, /classic|PVC/i, "bandiera"],
+      ["Bandiere", /^Bandier/i, /classic|beach/i, "bandiera"], ["Totem e display", /^Totem|^Display|^Espositor/i, /classic/i, "rollup"],
+      ["Stand e fondali", /^Stand|^Fondal|^Pop[- ]?up|^Parete/i, /classic/i, "rollup"], ["Banconi", /^Bancon|^Desk/i, /classic/i, "rollup"],
+      ["Insegne e pannelli", /^Insegn|^Pannell|^Targh|^Cartell/i, /classic/i, "poster"], ["Pellicole per vetrine", /^Pellicol/i, /classic/i, "adesivi"]
+    ],
+    confezioni: [
+      ["Shopper e borse", /^Shopper|^Borse|^Sacchett|^Buste/i, /cotone|carta|classic/i, "shopper"], ["Scatole e confezioni", /^Scatol|^Box|^Confezion|^Astucc/i, /classic/i, "scatola"],
+      ["Bicchieri e coppette", /^Bicchier|^Coppett/i, /carta|classic/i, "tazza"], ["Tovaglioli", /^Tovagliol/i, /classic/i, "volantino"], ["Imballaggi", /^Imballag|^Nastr|^Carta da imball/i, /classic/i, "scatola"]
+    ],
+    gadget: [
+      ["Penne", /^Penn/i, /a sfera classic|a sfera/i, "penne"], ["Matite", /^Matit/i, /classic/i, "penne"], ["Borracce e bottiglie", /^Borracc|^Bottigl/i, /classic/i, "tazza"],
+      ["Tazze", /^Tazz/i, /classic/i, "tazza"], ["Portachiavi", /^Portachiav/i, /classic/i, "penne"], ["Cordini e portabadge", /^Cordin|^Portabadge|^Lanyard/i, /classic/i, "penne"],
+      ["Zaini e sacche", /^Zain|^Sacc/i, /classic/i, "shopper"], ["Ombrelli", /^Ombrell/i, /classic/i, "shopper"]
+    ],
+    abiti: [
+      ["T-shirt", /^T-shirt|^Magliett/i, /classic|basic/i, "tshirt"], ["Polo", /^Polo/i, /classic/i, "tshirt"], ["Felpe", /^Felp/i, /classic/i, "tshirt"],
+      ["Giacche e gilet", /^Giacc|^Gilet/i, /classic/i, "tshirt"], ["Cappelli", /^Cappell|^Berrett/i, /classic/i, "tshirt"], ["Grembiuli", /^Grembiul/i, /classic/i, "tshirt"]
+    ],
+    foto: [
+      ["Fotolibri", /^Fotolibr/i, /copertina rigida/i, "rivista"], ["Foto da parete", /^Foto da parete|^Stampe fotografiche/i, /./, "poster"],
+      ["Calendari fotografici", /^Calendari fotografici/i, /./, "poster"], ["Cornici per foto", /^Cornici per foto/i, /./, "poster"]
+    ]
   };
-  /* i prodotti che si cercano per primi, in cima alla lista; il primo si apre da solo (Gab, 18:32: «subito i dati per scegliere formato carta copie e prezzo») */
-  var PRIMI = {
-    carta: [/^Volantini classici/i, /^Manifesti in stampa digitale/i, /^Manifesti classici/i, /^Biglietti da visita classici/i, /^Pieghevoli classici/i, /^Cartoline/i, /^Adesivi classici/i, /^Cartelline/i],
-    libri: [/^Brochure/i, /^Riviste/i, /^Libri/i, /^Cataloghi/i, /^Opuscoli/i],
-    agende: [/^Agende/i, /^Calendari da parete/i, /^Calendari/i, /^Quaderni/i, /^Blocchi/i],
-    fiere: [/^Roll-Up Classic, sistema incl/i, /^Roll-Up Basic, sistema incl/i, /^Striscioni/i, /^Banner/i, /^Bandiere/i, /^Totem/i, /^Display/i],
-    confezioni: [/^Shopper/i, /^Borse/i, /^Sacchetti/i, /^Scatole/i, /^Bicchieri/i, /^Tovaglioli/i],
-    gadget: [/^Penne a sfera/i, /^Matite/i, /^Borracce/i, /^Portachiavi/i, /^Cordini/i, /^Portabadge/i, /^Tazze/i],
-    abiti: [/^T-shirt/i, /^Magliette/i, /^Felpe/i, /^Polo/i, /^Grembiul/i],
-    foto: [/^Fotolibri con copertina rigida/i, /^Fotolibri con copertina flessibile/i, /^Fotolibro/i, /^Foto da parete/i, /^Calendari fotografici/i]
-  };
-  var ORDINE_ATTR = /formato|modello|materiale|carta|rifinitura|stampa|colore|taglia|pagine|facciate|copertina|rilegatura|dimension/i;
-  var box, fam, catalogo = null, gruppo = null, varianti = null, scelte = {}, variante = null, quantita = null, file = null;
+  var box, fam, nomeFam, catalogo = null, tipo = null, gruppo = null, scelte = {}, variante = null, quantita = null, opzioni = {}, opzScelte = {}, file = null, descr = null;
 
   function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (k) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]; }); }
   function eur(n) { return Number(n).toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €"; }
@@ -40,18 +60,31 @@
   function css() {
     var s = document.createElement("style");
     s.textContent =
-      "#fm-stampa .fms-cerca{width:100%;min-height:44px;padding:0 14px;border-radius:980px;border:1px solid rgba(212,175,106,.5);background:rgba(8,11,26,.6);color:#F5F0E6;font:15px 'DM Sans',system-ui,sans-serif;box-sizing:border-box;margin-bottom:10px}" +
-      "#fm-stampa .fms-lista{display:flex;flex-direction:column;gap:6px}" +
-      "#fm-stampa .fms-prod{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--carta,#1a2148);border:1px solid var(--riga,rgba(245,240,230,.14));border-radius:14px;padding:11px 12px;font-size:14px;text-align:left;color:inherit;cursor:pointer;width:100%}" +
-      "#fm-stampa .fms-prod.on{border-color:var(--oro,#D4AF6A)}#fm-stampa .fms-prod .fr{color:var(--oro,#D4AF6A)}" +
-      "#fm-stampa .fms-altri{margin-top:8px;font-size:13px;color:var(--oro,#D4AF6A);background:none;border:0;cursor:pointer}" +
-      "#fm-stampa .fms-passo{margin-top:18px}#fm-stampa .fms-passo .fm-occ{color:var(--aria,#9ac296);margin-bottom:8px;display:block}" +
-      "#fm-stampa .fms-attr{margin-bottom:10px}#fm-stampa .fms-attr .nome{font-size:12px;color:var(--grigio,#9A978F);margin-bottom:6px;letter-spacing:.04em}" +
-      "#fm-stampa .fms-chips{display:flex;flex-wrap:wrap;gap:6px}" +
-      "#fm-stampa .fms-chip{font:13px 'DM Sans',system-ui,sans-serif;border:1px solid var(--riga,rgba(245,240,230,.14));border-radius:980px;padding:6px 11px;color:rgba(245,240,230,.9);background:none;cursor:pointer}" +
-      "#fm-stampa .fms-chip.on{background:var(--oro,#D4AF6A);border-color:var(--oro,#D4AF6A);color:#0A0C1A}" +
-      "#fm-stampa .fms-chip.q{display:flex;flex-direction:column;align-items:flex-start;border-radius:14px;padding:8px 12px;min-width:92px}#fm-stampa .fms-chip.q b{font-size:15px}#fm-stampa .fms-chip.q small{font-size:12px;opacity:.85}" +
-      "#fm-stampa .fms-tot{margin-top:12px;background:var(--carta,#1a2148);border:1px solid var(--oro,#D4AF6A);border-radius:16px;padding:12px 14px}" +
+      "#fm-stampa .fms-indietro{display:inline-flex;align-items:center;gap:6px;font:13px 'DM Sans',system-ui,sans-serif;color:var(--oro,#D4AF6A);background:none;border:0;cursor:pointer;padding:0;margin-bottom:10px}" +
+      "#fm-stampa .fms-tipi{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}@media (min-width:700px){#fm-stampa .fms-tipi{grid-template-columns:repeat(3,minmax(0,1fr))}}" +
+      "#fm-stampa .fms-tipo{background:var(--carta,#1a2148);border:1px solid var(--riga,rgba(245,240,230,.14));border-radius:16px;overflow:hidden;text-align:left;color:inherit;cursor:pointer;padding:0}" +
+      "#fm-stampa .fms-tipo img{width:100%;aspect-ratio:1;object-fit:cover;display:block}#fm-stampa .fms-tipo .t{padding:9px 11px 11px;font-size:14px;font-weight:600}#fm-stampa .fms-tipo .t small{display:block;font-weight:400;font-size:11.5px;color:var(--grigio,#9A978F);margin-top:2px}" +
+      "#fm-stampa .fms-prod h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;line-height:1.1;margin:0 0 6px}" +
+      "#fm-stampa .fms-descr{font-size:13.5px;line-height:1.5;color:rgba(245,240,230,.85);margin-bottom:6px}#fm-stampa .fms-descr ul{margin:6px 0 0 18px;padding:0}#fm-stampa .fms-descr li{margin:2px 0}#fm-stampa .fms-descr p{margin:0 0 6px}" +
+      "#fm-stampa .fms-versione{margin:10px 0 14px}" +
+      "#fm-stampa select{width:100%;min-height:44px;padding:0 12px;border-radius:12px;border:1px solid rgba(245,240,230,.2);background:#0A0C1A;color:#F5F0E6;font:14px 'DM Sans',system-ui,sans-serif;appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#D4AF6A 50%),linear-gradient(135deg,#D4AF6A 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat}" +
+      "#fm-stampa .fms-passi{display:flex;flex-direction:column;gap:8px}" +
+      "#fm-stampa .fms-passo{background:var(--carta,#1a2148);border:1px solid var(--riga,rgba(245,240,230,.14));border-radius:16px;padding:12px 14px}" +
+      "#fm-stampa .fms-passo.spento{opacity:.45}" +
+      "#fm-stampa .fms-passo .capo{display:flex;align-items:baseline;justify-content:space-between;gap:10px}" +
+      "#fm-stampa .fms-passo .capo b{font-family:'Cinzel',serif;font-weight:500;font-size:11px;letter-spacing:.14em;color:var(--oro,#D4AF6A)}" +
+      "#fm-stampa .fms-passo .capo span{font-size:13px;color:rgba(245,240,230,.9);text-align:right}" +
+      "#fm-stampa .fms-passo .corpo{margin-top:10px}" +
+      "#fm-stampa .fms-card{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}" +
+      "#fm-stampa .fms-card button{background:#0A0C1A;border:1px solid rgba(245,240,230,.14);border-radius:12px;padding:10px 8px;color:inherit;font:13px 'DM Sans',system-ui,sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}" +
+      "#fm-stampa .fms-card button.on{border-color:var(--oro,#D4AF6A);box-shadow:0 0 0 1px rgba(212,175,106,.35)}" +
+      "#fm-stampa .fms-card button i{display:block;width:34px;height:34px;border:1.5px solid var(--oro,#D4AF6A);border-radius:4px}" +
+      "#fm-stampa .fms-card button i.q{width:34px;height:34px}#fm-stampa .fms-card button i.r{width:40px;height:28px}#fm-stampa .fms-card button i.o{border-radius:50%}#fm-stampa .fms-card button i.d{width:30px;height:40px}#fm-stampa .fms-card button i.s{border-style:dashed}" +
+      "#fm-stampa table.fms-prezzi{width:100%;border-collapse:collapse;font-size:13.5px}#fm-stampa table.fms-prezzi th{font-family:'Cinzel',serif;font-weight:500;font-size:10px;letter-spacing:.12em;color:var(--grigio,#9A978F);text-align:right;padding:4px 6px}#fm-stampa table.fms-prezzi th:first-child{text-align:left}" +
+      "#fm-stampa table.fms-prezzi td{padding:8px 6px;border-top:1px solid rgba(245,240,230,.08);text-align:right;cursor:pointer}#fm-stampa table.fms-prezzi td:first-child{text-align:left;font-weight:600}" +
+      "#fm-stampa table.fms-prezzi tr.on td{background:rgba(212,175,106,.14);color:#F5F0E6}#fm-stampa table.fms-prezzi tr.on td:first-child{color:var(--oro,#D4AF6A)}" +
+      "#fm-stampa .fms-opz{margin-bottom:10px}#fm-stampa .fms-opz .nome{font-size:12.5px;color:var(--grigio,#9A978F);margin-bottom:5px}" +
+      "#fm-stampa .fms-opz label{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:6px 0;border-top:1px solid rgba(245,240,230,.06);cursor:pointer}#fm-stampa .fms-opz label input{margin-right:8px}#fm-stampa .fms-opz label .pr{color:var(--oro,#D4AF6A);white-space:nowrap}" +
       "#fm-stampa .fms-tot .g{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--oro,#D4AF6A);line-height:1}#fm-stampa .fms-tot .g small{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--grigio,#9A978F);margin-left:6px}" +
       "#fm-stampa .fms-tot .r{font-size:12.5px;color:var(--grigio,#9A978F);margin-top:6px;line-height:1.5}" +
       "#fm-stampa .fms-file{margin-top:10px;font-size:13px;line-height:1.5}#fm-stampa .fms-file input{display:block;margin-top:6px;font-size:13px;color:var(--grigio,#9A978F)}" +
@@ -60,135 +93,182 @@
       "#fm-stampa .fms-attesa{font-size:13px;color:var(--grigio,#9A978F);padding:10px 0}";
     document.head.appendChild(s);
   }
-  function famiglia(g) {
-    var F = FAMIGLIE[fam]; if (!F) return false;
-    var cats = (g.c || []).map(function (x) { return String(x).trim().toLowerCase(); });
-    var nome = g.n || "";
-    if (F.no && F.no.test(nome)) return false;
-    var c = F.cat ? cats.some(function (x) { return F.cat.indexOf(x) >= 0; }) : false;
-    return c || (F.nome ? F.nome.test(nome) : false);
-  }
-  /* 1 · il prodotto */
-  function prodotti() {
+  function fetchJ(p) { return fetch(URL_FA + p).then(function (r) { return r.json(); }); }
+  /* il configuratore di Flyeralarm: si manda {attributo: valore} e torna, per ogni attributo, i valori ancora possibili;
+     quando resta una variante sola, torna il suo id (variants.result) */
+  function configura(g, scelteIds) { return fetch(URL_FA + "/v2/catalog/groups/" + g.id + "/configurator", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(scelteIds || {}) }).then(function (r) { return r.json(); }); }
+  function gruppiDi(t) { return catalogo.filter(function (g) { return t[1].test(g.n) && !/campion/i.test(g.n); }).sort(function (a, b) { return a.n.localeCompare(b.n, "it"); }); }
+
+  /* ── livello 1 · i tipi di prodotto, a quadranti */
+  function tipi() {
+    tipo = null; gruppo = null;
     box.innerHTML = "";
-    var lista = catalogo.filter(famiglia).filter(function (g) { return !/campion/i.test(g.n); });
-    lista.sort(function (a, b) { return a.n.localeCompare(b.n, "it"); });
-    var P = PRIMI[fam] || [], testa = [];
-    P.forEach(function (re) { lista.forEach(function (g) { if (re.test(g.n) && testa.indexOf(g) < 0) testa.push(g); }); });
-    lista = testa.concat(lista.filter(function (g) { return testa.indexOf(g) < 0; }));
-    var cerca = h("input", "fms-cerca"); cerca.type = "search"; cerca.placeholder = "cerca fra " + lista.length + " prodotti";
-    var ul = h("div", "fms-lista"), altri = h("button", "fms-altri", "mostra altri ›");
-    var mostrati = 0, filtro = "";
-    function render(reset) {
-      if (reset) { ul.innerHTML = ""; mostrati = 0; }
-      var vis = lista.filter(function (g) { return !filtro || g.n.toLowerCase().indexOf(filtro) >= 0; });
-      var fetta = vis.slice(mostrati, mostrati + 24);
-      fetta.forEach(function (g) {
-        var b = h("button", "fms-prod", "<span>" + esc(g.n) + "</span><span class=\"fr\">›</span>"); b.type = "button";
-        b.onclick = function () { Array.prototype.forEach.call(ul.children, function (x) { x.classList.remove("on"); }); b.classList.add("on"); scegli(g); };
-        ul.appendChild(b);
-      });
-      mostrati += fetta.length; altri.hidden = mostrati >= vis.length;
-      if (!vis.length) ul.innerHTML = '<div class="fms-attesa">niente con questo nome</div>';
-    }
-    cerca.oninput = function () { filtro = cerca.value.trim().toLowerCase(); render(true); };
-    altri.onclick = function () { render(false); };
-    var passo = h("div", "fms-passo", '<span class="fm-occ">IL PRODOTTO</span>');
-    passo.appendChild(cerca); passo.appendChild(ul); passo.appendChild(altri);
-    box.appendChild(passo); render(true);
-    box.appendChild(h("div", "fms-passo", '<div id="fms-scelte"></div><div id="fms-copie"></div><div id="fms-fine"></div>'));
-    /* il primo prodotto si apre da solo: formato, carta, copie e prezzo subito */
-    if (lista.length) { var primo = ul.firstChild; if (primo && primo.classList) { primo.classList.add("on"); scegliSenzaScorrere(lista[0]); } }
-  }
-  /* 2 · le scelte */
-  function scegliSenzaScorrere(g) { scegli(g, true); }
-  function scegli(g, fermo) {
-    gruppo = g; varianti = null; scelte = {}; variante = null; quantita = null;
-    var s = document.getElementById("fms-scelte"); s.innerHTML = '<span class="fm-occ">' + esc(g.n.toUpperCase()) + '</span><div class="fms-attesa">leggo formati, carte e copie…</div>';
-    document.getElementById("fms-copie").innerHTML = ""; document.getElementById("fms-fine").innerHTML = "";
-    if (!fermo) s.scrollIntoView({ block: "start", behavior: "smooth" });
-    fetch(URL_FA + "/v2/catalog/groups/" + g.id + "/variants").then(function (r) { return r.json(); }).then(function (j) {
-      varianti = (j && j.data) || [];
-      if (!varianti.length) { s.innerHTML = '<span class="fm-occ">' + esc(g.n.toUpperCase()) + '</span><div class="fms-attesa">per questo prodotto Flyeralarm non dà scelte da qui: scrivi a chi coordina</div>'; return; }
-      disegnaScelte();
-    }).catch(function () { s.innerHTML = '<div class="fms-attesa">Flyeralarm non risponde: riprova fra un momento</div>'; });
-  }
-  function attributi() {
-    var ordine = [], visti = {};
-    varianti.forEach(function (v) { (v.attributes || []).forEach(function (a) { if (!visti[a.attribute_name_id]) { visti[a.attribute_name_id] = a.attribute_name; ordine.push({ id: a.attribute_name_id, nome: a.attribute_name }); } }); });
-    return ordine;
-  }
-  function compatibili(fino) {
-    return varianti.filter(function (v) {
-      return Object.keys(scelte).every(function (k) {
-        if (fino && fino.indexOf(Number(k)) < 0) return true;
-        return (v.attributes || []).some(function (a) { return String(a.attribute_name_id) === String(k) && String(a.attribute_value_id) === String(scelte[k]); });
-      });
+    var torna = h("a", "fms-indietro", "‹ Stampa"); torna.href = "stampa-bozza.html"; box.appendChild(torna);
+    var griglia = h("div", "fms-tipi");
+    (TIPI[fam] || []).forEach(function (t) {
+      var gs = gruppiDi(t); if (!gs.length) return;
+      var b = h("button", "fms-tipo", '<img src="' + IMG + t[3] + '.jpg" alt=""><div class="t">' + esc(t[0]) + '<small>' + gs.length + (gs.length === 1 ? " versione" : " versioni") + '</small></div>'); b.type = "button";
+      b.onclick = function () { apriTipo(t, gs); };
+      griglia.appendChild(b);
     });
+    box.appendChild(griglia);
+    window.scrollTo({ top: 0 });
   }
-  function disegnaScelte() {
-    var s = document.getElementById("fms-scelte");
-    s.innerHTML = '<span class="fm-occ">' + esc(gruppo.n.toUpperCase()) + ' · SCEGLI</span>';
-    var attrs = attributi(), prima = [];
-    attrs.forEach(function (at) {
-      var comp = compatibili(prima);
-      var valori = {}, ord = [];
-      comp.forEach(function (v) { (v.attributes || []).forEach(function (a) { if (a.attribute_name_id === at.id && !valori[a.attribute_value_id]) { valori[a.attribute_value_id] = a.attribute_value; ord.push(a.attribute_value_id); } }); });
-      if (ord.length === 1 && scelte[at.id] == null) scelte[at.id] = ord[0];
-      if (scelte[at.id] != null && !valori[scelte[at.id]]) delete scelte[at.id];
-      var blocco = h("div", "fms-attr", '<div class="nome">' + esc(at.nome) + '</div>');
-      var chips = h("div", "fms-chips");
-      ord.forEach(function (id) {
-        var c = h("button", "fms-chip" + (String(scelte[at.id]) === String(id) ? " on" : ""), esc(valori[id])); c.type = "button";
-        c.onclick = function () { scelte[at.id] = id; attrs.forEach(function (a2, i2) { if (i2 > attrs.indexOf(at)) delete scelte[a2.id]; }); variante = null; quantita = null; disegnaScelte(); };
-        chips.appendChild(c);
-      });
-      blocco.appendChild(chips); s.appendChild(blocco);
-      prima.push(at.id);
+  /* ── livello 2 · il prodotto: descrizione, versione, passi */
+  function apriTipo(t, gs) {
+    tipo = t; box.innerHTML = "";
+    var torna = h("button", "fms-indietro", "‹ " + esc(nomeFam)); torna.type = "button"; torna.onclick = tipi; box.appendChild(torna);
+    var prod = h("div", "fms-prod"); box.appendChild(prod);
+    var primo = gs.filter(function (g) { return t[2].test(g.n); })[0] || gs[0];
+    var sel = h("select"); gs.forEach(function (g) { var o = document.createElement("option"); o.value = g.id; o.textContent = g.n; if (g === primo) o.selected = true; sel.appendChild(o); });
+    var vers = h("div", "fms-versione"); if (gs.length > 1) { vers.appendChild(h("div", "fms-opz nome", "la versione")); vers.appendChild(sel); }
+    sel.onchange = function () { var g = gs.filter(function (x) { return String(x.id) === sel.value; })[0]; if (g) apriGruppo(g, prod, vers); };
+    apriGruppo(primo, prod, vers);
+    window.scrollTo({ top: 0 });
+  }
+  function apriGruppo(g, prod, vers) {
+    gruppo = g; scelte = {}; variante = null; quantita = null; opzioni = {}; opzScelte = {}; file = null; descr = null;
+    prod.innerHTML = ""; prod.appendChild(h("h2", null, esc(g.n)));
+    var d = h("div", "fms-descr", '<div class="fms-attesa">leggo la descrizione…</div>'); prod.appendChild(d);
+    prod.appendChild(vers);
+    var passi = h("div", "fms-passi", '<div class="fms-attesa">leggo formati, materiali e prezzi…</div>'); prod.appendChild(passi);
+    fetchJ("/v2/catalog/groups/" + g.id).then(function (j) {
+      descr = j; d.innerHTML = j && j.description_html ? j.description_html.replace(/<strong>Informazioni obbligatorie:<\/strong>[\s\S]*$/i, "") : esc((j && j.description) || "");
+    }).catch(function () { d.innerHTML = ""; });
+    configura(g, {}).then(function (j) {
+      conf = j; ordine = Object.keys((j && j.attributes) || {});
+      if (!ordine.length) { passi.innerHTML = '<div class="fms-attesa">per questa versione Flyeralarm non dà scelte da qui: prova un\'altra versione</div>'; return; }
+      disegnaPassi(passi);
+    }).catch(function () { passi.innerHTML = '<div class="fms-attesa">Flyeralarm non risponde: riprova fra un momento</div>'; });
+  }
+  var conf = null, ordine = [], nomiScelti = {};
+  function forma(nome) { /* il disegnino della card del modello */
+    var n = nome.toLowerCase();
+    if (/quadrat/.test(n)) return "q"; if (/rotond|oval|cerch/.test(n)) return "o"; if (/lungo|vertical|alto/.test(n)) return "d"; if (/special|personalizz|misura|forma/.test(n)) return "s"; return "r";
+  }
+  function disegnaPassi(passi) {
+    passi.innerHTML = "";
+    var attrs = conf.attributes || {}, n = 0, fermo = false;
+    nomiScelti = {};
+    ordine.forEach(function (aid, i) {
+      n = i + 1;
+      var at = attrs[aid], valori = at.values || {}, ids = Object.keys(valori);
+      if (ids.length === 1 && scelte[aid] == null) scelte[aid] = ids[0];
+      if (scelte[aid] != null && !valori[scelte[aid]]) delete scelte[aid];
+      if (scelte[aid] != null) nomiScelti[at.name] = valori[scelte[aid]];
+      var p = h("div", "fms-passo" + (fermo ? " spento" : ""));
+      p.appendChild(h("div", "capo", "<b>" + n + ". " + esc(String(at.name).toUpperCase()) + "</b><span>" + (scelte[aid] != null ? esc(valori[scelte[aid]]) : (fermo ? "" : "scegli")) + "</span>"));
+      var corpo = h("div", "corpo");
+      if (!fermo) {
+        if (i === 0 && ids.length <= 9) {
+          var cards = h("div", "fms-card");
+          ids.forEach(function (id) {
+            var b = h("button", String(scelte[aid]) === String(id) ? "on" : "", "<i class=\"" + forma(valori[id]) + "\"></i><span>" + esc(valori[id]) + "</span>"); b.type = "button";
+            b.onclick = function () { scegliAttr(aid, id, passi); };
+            cards.appendChild(b);
+          });
+          corpo.appendChild(cards);
+        } else {
+          var sel = h("select"); var o0 = document.createElement("option"); o0.value = ""; o0.textContent = "scegli…"; sel.appendChild(o0);
+          ids.forEach(function (id) { var o = document.createElement("option"); o.value = id; o.textContent = valori[id]; if (String(scelte[aid]) === String(id)) o.selected = true; sel.appendChild(o); });
+          sel.onchange = function () { if (sel.value) scegliAttr(aid, sel.value, passi); };
+          corpo.appendChild(sel);
+        }
+      }
+      p.appendChild(corpo); passi.appendChild(p);
+      if (scelte[aid] == null) fermo = true;
     });
-    var rest = compatibili(null);
-    var tutte = attrs.every(function (a) { return scelte[a.id] != null; });
-    document.getElementById("fms-copie").innerHTML = ""; document.getElementById("fms-fine").innerHTML = "";
-    if (tutte && rest.length) { variante = rest[0]; copie(); }
-    else if (rest.length) document.getElementById("fms-copie").innerHTML = '<div class="fms-attesa">' + rest.length + ' combinazioni possibili: scegli le voci che restano</div>';
+    var pp = h("div", "fms-passo" + (fermo ? " spento" : "")); pp.id = "fms-prezzo";
+    pp.appendChild(h("div", "capo", "<b>" + (n + 1) + ". PREZZO BASE</b><span>" + (quantita ? quantita.q.quantity + " copie · " + eur(quantita.sp.msrp_price) : (fermo ? "" : "scegli le copie")) + "</span>"));
+    passi.appendChild(pp);
+    var po = h("div", "fms-passo spento"); po.id = "fms-opzioni"; po.appendChild(h("div", "capo", "<b>" + (n + 2) + ". OPZIONI</b><span></span>")); passi.appendChild(po);
+    var pc = h("div", "fms-passo spento"); pc.id = "fms-checkout"; pc.appendChild(h("div", "capo", "<b>" + (n + 3) + ". CHECKOUT E UPLOAD</b><span></span>")); passi.appendChild(pc);
+    if (!fermo && conf.variants && conf.variants.count === 1 && conf.variants.result) { variante = { id: conf.variants.result }; prezzoBase(pp, n); }
+    else if (!fermo && conf.variants && conf.variants.count > 1) pp.querySelector(".capo span").textContent = conf.variants.count + " combinazioni: manca una scelta";
   }
-  /* 3 · le copie col prezzo */
-  function copie() {
-    var c = document.getElementById("fms-copie"); c.innerHTML = '<div class="fms-attesa">leggo le copie e i prezzi…</div>';
-    fetch(URL_FA + "/v2/catalog/variants/" + variante.id).then(function (r) { return r.json(); }).then(function (v) {
+  function scegliAttr(aid, id, passi) {
+    scelte[aid] = id; var dopo = false;
+    ordine.forEach(function (a2) { if (dopo) delete scelte[a2]; if (a2 === aid) dopo = true; });
+    variante = null; quantita = null; opzScelte = {};
+    passi.querySelectorAll(".fms-passo").forEach(function (x) { x.classList.add("spento"); });
+    configura(gruppo, scelte).then(function (j) { conf = j; disegnaPassi(passi); })
+      .catch(function () { passi.insertBefore(h("div", "fms-attesa", "Flyeralarm non risponde: riprova fra un momento"), passi.firstChild); });
+  }
+  function prezzoBase(pp, n) {
+    var corpo = h("div", "corpo", '<div class="fms-attesa">leggo le copie e i prezzi…</div>'); pp.appendChild(corpo);
+    fetchJ("/v2/catalog/variants/" + variante.id).then(function (v) {
       var qs = (v && v.quantities) || [];
-      if (!qs.length) { c.innerHTML = '<div class="fms-attesa">nessuna quantità disponibile per questa scelta</div>'; return; }
-      c.innerHTML = '<span class="fm-occ">LE COPIE · COL PREZZO</span>';
-      var chips = h("div", "fms-chips");
+      variante.data_sheet = v && v.data_sheet; variante.attributes = (v && v.attributes) || [];
+      if (!qs.length) { corpo.innerHTML = '<div class="fms-attesa">nessuna quantità disponibile per questa scelta</div>'; return; }
+      var tipiSp = []; qs.forEach(function (q) { (q.shippings || []).forEach(function (s) { if (tipiSp.indexOf(s.type) < 0) tipiSp.push(s.type); }); });
+      var tab = h("table", "fms-prezzi"), thead = "<tr><th>copie</th>";
+      tipiSp.forEach(function (t) { var s0 = null; qs.some(function (q) { return (q.shippings || []).some(function (s) { if (s.type === t) { s0 = s; return true; } }); }); thead += "<th>" + esc(t) + (s0 ? "<br>" + s0.from + "–" + s0.to + " gg" : "") + "</th>"; });
+      tab.innerHTML = thead + "</tr>";
       qs.forEach(function (q) {
-        var sp = (q.shippings || []).filter(function (x) { return x.type === "Standard"; })[0] || (q.shippings || [])[0];
-        if (!sp) return;
-        var b = h("button", "fms-chip q", "<b>" + q.quantity + "</b><small>" + eur(sp.msrp_price) + "</small>"); b.type = "button";
-        b.onclick = function () { Array.prototype.forEach.call(chips.children, function (x) { x.classList.remove("on"); }); b.classList.add("on"); quantita = { q: q, sp: sp, vat: q.vat || 22 }; fine(); };
-        chips.appendChild(b);
+        var tr = document.createElement("tr"), html = "<td>" + q.quantity + "</td>";
+        tipiSp.forEach(function (t) { var s = (q.shippings || []).filter(function (x) { return x.type === t; })[0]; html += "<td data-t=\"" + esc(t) + "\">" + (s ? eur(s.msrp_price) : "—") + "</td>"; });
+        tr.innerHTML = html;
+        Array.prototype.forEach.call(tr.querySelectorAll("td[data-t]"), function (td) {
+          td.onclick = function () {
+            var s = (q.shippings || []).filter(function (x) { return x.type === td.getAttribute("data-t"); })[0]; if (!s) return;
+            Array.prototype.forEach.call(tab.querySelectorAll("tr"), function (r) { r.classList.remove("on"); }); tr.classList.add("on");
+            quantita = { q: q, sp: s, vat: q.vat || 22 };
+            pp.querySelector(".capo span").textContent = q.quantity + " copie · " + s.type + " · " + eur(s.msrp_price);
+            opzioniPasso(n);
+          };
+        });
+        tab.appendChild(tr);
       });
-      c.appendChild(chips);
-      c.appendChild(h("div", "fms-nota", "prezzi con consegna " + ((qs[0].shippings || [])[0] ? (qs[0].shippings[0].type + ", " + qs[0].shippings[0].from + "–" + qs[0].shippings[0].to + " giorni lavorativi") : "Standard") + " · IVA " + (qs[0].vat || 22) + " % a parte"));
-    }).catch(function () { c.innerHTML = '<div class="fms-attesa">Flyeralarm non risponde: riprova fra un momento</div>'; });
+      corpo.innerHTML = ""; corpo.appendChild(tab);
+      corpo.appendChild(h("div", "fms-nota", "prezzi con la consegna compresa · IVA " + (qs[0].vat || 22) + " % a parte · tocca il prezzo che vuoi"));
+    }).catch(function () { corpo.innerHTML = '<div class="fms-attesa">Flyeralarm non risponde: riprova fra un momento</div>'; });
   }
-  /* 4 · il file e il pagamento */
+  /* 7 · opzioni (verifica del file, contributo per il clima, angoli…) */
+  function opzioniPasso(n) {
+    var po = document.getElementById("fms-opzioni"), pc = document.getElementById("fms-checkout");
+    po.classList.remove("spento"); pc.classList.add("spento"); pc.querySelector(".capo span").textContent = "";
+    var old = po.querySelector(".corpo"); if (old) old.remove();
+    var corpo = h("div", "corpo", '<div class="fms-attesa">leggo le opzioni…</div>'); po.appendChild(corpo);
+    opzScelte = {};
+    fetchJ("/v2/catalog/options/variant/" + variante.id + "/amount/" + quantita.q.quantity + "/shipping/" + encodeURIComponent(quantita.sp.type)).then(function (j) {
+      opzioni = j || {}; corpo.innerHTML = "";
+      var chiavi = Object.keys(opzioni);
+      if (!chiavi.length) { corpo.innerHTML = '<div class="fms-nota">nessuna opzione per questo prodotto</div>'; checkout(n); return; }
+      chiavi.forEach(function (k) {
+        var g = opzioni[k], blocco = h("div", "fms-opz", '<div class="nome">' + esc(g.name) + '</div>');
+        var ids = Object.keys(g.options || {});
+        ids.forEach(function (oid, i) {
+          var o = g.options[oid], lab = h("label", null, '<span><input type="radio" name="opz-' + esc(k) + '" value="' + esc(oid) + '"' + (i === 0 ? " checked" : "") + '>' + esc(o.name) + '</span><span class="pr">' + (Number(o.msrpRawNettoPrice) ? "+ " + eur(o.msrpRawNettoPrice) : "compreso") + '</span>');
+          lab.querySelector("input").onchange = function () { opzScelte[k] = oid; checkout(n); };
+          if (i === 0) opzScelte[k] = oid;
+          blocco.appendChild(lab);
+        });
+        corpo.appendChild(blocco);
+      });
+      checkout(n);
+    }).catch(function () { corpo.innerHTML = '<div class="fms-nota">le opzioni non si sono caricate: si va avanti senza</div>'; opzioni = {}; checkout(n); });
+  }
   function descrizione() {
     var parti = [gruppo.n];
-    (variante.attributes || []).forEach(function (a) { if (/formato|materiale|carta|colore|taglia|rilegatura|copertina/i.test(a.attribute_name)) parti.push(a.attribute_value); });
+    Object.keys(nomiScelti).forEach(function (k) { if (!/^stampa$/i.test(k)) parti.push(nomiScelti[k]); });
     return parti.join(" · ");
   }
-  function fine() {
-    var f = document.getElementById("fms-fine"); f.innerHTML = "";
-    var netto = Number(quantita.sp.msrp_price), iva = Number(quantita.vat), tot = Math.round(netto * (1 + iva / 100) * 100) / 100;
-    var t = h("div", "fms-tot", '<div class="g">' + eur(tot) + '<small>IVA inclusa</small></div><div class="r">' + esc(descrizione()) + ' · ' + quantita.q.quantity + ' copie<br>' + eur(netto) + ' + IVA ' + iva + ' % · consegna ' + esc(quantita.sp.type) + ' in ' + quantita.sp.from + '–' + quantita.sp.to + ' giorni lavorativi</div>');
-    var fileBox = h("div", "fms-file", "<b>Il file di stampa</b> (PDF, fino a 100 MB). Lo puoi caricare ora o dopo il pagamento: senza il file l'ordine non parte." + (variante.data_sheet ? ' <a href="' + esc(variante.data_sheet) + '" target="_blank" rel="noopener" style="color:var(--oro,#D4AF6A)">le misure del file ›</a>' : ""));
+  function costoOpzioni() { var s = 0; Object.keys(opzScelte).forEach(function (k) { var o = opzioni[k] && opzioni[k].options && opzioni[k].options[opzScelte[k]]; if (o) s += Number(o.msrpRawNettoPrice) || 0; }); return s; }
+  /* 8 · checkout e upload */
+  function checkout(n) {
+    var pc = document.getElementById("fms-checkout"); pc.classList.remove("spento");
+    var old = pc.querySelector(".corpo"); if (old) old.remove();
+    var netto = Number(quantita.sp.msrp_price) + costoOpzioni(), iva = Number(quantita.vat), tot = Math.round(netto * (1 + iva / 100) * 100) / 100;
+    pc.querySelector(".capo span").textContent = eur(tot);
+    var corpo = h("div", "corpo");
+    var t = h("div", "fms-tot", '<div class="g">' + eur(tot) + '<small>IVA inclusa</small></div><div class="r">' + esc(descrizione()) + ' · ' + quantita.q.quantity + ' copie<br>' + eur(netto) + ' + IVA ' + iva + ' % · consegna ' + esc(quantita.sp.type) + ' in ' + quantita.sp.from + '–' + quantita.sp.to + ' giorni lavorativi' + (costoOpzioni() ? ' · opzioni ' + eur(costoOpzioni()) : '') + '</div>');
+    var fileBox = h("div", "fms-file", "<b>Il file di stampa</b> (PDF, fino a 100 MB)" + (variante.data_sheet ? ' · <a href="' + esc(variante.data_sheet) + '" target="_blank" rel="noopener" style="color:var(--oro,#D4AF6A)">le misure del file ›</a>' : ""));
     var inp = document.createElement("input"); inp.type = "file"; inp.accept = "application/pdf,.pdf,application/zip,.zip"; fileBox.appendChild(inp);
-    var stato = h("div", "fms-nota", ""); fileBox.appendChild(stato);
+    var stato = h("div", "fms-nota", "lo puoi caricare ora o dopo il pagamento: senza il file l'ordine non parte"); fileBox.appendChild(stato);
     t.appendChild(fileBox);
-    var paga = h("button", "fms-paga", "Ordina e paga " + eur(tot)); paga.type = "button";
-    t.appendChild(paga);
-    t.appendChild(h("div", "fms-nota", "Pagato, l'ordine lo manda in stampa chi coordina, col tuo file; ti arriva a casa col corriere. Se qualcosa non va, ti scrive."));
-    f.appendChild(t); f.scrollIntoView({ block: "start", behavior: "smooth" });
+    var paga = h("button", "fms-paga", "Ordina e paga " + eur(tot)); paga.type = "button"; t.appendChild(paga);
+    t.appendChild(h("div", "fms-nota", "Pagato, l'ordine lo manda in stampa chi coordina, col tuo file; ti arriva col corriere."));
+    corpo.appendChild(t); pc.appendChild(corpo);
     file = null;
     inp.onchange = function () {
       var fl = inp.files && inp.files[0]; if (!fl) return;
@@ -203,21 +283,23 @@
       });
     };
     paga.onclick = function () {
+      var opz = Object.keys(opzScelte).map(function (k) { return { gruppo: k, id: opzScelte[k], nome: (opzioni[k].options[opzScelte[k]] || {}).name || "" }; });
       FMCassa.apri({
         azione: "stampa",
-        corpo: { gruppo: String(gruppo.id), variante: String(variante.id), quantita_id: String(quantita.q.id), descrizione: descrizione(), file: file || "" },
+        corpo: { gruppo: String(gruppo.id), variante: String(variante.id), quantita_id: String(quantita.q.id), spedizione: quantita.sp.type, opzioni: opz, descrizione: descrizione(), file: file || "" },
         titolo: gruppo.n, sotto: "IVA inclusa · consegna " + quantita.sp.type,
-        righe: [descrizione(), quantita.q.quantity + " copie", eur(netto) + " + IVA " + iva + " %", file ? "file caricato" : "file da caricare dopo"],
-        grazie: "Pagato. L'ordine è arrivato a chi coordina" + (file ? ", col tuo file." : ": carica il file qui sotto appena puoi, oppure mandalo a chi coordina."),
+        righe: [descrizione(), quantita.q.quantity + " copie", eur(netto) + " + IVA " + iva + " %"].concat(opz.filter(function (o) { return o.nome; }).map(function (o) { return o.nome; })).concat([file ? "file caricato" : "file da caricare dopo"]),
+        grazie: "Pagato. L'ordine è arrivato a chi coordina" + (file ? ", col tuo file." : ": carica il file appena puoi, oppure mandalo a chi coordina."),
         dopo: function () { paga.disabled = true; paga.textContent = "Pagato"; }
       });
     };
+    pc.scrollIntoView({ block: "start", behavior: "smooth" });
   }
   function avvia() {
     box = document.getElementById("fm-stampa"); if (!box) return;
-    fam = box.getAttribute("data-famiglia") || "carta"; css();
+    fam = box.getAttribute("data-famiglia") || "carta"; nomeFam = box.getAttribute("data-nome") || "la famiglia"; css();
     box.innerHTML = '<div class="fms-attesa">leggo il catalogo…</div>';
-    fetch("stampa/catalogo.json").then(function (r) { return r.json(); }).then(function (c) { catalogo = c; prodotti(); })
+    fetch("stampa/catalogo.json").then(function (r) { return r.json(); }).then(function (c) { catalogo = c; tipi(); })
       .catch(function () { box.innerHTML = '<div class="fms-attesa">il catalogo non si è caricato: ricarica la pagina</div>'; });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", avvia); else avvia();
