@@ -271,7 +271,7 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
         <p class="ev-sot">Dentro trovi:</p>
         <div class="ev-dentro"><span>la conversazione</span><span>quello che serve sapere</span><span>le cose da fare</span><span>gli aggiornamenti dalla squadra</span></div>
         <div class="ev-pasto" hidden></div>
-        <div class="ev-tasti"><button class="fm-tasto" type="button" id="ev-ci-saro">Ci sarò</button><a class="fm-tasto" id="ev-entra" href="index.html?o=bfff97a1-3431-4939-b15e-304f14087509" hidden>Entra nel Festival</a><a class="fm-tasto secondario" href="festival-evento-bozza.html">La pagina del Festival</a></div>
+        <div class="ev-tasti"><button class="fm-tasto" type="button" id="ev-ci-saro">Ci sarò</button><a class="fm-tasto secondario" href="festival-evento-bozza.html">La pagina del Festival</a></div>
         <p class="ev-esito" aria-live="polite"></p>
       </div>
     </section>
@@ -527,7 +527,7 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   function $(s){ return box.querySelector(s); }
   function apri(){ box.hidden=false; tile.classList.add('on'); }
   function chiudi(){ box.hidden=true; tile.classList.remove('on'); }
-  function dentro(){ tile.querySelector('.ci').hidden=false; $('#ev-ci-saro').hidden=true; $('#ev-entra').hidden=false; }
+  function dentro(){ tile.querySelector('.ci').hidden=false; $('#ev-ci-saro').hidden=true; }   /* 14 ott 21:30, Gab: le pagine vecchie dell'orma «devono sparire»: nessun rimando a index.html?o= */
   tile.onclick=function(){ box.hidden?apri():chiudi(); };
   $('.ev-chiudi').onclick=chiudi;
   $('#ev-ci-saro').onclick=function(){
