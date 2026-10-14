@@ -76,6 +76,22 @@ a{color:inherit;text-decoration:none}
 .giorno b{display:block;font-weight:500;font-size:13px;line-height:1.25;margin-top:10px}
 .giorno small{display:block;font-size:11.5px;color:var(--grigio);margin-top:3px}
 .giorno.luna .d{color:var(--avorio)}
+button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
+.giorno.fest{border-color:rgba(212,175,106,.55);background:linear-gradient(160deg,rgba(212,175,106,.14),var(--carta) 70%)}
+.giorno.fest.on{border-color:var(--oro)}
+.giorno .ci{display:inline-block;margin-top:8px;font-size:11px;letter-spacing:.06em;color:var(--fatto,#7fb77e)}
+.evento{margin-top:12px;border:1px solid rgba(212,175,106,.45);border-radius:18px;padding:16px;background:linear-gradient(180deg,rgba(212,175,106,.10),transparent 70%)}
+.evento .ev-capo{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.evento h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:28px;line-height:1.05;margin-top:6px}
+.evento .ev-capo small{display:block;font-size:12.5px;color:var(--grigio);margin-top:4px}
+.evento .ev-chiudi{width:30px;height:30px;border-radius:50%;border:1px solid var(--riga);color:var(--grigio);flex:none}
+.evento .ev-sot{font-size:13px;color:var(--grigio);margin-top:12px}
+.evento .ev-dentro{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.evento .ev-dentro span{font-size:13px;padding:6px 12px;border-radius:980px;border:1px solid rgba(212,175,106,.45)}
+.evento .ev-pasto{margin-top:10px;font-size:13px;color:var(--oro)}
+.evento .ev-tasti{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.evento [hidden],.giorno [hidden]{display:none!important}
+.evento .ev-esito{font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:15px}
 
 /* post, come film */
 .film{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory;padding-bottom:4px}
@@ -247,7 +263,16 @@ a{color:inherit;text-decoration:none}
         <div class="giorno"><div class="d">12</div><div class="m">ottobre · lun</div><b>Strumenti per fare ordine</b><small>ore 19 · in diretta</small></div>
         <div class="giorno luna"><div class="d">◐</div><div class="m">17 ottobre</div><b>Primo quarto</b><small>la luna</small></div>
         <div class="giorno"><div class="d">25</div><div class="m">ottobre · dom</div><b>Villaggio Felicitas · Oristano</b><small>Cas'ale · Baratili · dalle 10</small></div>
-        <div class="giorno"><div class="d">21</div><div class="m">novembre · sab</div><b>Felicitas Festival</b><small>Centro Sociale · Baratili San Pietro</small></div>
+        <button class="giorno fest" type="button" id="cal-festival" aria-controls="evento-festival"><div class="d">21</div><div class="m">novembre · sab</div><b>Felicitas Festival</b><small>Centro Sociale · Baratili San Pietro</small><span class="ci" hidden>✓ ci sarò</span></button>
+      </div>
+      <!-- 14 ott 21:08, Gab: «nel calendario in bacheca c'è un tasto che ti fa accedere all'orma, che ovviamente non chiamiamo così, ma può esserci un riquadro che spiega cosa trovi all'interno» -->
+      <div class="evento" id="evento-festival" hidden>
+        <div class="ev-capo"><div><span class="fm-occ">SABATO 21 NOVEMBRE · DALLE 10:00</span><h3>Felicitas Festival</h3><small>TRAME · la forza di essere connessi — Centro Sociale · Baratili San Pietro</small></div><button type="button" class="ev-chiudi" aria-label="chiudi">✕</button></div>
+        <p class="ev-sot">Dentro trovi:</p>
+        <div class="ev-dentro"><span>la conversazione</span><span>quello che serve sapere</span><span>le cose da fare</span><span>gli aggiornamenti dalla squadra</span></div>
+        <div class="ev-pasto" hidden></div>
+        <div class="ev-tasti"><button class="fm-tasto" type="button" id="ev-ci-saro">Ci sarò</button><a class="fm-tasto" id="ev-entra" href="index.html?o=bfff97a1-3431-4939-b15e-304f14087509" hidden>Entra nel Festival</a><a class="fm-tasto secondario" href="festival-evento-bozza.html">La pagina del Festival</a></div>
+        <p class="ev-esito" aria-live="polite"></p>
       </div>
     </section>
 
@@ -492,5 +517,39 @@ a{color:inherit;text-decoration:none}
 })();
 </script>
 <script>try{ document.getElementById("cubo").innerHTML = window.FM_CUBO; }catch(e){}</script>
+<script>
+/* il Felicitas Festival nel calendario — 14 ottobre 2026. L'evento: orma bfff97a1-3431-4939-b15e-304f14087509.
+   ?festival=<id> (dalla pagina del Festival, dopo «Ci sarò») apre il riquadro e lo segna; &pasto=pranzo|cena lo ricorda. */
+(function(){
+  var EV='bfff97a1-3431-4939-b15e-304f14087509';
+  var tile=document.getElementById('cal-festival'), box=document.getElementById('evento-festival'); if(!tile||!box) return;
+  var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}):null;
+  function $(s){ return box.querySelector(s); }
+  function apri(){ box.hidden=false; tile.classList.add('on'); }
+  function chiudi(){ box.hidden=true; tile.classList.remove('on'); }
+  function dentro(){ tile.querySelector('.ci').hidden=false; $('#ev-ci-saro').hidden=true; $('#ev-entra').hidden=false; }
+  tile.onclick=function(){ box.hidden?apri():chiudi(); };
+  $('.ev-chiudi').onclick=chiudi;
+  $('#ev-ci-saro').onclick=function(){
+    if(!db){ return; }
+    db.auth.getSession().then(function(r){
+      if(!(r.data&&r.data.session)){ location.href="accesso.html?torna="+encodeURIComponent(location.pathname+"?festival="+EV); return; }
+      $('.ev-esito').textContent='Un momento…';
+      return db.rpc('fm_prendi_orma',{p_orma:EV}).then(function(x){ if(x.error) throw x.error; $('.ev-esito').textContent=''; dentro(); })
+        .catch(function(e){ $('.ev-esito').textContent='Non riuscito: '+(e&&e.message?e.message:'—'); });
+    });
+  };
+  /* sono già dentro? */
+  if(db) db.auth.getSession().then(function(r){ var s=r.data&&r.data.session; if(!s) return;
+    return db.from('orma_persone').select('stato').eq('orma_id',EV).eq('persona_id',s.user.id).limit(1).then(function(q){ if(q.data&&q.data.length) dentro(); });
+  }).catch(function(){});
+  var q=new URLSearchParams(location.search);
+  if(q.get('festival')!==null){
+    apri(); var p=q.get('pasto');
+    if(p==='pranzo'||p==='cena'){ var e=$('.ev-pasto'); e.hidden=false; e.textContent=(p==='pranzo'?'Il pranzo vegetariano di condivisione, alle 13:00':'La cena vegetariana, alle 19:30')+' · [ come si prenota ]'; }
+    setTimeout(function(){ box.scrollIntoView({block:'center',behavior:'smooth'}); },300);
+  }
+})();
+</script>
 </body>
 </html>

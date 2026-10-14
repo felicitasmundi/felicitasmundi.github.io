@@ -458,9 +458,9 @@ var db = (window.supabase && supabase.createClient) ? supabase.createClient("htt
 (function(){
   var QUI = location.origin + location.pathname;
   var MSG = "Felicitas Festival · TRAME: la forza di essere connessi\nSabato 21 novembre 2026 · dalle 10:00\nCentro Sociale · Baratili San Pietro (OR)\n" + QUI;
-  var evento = null;
+  var evento = 'bfff97a1-3431-4939-b15e-304f14087509';   /* l'orma del Festival (14 ott, dal thread che legge il database) */
   function trovaEvento(){ if(evento!==null||!db) return Promise.resolve(evento);
-    return db.from("orme").select("id,titolo,tipo").eq("tipo","festa").ilike("titolo","%Felicitas Festival%").limit(1)
+    return db.from("orme").select("id").eq("id","bfff97a1-3431-4939-b15e-304f14087509").limit(1)
       .then(function(r){ evento = (r.data&&r.data[0]&&r.data[0].id) || ""; return evento; }).catch(function(){ evento=""; return ""; }); }
   function esito(t){ document.querySelectorAll('.fest-esito').forEach(function(e){ e.textContent=t||''; }); }
   function sessione(){ return db ? db.auth.getSession().then(function(r){ return r.data&&r.data.session; }).catch(function(){ return null; }) : Promise.resolve(null); }
