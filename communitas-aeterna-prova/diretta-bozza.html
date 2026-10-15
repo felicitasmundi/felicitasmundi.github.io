@@ -330,6 +330,9 @@ a{color:inherit;text-decoration:none}
   function fuori(t){ if(rec&&rec.state==='recording') ferma(); lasciando=true; if(stanza){ try{ stanza.disconnect(); }catch(e){} } stanza=null; lasciando=false; $('suono').hidden=true; $('pausa').hidden=true; try{ if(navigator.mediaSession) navigator.mediaSession.playbackState='none'; }catch(e){} if(actx){ try{ actx.close(); }catch(e){} actx=null; analizza=null; } clearInterval(orologio2); $('suoni').innerHTML=''; $('onda').classList.add('fuori'); $('live-t').textContent='FUORI · CIVILTÀ SARDA'; $('live').style.color='var(--grigio)'; var i=$('live').querySelector('i'); i.style.background='var(--grigio)'; i.style.animation='none'; $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; if(entrato===false) $('ospite-dati').hidden=false; ['b-mic','b-mano','b-rec','b-file'].forEach(function(k){ $(k).disabled=true; $(k).classList.remove('on'); }); document.querySelector('.griglia').innerHTML=''; document.getElementById('app').classList.remove('coordina'); dice(t||''); }
   $('esci').onclick=function(){ cancellaSegno(); fuori(''); };
   $('pausa').onclick=function(){ pausaSala(!inPausa); };
+  /* 15 ott, Gab: «un altro operatore … lo sentivamo, mentre l'operatore no» — il navigatore blocca l'audio finché non si tocca la pagina:
+     ogni tocco, ovunque, sblocca la sala (non serve trovare il 🔊) */
+  document.addEventListener('pointerdown',function(){ if(stanza&&!stanza.canPlaybackAudio) stanza.startAudio().then(function(){ $('suono').hidden=true; }).catch(function(){}); if(actx&&actx.state==='suspended') actx.resume().catch(function(){}); },true);
   $('suono').onclick=function(){ if(stanza) stanza.startAudio().then(function(){ $('suono').hidden=true; if(actx&&actx.state==='suspended') actx.resume(); }).catch(function(){}); };
 
   /* il consenso prima di entrare: parole di Gab, 12 ottobre */

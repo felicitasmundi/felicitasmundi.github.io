@@ -156,6 +156,8 @@
       }).catch(function (e) { stanza = null; dice("La sala non si apre: " + (e && e.message ? e.message : "—")); });
   }
 
+  /* ogni tocco sblocca l'audio della sala, se il navigatore lo teneva fermo (15 ott) */
+  document.addEventListener("pointerdown", function () { if (stanza && !stanza.canPlaybackAudio) stanza.startAudio().then(function () { if ($("suono")) $("suono").hidden = true; }).catch(function () { }); }, true);
   window.addEventListener("pagehide", function () { lasciando = true; if (stanza) { try { stanza.disconnect(); } catch (e) { } } stanza = null; });
   window.addEventListener("pageshow", function (e) { if (e.persisted) window.FM_DIRETTA.avvia(); });
   window.FM_DIRETTA.avvia();
