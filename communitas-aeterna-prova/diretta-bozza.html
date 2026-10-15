@@ -144,7 +144,7 @@ a{color:inherit;text-decoration:none}
   <div class="regia-box">
     <div class="fm-occ">LA REGIA · SEI TU CHE COORDINI</div>
     <div class="fila"><button class="fm-tasto piccolo" id="silenzia" data-s="silenzia tutti">Silenzia tutti</button></div>
-    <p>Su ogni persona: «zittisci» chiude il suo microfono (compare solo se sta parlando) · «dai la parola» / «togli la parola» · «fuori» la manda fuori dalla sala. Il microfono lo apre solo chi parla. La mano alzata è un segno, non un tasto. La registrazione la fa chi ha aperto la diretta o chi coordina.</p>
+    <p>Su ogni persona: «chiudi il microfono» (compare solo se sta parlando) · «dai la parola» / «togli la parola» · «fuori» la manda fuori dalla sala. Il microfono lo apre solo chi parla. La mano alzata è un segno, non un tasto. La registrazione la fa chi ha aperto la diretta o chi coordina.</p>
   </div>
 
   <!-- ═══ nuova diretta (solo chi coordina) — 15 ott 09:14, Gab: «io voglio pubblicare una diretta radio … senza passare per te» ═══ -->
@@ -288,9 +288,9 @@ a{color:inherit;text-decoration:none}
       var st=document.createElement('span'); st.className='st'; st.textContent=stato; sm.appendChild(st);
       d.querySelector('.vic').textContent=m.comune||(m.ospite?'ospite':'—');
       /* 15 ott 09:12, Gab: «non ha senso che io possa schiacciare l'alza mano degli altri utenti o possa attivare il loro microfono»
-         → zittisci solo se ha il microfono aperto · dai/togli la parola secondo il permesso · fuori sempre; per te stesso niente */
+         → «chiudi il microfono» solo se ce l'ha aperto (09:22: «l'importante è che non scrivi zittisci») · dai/togli la parola secondo il permesso · fuori sempre; per te stesso niente */
       if(!me){ var rg=d.querySelector('.regia'), puoP=!!(p.permissions&&p.permissions.canPublish);
-        var tasti=[]; if(parla) tasti.push(['muta','zittisci']); tasti.push(['parola',puoP?'togli la parola':'dai la parola',!puoP]); tasti.push(['fuori','fuori']);
+        var tasti=[]; if(parla) tasti.push(['muta','chiudi il microfono']); tasti.push(['parola',puoP?'togli la parola':'dai la parola',!puoP]); tasti.push(['fuori','fuori']);
         tasti.forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.textContent=t[1]; if(t[0]==='fuori') b.className='fuori'; b.onclick=function(){ regia(t[0], p.identity, b, t[2]); }; rg.appendChild(b); }); }
       g.appendChild(d);
     });
