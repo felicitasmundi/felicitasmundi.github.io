@@ -86,12 +86,6 @@ a{color:inherit;text-decoration:none}
 .composi{display:flex;gap:8px;align-items:center;padding:10px 0 0}
 .composi .campo,#ospite-dati .campo{flex:1;background:var(--carta);border:1px solid var(--riga);border-radius:980px;padding:10px 14px;font-size:14px;color:var(--grigio)}
 #ospite-dati .campo{padding:9px 11px;font-size:13px}
-#nuova-box .campo{display:block;width:100%;box-sizing:border-box;background:var(--carta);border:1px solid var(--riga);border-radius:12px;padding:9px 12px;font:inherit;font-size:14px;color:var(--avorio);outline:none;margin-top:8px;color-scheme:dark}
-#nuova-box .scelta{display:flex;gap:6px;margin-top:10px}
-#nuova-box .scelta button{flex:1;height:34px;border-radius:980px;border:1px solid var(--riga);font-size:13px;color:var(--grigio)}
-#nuova-box .scelta button.on{background:var(--oro);color:var(--inchiostro);border-color:var(--oro)}
-#nuova-box .link{display:flex;gap:6px;margin-top:10px;align-items:center}
-#nuova-box .link input{flex:1;min-width:0;margin-top:0}
 .composi .tondo{width:38px;height:38px;border-radius:50%;background:var(--oro);color:var(--inchiostro);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
 .file-riga{display:flex;align-items:center;gap:12px;background:var(--carta);border:1px solid var(--riga);border-radius:14px;padding:10px 12px;margin-bottom:8px}
 .file-riga .ic{width:40px;height:40px;border-radius:10px;background:var(--notte);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--aria);flex:none}
@@ -145,18 +139,6 @@ a{color:inherit;text-decoration:none}
     <div class="fm-occ">LA REGIA · SEI TU CHE COORDINI</div>
     <div class="fila"><button class="fm-tasto piccolo" id="silenzia" data-s="silenzia tutti">Silenzia tutti</button></div>
     <p>Su ogni persona: «chiudi il microfono» (compare solo se sta parlando) · «dai la parola» / «togli la parola» · «fuori» la manda fuori dalla sala. Il microfono lo apre solo chi parla. La mano alzata è un segno, non un tasto. La registrazione la fa chi ha aperto la diretta o chi coordina.</p>
-  </div>
-
-  <!-- ═══ nuova diretta (solo chi coordina) — 15 ott 09:14, Gab: «io voglio pubblicare una diretta radio … senza passare per te» ═══ -->
-  <div class="quad" id="nuova-box" hidden>
-    <div class="capo"><span class="fm-occ">NUOVA DIRETTA</span><span class="n">la crei tu, il link lo mandi tu</span></div>
-    <input class="campo" id="nd-titolo" placeholder="titolo" maxlength="120" autocomplete="off">
-    <input class="campo" id="nd-chi" placeholder="con chi (si può lasciare vuoto)" maxlength="300" autocomplete="off">
-    <input class="campo" id="nd-quando" type="datetime-local">
-    <div class="scelta"><button type="button" id="nd-pubblica">pubblica · in Bacheca</button><button type="button" id="nd-link" class="on">solo col link</button></div>
-    <div style="display:flex;gap:8px;margin-top:10px"><button class="fm-tasto piccolo" id="nd-crea" type="button">Crea</button></div>
-    <div class="esito" id="nd-esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px"></div>
-    <div class="link" id="nd-fatto" hidden><input class="campo" id="nd-url" readonly><button class="fm-tasto piccolo secondario" id="nd-copia" type="button">Copia</button><a class="fm-tasto piccolo secondario" id="nd-apri">Apri</a></div>
   </div>
 
   <!-- ═══ chat · file ═══ -->
@@ -390,27 +372,6 @@ a{color:inherit;text-decoration:none}
   /* da quando è iniziata: la sala nasce col primo che entra (LiveKit ne segna l'ora); se non c'è, da quando sei entrato tu */
   function inizioSala(){ try{ var ri=stanza&&stanza.roomInfo; if(ri){ var ms=ri.creationTimeMs?Number(ri.creationTimeMs):(ri.creationTime?Number(ri.creationTime)*1000:0); if(ms>0&&ms<=Date.now()+60000) return ms; } }catch(e){} return Date.now(); }
 
-  /* nuova diretta: chi coordina la crea da qui (SQL 67 · fm_crea_diretta) */
-  (function(){
-    var pubblica=false;
-    function scegli(si){ pubblica=si; $('nd-pubblica').classList.toggle('on',si); $('nd-link').classList.toggle('on',!si); }
-    $('nd-pubblica').onclick=function(){ scegli(true); }; $('nd-link').onclick=function(){ scegli(false); };
-    function scrivi(t,m){ var e=$('nd-esito'); e.style.color=m?'var(--manca)':'var(--grigio)'; e.textContent=t||''; }
-    db.auth.getSession().then(function(r){ if(!(r.data&&r.data.session)) return;
-      return db.rpc('fm_coordina',{p_villaggio:VILLAGGIO}).then(function(c){ if(c.data===true) $('nuova-box').hidden=false; }); }).catch(function(){});
-    $('nd-crea').onclick=function(){
-      var t=$('nd-titolo').value.trim(), q=$('nd-quando').value;
-      if(!t){ scrivi('Manca il titolo.',true); return; } if(!q){ scrivi('Manca il giorno e l\u2019ora.',true); return; }
-      $('nd-crea').disabled=true; scrivi('Un momento…');
-      db.rpc('fm_crea_diretta',{p_titolo:t, p_sottotitolo:$('nd-chi').value.trim(), p_inizio:new Date(q).toISOString(), p_pubblica:pubblica}).then(function(r){
-        if(r.error) throw r.error;
-        var url=location.origin+location.pathname+'?puntata='+r.data;
-        $('nd-url').value=url; $('nd-apri').href=url; $('nd-fatto').hidden=false;
-        scrivi(pubblica?'Creata. È pubblica: compare in Bacheca da un\u2019ora prima a tre ore dopo.':'Creata. È solo col link: mandalo a chi vuoi.');
-      }).catch(function(e){ scrivi('Non creata: '+(e&&e.message?e.message:'—'),true); }).finally(function(){ $('nd-crea').disabled=false; });
-    };
-    $('nd-copia').onclick=function(){ var u=$('nd-url').value; (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){ $('nd-copia').textContent='Copiato'; setTimeout(function(){ $('nd-copia').textContent='Copia'; },2000); }).catch(function(){ $('nd-url').select(); }); };
-  })();
   $('velo').onclick=function(){ $('velo').classList.remove('vivo'); };
 
   /* microfono · mano */

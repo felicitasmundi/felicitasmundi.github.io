@@ -430,12 +430,15 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   </div>
   <!-- DIRETTA -->
   <div class="forma" data-f="diretta">
-    <div class="fm-chips"><button class="fm-chip on">una puntata</button><button class="fm-chip">una lezione a pagamento</button></div>
-    <div class="due-c"><input class="campo-t" placeholder="Data" value="lunedì 12 ottobre"><input class="campo-t" placeholder="Orario" value="19:00"></div>
-    <textarea placeholder="Descrizione"></textarea>
-    <div class="fm-nota" id="nota-diretta">La diretta va confermata dal villaggio. La lezione ha un costo: <span class="ph">[ € ]</span>.</div>
-    <button class="fm-tasto pieno" style="margin-top:10px;background:var(--manca);border-color:var(--manca);color:#fff">Vai in onda</button>
-    <div class="audio-f spento"><b>♪</b>a fine diretta resta qui il file audio<small>trascrizione · la fai tu</small></div>
+    <!-- 15 ott 13:12, Gab: «non è giusto il posto in cui hai messo crea diretta … nell'area in cui uno può creare le dirette» → qui, collegata (SQL 67 · fm_crea_diretta) -->
+    <input class="campo-t" id="nd-titolo" placeholder="Titolo" maxlength="120" autocomplete="off">
+    <input class="campo-t" id="nd-chi" placeholder="Con chi (si può lasciare vuoto)" maxlength="300" autocomplete="off">
+    <div class="due-c"><input class="campo-t" id="nd-giorno" type="date" style="color-scheme:dark"><input class="campo-t" id="nd-ora" type="time" style="color-scheme:dark"></div>
+    <div class="fm-chips" id="nd-vis" style="margin-top:10px"><button class="fm-chip" data-v="pubblica" type="button">Pubblica · in Bacheca</button><button class="fm-chip on" data-v="link" type="button">Solo col link</button></div>
+    <button class="fm-tasto pieno" id="nd-crea" type="button" style="margin-top:10px;background:var(--manca);border-color:var(--manca);color:#fff">Crea la diretta</button>
+    <div class="fm-nota" id="nd-esito" style="min-height:16px"></div>
+    <div id="nd-fatto" hidden style="margin-top:8px"><input class="campo-t" id="nd-url" readonly><div style="display:flex;gap:8px;margin-top:8px"><button class="fm-tasto piccolo secondario" id="nd-copia" type="button">Copia il link</button><a class="fm-tasto piccolo" id="nd-apri">Entra nella diretta</a></div></div>
+    <div class="audio-f spento"><b>♪</b>a fine diretta, chi coordina pubblica la registrazione: qui diventa la puntata<small>trascrizione · la fai tu</small></div>
   </div>
 
   <div class="dati" style="margin-top:12px"><span>Baratili San Pietro</span><span>oggi · luna nuova</span><span>Civiltà Sarda</span></div>
@@ -481,7 +484,7 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   $('apri-prat').onclick=function(){ $('leggi').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('chiudi-prat').onclick=function(){ $('leggi').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
   try{ var q=new URLSearchParams(location.search); if(q.get('v')==='mia'||q.get('vista')==='mia'){ vista('mia'); } if(q.get('praticantato')){ vista('mia'); $('apri-prat').onclick(); } }catch(e){}
-  document.querySelectorAll('#tipo .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); document.querySelectorAll('.forma').forEach(function(x){ x.classList.toggle('vivo', x.getAttribute('data-f')===f); }); }); });
+  document.querySelectorAll('#tipo .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); $('pubblica').hidden=(f==='diretta'); if($('pubblica').nextElementSibling) $('pubblica').nextElementSibling.hidden=(f==='diretta'); document.querySelectorAll('.forma').forEach(function(x){ x.classList.toggle('vivo', x.getAttribute('data-f')===f); }); }); });
   document.querySelectorAll('.scrivi .dati .fm-chip, .tre-foto .fm-chip, .forma .fm-chips .fm-chip, #stanza-chips .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ if(b.closest('.fm-chips')){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); } else { b.classList.toggle('on'); } }); });
   $('stampa-no').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); vista('mia'); };
   $('stampa-si').onclick=function(){ location.href='stanze-bozza.html?s=edizione'; };
@@ -502,6 +505,31 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   var VILLAGGIO='5839d11d-9901-49bb-9b2f-f94236bbe2a1';
   function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(k){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[k];}); }
   function data(m){ try{ return new Date(m).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}); }catch(e){ return ''; } }
+  /* crea una diretta (Cosa stai facendo? → Diretta) — solo chi coordina il villaggio (SQL 67) */
+  (function(){
+    var crea=document.getElementById('nd-crea'); if(!crea) return;
+    function $(i){ return document.getElementById(i); }
+    function scrivi(t,m){ var e=$('nd-esito'); e.style.color=m?'var(--manca)':''; e.textContent=t||''; }
+    var pubblica=false;
+    document.querySelectorAll('#nd-vis .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ pubblica=b.getAttribute('data-v')==='pubblica'; document.querySelectorAll('#nd-vis .fm-chip').forEach(function(x){ x.classList.toggle('on',x===b); }); }); });
+    try{ var o=new Date(); $('nd-giorno').value=o.getFullYear()+'-'+String(o.getMonth()+1).padStart(2,'0')+'-'+String(o.getDate()).padStart(2,'0'); }catch(e){}
+    db.auth.getSession().then(function(r){
+      if(!(r.data&&r.data.session)){ crea.disabled=true; scrivi('Per creare una diretta entra col tuo account.'); return; }
+      return db.rpc('fm_coordina',{p_villaggio:VILLAGGIO}).then(function(c){ if(c.data!==true){ crea.disabled=true; scrivi('La diretta la crea chi coordina il villaggio.'); } });
+    }).catch(function(){});
+    crea.onclick=function(){
+      var t=$('nd-titolo').value.trim(), g=$('nd-giorno').value, h=$('nd-ora').value;
+      if(!t){ scrivi('Manca il titolo.',true); return; } if(!g||!h){ scrivi('Manca il giorno o l\u2019ora.',true); return; }
+      crea.disabled=true; scrivi('Un momento…');
+      db.rpc('fm_crea_diretta',{p_titolo:t, p_sottotitolo:$('nd-chi').value.trim(), p_inizio:new Date(g+'T'+h).toISOString(), p_pubblica:pubblica}).then(function(r){
+        if(r.error) throw r.error;
+        var url=new URL('diretta-bozza.html?puntata='+r.data, location.href).href;
+        $('nd-url').value=url; $('nd-apri').href=url; $('nd-fatto').hidden=false;
+        scrivi(pubblica?'Creata. È pubblica: compare in Bacheca da un\u2019ora prima a tre ore dopo.':'Creata. È solo col link: mandalo a chi vuoi.');
+      }).catch(function(e){ scrivi('Non creata: '+(e&&e.message?e.message:'—'),true); }).finally(function(){ crea.disabled=false; });
+    };
+    $('nd-copia').onclick=function(){ var u=$('nd-url').value; (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){ $('nd-copia').textContent='Copiato'; setTimeout(function(){ $('nd-copia').textContent='Copia il link'; },2000); }).catch(function(){ $('nd-url').select(); }); };
+  })();
   /* le dirette pubbliche in onda (o che stanno per cominciare): le vede chiunque */
   var onda=document.getElementById('in-onda');
   if(onda) db.rpc('fm_dirette_in_onda').then(function(q){ if(q.error||!q.data) return; onda.innerHTML='';
