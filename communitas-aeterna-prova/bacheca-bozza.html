@@ -39,6 +39,14 @@ a{color:inherit;text-decoration:none}
 .fare span{flex:1;font-family:'Cormorant Garamond',serif;font-size:19px;color:rgba(245,240,230,.85)}
 .fare b{width:40px;height:40px;border-radius:50%;background:var(--notte);border:2px solid var(--oro);display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 14px rgba(212,175,106,.35)}
 .fare b img{width:40px;height:40px;border-radius:50%}
+/* 15 ott 13:14, Gab: «vai in onda può essere un tasto di fianco a cosa stai facendo» */
+.fare-riga{display:flex;gap:8px;align-items:center;margin:4px 18px 18px}
+.fare-riga .fare{flex:1;min-width:0;margin:0}
+.onda-t{flex:none;height:58px;padding:0 16px;border-radius:980px;border:1px solid #ff4d4d;background:rgba(255,77,77,.12);color:#ff6b6b;font:600 13px 'DM Sans',system-ui,sans-serif;display:flex;align-items:center;gap:7px;cursor:pointer;white-space:nowrap}
+.scrivi.e-diretta > .dati, .scrivi.e-diretta #apri-altro, .scrivi.e-diretta #altro, .scrivi.e-diretta #vis-et, .scrivi.e-diretta #vis, .scrivi.e-diretta #pubblica, .scrivi.e-diretta #pubblica + .fm-nota{display:none!important}
+.fare-riga .fare span{font-size:17px}
+.onda-t i{width:8px;height:8px;border-radius:50%;background:#ff4d4d;animation:fm-batte 1.4s infinite}
+@keyframes fm-batte{50%{opacity:.35}}
 
 /* i quadranti, nell'ordine di Gab: radio · karma yoga · calendario · post */
 .quad{padding:0 18px;margin-bottom:26px}
@@ -220,7 +228,7 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   <!-- ═══ LA BACHECA ═══ -->
   <div class="vista vivo" id="v-bacheca">
     <div class="testa-b"><div class="fm-occ">TERRA · VICINATI</div><h1>La Bacheca.</h1><div class="sot">La bacheca dei villaggi e dei vicinati: quello che pubblicano i villaggi, e i contenuti di chi partecipa.</div></div>
-    <button class="fare" id="apri-scrivi"><span>Cosa stai facendo?</span><b><img src="APP.FELICITASMUNDI/piatti/orma.png" alt=""></b></button>
+    <div class="fare-riga"><button class="fare" id="apri-scrivi"><span>Cosa stai facendo?</span><b><img src="APP.FELICITASMUNDI/piatti/orma.png" alt=""></b></button><button class="onda-t" id="vai-in-onda" type="button"><i></i>Vai in onda</button></div>
 
     <!-- 1 · radio -->
     <section class="quad" style="--c:var(--aria)">
@@ -458,7 +466,7 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   <div class="fm-etich">LA STANZA</div>
   <div class="fm-chips" id="stanza-chips"><button class="fm-chip elemento on" style="--c:var(--terra)"><i></i>Vicinati</button><button class="fm-chip elemento" style="--c:var(--acqua)"><i></i>Emporio</button><button class="fm-chip elemento" style="--c:var(--fuoco)"><i></i>Assistenza</button><button class="fm-chip elemento" style="--c:var(--aria)"><i></i>Edizione</button><button class="fm-chip elemento" style="--c:var(--etere)"><i></i>Scuola</button></div>
   </div>
-  <div class="fm-etich">CHI LA VEDE</div>
+  <div class="fm-etich" id="vis-et">CHI LA VEDE</div>
   <div class="fm-chips" id="vis"><button class="fm-chip">Solo io</button><button class="fm-chip">Il vicinato</button><button class="fm-chip on">Il villaggio</button></div>
   <button class="fm-tasto pieno" id="pubblica">Pubblica</button>
   <p class="fm-nota" style="margin-top:10px">Diventa un'orma, con le cose da fare, la chat e chi c'è dentro. Con «Il villaggio» compare nella Bacheca di tutti quelli del villaggio.</p>
@@ -480,11 +488,12 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   document.querySelectorAll('.piede button').forEach(function(b){ b.onclick=function(){ vista(b.getAttribute('data-v')); }; });
   function apri(){ $('scrivi').classList.add('vivo'); $('velo').classList.add('vivo'); }
   function chiudi(){ $('scrivi').classList.remove('vivo'); $('velo').classList.remove('vivo'); }
-  $('apri-scrivi').onclick=apri; $('apri-scrivi-2').onclick=apri; $('velo').onclick=function(){ chiudi(); $('stanze').classList.remove('vivo'); $('stampa').classList.remove('vivo'); $('leggi').classList.remove('vivo'); };
+  $('apri-scrivi').onclick=apri; $('apri-scrivi-2').onclick=apri;
+  $('vai-in-onda').onclick=function(){ apri(); var d=document.querySelector('#tipo .fm-chip[data-f="diretta"]'); if(d) d.click(); }; $('velo').onclick=function(){ chiudi(); $('stanze').classList.remove('vivo'); $('stampa').classList.remove('vivo'); $('leggi').classList.remove('vivo'); };
   $('apri-prat').onclick=function(){ $('leggi').classList.add('vivo'); $('velo').classList.add('vivo'); };
   $('chiudi-prat').onclick=function(){ $('leggi').classList.remove('vivo'); $('velo').classList.remove('vivo'); };
   try{ var q=new URLSearchParams(location.search); if(q.get('v')==='mia'||q.get('vista')==='mia'){ vista('mia'); } if(q.get('praticantato')){ vista('mia'); $('apri-prat').onclick(); } }catch(e){}
-  document.querySelectorAll('#tipo .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); $('pubblica').hidden=(f==='diretta'); if($('pubblica').nextElementSibling) $('pubblica').nextElementSibling.hidden=(f==='diretta'); document.querySelectorAll('.forma').forEach(function(x){ x.classList.toggle('vivo', x.getAttribute('data-f')===f); }); }); });
+  document.querySelectorAll('#tipo .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ var f=b.getAttribute('data-f'); $('scrivi').classList.toggle('e-diretta',f==='diretta'); document.querySelectorAll('.forma').forEach(function(x){ x.classList.toggle('vivo', x.getAttribute('data-f')===f); }); }); });
   document.querySelectorAll('.scrivi .dati .fm-chip, .tre-foto .fm-chip, .forma .fm-chips .fm-chip, #stanza-chips .fm-chip').forEach(function(b){ b.addEventListener('click',function(){ if(b.closest('.fm-chips')){ b.parentNode.querySelectorAll('.fm-chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); } else { b.classList.toggle('on'); } }); });
   $('stampa-no').onclick=function(){ $('stampa').classList.remove('vivo'); $('velo').classList.remove('vivo'); vista('mia'); };
   $('stampa-si').onclick=function(){ location.href='stanze-bozza.html?s=edizione'; };
