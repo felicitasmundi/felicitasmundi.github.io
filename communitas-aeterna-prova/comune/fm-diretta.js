@@ -141,7 +141,8 @@
           if (stanza === sala) stanza = null;
           if (lasciando) return;
           var R = LivekitClient.DisconnectReason || {};
-          if (perche === R.PARTICIPANT_REMOVED || perche === R.ROOM_DELETED || perche === R.DUPLICATE_IDENTITY) { spegni("Sei fuori dalla sala."); return; }
+          if (perche === R.ROOM_DELETED) { spegni("La diretta è chiusa."); return; }   /* chi coordina l'ha chiusa (15 ott) */
+          if (perche === R.PARTICIPANT_REMOVED || perche === R.DUPLICATE_IDENTITY) { spegni("Sei fuori dalla sala."); return; }
           if (tentativi++ < 3) { dice("Rientro…"); setTimeout(entra, 2500); } else dice("La sala non risponde.");
         });
         return sala.connect(d.dove, d.gettone).then(function () {

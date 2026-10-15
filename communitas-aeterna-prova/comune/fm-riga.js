@@ -65,7 +65,7 @@
   /* 13 ott 20:38, Gab: «se uno si muove dalla pagina chat, finisce la conversazione.. tienila sempre attiva» —
      se nella sala della diretta è rimasto il segno (fm_diretta), la diretta ti segue: comune/fm-diretta.js rientra in sala
      e mette in alto la pillola «● titolo» con play/pausa e microfono. Si carica solo se il segno c'è. */
-  function diretta() { try { if (!localStorage.getItem("fm_diretta")) return; if (window.FM_DIRETTA) { window.FM_DIRETTA.avvia(); return; } var sd = document.createElement("script"); sd.src = "comune/fm-diretta.js?v=10150910"; document.head.appendChild(sd); } catch (e) { } }
+  function diretta() { try { if (!localStorage.getItem("fm_diretta")) return; if (window.FM_DIRETTA) { window.FM_DIRETTA.avvia(); return; } var sd = document.createElement("script"); sd.src = "comune/fm-diretta.js?v=10150925"; document.head.appendChild(sd); } catch (e) { } }
   diretta();
   /* 21:05: tornando indietro, il navigatore può ridare la pagina dalla sua cache senza rieseguire gli script — si ricontrolla il segno */
   window.addEventListener("pageshow", function (e) { if (e.persisted) diretta(); });
