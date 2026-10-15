@@ -56,17 +56,18 @@ a{color:inherit;text-decoration:none}
 .pt .c{width:48px;height:48px;border-radius:50%;margin:0 auto 6px;background:var(--notte);border:1px solid var(--riga);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--oro);overflow:hidden}
 .pt .c img{width:100%;height:100%;object-fit:cover}
 .pt.parla .c{border-color:var(--oro);box-shadow:0 0 0 3px rgba(212,175,106,.28)}
-.pt.parla::after{content:"";position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--fatto)}
 .pt.muto .c{border-color:var(--manca);opacity:.75}
 .pt.mano::before{content:"✋";position:absolute;top:6px;left:8px;font-size:13px}
 .pt b{display:block;font-weight:500;font-size:12px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pt small{display:block;font-size:10.5px;color:var(--grigio);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pt .vic{display:inline-block;margin-top:5px;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);border:1px solid rgba(170,136,68,.5);border-radius:980px;padding:2px 7px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pt .ruolo{color:var(--oro)}
+.pt .st{color:var(--fatto)}
+.pt.muto .st{color:var(--manca)}
 .pt.ospite .vic{color:var(--grigio);border-color:var(--riga)}
-.pt .regia{display:none;gap:4px;justify-content:center;margin-top:7px}
+.pt .regia{display:none;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:7px}
 .coordina .pt .regia{display:flex}
-.pt .regia button{width:26px;height:26px;border-radius:50%;border:1px solid var(--riga);font-size:12px;display:flex;align-items:center;justify-content:center}
+.pt .regia button{height:22px;padding:0 7px;border-radius:980px;border:1px solid var(--riga);font-size:10px;letter-spacing:.02em;display:flex;align-items:center;justify-content:center}
 .pt .regia button.fuori{color:var(--manca);border-color:rgba(180,87,74,.5)}
 .pt .regia button.on{background:var(--oro);color:var(--inchiostro);border-color:var(--oro)}
 
@@ -251,11 +252,13 @@ a{color:inherit;text-decoration:none}
       var parla=mic&&!muto, d=document.createElement('div');
       d.className='pt'+(parla?' parla':'')+(mic&&muto?' muto':'')+(m.ospite?' ospite':'')+(mani[p.identity]&&Date.now()-mani[p.identity]<60000?' mano':'');
       var nome=p.name||(m.ospite?'ospite':p.identity);
-      var stato=(m.ospite?'senza account · ':'')+(parla?(attivi[p.identity]?'sta parlando':'in onda'):'ascolta');
-      d.innerHTML='<div class="c">'+(m.ospite?'○':iniz(nome))+'</div><b></b><small class="'+(m.coordina?'ruolo':'')+'"></small><span class="vic"></span>'+
-        '<div class="regia"><button data-az="muta" title="microfono">'+(mic&&muto?'🚫':'🎙')+'</button><button data-az="parola" title="parola">✋</button><button data-az="fuori" class="fuori" title="fuori">⨯</button></div>';
+      /* 15 ott, Gab: «il modo in cui hai generato i loghetti è confusionario» → iniziale per tutti, un solo stato, la regia a parole */
+      var stato=parla?'parla':(mic&&muto?'muto':'ascolta');
+      d.innerHTML='<div class="c">'+iniz(nome)+'</div><b></b><small></small><span class="vic"></span>'+
+        '<div class="regia"><button data-az="muta" title="chiudi il microfono">microfono</button><button data-az="parola" title="dai o togli la parola">parola</button><button data-az="fuori" class="fuori" title="manda fuori dalla sala">fuori</button></div>';
       d.querySelector('b').textContent=nome+(me?' · tu':'');
-      d.querySelector('small').textContent=(m.ruolo?m.ruolo+' · ':'')+stato;
+      var sm=d.querySelector('small'); if(m.ruolo){ var r=document.createElement('span'); r.className=m.coordina?'ruolo':''; r.textContent=m.ruolo+' · '; sm.appendChild(r); }
+      var st=document.createElement('span'); st.className='st'; st.textContent=stato; sm.appendChild(st);
       d.querySelector('.vic').textContent=m.comune||(m.ospite?'ospite':'—');
       if(me){ d.querySelectorAll('.regia button').forEach(function(b){ b.disabled=true; }); }
       d.querySelectorAll('.regia button').forEach(function(b){ b.onclick=function(){ regia(b.getAttribute('data-az'), p.identity, b); }; });
@@ -315,12 +318,12 @@ a{color:inherit;text-decoration:none}
       stanza.on(E.Disconnected,function(){ if(lasciando) return; cancellaSegno(); fuori('Sei fuori dalla sala.'); });
       return stanza.connect(d.dove,d.gettone).then(function(){ return stanza.startAudio().then(function(){ $('suono').hidden=true; }).catch(function(){ $('suono').hidden=false; }); }).then(function(){ segna();
         $('onda').classList.remove('fuori'); $('pausa').hidden=false; pausaSala(false); lettore(); $('live-t').textContent='IN SALA · CIVILTÀ SARDA'; $('live').style.color='#ff6b6b'; var i=$('live').querySelector('i'); i.style.background='#ff4d4d'; i.style.animation='';
-        $('entra').hidden=true; $('esci').hidden=false; $('ospite-dati').hidden=true; parlaPrima=!!d.parla; $('b-mic').disabled=!d.parla; $('b-mano').disabled=!d.entrato; $('b-rec').disabled=!d.coordina; $('b-file').disabled=!d.entrato;
+        $('entra').hidden=true; $('esci').hidden=false; $('ospite-dati').hidden=true; var puo=!!d.parla||!!(stanza.localParticipant.permissions&&stanza.localParticipant.permissions.canPublish); parlaPrima=puo; $('b-mic').disabled=!puo; $('b-mano').disabled=!d.entrato; $('b-rec').disabled=!d.coordina; $('b-file').disabled=!d.entrato;
         if(d.coordina) document.getElementById('app').classList.add('coordina');
-        dice(d.entrato?'':'Senza account: senti e parli; chi coordina può chiuderti il microfono.'); t1=Date.now(); orologio2=setInterval(function(){ var s=Math.floor((Date.now()-t1)/1000); $('tempo').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
+        dice(!puo?'Per ora ascolti: chi coordina ti dà la parola.':(d.entrato?'':'Senza account: senti e parli. Premi «microfono» per parlare.')); t1=Date.now(); orologio2=setInterval(function(){ var s=Math.floor((Date.now()-t1)/1000); $('tempo').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
         tessere();
         /* se il segno dice che il microfono era aperto, lo riapro (tornando dalle altre pagine) */
-        try{ var sg=JSON.parse(localStorage.getItem(CH)||'null'); if(sg&&sg.mic&&d.parla) $('b-mic').click(); }catch(e){}
+        try{ var sg=JSON.parse(localStorage.getItem(CH)||'null'); if(sg&&sg.mic&&puo) $('b-mic').click(); }catch(e){}
       });
     }).catch(function(e){ $('entra').disabled=false; dice('La sala non si apre: '+(e&&e.message?e.message:'—'),true); });
   }
