@@ -226,6 +226,8 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
     <section class="quad" style="--c:var(--aria)">
       <div class="capo"><span class="fm-occ">LA RADIO</span><a href="#puntate">le puntate ›</a></div>
       <!-- 13 ott 23:18, Gab: «la diretta è conclusa, dopo diventa puntata» — le puntate registrate, dal database (orme di tipo diretta del villaggio) -->
+      <!-- 15 ott 09:10, Gab: «dalla bacheca si dovrebbe leggere il nome della diretta se è pubblica, e chiunque può ascoltare» — le dirette pubbliche, da un'ora prima a tre ore dopo (SQL 67) -->
+      <div id="in-onda" class="fm-carte" style="margin-bottom:12px"></div>
       <div id="puntate" class="fm-carte" style="margin-bottom:12px"></div>
       <div class="radio-foto"><img src="casa/cerchio-fuoco.jpg" alt=""></div>
       <div class="radio-testo">
@@ -497,13 +499,23 @@ button.giorno{text-align:left;font:inherit;color:inherit;cursor:pointer}
   var VILLAGGIO='5839d11d-9901-49bb-9b2f-f94236bbe2a1';
   function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(k){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[k];}); }
   function data(m){ try{ return new Date(m).toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}); }catch(e){ return ''; } }
+  /* le dirette pubbliche in onda (o che stanno per cominciare): le vede chiunque */
+  var onda=document.getElementById('in-onda');
+  if(onda) db.rpc('fm_dirette_in_onda').then(function(q){ if(q.error||!q.data) return; onda.innerHTML='';
+    q.data.forEach(function(o){ var t=new Date(o.inizio_il), ora=t.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}), gia=t.getTime()<=Date.now();
+      var d=document.createElement('div'); d.className='fm-carta';
+      d.innerHTML='<div class="im" style="color:#ff4d4d">●</div><div class="t" style="flex:1;min-width:0"><b></b><small></small></div><a class="fm-tasto piccolo">Entra</a>';
+      d.querySelector('b').textContent=o.titolo; d.querySelector('small').textContent=(gia?'in onda · iniziata alle '+ora:'alle '+ora)+(o.sottotitolo?' · '+o.sottotitolo:'');
+      d.querySelector('a').href='diretta-bozza.html?puntata='+encodeURIComponent(o.id); onda.appendChild(d); });
+  }).catch(function(){});
   db.auth.getSession().then(function(r){
     if(!(r.data&&r.data.session)){ box.innerHTML='<div class="fm-carta"><div class="im" style="color:var(--aria)">◉</div><div class="t"><b>Le puntate</b><small>le dirette registrate le ascolta chi è entrato</small></div><a class="fm-tasto piccolo secondario" href="accesso.html">Entra</a></div>'; return; }
-    return db.from('orme').select('id,titolo,contenuto,momento,orma_file(indirizzo,dimensione,tipo)').eq('tipo','diretta').eq('orma_madre_id',VILLAGGIO).order('momento',{ascending:false}).limit(6).then(function(q){
+    return db.from('orme').select('id,titolo,contenuto,momento,inizio_il,orma_file(indirizzo,dimensione,tipo)').eq('tipo','diretta').eq('orma_madre_id',VILLAGGIO).order('momento',{ascending:false}).limit(6).then(function(q){
       if(q.error||!q.data||!q.data.length){ box.innerHTML=''; return; }
       box.innerHTML='';
       q.data.forEach(function(o){
         var f=(o.orma_file||[]).filter(function(x){ return x.tipo==='audio'; })[0];
+        if(!f&&o.inizio_il) return;   /* una diretta annunciata (SQL 67), non ancora una puntata */
         var d=document.createElement('div'); d.className='fm-carta';
         d.innerHTML='<div class="im" style="color:var(--aria)">◉</div><div class="t" style="flex:1;min-width:0"><b></b><small></small><div class="suono" style="margin-top:6px"></div></div>'+(f?'<button class="fm-tasto piccolo secondario">Ascolta</button>':'');
         d.querySelector('b').textContent=o.titolo; d.querySelector('small').textContent='puntata · '+data(o.momento)+(f&&f.dimensione?' · '+Math.round(f.dimensione/1048576)+' MB':'');
