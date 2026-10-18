@@ -118,13 +118,13 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 <div class="app" id="app">
-  <div id="fm-stanze" data-attiva=""></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px"><a href="strumento.html" style="font:600 13px 'DM Sans',system-ui,sans-serif;border:1px solid var(--riga);border-radius:999px;padding:7px 13px;color:var(--avorio)">← Torna all'app</a><span style="font-family:Cinzel,serif;letter-spacing:.18em;font-size:13px;color:var(--oro)">FELICITAS</span></div>
 
   <!-- ═══ la consolle ═══ -->
   <div class="onda fuori" id="onda">
     <div class="riga1"><span class="live" id="live" style="color:var(--grigio)"><i style="background:var(--grigio);animation:none"></i><span id="live-t">FUORI · CIVILTÀ SARDA</span></span><span style="display:flex;align-items:center;gap:8px"><button id="pausa" hidden title="pausa" aria-label="pausa" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--riga);color:var(--avorio);font-size:11px;display:flex;align-items:center;justify-content:center">❚❚</button><span class="tempo" id="tempo">00:00</span></span></div>
-    <h1 id="titolo">Mutuo credito cooperativo</h1>
-    <div class="sot" id="chi">giovedì 16 ottobre · ore 19 · con Guido Grossi e Vittorino Crivello · a cura di Gabriele Dettori e Marco Caddeo</div>
+    <h1 id="titolo">La diretta</h1>
+    <div class="sot" id="chi"></div>
     <div class="sot" id="giorno-sala" style="margin-top:4px"></div>
     <div class="griglia" style="margin-top:12px"></div>
     <div class="vu" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -160,17 +160,9 @@ a{color:inherit;text-decoration:none}
     <div class="esito" id="pub-esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px"></div>
   </div>
   <div class="quad pannello" id="p-info">
-    <div class="capo"><span class="fm-occ">GIOVEDÌ 16 OTTOBRE · ORE 19</span></div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;color:rgba(245,240,230,.9);margin-bottom:14px">
-      <p style="margin-bottom:10px">La chiacchierata che abbiamo fatto ieri, inizialmente con Vittorino, riguardava il discorso dei prezzi, dei valori, del lavoro e dei servizi in generale nella società come strutturata attualmente, ma in particolare, visto che lui è un esperto del settore agricolo oltre che essere un operatore, partiva da <span class="fm-ph">[ … ]</span>. Un piccolo agricoltore, un piccolo operatore non riesce a gestire, a tenere la sua azienda a galla perché non ce la fa a produrre e a vendere i suoi prodotti al prezzo necessario per poter vivere dignitosamente, per poter accedere ai servizi dei quali lui e la sua famiglia possono aver bisogno. Va oggi da un medico: col sistema sanitario nazionale che non funziona si è obbligati a fare visite private, e una visita privata da un medico, una mezz'ora di consulto, ti costa 100-150 euro; dipende, comunque i prezzi sono quelli. Ma anche un idraulico: se tu non te la cavi in casa facendo i lavoretti, chiami un idraulico per farti un lavoro e non te la cavi con meno di 100 euro, secondo com'è il lavoro. Quindi, per farla breve, i piccoli produttori — e questo vale un po' per tutti i settori — sono costretti a chiudere; non hanno in questo momento grandi alternative, non riescono a portare avanti la loro attività, senza contare poi la pressione da un punto di vista finanziario per dei debiti che dovessero aver fatto per tenere la loro azienda a galla. Quindi il ragionamento era: se può funzionare un sistema, una rete nella quale i prezzi in qualche modo sono controllati da un organismo centrale, che dovrebbe consentire un riequilibrio dei prezzi, e chi aderisce alla rete dovrebbe accettare questa situazione.</p>
-      <p style="margin-bottom:10px">Ne abbiamo parlato poi successivamente con Guido Grossi, e lui ritiene che il controllo dei prezzi non funzioni; quindi la soluzione che propone lui ovviamente è una sua opinione, un'opinione qualificata, però bisognerebbe approfondire, perché l'economia più forte che c'è in questo momento al mondo, che è quella cinese, è partita da una politica di prezzi controllati. Ovviamente bisognerebbe approfondire, bisognerebbe capire come è stata tutta l'evoluzione. Non è che il modello deve essere quello o deve essere un altro. A noi interessa come arrivare a determinati obiettivi, che sono quelli di un equilibrio della ricchezza, fondamentalmente: equilibrio della ricchezza e disponibilità di tempo per le persone che dovessero fare parte di questo sistema, disponibilità di tempo per poter lavorare su se stessi. Prevalentemente questo è il nostro sogno, il nostro desiderio: un'evoluzione personale e spirituale che possa portare all'unica cosa che può dare a un individuo, a una società, un senso realmente profondo della vita, che è la connessione con il divino.</p>
-      <p>Questo ovviamente è un passo e un obiettivo molto grande; prima di tutto c'è da risolvere le questioni materiali di sussistenza — stiamo vedendo in questo momento quanto è difficile. Grossi invece sostiene che almeno la sua formula, la sua proposta, la sua scelta nella rete che sta costruendo è quella del mutuo credito cooperativo: cioè, all'interno di un sistema, gli aderenti al mutuo credito cooperativo acquistano dei beni e dei servizi in una — chiamiamola — moneta determinata, specifica, e non tirano fuori del denaro fisicamente, ma si scrive in un registro che loro hanno avuto accesso a tot di credito, che poi con i loro prodotti e i loro servizi andranno a riequilibrare: quindi non incassando dai clienti denaro ma crediti. Secondo il progetto di Guido questo dovrebbe riequilibrare la distribuzione della ricchezza.</p>
-    </div>
-    <div class="fm-riga"><b>cos'è</b><span>la diretta del villaggio Civiltà Sarda · con Guido Grossi e Vittorino Crivello</span></div>
-    <div class="fm-riga"><b>la cura</b><span>Gabriele Dettori e Marco Caddeo</span></div>
     <div class="fm-riga"><b>chi può parlare</b><span>chi ha una voce (lo decide il gettone)</span></div>
     <div class="fm-riga"><b>chi registra</b><span>chi ha aperto la diretta, o chi coordina</span></div>
-    <div class="fm-riga"><b>alla fine</b><span>il file audio in Bacheca come Diretta · trascrizione: la fai tu</span></div>
+    <div class="fm-riga"><b>alla fine</b><span>il file audio nel Giornale come Diretta · trascrizione: la fai tu</span></div>
     <div class="fm-riga"><b>chi la vede</b><span>il villaggio · gli ospiti col link sentono e parlano; chi coordina può chiudere il microfono</span></div>
     <div class="fm-riga"><b>la voce registrata</b><span>accettata all'accesso · <a href="../communitas-aeterna/privacy.html#s6a" style="color:var(--oro)">privacy, sez. 6a</a></span></div>
   </div>
