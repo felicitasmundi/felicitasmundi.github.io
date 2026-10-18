@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- ⭐ 18 ottobre 2026, Gab: «io ti sto dicendo da prima di trasformare la tua prova di stamattina nell app confermata, poi miglioriamo da li»
+     · «rendila operativa, nessun link non funzionante». La prova di stamattina (lo strumento su claude.ai) diventa l'app:
+     Oggi · Giornale · Megafono · Obiettivi, con i dati veri su Supabase. Le regole d'accesso le decide il database (RLS). -->
+<title>Felicitas</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icona-felicitas-ios-180.png?v=0930"><link rel="icon" type="image/png" sizes="48x48" href="favicon-felicitas-48.png?v=0930"><meta name="theme-color" content="#F5F0E6"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
+  --oro:#A8822E; --oro-chiaro:#E9DCBC; --linea:#D9CDB4; --blu:#2F5D8A; --blu-chiaro:#E3ECF5;
+  --ok:#3F7A4A; --ok-chiaro:#E1EEDF; --att:#9A6A12; --att-chiaro:#F4E8CC; --err:#9A3B2E; --err-chiaro:#F5E1DC;
+  --tec:#5B6A92; --log:#9A6A12; --com:#3F7A4A;
+  --display:"Cinzel",Georgia,serif; --serif:"Cormorant Garamond",Georgia,serif; --sans:"DM Sans",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--carta)}
+[hidden]{display:none!important}
+body{margin:0;background:var(--carta);color:var(--inchiostro);font-family:var(--sans);font-size:15px;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--linea);background:var(--carta)}
+.marchio{font-family:var(--display);letter-spacing:.14em;font-size:15px;color:var(--oro);text-decoration:none}
+.chi{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--carta2);color:var(--tenue);border:1px solid var(--linea);white-space:nowrap}
+button.chip{cursor:pointer;font-family:var(--sans)}
+button.chip[aria-pressed="true"]{background:var(--oro-chiaro);border-color:var(--oro);color:var(--inchiostro)}
+.f-tecnologica{background:#E6E9F2;color:var(--tec);border-color:#C9CFE0}
+.f-logistica{background:var(--att-chiaro);color:var(--log);border-color:#E6D3A8}
+.f-comunitaria{background:var(--ok-chiaro);color:var(--com);border-color:#C6DCC3}
+.corpo{flex:1;width:100%;max-width:720px;margin:0 auto;padding:14px max(16px,env(safe-area-inset-right,0px)) 96px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;min-width:0}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--linea);background:var(--carta);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav button{font:600 11px var(--sans);background:none;border:0;padding:10px 1px 12px;color:var(--tenue);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav button .ic{font-size:17px;line-height:1}
+.nav button[aria-current="page"]{color:var(--oro)}
+.nav button.console .ic{background:var(--oro);color:#fff;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin-top:-18px;box-shadow:0 3px 10px rgba(168,130,46,.4)}
+h3{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1;margin:0}
+.et{font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);margin:0}
+.nota{font-size:12.5px;color:var(--tenue);margin:0}
+.card{border:1px solid var(--linea);border-radius:12px;padding:12px;background:var(--foglio);display:flex;flex-direction:column;gap:4px;min-width:0}
+.card .t{font-size:14.5px;overflow-wrap:anywhere;white-space:pre-wrap}
+.card .m{font-size:12px;color:var(--tenue)}
+.giorno{display:flex;gap:14px;align-items:center}
+.giorno svg{flex:none;width:52px;height:52px;color:var(--oro)}
+.giorno b{display:block;font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.1}
+.giorno span{font-size:13px;color:var(--tenue)}
+.appunt{display:flex;flex-direction:column;gap:6px}
+.appunt a,.appunt div{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 12px;border-radius:10px;background:var(--oro-chiaro);color:var(--inchiostro);text-decoration:none;font-size:14px;min-width:0}
+.appunt .ora{font-weight:600;white-space:nowrap}
+.appunt .rosso{color:var(--err);font-weight:600}
+.rimando{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--oro-chiaro);border-radius:12px;padding:12px 14px;cursor:pointer;border:0;font:600 14px var(--sans);color:var(--inchiostro);text-align:left;text-decoration:none}
+.pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap;align-self:flex-start}
+.v-pubblico{background:var(--ok-chiaro);color:var(--ok)}
+.v-vicinato{background:var(--blu-chiaro);color:var(--blu)}
+.v-solo_me{background:var(--carta2);color:var(--tenue)}
+.s-in_coda{background:var(--carta2);color:var(--tenue)}
+.s-in_avanzamento{background:var(--att-chiaro);color:var(--att)}
+.s-sviluppato{background:var(--ok-chiaro);color:var(--ok)}
+.riga{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.riga>div{min-width:0}
+.fine{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.mini{font:600 12px var(--sans);border:1px solid var(--linea);background:var(--carta);color:var(--inchiostro);border-radius:99px;padding:4px 11px;cursor:pointer;text-decoration:none}
+.mini.oro{background:var(--oro-chiaro);border-color:var(--oro)}
+.mini:disabled{opacity:.5;cursor:default}
+.giro{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.foglio-g{border:1px solid var(--linea);border-radius:12px;background:var(--foglio);padding:16px 16px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.testata{text-align:center;border-bottom:3px double var(--inchiostro);padding-bottom:8px}
+.testata h4{font-family:var(--display);font-weight:600;font-size:clamp(20px,5.5vw,28px);letter-spacing:.08em;margin:0}
+.testata p{margin:2px 0 0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--tenue)}
+.sez{display:flex;align-items:baseline;justify-content:space-between;gap:8px;border-bottom:1px solid var(--inchiostro);padding:10px 0 2px}
+.sez b{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
+.sez span{font-size:11.5px;color:var(--tenue)}
+.art{padding:8px 0;border-bottom:1px solid var(--linea);min-width:0}
+.art h5{font-family:var(--serif);font-weight:600;font-size:clamp(24px,6vw,30px);line-height:1.08;margin:0}
+.firma{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--tenue);margin:4px 0}
+.art .testo{font-family:var(--serif);font-size:18px;line-height:1.4;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.brevi{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:560px){.brevi{grid-template-columns:1fr 1fr;column-gap:18px}}
+.breve{padding:8px 0;border-bottom:1px solid var(--linea);min-width:0}
+.breve p{margin:0;font-family:var(--serif);font-size:17px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.breve>span{display:block;font-size:11.5px;color:var(--tenue);margin-top:2px}
+.onda{padding:8px 10px;margin:8px 0;background:var(--oro-chiaro);border-radius:8px;display:block;color:inherit;text-decoration:none}
+.onda b{font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--att)}
+.onda p{margin:2px 0 0;font-family:var(--serif);font-size:19px;font-weight:600}
+.onda span{display:block;font-size:11.5px;color:var(--tenue)}
+.etv{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blu);margin-right:6px}
+.leggi{background:none;border:0;padding:0;font:600 12.5px var(--sans);color:var(--blu);cursor:pointer;margin-top:4px}
+.finito{text-align:center;font-family:var(--serif);font-size:18px;color:var(--tenue);padding:10px 0 2px}
+.chiuso{border:1px dashed var(--linea);border-radius:12px;padding:12px;color:var(--tenue);font-size:13.5px}
+.vuoto{border:1px dashed var(--linea);border-radius:12px;padding:16px;color:var(--tenue);font-size:13.5px;text-align:center}
+.video{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;margin:6px 0}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.foto{width:100%;max-height:420px;object-fit:cover;border-radius:10px;margin:6px 0;display:block}
+.lnk{display:inline-block;margin:4px 0;font-size:13px;word-break:break-all}
+.btn{font:600 14px var(--sans);border-radius:10px;padding:10px 14px;cursor:pointer;border:1px solid var(--linea);background:var(--carta);color:var(--inchiostro);text-align:center;text-decoration:none;display:inline-block}
+.btn.pieno{background:var(--oro);border-color:var(--oro);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.azioni{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.file{position:absolute;width:1px;height:1px;opacity:0}
+textarea,input[type=text],input[type=url],input[type=date],input[type=time],input[type=search],input[type=number],select{width:100%;font:16px/1.5 var(--sans);color:var(--inchiostro);background:var(--carta);border:1px solid var(--linea);border-radius:10px;padding:9px 12px}
+textarea{min-height:100px;resize:vertical}
+textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:focus-within,a:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.scelte{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.scelta{border:1px solid var(--linea);border-radius:12px;padding:10px 12px;background:var(--carta);cursor:pointer;text-align:left;font:600 14px var(--sans);color:var(--inchiostro)}
+.scelta small{display:block;font-weight:400;font-size:12px;color:var(--tenue)}
+.scelta[aria-pressed="true"]{border-color:var(--oro);background:var(--oro-chiaro)}
+.modulo{display:flex;flex-direction:column;gap:8px}
+.modulo label{font-size:12.5px;color:var(--tenue);display:flex;flex-direction:column;gap:3px}
+.modulo label.btn{font:600 14px var(--sans);color:var(--inchiostro);display:inline-block}
+.due{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vis{display:flex;gap:6px;flex-wrap:wrap}
+.vis button{font:500 13px var(--sans);padding:5px 12px;border-radius:99px;border:1px solid var(--linea);background:var(--carta);cursor:pointer;color:var(--inchiostro)}
+.vis button[aria-pressed="true"]{background:var(--oro-chiaro);border-color:var(--oro)}
+.toast{font-size:13.5px;color:var(--ok);background:var(--ok-chiaro);padding:8px 12px;border-radius:8px}
+.toast.err{color:var(--err);background:var(--err-chiaro)}
+.allegati{display:flex;flex-direction:column;gap:4px}
+.allegati span{font-size:13px;display:flex;justify-content:space-between;gap:8px;background:var(--carta2);border-radius:8px;padding:5px 10px;min-width:0;overflow-wrap:anywhere}
+.persona{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:13.5px;padding:7px 0;border-bottom:1px solid var(--linea)}
+.persona small{display:block;color:var(--tenue);font-size:12px}
+.reg{display:inline-flex;align-items:center;gap:8px}
+.reg .punto{width:10px;height:10px;border-radius:50%;background:var(--err);animation:pulsa 1s infinite}
+@keyframes pulsa{50%{opacity:.3}}
+audio{width:100%;height:36px;margin:4px 0}
+a{color:var(--blu)}
+</style>
+</head>
+<body>
+<header class="top"><span class="marchio">FELICITAS</span><span class="chi" id="testa"></span></header>
+<main class="corpo" id="corpo" aria-live="polite"><p class="nota">Un momento…</p></main>
+<nav class="nav" id="nav" aria-label="Parti dell'app">
+  <button data-v="oggi"><span class="ic">☼</span>Oggi</button>
+  <button data-v="giornale"><span class="ic">❡</span>Giornale</button>
+  <button data-v="megafono" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</button>
+  <button data-v="obiettivi"><span class="ic">☐</span>Obiettivi</button>
+</nav>
+
+<script>
+(function(){
+"use strict";
+var URL_SB="https://gfnveesogkfvkrdudpfg.supabase.co", KEY="sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+var VILLAGGIO="5839d11d-9901-49bb-9b2f-f94236bbe2a1";
+var db=(window.supabase&&supabase.createClient)?supabase.createClient(URL_SB,KEY,{auth:{flowType:"implicit"}}):null;
+var ENTRA="accesso.html?torna="+encodeURIComponent("strumento.html");
+
+function $(s){return document.querySelector(s);}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function hhmm(t){return new Date(t).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Rome"});}
+function oggiISO(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+
+var FUNZIONI={tecnologica:"Tecnologica",logistica:"Logistica",comunitaria:"Comunitaria"};
+var RUOLI={tecnologica:[["piattaforma","Piattaforma e dati"],["radio","Radio, dirette ed edizione"]],
+  logistica:[["emporio","Emporio"],["magazzino","Magazzino e consegne"],["produttori","Produttori e produzione"],["eventi","Eventi e spostamenti"]],
+  comunitaria:[["vicinati","Vicinati"],["formazioni","Formazioni e praticantato"],["assistenza","Assistenza"]]};
+function nomeRuolo(f,r){var x=(RUOLI[f]||[]).filter(function(y){return y[0]===r;})[0];return x?x[1]:r;}
+var VIS={solo_me:"solo io",vicinato:"il vicinato",pubblico:"tutti"};
+var STADI={in_coda:"da fare",in_avanzamento:"in corso",sviluppato:"fatto"};
+var DOPO={in_coda:"in_avanzamento",in_avanzamento:"sviluppato",sviluppato:"in_coda"};
+var TIPI_G=["karma_yoga","articolo","festa","diretta","obiettivo","antakarana"];
+var TIPO_NOME={karma_yoga:"karma yoga",articolo:"articolo",festa:"festa",diretta:"diretta",obiettivo:"obiettivo",antakarana:"a tutti"};
+
+/* chi guarda */
+var io={id:null,nome:"",grado:"ospite",nucleo:false,coordina:false,ruoli:[]};
+var vista="oggi", giorno=0;
+var nomi={};
+
+function errore(e){
+  var m=String((e&&e.message)||e||"");
+  if(/non è aperto adesso/i.test(m))return "Questo tipo si apre con il praticantato: per ora scegli karma yoga.";
+  if(/row-level security|permission denied|not allowed/i.test(m))return "Con questo accesso non si può: lo fa chi ne ha il permesso.";
+  if(/too large|payload|25/i.test(m)&&/file|size|large/i.test(m))return "Il file supera i 25 MB.";
+  if(/orme_link_con_didascalia/.test(m))return "Scrivi una didascalia insieme al link.";
+  if(/JWT|session|auth/i.test(m))return "L'accesso è scaduto: entra di nuovo.";
+  return "Non è stato salvato. Si può riprovare."+(m?" ("+m.slice(0,90)+")":"");
+}
+function mostra(sel,t,err){var el=$(sel);if(!el)return;el.textContent=t;el.hidden=!t;el.classList.toggle("err",!!err);}
+
+/* nomi delle persone, dalla vista aperta */
+function leggiNomi(ids){
+  ids=ids.filter(function(x,i,a){return x&&a.indexOf(x)===i&&!(x in nomi);});
+  if(!ids.length||!db)return Promise.resolve();
+  return db.from("persone_pubbliche").select("id,nome").in("id",ids).then(function(r){
+    (r.data||[]).forEach(function(p){nomi[p.id]=p.nome||"";});
+    ids.forEach(function(id){if(!(id in nomi))nomi[id]="";});
+  }).catch(function(){});
+}
+
+/* YouTube e link */
+function ytId(u){var m=String(u||"").match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);return m?m[1]:null;}
+function primoLink(t){return (String(t||"").match(/https:\/\/[^\s<>"]+/)||[])[0]||null;}
+function linkHTML(u){
+  if(!u||!/^https:\/\//.test(u))return "";
+  var y=ytId(u);
+  if(y)return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
+  return '<a class="lnk" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(u.replace(/^https:\/\//,"").slice(0,60))+' ›</a>';
+}
+
+/* la luna di oggi: ciclo sinodico medio */
+function luna(){
+  var f=(((Date.now()-Date.UTC(2000,0,6,18,14))/864e5)/29.530588853)%1;if(f<0)f+=1;
+  var nome=f<.034||f>.966?"luna nuova":f<.216?"luna crescente":f<.284?"primo quarto":f<.466?"gibbosa crescente":f<.534?"luna piena":f<.716?"gibbosa calante":f<.784?"ultimo quarto":"luna calante";
+  var r=15,cos=Math.cos(2*Math.PI*f),rx=Math.abs(cos)*r,s1=f<.5?1:0,s2=cos>0?s1:1-s1;
+  var d="M20 "+(20-r)+" A "+r+" "+r+" 0 0 "+s1+" 20 "+(20+r)+" A "+rx.toFixed(2)+" "+r+" 0 0 "+s2+" 20 "+(20-r);
+  return {nome:nome,svg:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15.5" fill="none" stroke="currentColor" stroke-opacity=".35"/><path d="'+d+'" fill="currentColor"/></svg>'};
+}
+
+/* ── i dati ── */
+var cache={santo:null,lezioni:null,dirette:null,obiettivi:null,bisogni:null};
+function santo(){
+  if(cache.santo!==null||!db)return Promise.resolve(cache.santo);
+  var d=new Date();
+  return db.rpc("fm_santo",{p_mese:d.getMonth()+1,p_giorno:d.getDate()}).then(function(r){cache.santo=(r&&!r.error&&r.data)?String(r.data):"";return cache.santo;},function(){cache.santo="";return "";});
+}
+function lezioni(){
+  if(cache.lezioni||!db)return Promise.resolve(cache.lezioni||[]);
+  return db.rpc("fm_lezioni_prossime",{p_giorni:15}).then(function(r){cache.lezioni=(r&&!r.error&&r.data)||[];return cache.lezioni;},function(){return [];});
+}
+function dirette(){
+  if(cache.dirette||!db)return Promise.resolve(cache.dirette||[]);
+  return db.rpc("fm_dirette_in_onda").then(function(r){cache.dirette=(r&&!r.error&&r.data)||[];return cache.dirette;},function(){return [];});
+}
+var CAMPI="id,titolo,contenuto,tipo,visibilita,momento,accaduto_il,inizio_il,persona_id,stadio,entro_il,orma_file(nome,indirizzo,tipo)";
+function ormeDelGiorno(da,a){
+  if(!db)return Promise.resolve([]);
+  var A=new Date(da).toISOString(),B=new Date(a).toISOString();
+  function q(col){return db.from("orme").select(CAMPI).in("tipo",TIPI_G).gte(col,A).lt(col,B).order(col).limit(200)
+    .then(function(r){if(r&&!r.error)return r.data||[];
+      /* senza gli allegati, se il legame non si legge */
+      return db.from("orme").select(CAMPI.replace(/,orma_file\([^)]*\)/,"")).in("tipo",TIPI_G).gte(col,A).lt(col,B).order(col).limit(200)
+        .then(function(x){return x&&!x.error?(x.data||[]):[];});},function(){return [];});}
+  return Promise.all([q("momento"),q("inizio_il")]).then(function(v){
+    var visti={},tutte=[];v[0].concat(v[1]).forEach(function(o){if(visti[o.id])return;visti[o.id]=1;tutte.push(o);});
+    var ids=tutte.map(function(o){return o.id;});
+    if(!ids.length)return tutte;
+    return db.from("orme").select("id,link").in("id",ids).then(function(r){
+      var m={};((r&&!r.error&&r.data)||[]).forEach(function(x){m[x.id]=x.link;});
+      tutte.forEach(function(o){o.link=m[o.id]||null;});return tutte;
+    },function(){return tutte;});
+  });
+}
+function firmaURL(files){
+  var p=files.filter(function(f){return f&&f.indirizzo;}).map(function(f){return f.indirizzo;});
+  if(!p.length||!db||!io.id)return Promise.resolve({});
+  return db.storage.from("riservato").createSignedUrls(p,3600).then(function(r){
+    var m={};((r&&r.data)||[]).forEach(function(x){if(x&&x.signedUrl)m[x.path]=x.signedUrl;});return m;
+  },function(){return {};});
+}
+
+/* ── chi è dentro ── */
+function chiSono(){
+  if(!db)return Promise.resolve();
+  return db.auth.getSession().then(function(s){
+    var u=s&&s.data&&s.data.session&&s.data.session.user;if(!u)return;
+    io.id=u.id;
+    return Promise.all([
+      db.from("persone").select("id,nome,grado,nucleo").eq("id",u.id).maybeSingle().then(function(r){if(r&&r.data){io.nome=r.data.nome||"";io.grado=r.data.grado||"ospite";io.nucleo=!!r.data.nucleo;nomi[io.id]=io.nome;}}).catch(function(){}),
+      db.rpc("fm_coordina",{p_villaggio:VILLAGGIO}).then(function(r){io.coordina=!!(r&&!r.error&&r.data===true);}).catch(function(){}),
+      db.rpc("fm_miei_ruoli").then(function(r){io.ruoli=(r&&!r.error&&r.data)||[];}).catch(function(){})
+    ]);
+  }).catch(function(){});
+}
+function testa(){
+  var c=[];
+  if(!io.id)c.push('<a class="mini oro" href="'+ENTRA+'">Entra</a>');
+  else{
+    if(io.nucleo)c.push('<span class="chip">Nucleo</span>');
+    io.ruoli.forEach(function(r){c.push('<span class="chip f-'+esc(r.funzione)+'">'+esc(nomeRuolo(r.funzione,r.ruolo))+'</span>');});
+    if(!io.nucleo&&!io.ruoli.length)c.push('<span class="chip">'+esc(io.grado==="ospite"?"Ospite":io.grado.replace("_"," "))+'</span>');
+    c.push('<button class="mini" id="esci">Esci</button>');
+  }
+  $("#testa").innerHTML=c.join("");
+  var e=$("#esci");if(e)e.onclick=function(){db.auth.signOut().then(function(){location.href="strumento.html";});};
+}
+
+/* ── disegno ── */
+function vai(v){vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-v"));};});
+function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
+function disegna(){
+  document.querySelectorAll("#nav button").forEach(function(b){if(b.getAttribute("data-v")===vista)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi})[vista]();
+}
+
+/* OGGI */
+function appuntamentiHTML(lez,dir,da,a){
+  var ora=Date.now(),r=[];
+  lez.forEach(function(l){var t=new Date(l.inizio_il).getTime();if(t<da||t>=a)return;if(t+(l.durata_min||60)*6e4<ora)return;
+    r.push({t:t,h:'<span><span class="ora">'+hhmm(l.inizio_il)+'</span> · '+esc(l.titolo)+(l.luogo?' · '+esc(l.luogo):'')+'</span>',link:l.link});});
+  dir.forEach(function(d){var t=new Date(d.inizio_il).getTime();if(t<da||t>=a)return;var gia=t<=ora;
+    r.push({t:t,h:'<span>'+(gia?'<span class="rosso">● in onda</span>':'<span class="ora">'+hhmm(d.inizio_il)+'</span> · diretta')+' · '+esc(d.titolo)+'</span>',link:"diretta-bozza.html?puntata="+encodeURIComponent(d.id)});});
+  r.sort(function(x,y){return x.t-y.t;});
+  return r.map(function(x){return x.link?'<a href="'+esc(x.link)+'"'+(/^https:/.test(x.link)?' target="_blank" rel="noopener noreferrer"':'')+'>'+x.h+'<span>›</span></a>':'<div>'+x.h+'</div>';}).join("");
+}
+function vOggi(){
+  var c=$("#corpo"),l=luna(),d=new Date();
+  var g0=new Date();g0.setHours(0,0,0,0);var da=g0.getTime(),a=da+864e5;
+  c.innerHTML='<p class="et">Oggi · Felicitas</p>'+
+    '<div class="card"><div class="giorno">'+l.svg+'<div><b>'+esc(d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"}))+'</b><span id="o-cielo">'+esc(l.nome)+'</span></div></div></div>'+
+    '<div id="o-appunt"></div>'+
+    (io.id?'<p class="et" style="margin-top:6px">Obiettivi aperti</p><div id="o-obiettivi"><p class="nota">Un momento…</p></div>':
+      '<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra con il codice via mail</a></div></div>')+
+    '<button class="rimando" data-vai="giornale"><span>Apri il giornale di oggi</span><span>→</span></button>'+
+    (io.id?'<button class="rimando" data-vai="megafono"><span>Lascia qualcosa nel megafono</span><span>→</span></button>':'')+
+    (io.coordina?'<div id="o-ruoli"></div>':'');
+  legaVai(c);
+  santo().then(function(s){var e=$("#o-cielo");if(e&&s)e.textContent=s+" · "+l.nome;});
+  Promise.all([lezioni(),dirette()]).then(function(v){var e=$("#o-appunt");if(!e)return;var h=appuntamentiHTML(v[0],v[1],da,a);
+    e.innerHTML=h?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p><div class="appunt">'+h+'</div>':'';});
+  if(io.id)leggiObiettivi().then(function(){var e=$("#o-obiettivi");if(!e)return;
+    var aperti=cache.obiettivi.filter(function(o){return o.stadio!=="sviluppato";}).slice(0,4);
+    e.innerHTML=aperti.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo aperto. Si creano dal megafono o da Obiettivi.</div>';
+    legaObiettivi(e);});
+  if(io.coordina)vRuoli();
+}
+
+/* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
+var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
+var apriF={},apriA={};
+function vGiornale(){
+  var c=$("#corpo"),g=new Date();g.setHours(0,0,0,0);g.setDate(g.getDate()+giorno);
+  var da=g.getTime(),a=da+864e5;
+  var nome=giorno===0?"Oggi":giorno===-1?"Ieri":giorno===1?"Domani":"";
+  var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  c.innerHTML='<p class="et">Giornale · l\'edizione del giorno</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
+    (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
+    '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>';
+  c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
+  var questo=giorno;
+  Promise.all([ormeDelGiorno(da,a),lezioni()]).then(function(v){
+    if(vista!=="giornale"||giorno!==questo)return;
+    var voci=v[0].map(function(o){return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
+    v[1].forEach(function(l){var t=new Date(l.inizio_il).getTime();if(t>=da&&t<a)voci.push({l:l,t:t});});
+    var files=[];voci.forEach(function(x){if(x.o)(x.o.orma_file||[]).forEach(function(f){if(/image|audio/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic|m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||""))files.push(f);});});
+    return Promise.all([leggiNomi(voci.filter(function(x){return x.o;}).map(function(x){return x.o.persona_id;})),firmaURL(files)]).then(function(w){
+      if(vista!=="giornale"||giorno!==questo)return;
+      var firme=w[1];
+      var sez=FASCE.map(function(F){
+        var vv=voci.filter(function(x){var h=new Date(x.t).getHours();return h>=F[1]&&h<F[2];})
+          .sort(function(p,q){return ((q.o&&q.o.tipo==="articolo")?1:0)-((p.o&&p.o.tipo==="articolo")?1:0)||p.t-q.t;});
+        if(!vv.length)return "";
+        var k=da+F[0],tutto=apriF[k],vis=tutto?vv:vv.slice(0,4);
+        var art=vis.filter(function(x){return x.o&&x.o.tipo==="articolo";}),onda=vis.filter(function(x){return x.l||(x.o&&x.o.tipo==="diretta");}),brevi=vis.filter(function(x){return x.o&&x.o.tipo!=="articolo"&&x.o.tipo!=="diretta";});
+        return '<div class="sez"><b>'+F[0]+'</b><span>'+(vv.length===1?"1 voce":vv.length+" voci")+'</span></div>'+
+          art.map(function(x){return voce(x,firme);}).join("")+onda.map(function(x){return voce(x,firme);}).join("")+
+          (brevi.length?'<div class="brevi">'+brevi.map(function(x){return voce(x,firme);}).join("")+'</div>':"")+
+          (vv.length>4?'<button class="leggi" data-apri="'+k+'">'+(tutto?"Mostra meno":"Vedi tutte ("+vv.length+")")+'</button>':"");
+      }).join("");
+      var gc=$("#g-corpo");
+      gc.innerHTML=sez?sez+'<p class="finito">Hai visto tutto per '+(giorno===0?"oggi":"questo giorno")+'.</p>':
+        '<p class="nota" style="padding:14px 0;text-align:center">'+(giorno>0?"Ancora niente in programma per questo giorno.":"Questo giorno non ha ancora niente. Si riempie dal megafono: ogni cosa cade nella fascia dell'ora in cui arriva.")+'</p>';
+      gc.querySelectorAll("[data-apri]").forEach(function(b){b.onclick=function(){apriF[b.getAttribute("data-apri")]=!apriF[b.getAttribute("data-apri")];vGiornale();};});
+      gc.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});
+      legaVis(gc);
+    });
+  });
+}
+function mediaHTML(o,firme){
+  return (o.orma_file||[]).map(function(f){var u=firme[f.indirizzo];if(!u)return "";
+    if(/image/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic)$/i.test(f.nome||""))return '<img class="foto" src="'+esc(u)+'" alt="'+esc(f.nome||"foto")+'" loading="lazy">';
+    return '<audio controls preload="none" src="'+esc(u)+'"></audio>';}).join("");
+}
+function visHTML(o){
+  if(!io.id||o.persona_id!==io.id)return o.visibilita&&o.visibilita!=="pubblico"?'<span class="etv">'+esc(VIS[o.visibilita]||o.visibilita)+'</span>':"";
+  return '<span class="vis" style="margin-top:4px">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button data-vis="'+esc(o.id)+'|'+v+'" aria-pressed="'+(o.visibilita===v)+'">'+VIS[v]+'</button>';}).join("")+'</span>';
+}
+function legaVis(c){c.querySelectorAll("[data-vis]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-vis").split("|");b.disabled=true;
+  db.from("orme").update({visibilita:p[1]}).eq("id",p[0]).then(function(r){if(r.error){alert(errore(r.error));b.disabled=false;return;}cache.obiettivi=null;disegna();});};});}
+function voce(x,firme){
+  if(x.l){var l=x.l;return '<div class="onda"><b>Lezione · ore '+hhmm(l.inizio_il)+'</b><p>'+esc(l.titolo)+'</p>'+(l.sottotitolo?'<span>'+esc(l.sottotitolo)+'</span>':'')+(l.luogo?'<span>'+esc(l.luogo)+'</span>':'')+(l.link?linkHTML(l.link):'')+'</div>';}
+  var o=x.o,chi=nomi[o.persona_id]||"",link=o.link||primoLink(o.contenuto),testo=String(o.contenuto||"");
+  if(!o.link&&link)testo=testo.replace(link,"").trim();
+  var firma=hhmm(x.t)+" · "+esc(TIPO_NOME[o.tipo]||o.tipo)+(chi?" · "+esc(chi):"");
+  if(o.tipo==="diretta")return '<a class="onda" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'"><b>Diretta · ore '+hhmm(x.t)+'</b><p>'+esc(o.titolo||testo)+'</p>'+(o.titolo&&testo?'<span>'+esc(testo)+'</span>':'')+'<span>entra ›</span></a>';
+  if(o.tipo==="articolo"){var lungo=testo.length>320,tutto=apriA[o.id];
+    return '<article class="art">'+(o.titolo?'<h5>'+esc(o.titolo)+'</h5>':'')+'<p class="firma">'+firma+'</p>'+linkHTML(link)+mediaHTML(o,firme)+
+      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+visHTML(o)+'</article>';}
+  return '<div class="breve">'+(o.titolo?'<p><b>'+esc(o.titolo)+'</b></p>':'')+linkHTML(link)+mediaHTML(o,firme)+(testo?'<p>'+esc(testo)+'</p>':'')+'<span>'+firma+'</span>'+visHTML(o)+'</div>';
+}
+
+/* MEGAFONO: tutti sono editori */
+var M={tipo:"karma_yoga",vis:"pubblico",file:[],audio:null,rec:null,msg:""};
+var TIPI_M=[["karma_yoga","Karma yoga","cosa fai, cosa serve"],["articolo","Articolo","in evidenza nel giornale"],["festa","Festa","un evento, con giorno e ora"],["obiettivo","Obiettivo","cosa c'è da fare, entro quando"]];
+function vMegafono(){
+  var c=$("#corpo");
+  if(!io.id){c.innerHTML='<p class="et">Megafono · tutti sono editori</p><h3>Cosa fai?</h3><div class="card"><span class="t">Per scrivere nel giornale si entra con il codice che arriva per mail.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div>';return;}
+  var tipi=TIPI_M.slice();
+  if(io.coordina){tipi.push(["diretta","Diretta","radio, con giorno e ora"]);tipi.push(["lezione","Lezione","ogni settimana, stesso giorno e ora"]);}
+  var t=M.tipo,area="";
+  if(t==="diretta"){
+    area='<label>Titolo della diretta<input type="text" id="m-titolo" maxlength="120" autocomplete="off"></label><label>Con chi<input type="text" id="m-sotto" maxlength="300" autocomplete="off"></label>'+
+      '<div class="due"><label>Giorno<input type="date" id="m-data" value="'+oggiISO()+'"></label><label>Ora<input type="time" id="m-ora"></label></div>';
+  }else if(t==="lezione"){
+    area='<label>Titolo della lezione<input type="text" id="m-titolo" maxlength="120" autocomplete="off"></label><label>Chi la tiene, o di cosa parla<input type="text" id="m-sotto" maxlength="300" autocomplete="off"></label>'+
+      '<div class="due"><label>Giorno della settimana<select id="m-gs">'+["lunedì","martedì","mercoledì","giovedì","venerdì","sabato","domenica"].map(function(n,i){return '<option value="'+(i+1)+'">'+n+'</option>';}).join("")+'</select></label><label>Ora<input type="time" id="m-ora"></label></div>'+
+      '<div class="due"><label>Durata, in minuti<input type="number" id="m-durata" value="60" min="5" max="600"></label><label>Dal giorno<input type="date" id="m-dal" value="'+oggiISO()+'"></label></div>'+
+      '<label>Dove (mai l\'indirizzo di una casa)<input type="text" id="m-luogo" maxlength="200" autocomplete="off"></label><label>Link per collegarsi (https://)<input type="url" id="m-link" autocomplete="off" inputmode="url"></label>';
+  }else{
+    area=(t==="articolo"?'<label>Titolo<input type="text" id="m-titolo" maxlength="120" autocomplete="off"></label>':'')+
+      '<label>'+(t==="obiettivo"?"Cosa c'è da fare":"Il testo, o la didascalia")+'<textarea id="m-testo"></textarea></label>'+
+      (t==="festa"?'<div class="due"><label>Giorno<input type="date" id="m-data" value="'+oggiISO()+'"></label><label>Ora<input type="time" id="m-ora"></label></div>':'')+
+      (t==="obiettivo"?'<div class="due"><label>Entro il<input type="date" id="m-entro"></label><label>Quante persone servono<input type="number" id="m-quanti" min="1" max="999"></label></div>':'')+
+      '<label>Un link, anche YouTube (https://)<input type="url" id="m-link" autocomplete="off" inputmode="url" placeholder="https://"></label>'+
+      '<div class="azioni"><label class="btn" for="m-file">Foto o audio</label><input class="file" type="file" id="m-file" accept="image/*,audio/*,.m4a,.mp3,.ogg,.wav" multiple>'+
+      '<button class="btn" id="m-reg" type="button">'+(M.rec?'<span class="reg"><span class="punto"></span>Ferma</span>':'Registra un vocale')+'</button></div>'+
+      '<div class="allegati" id="m-allegati"></div>'+(M.msg?'<p class="nota">'+esc(M.msg)+'</p>':'')+
+      '<p class="et" style="margin-top:6px">Chi lo legge</p><div class="vis">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button type="button" data-mv="'+v+'" aria-pressed="'+(M.vis===v)+'">'+VIS[v]+'</button>';}).join("")+'</div>'+
+      '<p class="nota">Con un link o un allegato la didascalia serve sempre. Gli indirizzi delle case non si scrivono qui.</p>';
+  }
+  c.innerHTML='<p class="et">Megafono · tutti sono editori</p><h3>Cosa fai?</h3>'+
+    '<div class="scelte">'+tipi.map(function(x){return '<button class="scelta" data-tipo="'+x[0]+'" aria-pressed="'+(x[0]===t)+'">'+x[1]+'<small>'+esc(x[2])+'</small></button>';}).join("")+'</div>'+
+    '<div class="card modulo">'+area+'<div class="azioni"><button class="btn pieno" id="m-manda">'+(t==="diretta"?"Crea la diretta":t==="lezione"?"Metti la lezione":"Manda")+'</button></div><div class="toast" id="m-ok" hidden></div></div>';
+  c.querySelectorAll("[data-tipo]").forEach(function(b){b.onclick=function(){if(M.rec)return;M.tipo=b.getAttribute("data-tipo");M.msg="";vMegafono();};});
+  c.querySelectorAll("[data-mv]").forEach(function(b){b.onclick=function(){M.vis=b.getAttribute("data-mv");c.querySelectorAll("[data-mv]").forEach(function(x){x.setAttribute("aria-pressed",x===b);});};});
+  var fi=$("#m-file");if(fi)fi.onchange=function(e){[].forEach.call(e.target.files,function(f){if(M.file.length<10)M.file.push(f);});fi.value="";allegati();};
+  var rb=$("#m-reg");if(rb)rb.onclick=registra;
+  allegati();
+  $("#m-manda").onclick=manda;
+}
+function allegati(){
+  var el=$("#m-allegati");if(!el)return;
+  el.innerHTML=M.file.map(function(f,i){return '<span>'+esc(f.name)+'<button class="mini" data-via="'+i+'" type="button">togli</button></span>';}).join("");
+  el.querySelectorAll("[data-via]").forEach(function(b){b.onclick=function(){M.file.splice(+b.getAttribute("data-via"),1);allegati();};});
+}
+function registra(){
+  if(M.rec){M.rec.stop();return;}
+  if(!navigator.mediaDevices||!window.MediaRecorder){M.msg="Il microfono qui non si apre: si può scegliere un file audio.";vMegafono();return;}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+    var pezzi=[];M.rec=new MediaRecorder(s);
+    M.rec.ondataavailable=function(e){if(e.data.size)pezzi.push(e.data);};
+    M.rec.onstop=function(){var tipo=(M.rec.mimeType||"audio/webm").split(";")[0],est=/mp4/.test(tipo)?"m4a":/ogg/.test(tipo)?"ogg":"webm";
+      var d=new Date(),n="vocale-"+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"-"+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+"."+est;
+      try{M.file.push(new File(pezzi,n,{type:tipo}));}catch(e){var b=new Blob(pezzi,{type:tipo});b.name=n;M.file.push(b);}
+      s.getTracks().forEach(function(x){x.stop();});M.rec=null;M.msg="";vMegafono();};
+    M.rec.start();M.msg="";vMegafono();
+  }).catch(function(){M.rec=null;M.msg="Il microfono qui non si apre: si può scegliere un file audio.";vMegafono();});
+}
+function val(id){var e=$("#"+id);return e?String(e.value||"").trim():"";}
+function manda(){
+  var b=$("#m-manda"),t=M.tipo;
+  function fine(msg,err){b.disabled=false;mostra("#m-ok",msg,err);}
+  if(t==="diretta"){
+    var tt=val("m-titolo"),g=val("m-data"),h=val("m-ora");
+    if(!tt)return fine("Manca il titolo.",true);if(!g||!h)return fine("Manca il giorno o l'ora.",true);
+    b.disabled=true;
+    return db.rpc("fm_crea_diretta",{p_titolo:tt,p_sottotitolo:val("m-sotto"),p_inizio:new Date(g+"T"+h).toISOString(),p_pubblica:true}).then(function(r){
+      if(r.error)return fine(errore(r.error),true);cache.dirette=null;
+      M.msg="";vMegafono();mostra("#m-ok","Creata: compare in Oggi e nel giornale, da un'ora prima.");
+    });
+  }
+  if(t==="lezione"){
+    var lt=val("m-titolo"),lo=val("m-ora"),ll=val("m-link");
+    if(!lt)return fine("Manca il titolo.",true);if(!lo)return fine("Manca l'ora.",true);
+    if(ll&&!/^https:\/\/\S+$/.test(ll))return fine("Il link deve cominciare con https://",true);
+    b.disabled=true;
+    return db.rpc("fm_crea_lezione",{p_titolo:lt,p_sottotitolo:val("m-sotto"),p_giorno_settimana:+val("m-gs"),p_ora:lo,p_durata_min:+val("m-durata")||60,p_luogo:val("m-luogo"),p_link:ll,p_pubblica:true,p_dal:val("m-dal")||null}).then(function(r){
+      if(r.error)return fine(errore(r.error),true);cache.lezioni=null;
+      vMegafono();mostra("#m-ok","Fatto: la lezione compare ogni settimana in Oggi e nel giornale.");
+    });
+  }
+  var testo=val("m-testo"),titolo=val("m-titolo"),link=val("m-link");
+  if(!link){var dentro=primoLink(testo);if(dentro){link=dentro;testo=testo.replace(dentro,"").replace(/[ \t]+/g," ").trim();}}
+  if(link&&!/^https:\/\/\S+$/.test(link))return fine("Il link deve cominciare con https://",true);
+  if(!testo&&!titolo)return fine(link||M.file.length?"Scrivi una didascalia: due parole su cosa si vede o si ascolta.":"Scrivi qualcosa prima.",true);
+  if(!testo&&(link||M.file.length))return fine("Scrivi una didascalia: due parole su cosa si vede o si ascolta.",true);
+  var riga={persona_id:io.id,contenuto:testo||titolo,tipo:t,visibilita:M.vis,accaduto_il:oggiISO()};
+  if(titolo)riga.titolo=titolo.slice(0,120);
+  if(t==="festa"){var fg=val("m-data"),fh=val("m-ora");if(fg){riga.accaduto_il=fg;if(fh)riga.inizio_il=new Date(fg+"T"+fh).toISOString();}}
+  if(t==="obiettivo"){riga.stadio="in_coda";var en=val("m-entro"),qn=+val("m-quanti");if(en)riga.entro_il=en;if(qn>0)riga.quanti_servono=qn;}
+  if(link)riga.link=link;
+  b.disabled=true;b.textContent="Salvo…";
+  var prima=db.from("orme").insert(riga).select("id").single();
+  /* prima dell'SQL 72 la colonna `link` non c'è: si riprova col link dentro il testo */
+  if(link)prima=prima.then(function(r){if(r&&r.error&&/link/i.test(r.error.message||"")&&!/didascalia/.test(r.error.message||"")){delete riga.link;riga.contenuto=(riga.contenuto+"\n"+link).trim();return db.from("orme").insert(riga).select("id").single();}return r;});
+  prima.then(function(r){
+    if(r.error){b.textContent="Manda";return fine(errore(r.error),true);}
+    var id=r.data.id,file=M.file.slice(),male=0;
+    if(t==="festa"){db.rpc("fm_prendi_orma",{p_orma:id}).then(function(){},function(){});}
+    return file.reduce(function(fila,f){return fila.then(function(){
+      var nome=String(f.name||"file").replace(/[^\w.\-]+/g,"_").slice(-80);
+      if(f.size>25*1024*1024){male++;return;}
+      return db.storage.from("riservato").upload(id+"/"+nome,f).then(function(u){
+        if(u&&u.error){male++;return;}
+        return db.from("orma_file").insert({orma_id:id,nome:nome,indirizzo:id+"/"+nome,dimensione:f.size,chi_lo_ha_messo:io.id,da_conversazione:false}).then(function(q){if(q&&q.error)male++;});
+      });
+    }).catch(function(){male++;});},Promise.resolve()).then(function(){
+      M.file=[];M.msg="";cache.obiettivi=null;vMegafono();
+      mostra("#m-ok","Salvato: "+(t==="obiettivo"?"negli obiettivi":"nel giornale di oggi")+", "+({solo_me:"lo leggi solo tu",vicinato:"lo legge il vicinato",pubblico:"lo leggono tutti"})[M.vis]+"."+(male?" "+(male===1?"Un allegato non è passato.":male+" allegati non sono passati."):""));
+    });
+  });
+}
+
+/* OBIETTIVI e bisogni del villaggio */
+function leggiObiettivi(){
+  if(cache.obiettivi||!db)return Promise.resolve(cache.obiettivi||[]);
+  return Promise.all([
+    db.from("orme").select("id,titolo,contenuto,stadio,entro_il,quanti_servono,persona_id,visibilita,orma_persone(persona_id,preso_il,lasciato_il)").eq("tipo","obiettivo").order("momento",{ascending:false}).limit(120)
+      .then(function(r){if(r&&!r.error)return r.data||[];
+        /* se il legame con orma_persone non si legge, gli obiettivi si vedono lo stesso */
+        return db.from("orme").select("id,titolo,contenuto,stadio,entro_il,quanti_servono,persona_id,visibilita").eq("tipo","obiettivo").order("momento",{ascending:false}).limit(120)
+          .then(function(q){return q&&!q.error?(q.data||[]):[];});},function(){return [];}),
+    db.from("bisogni").select("id,titolo,dettaglio,entro,quanti,presi").is("preso_da",null).order("entro").limit(20)
+      .then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];})
+  ]).then(function(v){cache.obiettivi=v[0];cache.bisogni=v[1];
+    var ids=[];v[0].forEach(function(o){(o.orma_persone||[]).forEach(function(p){ids.push(p.persona_id);});});
+    return leggiNomi(ids).then(function(){return cache.obiettivi;});});
+}
+function dentroO(o){return (o.orma_persone||[]).filter(function(p){return p.preso_il&&!p.lasciato_il&&p.persona_id;});}
+function cardObiettivo(o){
+  var s=o.stadio||"in_coda",chi=dentroO(o),mio=chi.some(function(p){return p.persona_id===io.id;});
+  var nomiChi=chi.map(function(p){return nomi[p.persona_id];}).filter(Boolean);
+  return '<div class="card"><div class="riga"><div><span class="t">'+esc(o.titolo||o.contenuto)+'</span><br><span class="m">'+
+    (nomiChi.length?esc(nomiChi.join(", ")):(chi.length?(chi.length===1?"1 persona":chi.length+" persone"):"nessuno l'ha preso"))+
+    (o.quanti_servono?" · servono "+o.quanti_servono:"")+(o.entro_il?" · entro il "+esc(new Date(o.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span></div></div>'+
+    '<div class="fine">'+(io.id&&(mio||o.persona_id===io.id||io.coordina)?'<button class="pill s-'+s+'" data-stadio="'+esc(o.id)+'" style="border:0;cursor:pointer" aria-label="Cambia stato">'+STADI[s]+'</button>':'<span class="pill s-'+s+'">'+STADI[s]+'</span>')+
+    (io.id?(mio?'<button class="mini" data-lascia="'+esc(o.id)+'">Lo lascio</button>':(s!=="sviluppato"?'<button class="mini oro" data-prendo="'+esc(o.id)+'">Lo prendo</button>':'')):'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';
+}
+function legaObiettivi(c){
+  function dopo(r){if(r&&r.error){alert(errore(r.error));}cache.obiettivi=null;disegna();}
+  c.querySelectorAll("[data-prendo]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_orma",{p_orma:b.getAttribute("data-prendo")}).then(dopo,dopo);};});
+  c.querySelectorAll("[data-lascia]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_lascia_orma",{p_orma:b.getAttribute("data-lascia")}).then(dopo,dopo);};});
+  c.querySelectorAll("[data-stadio]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-stadio"),o=(cache.obiettivi||[]).filter(function(x){return x.id===id;})[0];if(!o)return;b.disabled=true;
+    db.rpc("fm_cambia_stadio",{p_orma:id,p_stadio:DOPO[o.stadio||"in_coda"]}).then(dopo,dopo);};});
+  c.querySelectorAll("[data-bisogno]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_bisogno",{p_bisogno:b.getAttribute("data-bisogno")}).then(dopo,dopo);};});
+}
+function vObiettivi(){
+  var c=$("#corpo");
+  c.innerHTML='<p class="et">Obiettivi · con le persone associate</p><h3>Da fare, in corso, fatto</h3><div id="ob"><p class="nota">Un momento…</p></div>';
+  leggiObiettivi().then(function(lista){
+    var e=$("#ob");if(!e||vista!=="obiettivi")return;
+    var ord={in_avanzamento:0,in_coda:1,sviluppato:2};
+    lista=lista.slice().sort(function(a,b){return ord[a.stadio||"in_coda"]-ord[b.stadio||"in_coda"];});
+    var bis=cache.bisogni||[];
+    e.innerHTML=(io.id?'<button class="rimando" data-vai="megafono"><span>Nuovo obiettivo, dal megafono</span><span>→</span></button>':'')+
+      (lista.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo qui, per ora.</div>')+
+      (bis.length?'<p class="et" style="margin-top:8px">I bisogni del villaggio · karma yoga</p>'+bis.map(function(x){return '<div class="card"><span class="t">'+esc(x.titolo)+'</span>'+(x.dettaglio?'<span class="m">'+esc(x.dettaglio)+'</span>':'')+
+        '<div class="fine">'+(x.entro?'<span class="m">entro il '+esc(new Date(x.entro).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+(io.id?'<button class="mini oro" data-bisogno="'+esc(x.id)+'">Lo prendo</button>':'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';}).join(""):"")+
+      (io.id?'<p class="nota">Tocca lo stato per spostarlo avanti.</p>':'');
+    legaVai(e);legaObiettivi(e);
+  });
+}
+
+/* PERSONE E RUOLI: solo per chi coordina il villaggio (SQL 69) */
+var tutteLePersone=null;
+function vRuoli(){
+  var box=$("#o-ruoli");if(!box)return;
+  Promise.all([
+    db.from("ruoli").select("id,persona_id,funzione,ruolo,dal").is("fino_al",null).order("dal",{ascending:false}).limit(300).then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
+    tutteLePersone?Promise.resolve(tutteLePersone):db.from("persone_pubbliche").select("id,nome").order("nome").limit(1000).then(function(r){tutteLePersone=(r&&!r.error&&r.data)||[];tutteLePersone.forEach(function(p){nomi[p.id]=p.nome||"";});return tutteLePersone;},function(){return [];})
+  ]).then(function(v){
+    var rr=v[0];if(rr===null){box.innerHTML="";return;}
+    return leggiNomi(rr.map(function(x){return x.persona_id;})).then(function(){
+      box.innerHTML='<p class="et" style="margin-top:10px">Persone e ruoli · per chi coordina</p><div class="card modulo">'+
+        (rr.length?rr.map(function(x){return '<div class="persona"><div><b>'+esc(nomi[x.persona_id]||"—")+'</b><small>'+esc(FUNZIONI[x.funzione]||x.funzione)+' · '+esc(nomeRuolo(x.funzione,x.ruolo))+'</small></div><button class="mini" data-chiudi-r="'+esc(x.id)+'">Chiudi</button></div>';}).join(""):'<p class="nota">Ancora nessuno ha un ruolo.</p>')+
+        '<label>Dai un ruolo a<input type="search" id="r-cerca" list="r-persone" autocomplete="off" placeholder="Nome"></label><datalist id="r-persone">'+(tutteLePersone||[]).map(function(p){return '<option value="'+esc(p.nome)+'">';}).join("")+'</datalist>'+
+        '<div class="due"><label>Funzione<select id="r-f">'+Object.keys(FUNZIONI).map(function(f){return '<option value="'+f+'">'+FUNZIONI[f]+'</option>';}).join("")+'</select></label><label>Ruolo<select id="r-r"></select></label></div>'+
+        '<div class="azioni"><button class="btn pieno" id="r-dai">Dai il ruolo</button></div><div class="toast" id="r-ok" hidden></div></div>';
+      function ruoliDi(f){$("#r-r").innerHTML=RUOLI[f].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");}
+      ruoliDi("tecnologica");$("#r-f").onchange=function(e){ruoliDi(e.target.value);};
+      box.querySelectorAll("[data-chiudi-r]").forEach(function(b){b.onclick=function(){b.disabled=true;db.from("ruoli").update({fino_al:oggiISO()}).eq("id",b.getAttribute("data-chiudi-r")).then(function(r){if(r.error){mostra("#r-ok",errore(r.error),true);b.disabled=false;return;}vRuoli();});};});
+      $("#r-dai").onclick=function(){
+        var n=val("r-cerca").toLowerCase(),p=(tutteLePersone||[]).filter(function(x){return String(x.nome||"").toLowerCase()===n;});
+        if(!n)return mostra("#r-ok","Scrivi il nome.",true);
+        if(p.length!==1)return mostra("#r-ok",p.length?"Ci sono più persone con questo nome: scrivilo intero.":"Nessuno con questo nome tra chi è entrato.",true);
+        var b=$("#r-dai");b.disabled=true;
+        db.from("ruoli").insert({persona_id:p[0].id,funzione:val("r-f"),ruolo:val("r-r"),dato_da:io.id}).then(function(r){
+          b.disabled=false;
+          if(r.error)return mostra("#r-ok",/duplicate|unique/i.test(r.error.message||"")?"Questa persona ha già questo ruolo.":errore(r.error),true);
+          vRuoli();
+        });
+      };
+    });
+  });
+}
+
+/* avvio */
+if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
+chiSono().then(function(){
+  testa();
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi)$/.test(q))vista=q;}catch(e){}
+  disegna();
+});
+db.auth.onAuthStateChange(function(ev){
+  if(ev==="SIGNED_OUT"&&io.id){location.href="strumento.html";return;}
+  if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();disegna();}});}
+});
+})();
+</script>
+</body>
+</html>
