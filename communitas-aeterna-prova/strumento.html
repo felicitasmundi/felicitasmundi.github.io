@@ -289,7 +289,7 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){if(v==="cervello"){location.href="cervello.html?c=10182045";return;}vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){if(v==="cervello"){location.href="cervello.html?c=10182050";return;}vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-v"));};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
@@ -305,6 +305,10 @@ function appuntamentiHTML(lez,dir,da,a){
     r.push({t:t,h:'<span><span class="ora">'+hhmm(l.inizio_il)+'</span> · '+esc(l.titolo)+(l.luogo?' · '+esc(l.luogo):'')+'</span>',link:l.link});});
   dir.forEach(function(d){var t=new Date(d.inizio_il).getTime();if(t<da||t>=a)return;var gia=t<=ora;
     r.push({t:t,h:'<span>'+(gia?'<span class="rosso">● in onda</span>':'<span class="ora">'+hhmm(d.inizio_il)+'</span> · diretta')+' · '+esc(d.titolo)+'</span>',link:"diretta-bozza.html?puntata="+encodeURIComponent(d.id)});});
+  /* 18 ott 20:46, Gab: «su oggi non mi riappare la chiamata in corso» → se sei entrato in una diretta (il segno fm_diretta, valido 3 ore), Oggi la rimette in cima */
+  try{var sg=JSON.parse(localStorage.getItem("fm_diretta")||"null");
+    if(sg&&sg.puntata&&sg.t&&ora-sg.t<3*3600e3&&!dir.some(function(d){return String(d.id)===String(sg.puntata);}))
+      r.push({t:0,h:'<span><span class="rosso">● in onda</span> · '+esc(sg.titolo||"la diretta")+' · rientra</span>',link:"diretta-bozza.html?puntata="+encodeURIComponent(sg.puntata)+"&c=10182050"});}catch(e){}
   r.sort(function(x,y){return x.t-y.t;});
   return r.map(function(x){return x.link?'<a href="'+esc(x.link)+'"'+(/^https:/.test(x.link)?' target="_blank" rel="noopener noreferrer"':'')+'>'+x.h+'<span>›</span></a>':'<div>'+x.h+'</div>';}).join("");
 }
@@ -620,7 +624,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182045");}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182050");}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){
