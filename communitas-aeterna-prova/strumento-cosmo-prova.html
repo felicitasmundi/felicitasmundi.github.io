@@ -149,6 +149,18 @@ a{color:var(--blu)}
 .corpo{zoom:1.12}
 @media (min-width:700px){.corpo{zoom:1.22}}
 </style>
+<style>
+/* varianti della prova: ?var=a cornice + dal vivo · b + il cielo del giorno · c cornice leggera + dal vivo */
+.vivo-cosmo .appunt a:has(.rosso), .vivo-cosmo .onda{background-color:#0A0C1A!important;background-image:radial-gradient(1px 1px at 12% 30%,rgba(245,240,230,.8),transparent 60%),radial-gradient(1px 1px at 37% 70%,rgba(245,240,230,.55),transparent 60%),radial-gradient(1.5px 1.5px at 63% 22%,rgba(212,175,106,.9),transparent 60%),radial-gradient(1px 1px at 81% 58%,rgba(245,240,230,.6),transparent 60%),radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%)!important;color:#F5F0E6!important;border:1px solid rgba(212,175,106,.35)!important}
+.vivo-cosmo .appunt a:has(.rosso) .rosso{color:#ff6b6b!important}
+.vivo-cosmo .onda b,.vivo-cosmo .onda p,.vivo-cosmo .onda span{color:#F5F0E6!important}
+.var-b .card:has(.giorno){background-color:#0A0C1A!important;background-image:radial-gradient(1px 1px at 12% 30%,rgba(245,240,230,.8),transparent 60%),radial-gradient(1px 1px at 37% 70%,rgba(245,240,230,.55),transparent 60%),radial-gradient(1.5px 1.5px at 63% 22%,rgba(212,175,106,.9),transparent 60%),radial-gradient(1px 1px at 81% 58%,rgba(245,240,230,.6),transparent 60%),radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%)!important;border-color:rgba(212,175,106,.35)!important}
+.var-b .giorno b{color:#F5F0E6!important}.var-b .giorno span{color:#C9C3B6!important}.var-b .giorno svg{color:#D4AF6A!important;filter:drop-shadow(0 0 8px rgba(212,175,106,.5))}
+.var-c .top{background:var(--carta)!important;background-image:none!important;border-color:var(--linea)!important}
+.var-c .top .chip,.var-c .top .mini,.var-c .top .alto-b{background:var(--carta2)!important;color:var(--inchiostro)!important;border-color:var(--linea)!important}
+.var-c .top .marchio{color:var(--oro)!important}
+</style>
+<script>try{var v=(new URLSearchParams(location.search).get("var")||"a").toLowerCase();document.documentElement.classList.add("var-"+v,"vivo-cosmo");}catch(e){}</script>
 </head>
 <body>
 <header class="top"><span class="marchio">FELICITAS</span><span class="chi"><span class="chi" id="alto"></span><span class="chi" id="testa"></span></span></header>
