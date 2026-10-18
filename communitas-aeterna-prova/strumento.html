@@ -341,6 +341,7 @@ function vOggi(){
     '<div id="o-appunt"></div>'+
     /* 18 ott 20:36 e 22:36, Gab: «oggi può essere anche il contesto "di cosa hai bisogno?"» · da oggi «si possa entrare nella visione completa dei prodotti e assistenza» */
     '<p class="et" style="margin-top:6px">Di cosa hai bisogno?</p><div class="stanze-o">'+STANZE_O.map(function(s){return '<a href="'+s[1]+'" style="--c:'+s[2]+'">'+esc(s[0])+'</a>';}).join("")+'</div>'+
+    (io.id?'<div id="o-logistica"></div>':'')+
     (io.id?'<p class="et" style="margin-top:6px">Obiettivi aperti</p><div id="o-obiettivi"><p class="nota">Un momento…</p></div>':
       '<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra con il codice via mail</a></div></div>')+
     (io.coordina?'<div id="o-ruoli"></div>':'');
@@ -352,7 +353,28 @@ function vOggi(){
     var aperti=cache.obiettivi.filter(function(o){return o.stadio!=="sviluppato";}).slice(0,4);
     e.innerHTML=aperti.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo aperto. Si creano dal megafono o da Obiettivi.</div>';
     legaObiettivi(e);});
+  if(io.id)logisticaOggi();
   if(io.coordina)vRuoli();
+}
+/* 18 ott 23:05, Gab: «alla fine le task sono legate al sistema logistico» (thread «Gestionale della logistica», SQL 74).
+   I compiti del mio ruolo logistico, in Oggi. Finché il 74 non c'è, o se non ho compiti, non compare niente. */
+function logisticaOggi(){
+  db.rpc("fm_logistica_oggi").then(function(r){
+    var e=$("#o-logistica");if(!e||vista!=="oggi")return;
+    var l=(r&&!r.error&&r.data)||[];if(!l.length){e.innerHTML="";return;}
+    e.innerHTML='<p class="et" style="margin-top:6px">Compiti della logistica</p>'+l.map(function(c){
+      var q=c.merce?(c.quantita!=null?c.quantita+" "+(c.unita||"")+" · ":"")+c.merce:"";
+      return '<div class="card"><span class="t">'+esc(c.titolo)+'</span><span class="m" style="display:block;margin-top:4px">'+esc(c.punto||"")+(q?" · "+esc(q):"")+
+        (c.entro_il?" · entro il "+esc(new Date(c.entro_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+(c.per_me?" · per te":"")+'</span>'+
+        (c.nota?'<span class="m" style="display:block">'+esc(c.nota)+'</span>':'')+
+        '<div class="fine">'+(c.preso_da_me?'<span class="pill s-in_avanzamento">Preso da te</span>':'<button class="mini oro" data-cprendo="'+esc(c.id)+'">Lo prendo</button>')+
+        '<button class="mini" data-cfatto="'+esc(c.id)+'"'+(c.merce?' data-q="'+esc(c.quantita==null?"":c.quantita)+'"':'')+'>Fatto</button></div></div>';}).join("");
+    function dopo(x){if(x&&x.error)alert(errore(x.error));logisticaOggi();}
+    e.querySelectorAll("[data-cprendo]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_compito_prendo",{p_compito:b.getAttribute("data-cprendo")}).then(dopo,dopo);};});
+    e.querySelectorAll("[data-cfatto]").forEach(function(b){b.onclick=function(){var a={p_compito:b.getAttribute("data-cfatto")};
+      if(b.hasAttribute("data-q")){var v=prompt("Quanta merce, davvero?",b.getAttribute("data-q"));if(v===null)return;v=parseFloat(String(v).replace(",","."));if(v>0)a.p_quantita=v;}
+      b.disabled=true;db.rpc("fm_compito_fatto",a).then(dopo,dopo);};});
+  },function(){});
 }
 
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
