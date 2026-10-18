@@ -125,7 +125,13 @@ html,body,.app{background:#F5F0E6!important}
 .onda::before{display:none!important}
 .campo,.composi .campo,#ospite-dati .campo{background:#FFFCF5!important;color:#2B2620!important;border:1px solid #D9CDB4!important}
 .campo::placeholder{color:#8a8070}
-.plancia{bottom:12px!important}
+.plancia{bottom:calc(68px + env(safe-area-inset-bottom,0px))!important}
+.app{padding-bottom:210px!important}
+/* 18 ott 20:54, Gab: «hai tolto il menu in basso, sembra di essere in un app esterna» → il menu dell'app, uguale a strumento.html */
+.menu-app{position:fixed;left:0;right:0;bottom:0;z-index:32;display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid #D9CDB4;background:#F5F0E6;padding-bottom:env(safe-area-inset-bottom,0px)}
+.menu-app a{font:600 11px 'DM Sans',system-ui,sans-serif;color:#6E6457;padding:10px 1px 12px;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none}
+.menu-app a .ic{font-size:17px;line-height:1}
+.menu-app a.console .ic{background:#A8822E;color:#fff;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin-top:-18px;box-shadow:0 3px 10px rgba(168,130,46,.4)}
 .plancia .in{background:rgba(255,252,245,.97)!important;border:1px solid #D9CDB4!important;box-shadow:0 4px 16px rgba(0,0,0,.08)}
 .plancia button i{background:#F5F0E6!important;border-color:#D9CDB4!important;color:#2B2620}
 .plancia button.on i{background:#A8822E!important;color:#fff!important}
@@ -136,7 +142,7 @@ html,body,.app{background:#F5F0E6!important}
 </head>
 <body>
 <div class="app" id="app">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px"><a href="strumento.html?c=10182050" style="font:600 13px 'DM Sans',system-ui,sans-serif;border:1px solid var(--riga);border-radius:999px;padding:7px 13px;color:var(--avorio)">← Torna all'app</a><span style="font-family:Cinzel,serif;letter-spacing:.18em;font-size:13px;color:var(--oro)">FELICITAS</span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px"><a href="strumento.html?c=10182055" style="font:600 13px 'DM Sans',system-ui,sans-serif;border:1px solid var(--riga);border-radius:999px;padding:7px 13px;color:var(--avorio)">← Torna all'app</a><span style="font-family:Cinzel,serif;letter-spacing:.18em;font-size:13px;color:var(--oro)">FELICITAS</span></div>
 
   <!-- ═══ la consolle ═══ -->
   <div class="onda fuori" id="onda">
@@ -188,6 +194,14 @@ html,body,.app{background:#F5F0E6!important}
 </div>
 
 <div class="velo" id="velo"></div>
+<nav class="menu-app" aria-label="Parti dell'app">
+  <a href="strumento.html?v=oggi&c=10182055"><span class="ic">☼</span>Oggi</a>
+  <a href="strumento.html?v=obiettivi&c=10182055"><span class="ic">☐</span>Obiettivi</a>
+  <a href="strumento.html?v=megafono&c=10182055" class="console"><span class="ic">＋</span>Megafono</a>
+  <a href="strumento.html?v=giornale&c=10182055"><span class="ic">❡</span>Giornale</a>
+  <a href="cervello.html?c=10182055"><span class="ic">✺</span>Cervello</a>
+</nav>
+
 <div class="plancia"><div class="in">
   <button id="b-mic" disabled><i>🎙</i>microfono</button>
   <button id="b-mano" disabled><i>✋</i>la mano</button>

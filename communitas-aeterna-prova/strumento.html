@@ -289,7 +289,7 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){if(v==="cervello"){location.href="cervello.html?c=10182050";return;}vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){if(v==="cervello"){location.href="cervello.html?c=10182055";return;}vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-v"));};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
@@ -308,7 +308,7 @@ function appuntamentiHTML(lez,dir,da,a){
   /* 18 ott 20:46, Gab: «su oggi non mi riappare la chiamata in corso» → se sei entrato in una diretta (il segno fm_diretta, valido 3 ore), Oggi la rimette in cima */
   try{var sg=JSON.parse(localStorage.getItem("fm_diretta")||"null");
     if(sg&&sg.puntata&&sg.t&&ora-sg.t<3*3600e3&&!dir.some(function(d){return String(d.id)===String(sg.puntata);}))
-      r.push({t:0,h:'<span><span class="rosso">● in onda</span> · '+esc(sg.titolo||"la diretta")+' · rientra</span>',link:"diretta-bozza.html?puntata="+encodeURIComponent(sg.puntata)+"&c=10182050"});}catch(e){}
+      r.push({t:0,h:'<span><span class="rosso">● in onda</span> · '+esc(sg.titolo||"la diretta")+' · rientra</span>',link:"diretta-bozza.html?puntata="+encodeURIComponent(sg.puntata)+"&c=10182055"});}catch(e){}
   r.sort(function(x,y){return x.t-y.t;});
   return r.map(function(x){return x.link?'<a href="'+esc(x.link)+'"'+(/^https:/.test(x.link)?' target="_blank" rel="noopener noreferrer"':'')+'>'+x.h+'<span>›</span></a>':'<div>'+x.h+'</div>';}).join("");
 }
@@ -624,7 +624,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182050");}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182055");}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){
@@ -632,6 +632,18 @@ db.auth.onAuthStateChange(function(ev){
   if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();disegna();}});}
 });
 })();
+</script>
+<style>
+/* 18 ott 20:54, Gab: «la diretta non rimane se mi sposto altrove» → la striscia della diretta (comune/fm-diretta.js) sta sopra il menu */
+.fm-dir.fissa{top:auto!important;bottom:calc(66px + env(safe-area-inset-bottom,0px))!important;background:#FFFCF5!important;border:1px solid #D9A39A!important;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.fm-dir .tit,.fm-dir .b{color:#2B2620!important}
+.fm-dir .b{border-color:#D9CDB4!important}
+.fm-dir .b.on{background:#A8822E!important;color:#fff!important}
+body.con-diretta{padding-bottom:130px}
+</style>
+<script>
+(function(){function segui(){try{if(!localStorage.getItem("fm_diretta"))return;document.body.classList.add("con-diretta");if(window.FM_DIRETTA){window.FM_DIRETTA.avvia();return;}var sd=document.createElement("script");sd.src="comune/fm-diretta.js?v=10182055";document.head.appendChild(sd);}catch(e){}}
+segui();window.addEventListener("pageshow",function(e){if(e.persisted)segui();});})();
 </script>
 </body>
 </html>
