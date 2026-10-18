@@ -33,7 +33,7 @@ button.chip[aria-pressed="true"]{background:var(--oro-chiaro);border-color:var(-
 .f-logistica{background:var(--att-chiaro);color:var(--log);border-color:#E6D3A8}
 .f-comunitaria{background:var(--ok-chiaro);color:var(--com);border-color:#C6DCC3}
 .corpo{flex:1;width:100%;max-width:720px;margin:0 auto;padding:14px max(16px,env(safe-area-inset-right,0px)) 96px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;min-width:0}
-.nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--linea);background:var(--carta);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--linea);background:var(--carta);padding-bottom:env(safe-area-inset-bottom,0px)}
 .nav button{font:600 11px var(--sans);background:none;border:0;padding:10px 1px 12px;color:var(--tenue);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
 .nav button .ic{font-size:17px;line-height:1}
 .nav button[aria-current="page"]{color:var(--oro)}
@@ -142,9 +142,10 @@ a{color:var(--blu)}
 <main class="corpo" id="corpo" aria-live="polite"><p class="nota">Un momento…</p></main>
 <nav class="nav" id="nav" aria-label="Parti dell'app">
   <button data-v="oggi"><span class="ic">☼</span>Oggi</button>
-  <button data-v="giornale"><span class="ic">❡</span>Giornale</button>
-  <button data-v="megafono" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</button>
   <button data-v="obiettivi"><span class="ic">☐</span>Obiettivi</button>
+  <button data-v="megafono" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</button>
+  <button data-v="giornale"><span class="ic">❡</span>Giornale</button>
+  <button data-v="cervello"><span class="ic">✺</span>Cervello</button>
 </nav>
 
 <script>
@@ -167,9 +168,6 @@ var RUOLI={tecnologica:[["piattaforma","Piattaforma e dati"],["radio","Radio, di
 function nomeRuolo(f,r){var x=(RUOLI[f]||[]).filter(function(y){return y[0]===r;})[0];return x?x[1]:r;}
 var VIS={solo_me:"solo io",vicinato:"il vicinato",pubblico:"tutti"};
 var ELEMENTI=[["terra","Terra \u00b7 Vicinati"],["acqua","Acqua \u00b7 Emporio"],["fuoco","Fuoco \u00b7 Assistenza"],["aria","Aria \u00b7 Edizione"],["etere","Etere \u00b7 Scuola"]];
-var CERVELLO_URL="https://claude.ai/artifact/NfkzZfjkJt8ib4KSKZe7pA";
-var CERVELLO=[["Gruppo Felicitas","chi siamo \u00b7 come si lavora \u00b7 le parole \u00b7 i piani \u00b7 cose decise"],["Il filo della coscienza","la formula \u00b7 il praticantato \u00b7 l'accompagnamento"],["Lo strumento","il gestionale \u00b7 l'ambiente tecnico \u00b7 repository e GitHub"],["Glossario","le parole, con l'ancora"],["Individui","come si raccontano le persone"],["Aziende","come si raccontano le aziende"],["Progetti","company brain \u00b7 cervello digitale evoluto"]];
-function puoCervello(){return !!(io.id&&(io.nucleo||io.coordina));}
 var STADI={in_coda:"da fare",in_avanzamento:"in corso",sviluppato:"fatto"};
 var DOPO={in_coda:"in_avanzamento",in_avanzamento:"sviluppato",sviluppato:"in_coda"};
 var TIPI_G=["karma_yoga","articolo","festa","diretta","obiettivo","antakarana"];
@@ -285,19 +283,19 @@ function testa(){
     c.push('<button class="mini" id="esci">Esci</button>');
   }
   $("#testa").innerHTML=c.join("");
-  $("#alto").innerHTML='<button class="alto-b" data-alto="cartelle">\u25a4 Cartelle</button>'+(puoCervello()?'<button class="alto-b" data-alto="cervello">\u273a Cervello</button>':'');
+  $("#alto").innerHTML='<button class="alto-b" data-alto="cartelle">\u25a4 Cartelle</button>';
   document.querySelectorAll("[data-alto]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-alto"));};});
   var e=$("#esci");if(e)e.onclick=function(){db.auth.signOut().then(function(){location.href="strumento.html";});};
 }
 
 /* ── disegno ── */
-function vai(v){vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){if(v==="cervello"){location.href="cervello.html";return;}vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-v"));};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
-  if(vista==="cervello"&&!puoCervello())vista="oggi";
+  if(vista==="cervello")vista="oggi";
   document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
-  ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,cervello:vCervello})[vista]();
+  ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle})[vista]();
 }
 
 /* OGGI */
@@ -318,8 +316,6 @@ function vOggi(){
     '<div id="o-appunt"></div>'+
     (io.id?'<p class="et" style="margin-top:6px">Obiettivi aperti</p><div id="o-obiettivi"><p class="nota">Un momento…</p></div>':
       '<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra con il codice via mail</a></div></div>')+
-    '<button class="rimando" data-vai="giornale"><span>Apri il giornale di oggi</span><span>→</span></button>'+
-    (io.id?'<button class="rimando" data-vai="megafono"><span>Lascia qualcosa nel megafono</span><span>→</span></button>':'')+
     (io.coordina?'<div id="o-ruoli"></div>':'');
   legaVai(c);
   santo().then(function(s){var e=$("#o-cielo");if(e&&s)e.textContent=s+" · "+l.nome;});
@@ -552,8 +548,7 @@ function vObiettivi(){
     var ord={in_avanzamento:0,in_coda:1,sviluppato:2};
     lista=lista.slice().sort(function(a,b){return ord[a.stadio||"in_coda"]-ord[b.stadio||"in_coda"];});
     var bis=cache.bisogni||[];
-    e.innerHTML=(io.id?'<button class="rimando" data-vai="megafono"><span>Nuovo obiettivo, dal megafono</span><span>→</span></button>':'')+
-      (lista.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo qui, per ora.</div>')+
+    e.innerHTML=(lista.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo qui, per ora.</div>')+
       (bis.length?'<p class="et" style="margin-top:8px">I bisogni del villaggio · karma yoga</p>'+bis.map(function(x){return '<div class="card"><span class="t">'+esc(x.titolo)+'</span>'+(x.dettaglio?'<span class="m">'+esc(x.dettaglio)+'</span>':'')+
         '<div class="fine">'+(x.entro?'<span class="m">entro il '+esc(new Date(x.entro).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+(io.id?'<button class="mini oro" data-bisogno="'+esc(x.id)+'">Lo prendo</button>':'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';}).join(""):"")+
       (io.id?'<p class="nota">Tocca lo stato per spostarlo avanti.</p>':'');
@@ -580,20 +575,13 @@ function vCartelle(){
       e.innerHTML='<div class="cartelle">'+[["tutte","Tutte"]].concat(ELEMENTI).map(function(k){var n=conta(k[0]);return '<button class="cartella" data-cartella="'+k[0]+'" aria-pressed="'+(k[0]===cartella)+'">'+esc(k[1])+'<small>'+(n===1?"1 file":n+" file")+'</small></button>';}).join("")+'</div>'+
         (lista.map(function(x){var u=firme[x.f.indirizzo],o=x.o,chi=nomi[o.persona_id]||"";
           return '<div class="card"><div class="riga"><div><span class="t">'+esc(x.f.nome||"file")+'</span><br><span class="m">'+esc(String(o.titolo||o.contenuto||"").split("\n")[0].slice(0,80))+(chi?" · "+esc(chi):"")+" · "+esc(new Date(o.momento).toLocaleDateString("it-IT",{day:"numeric",month:"short"}))+'</span></div><span class="pill v-'+esc(o.visibilita||"solo_me")+'">'+esc(VIS[o.visibilita]||"")+'</span></div>'+
-            (u?'<div class="fine"><a class="mini oro" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">Apri</a></div>':'<span class="m">Questo file da qui non si apre.</span>')+'</div>';}).join("")||'<div class="vuoto">Nessun file in questa cartella. Si aggiungono dal Megafono: foto o audio, e la cartella scelta.</div>')+
-        '<button class="rimando" data-vai="megafono"><span>Aggiungi un file dal Megafono</span><span>→</span></button>';
+            (u?'<div class="fine"><a class="mini oro" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">Apri</a></div>':'<span class="m">Questo file da qui non si apre.</span>')+'</div>';}).join("")||'<div class="vuoto">Nessun file in questa cartella. Si aggiungono dal Megafono: foto o audio, e la cartella scelta.</div>');
       e.querySelectorAll("[data-cartella]").forEach(function(b){b.onclick=function(){cartella=b.getAttribute("data-cartella");vCartelle();};});
       legaVai(e);
     });
   });
 }
 
-/* CERVELLO: per il nucleo e per chi coordina. Il libro vive su claude.ai, con permesso: non nel repository pubblico */
-function vCervello(){
-  $("#corpo").innerHTML='<p class="et">Cervello · con permesso</p><h3>Il libro</h3><div>'+CERVELLO.map(function(s){return '<div class="stanza"><b>'+esc(s[0])+'</b><span>'+esc(s[1])+'</span></div>';}).join("")+'</div>'+
-    '<a class="rimando" href="'+CERVELLO_URL+'" target="_blank" rel="noopener noreferrer"><span>Apri «Il cervello Felicitas»</span><span>→</span></a>'+
-    '<p class="nota">Si apre per chi è stato invitato alla pagina. Recapiti e cose personali delle persone non entrano qui.</p>';
-}
 
 /* PERSONE E RUOLI: solo per chi coordina il villaggio (SQL 69) */
 var tutteLePersone=null;
@@ -632,7 +620,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|cervello)$/.test(q))vista=q;}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html");}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){

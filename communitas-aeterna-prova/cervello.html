@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div style="padding:12px 16px 0"><a href="strumento.html" style="display:inline-block;font:600 13px 'DM Sans',system-ui,sans-serif;background:#fffdf6;color:#2a2418;border:1px solid #d8cfb8;border-radius:999px;padding:7px 13px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.08)">← Torna all'app</a></div>
+<title>Il cervello Felicitas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap">
+<style>
+/* Layout: una colonna di lettura; il praticantato, i tre cerchi, il filo, lo strumento; le fonti in un riquadro a parte. Stessa carta del Giornale Felicitas. */
+:root{
+  --carta:#F5F0E6;--carta-2:#EDE5D4;--inchiostro:#1A1405;--testo:#2B2418;--piano:#6B6253;--filo:#D8CDB6;
+  --oro:#8A6A2A;--oro-luce:#D4AF6A;--etere:#7A52A8;--proposta:#EEF0F6;--proposta-filo:#5B6A92;
+  --f-titolo:Cinzel,"Times New Roman",serif;--f-voce:"Cormorant Garamond",Georgia,serif;--f-testo:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+html{background:var(--carta)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--carta);color:var(--testo);font:16px/1.65 var(--f-testo);-webkit-font-smoothing:antialiased}
+.foglio{max-width:760px;margin:0 auto;padding-block:28px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sopra{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--piano)}
+header{padding:18px 0 22px;border-bottom:3px double var(--inchiostro)}
+h1{font-family:var(--f-titolo);font-weight:700;color:var(--inchiostro);font-size:clamp(34px,7.5vw,64px);line-height:1.02;letter-spacing:.03em;margin:8px 0 18px;text-wrap:balance}
+.apertura p{font-family:var(--f-voce);font-style:italic;font-size:clamp(21px,3.2vw,27px);line-height:1.3;color:var(--inchiostro);margin:0}
+.apertura small,.fonte{display:block;margin-top:6px;font-size:12.5px;color:var(--piano)}
+.legenda{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--piano);padding:14px 0;border-bottom:1px solid var(--filo)}
+.legenda span{display:inline-flex;align-items:center;gap:7px}
+.legenda i{width:12px;height:12px;border-radius:2px;flex:none}
+.l-gab{background:var(--oro-luce)}.l-video{background:var(--filo)}.l-prop{background:var(--proposta);border:1px solid var(--proposta-filo)}
+section.passo{padding:30px 0;border-bottom:1px solid var(--filo);display:grid;grid-template-columns:64px 1fr;gap:0 18px}
+@media(max-width:520px){section.passo{grid-template-columns:1fr}.cerchi{margin-bottom:12px}}
+.cerchi{width:56px;height:56px}
+.cerchi circle{fill:none;stroke:var(--filo);stroke-width:1.4}
+.cerchi circle.on{stroke:var(--oro);stroke-width:2}
+.cerchi circle.punto{fill:var(--oro);stroke:none}
+.corpo{min-width:0}
+.passo .occhiello{font:600 11.5px var(--f-testo);letter-spacing:.18em;text-transform:uppercase;color:var(--oro);margin:0 0 4px}
+h2{font-family:var(--f-voce);font-weight:700;font-size:clamp(28px,4.6vw,40px);line-height:1.08;color:var(--inchiostro);margin:0 0 14px;text-wrap:balance}
+h3{font-family:var(--f-titolo);font-size:14px;letter-spacing:.12em;color:var(--inchiostro);margin:22px 0 8px}
+blockquote{margin:14px 0;padding:2px 0 2px 16px;border-left:3px solid var(--filo)}
+blockquote.gab{border-left-color:var(--oro-luce)}
+blockquote p{margin:0;font-family:var(--f-voce);font-size:20px;line-height:1.35;color:var(--inchiostro);font-weight:500}
+blockquote cite{display:block;font-style:normal;font-size:12.5px;color:var(--piano);margin-top:4px}
+.prop{background:var(--proposta);border-left:3px solid var(--proposta-filo);padding:12px 14px;margin:14px 0;border-radius:0 4px 4px 0}
+.prop b{display:block;font:600 11px var(--f-testo);letter-spacing:.14em;text-transform:uppercase;color:var(--proposta-filo);margin-bottom:3px}
+.prop p{margin:0}
+.prop ol{margin:4px 0 0;padding-left:22px}
+.tre{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+@media(max-width:520px){.tre{grid-template-columns:1fr}}
+.tre div{border:1px solid var(--filo);padding:10px 12px;background:var(--carta-2)}
+.tre strong{font-family:var(--f-titolo);font-size:13px;letter-spacing:.1em;color:var(--inchiostro);display:block}
+.tre span{font-size:13.5px;color:var(--piano)}
+ul.riceve{margin:8px 0;padding-left:20px}
+.vuoto{color:var(--oro);font-weight:500}
+a{color:var(--oro)}a:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.fonti{margin-top:30px;padding:16px 18px;border:1px solid var(--filo);background:var(--carta-2)}
+.fonti h3{margin-top:0}
+.fonti p{margin:0 0 8px;font-size:15px}
+footer{padding-top:24px;font-size:13.5px;color:var(--piano)}
+footer p{margin:0 0 8px}
+[id]{scroll-margin-top:16px}
+:target{background:#F3E7C9;transition:background 1.5s}
+.indice{padding:18px 0 20px;border-bottom:1px solid var(--filo)}
+.indice h2{font-size:clamp(24px,4vw,32px);margin-bottom:10px}
+.indice dl{columns:2 220px;column-gap:28px;margin:0;font-size:14.5px}
+.indice .lettera{break-inside:avoid;margin:0 0 10px}
+.indice dt{font-family:var(--f-titolo);font-size:13px;color:var(--oro);letter-spacing:.1em;margin:0}
+.indice dd{margin:0;line-height:1.45}
+.indice dd a{color:var(--testo);text-decoration:none;border-bottom:1px solid var(--filo)}
+.indice dd a:hover{border-bottom-color:var(--oro)}
+.su{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:16px;background:var(--inchiostro);color:var(--carta);font:600 12.5px var(--f-testo);padding:8px 12px;border-radius:99px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+code{font-size:12.5px;background:var(--carta-2);padding:1px 5px;border-radius:3px;overflow-wrap:anywhere}
+</style>
+
+<div class="foglio">
+  <div class="sopra"><span>FelicitasMundi · praticantato Antaḥkaraṇa</span><span>Aggiornata il 18 ottobre 2026, ore 18:12</span></div>
+  <header>
+    <h1>Il cervello Felicitas</h1>
+    <div class="apertura">
+      <p>«L'utilizzo di varie piattaforme ci porta a frammentare comunicazioni, idee, compiti da svolgere, che portano a disperdere tempo ed energia, la mancanza di una pratica chiara che ci pone a riacquisire fiducia in noi stessi, coerenza tra pensiero parola ed azione, attenzione indomabile e tecniche per far ordine nella mente e nella memoria.»</p>
+      <small>Gabriele Dettori · 13 ottobre · «Ordine nella memoria»</small>
+    </div>
+  </header>
+
+  <div class="legenda" aria-label="Come si legge">
+    <span><i class="l-gab"></i>Parole di Gabriele Dettori, tali e quali</span>
+    <span><i class="l-video"></i>Dal Cruscotto e dal glossario</span>
+    <span><i class="l-prop"></i>Proposta di Claude, da confermare</span>
+  </div>
+
+  <nav class="indice" id="indice" aria-labelledby="indice-t">
+    <h2 id="indice-t">Indice analitico</h2>
+    <dl>
+      <div class="lettera"><dt>A</dt><dd><a href="#cerchi-aziende">Aziende, il cerchio</a></dd></div>
+      <div class="lettera"><dt>B</dt><dd><a href="#q-bacheca">Bacheca, ora giornale</a></dd></div>
+      <div class="lettera"><dt>C</dt><dd><a href="#prop-ingresso">Case private, indirizzi</a></dd><dd><a href="#cerchi">Cerchi: individui, vicinati, aziende</a></dd><dd><a href="#prop-livelli">Cinque elementi, le cartelle del drive</a></dd><dd><a href="#q-editori">Console</a></dd><dd><a href="#filo">Coscienza, il filo</a></dd></div>
+      <div class="lettera"><dt>D</dt><dd><a href="#prop-ingresso">Dichiarazione d'ingresso</a></dd><dd><a href="#q-dati">Dati, senza rivendita</a></dd><dd><a href="#prop-livelli">Drive</a></dd></div>
+      <div class="lettera"><dt>E</dt><dd><a href="#ingresso">Entrare in un vicinato</a></dd><dd><a href="#q-editori">Editori, tutti</a></dd><dd><a href="#q-edizione">Evidenza, articoli in</a></dd></div>
+      <div class="lettera"><dt>F</dt><dd><a href="#q-fasce">Fasce orarie</a></dd><dd><a href="#fonti-t">Fonti</a></dd><dd><a href="#q-formula">Formula, micro e macro</a></dd><dd><a href="#q-funzioni">Funzioni: tecnologica, logistica, comunitaria</a></dd></div>
+      <div class="lettera"><dt>G</dt><dd><a href="#prop-ingresso">Garante</a></dd><dd><a href="#gestionale">Gestionale</a></dd><dd><a href="#q-edizione">Giornale, edizione del giorno</a></dd><dd><a href="#repository">GitHub</a></dd></div>
+      <div class="lettera"><dt>I</dt><dd><a href="#cerchi-individui">Individui, il cerchio</a></dd></div>
+      <div class="lettera"><dt>L</dt><dd><a href="#q-livelli">Livelli di accesso</a></dd><dd><a href="#q-supermercato">Logistica e supermercato</a></dd></div>
+      <div class="lettera"><dt>M</dt><dd><a href="#q-mail">Mail delle 9 e delle 22</a></dd><dd><a href="#q-metro">Metro, il</a></dd><dd><a href="#prop-mistral">Mistral</a></dd></div>
+      <div class="lettera"><dt>N</dt><dd><a href="#q-nexus">Nexus</a></dd><dd><a href="#prop-ingresso">Nexus, apre solo la piazza</a></dd><dd><a href="#prop-livelli">Nucleo</a></dd></div>
+      <div class="lettera"><dt>O</dt><dd><a href="#q-opensource">Open source</a></dd><dd><a href="#prop-livelli">Operatore</a></dd><dd><a href="#praticantato">Ordine nella memoria</a></dd><dd><a href="#prop-livelli">Ospite</a></dd></div>
+      <div class="lettera"><dt>P</dt><dd><a href="#prop-visibilita">Per chi è una notizia</a></dd><dd><a href="#q-scroll">Pagina infinita, evitarla</a></dd><dd><a href="#praticantato">Praticantato Antaḥkaraṇa</a></dd><dd><a href="#prop-livelli">Praticante · karma yoga</a></dd><dd><a href="#q-supermercato">Produzione economica</a></dd></div>
+      <div class="lettera"><dt>R</dt><dd><a href="#repository">Repository e GitHub</a></dd><dd><a href="#q-ruoli">Ruoli</a></dd><dd><a href="#prop-visibilita">Ruoli, chi li dà</a></dd></div>
+      <div class="lettera"><dt>S</dt><dd><a href="#q-settimanale">Settimanale, il lunedì alle 9</a></dd><dd><a href="#prop-visibilita">Squadre: tecnologica, logistica, comunitaria</a></dd><dd><a href="#strumento">Strumento, cosa riceve chi lavora</a></dd><dd><a href="#q-supermercato">Supermercato evoluto</a></dd></div>
+      <div class="lettera"><dt>T</dt><dd><a href="#tecnica">Tecnica, l'ambiente</a></dd><dd><a href="#q-task">Task del giorno</a></dd></div>
+      <div class="lettera"><dt>V</dt><dd><a href="#prop-visibilita">Villaggio</a></dd><dd><a href="#visibilita">Visibilità</a></dd><dd><a href="#cerchi-vicinati">Vicinati, il cerchio</a></dd><dd><a href="#q-nexus">Vicinati, la sezione con il nexus</a></dd></div>
+    </dl>
+  </nav>
+
+  <section class="passo" id="cos-e">
+    <svg class="cerchi" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="9" class="on"/><circle cx="28" cy="28" r="17" class="on"/><circle cx="28" cy="28" r="25" class="on"/><circle cx="28" cy="28" r="3.2" class="punto"/></svg>
+    <div class="corpo">
+      <p class="occhiello">Cos'è</p>
+      <h2>Un cervello che unisce e tiene collegati</h2>
+      <blockquote class="gab"><p>«un cervello che unisce l ordine individuale, di gruppi e aziende, ma che li tiene collegati all aspetto della coscienza.. è un sistema evoluto, […] ed allo stesso tempo può essere applicato come risorsa ad ogni realta aziendale»</p><cite>Gabriele Dettori · 15 ottobre, 9:54</cite></blockquote>
+      <blockquote class="gab" id="q-task"><p>«avere a inizio giornata un messaggio che indica quelli che sono le task, avere a fine giornata tutte le varie cose fatte durante la giornata, cioè avere un'idea chiara, in modo da sapere poi l'indomani chi fa cosa, quali task si incominciano, e conoscere così l'andamento.»</p><cite>Gabriele Dettori · 14 ottobre, 11:02</cite></blockquote>
+      <blockquote class="gab" id="q-opensource"><p>«creare un cervello dell'azienda ma in open source, in modo che non si è blindati dall'AI.»</p><cite>Gabriele Dettori · 14 ottobre, 11:02</cite></blockquote>
+    </div>
+  </section>
+
+  <section class="passo" id="praticantato">
+    <svg class="cerchi" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="9" class="on"/><circle cx="28" cy="28" r="17"/><circle cx="28" cy="28" r="25"/></svg>
+    <div class="corpo">
+      <p class="occhiello">Dentro il praticantato</p>
+      <h2>Ordine nella memoria</h2>
+      <blockquote><p>«Incontro di gruppo settimanale online con registrazione; Antaḥkaraṇa secondo livello; lezioni riservate della Scuola. Chi entra come ospite trova una base presettata del praticantato. Il cruscotto coi cinque elementi è di chi segue il praticantato. Sottotitolo della pagina: «Ordine nella memoria».»</p><cite>Glossario · Praticantato Antaḥkaraṇa, 13 ottobre</cite></blockquote>
+      <blockquote><p>«Dentro: ritmo lunare, obiettivi settimanali, esercizi dell'attenzione, scrittura creativa, tecniche di coscienza, le sette virtù.»</p><cite>Glossario · Ordine nella memoria, 13 ottobre</cite></blockquote>
+      <blockquote><p>«cinque passaggi: la centratura nei cinque elementi · il progetto sogno · l'interazione con la comunità · le persone in un team · il team alimenta le aree centrali»</p><cite>Cruscotto 24_104 · la memoria, riga 15</cite></blockquote>
+      <div class="prop"><b>Proposta di Claude</b><p>I tre cerchi seguono i passaggi del praticantato: la centratura e il progetto sogno sono il cerchio degli individui; l'interazione con la comunità è il cerchio dei vicinati; le persone in un team, che alimentano le aree centrali, sono il cerchio delle aziende.</p></div>
+    </div>
+  </section>
+
+  <section class="passo" id="cerchi">
+    <svg class="cerchi" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="9" class="on"/><circle cx="28" cy="28" r="17" class="on"/><circle cx="28" cy="28" r="25" class="on"/></svg>
+    <div class="corpo">
+      <p class="occhiello">I tre cerchi</p>
+      <h2>Individui · vicinati · aziende</h2>
+      <blockquote class="gab"><p>«individui vicinati aziende»</p><cite>Gabriele Dettori · 16 ottobre, 22:05</cite></blockquote>
+      <div class="tre">
+        <div id="cerchi-individui"><strong>Individui</strong><span>«chi entra come ospite o come karma yoga, come colui che si sta approcciando, […] vedere determinati contenuti, partecipare alle formazioni, venire agli eventi, dare una mano» · Gabriele Dettori 18 ottobre</span></div>
+        <div id="cerchi-vicinati"><strong>Vicinati</strong><span>«I vicinati sono i gruppi localizzati.» · glossario, Gabriele Dettori 11 ottobre</span></div>
+        <div id="cerchi-aziende"><strong>Aziende</strong><span>«se una persona, un team lavora su un progetto, il gestionale lavora e è legato a quel progetto» · Gabriele Dettori 18 ottobre</span></div>
+      </div>
+      <div class="prop"><b>Proposta di Claude</b><p>Felicitas sta al centro dei tre cerchi: è il cervello che li tiene collegati, col filo della coscienza.</p></div>
+    </div>
+  </section>
+
+  <section class="passo" id="filo">
+    <svg class="cerchi" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="9"/><circle cx="28" cy="28" r="17"/><circle cx="28" cy="28" r="25"/><circle cx="28" cy="28" r="3.2" class="punto"/></svg>
+    <div class="corpo">
+      <p class="occhiello">Il filo della coscienza</p>
+      <h2>La stessa misura in piccolo e in grande</h2>
+      <blockquote id="q-formula"><p>«Per ogni persona la formula è la stessa in micro, mentre per Felicitas in macro»</p><cite>Cruscotto 24_104 · la formula</cite></blockquote>
+      <blockquote id="q-metro"><p>«IL METRO: se una decisione vale in macro ma non in micro, non è coerente con la formula.»</p><cite>Cruscotto 24_104 · la formula</cite></blockquote>
+    </div>
+  </section>
+
+  <section class="passo" id="strumento">
+    <svg class="cerchi" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="9" class="on"/><circle cx="28" cy="28" r="17" class="on"/><circle cx="28" cy="28" r="25"/></svg>
+    <div class="corpo">
+      <p class="occhiello">Lo strumento</p>
+      <h2>Cosa riceve chi lavora nel team</h2>
+      <ul class="riceve">
+        <li id="q-mail">«Le mail delle 9 e delle 22: corte, solo la loro parte, con i link.»</li>
+        <li>«il banco delle task (stile ClickUp)»</li>
+        <li>«il giornale del giorno»</li>
+        <li>«il libro del cervello, con indice per stanze e ricerca»</li>
+      </ul>
+      <span class="fonte">Gabriele Dettori · 15 ottobre, 9:33</span>
+      <h3>I dati</h3>
+      <blockquote class="gab" id="q-dati"><p>«open source, senza rivendita dei dati, e l’esportazione completa resta sempre disponibile»</p><cite>Gabriele Dettori · 15 ottobre, 9:41</cite></blockquote>
+      <h3 id="tecnica">L'ambiente tecnico</h3>
+      <blockquote class="gab" id="q-mistral"><p>«se integriamo mistral va inserito nell ambiente tecnico del cervello»</p><cite>Gabriele Dettori · 18 ottobre, 16:15</cite></blockquote>
+      <blockquote class="gab" id="q-mistral-no"><p>«mistral disattivalo / non lo stiamo piu usando abbiamo git hub»</p><cite>Gabriele Dettori · 18 ottobre, 18:07</cite></blockquote>
+      <blockquote class="gab" id="q-settimanale-claude"><p>«lo fa claude»</p><cite>Gabriele Dettori · 18 ottobre, 18:09</cite></blockquote>
+      <ul class="riceve">
+        <li>Le pagine dell'app: app.felicitasmundi.com, pubblicate dal repository felicitasmundi.github.io su GitHub.</li>
+        <li>I dati, il login e le regole d'accesso riga per riga: Supabase, a Francoforte.</li>
+        <li>Le mail delle 9, delle 22 e il Settimanale: Brevo.</li>
+        <li>Le dirette: LiveKit.</li>
+        <li>L'AI legge solo viste pulite, senza nomi, mail e telefoni, con un utente a parte (ai_lettore).</li>
+      </ul>
+      <div class="prop" id="prop-mistral"><b>Proposta di Claude</b><p>Mistral non si usa più. GitHub custodisce le versioni dei file e non scrive testi: la bozza del Settimanale la prepara Claude dalle viste pulite. Gabriele Dettori la approva prima che parta.</p></div>
+      <h3 id="repository">Repository e GitHub</h3>
+      <blockquote class="gab" id="q-repository"><p>«cosa vuol dire realmente repository e quale è la funzione di git hub? […] il cervello felicitas sarà gestito sia per gli aspetti tecnici linguistici, ma poi integrerà tutto il mondo di conoscenze coinvolte»</p><cite>Gabriele Dettori · 18 ottobre, 17:02</cite></blockquote>
+      <div class="prop" id="prop-repository"><b>Proposta di Claude</b>
+        <p><b style="display:inline;font:inherit;letter-spacing:0;text-transform:none;color:inherit">Repository</b>: la cartella di un progetto che tiene ogni versione di ogni file, con chi l'ha cambiato, quando e perché. Si può sempre tornare a una versione di prima.</p>
+        <p style="margin-top:6px"><b style="display:inline;font:inherit;letter-spacing:0;text-transform:none;color:inherit">Git</b>: il programma che tiene queste versioni. <b style="display:inline;font:inherit;letter-spacing:0;text-transform:none;color:inherit">GitHub</b>: il servizio online che custodisce il repository, così il Mac, chi lavora alla tecnica e le AI lavorano sulla stessa copia.</p>
+        <p style="margin-top:6px">Felicitas ne ha due. felicitasmundi, privato: la copia della cartella di lavoro sul Mac. felicitasmundi.github.io, pubblico: è l'app che si vede in app.felicitasmundi.com. Pubblico vuol dire che chiunque lo legge, quindi il cervello interno va solo nel privato.</p></div>
+    </div>
+  </section>
+
+  <section class="passo" id="come-si-usa">
+    <svg class="cerchi" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="9" class="on"/><circle cx="28" cy="28" r="17" class="on"/><circle cx="28" cy="28" r="25" class="on"/></svg>
+    <div class="corpo">
+      <p class="occhiello">Come si usa</p>
+      <h2>Livelli di accesso, una sola porta</h2>
+      <blockquote class="gab" id="q-livelli"><p>«se uno ha la possibilità di accedere ad altri contenuti lo fa, ma già dalla bacheca. Tecnicamente quindi sono livelli, cioè quelle delle task, quello del cervello, quello del giornale, sono livelli di accesso»</p><cite>Gabriele Dettori · 17 ottobre, 23:01</cite></blockquote>
+      <blockquote class="gab" id="q-nexus"><p>«per vedere l'area vicinati devi essere iscritto, devi avere il nexus»</p><cite>Gabriele Dettori · 17 ottobre, 23:03</cite></blockquote>
+      <blockquote class="gab" id="q-editori"><p>«praticamente tutti diventano degli editori sotto un certo aspetto, quindi tutti quanti potenzialmente possono, con fasi differenti, […] avere una console da cui poter poi identificare e poter quindi fare la diretta, fare l'articolo, mettere la nota»</p><cite>Gabriele Dettori · 17 ottobre, 22:59</cite></blockquote>
+      <h3 id="bacheca">Il giornale, edizione del giorno</h3>
+      <blockquote class="gab" id="q-bacheca"><p>«Effettivamente bacheca e giornale sono la stessa cosa»</p><cite>Gabriele Dettori · 18 ottobre, 10:45</cite></blockquote>
+      <blockquote class="gab" id="q-scroll"><p>«Io volevo evitare di avere la pagina infinita da scrollare»</p><cite>Gabriele Dettori · 18 ottobre, 10:52</cite></blockquote>
+      <blockquote class="gab" id="q-fasce"><p>«A me piacerebbe ci fosse una continuità di contenuti giornalieri fissati per fasce d orari, ma diventa un lavoro enorme che oggi nn so gestire»</p><cite>Gabriele Dettori · 18 ottobre, 10:55</cite></blockquote>
+      <div class="prop" id="q-edizione"><b>Proposta di Claude</b><p>Il giornale, che prima si chiamava bacheca, mostra un giorno alla volta, diviso in mattina, pomeriggio e sera. Ogni cosa lasciata nella console cade da sola nella fascia dell'ora in cui arriva: nessuno deve riempire le fasce, e quelle vuote non si vedono. Ogni fascia mostra tre cose, le altre si aprono. Gli articoli stanno in evidenza; la sezione dei vicinati si apre con il nexus. In fondo: «Hai visto tutto per oggi», e si passa al giorno prima o dopo. Il giornale è questa edizione, che arriva anche per mail alle 9 e alle 22. Gli appuntamenti fissi, come un palinsesto, si aggiungono uno alla volta quando ci sono le persone per curarli.</p></div>
+      <blockquote class="gab" id="q-settimanale"><p>«nuova regola per cervello, ogni team riceve ogni giorno alle 9 e 22 gli aggiornamenti, piu il lunedi alle 9 gli aggiornamenti sono integrati col resoconto della settimana passata.. puoi chiamarlo SETTIMANALE»</p><cite>Gabriele Dettori · 18 ottobre, 16:01</cite></blockquote>
+      <blockquote class="gab" id="q-settimanale-una"><p>«quello del lunedi, è un resoconto della settimana e il titolo sarà settimanale, e integrerà anche le info della giornata, cosi non arrivano due mail ma una integrata»</p><cite>Gabriele Dettori · 18 ottobre, 16:19</cite></blockquote>
+      <h3 id="gestionale">Il gestionale</h3>
+      <blockquote class="gab" id="q-funzioni"><p>«se una persona, un team lavora su un progetto, il gestionale lavora e è legato a quel progetto, quindi tecnicamente il gestionale di Felicitas Mundi deve essere legato alle funzioni centrali di Felicitas Mundi, cioè quella tecnologica, quella logistica e quella comunitaria»</p><cite>Gabriele Dettori · 18 ottobre, 01:42</cite></blockquote>
+      <blockquote class="gab" id="q-supermercato"><p>«è logistica che include anche il supermercato, ma non è solo il supermercato, perché poi oltre alla logistica c'è la produzione economica di un contesto»</p><cite>Gabriele Dettori · 18 ottobre, 02:06</cite></blockquote>
+      <blockquote class="gab" id="q-ruoli"><p>«facendo in modo che le persone non entrino così random, ma perché c'è un ruolo specifico»</p><cite>Gabriele Dettori · 18 ottobre, 01:55</cite></blockquote>
+      <div class="prop" id="prop-livelli"><b>Proposta di Claude</b><p>Quattro livelli, dal giornale in su:</p><ol>
+        <li>Ospite: il giornale pubblico, formazioni, eventi, dare una mano.</li>
+        <li>Praticante · karma yoga: in più l'area vicinati del giornale e le task che sceglie.</li>
+        <li>Operatore: un ruolo in una funzione, con campi, cartella del drive e task già pronti.</li>
+        <li>Nucleo: tutte le funzioni, quello che arriva da smistare, il cervello.</li></ol>
+        <p style="margin-top:8px">Le cartelle del drive sono i cinque elementi: Terra · Vicinati, Acqua · Emporio, Fuoco · Assistenza, Aria · Edizione, Etere · Scuola. Ogni file è pubblico, del team o solo di chi lo carica.</p></div>
+      <h3 id="visibilita">Ruoli e visibilità</h3>
+      <blockquote class="gab" id="q-visibilita"><p>«come differenzio le info pubbliche da quelle villaggio e vicinato? Più che altro, ci sono notizie che vorrei leggessero o i team di una squadra (logistica o tecnologia) o a seconda del ruolo»</p><cite>Gabriele Dettori · 18 ottobre, 11:38</cite></blockquote>
+      <div class="prop" id="prop-visibilita"><b>Proposta di Claude, già nello strumento</b>
+        <p>Chi coordina dà a ogni persona livello, funzione, ruolo, villaggio e vicinato. Chi scrive nel megafono sceglie per chi è la notizia:</p><ol>
+        <li>tutti: la piazza pubblica;</li>
+        <li>un villaggio, per esempio Sardegna;</li>
+        <li>un vicinato, per esempio Quartu;</li>
+        <li>una squadra: tecnologica, logistica o comunitaria;</li>
+        <li>un ruolo, per esempio Emporio.</li></ol>
+        <p style="margin-top:8px">Ognuno trova nel giornale le notizie per tutti, più quelle del villaggio, del vicinato, della squadra e del ruolo di chi legge, con una piccola etichetta che dice per chi sono. Il nucleo vede tutto. Chi entra come ospite vede la piazza pubblica.</p>
+        <p style="margin-top:8px">Nella versione di prova la separazione è nella vista. Nell'app su Supabase la fanno le regole d'accesso per ruolo, che ci sono già.</p></div>
+      <h3 id="ingresso">Entrare in un vicinato</h3>
+      <blockquote class="gab" id="q-ingresso"><p>«mi chiedono di essere un po più rigido nell far accedere le persone nei vicinati / Perché possono poi avere accesso alle case private delle persone. E nn vogliamo che chiunque entri»</p><cite>Gabriele Dettori · 18 ottobre, 11:46</cite></blockquote>
+      <div class="prop" id="prop-ingresso"><b>Proposta di Claude, approvata alle 11:48</b>
+        <p>Il nexus apre solo la piazza: chi lo apre entra come ospite e vede il giornale pubblico, non il vicinato, non i nomi, non i luoghi. Il vicinato si apre con quattro passi:</p><ol>
+        <li>conosciuto di persona, a un incontro;</li>
+        <li>un garante: qualcuno già nel vicinato dice «lo conosco»;</li>
+        <li>il sì di chi coordina il vicinato, mai automatico;</li>
+        <li>la dichiarazione d'ingresso firmata.</li></ol>
+        <p style="margin-top:8px">Gli indirizzi delle case non stanno mai nel giornale: arrivano solo a chi ha confermato quell'incontro, poco prima, e solo per quell'incontro. A chi viene tolto il vicinato, l'accesso si chiude subito.</p></div>
+      <p><a href="strumento.html">Lo strumento Felicitas</a>: il giornale, il megafono, gli obiettivi, il cervello, le cartelle e i ruoli delle persone, in una sola pagina che salva.</p>
+    </div>
+  </section>
+
+  <aside class="fonti" aria-labelledby="fonti-t">
+    <h3 id="fonti-t">Le fonti, e perché le abbiamo citate</h3>
+    <p>Michele Cotti, in due video: uno sul Dev Day di OpenAI del 29 settembre 2026, uno sui cinque livelli del «company brain». Antonio, in un video sul «second brain» con Obsidian. Sono le parole che oggi si usano fuori per l'ordine di una persona (second brain) e di un'azienda (company brain).</p>
+    <blockquote class="gab"><p>«però prima bisogna capire come impostare il lavoro per cui stiamo pensando al company brain, perchè effettivamente tutto il mio lavoro può basarsi su questo. ora estraggo un audio da un video, e ti mando la trascrizione, da li cerchiamo di prendere spunto..»</p><cite>Gabriele Dettori · 14 ottobre, 14:43</cite></blockquote>
+    <p class="fonte">Le trascrizioni stanno nel cervello, in <code>raw/</code>.</p>
+  </aside>
+
+  <footer>
+    <p><strong>La pagina del giorno.</strong> Il <a href="strumento.html?v=giornale">Giornale Felicitas</a> è l'uscita quotidiana di questo cervello.</p>
+    <p>Fonti: Cruscotto 24_104 e glossario di <code>pezzi-comuni.html</code> (13 ottobre). Nomi e cognomi: nel cervello si scrivono, senza cose personali; in pubblico entrano con il consenso della persona, altrimenti restano dentro vicinati e villaggi.</p>
+    <p>Tutto quello che sta nei riquadri azzurri è una proposta: si conferma, si cambia o si toglie.</p>
+  </footer>
+</div>
+<a class="su" href="#indice">↑ Indice</a>
+
+</body>
+</html>
