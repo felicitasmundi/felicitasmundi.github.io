@@ -142,7 +142,7 @@ html,body,.app{background:#F5F0E6!important}
 </head>
 <body>
 <div class="app" id="app">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px"><a href="strumento.html?c=10182055" style="font:600 13px 'DM Sans',system-ui,sans-serif;border:1px solid var(--riga);border-radius:999px;padding:7px 13px;color:var(--avorio)">← Torna all'app</a><span style="font-family:Cinzel,serif;letter-spacing:.18em;font-size:13px;color:var(--oro)">FELICITAS</span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px"><a href="strumento.html?c=10182141" style="font:600 13px 'DM Sans',system-ui,sans-serif;border:1px solid var(--riga);border-radius:999px;padding:7px 13px;color:var(--avorio)">← Torna all'app</a><span style="font-family:Cinzel,serif;letter-spacing:.18em;font-size:13px;color:var(--oro)">FELICITAS</span></div>
 
   <!-- ═══ la consolle ═══ -->
   <div class="onda fuori" id="onda">
@@ -195,11 +195,11 @@ html,body,.app{background:#F5F0E6!important}
 
 <div class="velo" id="velo"></div>
 <nav class="menu-app" aria-label="Parti dell'app">
-  <a href="strumento.html?v=oggi&c=10182055"><span class="ic">☼</span>Oggi</a>
-  <a href="strumento.html?v=obiettivi&c=10182055"><span class="ic">☐</span>Obiettivi</a>
-  <a href="strumento.html?v=megafono&c=10182055" class="console"><span class="ic">＋</span>Megafono</a>
-  <a href="strumento.html?v=giornale&c=10182055"><span class="ic">❡</span>Giornale</a>
-  <a href="cervello.html?c=10182055"><span class="ic">✺</span>Cervello</a>
+  <a href="strumento.html?v=oggi&c=10182141"><span class="ic">☼</span>Oggi</a>
+  <a href="strumento.html?v=obiettivi&c=10182141"><span class="ic">☐</span>Obiettivi</a>
+  <a href="strumento.html?v=megafono&c=10182141" class="console"><span class="ic">＋</span>Megafono</a>
+  <a href="strumento.html?v=giornale&c=10182141"><span class="ic">❡</span>Giornale</a>
+  <a href="cervello.html?c=10182141"><span class="ic">✺</span>Cervello</a>
 </nav>
 
 <div class="plancia"><div class="in">
@@ -232,7 +232,7 @@ html,body,.app{background:#F5F0E6!important}
     'mutuo-credito':{titolo:'Mutuo credito cooperativo', chi:'giovedì 16 ottobre · ore 19 · con Guido Grossi e Vittorino Crivello · a cura di Gabriele Dettori e Marco Caddeo'}
   };
   var CH='fm_diretta', CHIAVE_PUNTATA='mutuo-credito', lasciando=false, actx=null, analizza=null, spettroVivo=false;
-  function mostraPuntata(p){ document.getElementById('titolo').textContent=p.titolo; document.getElementById('chi').textContent=p.chi; document.title=p.titolo+' · la diretta del villaggio'; }
+  function mostraPuntata(p){ document.getElementById('titolo').textContent=p.titolo; document.getElementById('chi').textContent=p.chi; try{ if(typeof scriviGiorno==='function') scriviGiorno(); }catch(e){} document.title=p.titolo+' · la diretta del villaggio'; }
   function quando(t){ try{ var d=new Date(t); return d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'})+' · ore '+d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
   /* 15 ott 09:14, Gab: «io voglio pubblicare una diretta radio … senza passare per te» → le dirette nuove stanno nel database (SQL 67): ?puntata=<id dell'orma> */
   var PUNTATA=(function(){ try{ var k=new URLSearchParams(location.search).get('puntata');
@@ -392,7 +392,7 @@ html,body,.app{background:#F5F0E6!important}
   var LUNE=[[1.84566,'luna nuova','🌑'],[5.53699,'luna crescente','🌒'],[9.22831,'primo quarto','🌓'],[12.91963,'gibbosa crescente','🌔'],[16.61096,'luna piena','🌕'],[20.30228,'gibbosa calante','🌖'],[23.99361,'ultimo quarto','🌗'],[27.68493,'luna calante','🌘'],[99,'luna nuova','🌑']];
   function luna(q){ var g=((q||new Date())-Date.UTC(2000,0,6,18,14))/86400000, e=((g%29.530588853)+29.530588853)%29.530588853; for(var i=0;i<LUNE.length;i++) if(e<LUNE[i][0]) return LUNE[i][2]+' '+LUNE[i][1]; }
   var giorno={data:'', luna:'', santo:'', inizio:''};
-  function scriviGiorno(){ $('giorno-sala').textContent=[giorno.data,giorno.luna,giorno.santo,giorno.inizio].filter(Boolean).join(' · '); }
+  function scriviGiorno(){ /* 18 ott 21:40, Gab: «togli la ripetizione» → il giorno non si ripete se c'è già nella riga sopra */ var sopra=($('chi').textContent||'').toLowerCase(); var dt=giorno.data&&sopra.indexOf(giorno.data.toLowerCase())>=0?'':giorno.data; $('giorno-sala').textContent=[dt,giorno.luna,giorno.santo,giorno.inizio].filter(Boolean).join(' · '); }
   (function(){ var o=new Date(); giorno.data=o.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}); giorno.luna=luna(o); scriviGiorno();
     db.rpc('fm_santo',{p_mese:o.getMonth()+1,p_giorno:o.getDate()}).then(function(r){ if(r.data){ giorno.santo=String(r.data); scriviGiorno(); } }).catch(function(){}); })();
   /* da quando è iniziata: la sala nasce col primo che entra (LiveKit ne segna l'ora); se non c'è, da quando sei entrato tu */
