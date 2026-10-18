@@ -74,7 +74,24 @@
   var attiva = box.getAttribute("data-attiva") || "";
   var foto = box.getAttribute("data-foto") || "../communitas-aeterna/persone/gabriele-dettori.jpg";
   var quiPag = location.pathname.split("/").pop();
-  var h = '<div class="capo"><a class="marca" href="bacheca-bozza.html">FELICITASMUNDI</a><div class="destra"><a class="seme' + (quiPag === "come-funziona-bozza.html" ? " on" : "") + '" href="come-funziona-bozza.html" aria-label="come funziona" data-s="riga come funziona">' + S.seme + '</a><a class="io" href="account-bozza.html" aria-label="i miei dati"><img src="' + foto + '" alt=""></a></div></div><nav class="voci" aria-label="le stanze">';
+  /* 18 ott 22:24 e 22:36, Gab: «può essere interessante creare le pagine interne delle stanze, in modo che sia da oggi che da giornale si possa entrare
+     nella visione completa dei prodotti e assistenza» · «stanze da rifare con quella grafica […] le foto e i dati della pagina stanza rimangono uguali,
+     si tratta solo di riadattare il design della pagina». Nelle pagine delle stanze: barra in alto «FelicitasMundi» in cosmo e, in basso, il menu dell'app. */
+  var APP = /^(stanze-bozza|stampa|servizi|servizio)/.test(quiPag);
+  var C = "c=10182300";
+  if (APP) {
+    var cssA = ".fm-stanze{background:#0A0C1A radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%);border-bottom:1px solid rgba(212,175,106,.25);padding-top:12px}" +
+      ".fm-stanze .capo .marca{font-size:15px;letter-spacing:.08em;text-decoration:none}" +
+      ".fm-stanze .voci a svg{width:26px;height:26px}.fm-stanze .voci a span{font-size:min(11px,2.7vw)}" +
+      ".fm-app{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:#0A0C1A radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%);border-top:1px solid rgba(212,175,106,.25);padding-bottom:env(safe-area-inset-bottom,0px)}" +
+      ".fm-app a{font:600 12.5px 'DM Sans',system-ui,sans-serif;color:#A8A49B;text-decoration:none;padding:11px 1px 13px;display:flex;flex-direction:column;align-items:center;gap:4px}" +
+      ".fm-app a .ic{font-size:22px;line-height:1}" +
+      ".fm-app a.console .ic{background:#D4AF6A;color:#1A1405;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin-top:-22px;box-shadow:0 0 0 3px rgba(212,175,106,.18),0 3px 12px rgba(212,175,106,.45)}" +
+      "body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}" +
+      "@media (min-width:700px){.fm-stanze .capo .marca{font-size:18px}.fm-stanze .voci a svg{width:28px;height:28px}.fm-stanze .voci a span{font-size:13.5px}.fm-app a{font-size:15px;padding:13px 1px 15px}.fm-app a .ic{font-size:28px}.fm-app a.console .ic{width:50px;height:50px;margin-top:-26px}}";
+    var sa = document.createElement("style"); sa.textContent = cssA; document.head.appendChild(sa);
+  }
+  var h = '<div class="capo"><a class="marca" href="' + (APP ? 'strumento.html?' + C : 'bacheca-bozza.html') + '">' + (APP ? 'FelicitasMundi' : 'FELICITASMUNDI') + '</a><div class="destra"><a class="seme' + (quiPag === "come-funziona-bozza.html" ? " on" : "") + '" href="come-funziona-bozza.html" aria-label="come funziona" data-s="riga come funziona">' + S.seme + '</a><a class="io" href="account-bozza.html" aria-label="i miei dati"><img src="' + foto + '" alt=""></a></div></div><nav class="voci" aria-label="le stanze">';
   VOCI.forEach(function (v) {
     h += '<a href="' + v[4] + '" style="--c:var(--' + v[3] + ')" class="' + (v[0] === attiva ? "on" : "") + (v[0] === "stampa" ? " staccata" : "") + '" data-s="riga ' + v[0] + '">' + S[v[2]] + '<span>' + v[1] + '</span></a>';
   });
@@ -83,7 +100,15 @@
 
   /* 20:50, Gab: «dovrebbe comunque rimanere fissa in basso la barra con scritto bacheca ed orma» —
      il piede in ogni pagina. La Bacheca ha già il suo (coi due tasti che cambiano vista): lì non si aggiunge. */
-  if (!document.querySelector(".piede")) {
+  if (APP) {
+    var menu = document.createElement("nav"); menu.className = "fm-app"; menu.setAttribute("aria-label", "Parti dell'app");
+    menu.innerHTML = '<a href="strumento.html?v=oggi&' + C + '"><span class="ic">☼</span>Oggi</a>' +
+      '<a href="strumento.html?v=obiettivi&' + C + '"><span class="ic">☐</span>Obiettivi</a>' +
+      '<a href="strumento.html?v=megafono&' + C + '" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</a>' +
+      '<a href="strumento.html?v=giornale&' + C + '"><span class="ic">❡</span>Giornale</a>' +
+      '<a href="cervello.html?' + C + '"><span class="ic">✺</span>Cervello</a>';
+    document.body.appendChild(menu);
+  } else if (!document.querySelector(".piede")) {
     var cssP = ".fm-piede{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;pointer-events:none}" +
       ".fm-piede .in{pointer-events:auto;width:100%;max-width:var(--fm-larghezza,430px);display:flex;background:rgba(10,12,26,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--riga);padding:8px 0 calc(8px + env(safe-area-inset-bottom))}" +
       ".fm-piede a{flex:1;font-size:12px;letter-spacing:.08em;color:var(--grigio);display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none}" +
