@@ -136,6 +136,25 @@ textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:f
 audio{width:100%;height:36px;margin:4px 0}
 a{color:var(--blu)}
 </style>
+<style>
+/* ═══ La cornice cosmo (18 ott 22:24, Gab: «prefestisco a / trovo che le barre blu siano molto belle e nel caso possiamo rendere di quel colore le finestre attive come la diretta»).
+   Barra in alto e menu in basso blu cosmo; le pagine restano carta; ciò che è dal vivo (● in onda, la diretta) è cosmo.
+   Testi alla grandezza del Cruscotto (13 ott: telefono 112 %, computer 122 %). «rendi i loghi e i testi del menu piu grandi, soprattutto nel pc» ═══ */
+:root{--cosmo:#0A0C1A;--cosmo-oro:#D4AF6A;--cosmo-testo:#F5F0E6;--cosmo-grigio:#A8A49B;--cosmo-cielo:radial-gradient(1px 1px at 12% 30%,rgba(245,240,230,.8),transparent 60%),radial-gradient(1px 1px at 37% 70%,rgba(245,240,230,.55),transparent 60%),radial-gradient(1.5px 1.5px at 63% 22%,rgba(212,175,106,.9),transparent 60%),radial-gradient(1px 1px at 81% 58%,rgba(245,240,230,.6),transparent 60%),radial-gradient(1px 1px at 92% 18%,rgba(245,240,230,.5),transparent 60%),radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%)}
+.top,.nav{background-color:var(--cosmo)!important;background-image:var(--cosmo-cielo)!important;border-color:rgba(212,175,106,.25)!important}
+.top .marchio{color:var(--cosmo-oro)!important}
+.top .chip,.top .mini,.top .alto-b{background:rgba(245,240,230,.08)!important;color:var(--cosmo-testo)!important;border-color:rgba(245,240,230,.25)!important}
+.top .alto-b[aria-current="page"]{background:var(--cosmo-oro)!important;color:#1A1405!important}
+.nav button{color:var(--cosmo-grigio)!important;font-size:12.5px!important;padding:11px 1px 13px!important;gap:4px!important}
+.nav button .ic{font-size:22px!important}
+.nav button[aria-current="page"]{color:var(--cosmo-oro)!important}
+.nav button.console .ic{background:var(--cosmo-oro)!important;color:#1A1405!important;width:42px!important;height:42px!important;margin-top:-22px!important;box-shadow:0 0 0 3px rgba(212,175,106,.18),0 3px 12px rgba(212,175,106,.45)!important}
+.appunt a:has(.rosso),.onda{background-color:var(--cosmo)!important;background-image:var(--cosmo-cielo)!important;color:var(--cosmo-testo)!important;border:1px solid rgba(212,175,106,.35)!important}
+.appunt a:has(.rosso) .rosso{color:#ff6b6b!important}
+.onda b,.onda p,.onda span{color:var(--cosmo-testo)!important}
+.corpo{zoom:1.12;padding-bottom:110px!important}
+@media (min-width:700px){.corpo{zoom:1.22}.nav button{font-size:15px!important;padding:13px 1px 15px!important}.nav button .ic{font-size:28px!important}.nav button.console .ic{width:50px!important;height:50px!important;margin-top:-26px!important}.top .marchio{font-size:18px!important}}
+</style>
 </head>
 <body>
 <header class="top"><span class="marchio">FelicitasMundi</span><span class="chi"><span class="chi" id="alto"></span><span class="chi" id="testa"></span></span></header>
@@ -289,7 +308,7 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){if(v==="cervello"){location.href="cervello.html?c=10182141";return;}vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){if(v==="cervello"){location.href="cervello.html?c=10182224";return;}vista=v;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-v"));};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
@@ -308,7 +327,7 @@ function appuntamentiHTML(lez,dir,da,a){
   /* 18 ott 20:46, Gab: «su oggi non mi riappare la chiamata in corso» → se sei entrato in una diretta (il segno fm_diretta, valido 3 ore), Oggi la rimette in cima */
   try{var sg=JSON.parse(localStorage.getItem("fm_diretta")||"null");
     if(sg&&sg.puntata&&sg.t&&ora-sg.t<3*3600e3&&!dir.some(function(d){return String(d.id)===String(sg.puntata);}))
-      r.push({t:0,h:'<span><span class="rosso">● in onda</span> · '+esc(sg.titolo||"la diretta")+' · rientra</span>',link:"diretta-bozza.html?puntata="+encodeURIComponent(sg.puntata)+"&c=10182141"});}catch(e){}
+      r.push({t:0,h:'<span><span class="rosso">● in onda</span> · '+esc(sg.titolo||"la diretta")+' · rientra</span>',link:"diretta-bozza.html?puntata="+encodeURIComponent(sg.puntata)+"&c=10182224"});}catch(e){}
   r.sort(function(x,y){return x.t-y.t;});
   return r.map(function(x){return x.link?'<a href="'+esc(x.link)+'"'+(/^https:/.test(x.link)?' target="_blank" rel="noopener noreferrer"':'')+'>'+x.h+'<span>›</span></a>':'<div>'+x.h+'</div>';}).join("");
 }
@@ -624,7 +643,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182141");}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182224");}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){
@@ -635,10 +654,10 @@ db.auth.onAuthStateChange(function(ev){
 </script>
 <style>
 /* 18 ott 20:54, Gab: «la diretta non rimane se mi sposto altrove» → la striscia della diretta (comune/fm-diretta.js) sta sopra il menu */
-.fm-dir.fissa{top:auto!important;bottom:calc(66px + env(safe-area-inset-bottom,0px))!important;background:#FFFCF5!important;border:1px solid #D9A39A!important;box-shadow:0 4px 14px rgba(0,0,0,.1)}
-.fm-dir .tit,.fm-dir .b{color:#2B2620!important}
-.fm-dir .b{border-color:#D9CDB4!important}
-.fm-dir .b.on{background:#A8822E!important;color:#fff!important}
+.fm-dir.fissa{top:auto!important;bottom:calc(76px + env(safe-area-inset-bottom,0px))!important;background-color:#0A0C1A!important;background-image:var(--cosmo-cielo)!important;border:1px solid rgba(212,175,106,.35)!important;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.fm-dir .tit,.fm-dir .b{color:#F5F0E6!important}
+.fm-dir .b{border-color:rgba(245,240,230,.25)!important}
+.fm-dir .b.on{background:#D4AF6A!important;color:#1A1405!important}
 body.con-diretta{padding-bottom:130px}
 </style>
 <script>
