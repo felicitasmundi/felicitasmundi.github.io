@@ -36,6 +36,44 @@
 (function () {
   "use strict";
 
+  /* ⭐ 18 ottobre — il link dell'orma (SQL 72): un video YouTube si guarda qui, un altro link si apre.
+     Se la colonna non c'è ancora, vale il primo https:// scritto nel testo. */
+  function fmYoutubeId(u) {
+    var m = String(u || "").match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+  function mettiIlLink(R, o) {
+    var doc = R.ownerDocument || document;
+    var vecchio = R.querySelector("#fm-link-orma"); if (vecchio) vecchio.remove();
+    var u = o.link || (String(o.contenuto || "").match(/https:\/\/[^\s<>"]+/) || [])[0];
+    if (!u || !/^https:\/\//.test(u)) return;
+    var box = doc.createElement("div");
+    box.id = "fm-link-orma";
+    box.style.cssText = "margin:1rem 0;min-width:0";
+    var yt = fmYoutubeId(u);
+    if (yt) {
+      var cornice = doc.createElement("div");
+      cornice.style.cssText = "position:relative;width:100%;padding-top:56.25%;border-radius:.8rem;overflow:hidden;background:#000";
+      var f = doc.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + yt;
+      f.title = "video";
+      f.loading = "lazy";
+      f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+      f.setAttribute("allowfullscreen", "");
+      f.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:0";
+      cornice.appendChild(f);
+      box.appendChild(cornice);
+    } else {
+      var a = doc.createElement("a");
+      a.href = u; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.textContent = u.replace(/^https:\/\//, "").slice(0, 60);
+      a.style.cssText = "color:var(--oro-ch,#D4AF6A);word-break:break-all";
+      box.appendChild(a);
+    }
+    var dove = R.querySelector("#p-racconto");
+    if (dove && dove.parentNode) dove.parentNode.insertBefore(box, dove); else R.appendChild(box);
+  }
+
   var INDIRIZZO = "APP.FELICITASMUNDI/piatti/dentro-orma-piatto.html";
   var MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio",
               "agosto","settembre","ottobre","novembre","dicembre"];
@@ -92,6 +130,12 @@
       if (o.error) o = await db.from("orme").select(CAMPI).eq("id", id).single();   /* prima dell'SQL 33 */
       if (o.error) return d;
       d.orma = o.data;
+      /* ⭐ 18 ottobre, Gab: «la possiblità di mandare dei youtube ma sempre con l idea di dover scrivere una didascalia»
+         — il link sta nella colonna `link` (SQL 72); prima dell'SQL 72 la lettura sbaglia e si va avanti senza */
+      try {
+        var lk = await db.from("orme").select("link").eq("id", id).single();
+        if (!lk.error && lk.data) d.orma.link = lk.data.link || null;
+      } catch (e) {}
       var mia = !!(d.io && d.orma.persona_id === d.io);
       d.villaggio = null; d.coordina = false; d.nomino = false; d.gradi = {}; d.rubrica = [];
       var rubrica = [], team = [];
@@ -281,6 +325,7 @@
       conto: { aderenti: String(presenti.length), figlie: String(d.figlie.length) },
       madre: { titolo: d.madre ? (d.madre.titolo || "") : "" }
     });
+    mettiIlLink(R, o);
     P.stato(R, "ha-madre", !!d.madre);
     if (d.madre) P.gesto(R, "apri-madre", function () { apri(d.madre.id); });
     /* il colore e il solido seguono l'elemento dell'orma, come nei templi */

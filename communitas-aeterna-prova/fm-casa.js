@@ -867,6 +867,7 @@ var CASA = `
           <span data-sep="1" style="color:rgba(245,240,230,0.4)">&middot;</span>
           <span data-fase="1" style="color:rgba(245,240,230,0.66)"></span>
         </span>
+        <span data-appuntamenti="1" style="display:none;font-family:'Cormorant Garamond',serif;font-size:var(--t-eti);line-height:1.5;margin-top:0.35rem;min-width:0;color:rgba(245,240,230,0.82)"></span>
       </span>
     </div>
   </section>
@@ -1169,6 +1170,7 @@ function avviaCasa(){
       s.hidden = !(prima && dopo);
     });
     riga.hidden = !pieni.length;
+    if (window.FMAppuntamenti) window.FMAppuntamenti.mostra();
   };
   window.SpazioVivo.oggi({});
 
@@ -3131,3 +3133,62 @@ function apriCosa(cosa){
     mostraVicinato(v, true);
   }
 }
+
+
+/* ══ ⭐ 18 ottobre — GLI APPUNTAMENTI DI OGGI, sotto luna e santo ══
+   Gab, 18/10 13:30: «nel giornale interattivo devono vedersi anche gli appuntamenti con dirette o lezioni settimanali».
+   Le lezioni: fm_lezioni_prossime(1) (SQL 71) · le dirette: fm_dirette_in_onda() (SQL 67).
+   Gli ospiti vedono solo le pubbliche (lo decide il database). Se non c'è niente, la riga non compare. */
+window.FMAppuntamenti = (function () {
+  var dati = null, letto = 0, inCorso = false;
+  function hhmm(t) {
+    return new Date(t).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Rome" });
+  }
+  function leggi() {
+    if (inCorso || typeof db === "undefined" || !db) return;
+    if (dati && Date.now() - letto < 10 * 60 * 1000) return;
+    inCorso = true;
+    var lez = db.rpc("fm_lezioni_prossime", { p_giorni: 1 }).then(function (r) { return (r && !r.error && r.data) || []; }, function () { return []; });
+    var dir = db.rpc("fm_dirette_in_onda").then(function (r) { return (r && !r.error && r.data) || []; }, function () { return []; });
+    Promise.all([lez, dir]).then(function (v) {
+      var ora = Date.now(), righe = [];
+      v[0].forEach(function (l) {
+        var fine = new Date(l.inizio_il).getTime() + (l.durata_min || 60) * 60000;
+        if (fine < ora) return;
+        righe.push({ quando: new Date(l.inizio_il).getTime(), testo: hhmm(l.inizio_il) + " \u00b7 " + l.titolo, link: l.link || null, onda: false });
+      });
+      v[1].forEach(function (d) {
+        var gia = new Date(d.inizio_il).getTime() <= ora;
+        righe.push({ quando: new Date(d.inizio_il).getTime(),
+                     testo: (gia ? "in onda \u00b7 " : hhmm(d.inizio_il) + " \u00b7 diretta \u00b7 ") + d.titolo,
+                     link: "diretta-bozza.html?puntata=" + encodeURIComponent(d.id), onda: gia });
+      });
+      righe.sort(function (a, b) { return a.quando - b.quando; });
+      dati = righe; letto = Date.now(); inCorso = false;
+      mostra();
+    }).catch(function () { inCorso = false; });
+  }
+  function mostra() {
+    var box = document.querySelector("[data-appuntamenti]");
+    if (!box) return;
+    if (!dati) { leggi(); return; }
+    box.textContent = "";
+    if (!dati.length) { box.style.display = "none"; leggi(); return; }
+    dati.forEach(function (r) {
+      var el = document.createElement(r.link ? "a" : "span");
+      el.style.cssText = "display:block;color:inherit;text-decoration:none;min-width:0;overflow-wrap:anywhere";
+      if (r.link) {
+        el.href = r.link;
+        if (/^https:/.test(r.link)) { el.target = "_blank"; el.rel = "noopener noreferrer"; }
+      }
+      if (r.onda) {
+        var p = document.createElement("span"); p.textContent = "\u25cf "; p.style.color = "#ff4d4d"; el.appendChild(p);
+      }
+      el.appendChild(document.createTextNode(r.testo + (r.link ? " \u203a" : "")));
+      box.appendChild(el);
+    });
+    box.style.display = "block";
+    leggi();
+  }
+  return { mostra: mostra };
+})();

@@ -939,7 +939,12 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
 
     var tt = MG_TIPI.filter(function(x){ return x.n===mgStato.tipo; })[0];
     if(tt && tt.d === "antakarana"){ mgMandaTutti(t); return; }
-    var riga = {persona_id:io.id, contenuto:t,
+    /* ⭐ 18 ottobre, Gab: «la possiblità di mandare dei youtube ma sempre con l idea di dover scrivere una didascalia».
+       Il primo https:// del testo va nella colonna `link` (SQL 72); il resto è la didascalia, e senza didascalia non parte. */
+    var mgUrl = (t.match(/https:\/\/[^\s<>"]+/) || [])[0] || null;
+    var mgDidascalia = mgUrl ? t.replace(mgUrl, "").replace(/\s+/g, " ").trim() : t;
+    if(mgUrl && !mgDidascalia){ parla("Scrivi una didascalia insieme al link: due parole su cosa si vede."); campo.focus(); return; }
+    var riga = {persona_id:io.id, contenuto: mgUrl ? mgDidascalia : t,
       tipo: tt ? tt.d : "karma_yoga",
       visibilita:"solo_me",
       accaduto_il: mgStato.quando || dataDiOggi()};
@@ -964,8 +969,17 @@ document.getElementById("centro").insertAdjacentHTML("afterend", `<div id="mg">
     if(alleg.length) dettagli.push(alleg.length === 1 ? "un allegato" : alleg.length + " allegati");
 
     if(Array.isArray(mgAperti) && tt && mgAperti.indexOf(tt.d) < 0){ mgServePraticantato(mgStato.tipo); return; }
-    db.from("orme").insert(riga)
-      .select("id,contenuto").single().then(function(r){
+    if(mgUrl) riga.link = mgUrl;
+    var mgPrima = db.from("orme").insert(riga).select("id,contenuto").single();
+    /* prima dell'SQL 72 la colonna `link` non c'è: si riprova col link dentro il testo */
+    if(mgUrl) mgPrima = mgPrima.then(function(r){
+      if(r && r.error && /link/i.test(r.error.message || "")){
+        delete riga.link; riga.contenuto = t;
+        return db.from("orme").insert(riga).select("id,contenuto").single();
+      }
+      return r;
+    });
+    mgPrima.then(function(r){
       if(r.error){
         /* ⭐ 1 ottobre 22:44, Gab: per chi non ha lo strumento, non l'errore del database ma la strada: il praticantato */
         if(/non \u00e8 aperto adesso|non è aperto adesso/i.test(r.error.message || "")){ mgServePraticantato(mgStato.tipo); return; }
