@@ -186,10 +186,11 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return
 function hhmm(t){return new Date(t).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Rome"});}
 function oggiISO(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 
-var FUNZIONI={tecnologica:"Tecnologica",logistica:"Logistica",comunitaria:"Comunitaria"};
-var RUOLI={tecnologica:[["piattaforma","Piattaforma e dati"],["radio","Radio, dirette ed edizione"]],
-  logistica:[["emporio","Emporio"],["magazzino","Magazzino e consegne"],["produttori","Produttori e produzione"],["eventi","Eventi e spostamenti"]],
-  comunitaria:[["vicinati","Vicinati"],["formazioni","Formazioni e praticantato"],["assistenza","Assistenza"]]};
+var FUNZIONI={tecnologica:"Tecnologia",logistica:"Logistica",comunitaria:"Comunità"};
+/* 19 ott 23:48, Gab: «logistica ok emporio magazzino produttori eventi / tecnologia piattaforma giornale radio gestionale / comunità vicinati e villaggi, formazione ed assistenza comunitaria integrata» (SQL 84) */
+var RUOLI={tecnologica:[["piattaforma","Piattaforma"],["giornale","Giornale"],["radio","Radio"],["gestionale","Gestionale"]],
+  logistica:[["emporio","Emporio"],["magazzino","Magazzino"],["produttori","Produttori"],["eventi","Eventi"]],
+  comunitaria:[["vicinati","Vicinati e villaggi"],["formazioni","Formazione"],["assistenza","Assistenza comunitaria integrata"]]};
 function nomeRuolo(f,r){var x=(RUOLI[f]||[]).filter(function(y){return y[0]===r;})[0];return x?x[1]:r;}
 var VIS={solo_me:"solo io",vicinato:"il vicinato",pubblico:"tutti"};
 var ELEMENTI=[["terra","Terra \u00b7 Vicinati"],["acqua","Acqua \u00b7 Emporio"],["fuoco","Fuoco \u00b7 Assistenza"],["aria","Aria \u00b7 Edizione"],["etere","Etere \u00b7 Scuola"]];
