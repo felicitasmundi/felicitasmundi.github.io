@@ -235,10 +235,11 @@ function hhmm(t){return new Date(t).toLocaleTimeString("it-IT",{hour:"2-digit",m
 function oggiISO(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 
 var FUNZIONI={tecnologica:"Tecnologia",logistica:"Logistica",comunitaria:"Comunità"};
-/* 19 ott 23:48, Gab: «logistica ok emporio magazzino produttori eventi / tecnologia piattaforma giornale radio gestionale / comunità vicinati e villaggi, formazione ed assistenza comunitaria integrata» (SQL 84) */
-var RUOLI={tecnologica:[["piattaforma","Piattaforma"],["giornale","Giornale"],["radio","Radio"],["gestionale","Gestionale"]],
-  logistica:[["emporio","Emporio"],["magazzino","Magazzino"],["produttori","Produttori"],["eventi","Eventi"]],
-  comunitaria:[["vicinati","Vicinati e villaggi"],["formazioni","Formazione"],["assistenza","Assistenza comunitaria integrata"]]};
+/* 19 ott 23:48, Gab: «logistica ok emporio magazzino produttori eventi / tecnologia piattaforma giornale radio gestionale / comunità vicinati e villaggi, formazione ed assistenza comunitaria integrata» (SQL 84)
+   Settimanale 19 ott: «Alla tecnologia va aggiunta anche la voce sicurezza» · «economia sia da mettere nell'aspetto comunità» · 23:34: «contabilità mettila in logistica» (SQL 85) */
+var RUOLI={tecnologica:[["piattaforma","Piattaforma"],["giornale","Giornale"],["radio","Radio"],["gestionale","Gestionale"],["sicurezza","Sicurezza"]],
+  logistica:[["emporio","Emporio"],["magazzino","Magazzino"],["produttori","Produttori"],["eventi","Eventi"],["contabilita","Contabilità"]],
+  comunitaria:[["vicinati","Vicinati e villaggi"],["formazioni","Formazione"],["assistenza","Assistenza comunitaria integrata"],["economia","Economia"]]};
 function nomeRuolo(f,r){var x=(RUOLI[f]||[]).filter(function(y){return y[0]===r;})[0];return x?x[1]:r;}
 var VIS={solo_me:"solo io",vicinato:"il vicinato",pubblico:"tutti"};
 /* 19 ott 16:14, Gab: «oggi è rischioso usare pubblicamente il nome degli elementi in cartelle, meglio tenerlo per il praticantato» → si vedono i nomi delle stanze; nel database restano terra, acqua, fuoco, aria, etere */
