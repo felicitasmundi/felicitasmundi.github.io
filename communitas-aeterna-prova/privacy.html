@@ -10,8 +10,8 @@
 <style>
 :root{
   --terra:#AA8844; --acqua:#4488BB; --fuoco:#CC6644; --aria:#669944; --etere:#9966CC;
-  --accent:#AA8844; --bg:#080604; --crema:#F0EBE0;
-  --c50:rgba(240,235,224,.50); --c38:rgba(240,235,224,.38); --c22:rgba(240,235,224,.22); --c12:rgba(240,235,224,.12);
+  --accent:#D4AF6A; --bg:#121a3f; --crema:#F5F0E6;
+  --c50:rgba(245,240,230,.86); --c38:rgba(245,240,230,.70); --c22:rgba(245,240,230,.35); --c12:rgba(245,240,230,.18);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -19,8 +19,9 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 
 .fm-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
-    radial-gradient(120% 80% at 50% -10%, rgba(170,136,68,.10), transparent 60%),
-    radial-gradient(90% 60% at 50% 120%, rgba(153,102,204,.06), transparent 60%);}
+    radial-gradient(120% 80% at 50% -10%, rgba(70,96,190,.45), transparent 65%),
+    radial-gradient(90% 60% at 50% 120%, rgba(120,90,200,.25), transparent 60%),
+    linear-gradient(180deg,#18224f,#121a3f 60%,#0f1636);}
 .fm-bg::after{content:"";position:absolute;inset:0;opacity:.035;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
@@ -54,11 +55,11 @@ body{background:var(--bg);color:var(--crema);font-family:"Cormorant Garamond",se
 .doc{margin-top:10px}
 .doc h2{font-family:"Cinzel",serif;font-weight:700;font-size:clamp(18px,2.6vw,22px);color:var(--accent);margin:40px 0 12px;scroll-margin-top:16px;line-height:1.25}
 .doc h2 .hn{color:var(--c38);font-weight:400;margin-right:8px}
-.doc p{font-size:17px;color:var(--c50);margin-bottom:14px}
+.doc p{font-size:18.5px;font-weight:500;color:var(--c50);margin-bottom:14px}
 .doc p.lead{color:var(--crema)}
 .doc strong{color:var(--crema);font-weight:500}
 .doc ul{list-style:none;margin:0 0 14px}
-.doc li{font-size:16.5px;color:var(--c50);padding:7px 0 7px 22px;position:relative;border-top:.5px solid var(--c12)}
+.doc li{font-size:18px;font-weight:500;color:var(--c50);padding:7px 0 7px 22px;position:relative;border-top:.5px solid var(--c12)}
 .doc li:first-child{border-top:none}
 .doc li::before{content:"·";position:absolute;left:6px;top:7px;color:var(--accent);font-size:18px;line-height:1}
 .doc a.inl{color:var(--accent);text-decoration:none;border-bottom:.5px solid var(--c22)}
