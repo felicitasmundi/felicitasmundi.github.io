@@ -77,7 +77,7 @@
   /* 18 ott 22:24 e 22:36, Gab: «può essere interessante creare le pagine interne delle stanze, in modo che sia da oggi che da giornale si possa entrare
      nella visione completa dei prodotti e assistenza» · «stanze da rifare con quella grafica […] le foto e i dati della pagina stanza rimangono uguali,
      si tratta solo di riadattare il design della pagina». Nelle pagine delle stanze: barra in alto «FelicitasMundi» in cosmo e, in basso, il menu dell'app. */
-  var APP = /^(stanze-bozza|stampa|servizi|servizio)/.test(quiPag);
+  var APP = /^(stanze-bozza|stampa|servizi|servizio|come-funziona)/.test(quiPag);
   var C = "c=10182300";
   if (APP) {
     var cssA = ".fm-stanze{background:#0A0C1A radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%);border-bottom:1px solid rgba(212,175,106,.25);padding-top:12px}" +
