@@ -129,6 +129,11 @@ textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:f
 .stanza b{font-family:var(--serif);font-size:18px;font-weight:600}
 .stanza span{font-size:12px;color:var(--tenue);text-align:right}
 .cerchi{display:flex;flex-direction:column;gap:8px}
+.due-col{display:grid;grid-template-columns:1fr;gap:10px}@media (min-width:640px){.due-col{grid-template-columns:1fr 1fr}}
+.punti{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45}
+.io-voce{border-bottom:1px solid var(--linea);padding:10px 0}.io-voce:last-child{border-bottom:0}
+.io-voce summary{cursor:pointer;display:flex;justify-content:space-between;gap:10px;list-style:none}.io-voce summary::-webkit-details-marker{display:none}
+.io-voce summary small{color:var(--tenue);white-space:nowrap}.io-voce p{margin:8px 0 0;white-space:pre-wrap}
 .cerchio-b{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:var(--foglio);cursor:pointer;font:inherit;color:inherit;width:100%}
 .cerchio-b b{display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.1}
 .cerchio-b small{display:block;font-size:12.5px;color:var(--tenue);margin-top:2px}
@@ -454,20 +459,40 @@ function voce(x,firme){
 var cerchio=null,cerchiCache=null;
 function vCervello(){
   var c=$("#corpo");
+  /* 19 ott 20:16-20:20, Gab: cosa puoi fare, con e senza AI. «10 euro al mese […] include anche la base del praticantato» · «ok 10 o karma yoga».
+     I quattro punti sono le sue parole (20:17), così come le ha scritte. */
   c.innerHTML='<p class="et">Cervello</p>'+
     '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
-    /* Gab, 15/10, ripreso il 19/10 19:35: «ricordati di scrivere in cervello che è open source, che c e sicurezza sui dati e che può essere estratto e spostato altrove» */
+    /* Gab, 15/10, ripreso il 19/10 19:35 */
     '<p class="nota" style="margin:8px 2px 0">Il Cervello è open source, senza rivendita dei dati, e l\'esportazione completa resta sempre disponibile.</p>'+
-    '<p class="et" style="margin-top:12px">Cerchi</p><div class="cerchi" id="ce-lista">'+(io.id?'<p class="nota">Un momento…</p>':'<div class="card"><span class="t">I cerchi, cioè lo spazio solo per te, il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+'</div>'+
-    (io.id&&io.nucleo?'<p class="et" style="margin-top:12px">Apri un\'azienda · per il nucleo</p><div class="card modulo" id="az-apri">'+
-      '<label class="m" for="az-nome">Nome dell\'azienda</label><input type="text" id="az-nome">'+
+    '<p class="et" style="margin-top:14px">Cosa puoi fare nel Cervello</p>'+
+    '<div class="due-col">'+
+      '<div class="card"><b>Senza AI</b><span class="m">10 € al mese, oppure karma yoga · con la base del praticantato</span>'+
+        '<ol class="punti"><li><b>Ordine:</b> un indice e le regole su dove sta cosa, quindi trova subito il capitolo giusto senza rileggere tutto.</li>'+
+        '<li><b>Collegamenti:</b> vede quello che cambia ogni giorno (ordini, compiti, giornale), non solo i file fermi.</li>'+
+        '<li><b>Decisioni col perché:</b> se qualcuno va contro una cosa decisa, se ne accorge.</li>'+
+        '<li><b>Lavora da solo:</b> manda le mail delle 9 e delle 22, a ciascuno la sua parte.</li></ol></div>'+
+      '<div class="card"><b>Con AI</b><span class="m">26 € al mese</span>'+
+        '<span class="t" style="margin-top:6px">In più l\'AI lavora con la memoria Felicitas: trascrive, scrive, impagina, «detta e organizza».</span></div>'+
+    '</div>'+
+    (io.id?
+      '<p class="et" style="margin-top:14px">Il tuo spazio</p>'+
+      '<button class="cerchio-b" data-cerchio="io"><span><b>Il tuo spazio</b><small>quello che scrivi con «solo io»: lo leggi solo tu</small></span><span>›</span></button>'+
+      '<p class="et" style="margin-top:14px">I cerchi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'
+    :'<div class="card" style="margin-top:14px"><span class="t">Il tuo spazio e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
+    (io.id&&io.nucleo?'<p class="et" style="margin-top:14px">Porta un\'azienda nel Cervello · per il nucleo</p><div class="card modulo" id="az-apri">'+
+      /* dal file dei costi (Attiva il tuo cervello, 19/10), riga Azienda; la consegna a domicilio non è pronta (Gab 19:33) */
+      '<span class="t">L\'azienda trova: gestionale e logistica, cervello aggiornato, comunicazione tra i team (mail delle 9 e delle 22 con la parte di ciascuno), visibilità su Felicitas.</span>'+
+      '<label class="m" for="az-nome" style="margin-top:8px">Nome dell\'azienda</label><input type="text" id="az-nome">'+
       '<label class="m" for="az-terr" style="margin-top:6px">Territorio</label><input type="text" id="az-terr">'+
       '<label class="m" for="az-ref" style="margin-top:6px">Mail del referente (deve essere già entrato)</label><input type="email" id="az-ref">'+
-      '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="az-vai">Apri</button><span class="m" id="az-esito"></span></div></div>':'');
+      '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="az-vai">Apri lo spazio dell\'azienda</button><span class="m" id="az-esito"></span></div></div>':'');
   if(!io.id)return;
+  cerchiCache={io:{id:"io",tipo:"io",nome:"Il tuo spazio",dentro:true}};
+  legaCerchi(c);
   if(io.nucleo)$("#az-vai").onclick=function(){var b=this,n=$("#az-nome").value.trim();if(n.length<2){$("#az-esito").textContent="Il nome serve.";return;}
     b.disabled=true;db.rpc("fm_azienda_apri",{p_nome:n,p_territorio:$("#az-terr").value.trim(),p_mail_referente:$("#az-ref").value.trim()}).then(function(r){b.disabled=false;
-      if(r&&r.error){$("#az-esito").textContent=/fm_azienda_apri|function/i.test(r.error.message||"")?"Le aziende si aprono con l'SQL 80.":errore(r.error);return;}
+      if(r&&r.error){$("#az-esito").textContent=errore(r.error);return;}
       if(r.data!=="ok"){$("#az-esito").textContent=r.data;if(!/^Azienda aperta/.test(r.data))return;}
       vCervello();},function(){b.disabled=false;});};
   Promise.all([
@@ -475,38 +500,39 @@ function vCervello(){
     db.from("orme").select("id,titolo").eq("id",VILLAGGIO).maybeSingle().then(function(r){return (r&&r.data&&r.data.titolo)||"Il villaggio";},function(){return "Il villaggio";})
   ]).then(function(v){
     var e=$("#ce-lista");if(!e||vista!=="cervello")return;
-    cerchiCache={io:{id:"io",tipo:"io",nome:"Solo io",dentro:true}};
-    var io_b='<button class="cerchio-b" data-cerchio="io"><span><b>Solo io</b><small>quello che scrivi solo per te</small></span><span>›</span></button>';
     var l=v[0];
-    if(l===null){e.innerHTML=io_b+'<div class="vuoto">I cerchi si aprono con l\'SQL 79.</div>';legaCerchi(e);return;}
+    if(l===null){e.innerHTML='<div class="vuoto">I cerchi non si leggono adesso.</div>';return;}
     cerchiCache[VILLAGGIO]={id:VILLAGGIO,tipo:"villaggio",nome:v[1],dentro:true,guido:io.coordina};
     l.forEach(function(x){cerchiCache[x.id]=x;});
     var vic=l.filter(function(x){return x.tipo==="vicinato";});
     function bott(x){return '<button class="cerchio-b" data-cerchio="'+esc(x.id)+'"><span><b>'+esc(x.nome)+'</b><small>'+esc(x.tipo)+(x.territorio?' · '+esc(x.territorio):'')+' · '+(+x.persone===1?'1 persona':(+x.persone)+' persone')+'</small></span>'+
       (x.guido?'<span class="chip on">'+(x.tipo==="azienda"?"referente":"guidi")+'</span>':x.dentro?'<span class="chip on">dentro</span>':'<span>›</span>')+'</button>';}
-    var vil='<button class="cerchio-b" data-cerchio="'+VILLAGGIO+'"><span><b>'+esc(v[1])+'</b><small>il villaggio · '+vic.length+(vic.length===1?' vicinato':' vicinati')+'</small></span><span>›</span></button>';
-    e.innerHTML=io_b+vil+["vicinato","gruppo","azienda"].map(function(t){return l.filter(function(x){return x.tipo===t;}).map(bott).join("");}).join("");
+    /* Gab, 19/10 20:18: «villaggio è un team operativo organizzato in vicinati» */
+    var vil='<button class="cerchio-b" data-cerchio="'+VILLAGGIO+'"><span><b>'+esc(v[1])+'</b><small>il villaggio, un team operativo organizzato in vicinati · '+vic.length+(vic.length===1?' vicinato':' vicinati')+'</small></span><span>›</span></button>';
+    e.innerHTML=vil+["vicinato","gruppo","azienda"].map(function(t){return l.filter(function(x){return x.tipo===t;}).map(bott).join("");}).join("");
     legaCerchi(e);
   });
 }
 function legaCerchi(e){e.querySelectorAll("[data-cerchio]").forEach(function(b){b.onclick=function(){cerchio=b.getAttribute("data-cerchio");vai("cerchio");};});}
-/* SOLO IO · 19 ott 19:34, Gab: «crea spazio solo io». Quello che si scrive con «solo io» dal megafono: lo legge solo chi l'ha scritto. */
+/* in fondo a ogni cerchio, il ritorno ben visibile (Gab 20:16: «non c e il bottone per tornare indietro») */
+function fondoIndietro(c){
+  c.insertAdjacentHTML("beforeend",'<div class="azioni" style="margin-top:18px"><button class="btn" id="ce-indietro2" style="width:100%">← Torna al Cervello</button></div>');
+  $("#ce-indietro2").onclick=function(){vai("cervello");};
+}
+/* IL TUO SPAZIO · 19 ott 19:34, Gab: «crea spazio solo io»; 20:16: niente parole a caso, una lista pulita. */
 function vSoloIo(testa){
   var c=$("#corpo");
   c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Qui c\'è quello che scrivi con «solo io»: lo leggi solo tu.</span>'+
     '<div class="fine"><button class="mini oro" id="io-scrivi">Scrivi solo per te</button><button class="mini" data-vai="cartelle">Cartelle</button></div></div>'+
-    '<div class="foglio-g" id="io-lista" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
+    '<div class="card" id="io-lista" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
   $("#ce-indietro").onclick=function(){vai("cervello");};
   $("#io-scrivi").onclick=function(){M.vis="solo_me";vai("megafono");};
-  legaVai(c);
-  db.from("orme").select(CAMPI).eq("persona_id",io.id).eq("visibilita","solo_me").order("momento",{ascending:false}).limit(40).then(function(r){
+  legaVai(c);fondoIndietro(c);
+  db.from("orme").select("id,titolo,contenuto,momento").eq("persona_id",io.id).eq("visibilita","solo_me").order("momento",{ascending:false}).limit(40).then(function(r){
     var g=$("#io-lista");if(!g||cerchio!=="io")return;var l=(r&&!r.error&&r.data)||[];
-    if(!l.length){g.innerHTML='<p class="nota" style="padding:10px 0;text-align:center">Ancora niente. Dal megafono, scegliendo «solo io», quello che scrivi arriva qui.</p>';return;}
-    var files=[];l.forEach(function(o){(o.orma_file||[]).forEach(function(f){files.push(f);});});
-    firmaURL(files).then(function(u){if(cerchio!=="io")return;
-      g.innerHTML=l.map(function(o){return voce({o:o,t:new Date(o.inizio_il||o.momento).getTime()},u);}).join("");
-      g.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vCerchio();};});
-      legaVis(g);});
+    if(!l.length){g.innerHTML='<p class="nota" style="text-align:center">Ancora niente. Dal megafono, scegliendo «solo io», quello che scrivi arriva qui.</p>';return;}
+    g.innerHTML=l.map(function(o){var t=String(o.contenuto||""),tit=o.titolo||(t.length>70?t.slice(0,70)+"…":t);
+      return '<details class="io-voce"><summary><b>'+esc(tit)+'</b><small>'+esc(new Date(o.momento).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</small></summary>'+(t&&t!==tit?'<p>'+esc(t)+'</p>':'')+'</details>';}).join("");
   },function(){});
 }
 /* AZIENDA · aggiungere una persona del team (SQL 80): la aggiunge il referente o il nucleo, con la mail con cui è entrata */
@@ -525,11 +551,17 @@ function chipRuolo(x){var p=x.split(":");return '<span class="chip f-'+esc(p[0])
 function vCerchio(){
   var c=$("#corpo"),x=cerchiCache&&cerchiCache[cerchio];
   if(!x){vai("cervello");return;}
-  var testa='<div class="giro" style="margin-bottom:4px"><button class="mini" id="ce-indietro">← Cerchi</button></div><p class="et">'+({villaggio:"Il villaggio",vicinato:"Il vicinato",gruppo:"Il gruppo",azienda:"L'azienda",io:"Lo spazio"})[x.tipo]+'</p><h3>'+esc(x.nome)+'</h3>'+(x.territorio?'<p class="nota">'+esc(x.territorio)+'</p>':'');
+  var testa='<div class="giro" style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div><p class="et">'+({villaggio:"Il villaggio",vicinato:"Il vicinato",gruppo:"Il gruppo",azienda:"L'azienda",io:"Solo per te"})[x.tipo]+'</p><h3>'+esc(x.nome)+'</h3>'+(x.territorio?'<p class="nota">'+esc(x.territorio)+'</p>':'');
   if(x.tipo==="villaggio"){
-    c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">L\'area attiva in un territorio ampio, legata a una civiltà e alla sua radice linguistica. Dentro il villaggio si propongono i vicinati.</span></div>'+(io.coordina?'<div id="o-ruoli"></div>':'');
+    /* Gab, 19/10 20:18, verbatim (refuso corretto): «villaggio è un team operativo organizzato in vicinati, con l intento di portare avanti i progetti logistici e tecnologici legati a felicitas» */
+    var vv=Object.keys(cerchiCache).map(function(k){return cerchiCache[k];}).filter(function(y){return y.tipo==="vicinato";});
+    c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Un team operativo organizzato in vicinati, con l\'intento di portare avanti i progetti logistici e tecnologici legati a Felicitas.</span></div>'+
+      (vv.length?'<p class="et" style="margin-top:12px">I vicinati</p><div class="cerchi">'+vv.map(function(y){return '<button class="cerchio-b" data-cerchio="'+esc(y.id)+'"><span><b>'+esc(y.nome)+'</b><small>'+(y.territorio?esc(y.territorio)+' · ':'')+(+y.persone===1?'1 persona':(+y.persone)+' persone')+'</small></span><span>›</span></button>';}).join("")+'</div>':'')+
+      (io.coordina?'<div id="o-ruoli"></div>':'');
     $("#ce-indietro").onclick=function(){vai("cervello");};
+    legaCerchi(c);
     if(io.coordina)vRuoli();
+    fondoIndietro(c);
     return;
   }
   if(x.tipo==="io"){vSoloIo(testa);return;}
@@ -537,7 +569,7 @@ function vCerchio(){
   if(vic&&!x.dentro&&!x.guido&&!io.coordina){
     /* dal cervello, «Entrare in un vicinato» (approvato 18/10 11:48) */
     c.innerHTML=testa+'<div class="card" style="margin-top:8px"><b>Come si entra</b><span class="t">Il vicinato si apre con quattro passi:</span><ol class="passi"><li>conosciuto di persona, a un incontro;</li><li>un garante: qualcuno già nel vicinato dice «lo conosco»;</li><li>il sì di chi coordina il vicinato, mai automatico;</li><li>la dichiarazione d\'ingresso firmata.</li></ol></div>';
-    $("#ce-indietro").onclick=function(){vai("cervello");};return;
+    $("#ce-indietro").onclick=function(){vai("cervello");};fondoIndietro(c);return;
   }
   c.innerHTML=testa+
     '<p class="et" style="margin-top:12px">Chi c\'è</p><div class="card" id="ce-persone"><p class="nota">Un momento…</p></div>'+
@@ -545,6 +577,7 @@ function vCerchio(){
     (x.tipo==="azienda"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il referente</p><div class="card modulo" id="az-aggiungi"></div>':'')+
     (x.tipo!=="azienda"?'<p class="et" style="margin-top:12px">Il giornale del '+(vic?'vicinato':'gruppo')+'</p><div class="foglio-g" id="ce-giornale"><p class="nota">Un momento…</p></div>':'');
   if(x.tipo==="azienda"&&(x.guido||io.nucleo))aziendaAggiungi(cerchio);
+  fondoIndietro(c);
   $("#ce-indietro").onclick=function(){vai("cervello");};
   var questo=cerchio;
   db.rpc("fm_cerchio_persone",{p_vicinato:questo}).then(function(r){
