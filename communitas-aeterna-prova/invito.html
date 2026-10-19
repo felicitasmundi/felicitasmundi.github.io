@@ -78,10 +78,14 @@
     border-bottom:1px solid rgba(200,160,85,0.35);padding-bottom:0.1rem}
   .fp-link a:hover{color:var(--ivory,#F5F0E6);border-bottom-color:var(--ivory,#F5F0E6)}
 </style>
+<style>/* 19 ott 12:27, Gab: «rifacciamo l invito, unisciti e scarica app» · lo stesso cielo blu dell'accesso e della diretta */
+body{background:radial-gradient(120% 70% at 50% 0%,#24346e 0%,#141c44 45%,#0A0C1A 100%) fixed,#0A0C1A!important}
+body::before,body::after{display:none!important}
+.tasto{border-radius:999px!important}</style>
 </head>
 <body>
 <div class="carta">
-  <img class="nexus" src="https://www.felicitasmundi.com/wp-content/uploads/2026/05/nexus.png" alt="">
+  <img class="nexus" src="APP.FELICITASMUNDI/piatti/nexus-cerchio.webp" alt="" style="border-radius:50%">
   <div class="occhio">Comunità Eterna FelicitasMundi</div>
   <div id="corpo">
     <h1>Un momento…</h1>
@@ -161,7 +165,7 @@
                ⚠️ Se un giorno serve mandarlo altrove, si cambia questa riga. */
             + '&torna=' + encodeURIComponent('invito.html?invito=' + inv.codice) + '">'
         +   'Conferma, e comincia la tua</a>'
-        + '<a class="tasto vuoto" href="soglia.html">Prima voglio capire cos\u2019\u00e8</a>')
+        + '<a class="tasto vuoto" href="come-funziona-bozza.html">Prima voglio capire cos\u2019\u00e8</a>')
     );
 
     var t = document.getElementById("testo");
@@ -175,6 +179,6 @@
   }
 })();
 </script>
-<!-- ══ stanza di prova · si accende solo a questo indirizzo ══ --><script>if(location.pathname.indexOf("communitas-aeterna-prova")>-1){var s=document.createElement("script");s.src="/communitas-aeterna-prova/fm-prova.js";document.body.appendChild(s);}</script>
+
 </body>
 </html>
