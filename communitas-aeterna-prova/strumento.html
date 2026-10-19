@@ -101,7 +101,7 @@ h3{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1;margi
 .btn:disabled{opacity:.5;cursor:default}
 .azioni{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .file{position:absolute;width:1px;height:1px;opacity:0}
-textarea,input[type=text],input[type=url],input[type=date],input[type=time],input[type=search],input[type=number],select{width:100%;font:16px/1.5 var(--sans);color:var(--inchiostro);background:var(--carta);border:1px solid var(--linea);border-radius:10px;padding:9px 12px}
+textarea,input[type=tel],input[type=text],input[type=url],input[type=date],input[type=time],input[type=search],input[type=number],select{width:100%;font:16px/1.5 var(--sans);color:var(--inchiostro);background:var(--carta);border:1px solid var(--linea);border-radius:10px;padding:9px 12px}
 textarea{min-height:100px;resize:vertical}
 textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:focus-within,a:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
 .scelte{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
@@ -142,6 +142,12 @@ a{color:var(--blu)}
    Testi alla grandezza del Cruscotto (13 ott: telefono 112 %, computer 122 %). «rendi i loghi e i testi del menu piu grandi, soprattutto nel pc» ═══ */
 :root{--cosmo:#0A0C1A;--cosmo-oro:#D4AF6A;--cosmo-testo:#F5F0E6;--cosmo-grigio:#A8A49B;--cosmo-cielo:radial-gradient(1px 1px at 12% 30%,rgba(245,240,230,.8),transparent 60%),radial-gradient(1px 1px at 37% 70%,rgba(245,240,230,.55),transparent 60%),radial-gradient(1.5px 1.5px at 63% 22%,rgba(212,175,106,.9),transparent 60%),radial-gradient(1px 1px at 81% 58%,rgba(245,240,230,.6),transparent 60%),radial-gradient(1px 1px at 92% 18%,rgba(245,240,230,.5),transparent 60%),radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%)}
 .top,.nav{background-color:var(--cosmo)!important;background-image:var(--cosmo-cielo)!important;border-color:rgba(212,175,106,.25)!important}
+.paniere-o{border:1px solid var(--linea);border-left:3px solid #4488BB;border-radius:14px;padding:12px;background:var(--foglio);display:flex;flex-direction:column;gap:4px;margin:0 0 12px}
+.paniere-o .sopra{font:600 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#4488BB}
+.paniere-o b{font-family:var(--serif);font-size:19px;font-weight:600}
+.paniere-o .prezzo{font:600 15px var(--sans)}.paniere-o .prezzo small{font-weight:400;color:var(--tenue)}
+.paniere-o .sotto{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--linea);padding-top:8px;margin-top:4px}
+.paniere-o select{font:inherit;max-width:100%;padding:6px 8px;border:1px solid var(--linea);border-radius:10px;background:var(--carta)}
 .stanze-o{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}.stanze-o a{display:block;padding:14px 12px;border-radius:14px;background:var(--cosmo);background-image:var(--cosmo-cielo);color:var(--cosmo-testo);text-decoration:none;font:500 15px var(--sans);border-left:3px solid var(--c)}
 .top .marchio{color:var(--cosmo-oro)!important}
 .top .chip,.top .mini,.top .alto-b{background:rgba(245,240,230,.08)!important;color:var(--cosmo-testo)!important;border-color:rgba(245,240,230,.25)!important}
@@ -304,7 +310,7 @@ function testa(){
     c.push('<button class="mini" id="esci">Esci</button>');
   }
   $("#testa").innerHTML=c.join("");
-  $("#alto").innerHTML='<button class="alto-b" data-alto="cartelle">\u25a4 Cartelle</button>';
+  $("#alto").innerHTML='<button class="alto-b" data-alto="cartelle">\u25a4 Cartelle</button>'+(io.id?'<button class="alto-b" data-alto="dati">\u25c9 I miei dati</button>':'');
   document.querySelectorAll("[data-alto]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-alto"));};});
   var e=$("#esci");if(e)e.onclick=function(){db.auth.signOut().then(function(){location.href="strumento.html";});};
 }
@@ -316,7 +322,7 @@ function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.oncli
 function disegna(){
   if(vista==="cervello")vista="oggi";
   document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
-  ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle})[vista]();
+  ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati})[vista]();
 }
 
 /* OGGI */
@@ -333,6 +339,27 @@ function appuntamentiHTML(lez,dir,da,a){
   r.sort(function(x,y){return x.t-y.t;});
   return r.map(function(x){return x.link?'<a href="'+esc(x.link)+'"'+(/^https:/.test(x.link)?' target="_blank" rel="noopener noreferrer"':'')+'>'+x.h+'<span>›</span></a>':'<div>'+x.h+'</div>';}).join("");
 }
+/* 19 ott 12:37, Gab: «il paniere su oggi va nel quadrante "di cosa hai bisogno" nell ambito dell emporio» · «180 pacco per il gruppo»
+   · «il paniere sarebbe il contesto prodotto da prendere col gruppo». Esempio; il database si collega dopo. */
+var PANIERE_O={titolo:"L'altra storia d'Italia",autore:"Lamberto Rimondini",editore:"Macro",pacco:180,copie:7}; /* 19 ott 12:50, Gab: «ora scrivi che le copie sono 7, poi ti do conferma col dato reale su database» */
+function paniereHTML(){var p=PANIERE_O;
+  return '<div class="paniere-o" id="o-paniere"><span class="sopra">Emporio · il paniere del gruppo</span><b>'+esc(p.titolo)+'</b><span class="m">'+esc(p.autore)+' · '+esc(p.editore)+'</span>'+
+    '<span class="prezzo">'+esc(p.pacco)+' € <small>il pacco per il gruppo · '+esc(p.copie)+' copie</small></span>'+
+    '<div class="fine"><button class="mini oro" data-pan="si">Partecipo</button><button class="mini" data-pan="come">Come funziona</button></div><div class="sotto" id="o-pan-sotto" hidden></div></div>';}
+function legaPaniere(c){var box=c.querySelector("#o-paniere");if(!box)return;var sotto=box.querySelector("#o-pan-sotto");
+  box.querySelector('[data-pan="come"]').onclick=function(){
+    if(!sotto.hidden&&sotto.getAttribute("data-c")==="come"){sotto.hidden=true;return;}
+    sotto.setAttribute("data-c","come");sotto.hidden=false;
+    sotto.innerHTML='<span class="t">Il paniere è il prodotto da prendere col gruppo. Il prezzo è quello del pacco per il gruppo.</span><span class="t">Ogni paniere va prima al nucleo per essere confermato.</span><span class="m">Il primo punto di ritiro è il Festival Felicitas, 21 novembre, Baratili San Pietro.</span>';};
+  box.querySelector('[data-pan="si"]').onclick=function(){
+    if(!io.id){location.href=ENTRA;return;}
+    sotto.setAttribute("data-c","si");sotto.hidden=false;
+    sotto.innerHTML='<span class="m">Dove lo ritiri?</span><select id="o-pan-dove"><option value="festival">Festival Felicitas · 21 novembre</option><option value="portami">Me lo porta un vicino</option></select>'+
+      '<div class="fine"><button class="mini oro" id="o-pan-ok">Confermo</button><button class="mini" id="o-pan-no">Annulla</button></div>';
+    sotto.querySelector("#o-pan-no").onclick=function(){sotto.hidden=true;};
+    sotto.querySelector("#o-pan-ok").onclick=function(){var d=sotto.querySelector("#o-pan-dove");
+      sotto.innerHTML='<span class="t">Ci sei. Ritiro: '+esc(d.options[d.selectedIndex].text)+'.</span>';};};
+}
 var STANZE_O=[["Emporio","stanze-bozza.html?s=emporio&c=10182300","#4488BB"],["Stampa","stampa-bozza.html?c=10182300","#669944"],["Assistenza comunitaria integrata","stanze-bozza.html?s=mutuo&c=10182300","#CC6644"],["Scuola","stanze-bozza.html?s=scuola&c=10182300","#9966CC"]];
 function vOggi(){
   var c=$("#corpo"),l=luna(),d=new Date();
@@ -342,11 +369,12 @@ function vOggi(){
     '<div id="o-appunt"></div>'+
     /* 18 ott 20:36 e 22:36, Gab: «oggi può essere anche il contesto "di cosa hai bisogno?"» · da oggi «si possa entrare nella visione completa dei prodotti e assistenza» */
     '<p class="et" style="margin-top:6px">Di cosa hai bisogno?</p><div class="stanze-o">'+STANZE_O.map(function(s){return '<a href="'+s[1]+'" style="--c:'+s[2]+'">'+esc(s[0])+'</a>';}).join("")+'</div>'+
+    paniereHTML()+
     (io.id?'<div id="o-logistica"></div>':'')+
     (io.id?'<p class="et" style="margin-top:6px">Obiettivi aperti</p><div id="o-obiettivi"><p class="nota">Un momento…</p></div>':
       '<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra con il codice via mail</a></div></div>')+
     (io.coordina?'<div id="o-ruoli"></div>':'');
-  legaVai(c);
+  legaVai(c);legaPaniere(c);
   santo().then(function(s){var e=$("#o-cielo");if(e&&s)e.textContent=s+" · "+l.nome;});
   Promise.all([lezioni(),dirette()]).then(function(v){var e=$("#o-appunt");if(!e)return;var h=appuntamentiHTML(v[0],v[1],da,a);
     e.innerHTML=h?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p><div class="appunt">'+h+'</div>':'';});
@@ -609,6 +637,36 @@ function vObiettivi(){
 
 /* CARTELLE: i cinque elementi, con i file già mandati che chi guarda può leggere */
 var cartella="tutte";
+/* I MIEI DATI · 19 ott 12:37, Gab: «i dati account va inserita […] mostrami la finestra e all ok rendi tutto operativo, nessuna voce deve portare al vuoto».
+   Scrive solo nella mia riga di persone (colonne già usate da fm-account-mio.js e account-bozza.html). */
+function vDati(){
+  var c=$("#corpo");
+  if(!io.id){c.innerHTML='<p class="et">I miei dati</p><div class="card"><span class="t">I tuoi dati si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra con il codice via mail</a></div></div>';return;}
+  c.innerHTML='<p class="et">I miei dati</p><div id="d-corpo"><p class="nota">Un momento…</p></div>';
+  db.from("persone").select("nome,cognome,biografia,telefono,lingua,avvisi_mail,vicinato_id,radice_id").eq("id",io.id).maybeSingle().then(function(r){
+    var d=(r&&r.data)||{},e=$("#d-corpo");if(!e||vista!=="dati")return;
+    function campo(k,et,tipo){return '<label class="m" for="d-'+k+'" style="display:block;margin-top:8px">'+et+'</label>'+(tipo==="area"?'<textarea id="d-'+k+'">'+esc(d[k]||"")+'</textarea>':'<input type="'+(tipo||"text")+'" id="d-'+k+'" value="'+esc(d[k]||"")+'">');}
+    e.innerHTML='<div class="card"><b>Chi sono</b>'+campo("nome","Nome")+campo("cognome","Cognome")+campo("biografia","Biografia","area")+campo("telefono","Telefono","tel")+campo("lingua","Che lingua parli")+
+      '<div class="azioni" style="margin-top:10px"><button class="btn pieno" id="d-salva">Salva</button><span class="m" id="d-esito"></span></div></div>'+
+      '<div class="card" style="margin-top:10px"><b>Il mio villaggio e il mio vicinato</b><span class="t" id="d-luoghi">Un momento…</span><div class="fine"><a class="mini" href="cervello.html?c=10182300#ingresso">Come si entra in un vicinato</a></div></div>'+
+      '<div class="card" style="margin-top:10px"><b>Avvisi per mail</b><label class="t" style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-avvisi"'+(d.avvisi_mail===false?'':' checked')+'> Ricevo gli avvisi per mail</label><span class="m" id="d-avvisi-esito"></span></div>'+
+      '<div class="card" style="margin-top:10px"><b>Segnala un problema tecnico</b><span class="m">Un pagamento che non si vede, una pagina che non si apre, una cosa che non funziona.</span><textarea id="d-segnala" style="min-height:70px"></textarea><div class="azioni"><button class="btn" id="d-manda">Manda</button><span class="m" id="d-segnala-esito"></span></div></div>'+
+      '<div class="card" style="margin-top:10px"><b>Account</b><span class="t">Entri con la tua mail e un codice.</span><div class="fine"><a class="mini" href="privacy.html" target="_blank">Privacy</a><a class="mini" href="privacy.html#condizioni" target="_blank">Condizioni</a><a class="mini" href="privacy.html#cookie" target="_blank">Cookie</a><button class="mini" id="d-esci">Esci</button></div></div>';
+    $("#d-salva").onclick=function(){var b=this,riga={};["nome","cognome","biografia","telefono","lingua"].forEach(function(k){riga[k]=$("#d-"+k).value.trim()||null;});
+      if(!riga.nome){$("#d-esito").textContent="Il nome serve.";return;}
+      b.disabled=true;db.from("persone").update(riga).eq("id",io.id).then(function(x){b.disabled=false;
+        if(x&&x.error){$("#d-esito").textContent=errore(x.error);return;}io.nome=riga.nome;nomi[io.id]=riga.nome;$("#d-esito").textContent="Salvato.";});};
+    $("#d-avvisi").onchange=function(){var v=this.checked;db.from("persone").update({avvisi_mail:v}).eq("id",io.id).then(function(x){$("#d-avvisi-esito").textContent=x&&x.error?errore(x.error):"Salvato.";});};
+    $("#d-manda").onclick=function(){var t=$("#d-segnala").value.trim(),b=this;if(!t)return;b.disabled=true;
+      db.from("segnalazioni").insert({persona_id:io.id,tipo:"tecnico",testo:t,riferimento:"i miei dati · "+new Date().toISOString().slice(0,10),stato:"aperta"}).then(function(x){b.disabled=false;
+        if(x&&x.error){$("#d-segnala-esito").textContent=errore(x.error);return;}$("#d-segnala").value="";$("#d-segnala-esito").textContent="Mandata. Arriva a chi tiene Felicitas.";});};
+    $("#d-esci").onclick=function(){db.auth.signOut().then(function(){location.href="strumento.html";});};
+    var ids=[d.radice_id,d.vicinato_id].filter(Boolean);
+    (ids.length?db.from("orme").select("id,titolo").in("id",ids):Promise.resolve({data:[]})).then(function(o){var t={};((o&&o.data)||[]).forEach(function(x){t[x.id]=x.titolo;});
+      var l=$("#d-luoghi");if(!l)return;
+      l.textContent=(d.radice_id&&t[d.radice_id]?"Villaggio: "+t[d.radice_id]:"Non hai ancora scelto un villaggio.")+"\n"+(d.vicinato_id&&t[d.vicinato_id]?"Vicinato: "+t[d.vicinato_id]:"Non sei ancora in un vicinato.");},function(){});
+  },function(){var e=$("#d-corpo");if(e)e.innerHTML='<div class="vuoto">Non riesco a leggere i tuoi dati adesso.</div>';});
+}
 function vCartelle(){
   var c=$("#corpo");
   if(!io.id){c.innerHTML='<p class="et">Cartelle</p><h3>Documenti, foto, audio</h3><div class="card"><span class="t">Le cartelle si aprono a chi è entrato.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div>';return;}
@@ -699,7 +757,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182300");}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati)$/.test(q))vista=q;if(q==="cervello")location.replace("cervello.html?c=10182300");}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){

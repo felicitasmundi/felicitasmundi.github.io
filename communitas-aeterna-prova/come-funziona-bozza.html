@@ -29,6 +29,7 @@ a{color:inherit;text-decoration:none}
 .testa .sot{font-size:14px;color:var(--grigio);margin-top:8px;line-height:1.5}
 
 .parte{padding:0 18px;margin-bottom:30px}
+.voci-app{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:10px}.voci-app a{display:block;text-decoration:none;color:var(--avorio);border:1px solid rgba(212,175,106,.3);border-left:3px solid var(--oro);border-radius:14px;padding:12px 14px;background:rgba(245,240,230,.03)}.voci-app b{display:block;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;color:var(--oro);margin-bottom:4px}.voci-app span{font-size:14px;line-height:1.45;color:var(--avorio)}
 .parte .capo{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
 .parte .capo .n{font-family:'Cinzel',serif;font-size:12px;color:var(--oro);letter-spacing:.1em}
 .parte .capo h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;line-height:1.1}
@@ -182,6 +183,19 @@ a{color:inherit;text-decoration:none}
     <div class="sot">I piani, come sono realizzati i servizi, dove vanno i soldi. Tutto qui, aperto.</div>
   </div>
 
+  <!-- 19 ott 12:27, Gab: «come funziona lo vediamo ora, perchè va integrato il discorso delle novità dell app» -->
+  <section class="parte">
+    <div class="capo"><span class="n">0</span><h2>L'app, voce per voce.</h2></div>
+    <div class="voci-app">
+      <a href="strumento.html?v=oggi&amp;c=10182300"><b>☼ Oggi</b><span>Il contesto d'accesso per tutti. Gli appuntamenti del giorno, «Di cosa hai bisogno?» con Emporio, Stampa, Assistenza comunitaria integrata e Scuola, il paniere del gruppo, i compiti della logistica.</span></a>
+      <a href="strumento.html?v=giornale&amp;c=10182300"><b>❡ Giornale</b><span>L'edizione del giorno, a tre fasce, che finisce. La stessa edizione arriva per mail alle 9 e alle 22.</span></a>
+      <a href="strumento.html?v=megafono&amp;c=10182300"><b>＋ Megafono</b><span>In questo spazio il nostro dare diventa un'offerta all'esistenza. Quello che scrivi lo vedi solo tu, il tuo vicinato o tutti: lo decide il tasto di visibilità.</span></a>
+      <a href="strumento.html?v=obiettivi&amp;c=10182300"><b>☐ Obiettivi</b><span>Le cose da fare del villaggio: si prendono e si portano a termine.</span></a>
+      <a href="cervello.html?c=10182300"><b>✺ Cervello</b><span>Ciò che scrivi rimane nel cervello Felicitas. È il wiki di Felicitas.</span></a>
+      <a href="strumento.html?v=cartelle&amp;c=10182300"><b>▤ Cartelle</b><span>Documenti, foto e audio, nei cinque elementi.</span></a>
+    </div>
+  </section>
+
   <!-- 1 · scegli: i piani, uno accanto all'altro, con tutto l'elenco -->
   <section class="parte larga">
     <div class="capo"><span class="n">1</span><h2>Scegli come stare.</h2></div>
@@ -192,10 +206,10 @@ a{color:inherit;text-decoration:none}
         <a class="fm-tasto piccolo secondario" href="accesso.html" data-s="scegli ospite">Entra</a>
         <div class="tutto">Senza quota e senza patto:</div>
         <ul>
-          <li>la Bacheca dei villaggi e dei vicinati: quello che pubblicano i villaggi, e i contenuti di chi partecipa</li>
-          <li>le stanze: Emporio, Mutuo aiuto, Edizione, Scuola</li>
+          <li>il Giornale dei villaggi e dei vicinati: quello che pubblicano i villaggi, e i contenuti di chi partecipa</li>
+          <li>le stanze: Emporio, Stampa, Assistenza comunitaria integrata, Scuola</li>
           <li>gli eventi del villaggio</li>
-          <li>il karma yoga del villaggio si vede anche da fuori, prima di entrare</li>
+          <li>i bisogni del villaggio si vedono anche da fuori, prima di entrare</li>
           <li>la diretta è libera per chiunque; l'archivio no</li>
           <li>i percorsi gratuiti</li>
           <li>acquistare nell'Emporio: chi compra soltanto nell'Emporio resta ospite</li>
@@ -204,11 +218,11 @@ a{color:inherit;text-decoration:none}
       <div class="piano" data-piano="karma_yoga">
         <span class="qui-s">SEI QUI</span><div class="nome">Praticante · karma yoga</div><div class="per">Chi dà una mano, segue e porta a termine obiettivi dei gruppi operativi, chi mette a disposizione luoghi e tempo.</div>
         <div class="pr">0 €<small>il patto: obiettivi, non ore</small></div>
-        <a class="fm-tasto piccolo secondario" href="bacheca-bozza.html#karma-yoga" data-s="scegli praticante">Proponiti</a>
+        <a class="fm-tasto piccolo secondario" href="strumento.html?v=megafono&amp;c=10182300" data-s="scegli praticante">Proponiti</a>
         <div class="tutto">Tutto dell'ospite, più:</div>
         <ul>
           <li>attivare un profilo privato</li>
-          <li>inserire le sue orme, che restano sue</li>
+          <li>inserire i suoi contenuti, che restano suoi</li>
           <li>il villaggio è il gruppo da cui ognuno parte, taggato col vicinato di appartenenza: chat, obiettivi, eventi e pubblicazione stampa</li>
           <li>prendere e portare a termine gli obiettivi dei gruppi operativi: è il patto</li>
           <li>partecipare alla parte gratuita del praticantato</li>
@@ -223,9 +237,9 @@ a{color:inherit;text-decoration:none}
         <span class="qui-s">SEI QUI</span><div class="nome">Villaggio</div>
         <div class="pr">10 €<small>al mese, IVA inclusa</small></div>
         <button class="fm-tasto piccolo secondario" data-s="scegli 10" data-cassa="villaggio">Scegli</button>
-        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html?vista=mia" data-s="vai villaggio">Vai alla mia orma</a>
-        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html#karma-yoga" data-s="vai karma_yoga">Prendi un compito</a>
-        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html" data-s="vai ospite">Vai in Bacheca</a>
+        <a class="fm-tasto piccolo vai" href="strumento.html?v=oggi&amp;c=10182300" data-s="vai villaggio">Vai a Oggi</a>
+        <a class="fm-tasto piccolo vai" href="strumento.html?v=obiettivi&amp;c=10182300" data-s="vai karma_yoga">Prendi un compito</a>
+        <a class="fm-tasto piccolo vai" href="strumento.html?v=giornale&amp;c=10182300" data-s="vai ospite">Vai al Giornale</a>
         <div class="tutto">Tutto del praticante, più le proprie cose: il proprio lavoro, il proprio team, i propri prodotti.</div>
         <ul>
           <li>il team partner: le stesse informazioni, con accesso ristretto al gruppo, collegato al villaggio e al vicinato</li>
@@ -240,7 +254,7 @@ a{color:inherit;text-decoration:none}
         <span class="qui-s">SEI QUI</span><div class="nome">Bottega</div>
         <div class="pr">26 €<small>al mese, IVA inclusa</small></div>
         <button class="fm-tasto piccolo" data-s="scegli 26" data-cassa="bottega">Scegli</button>
-        <a class="fm-tasto piccolo vai" href="bacheca-bozza.html?vista=mia" data-s="vai bottega">Vai alla mia orma</a>
+        <a class="fm-tasto piccolo vai" href="strumento.html?v=oggi&amp;c=10182300" data-s="vai bottega">Vai a Oggi</a>
         <div class="tutto">Tutto del Villaggio, più:</div>
         <ul>
           <li>la memoria che lavora con te, sempre</li>
@@ -265,8 +279,8 @@ a{color:inherit;text-decoration:none}
   <section class="parte">
     <div class="capo"><span class="n">2</span><h2>Perché 26 qui e non 20 a un'AI.</h2></div>
     <div class="piu">
-      <div><i>1</i><div><b>Dei 26, l'AI è 16. I 10 sono Felicitas.</b><small>Chi paga 20 a un'AI ha solo l'AI, e poi deve costruirsi il gruppo, la bacheca, gli eventi, la stampa, la diretta.</small></div></div>
-      <div><i>2</i><div><b>L'AI conosce già il tuo lavoro.</b><small>Non parte da zero a ogni chat: ha le tue orme, il tuo gruppo, le tue dirette, quello che hai dettato. Altrove quella memoria la costruisci e la mantieni tu.</small></div></div>
+      <div><i>1</i><div><b>Dei 26, l'AI è 16. I 10 sono Felicitas.</b><small>Chi paga 20 a un'AI ha solo l'AI, e poi deve costruirsi il gruppo, il giornale, gli eventi, la stampa, la diretta.</small></div></div>
+      <div><i>2</i><div><b>L'AI conosce già il tuo lavoro.</b><small>Non parte da zero a ogni chat: ha i tuoi contenuti, il tuo gruppo, le tue dirette, quello che hai dettato. Altrove quella memoria la costruisci e la mantieni tu.</small></div></div>
       <div><i>3</i><div><b>Il lavoro atterra dove serve.</b><small>La trascrizione finisce nella puntata, l'impaginato in Stampa, la notizia in Edizione, l'obiettivo nel gruppo. Con un'AI generica ti resta un file da portare in giro.</small></div></div>
       <div><i>4</i><div><b>I dati stanno in Italia, da noi.</b><small>Voce, testi e memoria sui server di Felicitas. Nessun terzo li tiene.</small></div></div>
       <div><i>5</i><div><b>Il praticantato e la comunità.</b><small>Il percorso in cinque passaggi, i vicinati, le persone. Nessuna AI te li dà.</small></div></div>
@@ -304,8 +318,8 @@ a{color:inherit;text-decoration:none}
       <div class="legenda"><span style="--c:var(--terra)"><i></i>TERRA</span><span style="--c:var(--acqua)"><i></i>ACQUA</span><span style="--c:var(--fuoco)"><i></i>FUOCO</span><span style="--c:var(--aria)"><i></i>ARIA</span><span style="--c:var(--etere)"><i></i>ETERE</span><span style="--c:var(--nexus)"><i></i>NEXUS</span></div>
       <div class="leggo"><span class="oc">◉</span><p>Il cruscotto è di chi segue il praticantato: dentro ci sono le scelte prese e gli obiettivi dati, al ritmo e coi simboli del funzionamento della Coscienza. Chi ha la Bottega lo ha come memoria che lavora: l'AI legge queste righe prima di rispondere.</p></div>
     </div>
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><button class="fm-tasto piccolo" data-s="scegli praticantato" data-cassa="praticantato">Entra nel praticantato · 20 € a settimana</button><a class="fm-tasto piccolo secondario" href="bacheca-bozza.html?vista=mia&praticantato=1" data-s="che cos'è il praticantato">Che cos'è il praticantato</a></div>
-    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">A parte dai piani. Il percorso dei talenti si apre da la mia orma.</p>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><button class="fm-tasto piccolo" data-s="scegli praticantato" data-cassa="praticantato">Entra nel praticantato · 20 € a settimana</button><a class="fm-tasto piccolo secondario" href="strumento.html?v=oggi&amp;c=10182300" data-s="che cos'è il praticantato">Che cos'è il praticantato</a></div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--grigio)">A parte dai piani.</p>
     <div id="esito" hidden style="margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--carta);border:1px solid var(--oro);font-size:13.5px;line-height:1.45"></div>
   </section>
 
@@ -315,7 +329,7 @@ a{color:inherit;text-decoration:none}
     <div class="sotto">
       <div class="fm-riga"><b>la voce</b><span>la trascrive Whisper, un programma aperto, sul server di Felicitas in Italia. L'audio non esce da lì.</span></div>
       <div class="fm-riga"><b>i testi</b><span>i lavori di testo (impaginare, correggere, tradurre, guidare) li fa Claude, di Anthropic, su tua richiesta e solo con il testo di quel lavoro. Anthropic dichiara di non usare i dati dei clienti dell'API per addestrare i modelli <span class="fm-ph">[ riga da verificare sulle condizioni, prima della pubblicazione ]</span>.</span></div>
-      <div class="fm-riga"><b>la memoria</b><span>le orme, i gruppi, le chat, il cruscotto del praticantato: su Supabase, il database di Felicitas. L'AI li legge quando glielo chiedi; non li tiene.</span></div>
+      <div class="fm-riga"><b>la memoria</b><span>i contenuti, i gruppi, le chat, il cruscotto del praticantato: su Supabase, il database di Felicitas. L'AI li legge quando glielo chiedi; non li tiene.</span></div>
       <div class="fm-riga"><b>la diretta</b><span>LiveKit, server in Europa, solo per il passaggio della voce in tempo reale. La registrazione la fa il navigatore di chi coordina.</span></div>
     </div>
   </section>
@@ -433,7 +447,7 @@ a{color:inherit;text-decoration:none}
           pianoMio=vivo?d.piano:null;
           segna(vivo?d.piano:base);
           var pr=document.querySelector('[data-cassa="praticantato"]');
-          if(pr&&d.praticantato_fino_al&&new Date(d.praticantato_fino_al)>ora){ pr.textContent="Sei nel praticantato · fino al "+new Date(d.praticantato_fino_al).toLocaleDateString("it-IT")+" · vai nel percorso ›"; pr.classList.add("secondario"); pr.onclick=function(ev){ ev.stopImmediatePropagation(); location.href="bacheca-bozza.html?vista=mia&praticantato=1"; }; }
+          if(pr&&d.praticantato_fino_al&&new Date(d.praticantato_fino_al)>ora){ pr.textContent="Sei nel praticantato · fino al "+new Date(d.praticantato_fino_al).toLocaleDateString("it-IT")+" · vai nel percorso ›"; pr.classList.add("secondario"); pr.onclick=function(ev){ ev.stopImmediatePropagation(); location.href="strumento.html?v=oggi&amp;c=10182300"; }; }
         }, function(){ segna(base); });
       });
     }).catch(function(e){ console.log("come funziona · sessione", e); });
@@ -519,7 +533,7 @@ a{color:inherit;text-decoration:none}
     });
   });
   /* dove si va dopo: Villaggio e Bottega → la mia orma; praticantato → il percorso (Gab, 18:15) */
-  function dove(piano){ return piano==="praticantato" ? {href:"bacheca-bozza.html?vista=mia&praticantato=1",testo:"Vai nel percorso ›"} : {href:"bacheca-bozza.html?vista=mia",testo:"Vai alla mia orma ›"}; }
+  function dove(piano){ return piano==="praticantato" ? {href:"strumento.html?v=oggi&c=10182300",testo:"Vai nel percorso ›"} : {href:"strumento.html?v=oggi&c=10182300",testo:"Vai a Oggi ›"}; }
   function mostra(testo, male, poi){ var e=document.getElementById("esito"); if(!e) return; e.hidden=false; e.style.borderColor=male?"var(--manca)":"var(--oro)"; e.textContent=testo; if(poi){ var a=document.createElement("a"); a.href=poi.href; a.textContent=poi.testo; a.className="fm-tasto piccolo"; a.style.marginLeft="10px"; e.appendChild(a); } e.scrollIntoView({block:"center"}); }
   try{
     var q=new URLSearchParams(location.search);
@@ -528,7 +542,7 @@ a{color:inherit;text-decoration:none}
   }catch(e){}
 })();
 </script>
-<script src="comune/fm-riga.js?v=10191300"></script>
+<script src="comune/fm-riga.js?v=10191500"></script>
 <script src="comune/fm-statistiche.js?v=10121420"></script>
 </body>
 </html>
