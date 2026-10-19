@@ -91,7 +91,7 @@
       "@media (min-width:700px){.fm-stanze .capo .marca{font-size:18px}.fm-stanze .voci a svg{width:28px;height:28px}.fm-stanze .voci a span{font-size:13.5px}.fm-app a{font-size:15px;padding:13px 1px 15px}.fm-app a .ic{font-size:28px}.fm-app a.console .ic{width:50px;height:50px;margin-top:-26px}}";
     var sa = document.createElement("style"); sa.textContent = cssA; document.head.appendChild(sa);
   }
-  var h = '<div class="capo"><a class="marca" href="' + (APP ? 'strumento.html?' + C : 'bacheca-bozza.html') + '">' + (APP ? 'FelicitasMundi' : 'FELICITASMUNDI') + '</a><div class="destra"><a class="seme' + (quiPag === "come-funziona-bozza.html" ? " on" : "") + '" href="come-funziona-bozza.html" aria-label="come funziona" data-s="riga come funziona">' + S.seme + '</a><a class="io" href="account-bozza.html" aria-label="i miei dati"><img src="' + foto + '" alt=""></a></div></div><nav class="voci" aria-label="le stanze">';
+  var h = '<div class="capo"><a class="marca" href="' + 'strumento.html?v=oggi&' + C + '">' + (APP ? 'FelicitasMundi' : 'FELICITASMUNDI') + '</a><div class="destra"><a class="seme' + (quiPag === "come-funziona-bozza.html" ? " on" : "") + '" href="come-funziona-bozza.html" aria-label="come funziona" data-s="riga come funziona">' + S.seme + '</a><a class="io" href="account-bozza.html" aria-label="i miei dati"><img src="' + foto + '" alt=""></a></div></div><nav class="voci" aria-label="le stanze">';
   VOCI.forEach(function (v) {
     h += '<a href="' + v[4] + '" style="--c:var(--' + v[3] + ')" class="' + (v[0] === attiva ? "on" : "") + (v[0] === "stampa" ? " staccata" : "") + '" data-s="riga ' + v[0] + '">' + S[v[2]] + '<span>' + v[1] + '</span></a>';
   });
