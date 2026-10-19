@@ -191,7 +191,7 @@ var ELEMENTI=[["terra","Terra \u00b7 Vicinati"],["acqua","Acqua \u00b7 Emporio"]
 var STADI={in_coda:"da fare",in_avanzamento:"in corso",sviluppato:"fatto"};
 var DOPO={in_coda:"in_avanzamento",in_avanzamento:"sviluppato",sviluppato:"in_coda"};
 var TIPI_G=["karma_yoga","articolo","festa","diretta","obiettivo","antakarana"];
-var TIPO_NOME={karma_yoga:"karma yoga e servizio",articolo:"articolo",festa:"festa",diretta:"diretta",obiettivo:"obiettivo",antakarana:"a tutti"};
+var TIPO_NOME={karma_yoga:"dono · scambio",articolo:"articolo",festa:"festa",diretta:"diretta",obiettivo:"obiettivo",antakarana:"a tutti"};
 
 /* chi guarda */
 var io={id:null,nome:"",grado:"ospite",nucleo:false,coordina:false,ruoli:[]};
@@ -200,7 +200,7 @@ var nomi={};
 
 function errore(e){
   var m=String((e&&e.message)||e||"");
-  if(/non è aperto adesso/i.test(m))return "Questo tipo si apre con il praticantato: per ora scegli Karma Yoga, praticantato e servizio alla comunità.";
+  if(/non è aperto adesso/i.test(m))return "Questo tipo si apre con il praticantato: per ora scegli Dono · scambio.";
   if(/row-level security|permission denied|not allowed/i.test(m))return "Con questo accesso non si può: lo fa chi ne ha il permesso.";
   if(/too large|payload|25/i.test(m)&&/file|size|large/i.test(m))return "Il file supera i 25 MB.";
   if(/orme_link_con_didascalia/.test(m))return "Scrivi una didascalia insieme al link.";
@@ -443,10 +443,10 @@ function voce(x,firme){
 
 /* MEGAFONO: tutti sono editori */
 var M={tipo:"karma_yoga",vis:"pubblico",el:"",file:[],audio:null,rec:null,msg:""};
-var TIPI_M=[["karma_yoga","Karma Yoga, praticantato e servizio alla comunità","mettere a disposizione tempo e risorse"],["articolo","Articolo","in evidenza nel giornale"],["festa","Festa","un evento, con giorno e ora"],["obiettivo","Obiettivo","cosa c'è da fare, entro quando"]];
+var TIPI_M=[["karma_yoga","Dono · scambio","descrivere, mettere foto, archiviare documenti o audio"],["articolo","Articolo","in evidenza nel giornale"],["festa","Festa","un evento, con giorno e ora"],["obiettivo","Obiettivo","cosa c'è da fare, entro quando"]];
 function vMegafono(){
   var c=$("#corpo");
-  if(!io.id){c.innerHTML='<p class="et">Megafono · tutti sono editori</p><h3>Cosa fai?</h3><div class="card"><span class="t">Per scrivere nel giornale si entra con il codice che arriva per mail.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div>';return;}
+  if(!io.id){c.innerHTML='<p class="et">Megafono · tutti sono editori</p><h3>Cosa fai?</h3><p class="nota" style="margin:-4px 0 12px;font-style:italic">In questo spazio il nostro dare diventa un\'offerta all\'esistenza.</p><div class="card"><span class="t">Per scrivere nel giornale si entra con il codice che arriva per mail.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div>';return;}
   var tipi=TIPI_M.slice();
   if(io.coordina){tipi.push(["diretta","Diretta","radio, con giorno e ora"]);tipi.push(["lezione","Lezione","ogni settimana, stesso giorno e ora"]);}
   var t=M.tipo,area="";
@@ -459,21 +459,20 @@ function vMegafono(){
       '<div class="due"><label>Durata, in minuti<input type="number" id="m-durata" value="60" min="5" max="600"></label><label>Dal giorno<input type="date" id="m-dal" value="'+oggiISO()+'"></label></div>'+
       '<label>Dove (mai l\'indirizzo di una casa)<input type="text" id="m-luogo" maxlength="200" autocomplete="off"></label><label>Link per collegarsi (https://)<input type="url" id="m-link" autocomplete="off" inputmode="url"></label>';
   }else{
-    /* 19 ott 11:39, Gab: «Karma Yoga, praticantato e servizio alla comunità / a questo punto però bisogna spiegare che in questo spazio è possibile raccontare il servizio…» */
-    area=(t==="karma_yoga"?'<p class="nota" style="margin:0 0 10px">In questo spazio è possibile raccontare il servizio che si dà a luoghi e persone, mettere a disposizione tempo e risorse, donare o scambiare prodotti e trattamenti.</p>':'')+
-      (t==="articolo"?'<label>Titolo<input type="text" id="m-titolo" maxlength="120" autocomplete="off"></label>':'')+
+    /* 19 ott 12:04, Gab: «togli il tasto karma yoga / metti dono scambio come primo bottone, dando la possibilità di descrivere, mettere foto, archiviare documenti o audio». Nel database il tipo resta karma_yoga. */
+    area=(t==="articolo"?'<label>Titolo<input type="text" id="m-titolo" maxlength="120" autocomplete="off"></label>':'')+
       '<label>'+(t==="obiettivo"?"Cosa c'è da fare":"Il testo, o la didascalia")+'<textarea id="m-testo"></textarea></label>'+
       (t==="festa"?'<div class="due"><label>Giorno<input type="date" id="m-data" value="'+oggiISO()+'"></label><label>Ora<input type="time" id="m-ora"></label></div>':'')+
       (t==="obiettivo"?'<div class="due"><label>Entro il<input type="date" id="m-entro"></label><label>Quante persone servono<input type="number" id="m-quanti" min="1" max="999"></label></div>':'')+
       '<label>Un link, anche YouTube (https://)<input type="url" id="m-link" autocomplete="off" inputmode="url" placeholder="https://"></label>'+
-      '<div class="azioni"><label class="btn" for="m-file">Foto o audio</label><input class="file" type="file" id="m-file" accept="image/*,audio/*,.m4a,.mp3,.ogg,.wav" multiple>'+
+      '<div class="azioni"><label class="btn" for="m-file">Foto, documenti o audio</label><input class="file" type="file" id="m-file" accept="image/*,audio/*,.m4a,.mp3,.ogg,.wav,.pdf,.doc,.docx,.odt,.txt,.rtf,.xls,.xlsx,.ods,.ppt,.pptx,.odp" multiple>'+
       '<button class="btn" id="m-reg" type="button">'+(M.rec?'<span class="reg"><span class="punto"></span>Ferma</span>':'Registra un vocale')+'</button></div>'+
       '<div class="allegati" id="m-allegati"></div>'+(M.msg?'<p class="nota">'+esc(M.msg)+'</p>':'')+
       '<label>In quale cartella va<select id="m-el"><option value="">nessuna</option>'+ELEMENTI.map(function(e){return '<option value="'+e[0]+'"'+(M.el===e[0]?' selected':'')+'>'+e[1]+'</option>';}).join("")+'</select></label>'+
       '<p class="et" style="margin-top:6px">Chi lo legge</p><div class="vis">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button type="button" data-mv="'+v+'" aria-pressed="'+(M.vis===v)+'">'+VIS[v]+'</button>';}).join("")+'</div>'+
       '<p class="nota">Con un link o un allegato la didascalia serve sempre. Gli indirizzi delle case non si scrivono qui.</p>';
   }
-  c.innerHTML='<p class="et">Megafono · tutti sono editori</p><h3>Cosa fai?</h3>'+
+  c.innerHTML='<p class="et">Megafono · tutti sono editori</p><h3>Cosa fai?</h3><p class="nota" style="margin:-4px 0 12px;font-style:italic">In questo spazio il nostro dare diventa un\'offerta all\'esistenza.</p>'+
     '<div class="scelte">'+tipi.map(function(x){return '<button class="scelta" data-tipo="'+x[0]+'" aria-pressed="'+(x[0]===t)+'">'+x[1]+'<small>'+esc(x[2])+'</small></button>';}).join("")+'</div>'+
     '<div class="card modulo">'+area+'<div class="azioni"><button class="btn pieno" id="m-manda">'+(t==="diretta"?"Crea la diretta":t==="lezione"?"Metti la lezione":"Manda")+'</button></div><div class="toast" id="m-ok" hidden></div></div>';
   c.querySelectorAll("[data-tipo]").forEach(function(b){b.onclick=function(){if(M.rec)return;M.tipo=b.getAttribute("data-tipo");M.msg="";vMegafono();};});
@@ -600,7 +599,7 @@ function vObiettivi(){
     lista=lista.slice().sort(function(a,b){return ord[a.stadio||"in_coda"]-ord[b.stadio||"in_coda"];});
     var bis=cache.bisogni||[];
     e.innerHTML=(lista.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo qui, per ora.</div>')+
-      (bis.length?'<p class="et" style="margin-top:8px">I bisogni del villaggio · karma yoga</p>'+bis.map(function(x){return '<div class="card"><span class="t">'+esc(x.titolo)+'</span>'+(x.dettaglio?'<span class="m">'+esc(x.dettaglio)+'</span>':'')+
+      (bis.length?'<p class="et" style="margin-top:8px">I bisogni del villaggio</p>'+bis.map(function(x){return '<div class="card"><span class="t">'+esc(x.titolo)+'</span>'+(x.dettaglio?'<span class="m">'+esc(x.dettaglio)+'</span>':'')+
         '<div class="fine">'+(x.entro?'<span class="m">entro il '+esc(new Date(x.entro).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+(io.id?'<button class="mini oro" data-bisogno="'+esc(x.id)+'">Lo prendo</button>':'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';}).join(""):"")+
       (io.id?'<p class="nota">Tocca lo stato per spostarlo avanti.</p>':'');
     legaVai(e);legaObiettivi(e);
