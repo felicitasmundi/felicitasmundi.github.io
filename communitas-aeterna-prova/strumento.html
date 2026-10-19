@@ -132,6 +132,8 @@ textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:f
 .stanza b{font-family:var(--serif);font-size:18px;font-weight:600}
 .stanza span{font-size:12px;color:var(--tenue);text-align:right}
 .cerchi{display:flex;flex-direction:column;gap:8px}
+.due-col{display:grid;grid-template-columns:1fr;gap:10px}@media (min-width:640px){.due-col{grid-template-columns:1fr 1fr}}
+.punti{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45}
 .cerchio-b{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:var(--foglio);cursor:pointer;font:inherit;color:inherit;width:100%}
 .cerchio-b b{display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.1}
 .cerchio-b small{display:block;font-size:12.5px;color:var(--tenue);margin-top:2px}
@@ -144,6 +146,36 @@ textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:f
 @keyframes pulsa{50%{opacity:.3}}
 audio{width:100%;height:36px;margin:4px 0}
 a{color:var(--blu)}
+/* il cervello digitale: la stessa carta del Cervello Felicitas */
+.libro{display:flex;flex-direction:column}
+.lb-testa{padding:6px 0 18px;border-bottom:3px double var(--inchiostro)}
+.lb-testa h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,7vw,48px);line-height:1.05;letter-spacing:.03em;margin:6px 0 10px;overflow-wrap:anywhere}
+.lb-occ{font:600 11.5px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--oro);margin:0 0 4px}
+.lb-gab{margin:10px 0 0;padding:2px 0 2px 16px;border-left:3px solid #D4AF6A}
+.lb-gab p{margin:0;font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.3}
+.lb-gab cite{display:block;font-style:normal;font-size:12.5px;color:var(--tenue);margin-top:4px}
+.lb-indice{padding:16px 0;border-bottom:1px solid var(--linea)}
+.lb-indice h2{font-family:var(--serif);font-weight:700;font-size:26px;margin:0 0 8px}
+.lb-indice ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
+.lb-indice li button{font:15px var(--sans);background:none;border:0;border-bottom:1px solid var(--linea);padding:0;color:var(--inchiostro);cursor:pointer;text-align:left}
+.lb-indice li small{color:var(--tenue);font-size:12px;margin-left:8px}
+.lb-passo{padding:24px 0;border-bottom:1px solid var(--linea);display:grid;grid-template-columns:56px 1fr;gap:0 16px;scroll-margin-top:70px}
+@media(max-width:520px){.lb-passo{grid-template-columns:1fr}.lb-cerchi{margin-bottom:10px}}
+.lb-cerchi{width:48px;height:48px}.lb-cerchi circle{fill:none;stroke:var(--linea);stroke-width:1.4}.lb-cerchi circle.on{stroke:var(--oro);stroke-width:2}.lb-cerchi circle.punto{fill:var(--oro);stroke:none}
+.lb-corpo{min-width:0;display:flex;flex-direction:column;gap:8px}
+.lb-corpo h2{font-family:var(--serif);font-weight:700;font-size:clamp(26px,4.6vw,34px);line-height:1.08;margin:0;overflow-wrap:anywhere}
+.lb-riga{padding:2px 0 2px 14px;border-left:3px solid var(--linea)}
+.lb-riga p{margin:0;font-family:var(--serif);font-size:19px;line-height:1.35;white-space:pre-wrap;overflow-wrap:anywhere}
+.lb-riga small{display:block;font-size:12px;color:var(--tenue);margin-top:2px}
+.lb-togli{font:inherit;background:none;border:0;padding:0;color:var(--err);cursor:pointer;text-decoration:underline}
+.lb-nuova{display:flex;flex-direction:column;gap:8px;align-items:flex-start}.lb-nuova textarea{min-height:80px}
+.lb-apri{border-bottom:0}
+.lb-com{margin:6px 0 4px 6px;display:flex;flex-direction:column;gap:6px}
+.lb-c{padding:4px 0 4px 12px;border-left:2px dotted var(--oro)}
+.lb-c p{margin:0;font-size:14.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+.lb-c small{display:block;font-size:12px;color:var(--tenue)}
+.lb-commenta{font:600 12.5px var(--sans);background:none;border:0;padding:2px 0;color:var(--oro);cursor:pointer;text-align:left}
+.lb-cnuovo{display:flex;flex-direction:column;gap:8px}.lb-cnuovo textarea{min-height:70px}
 </style>
 <style>
 /* ═══ La cornice cosmo (18 ott 22:24, Gab: «prefestisco a / trovo che le barre blu siano molto belle e nel caso possiamo rendere di quel colore le finestre attive come la diretta»).
@@ -495,20 +527,43 @@ function voce(x,firme){
 var cerchio=null,cerchiCache=null;
 function vCervello(){
   var c=$("#corpo");
+  /* 19 ott 20:16-20:20, Gab: cosa puoi fare, con e senza AI. «10 euro al mese […]» · «ok 10 o karma yoga».
+     19 ott 21:07-21:08, Gab (thread «Attiva il tuo cervello»): il percorso «20 euro a settimana», «o paghi 80 euro al mese o fai il karma yoga» · «per l integrazione sono 26». I 10 € non includono più la base del praticantato.
+     I quattro punti sono le sue parole (20:17), così come le ha scritte. */
   c.innerHTML='<p class="et">Cervello</p>'+
     '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
-    /* Gab, 15/10, ripreso il 19/10 19:35: «ricordati di scrivere in cervello che è open source, che c e sicurezza sui dati e che può essere estratto e spostato altrove» */
+    /* Gab, 15/10, ripreso il 19/10 19:35 */
     '<p class="nota" style="margin:8px 2px 0">Il Cervello è open source, senza rivendita dei dati, e l\'esportazione completa resta sempre disponibile.</p>'+
-    '<p class="et" style="margin-top:12px">Cerchi</p><div class="cerchi" id="ce-lista">'+(io.id?'<p class="nota">Un momento…</p>':'<div class="card"><span class="t">I cerchi, cioè lo spazio solo per te, il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+'</div>'+
-    (io.id&&io.nucleo?'<p class="et" style="margin-top:12px">Apri un\'azienda · per il nucleo</p><div class="card modulo" id="az-apri">'+
-      '<label class="m" for="az-nome">Nome dell\'azienda</label><input type="text" id="az-nome">'+
+    '<p class="et" style="margin-top:14px">Cosa puoi fare nel Cervello</p>'+
+    '<div class="due-col">'+
+      '<div class="card"><b>Senza AI</b><span class="m">10 € al mese</span>'+
+        '<ol class="punti"><li><b>Ordine:</b> un indice e le regole su dove sta cosa, quindi trova subito il capitolo giusto senza rileggere tutto.</li>'+
+        '<li><b>Collegamenti:</b> vede quello che cambia ogni giorno (ordini, compiti, giornale), non solo i file fermi.</li>'+
+        '<li><b>Decisioni col perché:</b> se qualcuno va contro una cosa decisa, se ne accorge.</li>'+
+        '<li><b>Lavora da solo:</b> manda le mail delle 9 e delle 22, a ciascuno la sua parte.</li></ol></div>'+
+      '<div class="card"><b>Con AI</b><span class="m">26 € al mese</span>'+
+        '<span class="t" style="margin-top:6px">In più l\'AI lavora con la memoria Felicitas: trascrive, scrive, impagina, «detta e organizza».</span></div>'+
+    '</div>'+
+    '<div class="card" style="margin-top:10px"><b>Il percorso · praticantato Antaḥkaraṇa</b><span class="m">20 € a settimana (80 € al mese), oppure karma yoga</span></div>'+
+    '<p class="nota" style="margin:8px 2px 0">Leggere il libro Felicitas e il proprio vicinato è gratis.</p>'+
+    (io.id?
+      '<p class="et" style="margin-top:14px">Il cervello digitale</p>'+
+      '<button class="cerchio-b" data-cerchio="io"><span><b>Il percorso del talento</b><small>i capitoli di '+esc(io.nome||"chi entra")+' · li legge solo chi li scrive</small></span><span>›</span></button>'+
+      '<p class="et" style="margin-top:14px">I cerchi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'
+    :'<div class="card" style="margin-top:14px"><span class="t">Il percorso del talento e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
+    (io.id&&io.nucleo?'<p class="et" style="margin-top:14px">Porta un\'azienda nel Cervello · per il nucleo</p><div class="card modulo" id="az-apri">'+
+      /* dal file dei costi (Attiva il tuo cervello, 19/10), riga Azienda; la consegna a domicilio non è pronta (Gab 19:33) */
+      '<span class="t">L\'azienda trova: gestionale e logistica, cervello aggiornato, comunicazione tra i team (mail delle 9 e delle 22 con la parte di ciascuno), visibilità su Felicitas.</span>'+
+      '<label class="m" for="az-nome" style="margin-top:8px">Nome dell\'azienda</label><input type="text" id="az-nome">'+
       '<label class="m" for="az-terr" style="margin-top:6px">Territorio</label><input type="text" id="az-terr">'+
       '<label class="m" for="az-ref" style="margin-top:6px">Mail del referente (deve essere già entrato)</label><input type="email" id="az-ref">'+
-      '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="az-vai">Apri</button><span class="m" id="az-esito"></span></div></div>':'');
+      '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="az-vai">Apri lo spazio dell\'azienda</button><span class="m" id="az-esito"></span></div></div>':'');
   if(!io.id)return;
+  cerchiCache={io:{id:"io",tipo:"io",nome:"Il percorso del talento",dentro:true}};
+  legaCerchi(c);
   if(io.nucleo)$("#az-vai").onclick=function(){var b=this,n=$("#az-nome").value.trim();if(n.length<2){$("#az-esito").textContent="Il nome serve.";return;}
     b.disabled=true;db.rpc("fm_azienda_apri",{p_nome:n,p_territorio:$("#az-terr").value.trim(),p_mail_referente:$("#az-ref").value.trim()}).then(function(r){b.disabled=false;
-      if(r&&r.error){$("#az-esito").textContent=/fm_azienda_apri|function/i.test(r.error.message||"")?"Le aziende si aprono con l'SQL 80.":errore(r.error);return;}
+      if(r&&r.error){$("#az-esito").textContent=errore(r.error);return;}
       if(r.data!=="ok"){$("#az-esito").textContent=r.data;if(!/^Azienda aperta/.test(r.data))return;}
       vCervello();},function(){b.disabled=false;});};
   Promise.all([
@@ -516,39 +571,147 @@ function vCervello(){
     db.from("orme").select("id,titolo").eq("id",VILLAGGIO).maybeSingle().then(function(r){return (r&&r.data&&r.data.titolo)||"Il villaggio";},function(){return "Il villaggio";})
   ]).then(function(v){
     var e=$("#ce-lista");if(!e||vista!=="cervello")return;
-    cerchiCache={io:{id:"io",tipo:"io",nome:"Solo io",dentro:true}};
-    var io_b='<button class="cerchio-b" data-cerchio="io"><span><b>Solo io</b><small>quello che scrivi solo per te</small></span><span>›</span></button>';
     var l=v[0];
-    if(l===null){e.innerHTML=io_b+'<div class="vuoto">I cerchi si aprono con l\'SQL 79.</div>';legaCerchi(e);return;}
+    if(l===null){e.innerHTML='<div class="vuoto">I cerchi non si leggono adesso.</div>';return;}
     cerchiCache[VILLAGGIO]={id:VILLAGGIO,tipo:"villaggio",nome:v[1],dentro:true,guido:io.coordina};
     l.forEach(function(x){cerchiCache[x.id]=x;});
     var vic=l.filter(function(x){return x.tipo==="vicinato";});
     function bott(x){return '<button class="cerchio-b" data-cerchio="'+esc(x.id)+'"><span><b>'+esc(x.nome)+'</b><small>'+esc(x.tipo)+(x.territorio?' · '+esc(x.territorio):'')+' · '+(+x.persone===1?'1 persona':(+x.persone)+' persone')+'</small></span>'+
       (x.guido?'<span class="chip on">'+(x.tipo==="azienda"?"referente":"guidi")+'</span>':x.dentro?'<span class="chip on">dentro</span>':'<span>›</span>')+'</button>';}
-    var vil='<button class="cerchio-b" data-cerchio="'+VILLAGGIO+'"><span><b>'+esc(v[1])+'</b><small>il villaggio · '+vic.length+(vic.length===1?' vicinato':' vicinati')+'</small></span><span>›</span></button>';
-    e.innerHTML=io_b+vil+["vicinato","gruppo","azienda"].map(function(t){return l.filter(function(x){return x.tipo===t;}).map(bott).join("");}).join("");
+    /* Gab, 19/10 20:18: «villaggio è un team operativo organizzato in vicinati» */
+    var vil='<button class="cerchio-b" data-cerchio="'+VILLAGGIO+'"><span><b>'+esc(v[1])+'</b><small>il villaggio, un team operativo organizzato in vicinati · '+vic.length+(vic.length===1?' vicinato':' vicinati')+'</small></span><span>›</span></button>';
+    e.innerHTML=vil+["vicinato","gruppo","azienda"].map(function(t){return l.filter(function(x){return x.tipo===t;}).map(bott).join("");}).join("");
     legaCerchi(e);
   });
 }
 function legaCerchi(e){e.querySelectorAll("[data-cerchio]").forEach(function(b){b.onclick=function(){cerchio=b.getAttribute("data-cerchio");vai("cerchio");};});}
-/* SOLO IO · 19 ott 19:34, Gab: «crea spazio solo io». Quello che si scrive con «solo io» dal megafono: lo legge solo chi l'ha scritto. */
-function vSoloIo(testa){
+/* in fondo a ogni cerchio, il ritorno ben visibile (Gab 20:16: «non c e il bottone per tornare indietro») */
+function fondoIndietro(c){
+  c.insertAdjacentHTML("beforeend",'<div class="azioni" style="margin-top:18px"><button class="btn" id="ce-indietro2" style="width:100%">← Torna al Cervello</button></div>');
+  $("#ce-indietro2").onclick=function(){vai("cervello");};
+}
+/* IL CERVELLO DIGITALE · 19 ott, Gab: «anche alle persone si crea cervello digitale evoluto» · «io ho bisogno di vedere lo stesso layot usato per felicitas, anche per utenti e team»
+   · «basta usare un tasto che aggiunge una riga, direttamente sullo schermo». Capitoli e righe nel database (SQL 81). Stessa carta e stesso ordine del Cervello Felicitas: testata, indice, capitoli. */
+var LB_CERCHI='<svg class="lb-cerchi" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="9" class="on"/><circle cx="28" cy="28" r="17"/><circle cx="28" cy="28" r="25"/><circle cx="28" cy="28" r="3.2" class="punto"/></svg>';
+function libro(box,chi){
+  if(!box)return;
+  var nomiL={};
+  function carica(){
+    var p1=db.from("cervello_capitoli").select("id,titolo,ordine,aperto_il").eq(chi.campo,chi.id).order("ordine").order("aperto_il");
+    var p2=chi.campo==="persona_id"?Promise.resolve(null):db.rpc("fm_cerchio_persone",{p_vicinato:chi.id}).then(function(r){((r&&r.data)||[]).forEach(function(p){nomiL[p.persona_id]=p.nome;});},function(){});
+    Promise.all([p1,p2]).then(function(v){
+      var r=v[0];if(!document.body.contains(box))return;
+      if(!r||r.error){box.innerHTML='<div class="vuoto">Il cervello si apre con l\'SQL 81.</div>';return;}
+      var caps=r.data||[],ids=caps.map(function(k){return k.id;});
+      (ids.length?db.from("cervello_righe").select("id,capitolo_id,testo,scritta_da,scritta_il").in("capitolo_id",ids).order("scritta_il"):Promise.resolve({data:[]})).then(function(q){
+        var righe=(q&&q.data)||[],rid=righe.map(function(g){return g.id;});
+        if(chi.campo==="persona_id"||!rid.length){if(document.body.contains(box))disegnaL(caps,righe,[],{});return;}
+        /* commenti e audio sotto ogni riga (SQL 83); se l'83 non c'è, il libro si vede lo stesso, senza commenti */
+        db.from("cervello_commenti").select("id,riga_id,testo,audio,scritto_da,scritto_il").in("riga_id",rid).order("scritto_il").then(function(c){
+          var com=(c&&!c.error&&c.data)||[],pa=com.filter(function(x){return x.audio;}).map(function(x){return x.audio;});
+          (pa.length?db.storage.from("cervello").createSignedUrls(pa,3600).then(function(u){var m={};((u&&u.data)||[]).forEach(function(x){if(x&&x.signedUrl)m[x.path]=x.signedUrl;});return m;},function(){return {};}):Promise.resolve({})).then(function(url){
+            if(document.body.contains(box))disegnaL(caps,righe,c&&c.error?null:com,url);});
+        },function(){if(document.body.contains(box))disegnaL(caps,righe,null,{});});});
+    },function(){box.innerHTML='<div class="vuoto">Il cervello non si legge adesso.</div>';});
+  }
+  function disegnaL(caps,righe,com,url){
+    var per={},cpr={};righe.forEach(function(g){(per[g.capitolo_id]=per[g.capitolo_id]||[]).push(g);});
+    (com||[]).forEach(function(x){(cpr[x.riga_id]=cpr[x.riga_id]||[]).push(x);});
+    function quando(t){return esc(new Date(t).toLocaleDateString("it-IT",{day:"numeric",month:"long"}));}
+    function commenti(g){if(!com)return '';
+      return '<div class="lb-com">'+(cpr[g.id]||[]).map(function(x){
+        return '<div class="lb-c">'+(x.testo?'<p>'+esc(x.testo)+'</p>':'')+(x.audio&&url[x.audio]?'<audio controls preload="none" src="'+esc(url[x.audio])+'"></audio>':'')+
+          '<small>'+quando(x.scritto_il)+(nomiL[x.scritto_da]?' · '+esc(nomiL[x.scritto_da]):'')+(x.scritto_da===io.id?' · <button class="lb-togli" data-togli-c="'+x.id+'">togli</button>':'')+'</small></div>';}).join("")+
+        '<div data-cbox="'+g.id+'"><button class="lb-commenta" data-commenta="'+g.id+'">Commenta · scrivi o registra un audio</button></div></div>';}
+    var sq=chi.campo!=="persona_id";
+    box.innerHTML='<div class="libro">'+
+      '<header class="lb-testa"><p class="lb-occ">'+esc(chi.occ)+'</p><h1>'+esc(chi.titolo)+'</h1>'+(chi.apertura||'')+'</header>'+
+      (caps.length?'<nav class="lb-indice" aria-label="Indice"><h2>Indice</h2><ol>'+caps.map(function(k){var n=(per[k.id]||[]).length;
+        return '<li><button data-vai-cap="'+k.id+'">'+esc(k.titolo)+'</button><small>'+(n===1?'1 riga':n+' righe')+'</small></li>';}).join("")+'</ol></nav>':'')+
+      caps.map(function(k,i){
+        return '<section class="lb-passo" id="cap-'+k.id+'">'+LB_CERCHI+'<div class="lb-corpo"><p class="lb-occ">Capitolo '+(i+1)+'</p><h2>'+esc(k.titolo)+'</h2>'+
+          '<div class="lb-righe">'+(per[k.id]||[]).map(function(g){
+            return '<div class="lb-riga"><p>'+esc(g.testo)+'</p><small>'+esc(new Date(g.scritta_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+
+              (sq&&nomiL[g.scritta_da]?' · '+esc(nomiL[g.scritta_da]):'')+(g.scritta_da===io.id?' · <button class="lb-togli" data-togli="'+g.id+'">togli</button>':'')+'</small>'+commenti(g)+'</div>';}).join("")+'</div>'+
+          '<div class="lb-nuova" data-box="'+k.id+'"><button class="mini oro" data-riga="'+k.id+'">+ Aggiungi una riga</button></div></div></section>';}).join("")+
+      '<section class="lb-passo lb-apri">'+LB_CERCHI+'<div class="lb-corpo"><p class="lb-occ">'+(caps.length?'Capitolo '+(caps.length+1):'Il primo capitolo')+'</p>'+
+        '<div class="modulo"><label for="lb-tit">Titolo del capitolo</label><input type="text" id="lb-tit" maxlength="200">'+
+        '<div class="azioni"><button class="btn pieno" id="lb-apri">Apri il capitolo</button><span class="m" id="lb-esito"></span></div></div></div></section>'+
+    '</div>';
+    box.querySelectorAll("[data-vai-cap]").forEach(function(b){b.onclick=function(){var s=document.getElementById("cap-"+b.getAttribute("data-vai-cap"));if(s)s.scrollIntoView({behavior:"smooth"});};});
+    box.querySelectorAll("[data-riga]").forEach(function(b){b.onclick=function(){
+      var id=b.getAttribute("data-riga"),w=box.querySelector('[data-box="'+id+'"]');
+      w.innerHTML='<textarea aria-label="Nuova riga" maxlength="4000"></textarea><div class="azioni"><button class="btn pieno">Salva</button><button class="btn">Annulla</button></div>';
+      var t=w.querySelector("textarea"),bs=w.querySelectorAll("button");t.focus();
+      bs[1].onclick=function(){disegnaL(caps,righe,com,url);};
+      bs[0].onclick=function(){var s=t.value.trim();if(!s)return;bs[0].disabled=true;
+        db.from("cervello_righe").insert({capitolo_id:id,testo:s}).then(function(r){if(r&&r.error){bs[0].disabled=false;w.insertAdjacentHTML("beforeend",'<p class="nota">'+esc(errore(r.error))+'</p>');return;}carica();},function(){bs[0].disabled=false;});};};});
+    box.querySelectorAll("[data-togli-c]").forEach(function(b){b.onclick=function(){b.disabled=true;
+      db.from("cervello_commenti").delete().eq("id",b.getAttribute("data-togli-c")).then(function(){carica();},function(){b.disabled=false;});};});
+    box.querySelectorAll("[data-commenta]").forEach(function(b){b.onclick=function(){commentaBox(b.getAttribute("data-commenta"));};});
+    box.querySelectorAll("[data-togli]").forEach(function(b){b.onclick=function(){b.disabled=true;
+      db.from("cervello_righe").delete().eq("id",b.getAttribute("data-togli")).then(function(){carica();},function(){b.disabled=false;});};});
+    $("#lb-apri").onclick=function(){var b=this,t=$("#lb-tit").value.trim();if(!t){$("#lb-esito").textContent="Il titolo serve.";return;}b.disabled=true;
+      var riga={titolo:t,ordine:caps.length};riga[chi.campo]=chi.id;
+      db.from("cervello_capitoli").insert(riga).then(function(r){if(r&&r.error){b.disabled=false;$("#lb-esito").textContent=errore(r.error);return;}carica();},function(){b.disabled=false;});};
+  }
+  /* il commento: testo, audio registrato o file audio, o tutti e due. L'audio va nello spazio «cervello» (SQL 83), in una cartella col numero del commento. */
+  function commentaBox(rid){
+    var w=box.querySelector('[data-cbox="'+rid+'"]'),C={file:null,rec:null};
+    function disegna(){
+      w.innerHTML='<div class="lb-cnuovo"><textarea aria-label="Commento" maxlength="4000" placeholder="Il commento"></textarea>'+
+        '<div class="azioni"><button class="mini'+(C.rec?' oro':'')+'" data-a="reg">'+(C.rec?'■ Ferma la registrazione':'● Registra un audio')+'</button>'+
+        '<label class="mini">Scegli un file audio<input type="file" accept="audio/*" class="file"></label></div>'+
+        (C.file?'<p class="nota">Audio pronto: '+esc(C.file.name||"vocale")+' · <button class="lb-togli" data-a="via">togli</button></p>':'')+
+        '<div class="azioni"><button class="btn pieno" data-a="ok">Salva</button><button class="btn" data-a="no">Annulla</button><span class="m" data-a="esito"></span></div></div>';
+      var t=w.querySelector("textarea");if(C.testo)t.value=C.testo;t.oninput=function(){C.testo=t.value;};
+      w.querySelector('input[type=file]').onchange=function(){if(this.files[0]){C.file=this.files[0];disegna();}};
+      w.querySelector('[data-a="reg"]').onclick=registraC;
+      var via=w.querySelector('[data-a="via"]');if(via)via.onclick=function(){C.file=null;disegna();};
+      w.querySelector('[data-a="no"]').onclick=function(){if(C.rec)C.rec.stop();carica();};
+      w.querySelector('[data-a="ok"]').onclick=salvaC;
+    }
+    function registraC(){
+      if(C.rec){C.rec.stop();return;}
+      if(!navigator.mediaDevices||!window.MediaRecorder){w.querySelector('[data-a="esito"]').textContent="Il microfono qui non si apre: si può scegliere un file audio.";return;}
+      navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){
+        var pezzi=[];C.rec=new MediaRecorder(st);
+        C.rec.ondataavailable=function(e){if(e.data.size)pezzi.push(e.data);};
+        C.rec.onstop=function(){var tipo=(C.rec.mimeType||"audio/webm").split(";")[0],est=/mp4/.test(tipo)?"m4a":/ogg/.test(tipo)?"ogg":"webm",n="vocale."+est;
+          try{C.file=new File(pezzi,n,{type:tipo});}catch(e){C.file=new Blob(pezzi,{type:tipo});C.file.name=n;}
+          st.getTracks().forEach(function(x){x.stop();});C.rec=null;disegna();};
+        C.rec.start();disegna();
+      }).catch(function(){w.querySelector('[data-a="esito"]').textContent="Il microfono qui non si apre: si può scegliere un file audio.";});
+    }
+    function salvaC(){
+      var b=w.querySelector('[data-a="ok"]'),e=w.querySelector('[data-a="esito"]'),t=(C.testo||"").trim();
+      if(!t&&!C.file){e.textContent="Scrivi qualcosa o aggiungi un audio.";return;}
+      if(C.file&&C.file.size>25*1024*1024){e.textContent="L'audio è troppo grande: al massimo 25 MB.";return;}
+      b.disabled=true;e.textContent="Un momento…";
+      var id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():null;
+      var nome=C.file?String(C.file.name||"vocale").replace(/[^\w.\-]+/g,"-"):null,riga={riga_id:rid,testo:t||null};
+      if(id)riga.id=id;if(C.file&&id)riga.audio=id+"/"+nome;
+      db.from("cervello_commenti").insert(riga).then(function(r){
+        if(r&&r.error){b.disabled=false;e.textContent=errore(r.error);return;}
+        if(!riga.audio){carica();return;}
+        db.storage.from("cervello").upload(riga.audio,C.file,{contentType:C.file.type||undefined}).then(function(u){
+          if(u&&u.error){db.from("cervello_commenti").update({audio:null}).eq("id",id).then(function(){},function(){});e.textContent="Il commento è salvato, l'audio no: "+errore(u.error);b.disabled=false;return;}
+          carica();},function(){b.disabled=false;e.textContent="L'audio non è partito.";});
+      },function(){b.disabled=false;e.textContent="Non è partito.";});
+    }
+    disegna();w.querySelector("textarea").focus();
+  }
+  box.innerHTML='<p class="nota">Un momento…</p>';
+  carica();
+}
+/* IL PERCORSO DEL TALENTO · Gab, 19/10: «non è il tuo spazio, è il percorso del talento». Lo legge solo chi lo scrive (SQL 81). */
+function vPercorso(){
   var c=$("#corpo");
-  c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Qui c\'è quello che scrivi con «solo io»: lo leggi solo tu.</span>'+
-    '<div class="fine"><button class="mini oro" id="io-scrivi">Scrivi solo per te</button><button class="mini" data-vai="cartelle">Cartelle</button></div></div>'+
-    '<div class="foglio-g" id="io-lista" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
+  c.innerHTML='<div class="giro" style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div><div id="lb"></div>';
   $("#ce-indietro").onclick=function(){vai("cervello");};
-  $("#io-scrivi").onclick=function(){M.vis="solo_me";vai("megafono");};
-  legaVai(c);
-  db.from("orme").select(CAMPI).eq("persona_id",io.id).eq("visibilita","solo_me").order("momento",{ascending:false}).limit(40).then(function(r){
-    var g=$("#io-lista");if(!g||cerchio!=="io")return;var l=(r&&!r.error&&r.data)||[];
-    if(!l.length){g.innerHTML='<p class="nota" style="padding:10px 0;text-align:center">Ancora niente. Dal megafono, scegliendo «solo io», quello che scrivi arriva qui.</p>';return;}
-    var files=[];l.forEach(function(o){(o.orma_file||[]).forEach(function(f){files.push(f);});});
-    firmaURL(files).then(function(u){if(cerchio!=="io")return;
-      g.innerHTML=l.map(function(o){return voce({o:o,t:new Date(o.inizio_il||o.momento).getTime()},u);}).join("");
-      g.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vCerchio();};});
-      legaVis(g);});
-  },function(){});
+  fondoIndietro(c);
+  libro($("#lb"),{campo:"persona_id",id:io.id,occ:"Il percorso del talento",titolo:io.nome||"Il percorso del talento",
+    apertura:'<blockquote class="lb-gab"><p>«il percorso del talento con il praticantato applicato alle cose che si desidera fare e si mettono assieme»</p><cite>Gabriele Dettori · 19 ottobre</cite></blockquote>'});
 }
 /* AZIENDA · aggiungere una persona del team (SQL 80): la aggiunge il referente o il nucleo, con la mail con cui è entrata */
 function aziendaAggiungi(az){
@@ -566,26 +729,35 @@ function chipRuolo(x){var p=x.split(":");return '<span class="chip f-'+esc(p[0])
 function vCerchio(){
   var c=$("#corpo"),x=cerchiCache&&cerchiCache[cerchio];
   if(!x){vai("cervello");return;}
-  var testa='<div class="giro" style="margin-bottom:4px"><button class="mini" id="ce-indietro">← Cerchi</button></div><p class="et">'+({villaggio:"Il villaggio",vicinato:"Il vicinato",gruppo:"Il gruppo",azienda:"L'azienda",io:"Lo spazio"})[x.tipo]+'</p><h3>'+esc(x.nome)+'</h3>'+(x.territorio?'<p class="nota">'+esc(x.territorio)+'</p>':'');
+  var testa='<div class="giro" style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div><p class="et">'+({villaggio:"Il villaggio",vicinato:"Il vicinato",gruppo:"Il gruppo",azienda:"L'azienda",io:"Solo per te"})[x.tipo]+'</p><h3>'+esc(x.nome)+'</h3>'+(x.territorio?'<p class="nota">'+esc(x.territorio)+'</p>':'');
   if(x.tipo==="villaggio"){
-    c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">L\'area attiva in un territorio ampio, legata a una civiltà e alla sua radice linguistica. Dentro il villaggio si propongono i vicinati.</span></div>'+(io.coordina?'<div id="o-ruoli"></div>':'');
+    /* Gab, 19/10 20:18, verbatim (refuso corretto): «villaggio è un team operativo organizzato in vicinati, con l intento di portare avanti i progetti logistici e tecnologici legati a felicitas» */
+    var vv=Object.keys(cerchiCache).map(function(k){return cerchiCache[k];}).filter(function(y){return y.tipo==="vicinato";});
+    c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Un team operativo organizzato in vicinati, con l\'intento di portare avanti i progetti logistici e tecnologici legati a Felicitas.</span></div>'+
+      (vv.length?'<p class="et" style="margin-top:12px">I vicinati</p><div class="cerchi">'+vv.map(function(y){return '<button class="cerchio-b" data-cerchio="'+esc(y.id)+'"><span><b>'+esc(y.nome)+'</b><small>'+(y.territorio?esc(y.territorio)+' · ':'')+(+y.persone===1?'1 persona':(+y.persone)+' persone')+'</small></span><span>›</span></button>';}).join("")+'</div>':'')+
+      (io.coordina?'<div id="o-ruoli"></div>':'');
     $("#ce-indietro").onclick=function(){vai("cervello");};
+    legaCerchi(c);
     if(io.coordina)vRuoli();
+    fondoIndietro(c);
     return;
   }
-  if(x.tipo==="io"){vSoloIo(testa);return;}
+  if(x.tipo==="io"){vPercorso();return;}
   var vic=x.tipo==="vicinato";
   if(vic&&!x.dentro&&!x.guido&&!io.coordina){
     /* dal cervello, «Entrare in un vicinato» (approvato 18/10 11:48) */
     c.innerHTML=testa+'<div class="card" style="margin-top:8px"><b>Come si entra</b><span class="t">Il vicinato si apre con quattro passi:</span><ol class="passi"><li>conosciuto di persona, a un incontro;</li><li>un garante: qualcuno già nel vicinato dice «lo conosco»;</li><li>il sì di chi coordina il vicinato, mai automatico;</li><li>la dichiarazione d\'ingresso firmata.</li></ol></div>';
-    $("#ce-indietro").onclick=function(){vai("cervello");};return;
+    $("#ce-indietro").onclick=function(){vai("cervello");};fondoIndietro(c);return;
   }
-  c.innerHTML=testa+
+  var conLibro=x.tipo!=="azienda"&&(x.dentro||x.guido);
+  c.innerHTML=(conLibro?'<div class="giro" style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div><div id="lb"></div>':testa)+
     '<p class="et" style="margin-top:12px">Chi c\'è</p><div class="card" id="ce-persone"><p class="nota">Un momento…</p></div>'+
     (vic&&(x.guido||io.coordina)?'<p class="et" style="margin-top:12px">Dai un ruolo · per chi guida</p><div class="card modulo" id="ce-ruoli"></div>':'')+
     (x.tipo==="azienda"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il referente</p><div class="card modulo" id="az-aggiungi"></div>':'')+
     (x.tipo!=="azienda"?'<p class="et" style="margin-top:12px">Il giornale del '+(vic?'vicinato':'gruppo')+'</p><div class="foglio-g" id="ce-giornale"><p class="nota">Un momento…</p></div>':'');
   if(x.tipo==="azienda"&&(x.guido||io.nucleo))aziendaAggiungi(cerchio);
+  if(conLibro)libro($("#lb"),{campo:vic?"vicinato_id":"squadra_id",id:cerchio,occ:(vic?"Il cervello del vicinato":"Il cervello del gruppo")+(x.territorio?" · "+x.territorio:""),titolo:x.nome});
+  fondoIndietro(c);
   $("#ce-indietro").onclick=function(){vai("cervello");};
   var questo=cerchio;
   db.rpc("fm_cerchio_persone",{p_vicinato:questo}).then(function(r){
