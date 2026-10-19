@@ -32,7 +32,7 @@
 (function () {
   "use strict";
 
-  var INDIRIZZO = "APP.FELICITASMUNDI/piatti/accesso-piatto.html?v=10131548";
+  var INDIRIZZO = "APP.FELICITASMUNDI/piatti/accesso-piatto.html?v=10191400";
   var INVITO_P = "p_slug";              /* ⚠️ da confermare col database */
   /* ⭐ dopo l'ingresso, se non si torna da nessuna parte:
      chi non ha ancora un talento va alla SOGLIA, non alla home —
