@@ -711,17 +711,30 @@ function cardObiettivo(o){
     '<div class="fine">'+(io.id&&(mio||o.persona_id===io.id||io.coordina)?'<button class="pill s-'+s+'" data-stadio="'+esc(o.id)+'" style="border:0;cursor:pointer" aria-label="Cambia stato">'+STADI[s]+'</button>':'<span class="pill s-'+s+'">'+STADI[s]+'</span>')+
     (io.id?(mio?'<button class="mini" data-lascia="'+esc(o.id)+'">Lo lascio</button>':(s!=="sviluppato"?'<button class="mini oro" data-prendo="'+esc(o.id)+'">Lo prendo</button>':'')):'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';
 }
+/* 19 ott 19:12, Gab: «per poter accedere agli obiettivi col karma yoga, si dovrebbe comunque partecipare al praticantato.. è aperto a tutti, ma tutti dovrebbero essere invitati al praticantato» → invito, non vincolo (scelta di Gab, 19:13) */
+var invitoPrat=false;
+function cardInvitoPrat(){
+  return '<div class="card" id="invito-prat"'+(invitoPrat?' style="border-color:var(--oro,#D4AF6A)"':'')+'><b>Praticantato</b>'+
+    (invitoPrat?'<span class="t">Preso. Il karma yoga è aperto a tutti, e tutti sono invitati al praticantato.</span>':'')+
+    '<span class="t">Dal progetto sogno alla cooperazione per una civiltà evoluta.</span>'+
+    '<span class="m">L\'accompagnamento segue il ritmo dei cicli lunari (luna nuova — luna piena). Gli incontri di gruppo avvengono in diretta con Gabriele.</span>'+
+    '<div class="fine"><a class="mini oro" href="cervello.html#praticantato">Che cos\'è il praticantato</a></div></div>';
+}
+function primaVolta(){var k="fm_invito_prat",v=null;try{v=localStorage.getItem(k);localStorage.setItem(k,"1");}catch(e){}return !v;}
 function legaObiettivi(c){
   function dopo(r){if(r&&r.error){alert(errore(r.error));}cache.obiettivi=null;disegna();}
-  c.querySelectorAll("[data-prendo]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_orma",{p_orma:b.getAttribute("data-prendo")}).then(dopo,dopo);};});
+  function dopoPreso(r){if(!(r&&r.error)&&primaVolta())invitoPrat=true;dopo(r);
+    if(invitoPrat)setTimeout(function(){var i=$("#invito-prat");if(i)i.scrollIntoView({behavior:"smooth",block:"center"});},400);}
+  c.querySelectorAll("[data-prendo]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_orma",{p_orma:b.getAttribute("data-prendo")}).then(dopoPreso,dopo);};});
   c.querySelectorAll("[data-lascia]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_lascia_orma",{p_orma:b.getAttribute("data-lascia")}).then(dopo,dopo);};});
   c.querySelectorAll("[data-stadio]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-stadio"),o=(cache.obiettivi||[]).filter(function(x){return x.id===id;})[0];if(!o)return;b.disabled=true;
     db.rpc("fm_cambia_stadio",{p_orma:id,p_stadio:DOPO[o.stadio||"in_coda"]}).then(dopo,dopo);};});
-  c.querySelectorAll("[data-bisogno]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_bisogno",{p_bisogno:b.getAttribute("data-bisogno")}).then(dopo,dopo);};});
+  c.querySelectorAll("[data-bisogno]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_bisogno",{p_bisogno:b.getAttribute("data-bisogno")}).then(dopoPreso,dopo);};});
 }
 function vObiettivi(){
   var c=$("#corpo");
-  c.innerHTML='<p class="et">Obiettivi · con le persone associate</p><h3>Da fare, in corso, fatto</h3><div id="ob"><p class="nota">Un momento…</p></div>';
+  c.innerHTML='<p class="et">Obiettivi · con le persone associate</p><h3>Da fare, in corso, fatto</h3>'+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
+  invitoPrat=false;
   leggiObiettivi().then(function(lista){
     var e=$("#ob");if(!e||vista!=="obiettivi")return;
     var ord={in_avanzamento:0,in_coda:1,sviluppato:2};
