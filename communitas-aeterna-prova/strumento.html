@@ -725,6 +725,18 @@ function aziendaAggiungi(az){
       if(r.data!=="ok"){$("#az-agg-esito").textContent=r.data;return;}
       vCerchio();},function(){b.disabled=false;});};
 }
+/* GRUPPO · aggiungere una persona (SQL 83): la aggiunge il nucleo o il capofila, con la mail con cui è entrata; «capofila» può aggiungere altri */
+function gruppoAggiungi(sq){
+  var box=$("#gr-aggiungi");if(!box)return;
+  box.innerHTML='<label class="m" for="gr-mail">Mail della persona (deve essere già entrata)</label><input type="email" id="gr-mail">'+
+    '<label class="m" style="margin-top:8px;display:flex;flex-direction:row;gap:8px;align-items:center;text-align:left"><input type="checkbox" id="gr-capo" style="width:18px;height:18px;flex:none;display:inline-block;margin:0">Capofila: può aggiungere altre persone</label>'+
+    '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="gr-agg">Aggiungi</button><span class="m" id="gr-agg-esito"></span></div>';
+  $("#gr-agg").onclick=function(){var b=this,m=$("#gr-mail").value.trim();if(!m)return;b.disabled=true;
+    db.rpc("fm_squadra_aggiungi",{p_squadra:sq,p_mail:m,p_responsabile:$("#gr-capo").checked}).then(function(r){b.disabled=false;
+      if(r&&r.error){$("#gr-agg-esito").textContent=/fm_squadra_aggiungi|function/i.test(r.error.message||"")?"Si apre con l'SQL 83.":errore(r.error);return;}
+      if(r.data!=="ok"){$("#gr-agg-esito").textContent=r.data;return;}
+      vCerchio();},function(){b.disabled=false;});};
+}
 function chipRuolo(x){var p=x.split(":");return '<span class="chip f-'+esc(p[0])+'">'+esc(nomeRuolo(p[0],p[1]))+'</span>';}
 function vCerchio(){
   var c=$("#corpo"),x=cerchiCache&&cerchiCache[cerchio];
@@ -754,8 +766,10 @@ function vCerchio(){
     '<p class="et" style="margin-top:12px">Chi c\'è</p><div class="card" id="ce-persone"><p class="nota">Un momento…</p></div>'+
     (vic&&(x.guido||io.coordina)?'<p class="et" style="margin-top:12px">Dai un ruolo · per chi guida</p><div class="card modulo" id="ce-ruoli"></div>':'')+
     (x.tipo==="azienda"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il referente</p><div class="card modulo" id="az-aggiungi"></div>':'')+
+    (x.tipo==="gruppo"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il capofila</p><div class="card modulo" id="gr-aggiungi"></div>':'')+
     (x.tipo!=="azienda"?'<p class="et" style="margin-top:12px">Il giornale del '+(vic?'vicinato':'gruppo')+'</p><div class="foglio-g" id="ce-giornale"><p class="nota">Un momento…</p></div>':'');
   if(x.tipo==="azienda"&&(x.guido||io.nucleo))aziendaAggiungi(cerchio);
+  if(x.tipo==="gruppo"&&(x.guido||io.nucleo))gruppoAggiungi(cerchio);
   if(conLibro)libro($("#lb"),{campo:vic?"vicinato_id":"squadra_id",id:cerchio,occ:(vic?"Il cervello del vicinato":"Il cervello del gruppo")+(x.territorio?" · "+x.territorio:""),titolo:x.nome});
   fondoIndietro(c);
   $("#ce-indietro").onclick=function(){vai("cervello");};
