@@ -187,7 +187,8 @@ var RUOLI={tecnologica:[["piattaforma","Piattaforma e dati"],["radio","Radio, di
   comunitaria:[["vicinati","Vicinati"],["formazioni","Formazioni e praticantato"],["assistenza","Assistenza"]]};
 function nomeRuolo(f,r){var x=(RUOLI[f]||[]).filter(function(y){return y[0]===r;})[0];return x?x[1]:r;}
 var VIS={solo_me:"solo io",vicinato:"il vicinato",pubblico:"tutti"};
-var ELEMENTI=[["terra","Terra \u00b7 Vicinati"],["acqua","Acqua \u00b7 Emporio"],["fuoco","Fuoco \u00b7 Assistenza"],["aria","Aria \u00b7 Edizione"],["etere","Etere \u00b7 Scuola"]];
+/* 19 ott 16:14, Gab: «oggi è rischioso usare pubblicamente il nome degli elementi in cartelle, meglio tenerlo per il praticantato» → si vedono i nomi delle stanze; nel database restano terra, acqua, fuoco, aria, etere */
+var ELEMENTI=[["terra","Vicinati"],["acqua","Emporio"],["fuoco","Assistenza"],["aria","Stampa"],["etere","Scuola"]];
 var STADI={in_coda:"da fare",in_avanzamento:"in corso",sviluppato:"fatto"};
 var DOPO={in_coda:"in_avanzamento",in_avanzamento:"sviluppato",sviluppato:"in_coda"};
 var TIPI_G=["karma_yoga","articolo","festa","diretta","obiettivo","antakarana"];
@@ -610,9 +611,9 @@ function vObiettivi(){
 var cartella="tutte";
 function vCartelle(){
   var c=$("#corpo");
-  if(!io.id){c.innerHTML='<p class="et">Cartelle · sono i cinque elementi</p><h3>Documenti, foto, audio</h3><div class="card"><span class="t">Le cartelle si aprono a chi è entrato.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div>';return;}
+  if(!io.id){c.innerHTML='<p class="et">Cartelle</p><h3>Documenti, foto, audio</h3><div class="card"><span class="t">Le cartelle si aprono a chi è entrato.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div>';return;}
   /* 19 ott 16:04, Gab: «se io avessi come possibilità nell app di poter caricare lì un immagine che poi mi ritrovo nell archivio, sarebbe gia uno stra lavoro» */
-  c.innerHTML='<p class="et">Cartelle · sono i cinque elementi</p><h3>Documenti, foto, audio</h3>'+
+  c.innerHTML='<p class="et">Cartelle</p><h3>Documenti, foto, audio</h3>'+
     '<div class="card" id="ca-carica"><b>Carica qui</b><div class="azioni"><label class="btn pieno" for="ca-file">Scegli foto o file</label><input class="file" type="file" id="ca-file" accept="image/*,audio/*,.m4a,.mp3,.ogg,.wav,.pdf,.doc,.docx,.odt,.txt,.rtf,.xls,.xlsx,.ods,.ppt,.pptx,.odp" multiple><span class="m" id="ca-scelti"></span></div>'+
     '<label class="m" for="ca-el" style="margin-top:6px">In quale cartella</label><select id="ca-el">'+ELEMENTI.map(function(k){return '<option value="'+k[0]+'"'+(k[0]===cartella?' selected':'')+'>'+esc(k[1])+'</option>';}).join("")+'</select>'+
     '<label class="m" for="ca-vis" style="margin-top:6px">Chi lo vede</label><select id="ca-vis"><option value="solo_me">Solo io</option><option value="vicinato">Il vicinato</option><option value="pubblico">Tutti</option></select>'+
