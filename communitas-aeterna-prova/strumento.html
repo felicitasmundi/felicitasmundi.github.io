@@ -286,7 +286,7 @@ function linkHTML(u){
 /* la luna di oggi: ciclo sinodico medio */
 function luna(){
   var f=(((Date.now()-Date.UTC(2000,0,6,18,14))/864e5)/29.530588853)%1;if(f<0)f+=1;
-  var nome=f<.034||f>.966?"luna nuova":f<.216?"luna crescente":f<.284?"primo quarto":f<.466?"gibbosa crescente":f<.534?"luna piena":f<.716?"gibbosa calante":f<.784?"ultimo quarto":"luna calante";
+  var nome=f<.034||f>.966?"luna nuova":f<.466?"luna crescente":f<.534?"luna piena":"luna calante"; /* 19 ott 23:30, Gab: «metti solo luna piena nuova calante crescente» */
   var r=15,cos=Math.cos(2*Math.PI*f),rx=Math.abs(cos)*r,s1=f<.5?1:0,s2=cos>0?s1:1-s1;
   var d="M20 "+(20-r)+" A "+r+" "+r+" 0 0 "+s1+" 20 "+(20+r)+" A "+rx.toFixed(2)+" "+r+" 0 0 "+s2+" 20 "+(20-r);
   return {nome:nome,svg:'<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="15.5" fill="none" stroke="currentColor" stroke-opacity=".35"/><path d="'+d+'" fill="currentColor"/></svg>'};
