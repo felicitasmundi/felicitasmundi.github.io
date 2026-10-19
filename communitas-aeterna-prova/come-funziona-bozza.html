@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Come funziona · bozza</title>
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/caratteri.css">
 <link rel="stylesheet" href="comune/fm-comune.css?v=10131608">
 <style>
 /* ═══ COME FUNZIONA · 13 ottobre 2026 (Gab, 12:03–12:16)
@@ -500,7 +499,7 @@ a{color:inherit;text-decoration:none}
       if(!STRIPE_PK){ erroreCassa("manca la chiave pubblicabile di Stripe nella pagina"); return; }
       if(!window.Stripe){ erroreCassa("Stripe non si è caricato: ricarica la pagina"); return; }
       stripe=stripe||window.Stripe(STRIPE_PK,{locale:"it"});
-      elements=stripe.elements({clientSecret:d.segreto,appearance:{theme:"night",labels:"floating",variables:{colorPrimary:"#D4AF6A",colorBackground:"#0A0C1A",colorText:"#F5F0E6",colorTextSecondary:"#9A978F",colorDanger:"#B4574A",fontFamily:"'DM Sans', system-ui, sans-serif",borderRadius:"12px",spacingUnit:"4px"},rules:{".Input":{border:"1px solid rgba(245,240,230,.14)",boxShadow:"none"},".Input:focus":{border:"1px solid #D4AF6A",boxShadow:"0 0 0 1px rgba(212,175,106,.35)"},".Tab":{border:"1px solid rgba(245,240,230,.14)"},".Tab--selected":{border:"1px solid #D4AF6A",color:"#F5F0E6"}}},fonts:[{cssSrc:"https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap"}]});
+      elements=stripe.elements({clientSecret:d.segreto,appearance:{theme:"night",labels:"floating",variables:{colorPrimary:"#D4AF6A",colorBackground:"#0A0C1A",colorText:"#F5F0E6",colorTextSecondary:"#9A978F",colorDanger:"#B4574A",fontFamily:"'DM Sans', system-ui, sans-serif",borderRadius:"12px",spacingUnit:"4px"},rules:{".Input":{border:"1px solid rgba(245,240,230,.14)",boxShadow:"none"},".Input:focus":{border:"1px solid #D4AF6A",boxShadow:"0 0 0 1px rgba(212,175,106,.35)"},".Tab":{border:"1px solid rgba(245,240,230,.14)"},".Tab--selected":{border:"1px solid #D4AF6A",color:"#F5F0E6"}}},fonts:[{cssSrc:new URL("comune/caratteri.css",location.href).href}]});
       document.getElementById("cassa-carta").innerHTML="";
       var el=elements.create("payment",{layout:"tabs"}); el.mount("#cassa-carta");
       el.on("ready", function(){ paga.disabled=false; paga.dataset.modo="paga"; paga.textContent="Paga "+somma.toLocaleString("it-IT",{minimumFractionDigits:2})+" € "+(d.cambio?"ora":(PERIODO[d.periodo]||"")); });
