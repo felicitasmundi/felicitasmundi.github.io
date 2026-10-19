@@ -12,7 +12,8 @@
     try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (/^sb-.*-auth-token$/.test(k)) { dentro = true; break; } } } catch (e) {}
     /* 19 ott 16:17, Gab: «perchè ancora figura come prova?» → chi è dentro va dritto a Oggi dell'app vera; i link con parametri passano dal guscio dell'app vera, che tiene vivi eventi e inviti */
     if (q || h) location.replace("communitas-aeterna-prova/index.html" + q + h);
-    else if (dentro) location.replace("communitas-aeterna-prova/strumento.html?v=oggi&c=10182300");
+    /* 19 ott 16:17, scelta «Indirizzo pulito»: app.felicitasmundi.com apre direttamente Oggi, per tutti */
+    else location.replace("communitas-aeterna-prova/strumento.html?v=oggi&c=10182300");
   })();
 </script>
 <title>FelicitasMundi · Comunità Eterna — villaggi, eventi, Emporio, Assistenza, Scuola</title>
