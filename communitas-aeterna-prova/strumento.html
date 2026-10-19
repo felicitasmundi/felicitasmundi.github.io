@@ -148,6 +148,12 @@ a{color:var(--blu)}
 .paniere-o .prezzo{font:600 15px var(--sans)}.paniere-o .prezzo small{font-weight:400;color:var(--tenue)}
 .paniere-o .sotto{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--linea);padding-top:8px;margin-top:4px}
 .paniere-o select{font:inherit;max-width:100%;padding:6px 8px;border:1px solid var(--linea);border-radius:10px;background:var(--carta)}
+.evid{display:block;text-decoration:none;border-radius:16px;padding:16px;margin:0 0 12px;background:var(--cosmo);background-image:var(--cosmo-cielo);color:var(--cosmo-testo);border:1px solid rgba(212,175,106,.35)}
+.evid small{display:block;font:600 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cosmo-oro)}
+.evid b{display:block;font-family:var(--serif);font-weight:500;font-size:24px;line-height:1.15;margin:4px 0}
+.evid span{display:block;font-size:14px;color:var(--cosmo-grigio)}
+.evid p{margin:8px 0 0;font-size:15px;line-height:1.45}
+.evid .vai{display:inline-block;margin-top:10px;font:600 13px var(--sans);color:#1A1405;background:var(--cosmo-oro);border-radius:99px;padding:7px 14px;text-decoration:none}
 .stanze-o{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}.stanze-o a{display:block;padding:14px 12px;border-radius:14px;background:var(--cosmo);background-image:var(--cosmo-cielo);color:var(--cosmo-testo);text-decoration:none;font:500 15px var(--sans);border-left:3px solid var(--c)}
 .top .marchio{color:var(--cosmo-oro)!important}
 .top .chip,.top .mini,.top .alto-b{background:rgba(245,240,230,.08)!important;color:var(--cosmo-testo)!important;border-color:rgba(245,240,230,.25)!important}
@@ -364,7 +370,11 @@ var STANZE_O=[["Emporio","stanze-bozza.html?s=emporio&c=10182300","#4488BB"],["S
 function vOggi(){
   var c=$("#corpo"),l=luna(),d=new Date();
   var g0=new Date();g0.setHours(0,0,0,0);var da=g0.getTime(),a=da+864e5;
-  c.innerHTML='<p class="et">Oggi · Felicitas</p>'+
+  /* 19 ott 16:21, Gab: «aprendo l app […] anche oggi non è comprensibile» da chi arriva da fuori → in cima chi siamo (parole dell'invito al Festival) e il Festival in evidenza, voce fissa fino al 21 novembre */
+  var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime();
+  c.innerHTML=(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>Felicitas Mundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
+    (fest?'<a class="evid" href="festival-evento-bozza.html?c=10182300"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
+    '<p class="et">Oggi · Felicitas</p>'+
     '<div class="card"><div class="giorno">'+l.svg+'<div><b>'+esc(d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"}))+'</b><span id="o-cielo">'+esc(l.nome)+'</span></div></div></div>'+
     '<div id="o-appunt"></div>'+
     /* 18 ott 20:36 e 22:36, Gab: «oggi può essere anche il contesto "di cosa hai bisogno?"» · da oggi «si possa entrare nella visione completa dei prodotti e assistenza» */
@@ -372,7 +382,7 @@ function vOggi(){
     paniereHTML()+
     (io.id?'<div id="o-logistica"></div>':'')+
     (io.id?'<p class="et" style="margin-top:6px">Obiettivi aperti</p><div id="o-obiettivi"><p class="nota">Un momento…</p></div>':
-      '<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra con il codice via mail</a></div></div>')+
+      '<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span></div>')+
     (io.coordina?'<div id="o-ruoli"></div>':'');
   legaVai(c);legaPaniere(c);
   santo().then(function(s){var e=$("#o-cielo");if(e&&s)e.textContent=s+" · "+l.nome;});
