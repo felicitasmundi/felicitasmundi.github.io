@@ -219,6 +219,70 @@ a{color:var(--blu)}
 .onda b,.onda p,.onda span{color:var(--cosmo-testo)!important}
 .corpo{zoom:1.12;padding-bottom:110px!important}
 @media (min-width:700px){.corpo{zoom:1.22}.nav button{font-size:15px!important;padding:13px 1px 15px!important}.nav button .ic{font-size:28px!important}.nav button.console .ic{width:50px!important;height:50px!important;margin-top:-26px!important}.top .marchio{font-size:18px!important}}
+
+/* ═══ GIORNALE · modello 4 (20 ott, thread «Giornale e logistica insieme»; Gab 01:42: «bello»; 01:48: «ok anteprima si è giusto»).
+   Notte e oro, tessere grandi, una idea per tessera. Solo la vista Giornale va di notte. ═══ */
+html:has(body.notte),body.notte{background:#0E0B08}
+body.notte .corpo{--carta:#0E0B08;--carta2:#241C13;--foglio:#1C1610;--inchiostro:#F5F0E6;--tenue:#A89B85;--linea:#3A2F22;--oro:#D4AF6A;--oro-chiaro:#2E2416;--blu:#D4AF6A;--att:#D4AF6A;color:var(--inchiostro)}
+body.notte .corpo .foglio-g{border:0;border-radius:26px}
+body.notte .corpo .testata{border-bottom-color:var(--linea)}body.notte .corpo .testata h4{display:none}
+body.notte .corpo .sez{border-bottom-color:var(--linea)}
+.g4-apre{padding:14px 6px 4px}
+.g4-data{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--tenue)}
+.g4-apre h1{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1;margin:8px 0 12px}
+.g4-apre .grande{font-size:22px;line-height:1.25;font-weight:500;margin:0}
+.g4-apre .grande b{color:var(--oro)}
+.g4-t{border-radius:26px;background:#1C1610;overflow:hidden;position:relative}
+.g4-t>.in{padding:20px}
+.g4-occ{font-family:var(--display);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--oro)}
+.g4-t h2{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.05;margin:6px 0 8px}
+.g4-t p{margin:0;color:#D9CFBF;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.g4-cit{font-family:var(--serif);font-size:21px;line-height:1.25;color:var(--inchiostro);margin:10px 0}
+.g4-radio{background:linear-gradient(160deg,#2A1E10,#0E0B08)}
+.g4-radio h2{font-size:38px}
+.g4-onda{display:flex;gap:3px;align-items:flex-end;height:34px;margin:14px 0 4px}
+.g4-onda i{flex:1;background:var(--oro);opacity:.7;border-radius:2px}
+.g4-tasto{display:block;text-align:center;margin-top:14px;background:var(--oro);color:#1A1405!important;font-weight:700;border-radius:14px;padding:13px;font-size:15px;text-decoration:none;border:0;width:100%;font-family:var(--sans);cursor:pointer}
+.g4-prog{background:#000}
+.g4-prog img{display:block;width:100%;height:auto}
+.g4-num{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:16px 0 4px}
+.g4-num div{background:#241C13;border-radius:16px;padding:12px 8px;text-align:center}
+.g4-num b{display:block;font-size:30px;font-weight:700;line-height:1}
+.g4-num small{font-size:11px;color:var(--tenue)}
+.g4-serve{margin-top:14px}
+.g4-cp{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--linea)}
+.g4-cp span{font-size:14px}.g4-cp small{display:block;color:var(--tenue);font-size:12px}
+.g4-mini{font:700 12px var(--sans);border-radius:20px;padding:6px 12px;border:1px solid var(--oro);color:var(--oro);background:none;white-space:nowrap;cursor:pointer;text-decoration:none}
+.g4-mini:disabled{opacity:.6;cursor:default}
+.g4-pal{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.g4-p{border-radius:18px;padding:30px 10px 12px;min-height:96px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;color:#fff}
+.g4-p h4{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.05;margin:0}
+.g4-p p{font-size:11px;margin:4px 0 0;opacity:.9}
+.g4-bollo{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;border-radius:20px;padding:2px 7px;background:rgba(255,255,255,.92);color:#1A1405}
+.g4-p.ferma{opacity:.45}
+.g4-mos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g4-cat{border-radius:22px;padding:16px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:#fff}
+.g4-cat svg{width:30px;height:30px}
+.g4-cat h3{font-family:var(--serif);font-weight:700;font-size:22px;line-height:1.05;margin:8px 0 2px;color:#fff}
+.g4-cat p{font-size:13px;margin:4px 0 0;opacity:.92}
+.g4-titolo{grid-column:1/-1;padding:6px 4px}
+.g4-titolo h3{font-family:var(--serif);font-weight:700;font-size:28px;margin:4px 0 0}
+.g4-titolo p{color:var(--tenue);font-size:13px;margin:6px 0 0}
+.g4-c1{background:linear-gradient(150deg,#F2A27C,#B4502F)}.g4-c2{background:linear-gradient(150deg,#9FD27A,#3E6E2A)}.g4-c3{background:linear-gradient(150deg,#E2C07F,#8A6A2E)}.g4-c4{background:linear-gradient(150deg,#C7A6F0,#5E3E93)}.g4-c5{background:linear-gradient(150deg,#8FC2EA,#2C5E87)}
+.g4-prezzi{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.g4-prezzi div{background:#241C13;border-radius:16px;padding:12px}
+.g4-prezzi b{display:block;font-size:24px;line-height:1.1}.g4-prezzi small{color:var(--tenue);font-size:12px}
+.g4-d{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--linea);font-size:14px}
+.g4-d:first-of-type{border-top:0}
+.g4-d b{font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--oro);padding-top:2px}
+.g4-vil{border:1px solid #8A6A2A;background:#17120C}
+.g4-gg{border-top:1px solid var(--linea);padding:10px 0}
+.g4-gg summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--oro)}
+.g4-gg summary::-webkit-details-marker{display:none}
+body.notte .corpo .art{border-bottom:0}
+.g4-sale{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.g4-sale.visto{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.g4-sale{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
@@ -381,6 +445,7 @@ document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
   document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  document.body.classList.toggle("notte",vista==="giornale");
   ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio})[vista]();
 }
 
@@ -503,6 +568,105 @@ function logisticaOggi(){
   },function(){});
 }
 
+/* ═══ GIORNALE · modello 4 ═══
+   Gab 20 ott 01:42 sul modello 4: «bello». 01:48: «ok anteprima si è giusto».
+   I testi del Festival, del palinsesto, delle tre linee, del percorso e della citazione sono quelli del modello 4 (presi dal Settimanale del 20/10, senza riscriverli).
+   Gli articoli del giorno si leggono dal database: i pubblici in tessere grandi, gli altri in «Solo per i villaggi».
+   Bolli del palinsesto e «dall'ultima volta» dall'SQL 77 (fm_giornale_entro, fm_giornale_voci_mosse); senza, le voci sono tutte uguali. */
+var FEST_ID="bfff97a1-3431-4939-b15e-304f14087509";
+var VOCI_G4=[["pratiche_risveglio","Pratiche di risveglio",1],["bambini","Contenuti per bambini",2],["sapere_mondo","Sapere del mondo",5],["storie","Storie",3],["musica","Bella musica",4],["maestrie","Le maestrie",3],["insegnamenti","Insegnamenti",5],["creativita","Creatività",1],["notte","Programmi della notte",4],["tecnologia","Tecnologia",5],["economia","Economia",3]];
+var DATE_G4=[["2026-10-25","25 ottobre","Villaggio Felicitas a Oristano."],["2026-11-21","21 novembre","Felicitas Festival, Baratili San Pietro."],["2027-01-15","15-17 gennaio","Seminario di Aplomb, «la giusta postura e la colonna vertebrale», a Oristano."],["2027-01-17","17 gennaio","Ottana, «dove verrà presentata la maschera di Ottana»."]];
+var g4Entro;
+function g4Testa(g){
+  var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime(),L=luna();
+  var giorni=Math.max(0,Math.ceil((new Date("2026-11-21T00:00:00").getTime()-new Date().setHours(0,0,0,0))/864e5));
+  var ico=function(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true">'+d+'</svg>';};
+  var s1=function(x){return ' g4-sale';};
+  return '<div class="g4-apre"><div class="g4-data">'+esc(g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}))+' · '+esc(L.nome)+'</div><h1>Giornale<br>Felicitas</h1><p class="grande" id="g4-mosse" hidden></p></div>'+
+    '<div id="g4-radio"></div><div id="g4-art" style="display:flex;flex-direction:column;gap:10px"></div>'+
+    (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="festival-evento-bozza.html?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
+      '<div class="g4-occ">21 novembre · Baratili San Pietro · Centro sociale</div>'+
+      '<div class="g4-cit">«Un contesto di gioia dalle 10 di mattina fino a notte.»</div>'+
+      '<p>«Un punto di ritiro oltre che di rivendita», con «uno spazio emporio» e «uno spazio di conferenze». Ospiti: Rimondini, «che si occupa di geopolitica», dottoressa Randaccio, Gruppo Sardo Surra, «gli amici del cerchio, del drum circle, di Hare Krishna». Per bambini e ragazzi «dalla giocoleria ai fumetti».</p>'+
+      '<div class="g4-num"><div><b>'+giorni+'</b><small>giorni</small></div><div id="g4-fatti" hidden><b></b><small>compiti fatti</small></div><div id="g4-servono" hidden><b></b><small>cose che servono</small></div></div>'+
+      '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
+      '<a class="g4-tasto" href="festival-evento-bozza.html?c=10182300">Il programma</a></div></div>':'')+
+    '<div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div><h2 style="font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.05;margin:6px 0 8px">«Ogni giorno si possono condividere contenuti.»</h2><p style="margin:0;color:#D9CFBF;font-size:15px">Il palinsesto giornaliero: «pratiche di risveglio, contenuti per bambini, sapere del mondo, storie, bella musica, da ascoltare, le maestrie, insegnamenti, la creatività e i programmi della notte». A queste si aggiungono tecnologia ed economia.</p></div>'+
+    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div>'+
+    '<div class="g4-mos"><div class="g4-titolo g4-sale"><div class="g4-occ">Le tre linee · per i team</div><h3>Logistica, tecnologie e comunità.</h3><p>«Servono per poter indirizzare la comunità e indirizzare soprattutto dei team, delle squadre di lavoro.»</p></div>'+
+      '<a class="g4-cat g4-c1 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>')+'<div><h3>Logistica</h3><p>Supportare i produttori.</p></div></a>'+
+      '<a class="g4-cat g4-c5 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')+'<div><h3>Tecnologia</h3><p>«L\'AI non entra nel database.»</p></div></a>'+
+      '<a class="g4-cat g4-c2 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="7" cy="9" r="2.5"/><circle cx="17" cy="9" r="2.5"/><circle cx="12" cy="6" r="2.5"/><path d="M3 20c.6-3 2.4-5 4-5M21 20c-.6-3-2.4-5-4-5M8 20c.6-3 2.2-5 4-5s3.4 2 4 5"/>')+'<div><h3>Comunità</h3><p>Chi c\'è, cosa fa?</p></div></a>'+
+      '<a class="g4-cat g4-c3 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="12" cy="12" r="8"/><path d="M12 7v10M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2-1.1 1.7-2.5 2-2.5.8-2.5 2 1.1 2 2.5 2 2.5-.8 2.5-2"/>')+'<div><h3>Economia</h3><p>La distribuzione equa ed adeguata della ricchezza.</p></div></a></div>'+
+    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Il percorso</div><h2>Le virtù e la riscoperta del proprio talento.</h2><p>«Questo percorso che quindi proporrò sarà settimanale». «Si potrà scrivere sul Megafono, si potranno mettere articoli, si potranno fare delle dirette».</p>'+
+      '<div class="g4-prezzi"><div><b>Gratis</b><small>leggere il cervello Felicitas</small></div><div><b>10 €</b><small>al mese senza AI</small></div><div><b>26 €</b><small>al mese con l\'AI</small></div><div><b>20 €</b><small>a settimana il percorso, cioè 80 € al mese, oppure il karma yoga</small></div></div></div></div>'+
+    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Perché scriviamo le decisioni</div><div class="g4-cit" style="font-size:24px">«Se non lo sanno tutti gli altri del team e lo sa solo l\'unica persona con cui parlo in quel momento, gli altri rimangono indietro.»</div></div></div>'+
+    '<div class="g4-t g4-sale"><div class="in" id="g4-date"><div class="g4-occ">Le date</div>'+g4Date([])+'</div></div>'+
+    '<div id="g4-vil"></div>';
+}
+function g4Date(lez){
+  var oggi=new Date();oggi.setHours(0,0,0,0);var r=[];
+  lez.forEach(function(l){var t=new Date(l.inizio_il);if(t<Date.now()-36e5)return;var d=new Date(t);d.setHours(0,0,0,0);
+    r.push({t:t.getTime(),b:(d.getTime()===oggi.getTime()?"oggi":t.toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+", "+hhmm(l.inizio_il),s:l.titolo+(l.luogo?" · "+l.luogo:"")});});
+  DATE_G4.forEach(function(x){var t=new Date(x[0]+"T00:00:00").getTime();if(t>=oggi.getTime())r.push({t:t,b:x[1],s:x[2]});});
+  r.sort(function(p,q){return p.t-q.t;});
+  return r.slice(0,8).map(function(x){return '<div class="g4-d"><b>'+esc(x.b)+'</b><span>'+esc(x.s)+'</span></div>';}).join("");
+}
+function g4Sale(){
+  var el=[].slice.call(document.querySelectorAll("#corpo .g4-sale:not(.visto)"));
+  if(!("IntersectionObserver" in window)){el.forEach(function(e){e.classList.add("visto");});return;}
+  var o=new IntersectionObserver(function(v){v.forEach(function(x){if(x.isIntersecting){x.target.classList.add("visto");o.unobserve(x.target);}});},{rootMargin:"0px 0px -8% 0px"});
+  el.forEach(function(e){o.observe(e);});
+}
+function g4Articoli(arti,firme){
+  var pub=arti.filter(function(x){return x.o.visibilita==="pubblico";}),dentro=arti.filter(function(x){return x.o.visibilita!=="pubblico";});
+  var A=$("#g4-art");if(A)A.innerHTML=pub.map(function(x){return '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Articolo</div>'+voce(x,firme)+'</div></div>';}).join("");
+  var V=$("#g4-vil");if(V)V.innerHTML=io.id&&dentro.length?'<div class="g4-t g4-vil g4-sale"><div class="in"><div class="g4-occ">Solo per i villaggi</div>'+
+    dentro.map(function(x){return '<details class="g4-gg"><summary><span>'+esc(x.o.titolo||"Articolo")+'</span><span>›</span></summary>'+voce(x,firme)+'</details>';}).join("")+'</div></div>':"";
+  [A,V].forEach(function(c){if(!c)return;
+    c.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(c);});
+  g4Sale();
+}
+function g4Riempi(da,a,questo){
+  g4Sale();
+  function ok(){return vista==="giornale"&&giorno===questo;}
+  lezioni().then(function(l){var d=$("#g4-date");if(ok()&&d)d.innerHTML='<div class="g4-occ">Le date</div>'+g4Date(l);});
+  if(!db)return;
+  /* la puntata radio: l'ultima diretta fino a questo giorno */
+  db.from("orme").select(CAMPI+",link").eq("tipo","diretta").lt("momento",new Date(a).toISOString()).order("momento",{ascending:false}).limit(1).then(function(r){
+    var o=r&&!r.error&&r.data&&r.data[0];if(!o||!ok())return;
+    var au=(o.orma_file||[]).filter(function(f){return /audio/.test(f.tipo||"")||/\.(m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||"");});
+    return firmaURL(au).then(function(fm){if(!ok())return;var u=au.length&&fm[au[0].indirizzo];
+      var onda='<div class="g4-onda" aria-hidden="true">'+[30,60,45,90,70,40,80,55,35,75,50,65,30,85,45,60].map(function(h){return '<i style="height:'+h+'%"></i>';}).join("")+'</div>';
+      $("#g4-radio").innerHTML='<div class="g4-t g4-radio g4-sale"><div class="in"><div class="g4-occ">Radio Felicitas · '+esc(new Date(o.inizio_il||o.momento).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</div>'+
+        (o.titolo?'<h2>'+esc(o.titolo)+'</h2>':'')+(o.contenuto?'<p>'+esc(String(o.contenuto).slice(0,600))+'</p>':'')+onda+
+        (u?'<audio controls preload="none" src="'+esc(u)+'"></audio>':'')+
+        '<a class="g4-tasto" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'&c=10182300">▶ Ascolta</a></div></div>';g4Sale();});
+  },function(){});
+  /* il Festival: cosa serve, dagli articoli pubblici del Festival (SQL 76) */
+  if($("#g4-serve"))db.from("orme").select("id").eq("tipo","articolo").eq("visibilita","pubblico").eq("orma_madre_id",FEST_ID).limit(5).then(function(r){
+    var ids=((r&&!r.error&&r.data)||[]).map(function(x){return x.id;});if(!ids.length)return;
+    return Promise.all(ids.map(function(id){return db.rpc("fm_giornale_compiti_fuori",{p_articolo:id}).then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];});})).then(function(v){
+      if(!ok())return;var tutti=[].concat.apply([],v),fatti=tutti.filter(function(c){return c.stato==="fatto";}),servono=tutti.filter(function(c){return c.stato==="da_prendere";});
+      if(!tutti.length)return;
+      var F=$("#g4-fatti"),S=$("#g4-servono"),C=$("#g4-serve");
+      F.querySelector("b").textContent=fatti.length;F.hidden=false;S.querySelector("b").textContent=servono.length;S.hidden=false;
+      if(servono.length){C.hidden=false;C.insertAdjacentHTML("beforeend",servono.slice(0,5).map(function(c){
+        return '<div class="g4-cp"><span>'+esc(c.titolo)+'<small>'+esc([c.luogo,c.entro_il?"entro il "+new Date(c.entro_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}):""].filter(Boolean).join(" · "))+'</small></span>'+
+          (io.id?'<button class="g4-mini" data-mano="'+esc(c.id)+'">Do una mano</button>':'<a class="g4-mini" href="'+ENTRA+'">Do una mano</a>')+'</div>';}).join(""));
+        C.querySelectorAll("[data-mano]").forEach(function(b){b.onclick=function(){b.disabled=true;
+          db.rpc("fm_compito_do_una_mano",{p_compito:b.getAttribute("data-mano")}).then(function(x){if(x&&x.error){alert(errore(x.error));b.disabled=false;return;}b.textContent="✓";},function(){b.disabled=false;});};});}
+    });
+  },function(){});
+  /* palinsesto e «dall'ultima volta» (SQL 77): l'ultima visita si legge una volta sola a ogni apertura dell'app */
+  var entro=g4Entro!==undefined?Promise.resolve(g4Entro):io.id?db.rpc("fm_giornale_entro").then(function(x){g4Entro=x&&!x.error?(x.data||null):null;return g4Entro;},function(){g4Entro=null;return null;}):Promise.resolve(null);
+  entro.then(function(dal){return db.rpc("fm_giornale_voci_mosse",{p_dal:dal}).then(function(x){
+    if(!ok()||!x||x.error||!x.data)return;var tot=0,m={};x.data.forEach(function(v){m[v.voce]=+v.nuove||0;tot+=m[v.voce];});
+    document.querySelectorAll("#g4-pal [data-voce]").forEach(function(t){var n=m[t.getAttribute("data-voce")]||0;
+      t.classList.toggle("ferma",!n);t.insertAdjacentHTML(n?"afterbegin":"beforeend",n?'<span class="g4-bollo">'+n+(n===1?" novità":" novità")+'</span>':'<p>niente di nuovo</p>');});
+    var M=$("#g4-mosse");if(io.id&&dal&&tot&&M){M.innerHTML="Dall'ultima volta che sei entrato "+(tot===1?"si è mossa <b>1 cosa</b>.":"si sono mosse <b>"+tot+" cose</b>.");M.hidden=false;}
+  });},function(){});
+}
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
 var apriF={},apriA={};
@@ -511,7 +675,7 @@ function vGiornale(){
   var da=g.getTime(),a=da+864e5;
   var nome=giorno===0?"Oggi":giorno===-1?"Ieri":giorno===1?"Domani":"";
   var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  c.innerHTML='<p class="et">Giornale · l\'edizione del giorno</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
+  c.innerHTML=g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
     (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
     '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>';
   c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
@@ -520,10 +684,12 @@ function vGiornale(){
     if(vista!=="giornale"||giorno!==questo)return;
     var voci=v[0].map(function(o){return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
     v[1].forEach(function(l){var t=new Date(l.inizio_il).getTime();if(t>=da&&t<a)voci.push({l:l,t:t});});
-    var files=[];voci.forEach(function(x){if(x.o)(x.o.orma_file||[]).forEach(function(f){if(/image|audio/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic|m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||""))files.push(f);});});
-    return Promise.all([leggiNomi(voci.filter(function(x){return x.o;}).map(function(x){return x.o.persona_id;})),firmaURL(files)]).then(function(w){
+    var arti=voci.filter(function(x){return x.o&&x.o.tipo==="articolo";});voci=voci.filter(function(x){return !(x.o&&x.o.tipo==="articolo");});
+    var files=[];voci.concat(arti).forEach(function(x){if(x.o)(x.o.orma_file||[]).forEach(function(f){if(/image|audio/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic|m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||""))files.push(f);});});
+    return Promise.all([leggiNomi(voci.concat(arti).filter(function(x){return x.o;}).map(function(x){return x.o.persona_id;})),firmaURL(files)]).then(function(w){
       if(vista!=="giornale"||giorno!==questo)return;
       var firme=w[1];
+      g4Articoli(arti,firme);
       var sez=FASCE.map(function(F){
         var vv=voci.filter(function(x){var h=new Date(x.t).getHours();return h>=F[1]&&h<F[2];})
           .sort(function(p,q){return ((q.o&&q.o.tipo==="articolo")?1:0)-((p.o&&p.o.tipo==="articolo")?1:0)||p.t-q.t;});
@@ -543,6 +709,7 @@ function vGiornale(){
       legaVis(gc);
     });
   });
+  g4Riempi(da,a,questo);
 }
 function mediaHTML(o,firme){
   return (o.orma_file||[]).map(function(f){var u=firme[f.indirizzo];if(!u)return "";
