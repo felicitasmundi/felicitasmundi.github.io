@@ -377,6 +377,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
 
   /* entrare */
   function entra(){
+    try{ if(window.top!==window&&window.top.FM_CORNICE&&window.top.FM_DIRETTA) window.top.FM_DIRETTA.ferma(); }catch(e){}   /* 19 ott: nella cornice la striscia si fa da parte, la sala entra qui */
     if(typeof LivekitClient==='undefined'){ dice('Un momento…'); var lk=document.createElement('script'); lk.src='https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js'; lk.onload=entra; lk.onerror=function(){ dice('La sala non si è caricata. Ricarica la pagina.',true); }; document.head.appendChild(lk); return; }
     /* 15 ott 09:15, Gab: «un utente non registrato per entrare deve scrivere per forza nome e dove si trova» */
     if(entrato===false){ var od=ospiteDati(); if(!od.nome||!od.da){ dice('Scrivi come ti chiami e da dove parli.',true); (!od.nome?$('osp-nome'):$('osp-da')).focus(); return; } }

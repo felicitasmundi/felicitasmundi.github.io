@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>FelicitasMundi</title>
+<link rel="icon" href="favicon-felicitas-48.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- ═══ LA CORNICE · prova (19 ottobre 2026)
+     21:07, Gab: «Cosa intendi per rifare l'app come pagina unica?» · 21:08 «facendo una pagina unica … non si indicizzano i prodotti»
+     · 21:10 «Si può andare» → l'area interna (Oggi, Giornale, Megafono, Obiettivi, Cervello, Bacheca, la diretta) si apre DENTRO
+     questa cornice. La cornice non si ricarica mai: tiene la diretta (comune/fm-diretta.js) accesa mentre le pagine cambiano dentro.
+     Le pagine pubbliche (Stampa, Emporio, Festival) restano pagine vere, col loro indirizzo.
+     ?p=<pagina> sceglie la pagina di partenza (es. ?p=bacheca-bozza.html). ═══ -->
+<style>
+html,body{margin:0;height:100%;background:#0A0C1A;overflow:hidden}
+#dentro{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#0A0C1A}
+/* la striscia della diretta, sopra il menu dell'app (come in strumento.html) */
+.fm-dir.fissa{top:auto!important;bottom:calc(76px + env(safe-area-inset-bottom,0px))!important;max-width:520px;margin:0 auto!important;background:radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%)!important;border:1px solid rgba(212,175,106,.35)!important;box-shadow:0 4px 14px rgba(0,0,0,.35);font-family:'DM Sans',system-ui,sans-serif}
+.fm-dir .tit,.fm-dir .b{color:#F5F0E6!important}
+.fm-dir .b{border-color:rgba(245,240,230,.25)!important}
+.fm-dir .b.on{background:#D4AF6A!important;color:#1A1405!important}
+</style>
+</head>
+<body>
+<iframe id="dentro" title="FelicitasMundi" allow="microphone; autoplay; clipboard-write; fullscreen"></iframe>
+<script>
+(function(){
+  window.FM_CORNICE = true;
+  var f = document.getElementById("dentro");
+  /* solo pagine di questa cartella, senza salti fuori */
+  function pulita(p){ p = String(p||""); return /^[a-z0-9\-]+\.html([?#].*)?$/i.test(p) ? p : "strumento.html"; }
+  var q = new URLSearchParams(location.search);
+  f.src = pulita(q.get("p"));
+
+  function segno(){ try{ var g = JSON.parse(localStorage.getItem("fm_diretta")||"null"); return !!(g && g.t && Date.now()-g.t < 3*3600*1000); }catch(e){ return false; } }
+  function diretta(){
+    if(!segno()) return;
+    if(window.FM_DIRETTA){ window.FM_DIRETTA.avvia(); return; }
+    var s = document.createElement("script"); s.src = "comune/fm-diretta.js?v=10192115"; document.head.appendChild(s);
+  }
+
+  f.addEventListener("load", function(){
+    var dove = "", titolo = "";
+    try{ dove = f.contentWindow.location.pathname.split("/").pop() + f.contentWindow.location.search; titolo = f.contentDocument.title; }catch(e){}
+    if(titolo) document.title = titolo;
+    /* l'indirizzo in alto segue la pagina di dentro: se ricarichi, resti lì */
+    try{ if(dove){ var u = new URL(location.href); u.searchParams.set("p", dove); history.replaceState(null, "", u.toString()); } }catch(e){}
+    /* nella sala la diretta la tiene la sala; altrove la tiene la cornice */
+    if(dove.indexOf("diretta-bozza.html") === 0){ if(window.FM_DIRETTA && window.FM_DIRETTA.ferma) window.FM_DIRETTA.ferma(); }
+    else diretta();
+  });
+
+  /* toccando il titolo nella striscia si torna nella sala, dentro la cornice */
+  document.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest(".fm-dir .tit"); if(!a) return;
+    e.preventDefault(); f.src = pulita(a.getAttribute("href"));
+  }, true);
+})();
+</script>
+</body>
+</html>

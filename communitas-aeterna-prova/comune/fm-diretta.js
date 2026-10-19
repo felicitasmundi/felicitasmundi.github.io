@@ -15,6 +15,8 @@
    Il gettone lo chiede a sala-gettone con il tuo accesso (se c'è in questo navigatore), altrimenti come ospite.
    21:05: la pagina può tornare dalla cache del navigatore (pageshow persisted): allora si riparte da avvia(). */
 (function () {
+  /* 19 ott, Gab «si può andare» alla cornice (cornice-prova.html): dentro la cornice la diretta la tiene la cornice, non la pagina */
+  try { if (window.top !== window && window.top.FM_CORNICE) return; } catch (e) { }
   if (window.FM_DIRETTA) { window.FM_DIRETTA.avvia(); return; }
   var CH = "fm_diretta", FM_URL = "https://gfnveesogkfvkrdudpfg.supabase.co", FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var LK = "https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js";
@@ -29,7 +31,8 @@
   function dice(t) { var a = $("tit"); if (!a) return; a.textContent = t || segno.titolo || "la diretta del villaggio"; a.classList.toggle("esito", !!t); }
 
   /* avvia(): all'apertura della pagina, e quando torna dalla cache del navigatore — il segno può essere nato dopo */
-  window.FM_DIRETTA = { avvia: function () { var g = leggi(); if (!g) return; if (pill && stanza) return; segno = g; if (!pill) costruisci(); lasciando = false; tentativi = 0; mostraPausa(); entra(); } };
+  window.FM_DIRETTA = { ferma: function () { lasciando = true; if (stanza) { try { stanza.disconnect(); } catch (e) { } } stanza = null; if (pill) { pill.remove(); pill = null; } },   /* la cornice: la sala si apre dentro, la striscia si fa da parte senza spegnere il segno */
+    avvia: function () { var g = leggi(); if (!g) return; if (pill && stanza) return; segno = g; if (!pill) costruisci(); lasciando = false; tentativi = 0; mostraPausa(); entra(); } };
 
   /* la pillola, in alto nella riga (o, senza riga, una striscia fissa in alto) */
   function costruisci() {
