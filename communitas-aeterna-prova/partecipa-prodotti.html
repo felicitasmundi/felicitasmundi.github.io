@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Partecipa coi tuoi prodotti · Felicitas Festival</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Dichiarazione d'intenti per le aziende alimentari: proporre il proprio prodotto alla rete Felicitas e ritirarlo al Felicitas Festival, 21 novembre 2026, Baratili San Pietro.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10131608">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!--
+  19 ottobre 2026 · thread «Company brain per i team».
+  Gab 17:12: «abbiamo la possibilità di far inserire stile form i dati all autore, e fargli metteere un segno per indicare che conferma le sue scelte?»
+  Gab 17:13: «banner che loro dovranno inserire sul loro sito, che riporta e collega l evento».
+  Gab 17:14: «questo documento dovrebbe essere inserito nei documenti in cartella, e dovrebbe essere visibile dentro la selezione per partecipare coi propri prodotti».
+  Testi: dalla dichiarazione d'intenti (app-vera/giro-19-10) e dalla lettera d'intenti per i partner (banner, segnalazioni, durata e ritiro).
+  Le risposte vanno nella tavola dichiarazioni_intenti (SQL 78): le leggono chi le scrive e il nucleo.
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#050507;color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:var(--oro)}
+.in{max-width:820px;margin:0 auto;padding:0 18px}
+.trama{height:3px;background:linear-gradient(90deg,#F39A3A,#F5D27A,#2BB3C9,#E0498A,#8ED06B,#F39A3A);border-radius:2px}
+.su{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0}
+.su a{font-size:13px;text-decoration:none}
+.su .marca{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:var(--avorio);opacity:.75}
+header{padding:28px 0 8px}
+header h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,7vw,52px);line-height:1.02;margin:8px 0 10px}
+header p{color:var(--grigio);font-size:15.5px;max-width:640px}
+.indice{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.indice a{font-size:12.5px;border:1px solid var(--riga);border-radius:99px;padding:5px 12px;text-decoration:none;color:var(--avorio)}
+section{padding:22px 0 6px;border-top:1px solid var(--riga);margin-top:22px}
+h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(26px,5vw,34px);line-height:1.1;margin:6px 0 10px}
+h2 .n{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro);display:block;margin-bottom:4px}
+p.t,li{font-size:15.5px;color:rgba(245,240,230,.88)}
+ul.t{padding-left:20px;display:flex;flex-direction:column;gap:6px;margin:6px 0 12px}
+.blocco{border:1px solid var(--riga);border-radius:18px;padding:18px;background:var(--carta);margin:12px 0}
+.blocco.oro{border-color:rgba(212,175,106,.5)}
+.blocco h3{font-family:'Cinzel',serif;font-weight:500;font-size:13px;letter-spacing:.14em;color:var(--oro);margin-bottom:8px;text-transform:uppercase}
+.due{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:640px){.due{grid-template-columns:1fr 1fr}}
+label.c{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--grigio)}
+input[type=text],input[type=email],input[type=tel],input[type=url],textarea,select{width:100%;font:16px/1.4 'DM Sans',system-ui,sans-serif;color:var(--avorio);background:#0A0C1A;border:1px solid rgba(245,240,230,.2);border-radius:10px;padding:10px 12px}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus,select:focus,a:focus-visible,button:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.scelta{display:flex;gap:10px;align-items:flex-start;font-size:15px;padding:9px 12px;border:1px solid var(--riga);border-radius:12px;cursor:pointer;background:#0A0C1A}
+.scelta input{margin-top:4px;accent-color:#D4AF6A;width:18px;height:18px;flex:none}
+.scelta small{display:block;color:var(--grigio);font-size:13px}
+.scelte{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:640px){.scelte.a2{grid-template-columns:1fr 1fr}.scelte.a4{grid-template-columns:1fr 1fr 1fr 1fr}}
+.conferma{border:1px solid var(--oro);background:rgba(212,175,106,.1)}
+.nota{font-size:13px;color:var(--grigio)}
+.esito{margin-top:10px;font-size:14.5px}
+.esito.err{color:#E89A8E}
+.esito.ok{color:#9CCB86}
+.solo-stampa{display:none;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:28px;font-size:12px;color:#222}.solo-stampa div{border-top:1px solid #999;padding-top:6px;min-height:50px}
+.banner-prova{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;margin:10px 0}
+.banner-prova img{border-radius:6px;max-width:100%;height:auto}
+pre{white-space:pre-wrap;word-break:break-all;background:#0A0C1A;border:1px solid var(--riga);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--avorio);margin:8px 0}
+.tasti{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+footer{border-top:1px solid var(--riga);margin-top:36px;padding:18px 0 40px;font-size:12px;color:var(--grigio)}
+@media print{html,body{background:#fff!important;background-image:none!important;color:#111!important}.su,.indice,form .tasti,.no-stampa,.trama{display:none!important}.blocco{background:#fff;border-color:#bbb}p.t,li,label.c,.nota,header p{color:#222}h2 .n,.blocco h3{color:#7a5a1a}input[type],textarea,select{background:#fff!important;color:#111!important;border-color:#999!important}html body::before{display:none!important}.solo-stampa{display:grid!important}.scelta{background:#fff}section{break-inside:avoid-page}}
+</style>
+</head>
+<body>
+<div class="trama"></div>
+<div class="in">
+  <div class="su"><a href="festival-evento-bozza.html">← Felicitas Festival</a><span class="marca">FELICITASMUNDI</span></div>
+
+  <header>
+    <span class="fm-occ">FELICITAS FESTIVAL · 21 NOVEMBRE 2026 · BARATILI SAN PIETRO</span>
+    <h1>Partecipa coi tuoi prodotti.</h1>
+    <p>Dichiarazione d'intenti per le aziende alimentari. Con questa dichiarazione un'azienda alimentare propone il proprio prodotto alla rete: le persone e i vicinati lo vedono nell'app, lo prenotano, lo ritirano al Festival.</p>
+    <nav class="indice" aria-label="Le parti della dichiarazione">
+      <a href="#prodotto">1 · Il prodotto</a><a href="#quantita">2 · Quantità</a><a href="#costi">3 · Costi</a><a href="#ritiro">4 · Ritiro</a><a href="#nome">5 · Il nome</a><a href="#proponi-vicinato">6 · Il vicinato</a><a href="#banner">7 · Il banner</a><a href="#segnala">8 · Le segnalazioni</a><a href="#conferma">9 · Durata e ritiro</a>
+    </nav>
+  </header>
+
+  <form id="dich" novalidate>
+  <section id="azienda" style="border-top:0;margin-top:0">
+    <div class="blocco">
+      <h3>L'azienda</h3>
+      <div class="due">
+        <label class="c">Ragione sociale<input type="text" name="ragione_sociale" required maxlength="200" autocomplete="organization"></label>
+        <label class="c">P.IVA / codice fiscale<input type="text" name="piva" maxlength="30"></label>
+        <label class="c">Sede<input type="text" name="sede" maxlength="300"></label>
+        <label class="c">Sito<input type="url" name="sito" maxlength="300" inputmode="url" placeholder="https://"></label>
+        <label class="c">Referente<input type="text" name="referente" maxlength="120" autocomplete="name"></label>
+        <label class="c">Ruolo<input type="text" name="ruolo" maxlength="120"></label>
+        <label class="c">Email<input type="email" name="email" maxlength="200" autocomplete="email"></label>
+        <label class="c">Telefono<input type="tel" name="telefono" maxlength="40" autocomplete="tel"></label>
+      </div>
+    </div>
+  </section>
+
+  <section id="prodotto">
+    <h2><span class="n">1</span>Il prodotto</h2>
+    <div class="blocco">
+      <div class="due">
+        <label class="c">Prodotto<input type="text" name="prodotto" required maxlength="300"></label>
+        <label class="c">Formato, peso o volume<input type="text" name="formato" maxlength="200"></label>
+      </div>
+      <p class="nota" style="margin-top:10px">Lotto e scadenza si indicano a ogni consegna. Foto e descrizione per l'app le fornisce l'azienda.</p>
+    </div>
+  </section>
+
+  <section id="quantita">
+    <h2><span class="n">2</span>Quantità</h2>
+    <div class="blocco">
+      <div class="due">
+        <label class="c">Quantità che l'azienda mette a disposizione per il Festival<input type="text" name="quantita" maxlength="200"></label>
+        <label class="c">Quantità minima per un pacco di gruppo<input type="text" name="pacco_gruppo" maxlength="200"></label>
+      </div>
+      <p class="nota" style="margin-top:10px">Chi ordina prima, blocca la sua quantità: l'azienda sa cosa serve prima di consegnare (ordine anticipato del vicinato).</p>
+    </div>
+  </section>
+
+  <section id="costi">
+    <h2><span class="n">3</span>Costi e pagamento</h2><p class="t" style="margin-bottom:10px">Due modi, l'azienda sceglie:</p>
+    <div class="scelte a2">
+      <label class="scelta"><input type="radio" name="modo" value="conto_vendita"><span><b>Conto vendita</b><small>L'azienda porta la merce al punto di ritiro. Il non venduto torna all'azienda. Per ogni azienda il sistema tiene il rendiconto: quanto è arrivato, quanto venduto, quanto torna indietro, quanto va pagato.</small></span></label>
+      <label class="scelta"><input type="radio" name="modo" value="pacco_gruppo"><span><b>Pacco per il gruppo</b><small>Il prezzo è quello del pacco intero, preso insieme da un gruppo. Si conferma quando il gruppo è completo.</small></span></label>
+    </div>
+    <p class="t" style="margin-top:12px">In entrambi i casi Felicitas Omnia vende e fattura (fattura elettronica con Aruba Fatture) e paga l'azienda per il venduto. Con ogni partner si definiscono la percentuale, le zone servite, il primo pacchetto e le consegne.</p>
+    <div class="blocco"><label class="c">Prezzo al pubblico<input type="text" name="prezzo_pubblico" maxlength="60" inputmode="decimal"></label></div>
+  </section>
+
+  <section id="ritiro">
+    <h2><span class="n">4</span>Logistica di ritiro</h2><p class="t">Il Festival è il primo punto di ritiro della rete Felicitas.</p>
+    <ul class="t">
+      <li>Felicitas Festival, 21 novembre 2026 · Baratili San Pietro · Centro Sociale + Centro polifunzionale, ex Cantina Madau.</li>
+      <li>Ritiro delle persone: al Festival, con il codice dell'ordine; oppure qualcuno lo porta a chi non può venire.</li>
+      <li>Resi: se qualcosa non va, la persona lo riporta al punto e il sistema lo segna.</li>
+    </ul>
+    <div class="blocco">
+      <label class="c">Consegna al punto di ritiro: giorno e orario, prima del 21 novembre<input type="text" name="consegna" maxlength="300"></label>
+      <p class="nota" style="margin:12px 0 6px">Conservazione</p>
+      <div class="scelte a2" style="grid-template-columns:repeat(3,1fr)">
+        <label class="scelta"><input type="radio" name="conservazione" value="secco">secco</label>
+        <label class="scelta"><input type="radio" name="conservazione" value="fresco">fresco</label>
+        <label class="scelta"><input type="radio" name="conservazione" value="freddo">freddo</label>
+      </div>
+    </div>
+  </section>
+
+  <section id="nome">
+    <h2><span class="n">5</span>Il nome dell'azienda</h2>
+    <p class="t">L'azienda accetta che il suo nome, il marchio e il prodotto siano visibili nell'app, nel Giornale e nelle comunicazioni del Festival.</p>
+    <div class="scelte a2" style="margin-top:10px">
+      <label class="scelta"><input type="radio" name="nome_pubblico" value="si">Sì, il nome può essere pubblico.</label>
+      <label class="scelta"><input type="radio" name="nome_pubblico" value="no">No, solo dentro vicinati e villaggi.</label>
+    </div>
+  </section>
+
+  <section id="proponi-vicinato">
+    <h2><span class="n">6</span>Proporre il proprio vicinato</h2><p class="t">Chi vuole può anche aderire come vicinato.</p>
+    <p class="t">Nell'app:</p>
+    <ul class="t">
+      <li>un tasto per comunicare con il villaggio;</li>
+      <li>le informazioni su risorse e persone presenti;</li>
+      <li>la lista di produttori, terapeutici, scuole e strutture adatte per fare punto di ritiro, magazzino, mensa o produzione.</li>
+    </ul>
+    <p class="t">Si aderisce col vicinato in cui si vive, oppure ci si propone per entrare in un vicinato. Ogni richiesta arriva come notifica e mail ai coordinatori del villaggio.</p>
+    <p class="nota" style="margin:12px 0 6px">Il mio vicinato / la mia struttura può offrire:</p>
+    <div class="scelte a4">
+      <label class="scelta"><input type="checkbox" name="vicinato_offre" value="punto_ritiro">punto di ritiro</label>
+      <label class="scelta"><input type="checkbox" name="vicinato_offre" value="magazzino">magazzino</label>
+      <label class="scelta"><input type="checkbox" name="vicinato_offre" value="mensa">mensa</label>
+      <label class="scelta"><input type="checkbox" name="vicinato_offre" value="produzione">produzione</label>
+    </div>
+  </section>
+
+  <section id="banner">
+    <h2><span class="n">7</span>Il banner</h2>
+    <p class="t">Il consenso a comparire sul sito dell'azienda con il banner FelicitasMundi aggiornato: un banner che l'azienda inserisce sul suo sito, che riporta e collega l'evento.</p>
+    <label class="scelta" style="margin-top:10px"><input type="checkbox" name="banner" value="si"><span>Consenso al banner sul proprio sito</span></label>
+    <div class="blocco no-stampa" id="banner-codice">
+      <h3>Il banner, da copiare</h3>
+      <div class="banner-prova">
+        <img src="casa/banner-festival-300x250.png" width="300" height="250" alt="Felicitas Festival · 21 novembre 2026 · Baratili San Pietro">
+        <img src="casa/banner-festival-728x90.png" width="728" height="90" alt="Felicitas Festival · 21 novembre 2026 · Baratili San Pietro" style="max-width:100%">
+      </div>
+      <p class="nota">Il codice da incollare nella pagina del sito. L'immagine sta su FelicitasMundi e si aggiorna da sola; il clic porta alla pagina del Festival.</p>
+      <pre id="cod-quadrato"></pre>
+      <div class="tasti" style="margin-top:0"><button class="fm-tasto piccolo secondario" type="button" data-copia="cod-quadrato">Copia il codice · quadrato</button><button class="fm-tasto piccolo secondario" type="button" data-copia="cod-striscia">Copia il codice · striscia</button></div>
+      <pre id="cod-striscia" hidden></pre>
+    </div>
+  </section>
+
+  <section id="segnala">
+    <h2><span class="n">8</span>Le segnalazioni</h2>
+    <p class="t">L'azienda può segnalare nomi di persone e di aziende a cui proporre il partenariato.</p>
+    <div class="blocco">
+      <label class="c">Persone e aziende che segnaliamo<textarea name="segnala" maxlength="2000"></textarea></label>
+      <p class="nota" style="margin-top:8px">I nomi e i contatti segnalati si usano solo per proporre il partenariato a quelle persone e aziende.</p>
+      <label class="c" style="margin-top:12px">Note<textarea name="note" maxlength="2000"></textarea></label>
+    </div>
+  </section>
+
+  <section id="conferma">
+    <h2><span class="n">9</span>Durata e ritiro</h2>
+    <p class="t">Questa dichiarazione d'intenti non crea obblighi né per l'azienda né per Felicitas Omnia: ogni accordo concreto si scrive a parte. Dura un anno dalla firma e si rinnova da sola se non viene ritirata. Il consenso al banner, e la dichiarazione intera, si ritirano in qualsiasi momento scrivendo al nucleo centrale di FelicitasMundi, per ora nella persona di Gabriele Dettori.</p>
+    <p class="t" style="margin-top:8px">I dati si trattano come scritto nella <a href="privacy.html">privacy di FelicitasMundi</a>.</p>
+    <label class="scelta conferma" style="margin-top:14px"><input type="checkbox" name="conferma" value="si" required><span><b>Confermo le mie scelte.</b><small>Chi conferma è entrato con il codice via mail: la dichiarazione porta il suo nome, il giorno e l'ora.</small></span></label>
+    <div class="tasti">
+      <button class="fm-tasto" type="submit" id="manda">Confermo e mando</button>
+      <a class="fm-tasto secondario" href="dichiarazione-intenti-festival.pdf" download>Scarica il PDF</a>
+    </div>
+    <p class="esito" id="esito" role="status" aria-live="polite"></p>
+    <div class="solo-stampa" aria-hidden="true"><div>Luogo e data</div><div>Per l'azienda · firma</div><div>Per Felicitas Omnia S.r.l.s. · Gabriele Dettori</div></div>
+  </section>
+  </form>
+
+  <footer>Felicitas Omnia S.r.l.s. · Sassari · P.IVA 03075740906 · FelicitasMundi · Comunità Eterna</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var EV="bfff97a1-3431-4939-b15e-304f14087509";   /* il Felicitas Festival, orma */
+var BOZZA="fm_dichiarazione_bozza";
+var BASE="https://app.felicitasmundi.com/communitas-aeterna-prova/";
+var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}):null;
+var f=document.getElementById("dich"),esito=document.getElementById("esito"),manda=document.getElementById("manda");
+
+/* il codice del banner: un'immagine con il link, niente script sul sito degli altri */
+function codice(w,h){return '<a href="'+BASE+'festival-evento-bozza.html" target="_blank" rel="noopener"><img src="'+BASE+'casa/banner-festival-'+w+'x'+h+'.png" width="'+w+'" height="'+h+'" alt="Felicitas Festival · 21 novembre 2026 · Baratili San Pietro" style="max-width:100%;height:auto;border:0"></a>';}
+document.getElementById("cod-quadrato").textContent=codice(300,250);
+document.getElementById("cod-striscia").textContent=codice(728,90);
+document.querySelectorAll("[data-copia]").forEach(function(b){b.onclick=function(){
+  var id=b.getAttribute("data-copia"),t=document.getElementById(id).textContent,prima=b.textContent;
+  document.getElementById("cod-quadrato").hidden=id!=="cod-quadrato";document.getElementById("cod-striscia").hidden=id!=="cod-striscia";
+  function ok(){b.textContent="Copiato";setTimeout(function(){b.textContent=prima;},1800);}
+  if(navigator.clipboard)navigator.clipboard.writeText(t).then(ok,function(){});
+};});
+
+function dati(){
+  var d={};
+  ["ragione_sociale","piva","sede","sito","referente","ruolo","email","telefono","prodotto","formato","quantita","pacco_gruppo","prezzo_pubblico","consegna","segnala","note"].forEach(function(k){var v=(f.elements[k].value||"").trim();d[k]=v||null;});
+  ["modo","conservazione","nome_pubblico"].forEach(function(k){var x=f.querySelector('input[name="'+k+'"]:checked');d[k]=x?x.value:null;});
+  d.vicinato_offre=[].slice.call(f.querySelectorAll('input[name="vicinato_offre"]:checked')).map(function(x){return x.value;});
+  d.banner=f.elements.banner.checked;d.conferma=f.elements.conferma.checked;
+  return d;
+}
+function rimetti(d){
+  Object.keys(d).forEach(function(k){
+    if(k==="vicinato_offre"){f.querySelectorAll('input[name="vicinato_offre"]').forEach(function(x){x.checked=d[k].indexOf(x.value)>-1;});return;}
+    if(k==="banner"||k==="conferma"){f.elements[k].checked=!!d[k];return;}
+    if(["modo","conservazione","nome_pubblico"].indexOf(k)>-1){var x=f.querySelector('input[name="'+k+'"][value="'+d[k]+'"]');if(x)x.checked=true;return;}
+    if(f.elements[k]&&d[k]!=null)f.elements[k].value=d[k];
+  });
+}
+function di(t,tipo){esito.textContent=t;esito.className="esito"+(tipo?" "+tipo:"");}
+try{var b=localStorage.getItem(BOZZA);if(b)rimetti(JSON.parse(b));}catch(e){}
+
+f.addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var d=dati();
+  if(!d.ragione_sociale||d.ragione_sociale.length<2){di("Manca la ragione sociale.","err");f.elements.ragione_sociale.focus();return;}
+  if(!d.prodotto||d.prodotto.length<2){di("Manca il prodotto.","err");f.elements.prodotto.focus();return;}
+  if(!d.conferma){di("Per mandarla serve il segno «Confermo le mie scelte».","err");return;}
+  if(!db){di("La pagina non riesce a collegarsi. Controlla la connessione e riprova.","err");return;}
+  manda.disabled=true;di("Un momento…");
+  db.auth.getSession().then(function(s){
+    var u=s&&s.data&&s.data.session&&s.data.session.user;
+    if(!u){
+      try{localStorage.setItem(BOZZA,JSON.stringify(d));}catch(e){}
+      location.href="accesso.html?torna="+encodeURIComponent(location.pathname+"#conferma");return;
+    }
+    var riga={evento_id:EV,ragione_sociale:d.ragione_sociale,piva:d.piva,sede:d.sede,sito:d.sito,referente:d.referente,ruolo:d.ruolo,email:d.email,telefono:d.telefono,
+      prodotto:d.prodotto,formato:d.formato,quantita:d.quantita,pacco_gruppo:d.pacco_gruppo,conservazione:d.conservazione,modo:d.modo,prezzo_pubblico:d.prezzo_pubblico,
+      consegna:d.consegna,nome_pubblico:d.nome_pubblico==="si",banner:d.banner,vicinato_offre:d.vicinato_offre,segnala:d.segnala,note:d.note,conferma:true};
+    return db.from("dichiarazioni_intenti").insert(riga).then(function(r){
+      manda.disabled=false;
+      if(r.error){var m=String(r.error.message||"");
+        di(/does not exist|schema cache/i.test(m)?"Il modulo non è ancora aperto: riprova tra poco.":"Non è stata mandata. Si può riprovare."+(m?" ("+m.slice(0,90)+")":""),"err");return;}
+      try{localStorage.removeItem(BOZZA);}catch(e){}
+      di("Ricevuta. La dichiarazione è arrivata al nucleo, con il tuo nome, il giorno e l'ora."+(d.banner?" Il codice del banner è qui sopra, nella parte 7.":""),"ok");
+    });
+  }).catch(function(){manda.disabled=false;di("Non è stata mandata. Si può riprovare.","err");});
+});
+})();
+</script>
+</body>
+</html>
