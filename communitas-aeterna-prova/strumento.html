@@ -546,13 +546,13 @@ function manda(){
     return file.reduce(function(fila,f){return fila.then(function(){
       var nome=String(f.name||"file").replace(/[^\w.\-]+/g,"_").slice(-80);
       if(f.size>25*1024*1024){male++;return;}
-      return db.storage.from("riservato").upload(id+"/"+nome,f).then(function(u){
-        if(u&&u.error){male++;return;}
+      return db.storage.from("riservato").upload(id+"/"+nome,f,{contentType:f.type||undefined}).then(function(u){
+        if(u&&u.error){male++;console.warn("allegato:",f.name,u.error);M.perche=(u.error.message||"");return;}
         return db.from("orma_file").insert({orma_id:id,nome:nome,indirizzo:id+"/"+nome,dimensione:f.size,chi_lo_ha_messo:io.id,da_conversazione:false}).then(function(q){if(q&&q.error)male++;});
       });
     }).catch(function(){male++;});},Promise.resolve()).then(function(){
       M.file=[];M.msg="";cache.obiettivi=null;vMegafono();
-      mostra("#m-ok","Salvato: "+(t==="obiettivo"?"negli obiettivi":"nel giornale di oggi")+", "+({solo_me:"lo leggi solo tu",vicinato:"lo legge il vicinato",pubblico:"lo leggono tutti"})[M.vis]+"."+(male?" "+(male===1?"Un allegato non è passato.":male+" allegati non sono passati."):""));
+      mostra("#m-ok","Salvato: "+(t==="obiettivo"?"negli obiettivi":"nel giornale di oggi")+", "+({solo_me:"lo leggi solo tu",vicinato:"lo legge il vicinato",pubblico:"lo leggono tutti"})[M.vis]+"."+(male?" "+(male===1?"Un allegato non è passato":male+" allegati non sono passati")+(M.perche?" ("+M.perche+").":"."):""));M.perche="";
     });
   });
 }
@@ -611,7 +611,35 @@ var cartella="tutte";
 function vCartelle(){
   var c=$("#corpo");
   if(!io.id){c.innerHTML='<p class="et">Cartelle · sono i cinque elementi</p><h3>Documenti, foto, audio</h3><div class="card"><span class="t">Le cartelle si aprono a chi è entrato.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div>';return;}
-  c.innerHTML='<p class="et">Cartelle · sono i cinque elementi</p><h3>Documenti, foto, audio</h3><div id="ca"><p class="nota">Un momento…</p></div>';
+  /* 19 ott 16:04, Gab: «se io avessi come possibilità nell app di poter caricare lì un immagine che poi mi ritrovo nell archivio, sarebbe gia uno stra lavoro» */
+  c.innerHTML='<p class="et">Cartelle · sono i cinque elementi</p><h3>Documenti, foto, audio</h3>'+
+    '<div class="card" id="ca-carica"><b>Carica qui</b><div class="azioni"><label class="btn pieno" for="ca-file">Scegli foto o file</label><input class="file" type="file" id="ca-file" accept="image/*,audio/*,.m4a,.mp3,.ogg,.wav,.pdf,.doc,.docx,.odt,.txt,.rtf,.xls,.xlsx,.ods,.ppt,.pptx,.odp" multiple><span class="m" id="ca-scelti"></span></div>'+
+    '<label class="m" for="ca-el" style="margin-top:6px">In quale cartella</label><select id="ca-el">'+ELEMENTI.map(function(k){return '<option value="'+k[0]+'"'+(k[0]===cartella?' selected':'')+'>'+esc(k[1])+'</option>';}).join("")+'</select>'+
+    '<label class="m" for="ca-vis" style="margin-top:6px">Chi lo vede</label><select id="ca-vis"><option value="solo_me">Solo io</option><option value="vicinato">Il vicinato</option><option value="pubblico">Tutti</option></select>'+
+    '<label class="m" for="ca-testo" style="margin-top:6px">Due parole su cosa si vede (facoltativo)</label><input type="text" id="ca-testo">'+
+    '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="ca-vai" disabled>Carica</button><span class="m" id="ca-esito"></span></div></div>'+
+    '<div id="ca"><p class="nota">Un momento…</p></div>';
+  (function(){var inp=$("#ca-file"),vai=$("#ca-vai"),es=$("#ca-esito");
+    inp.onchange=function(){var n=inp.files.length;$("#ca-scelti").textContent=n?(n===1?inp.files[0].name:n+" file scelti"):"";vai.disabled=!n;es.textContent="";};
+    vai.onclick=function(){
+      var fl=[].slice.call(inp.files);if(!fl.length)return;
+      var grandi=fl.filter(function(f){return f.size>25*1024*1024;});if(grandi.length){es.textContent="Troppo grande (più di 25 MB): "+grandi[0].name;return;}
+      var t=$("#ca-testo").value.trim();
+      vai.disabled=true;vai.textContent="Carico…";es.textContent="";
+      db.from("orme").insert({persona_id:io.id,contenuto:t||fl.map(function(f){return f.name;}).join(", "),tipo:"karma_yoga",visibilita:$("#ca-vis").value,elemento:$("#ca-el").value,accaduto_il:oggiISO()}).select("id").single().then(function(r){
+        if(r.error){vai.disabled=false;vai.textContent="Carica";es.textContent="Non salvato: "+errore(r.error);return;}
+        var id=r.data.id,male=[];
+        return fl.reduce(function(fila,f){return fila.then(function(){
+          var nome=String(f.name||"file").replace(/[^\w.\-]+/g,"_").slice(-80);
+          return db.storage.from("riservato").upload(id+"/"+nome,f,{contentType:f.type||undefined}).then(function(u){
+            if(u&&u.error){male.push(f.name+": "+(u.error.message||"non passato"));return;}
+            return db.from("orma_file").insert({orma_id:id,nome:nome,indirizzo:id+"/"+nome,dimensione:f.size,chi_lo_ha_messo:io.id,da_conversazione:false}).then(function(q){if(q&&q.error)male.push(f.name+": "+errore(q.error));});
+          });}).catch(function(e){male.push(f.name+": "+((e&&e.message)||"non passato"));});},Promise.resolve()).then(function(){
+          cartella=$("#ca-el").value;vCartelle();
+          setTimeout(function(){var e=$("#ca-esito");if(e)e.textContent=male.length?"Non è passato: "+male.join(" · "):"Caricato. Lo trovi qui sotto.";},50);
+        });
+      });
+    };})();
   var Q="id,titolo,contenuto,elemento,visibilita,momento,persona_id,orma_file!inner(nome,indirizzo,tipo,dimensione)";
   db.from("orme").select(Q).order("momento",{ascending:false}).limit(300).then(function(r){
     if(r&&!r.error)return r.data||[];
