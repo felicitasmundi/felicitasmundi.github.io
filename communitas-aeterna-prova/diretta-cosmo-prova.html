@@ -373,7 +373,7 @@ a{color:inherit;text-decoration:none}
 
   /* 15 ott 09:17, Gab: «quando inizia la diretta, si legge da quando è iniziata, e che ti mostri data, luna e santo»
      la luna: lo stesso conto di fm-orma-mia.js · il santo: tavola «santi» (SQL 67 · fm_santo, anche per gli ospiti) */
-  var LUNE=[[1.84566,'luna nuova','🌑'],[5.53699,'luna crescente','🌒'],[9.22831,'primo quarto','🌓'],[12.91963,'gibbosa crescente','🌔'],[16.61096,'luna piena','🌕'],[20.30228,'gibbosa calante','🌖'],[23.99361,'ultimo quarto','🌗'],[27.68493,'luna calante','🌘'],[99,'luna nuova','🌑']];
+  var LUNE=[[1.004,'luna nuova','🌑'],[13.761,'luna crescente','🌒'],[15.769,'luna piena','🌕'],[28.527,'luna calante','🌘'],[99,'luna nuova','🌑']];   /* 19 ott 23:30, Gab: «metti solo luna piena nuova calante crescente» (stesse soglie di strumento.html) */
   function luna(q){ var g=((q||new Date())-Date.UTC(2000,0,6,18,14))/86400000, e=((g%29.530588853)+29.530588853)%29.530588853; for(var i=0;i<LUNE.length;i++) if(e<LUNE[i][0]) return LUNE[i][2]+' '+LUNE[i][1]; }
   var giorno={data:'', luna:'', santo:'', inizio:''};
   function scriviGiorno(){ /* 18 ott 21:40, Gab: «togli la ripetizione» → il giorno non si ripete se c'è già nella riga sopra */ var sopra=($('chi').textContent||'').toLowerCase(); var dt=giorno.data&&sopra.indexOf(giorno.data.toLowerCase())>=0?'':giorno.data; $('giorno-sala').textContent=[dt,giorno.luna,giorno.santo,giorno.inizio].filter(Boolean).join(' · '); }

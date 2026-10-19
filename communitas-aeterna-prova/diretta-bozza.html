@@ -253,6 +253,8 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   /* le puntate: ?puntata=… sceglie titolo e sottotitolo (13 ott 20:23, Gab: «aggiungi puntata, oggi alle 21 - titolo Felicitas Festival - incontro con Surra, con Marco e Gabriele»).
      Gli ospiti col link entrano senza account: sentono; chi coordina dà loro la parola dalla regia. */
   var PUNTATE={
+    /* 19 ott 23:50, Gab: «fare una diretta radio in cui racconto della settimana conclusa, e la registro mentre la faccio / mandami link» */
+    'settimana-19-ott':{titolo:'la settimana conclusa', chi:'lunedì 19 ottobre'},
     /* 19 ott 09:44, Gab: «ore 17 / Assistenza Spirituale - Corsi Usci / solo per chi ha il link» — martedì 20, solo col link */
     'usci-20-ott':{titolo:'Assistenza Spirituale - Corsi Usci', chi:'martedì 20 ottobre · ore 17', quando:'2026-10-20T17:00:00+02:00'},
     /* 18 ott 20:36, Gab: «tema: felicitas festival 21 nov / con marco e ivano» · 20:40 «mandami il link della diretta» — solo col link */
@@ -426,7 +428,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
 
   /* 15 ott 09:17, Gab: «quando inizia la diretta, si legge da quando è iniziata, e che ti mostri data, luna e santo»
      la luna: lo stesso conto di fm-orma-mia.js · il santo: tavola «santi» (SQL 67 · fm_santo, anche per gli ospiti) */
-  var LUNE=[[1.84566,'luna nuova','🌑'],[5.53699,'luna crescente','🌒'],[9.22831,'primo quarto','🌓'],[12.91963,'gibbosa crescente','🌔'],[16.61096,'luna piena','🌕'],[20.30228,'gibbosa calante','🌖'],[23.99361,'ultimo quarto','🌗'],[27.68493,'luna calante','🌘'],[99,'luna nuova','🌑']];
+  var LUNE=[[1.004,'luna nuova','🌑'],[13.761,'luna crescente','🌒'],[15.769,'luna piena','🌕'],[28.527,'luna calante','🌘'],[99,'luna nuova','🌑']];   /* 19 ott 23:30, Gab: «metti solo luna piena nuova calante crescente» (stesse soglie di strumento.html) */
   function luna(q){ var g=((q||new Date())-Date.UTC(2000,0,6,18,14))/86400000, e=((g%29.530588853)+29.530588853)%29.530588853; for(var i=0;i<LUNE.length;i++) if(e<LUNE[i][0]) return LUNE[i][2]+' '+LUNE[i][1]; }
   var giorno={data:'', luna:'', santo:'', inizio:''};
   function scriviGiorno(){ /* 18 ott 21:40, Gab: «togli la ripetizione» → il giorno non si ripete se c'è già nella riga sopra */ var sopra=($('chi').textContent||'').toLowerCase(); var dt=giorno.data&&sopra.indexOf(giorno.data.toLowerCase())>=0?'':giorno.data; $('giorno-sala').textContent=[dt,giorno.luna,giorno.santo,giorno.inizio].filter(Boolean).join(' · '); }
