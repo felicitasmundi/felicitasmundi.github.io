@@ -454,7 +454,16 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
      codifica mentre si registra: poca memoria anche per un'ora). Se lamejs non si carica, resta il registratore del navigatore (webm/m4a). */
   function finito(blob, tipo, est){ ultimo={blob:blob,tipo:tipo,secondi:Math.round((Date.now()-t0)/1000)}; var url=URL.createObjectURL(blob);
     var nome='diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+est; ultimo.nome=nome;
-    $('reg-box').style.display='block'; $('reg-info').textContent=nome+' · '+Math.round(blob.size/1024)+' KB'; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome; $('pubblica').disabled=false; $('pubblica').textContent='Pubblica come Diretta'; $('pub-esito').textContent=''; }
+    $('reg-box').style.display='block'; $('reg-info').textContent=nome+' · '+Math.round(blob.size/1024)+' KB'; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome; $('pubblica').disabled=false; $('pubblica').textContent='Pubblica come Diretta'; $('pub-esito').textContent='';  salvaCopia(); }
+  /* 20 ott 17:32, Gab: «ho schiacciato registra e poi ho messo scarica e non ho ancora iniziato a scaricare» →
+     (1) appena si ferma, una copia sale da sola nel deposito della diretta (dirette/<villaggio>/), così non si perde chiudendo la pagina;
+     (2) «Scarica il file» sul telefono apre la condivisione (iPhone: «Salva in File»), dove il download diretto non parte */
+  function salvaCopia(){ if(!ultimo||ultimo.salvato) return; var e=$('pub-esito'); e.textContent='Salvo una copia nel deposito…';
+    db.storage.from('dirette').upload(VILLAGGIO+'/'+ultimo.nome, ultimo.blob,{contentType:ultimo.tipo,upsert:false}).then(function(r){
+      if(r.error&&!/already exists|duplicate/i.test(r.error.message||'')) throw r.error; ultimo.salvato=true; e.textContent='Una copia è salva nel deposito della diretta ('+ultimo.nome+').'; })
+    .catch(function(err){ e.textContent='La copia nel deposito non è salita ('+(err&&err.message?err.message:'—')+'): scarica il file prima di chiudere la pagina.'; }); }
+  $('file-scarica').addEventListener('click',function(ev){ if(!ultimo) return; try{ var f=new File([ultimo.blob],ultimo.nome,{type:ultimo.tipo});
+      if(navigator.canShare&&navigator.canShare({files:[f]})&&/iPhone|iPad|Android/i.test(navigator.userAgent)){ ev.preventDefault(); navigator.share({files:[f],title:ultimo.nome}).catch(function(){}); } }catch(e){} });
   function registra(){ if(!stanza) return;
     if(typeof lamejs==='undefined'&&!window.__lameNo){ dice('Un momento…'); var lj=document.createElement('script'); lj.src='https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js'; lj.onload=function(){ dice(''); registra(); }; lj.onerror=function(){ window.__lameNo=true; registra(); }; document.head.appendChild(lj); return; }
     ctx=new (window.AudioContext||window.webkitAudioContext)(); dest=ctx.createMediaStreamDestination(); sorgenti=[];
@@ -487,7 +496,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     .catch(function(err){ $('pubblica').disabled=false; e.textContent='Non pubblicata: '+(err&&err.message?err.message:'—'); }); };
 
   document.querySelectorAll('.lingue button').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.lingue button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on'); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo', p.id==='p-'+b.getAttribute('data-p')); }); }; });
-  window.addEventListener('beforeunload',function(e){ if(rec&&rec.state==='recording'){ e.preventDefault(); e.returnValue='La registrazione è in corso: se esci la perdi. Prima premi ferma.'; return e.returnValue; } });
+  window.addEventListener('beforeunload',function(e){ if(rec&&rec.state==='recording'){ e.preventDefault(); e.returnValue='La registrazione è in corso: se esci la perdi. Prima premi ferma.'; return e.returnValue; } if(ultimo&&!ultimo.salvato){ e.preventDefault(); e.returnValue='La registrazione non è ancora salva: se esci la perdi. Prima scaricala.'; return e.returnValue; } });
   window.addEventListener('pagehide',function(){ lasciando=true; if(stanza) stanza.disconnect(); });
   /* tornando dalle altre pagine col segno acceso: rientro da solo — anche quando il navigatore ridà la pagina dalla sua cache (pageshow) */
   window.addEventListener('pageshow',function(e){ if(!e.persisted) return; stanza=null; fuori(''); if(segnoVivo()) entra(); });
