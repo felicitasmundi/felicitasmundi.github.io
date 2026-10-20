@@ -570,12 +570,13 @@ function logisticaOggi(){
 
 /* ═══ GIORNALE · modello 4 ═══
    Gab 20 ott 01:42 sul modello 4: «bello». 01:48: «ok anteprima si è giusto».
-   I testi del Festival, del palinsesto, delle tre linee, del percorso e della citazione sono quelli del modello 4 (presi dal Settimanale del 20/10, senza riscriverli).
+   Gab 20 ott 10:32: il Settimanale del 20/10 è «troppo approssimativo», «non lo devo far leggere a nessuno» → nessun testo del Settimanale qui.
+   Testi fissi solo da fonti già approvate: pagina del Festival, SQL 77 (le voci, audio 20/10 01:31), SQL 84-85 (le tre funzioni), Cervello (i prezzi).
    Gli articoli del giorno si leggono dal database: i pubblici in tessere grandi, gli altri in «Solo per i villaggi».
    Bolli del palinsesto e «dall'ultima volta» dall'SQL 77 (fm_giornale_entro, fm_giornale_voci_mosse); senza, le voci sono tutte uguali. */
 var FEST_ID="bfff97a1-3431-4939-b15e-304f14087509";
 var VOCI_G4=[["pratiche_risveglio","Pratiche di risveglio",1],["bambini","Contenuti per bambini",2],["sapere_mondo","Sapere del mondo",5],["storie","Storie",3],["musica","Bella musica",4],["maestrie","Le maestrie",3],["insegnamenti","Insegnamenti",5],["creativita","Creatività",1],["notte","Programmi della notte",4],["tecnologia","Tecnologia",5],["economia","Economia",3]];
-var DATE_G4=[["2026-10-25","25 ottobre","Villaggio Felicitas a Oristano."],["2026-11-21","21 novembre","Felicitas Festival, Baratili San Pietro."],["2027-01-15","15-17 gennaio","Seminario di Aplomb, «la giusta postura e la colonna vertebrale», a Oristano."],["2027-01-17","17 gennaio","Ottana, «dove verrà presentata la maschera di Ottana»."]];
+var DATE_G4=[["2026-10-25","25 ottobre","L'incontro dei vicinati · Cas'ale · Baratili · dalle 10"],["2026-11-21","21 novembre","Felicitas Festival · Baratili San Pietro · dalle 10:00"]]; /* dalla pagina del Festival */
 var g4Entro;
 function g4Testa(g){
   var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime(),L=luna();
@@ -585,22 +586,20 @@ function g4Testa(g){
   return '<div class="g4-apre"><div class="g4-data">'+esc(g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}))+' · '+esc(L.nome)+'</div><h1>Giornale<br>Felicitas</h1><p class="grande" id="g4-mosse" hidden></p></div>'+
     '<div id="g4-radio"></div><div id="g4-art" style="display:flex;flex-direction:column;gap:10px"></div>'+
     (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="festival-evento-bozza.html?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
-      '<div class="g4-occ">21 novembre · Baratili San Pietro · Centro sociale</div>'+
-      '<div class="g4-cit">«Un contesto di gioia dalle 10 di mattina fino a notte.»</div>'+
-      '<p>«Un punto di ritiro oltre che di rivendita», con «uno spazio emporio» e «uno spazio di conferenze». Ospiti: Rimondini, «che si occupa di geopolitica», dottoressa Randaccio, Gruppo Sardo Surra, «gli amici del cerchio, del drum circle, di Hare Krishna». Per bambini e ragazzi «dalla giocoleria ai fumetti».</p>'+
+      '<div class="g4-occ">In evidenza</div><h2>Felicitas Festival</h2>'+
+      '<p>TRAME · la forza di essere connessi<br>Sabato 21 novembre 2026 · dalle 10:00<br>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</p>'+
       '<div class="g4-num"><div><b>'+giorni+'</b><small>giorni</small></div><div id="g4-fatti" hidden><b></b><small>compiti fatti</small></div><div id="g4-servono" hidden><b></b><small>cose che servono</small></div></div>'+
       '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
       '<a class="g4-tasto" href="festival-evento-bozza.html?c=10182300">Il programma</a></div></div>':'')+
-    '<div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div><h2 style="font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.05;margin:6px 0 8px">«Ogni giorno si possono condividere contenuti.»</h2><p style="margin:0;color:#D9CFBF;font-size:15px">Il palinsesto giornaliero: «pratiche di risveglio, contenuti per bambini, sapere del mondo, storie, bella musica, da ascoltare, le maestrie, insegnamenti, la creatività e i programmi della notte». A queste si aggiungono tecnologia ed economia.</p></div>'+
+    '<div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
     '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div>'+
-    '<div class="g4-mos"><div class="g4-titolo g4-sale"><div class="g4-occ">Le tre linee · per i team</div><h3>Logistica, tecnologie e comunità.</h3><p>«Servono per poter indirizzare la comunità e indirizzare soprattutto dei team, delle squadre di lavoro.»</p></div>'+
-      '<a class="g4-cat g4-c1 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>')+'<div><h3>Logistica</h3><p>Supportare i produttori.</p></div></a>'+
-      '<a class="g4-cat g4-c5 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')+'<div><h3>Tecnologia</h3><p>«L\'AI non entra nel database.»</p></div></a>'+
-      '<a class="g4-cat g4-c2 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="7" cy="9" r="2.5"/><circle cx="17" cy="9" r="2.5"/><circle cx="12" cy="6" r="2.5"/><path d="M3 20c.6-3 2.4-5 4-5M21 20c-.6-3-2.4-5-4-5M8 20c.6-3 2.2-5 4-5s3.4 2 4 5"/>')+'<div><h3>Comunità</h3><p>Chi c\'è, cosa fa?</p></div></a>'+
-      '<a class="g4-cat g4-c3 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="12" cy="12" r="8"/><path d="M12 7v10M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2-1.1 1.7-2.5 2-2.5.8-2.5 2 1.1 2 2.5 2 2.5-.8 2.5-2"/>')+'<div><h3>Economia</h3><p>La distribuzione equa ed adeguata della ricchezza.</p></div></a></div>'+
-    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Il percorso</div><h2>Le virtù e la riscoperta del proprio talento.</h2><p>«Questo percorso che quindi proporrò sarà settimanale». «Si potrà scrivere sul Megafono, si potranno mettere articoli, si potranno fare delle dirette».</p>'+
+    '<div class="g4-mos"><div class="g4-titolo g4-sale"><div class="g4-occ">Le tre linee · per i team</div><h3>Logistica, tecnologia e comunità</h3></div>'+
+      '<a class="g4-cat g4-c1 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>')+'<div><h3>Logistica</h3><p>Emporio · Magazzino · Produttori · Eventi · Contabilità</p></div></a>'+
+      '<a class="g4-cat g4-c5 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')+'<div><h3>Tecnologia</h3><p>Piattaforma · Giornale · Radio · Gestionale · Sicurezza</p></div></a>'+
+      '<a class="g4-cat g4-c2 g4-sale" style="grid-column:1/-1;min-height:120px" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="7" cy="9" r="2.5"/><circle cx="17" cy="9" r="2.5"/><circle cx="12" cy="6" r="2.5"/><path d="M3 20c.6-3 2.4-5 4-5M21 20c-.6-3-2.4-5-4-5M8 20c.6-3 2.2-5 4-5s3.4 2 4 5"/>')+'<div><h3>Comunità</h3><p>Vicinati e villaggi · Formazione · Assistenza comunitaria integrata · Economia</p></div></a>'+
+      '</div>'+
+    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Il percorso</div><h2>Praticantato Antaḥkaraṇa</h2>'+
       '<div class="g4-prezzi"><div><b>Gratis</b><small>leggere il cervello Felicitas</small></div><div><b>10 €</b><small>al mese senza AI</small></div><div><b>26 €</b><small>al mese con l\'AI</small></div><div><b>20 €</b><small>a settimana il percorso, cioè 80 € al mese, oppure il karma yoga</small></div></div></div></div>'+
-    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Perché scriviamo le decisioni</div><div class="g4-cit" style="font-size:24px">«Se non lo sanno tutti gli altri del team e lo sa solo l\'unica persona con cui parlo in quel momento, gli altri rimangono indietro.»</div></div></div>'+
     '<div class="g4-t g4-sale"><div class="in" id="g4-date"><div class="g4-occ">Le date</div>'+g4Date([])+'</div></div>'+
     '<div id="g4-vil"></div>';
 }
