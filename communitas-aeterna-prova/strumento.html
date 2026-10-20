@@ -303,6 +303,16 @@ body.notte .corpo .art{border-bottom:0}
 .g4-sale{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 .g4-sale.visto{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.g4-sale{opacity:1;transform:none;transition:none}}
+.rg-nuovo{margin:8px 0 4px;border-color:var(--oro)}
+.rg-nuovo textarea{min-height:70px}
+.rg-altro summary{cursor:pointer;font-size:13px;color:var(--tenue)}
+.rg-lista{display:flex;flex-direction:column;gap:6px}
+.rg-testa{display:flex;gap:8px;align-items:baseline}.rg-testa .m{flex:none;font-variant-numeric:tabular-nums}
+.rg-meta{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0}
+.rg-voce{margin-top:6px}.rg-voce summary{display:flex;justify-content:space-between;align-items:baseline;gap:8px;cursor:pointer;list-style:none}.rg-voce summary::-webkit-details-marker{display:none}
+.rg-blocchi{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px}@media (min-width:640px){.rg-blocchi{grid-template-columns:repeat(3,1fr)}}
+.rg-blocchi ul{margin:4px 0 0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.rg-az{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex:none;width:44%;max-width:190px}select.rg-cambia{width:100%;font-size:12.5px;padding:4px 6px}
 </style>
 </head>
 <body>
@@ -553,7 +563,7 @@ function vOggi(){
     '<div id="o-appunt"></div>'+
     /* 18 ott 20:36 e 22:36, Gab: «oggi può essere anche il contesto "di cosa hai bisogno?"» · da oggi «si possa entrare nella visione completa dei prodotti e assistenza» */
     /* 19 ott 18:05, Gab: «prima di cosa hai bisogno, forse vanno segnati i task che uno ha accettato, per ricordare a che punto si trova» */
-    (io.id?'<div id="o-miei"></div><div id="o-logistica"></div>':'')+
+    (io.id?'<div id="o-reg"></div><div id="o-miei"></div><div id="o-logistica"></div>':'')+
     /* 19 ott 18:05, Gab: ogni voce scritta come parola, sotto una fila di rettangolini; 23:32 «per ora rendi visibile ciò che c e permetendo a tutto il resto di entrare una volta inserito» */
     '<p class="et" style="margin-top:6px">Di cosa hai bisogno?</p>'+STANZE_O.map(function(s){return '<div class="voce-o" style="--c:'+s[2]+'"><a class="capo-o" href="'+s[1]+'"><b>'+esc(s[0])+'</b><span>tutto ›</span></a><div class="fila-o" id="fila-'+s[3]+'"></div>'+(s[3]==="emporio"?paniereHTML():'')+'</div>';}).join("")+
     (io.id?'':'<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span></div>')+
@@ -563,6 +573,7 @@ function vOggi(){
   Promise.all([lezioni(),dirette()]).then(function(v){var e=$("#o-appunt");if(!e)return;var h=appuntamentiHTML(v[0],v[1],da,a);
     e.innerHTML=h?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p><div class="appunt">'+h+'</div>':'';});
   fileOggi();
+  if(io.id)vRegistroOggi();
   if(io.id)mieiOggi();
   if(io.id)logisticaOggi();
   if(io.coordina)vRuoli();
@@ -586,6 +597,215 @@ function logisticaOggi(){
       if(b.hasAttribute("data-q")){var v=prompt("Quanta merce, davvero?",b.getAttribute("data-q"));if(v===null)return;v=parseFloat(String(v).replace(",","."));if(v>0)a.p_quantita=v;}
       b.disabled=true;db.rpc("fm_compito_fatto",a).then(dopo,dopo);};});
   },function(){});
+}
+
+/* ═══ IL REGISTRO DEL TEAM · SQL 90 ═══
+   Schema approvato da Gab il 20/10 alle 14:37 (cervello-felicitas/output/registro-del-team.html).
+   20 ott 10:52, Gab: «Oggi dovrebbe essere il contesto dove tu segni gli appuntamenti e le cose che stanno succedendo oggi.»
+   20 ott 13:40: «manca proprio questo registro unico del team […] E la banca dei compiti con lo Stato, quello è importantissimo.»
+   20 ott 21:55: «tutto quello che abbiamo detto e che è scritto nel giornale della sera deve essere attivato adesso»
+   Una tavola sola (registro): si scrive in Oggi, si muove nel banco dei compiti (Obiettivi), resta nel Cervello per voce.
+   Senza l'SQL 90 queste parti non compaiono. */
+var REG_TIPI=[["da_fare","da fare"],["chiamata","chiamata"],["incontro","incontro"],["fatto","fatto"],["decisione","decisione"],["idea","idea"]];
+var REG_TIPO={};REG_TIPI.forEach(function(x){REG_TIPO[x[0]]=x[1];});
+var REG_STATO={aperto:"aperto",preso:"preso",fatto:"fatto",annullato:"annullato"};
+var REG_STATO_C={aperto:"s-in_coda",preso:"s-in_avanzamento",fatto:"s-sviluppato",annullato:"s-in_coda"};
+var REG_VIS=[["cerchio","il gruppo"],["villaggio","il villaggio"],["solo_me","solo io"]];
+var REG_VIS_N={cerchio:"il gruppo",villaggio:"il villaggio",solo_me:"solo io"};
+var reg={guardo:"tutto",tipo:"da_fare",cerchi:null,cosaFa:null,manca:false};
+function regCerchi(){
+  if(reg.cerchi)return Promise.resolve(reg.cerchi);
+  return db.rpc("fm_cerchi").then(function(r){reg.cerchi=((r&&!r.error&&r.data)||[]).filter(function(x){return x.dentro||x.guido;});return reg.cerchi;},function(){reg.cerchi=[];return reg.cerchi;});
+}
+function regCerchioDi(g){return g.vicinato_id||g.squadra_id||g.azienda_id||VILLAGGIO;}
+function regNomeCerchio(id){if(!id||id===VILLAGGIO)return "il villaggio";var x=(reg.cerchi||[]).filter(function(c){return c.id===id;})[0];return x?x.nome:"";}
+function regTuttiRuoli(){var l=[];Object.keys(RUOLI).forEach(function(f){RUOLI[f].forEach(function(r){l.push([f,r[0],FUNZIONI[f]+" · "+r[1]]);});});return l;}
+function regNomeRuolo(r){var x=regTuttiRuoli().filter(function(y){return y[1]===r;})[0];return x?x[2]:r;}
+function regMioRuolo(r){return (io.ruoli||[]).some(function(x){return x.ruolo===r;});}
+/* i tasti dello stato: chi può fare cosa lo decide il database; qui si mostrano solo quelli sensati */
+function regTasti(g){
+  if(!g.stato)return "";
+  var mio=g.preso_da===io.id,autore=g.scritto_da===io.id,guida=io.coordina||io.nucleo,b=[];
+  if(g.stato==="aperto"){b.push('<button class="mini oro" data-rg="prendo|'+esc(g.id)+'">Lo prendo</button>');b.push('<button class="mini" data-rg="fatto|'+esc(g.id)+'">Fatto</button>');}
+  if(g.stato==="preso"&&(mio||autore||guida)){b.push('<button class="mini oro" data-rg="fatto|'+esc(g.id)+'">Fatto</button>');b.push('<button class="mini" data-rg="riapro|'+esc(g.id)+'">'+(mio?"Lo lascio":"Riapri")+'</button>');}
+  if(g.stato==="fatto"&&(mio||autore||guida))b.push('<button class="mini" data-rg="riapro|'+esc(g.id)+'">Riapri</button>');
+  if((g.stato==="aperto"||g.stato==="preso")&&(autore||guida))b.push('<button class="mini" data-rg="annullo|'+esc(g.id)+'">Annulla</button>');
+  return b.length?'<div class="fine">'+b.join("")+'</div>':"";
+}
+function regRiga(g,conData){
+  var chi=g.preso_da?(nomi[g.preso_da]||"qualcuno"):"",da=nomi[g.scritto_da]||"";
+  var quando=conData?new Date(g.scritto_il).toLocaleDateString("it-IT",{day:"numeric",month:"short"})+" ":"";
+  return '<div class="card rg-riga"><div class="rg-testa"><span class="m">'+esc(quando+hhmm(g.scritto_il))+'</span><span class="t">'+esc(g.testo)+'</span></div>'+
+    '<div class="rg-meta"><span class="pill s-in_coda">'+esc(REG_TIPO[g.tipo]||g.tipo)+'</span>'+(g.stato?'<span class="pill '+REG_STATO_C[g.stato]+'">'+esc(REG_STATO[g.stato])+(chi&&g.stato!=="aperto"?" · "+esc(chi):"")+'</span>':'')+
+      (g.voce?'<span class="chip">'+esc(g.voce)+'</span>':'')+(g.ruolo?'<span class="chip f-'+esc(g.funzione||"")+'">'+esc(regNomeRuolo(g.ruolo))+'</span>':'')+
+      '<span class="chip">'+esc(g.visibilita==="cerchio"?regNomeCerchio(regCerchioDi(g)):REG_VIS_N[g.visibilita]||"")+'</span></div>'+
+    (g.con_chi?'<span class="m">con '+esc(g.con_chi)+'</span>':'')+
+    (g.perche?'<span class="m rg-perche">perché: '+esc(g.perche)+'</span>':'')+
+    (g.prossimo?'<span class="m">prossimo passo: '+esc(g.prossimo)+'</span>':'')+
+    (g.entro_il?'<span class="m">entro il '+esc(new Date(g.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+
+    (da&&g.scritto_da!==io.id?'<span class="m">scritto da '+esc(da)+'</span>':'')+
+    regTasti(g)+'</div>';
+}
+function regLega(box,dopo){
+  box.querySelectorAll("[data-rg]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-rg").split("|");b.disabled=true;
+    db.rpc("fm_registro_"+p[0],{p_riga:p[1]}).then(function(r){if(r&&r.error)alert(errore(r.error));cache.obiettivi=null;dopo();},function(e){alert(errore(e));dopo();});};});
+}
+function regModulo(obiettivi){
+  var cer=[[VILLAGGIO,"Il villaggio"]].concat((reg.cerchi||[]).map(function(c){return [c.id,c.nome];}));
+  var dove=reg.guardo!=="tutto"?reg.guardo:VILLAGGIO;
+  return '<div class="card modulo rg-nuovo"><b>Aggiungi un\'informazione</b>'+
+    '<textarea id="rg-testo" maxlength="2000" aria-label="Aggiungi un\'informazione"></textarea>'+
+    '<div class="lg-filtri" role="radiogroup" aria-label="Tipo">'+REG_TIPI.map(function(t){return '<button type="button" class="chip'+(reg.tipo===t[0]?" on":"")+'" role="radio" aria-checked="'+(reg.tipo===t[0])+'" data-rgtipo="'+t[0]+'">'+t[1]+'</button>';}).join("")+'</div>'+
+    '<div class="due"><label>Dove<select id="rg-dove">'+cer.map(function(c){return '<option value="'+esc(c[0])+'"'+(c[0]===dove?" selected":"")+'>'+esc(c[1])+'</option>';}).join("")+'</select></label>'+
+    '<label>Chi la vede<select id="rg-vis">'+REG_VIS.map(function(v){return '<option value="'+v[0]+'">'+v[1]+'</option>';}).join("")+'</select></label></div>'+
+    '<details class="rg-altro"><summary>Voce, ruolo, perché, prossimo passo</summary><div class="modulo" style="margin-top:8px">'+
+      '<div class="due"><label>Voce<input type="text" id="rg-voce" list="rg-voci" maxlength="80"></label>'+
+      '<label>Per il ruolo<select id="rg-ruolo"><option value="">nessuno</option>'+regTuttiRuoli().map(function(r){return '<option value="'+esc(r[0]+":"+r[1])+'">'+esc(r[2])+'</option>';}).join("")+'</select></label></div>'+
+      '<datalist id="rg-voci"></datalist>'+
+      '<label>Con chi<input type="text" id="rg-con" maxlength="300"></label>'+
+      '<label>Perché<textarea id="rg-perche" maxlength="2000" style="min-height:60px"></textarea></label>'+
+      '<label>Prossimo passo<input type="text" id="rg-prossimo" maxlength="600"></label>'+
+      '<div class="due"><label>Entro il<input type="date" id="rg-entro"></label>'+
+      '<label>Obiettivo<select id="rg-ob"><option value="">nessuno</option>'+(obiettivi||[]).filter(function(o){return o.stadio!=="sviluppato";}).map(function(o){return '<option value="'+esc(o.id)+'">'+esc(o.titolo||o.contenuto||"")+'</option>';}).join("")+'</select></label></div>'+
+    '</div></details>'+
+    '<div class="azioni"><button class="btn pieno" id="rg-salva">Salva</button></div><div class="toast" id="rg-ok" hidden></div></div>';
+}
+function regSalva(dopo){
+  var t=val("rg-testo");if(!t)return mostra("#rg-ok","Scrivi cosa succede.",true);
+  var dove=val("rg-dove"),c=(reg.cerchi||[]).filter(function(x){return x.id===dove;})[0],ru=val("rg-ruolo").split(":");
+  var riga={testo:t,tipo:reg.tipo,visibilita:val("rg-vis")||"cerchio",voce:val("rg-voce")||null,con_chi:val("rg-con")||null,perche:val("rg-perche")||null,
+    prossimo:val("rg-prossimo")||null,entro_il:val("rg-entro")||null,obiettivo_id:val("rg-ob")||null,funzione:ru[1]?ru[0]:null,ruolo:ru[1]||null};
+  if(c)riga[{vicinato:"vicinato_id",gruppo:"squadra_id",azienda:"azienda_id"}[c.tipo]]=c.id;
+  var b=$("#rg-salva");b.disabled=true;
+  db.from("registro").insert(riga).then(function(r){b.disabled=false;
+    if(r&&r.error)return mostra("#rg-ok",errore(r.error),true);
+    $("#rg-testo").value="";mostra("#rg-ok","Salvato nel registro.");cache.obiettivi=null;setTimeout(dopo,600);
+  },function(e){b.disabled=false;mostra("#rg-ok",errore(e),true);});
+}
+/* Oggi: «Stai guardando», «Aggiungi un'informazione», le cose di oggi e quelle aperte per me o per il mio ruolo */
+function vRegistroOggi(){
+  var box=$("#o-reg");if(!box)return;
+  var oggi=oggiISO();
+  Promise.all([
+    regCerchi(),
+    db.from("registro").select("*").or("giorno.eq."+oggi+",stato.in.(aperto,preso)").order("scritto_il",{ascending:false}).limit(200).then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
+    leggiObiettivi(),
+    reg.cosaFa?Promise.resolve(reg.cosaFa):db.from("ruoli_cosa_fa").select("funzione,ruolo,cosa_fa").then(function(r){reg.cosaFa=(r&&!r.error&&r.data)||[];return reg.cosaFa;},function(){return [];})
+  ]).then(function(v){
+    if(vista!=="oggi"||!$("#o-reg"))return;
+    var righe=v[1];
+    if(righe===null){reg.manca=true;box.innerHTML=io.nucleo?'<p class="nota" style="margin:0 2px 10px">Il registro del team si apre con l\'SQL 90.</p>':'';return;}
+    reg.manca=false;
+    var g=reg.guardo;
+    if(g!=="tutto")righe=righe.filter(function(x){return regCerchioDi(x)===g;});
+    var miei=righe.filter(function(x){return x.giorno===oggi||x.preso_da===io.id||x.scritto_da===io.id||(x.ruolo&&regMioRuolo(x.ruolo));});
+    var ids=[];miei.forEach(function(x){ids.push(x.scritto_da,x.preso_da);});
+    leggiNomi(ids).then(function(){
+      var mieiRuoli=(io.ruoli||[]).map(function(r){var c=(reg.cosaFa||[]).filter(function(x){return x.ruolo===r.ruolo;})[0];return '<div class="card"><span class="chip f-'+esc(r.funzione)+'" style="align-self:flex-start">'+esc(nomeRuolo(r.funzione,r.ruolo))+'</span>'+
+        (c?'<span class="t">'+esc(c.cosa_fa)+'</span>':'<span class="m">Cosa fa chi ha questo ruolo lo scrive chi coordina.</span>')+'</div>';}).join("");
+      box.innerHTML='<p class="et">Stai guardando</p><div class="lg-filtri" style="margin-top:6px">'+
+          [["tutto","Tutto"],[VILLAGGIO,"Il villaggio"]].concat((reg.cerchi||[]).map(function(c){return [c.id,c.nome];})).map(function(c){return '<button class="chip'+(g===c[0]?" on":"")+'" data-rgguardo="'+esc(c[0])+'">'+esc(c[1])+'</button>';}).join("")+'</div>'+
+        regModulo(v[2])+
+        '<p class="et" style="margin-top:12px">Le cose di oggi</p>'+
+        (miei.length?'<div class="rg-lista">'+miei.map(function(x){return regRiga(x,x.giorno!==oggi);}).join("")+'</div>':'<div class="vuoto">Ancora niente oggi'+(g!=="tutto"?" qui":"")+'.</div>')+
+        (mieiRuoli?'<p class="et" style="margin-top:12px">Il tuo ruolo</p><div class="rg-lista">'+mieiRuoli+'</div>':'');
+      box.querySelectorAll("[data-rgguardo]").forEach(function(b){b.onclick=function(){reg.guardo=b.getAttribute("data-rgguardo");vRegistroOggi();};});
+      box.querySelectorAll("[data-rgtipo]").forEach(function(b){b.onclick=function(){reg.tipo=b.getAttribute("data-rgtipo");
+        box.querySelectorAll("[data-rgtipo]").forEach(function(y){var on=y===b;y.classList.toggle("on",on);y.setAttribute("aria-checked",on);});};});
+      var voci={};(v[1]||[]).forEach(function(x){if(x.voce)voci[x.voce]=1;});
+      $("#rg-voci").innerHTML=Object.keys(voci).sort().map(function(x){return '<option value="'+esc(x)+'">';}).join("");
+      $("#rg-salva").onclick=function(){regSalva(vRegistroOggi);};
+      regLega(box,vRegistroOggi);
+    });
+  });
+}
+
+/* IL BANCO DEI COMPITI · uno solo: le righe del registro con uno stato e i compiti della logistica (SQL 74), ognuno col suo stato */
+var banco={filtro:"tutti"};
+function vBanco(box,cerchioId){
+  if(!box)return;
+  db.rpc("fm_banco",{p_cerchio:cerchioId||null}).then(function(r){
+    if(!box.isConnected)return;
+    if(!r||r.error){box.innerHTML="";return;}
+    var l=r.data||[],ids=[];l.forEach(function(x){ids.push(x.preso_da,x.scritto_da);});
+    leggiNomi(ids).then(function(){
+      var ruoli={};l.forEach(function(x){if(x.ruolo)ruoli[x.ruolo]=1;});
+      var f=banco.filtro,q=l.filter(function(x){return f==="tutti"||(f==="miei"?(x.preso_da===io.id||x.scritto_da===io.id):x.ruolo===f);});
+      var col=[["aperto","Aperto"],["preso","Preso"],["fatto","Fatto · 30 giorni"]];
+      function carta(x){
+        var t=x.fonte==="logistica"?{id:x.id,stato:x.stato,preso_da:x.preso_da,scritto_da:x.scritto_da}:x;
+        var tasti=x.fonte==="logistica"?
+          (x.stato==="aperto"?'<div class="fine"><button class="mini oro" data-bclog="prendo|'+esc(x.id)+'">Lo prendo</button></div>':x.stato==="preso"&&(x.preso_da===io.id||io.coordina)?'<div class="fine"><button class="mini oro" data-bclog="fatto|'+esc(x.id)+'">Fatto</button></div>':''):regTasti(t);
+        return '<div class="card"><span class="t">'+esc(x.titolo)+'</span><div class="rg-meta">'+
+          (x.fonte==="logistica"?(x.ruolo?'':'<span class="chip f-logistica">logistica</span>'):'<span class="pill s-in_coda">'+esc(REG_TIPO[x.tipo]||x.tipo)+'</span>')+
+          (x.ruolo?'<span class="chip f-'+esc(x.funzione||"")+'">'+esc(regNomeRuolo(x.ruolo))+'</span>':'')+(x.voce?'<span class="chip">'+esc(x.voce)+'</span>':'')+'</div>'+
+          '<span class="m">'+(x.preso_da?esc(nomi[x.preso_da]||"preso"):"nessuno ancora")+(x.entro_il?" · entro il "+esc(new Date(x.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span>'+tasti+'</div>';}
+      box.innerHTML='<p class="et">Il banco dei compiti</p>'+
+        '<div class="lg-conta" style="grid-template-columns:repeat(3,1fr)">'+col.map(function(c){return '<div><b>'+q.filter(function(x){return x.stato===c[0];}).length+'</b><small>'+c[1].split(" ·")[0].toLowerCase()+'</small></div>';}).join("")+'</div>'+
+        '<div class="lg-filtri">'+[["tutti","Tutti"],["miei","I miei"]].concat(Object.keys(ruoli).map(function(k){return [k,regNomeRuolo(k).split(" · ").pop()];})).map(function(c){return '<button class="chip'+(f===c[0]?" on":"")+'" data-bcf="'+esc(c[0])+'">'+esc(c[1])+'</button>';}).join("")+'</div>'+
+        '<div class="lg-banco">'+col.map(function(c){var z=q.filter(function(x){return x.stato===c[0];});
+          return '<div class="lg-col"><p class="et">'+c[1]+' · '+z.length+'</p>'+(z.length?z.map(carta).join(""):'<div class="vuoto" style="padding:10px">—</div>')+'</div>';}).join("")+'</div>';
+      function di(){vBanco(box,cerchioId);}
+      box.querySelectorAll("[data-bcf]").forEach(function(b){b.onclick=function(){banco.filtro=b.getAttribute("data-bcf");di();};});
+      box.querySelectorAll("[data-bclog]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-bclog").split("|"),a={p_compito:p[1]};b.disabled=true;
+        db.rpc("fm_compito_"+p[0],a).then(function(x){if(x&&x.error)alert(errore(x.error));di();},function(){di();});};});
+      regLega(box,di);
+    });
+  },function(){box.innerHTML="";});
+}
+
+/* IL CERVELLO PER VOCE · il sistema di coscienza: il cosa e il perché.
+   20 ott 12:01, Gab: «sistema di coscienza è il contesto che integra il cosa e il perchè».
+   Si legge solo quello che le regole del registro fanno vedere: chi è nel gruppo, chi ha il ruolo, il villaggio; «solo io» resta di chi l'ha scritto. */
+function vVociRegistro(box,cerchioId){
+  if(!box)return;
+  var A=new Date(Date.now()-90*864e5).toISOString();
+  var qy=db.from("registro").select("*").gte("scritto_il",A).order("scritto_il",{ascending:false}).limit(400);
+  Promise.all([qy.then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),regCerchi()]).then(function(v){
+    if(!box.isConnected)return;
+    var l=v[0];if(l===null){box.innerHTML="";return;}
+    l=l.filter(function(x){return x.stato!=="annullato"&&(!cerchioId||regCerchioDi(x)===cerchioId);});
+    if(!l.length){box.innerHTML='<p class="et" style="margin-top:14px">Il registro per voce</p><div class="vuoto">Le righe scritte in Oggi compaiono qui, divise per voce.</div>';return;}
+    var ids=[];l.forEach(function(x){ids.push(x.scritto_da,x.preso_da);});
+    leggiNomi(ids).then(function(){
+      var per={};l.forEach(function(x){var k=x.voce||"Senza voce";(per[k]=per[k]||[]).push(x);});
+      var chiavi=Object.keys(per).sort(function(a,b){return a==="Senza voce"?1:b==="Senza voce"?-1:per[b].length-per[a].length;});
+      box.innerHTML='<p class="et" style="margin-top:14px">Il registro per voce</p>'+chiavi.map(function(k){var z=per[k];
+        var chi={};z.forEach(function(x){[x.scritto_da,x.preso_da].forEach(function(p){if(p&&nomi[p])chi[nomi[p]]=1;});});
+        var suc=z.filter(function(x){return x.stato==="aperto"||x.stato==="preso"||x.tipo==="fatto"||x.tipo==="incontro"||x.tipo==="chiamata";}).slice(0,6);
+        var dec=z.filter(function(x){return x.tipo==="decisione"||x.perche;}).slice(0,6);
+        return '<details class="card rg-voce"><summary><b>'+esc(k)+'</b><span class="m">'+z.length+(z.length===1?" riga":" righe")+'</span></summary>'+
+          '<div class="rg-blocchi"><div><p class="et">Chi c\'è</p><span class="t">'+(Object.keys(chi).map(esc).join(", ")||"—")+'</span></div>'+
+          '<div><p class="et">Cosa succede</p>'+(suc.length?'<ul>'+suc.map(function(x){return '<li>'+esc(x.testo)+(x.stato?' <span class="pill '+REG_STATO_C[x.stato]+'">'+REG_STATO[x.stato]+'</span>':'')+'</li>';}).join("")+'</ul>':'<span class="m">—</span>')+'</div>'+
+          '<div><p class="et">Perché · decisioni</p>'+(dec.length?'<ul>'+dec.map(function(x){return '<li>'+esc(x.tipo==="decisione"?x.testo:x.perche)+'<span class="m"> · '+esc(new Date(x.scritto_il).toLocaleDateString("it-IT",{day:"numeric",month:"short"}))+'</span></li>';}).join("")+'</ul>':'<span class="m">—</span>')+'</div></div>'+
+          '<p class="nota" style="margin-top:6px">'+esc(Object.keys(z.reduce(function(a,x){a[REG_VIS_N[x.visibilita]]=1;return a;},{})).join(" · "))+'</p></details>';}).join("");
+    });
+  });
+}
+
+/* RUOLI · cambiare un ruolo in un passo, e scrivere cosa fa chi lo ha (SQL 90) */
+function regRuoliExtra(box){
+  if(!box)return;
+  box.querySelectorAll("[data-chiudi-r]").forEach(function(b){
+    var s=document.createElement("select");s.className="rg-cambia";s.setAttribute("aria-label","Cambia ruolo");
+    s.innerHTML='<option value="">cambia in…</option>'+regTuttiRuoli().map(function(r){return '<option value="'+esc(r[0]+":"+r[1])+'">'+esc(r[2])+'</option>';}).join("");
+    s.onchange=function(){if(!s.value)return;var p=s.value.split(":");s.disabled=true;
+      db.rpc("fm_ruolo_cambia",{p_ruolo:b.getAttribute("data-chiudi-r"),p_funzione:p[0],p_nuovo:p[1]}).then(function(r){s.disabled=false;
+        if(r&&r.error)return mostra("#r-ok",/fm_ruolo_cambia|function/i.test(r.error.message||"")?"Si apre con l'SQL 90.":errore(r.error),true);
+        if(r.data!=="ok")return mostra("#r-ok",r.data,true);
+        reg.cosaFa=null;vRuoli();},function(){s.disabled=false;});};
+    var w=document.createElement("div");w.className="rg-az";b.parentNode.insertBefore(w,b);w.appendChild(s);w.appendChild(b);
+  });
+  var k=document.createElement("div");k.className="card modulo";k.style.marginTop="10px";
+  k.innerHTML='<b>Cosa fa chi ha il ruolo</b><label>Ruolo<select id="cf-r">'+regTuttiRuoli().map(function(r){return '<option value="'+esc(r[0]+":"+r[1])+'">'+esc(r[2])+'</option>';}).join("")+'</select></label>'+
+    '<label>Cosa fa<textarea id="cf-t" maxlength="2000" style="min-height:70px"></textarea></label><div class="azioni"><button class="btn pieno" id="cf-salva">Salva</button></div><div class="toast" id="cf-ok" hidden></div>';
+  box.appendChild(k);
+  function carica(){var p=val("cf-r").split(":"),c=(reg.cosaFa||[]).filter(function(x){return x.funzione===p[0]&&x.ruolo===p[1];})[0];$("#cf-t").value=c?c.cosa_fa:"";}
+  (reg.cosaFa?Promise.resolve(reg.cosaFa):db.from("ruoli_cosa_fa").select("funzione,ruolo,cosa_fa").then(function(r){if(r&&r.error){k.remove();return null;}reg.cosaFa=r.data||[];return reg.cosaFa;},function(){k.remove();return null;})).then(function(x){if(x)carica();});
+  $("#cf-r").onchange=carica;
+  $("#cf-salva").onclick=function(){var p=val("cf-r").split(":"),t=val("cf-t");if(!t)return mostra("#cf-ok","Scrivi cosa fa.",true);var b=this;b.disabled=true;
+    db.from("ruoli_cosa_fa").upsert({funzione:p[0],ruolo:p[1],cosa_fa:t,scritto_da:io.id,scritto_il:new Date().toISOString()}).then(function(r){b.disabled=false;
+      if(r&&r.error)return mostra("#cf-ok",errore(r.error),true);reg.cosaFa=null;mostra("#cf-ok","Salvato.");},function(e){b.disabled=false;mostra("#cf-ok",errore(e),true);});};
 }
 
 /* ═══ GIORNALE · modello 4 ═══
@@ -784,7 +1004,7 @@ function vCervello(){
     (io.id?
       '<p class="et" style="margin-top:14px">Il cervello digitale</p>'+
       '<button class="cerchio-b" data-cerchio="io"><span><b>Il percorso del talento</b><small>i capitoli di '+esc(io.nome||"chi entra")+' · li legge solo chi li scrive</small></span><span>›</span></button>'+
-      '<p class="et" style="margin-top:14px">I cerchi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'
+      '<p class="et" style="margin-top:14px">I cerchi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div><div id="ce-voci"></div>'
     :'<div class="card" style="margin-top:14px"><span class="t">Il percorso del talento e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
     (io.id&&io.nucleo?'<p class="et" style="margin-top:14px">Porta un\'azienda nel Cervello · per il nucleo</p><div class="card modulo" id="az-apri">'+
       /* dal file dei costi (Attiva il tuo cervello, 19/10), riga Azienda; la consegna a domicilio non è pronta (Gab 19:33) */
@@ -796,6 +1016,7 @@ function vCervello(){
   if(!io.id)return;
   cerchiCache={io:{id:"io",tipo:"io",nome:"Il percorso del talento",dentro:true}};
   legaCerchi(c);
+  vVociRegistro($("#ce-voci"));
   if(io.nucleo)$("#az-vai").onclick=function(){var b=this,n=$("#az-nome").value.trim();if(n.length<2){$("#az-esito").textContent="Il nome serve.";return;}
     b.disabled=true;db.rpc("fm_azienda_apri",{p_nome:n,p_territorio:$("#az-terr").value.trim(),p_mail_referente:$("#az-ref").value.trim()}).then(function(r){b.disabled=false;
       if(r&&r.error){$("#az-esito").textContent=errore(r.error);return;}
@@ -982,6 +1203,7 @@ function vCerchio(){
     var vv=Object.keys(cerchiCache).map(function(k){return cerchiCache[k];}).filter(function(y){return y.tipo==="vicinato";});
     var inLog=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
     c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Un team operativo organizzato in vicinati, con l\'intento di portare avanti i progetti logistici e tecnologici legati a Felicitas.</span></div>'+
+      '<div id="ce-banco" style="margin-top:12px"></div><div id="ce-voci"></div>'+
       (inLog?'<div id="lg"></div>':'')+
       (vv.length?'<p class="et" style="margin-top:12px">I vicinati</p><div class="cerchi">'+vv.map(function(y){return '<button class="cerchio-b" data-cerchio="'+esc(y.id)+'"><span><b>'+esc(y.nome)+'</b><small>'+(y.territorio?esc(y.territorio)+' · ':'')+(+y.persone===1?'1 persona':(+y.persone)+' persone')+'</small></span><span>›</span></button>';}).join("")+'</div>':'')+
       (io.coordina?'<div id="o-ruoli"></div>':'');
@@ -989,6 +1211,7 @@ function vCerchio(){
     legaCerchi(c);
     if(io.coordina)vRuoli();
     if(inLog)vLogistica();
+    vBanco($("#ce-banco"),VILLAGGIO);vVociRegistro($("#ce-voci"),VILLAGGIO);
     fondoIndietro(c);
     return;
   }
@@ -1005,12 +1228,14 @@ function vCerchio(){
     (vic&&(x.guido||io.coordina)?'<p class="et" style="margin-top:12px">Dai un ruolo · per chi guida</p><div class="card modulo" id="ce-ruoli"></div>':'')+
     (x.tipo==="azienda"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il referente</p><div class="card modulo" id="az-aggiungi"></div>':'')+
     (x.tipo==="gruppo"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il capofila</p><div class="card modulo" id="gr-aggiungi"></div>':'')+
+    '<div id="ce-banco" style="margin-top:12px"></div><div id="ce-voci"></div>'+
     (x.tipo!=="azienda"?'<p class="et" style="margin-top:12px">Il giornale del '+(vic?'vicinato':'gruppo')+'</p><div class="foglio-g" id="ce-giornale"><p class="nota">Un momento…</p></div>':'');
   if(x.tipo==="azienda"&&(x.guido||io.nucleo))aziendaAggiungi(cerchio);
   if(x.tipo==="gruppo"&&(x.guido||io.nucleo))gruppoAggiungi(cerchio);
   if(conLibro)libro($("#lb"),{campo:vic?"vicinato_id":"squadra_id",id:cerchio,occ:(vic?"Il cervello del vicinato":"Il cervello del gruppo")+(x.territorio?" · "+x.territorio:""),titolo:x.nome});
   fondoIndietro(c);
   $("#ce-indietro").onclick=function(){vai("cervello");};
+  vBanco($("#ce-banco"),cerchio);vVociRegistro($("#ce-voci"),cerchio);
   var questo=cerchio;
   db.rpc("fm_cerchio_persone",{p_vicinato:questo}).then(function(r){
     var e=$("#ce-persone");if(!e||cerchio!==questo)return;var l=(r&&!r.error&&r.data)||[];
@@ -1304,6 +1529,8 @@ function cardObiettivo(o){
     (nomiChi.length?esc(nomiChi.join(", ")):(chi.length?(chi.length===1?"1 persona":chi.length+" persone"):"nessuno l'ha preso"))+
     (o.quanti_servono?" · "+chi.length+" su "+o.quanti_servono:"")+(o.entro_il?" · entro il "+esc(new Date(o.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span></div></div>'+
     (o.quanti_servono?'<div class="barra-ob"><i style="width:'+Math.min(100,Math.round(100*chi.length/o.quanti_servono))+'%"></i></div>':'')+
+    /* SQL 90: l'avanzamento si calcola dai compiti fatti, nessuno lo scrive a mano */
+    (cache.avanz&&cache.avanz[o.id]?'<span class="m">'+cache.avanz[o.id].fatti+' di '+cache.avanz[o.id].compiti+' compiti fatti</span><div class="barra-ob"><i style="width:'+Math.round(100*cache.avanz[o.id].fatti/Math.max(1,cache.avanz[o.id].compiti))+'%"></i></div>':'')+
     '<div class="fine">'+(io.id&&(mio||o.persona_id===io.id||io.coordina)?'<button class="pill s-'+s+'" data-stadio="'+esc(o.id)+'" style="border:0;cursor:pointer" aria-label="Cambia stato">'+STADI[s]+'</button>':'<span class="pill s-'+s+'">'+STADI[s]+'</span>')+
     (io.id?(mio?'<button class="mini" data-lascia="'+esc(o.id)+'">Lo lascio</button>':(s!=="sviluppato"?'<button class="mini oro" data-prendo="'+esc(o.id)+'">Lo prendo</button>':'')):'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';
 }
@@ -1333,9 +1560,13 @@ function vObiettivi(){
      Come funziona: la frase già approvata della bacheca (bacheca-bozza.html). Lo stato: quanti da fare, in corso, fatti; ogni obiettivo con quanti l'hanno preso su quanti servono. */
   c.innerHTML='<p class="et">Obiettivi</p><h3>Quello di cui il villaggio ha bisogno</h3>'+
     '<div class="card"><span class="t">Quello di cui il villaggio ha bisogno, per chi può fare. Si tocca «lo prendo» e la cosa entra tra le tue cose da fare.</span><span class="m">Chi l\'ha preso tocca lo stato per spostarlo avanti: da fare, in corso, fatto.</span></div>'+
-    '<div class="stato-ob" id="ob-stato"></div>'+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
+    '<div class="stato-ob" id="ob-stato"></div>'+(io.id?'<div id="ob-banco" style="margin:10px 0 14px"></div>':'')+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
   invitoPrat=false;
+  if(io.id)vBanco($("#ob-banco"));
   leggiObiettivi().then(function(lista){
+    if(!io.id||!lista.length)return lista;
+    return db.rpc("fm_obiettivi_avanzamento",{p_obiettivi:lista.map(function(o){return o.id;})}).then(function(r){cache.avanz={};((r&&!r.error&&r.data)||[]).forEach(function(x){cache.avanz[x.obiettivo_id]=x;});return lista;},function(){return lista;});
+  }).then(function(lista){
     var e=$("#ob");if(!e||vista!=="obiettivi")return;
     var ord={in_avanzamento:0,in_coda:1,sviluppato:2};
     lista=lista.slice().sort(function(a,b){return ord[a.stadio||"in_coda"]-ord[b.stadio||"in_coda"];});
@@ -1453,6 +1684,7 @@ function vRuoli(){
         '<div class="azioni"><button class="btn pieno" id="r-dai">Dai il ruolo</button></div><div class="toast" id="r-ok" hidden></div></div>';
       function ruoliDi(f){$("#r-r").innerHTML=RUOLI[f].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");}
       ruoliDi("tecnologica");$("#r-f").onchange=function(e){ruoliDi(e.target.value);};
+      regRuoliExtra(box);
       box.querySelectorAll("[data-chiudi-r]").forEach(function(b){b.onclick=function(){b.disabled=true;db.from("ruoli").update({fino_al:oggiISO()}).eq("id",b.getAttribute("data-chiudi-r")).then(function(r){if(r.error){mostra("#r-ok",errore(r.error),true);b.disabled=false;return;}vRuoli();});};});
       $("#r-dai").onclick=function(){
         var n=val("r-cerca").toLowerCase(),p=(tutteLePersone||[]).filter(function(x){return String(x.nome||"").toLowerCase()===n;});
