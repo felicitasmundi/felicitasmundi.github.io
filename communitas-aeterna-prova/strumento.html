@@ -270,6 +270,7 @@ body.notte .corpo .sez{border-bottom-color:var(--linea)}
 .g4-num b{display:block;font-size:30px;font-weight:700;line-height:1}
 .g4-num small{font-size:11px;color:var(--tenue)}
 .g4-serve{margin-top:14px}
+.g4-lavora{margin-top:14px;padding-top:10px;border-top:1px solid var(--linea)}.g4-lavora .barra-ob{margin:4px 0 8px}.g4-lr{padding:8px 0;border-top:1px solid var(--linea)}.g4-lr:first-of-type{border-top:0}.g4-lr .t{display:block}
 .g4-cp{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--linea)}
 .g4-cp span{font-size:14px}.g4-cp small{display:block;color:var(--tenue);font-size:12px}
 .g4-mini{font:700 12px var(--sans);border-radius:20px;padding:6px 12px;border:1px solid var(--oro);color:var(--oro);background:none;white-space:nowrap;cursor:pointer;text-decoration:none}
@@ -946,7 +947,44 @@ function g4Articoli(arti,firme){
     dentro.map(function(x){return '<details class="g4-gg"><summary><span>'+esc(x.o.titolo||"Articolo")+'</span><span>›</span></summary>'+voce(x,firme)+'</details>';}).join("")+'</div></div>':"";
   [A,V].forEach(function(c){if(!c)return;
     c.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(c);});
-  g4Sale();
+  g4Sale();  g4Lavora();
+}
+/* CHI CI LAVORA · SQL 94 (thread «Giornale e logistica insieme»)
+   20 ott 23:51, Gab: «quando potrò vedere anche il riferimento dei team sotto gli articoli con le task e lo sviluppo?» · 23:52 «ok94».
+   Sotto ogni articolo le righe del registro legate, coi permessi di chi guarda. Lega una riga chi l'ha scritta, il nucleo o chi coordina.
+   Senza l'SQL 94, o per chi non è entrato, il riquadro non compare. */
+function g4Lavora(){
+  var box=[].slice.call(document.querySelectorAll("[data-lavora]"));if(!io.id||!db||!box.length)return;
+  var ids=box.map(function(e){return e.getAttribute("data-lavora");});
+  var puoi=io.nucleo||io.coordina;
+  Promise.all([
+    db.rpc("fm_giornale_registro",{p_articoli:ids}).then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
+    db.from("registro").select("id,testo,tipo,stato,scritto_da,articolo_id").is("articolo_id",null).or("stato.is.null,stato.neq.annullato").order("scritto_il",{ascending:false}).limit(40).then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];})
+  ]).then(function(v){
+    var righe=v[0];if(righe===null)return;
+    var libere=v[1].filter(function(g){return puoi||g.scritto_da===io.id;});
+    leggiNomi(righe.map(function(g){return g.preso_da;}).filter(Boolean)).then(function(){
+      box.forEach(function(e){if(!e.isConnected)return;var id=e.getAttribute("data-lavora");
+        var mie=righe.filter(function(g){return g.articolo_id===id;});
+        if(!mie.length&&!libere.length){e.hidden=true;return;}
+        var fatte=mie.filter(function(g){return g.stato==="fatto";}).length,conStato=mie.filter(function(g){return g.stato;}).length;
+        e.innerHTML='<p class="g4-occ">Chi ci lavora</p>'+
+          (conStato?'<p class="m">'+fatte+' di '+conStato+' fatti</p><div class="barra-ob"><i style="width:'+Math.round(100*fatte/conStato)+'%"></i></div>':'')+
+          (mie.length?mie.map(function(g){
+            return '<div class="g4-lr"><span class="t">'+esc(g.testo)+'</span><div class="rg-meta">'+
+              (g.stato?'<span class="chip '+(REG_STATO_C[g.stato]||"")+'">'+esc(REG_STATO[g.stato]||g.stato)+'</span>':'<span class="chip">'+esc(REG_TIPO[g.tipo]||g.tipo)+'</span>')+
+              (g.ruolo?'<span class="chip">'+esc(regNomeRuolo(g.ruolo))+'</span>':g.funzione?'<span class="chip">'+esc(FUNZIONI[g.funzione]||g.funzione)+'</span>':'')+
+              (g.stato==="preso"&&g.preso_da&&nomi[g.preso_da]?'<span class="m">preso da '+esc(nomi[g.preso_da])+'</span>':'')+(g.stato==="fatto"&&g.fatto_il?'<span class="m">fatto il '+esc(new Date(g.fatto_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+
+              (g.entro_il?'<span class="m">entro il '+esc(new Date(g.entro_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+
+              (g.prossimo?'<span class="m">poi: '+esc(g.prossimo)+'</span>':'')+'</div></div>';}).join(""):'<p class="m">Ancora nessuna riga del registro legata a questo articolo.</p>')+
+          (libere.length?'<details class="rg-altro"><summary>Lega una riga del registro</summary><div class="azioni" style="margin-top:6px"><select class="g4-lega" aria-label="Riga del registro da legare"><option value="">scegli…</option>'+
+            libere.map(function(g){return '<option value="'+esc(g.id)+'">'+esc(String(g.testo).slice(0,80))+'</option>';}).join("")+'</select><button class="mini oro">Lega</button></div></details>':'');
+        e.hidden=false;
+        var bt=e.querySelector(".g4-lega+button");if(bt)bt.onclick=function(){var s=e.querySelector(".g4-lega");if(!s.value)return;bt.disabled=true;
+          db.rpc("fm_registro_articolo",{p_riga:s.value,p_articolo:id}).then(function(r){bt.disabled=false;if(r&&r.error){alert(errore(r.error));return;}g4Lavora();},function(){bt.disabled=false;});};
+      });
+    });
+  });
 }
 function g4Riempi(da,a,questo){
   g4Sale();
@@ -1051,7 +1089,7 @@ function voce(x,firme){
   if(o.tipo==="diretta")return '<a class="onda" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'"><b>Diretta · ore '+hhmm(x.t)+'</b><p>'+esc(o.titolo||testo)+'</p>'+(o.titolo&&testo?'<span>'+esc(testo)+'</span>':'')+'<span>entra ›</span></a>';
   if(o.tipo==="articolo"){var lungo=testo.length>320,tutto=apriA[o.id];
     return '<article class="art">'+(o.titolo?'<h5>'+esc(o.titolo)+'</h5>':'')+'<p class="firma">'+firma+'</p>'+linkHTML(link)+mediaHTML(o,firme)+
-      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+visHTML(o)+'</article>';}
+      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';}
   return '<div class="breve">'+(o.titolo?'<p><b>'+esc(o.titolo)+'</b></p>':'')+linkHTML(link)+mediaHTML(o,firme)+(testo?'<p>'+esc(testo)+'</p>':'')+'<span>'+firma+'</span>'+visHTML(o)+'</div>';
 }
 
