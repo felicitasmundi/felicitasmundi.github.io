@@ -133,6 +133,26 @@ textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:f
 .stanza span{font-size:12px;color:var(--tenue);text-align:right}
 .cerchi{display:flex;flex-direction:column;gap:8px}
 .due-col{display:grid;grid-template-columns:1fr;gap:10px}@media (min-width:640px){.due-col{grid-template-columns:1fr 1fr}}
+/* la logistica nel villaggio (20 ott) */
+.lg-conta{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 10px}
+.lg-conta div{border:1px solid var(--linea);border-radius:10px;background:var(--foglio);padding:8px 6px;text-align:center;min-width:0}
+.lg-conta b{display:block;font:700 22px var(--sans);line-height:1.1;font-variant-numeric:tabular-nums}
+.lg-conta small{display:block;font-size:11px;color:var(--tenue)}
+.lg-filtri{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.lg-filtri .chip.on{background:var(--oro-chiaro);border-color:var(--oro);color:var(--inchiostro)}
+#lg .riga-m{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.lg-banco{display:grid;grid-template-columns:1fr;gap:10px}@media (min-width:640px){.lg-banco{grid-template-columns:repeat(3,1fr)}}
+.lg-col{display:flex;flex-direction:column;gap:6px;min-width:0}
+.lg-col>p{margin:0 2px}
+.lg-tab{width:100%;border-collapse:collapse;font-size:13px}
+.lg-tab th,.lg-tab td{text-align:left;padding:5px 4px;border-bottom:1px solid var(--linea);vertical-align:top}
+.lg-tab th{font-weight:600;color:var(--tenue);font-size:11.5px}
+.lg-tab td.n,.lg-tab th.n{text-align:right;white-space:nowrap}
+.lg-scroll{overflow-x:auto}
+@media (max-width:520px){.lg-tab .lg-meno{display:none}}
+details.lg-nuovo{border:1px solid var(--linea);border-radius:12px;background:var(--foglio);padding:10px 12px;margin-top:8px}
+details.lg-nuovo summary{cursor:pointer;font-weight:600;font-size:14px}
+details.lg-nuovo .modulo{margin-top:10px}
 .punti{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45}
 .cerchio-b{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:var(--foglio);cursor:pointer;font:inherit;color:inherit;width:100%}
 .cerchio-b b{display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.1}
@@ -194,7 +214,18 @@ a{color:var(--blu)}
 .evid b{display:block;font-family:var(--serif);font-weight:500;font-size:24px;line-height:1.15;margin:4px 0}
 .evid span{display:block;font-size:14px;color:var(--cosmo-grigio)}
 .evid p{margin:8px 0 0;font-size:15px;line-height:1.45}
+.evid .copertina{display:block;width:100%;height:auto;border-radius:10px;margin:0 0 12px}
 .evid .vai{display:inline-block;margin-top:10px;font:600 13px var(--sans);color:#1A1405;background:var(--cosmo-oro);border-radius:99px;padding:7px 14px;text-decoration:none}
+.voce-o{margin:0 0 14px}.voce-o>a.capo-o{display:flex;justify-content:space-between;align-items:baseline;text-decoration:none;color:inherit;margin:0 0 6px}
+.voce-o>a.capo-o b{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--c,inherit)}.voce-o>a.capo-o span{font-size:13px;color:var(--tenue);white-space:nowrap}.voce-o>a.capo-o{gap:10px}
+.fila-o{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 8px;-webkit-overflow-scrolling:touch}.fila-o::-webkit-scrollbar{display:none}
+.fila-o>a{flex:0 0 150px;scroll-snap-align:start;border:1px solid var(--linea);border-radius:14px;overflow:hidden;background:var(--foglio);text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.fila-o>a img{width:100%;height:110px;object-fit:cover;display:block;background:var(--carta2)}
+.fila-o>a .tt{padding:8px 10px 10px;display:flex;flex-direction:column;gap:2px}.fila-o>a b{font-family:var(--serif);font-size:16px;font-weight:600;line-height:1.15}.fila-o>a small{font-size:12px;color:var(--tenue);line-height:1.3}
+.fila-o>a.senza{border-left:3px solid var(--c,var(--linea))}
+.miei-o{display:flex;flex-direction:column;gap:6px;margin:0 0 12px}.miei-o .card{margin:0}.miei-o .riga-m{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.stato-ob{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 4px}.stato-ob span{font-size:13px;padding:4px 10px;border-radius:99px}
+.barra-ob{height:5px;border-radius:99px;background:var(--carta2);overflow:hidden;margin-top:6px}.barra-ob i{display:block;height:100%;background:var(--oro,#D4AF6A)}
 .stanze-o{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}.stanze-o a{display:block;padding:14px 12px;border-radius:14px;background:var(--cosmo);background-image:var(--cosmo-cielo);color:var(--cosmo-testo);text-decoration:none;font:500 15px var(--sans);border-left:3px solid var(--c)}
 .top .marchio{color:var(--cosmo-oro)!important}
 .top .chip,.top .mini,.top .alto-b{background:rgba(245,240,230,.08)!important;color:var(--cosmo-testo)!important;border-color:rgba(245,240,230,.25)!important}
@@ -208,6 +239,80 @@ a{color:var(--blu)}
 .onda b,.onda p,.onda span{color:var(--cosmo-testo)!important}
 .corpo{zoom:1.12;padding-bottom:110px!important}
 @media (min-width:700px){.corpo{zoom:1.22}.nav button{font-size:15px!important;padding:13px 1px 15px!important}.nav button .ic{font-size:28px!important}.nav button.console .ic{width:50px!important;height:50px!important;margin-top:-26px!important}.top .marchio{font-size:18px!important}}
+
+/* ═══ GIORNALE · modello 4 (20 ott, thread «Giornale e logistica insieme»; Gab 01:42: «bello»; 01:48: «ok anteprima si è giusto»).
+   Notte e oro, tessere grandi, una idea per tessera. Solo la vista Giornale va di notte. ═══ */
+html:has(body.notte),body.notte{background:#0E0B08}
+body.notte .corpo{--carta:#0E0B08;--carta2:#241C13;--foglio:#1C1610;--inchiostro:#F5F0E6;--tenue:#A89B85;--linea:#3A2F22;--oro:#D4AF6A;--oro-chiaro:#2E2416;--blu:#D4AF6A;--att:#D4AF6A;color:var(--inchiostro)}
+body.notte .corpo .foglio-g{border:0;border-radius:26px}
+body.notte .corpo .testata{border-bottom-color:var(--linea)}body.notte .corpo .testata h4{display:none}
+body.notte .corpo .sez{border-bottom-color:var(--linea)}
+.g4-apre{padding:14px 6px 4px}
+.g4-data{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--tenue)}
+.g4-apre h1{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1;margin:8px 0 12px}
+.g4-apre .grande{font-size:22px;line-height:1.25;font-weight:500;margin:0}
+.g4-apre .grande b{color:var(--oro)}
+.g4-t{border-radius:26px;background:#1C1610;overflow:hidden;position:relative}
+.g4-t>.in{padding:20px}
+.g4-occ{font-family:var(--display);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--oro)}
+.g4-t h2{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.05;margin:6px 0 8px}
+.g4-t p{margin:0;color:#D9CFBF;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.g4-cit{font-family:var(--serif);font-size:21px;line-height:1.25;color:var(--inchiostro);margin:10px 0}
+.g4-radio{background:linear-gradient(160deg,#2A1E10,#0E0B08)}
+.g4-radio h2{font-size:38px}
+.g4-onda{display:flex;gap:3px;align-items:flex-end;height:34px;margin:14px 0 4px}
+.g4-onda i{flex:1;background:var(--oro);opacity:.7;border-radius:2px}
+.g4-tasto{display:block;text-align:center;margin-top:14px;background:var(--oro);color:#1A1405!important;font-weight:700;border-radius:14px;padding:13px;font-size:15px;text-decoration:none;border:0;width:100%;font-family:var(--sans);cursor:pointer}
+.g4-prog{background:#000}
+.g4-prog img{display:block;width:100%;height:auto}
+.g4-num{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:16px 0 4px}
+.g4-num div{background:#241C13;border-radius:16px;padding:12px 8px;text-align:center}
+.g4-num b{display:block;font-size:30px;font-weight:700;line-height:1}
+.g4-num small{font-size:11px;color:var(--tenue)}
+.g4-serve{margin-top:14px}
+.g4-cp{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--linea)}
+.g4-cp span{font-size:14px}.g4-cp small{display:block;color:var(--tenue);font-size:12px}
+.g4-mini{font:700 12px var(--sans);border-radius:20px;padding:6px 12px;border:1px solid var(--oro);color:var(--oro);background:none;white-space:nowrap;cursor:pointer;text-decoration:none}
+.g4-mini:disabled{opacity:.6;cursor:default}
+.g4-pal{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.g4-p{border-radius:18px;padding:30px 10px 12px;min-height:96px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;color:#fff}
+.g4-p h4{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.05;margin:0}
+.g4-p p{font-size:11px;margin:4px 0 0;opacity:.9}
+.g4-bollo{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;border-radius:20px;padding:2px 7px;background:rgba(255,255,255,.92);color:#1A1405}
+.g4-p.ferma{opacity:.45}
+.g4-mos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g4-cat{border-radius:22px;padding:16px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:#fff}
+.g4-cat svg{width:30px;height:30px}
+.g4-cat h3{font-family:var(--serif);font-weight:700;font-size:22px;line-height:1.05;margin:8px 0 2px;color:#fff}
+.g4-cat p{font-size:13px;margin:4px 0 0;opacity:.92}
+.g4-titolo{grid-column:1/-1;padding:6px 4px}
+.g4-titolo h3{font-family:var(--serif);font-weight:700;font-size:28px;margin:4px 0 0}
+.g4-titolo p{color:var(--tenue);font-size:13px;margin:6px 0 0}
+.g4-c1{background:linear-gradient(150deg,#F2A27C,#B4502F)}.g4-c2{background:linear-gradient(150deg,#9FD27A,#3E6E2A)}.g4-c3{background:linear-gradient(150deg,#E2C07F,#8A6A2E)}.g4-c4{background:linear-gradient(150deg,#C7A6F0,#5E3E93)}.g4-c5{background:linear-gradient(150deg,#8FC2EA,#2C5E87)}
+.g4-prezzi{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.g4-prezzi div{background:#241C13;border-radius:16px;padding:12px}
+.g4-prezzi b{display:block;font-size:24px;line-height:1.1}.g4-prezzi small{color:var(--tenue);font-size:12px}
+.g4-d{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--linea);font-size:14px}
+.g4-d:first-of-type{border-top:0}
+.g4-d b{font-family:var(--display);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--oro);padding-top:2px}
+.g4-vil{border:1px solid #8A6A2A;background:#17120C}
+.g4-gg{border-top:1px solid var(--linea);padding:10px 0}
+.g4-gg summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;font-family:var(--display);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--oro)}
+.g4-gg summary::-webkit-details-marker{display:none}
+body.notte .corpo .art{border-bottom:0}
+.g4-sale{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.g4-sale.visto{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.g4-sale{opacity:1;transform:none;transition:none}}
+.rg-nuovo{margin:8px 0 4px;border-color:var(--oro)}
+.rg-nuovo textarea{min-height:70px}
+.rg-altro summary{cursor:pointer;font-size:13px;color:var(--tenue)}
+.rg-lista{display:flex;flex-direction:column;gap:6px}
+.rg-testa{display:flex;gap:8px;align-items:baseline}.rg-testa .m{flex:none;font-variant-numeric:tabular-nums}
+.rg-meta{display:flex;flex-wrap:wrap;gap:5px;margin:2px 0}
+.rg-voce{margin-top:6px}.rg-voce summary{display:flex;justify-content:space-between;align-items:baseline;gap:8px;cursor:pointer;list-style:none}.rg-voce summary::-webkit-details-marker{display:none}
+.rg-blocchi{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px}@media (min-width:640px){.rg-blocchi{grid-template-columns:repeat(3,1fr)}}
+.rg-blocchi ul{margin:4px 0 0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
+.rg-az{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex:none;width:44%;max-width:190px}select.rg-cambia{width:100%;font-size:12.5px;padding:4px 6px}
 </style>
 </head>
 <body>
@@ -215,9 +320,9 @@ a{color:var(--blu)}
 <main class="corpo" id="corpo" aria-live="polite"><p class="nota">Un momento…</p></main>
 <nav class="nav" id="nav" aria-label="Parti dell'app">
   <button data-v="oggi"><span class="ic">☼</span>Oggi</button>
-  <button data-v="obiettivi"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity=".45"/><path d="M12 12V7.3M12 12l4.1 2.4M12 12l-4.1 2.4"/><circle cx="12" cy="5.2" r="2.1"/><circle cx="17.9" cy="15.4" r="2.1"/><circle cx="6.1" cy="15.4" r="2.1"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span>Obiettivi</button>
-  <button data-v="megafono" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</button>
   <button data-v="giornale"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><g transform="translate(0.599 17.067) scale(0.01431)"><path d="M587 -708Q583 -658 581.5 -611.5Q580 -565 580 -540Q580 -519 581.0 -500.0Q582 -481 583 -468H560Q543 -551 513.0 -598.5Q483 -646 447.5 -665.5Q412 -685 376 -685H363Q337 -685 324.0 -680.5Q311 -676 306.5 -663.0Q302 -650 302 -622V-116Q302 -76 310.5 -55.5Q319 -35 343.0 -29.0Q367 -23 413 -23V0Q379 -1 324.0 -2.0Q269 -3 207 -3Q161 -3 115.0 -2.0Q69 -1 28 0V-20Q59 -22 74.0 -28.0Q89 -34 94.0 -52.0Q99 -70 99 -106V-602Q99 -639 94.0 -656.5Q89 -674 73.5 -680.5Q58 -687 28 -688V-708Q72 -707 121.5 -706.5Q171 -706 219.5 -705.5Q268 -705 309.5 -705.0Q351 -705 378 -705Q424 -705 482.5 -705.5Q541 -706 587 -708ZM442 -366Q442 -366 442.0 -356.0Q442 -346 442 -346H272Q272 -346 272.0 -356.0Q272 -366 272 -366ZM471 -498Q467 -441 467.5 -411.0Q468 -381 468 -356Q468 -331 469.0 -301.0Q470 -271 474 -214H451Q445 -251 426.5 -281.0Q408 -311 379.0 -328.5Q350 -346 312 -346V-366Q340 -366 363.0 -378.0Q386 -390 403.5 -410.0Q421 -430 432.5 -453.0Q444 -476 448 -498Z M1565 -708V-688Q1535 -687 1519.5 -680.5Q1504 -674 1499.0 -656.5Q1494 -639 1494 -602V-106Q1494 -70 1499.5 -52.0Q1505 -34 1520.0 -28.0Q1535 -22 1565 -20V0Q1534 -2 1486.0 -2.5Q1438 -3 1388 -3Q1334 -3 1286.5 -2.5Q1239 -2 1210 0V-20Q1244 -22 1261.5 -28.0Q1279 -34 1285.0 -52.0Q1291 -70 1291 -106V-641L1301 -643L1050 -1H1034L752 -643V-196Q752 -129 757.5 -93.5Q763 -58 784.5 -42.5Q806 -27 853 -20V0Q833 -2 801.0 -2.5Q769 -3 741 -3Q719 -3 696.0 -2.5Q673 -2 658 0V-20Q689 -27 704.0 -41.5Q719 -56 724.0 -88.0Q729 -120 729 -176V-602Q729 -639 724.0 -656.5Q719 -674 703.5 -680.5Q688 -687 658 -688V-708Q673 -707 696.0 -706.0Q719 -705 741 -705Q799 -705 852.0 -706.0Q905 -707 948 -708L1146 -262L1116 -229L1301 -705Q1321 -705 1344.0 -705.0Q1367 -705 1388 -705Q1438 -705 1486.0 -706.0Q1534 -707 1565 -708Z"/></g></svg></span>Giornale</button>
+  <button data-v="megafono" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</button>
+  <button data-v="obiettivi"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity=".45"/><path d="M12 12V7.3M12 12l4.1 2.4M12 12l-4.1 2.4"/><circle cx="12" cy="5.2" r="2.1"/><circle cx="17.9" cy="15.4" r="2.1"/><circle cx="6.1" cy="15.4" r="2.1"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span>Obiettivi</button>
   <button data-v="cervello"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.2C8.6 2.4 6.3 3.4 5.6 5.4 3.7 5.9 2.8 7.8 3.4 9.6 2.2 11 2.4 13.3 3.8 14.4 3.4 16.6 4.8 18.6 7 18.8 7.8 20.6 9.6 21.4 11 20.8Z"/><path d="M13 3.2C15.4 2.4 17.7 3.4 18.4 5.4 20.3 5.9 21.2 7.8 20.6 9.6 21.8 11 21.6 13.3 20.2 14.4 20.6 16.6 19.2 18.6 17 18.8 16.2 20.6 14.4 21.4 13 20.8Z"/><path d="M5.6 5.4C7 6 8 7.2 8 8.6M3.6 11.8C5.4 11.4 7.4 12 8.4 13.4M7 18.8C7.2 17 8.4 15.8 9.8 15.6" opacity=".75"/><path d="M18.4 5.4C17 6 16 7.2 16 8.6M20.4 11.8C18.6 11.4 16.6 12 15.6 13.4M17 18.8C16.8 17 15.6 15.8 14.2 15.6" opacity=".75"/></svg></span>Cervello</button>
 </nav>
 
@@ -370,6 +475,7 @@ document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
   document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  document.body.classList.toggle("notte",vista==="giornale");
   ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio})[vista]();
 }
 
@@ -408,32 +514,67 @@ function legaPaniere(c){var box=c.querySelector("#o-paniere");if(!box)return;var
     sotto.querySelector("#o-pan-ok").onclick=function(){var d=sotto.querySelector("#o-pan-dove");
       sotto.innerHTML='<span class="t">Ci sei. Ritiro: '+esc(d.options[d.selectedIndex].text)+'.</span>';};};
 }
-var STANZE_O=[["Emporio","stanze-bozza.html?s=emporio&c=10182300","#4488BB"],["Stampa","stampa-bozza.html?c=10182300","#669944"],["Assistenza comunitaria integrata","stanze-bozza.html?s=mutuo&c=10182300","#CC6644"],["Scuola","stanze-bozza.html?s=scuola&c=10182300","#9966CC"]];
+var STANZE_O=[["Emporio","stanze-bozza.html?s=emporio&c=10182300","#4488BB","emporio"],["Stampa","stampa-bozza.html?c=10182300","#669944","stampa"],["Assistenza comunitaria integrata","stanze-bozza.html?s=mutuo&c=10182300","#CC6644","assistenza"],["Scuola","stanze-bozza.html?s=scuola&c=10182300","#9966CC","scuola"]];
+/* Le file di «Di cosa hai bisogno?»: solo cose vere. Emporio: gli ultimi prodotti pubblici del database; se non ce ne sono, i prodotti con foto già nell'Emporio.
+   Stampa: il kit fiera e le categorie con foto della pagina Stampa. Assistenza e Scuola: i servizi attivi del database. Una fila vuota non si vede. */
+var EMP_FISSI=[["La Bhagavad-gītā Così com’è","A.C. Bhaktivedānta Swāmī Prabhupāda","APP.FELICITASMUNDI/piatti/bhagavad-gita.jpg"],["Anima vagabonda","Parabhakti dāsa","APP.FELICITASMUNDI/piatti/anima-vagabonda.jpg"]];
+var STAMPA_O=[["Kit fiera","2500 volantini A5 · 1 roll-up · 2 striscioni · 30 maglie","casa/kit-volantino.jpg","stampa-kit-fiera.html"],["Carta stampata","volantini, manifesti, locandine, biglietti da visita","stampa/volantino.jpg?v=10132030","stampa-carta-stampata.html"],["Esposizione e fiere","totem, roll-up, striscioni, stand","stampa/rollup.jpg?v=10132030","stampa-esposizione-fiere.html"]];
+function cartaO(t,sotto,img,link){return '<a href="'+esc(link)+'"'+(img?'':' class="senza"')+'>'+(img?'<img src="'+esc(img)+'" alt="" loading="lazy">':'')+'<span class="tt"><b>'+esc(t)+'</b>'+(sotto?'<small>'+esc(sotto)+'</small>':'')+'</span></a>';}
+function fotoProdotto(f){f=String(f||"");if(/^https:\/\//.test(f))return f;if(f&&f.indexOf("/")<0)return "APP.FELICITASMUNDI/piatti/"+f;return "";}
+function prezzoServizio(x){return x.dono?"in dono":(x.prezzo_euro!=null?x.prezzo_euro+" €":"");}
+function fileOggi(){
+  function metti(id,h){var e=$("#fila-"+id);if(!e)return;e.innerHTML=h;if(!h)e.style.display="none";}
+  var emp=STANZE_O[0][1],ass=STANZE_O[2][1],scu=STANZE_O[3][1];
+  metti("stampa",STAMPA_O.map(function(x){return cartaO(x[0],x[1],x[2],x[3]);}).join(""));
+  if(!db){metti("emporio",EMP_FISSI.map(function(x){return cartaO(x[0],x[1],x[2],emp);}).join(""));metti("assistenza","");metti("scuola","");return;}
+  db.from("prodotti").select("id,nome,autore,foto,prezzo,si_compra,creato_il").eq("stato","pubblico").order("creato_il",{ascending:false}).limit(2).then(function(r){
+    var l=(r&&!r.error&&r.data)||[];
+    metti("emporio",l.length?l.map(function(p){return cartaO(p.nome||"",(p.si_compra===false?"richiedi al responsabile":(p.prezzo?p.prezzo+" €":""))||p.autore||"",fotoProdotto(p.foto),emp);}).join(""):
+      EMP_FISSI.map(function(x){return cartaO(x[0],x[1],x[2],emp);}).join(""));
+  },function(){metti("emporio",EMP_FISSI.map(function(x){return cartaO(x[0],x[1],x[2],emp);}).join(""));});
+  db.from("servizi").select("id,titolo,tipo,durata_minuti,a_distanza,prezzo_euro,dono,creato_il").eq("attivo",true).order("creato_il",{ascending:false}).limit(20).then(function(r){
+    var l=(r&&!r.error&&r.data)||[];
+    var a=l.filter(function(x){return ["assistenza_spirituale","consulenza","percorso"].indexOf(x.tipo)>=0;}).slice(0,3),s=l.filter(function(x){return x.tipo==="formazione";}).slice(0,3);
+    metti("assistenza",a.map(function(x){return cartaO(x.titolo||"",[prezzoServizio(x),x.a_distanza?"a distanza":""].filter(Boolean).join(" · "),"",ass);}).join(""));
+    metti("scuola",s.map(function(x){return cartaO(x.titolo||"",[x.a_distanza?"online":"dal vivo",prezzoServizio(x)].filter(Boolean).join(" · "),"",scu);}).join(""));
+  },function(){metti("assistenza","");metti("scuola","");});
+}
+/* I compiti presi da chi entra, con a che punto sono (Gab 18:05). Una riga per compito; il quadro intero sta in Obiettivi. */
+function mieiOggi(){
+  leggiObiettivi().then(function(){var e=$("#o-miei");if(!e||vista!=="oggi")return;
+    var m=(cache.obiettivi||[]).filter(function(o){return o.stadio!=="sviluppato"&&dentroO(o).some(function(p){return p.persona_id===io.id;});});
+    e.innerHTML=m.length?'<p class="et" style="margin-top:6px">I compiti che hai preso</p><div class="miei-o">'+m.map(function(o){var s=o.stadio||"in_coda";
+      return '<div class="card"><div class="riga-m"><span class="t">'+esc(o.titolo||o.contenuto)+'</span><button class="pill s-'+s+'" data-stadio="'+esc(o.id)+'" style="border:0;cursor:pointer" aria-label="Cambia stato">'+STADI[s]+'</button></div>'+
+        (o.entro_il?'<span class="m">entro il '+esc(new Date(o.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+'</div>';}).join("")+
+      '<button class="mini" data-vai="obiettivi" style="align-self:flex-start">Tutti gli obiettivi ›</button></div>':
+      '<div class="miei-o"><button class="mini" data-vai="obiettivi" style="align-self:flex-start">Obiettivi: quello di cui il villaggio ha bisogno ›</button></div>';
+    legaVai(e);legaObiettivi(e);});
+}
 function vOggi(){
   var c=$("#corpo"),l=luna(),d=new Date();
   var g0=new Date();g0.setHours(0,0,0,0);var da=g0.getTime(),a=da+864e5;
-  /* 19 ott 16:21, Gab: «aprendo l app […] anche oggi non è comprensibile» da chi arriva da fuori → in cima chi siamo (parole dell'invito al Festival) e il Festival in evidenza, voce fissa fino al 21 novembre */
+  /* 19 ott 16:21, Gab: «aprendo l app […] anche oggi non è comprensibile» da chi arriva da fuori → in cima chi siamo (parole dell'invito al Festival) e il Festival in evidenza, voce fissa fino al 21 novembre
+     20 ott 01:44, Gab: «puoi mettere la copertina dell evento nel festival in evidenza in oggi?» */
   var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime();
   c.innerHTML=(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>Felicitas Mundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
-    (fest?'<a class="evid" href="festival-evento-bozza.html?c=10182300"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
+    (fest?'<a class="evid" href="festival-evento-bozza.html?c=10182300"><img class="copertina" src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · TRAME: la forza di essere connessi"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
     '<p class="et">Oggi · Felicitas</p>'+
     '<div class="card"><div class="giorno">'+l.svg+'<div><b>'+esc(d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"}))+'</b><span id="o-cielo">'+esc(l.nome)+'</span></div></div></div>'+
     '<div id="o-appunt"></div>'+
     /* 18 ott 20:36 e 22:36, Gab: «oggi può essere anche il contesto "di cosa hai bisogno?"» · da oggi «si possa entrare nella visione completa dei prodotti e assistenza» */
-    '<p class="et" style="margin-top:6px">Di cosa hai bisogno?</p><div class="stanze-o">'+STANZE_O.map(function(s){return '<a href="'+s[1]+'" style="--c:'+s[2]+'">'+esc(s[0])+'</a>';}).join("")+'</div>'+
-    paniereHTML()+
-    (io.id?'<div id="o-logistica"></div>':'')+
-    (io.id?'<p class="et" style="margin-top:6px">Obiettivi aperti</p><div id="o-obiettivi"><p class="nota">Un momento…</p></div>':
-      '<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span></div>')+
+    /* 19 ott 18:05, Gab: «prima di cosa hai bisogno, forse vanno segnati i task che uno ha accettato, per ricordare a che punto si trova» */
+    (io.id?'<div id="o-reg"></div><div id="o-miei"></div><div id="o-logistica"></div>':'')+
+    /* 19 ott 18:05, Gab: ogni voce scritta come parola, sotto una fila di rettangolini; 23:32 «per ora rendi visibile ciò che c e permetendo a tutto il resto di entrare una volta inserito» */
+    '<p class="et" style="margin-top:6px">Di cosa hai bisogno?</p>'+STANZE_O.map(function(s){return '<div class="voce-o" style="--c:'+s[2]+'"><a class="capo-o" href="'+s[1]+'"><b>'+esc(s[0])+'</b><span>tutto ›</span></a><div class="fila-o" id="fila-'+s[3]+'"></div>'+(s[3]==="emporio"?paniereHTML():'')+'</div>';}).join("")+
+    (io.id?'':'<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span></div>')+
     (io.coordina?'<div id="o-ruoli"></div>':'');
   legaVai(c);legaPaniere(c);
   santo().then(function(s){var e=$("#o-cielo");if(e&&s)e.textContent=s+" · "+l.nome;});
   Promise.all([lezioni(),dirette()]).then(function(v){var e=$("#o-appunt");if(!e)return;var h=appuntamentiHTML(v[0],v[1],da,a);
     e.innerHTML=h?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p><div class="appunt">'+h+'</div>':'';});
-  if(io.id)leggiObiettivi().then(function(){var e=$("#o-obiettivi");if(!e)return;
-    var aperti=cache.obiettivi.filter(function(o){return o.stadio!=="sviluppato";}).slice(0,4);
-    e.innerHTML=aperti.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo aperto. Si creano dal megafono o da Obiettivi.</div>';
-    legaObiettivi(e);});
+  fileOggi();
+  if(io.id)vRegistroOggi();
+  if(io.id)mieiOggi();
   if(io.id)logisticaOggi();
   if(io.coordina)vRuoli();
 }
@@ -458,6 +599,313 @@ function logisticaOggi(){
   },function(){});
 }
 
+/* ═══ IL REGISTRO DEL TEAM · SQL 90 ═══
+   Schema approvato da Gab il 20/10 alle 14:37 (cervello-felicitas/output/registro-del-team.html).
+   20 ott 10:52, Gab: «Oggi dovrebbe essere il contesto dove tu segni gli appuntamenti e le cose che stanno succedendo oggi.»
+   20 ott 13:40: «manca proprio questo registro unico del team […] E la banca dei compiti con lo Stato, quello è importantissimo.»
+   20 ott 21:55: «tutto quello che abbiamo detto e che è scritto nel giornale della sera deve essere attivato adesso»
+   Una tavola sola (registro): si scrive in Oggi, si muove nel banco dei compiti (Obiettivi), resta nel Cervello per voce.
+   Senza l'SQL 90 queste parti non compaiono. */
+var REG_TIPI=[["da_fare","da fare"],["chiamata","chiamata"],["incontro","incontro"],["fatto","fatto"],["decisione","decisione"],["idea","idea"]];
+var REG_TIPO={};REG_TIPI.forEach(function(x){REG_TIPO[x[0]]=x[1];});
+var REG_STATO={aperto:"aperto",preso:"preso",fatto:"fatto",annullato:"annullato"};
+var REG_STATO_C={aperto:"s-in_coda",preso:"s-in_avanzamento",fatto:"s-sviluppato",annullato:"s-in_coda"};
+var REG_VIS=[["cerchio","il gruppo"],["villaggio","il villaggio"],["solo_me","solo io"]];
+var REG_VIS_N={cerchio:"il gruppo",villaggio:"il villaggio",solo_me:"solo io"};
+var reg={guardo:"tutto",tipo:"da_fare",cerchi:null,cosaFa:null,manca:false};
+function regCerchi(){
+  if(reg.cerchi)return Promise.resolve(reg.cerchi);
+  return db.rpc("fm_cerchi").then(function(r){reg.cerchi=((r&&!r.error&&r.data)||[]).filter(function(x){return x.dentro||x.guido;});return reg.cerchi;},function(){reg.cerchi=[];return reg.cerchi;});
+}
+function regCerchioDi(g){return g.vicinato_id||g.squadra_id||g.azienda_id||VILLAGGIO;}
+function regNomeCerchio(id){if(!id||id===VILLAGGIO)return "il villaggio";var x=(reg.cerchi||[]).filter(function(c){return c.id===id;})[0];return x?x.nome:"";}
+function regTuttiRuoli(){var l=[];Object.keys(RUOLI).forEach(function(f){RUOLI[f].forEach(function(r){l.push([f,r[0],FUNZIONI[f]+" · "+r[1]]);});});return l;}
+function regNomeRuolo(r){var x=regTuttiRuoli().filter(function(y){return y[1]===r;})[0];return x?x[2]:r;}
+function regMioRuolo(r){return (io.ruoli||[]).some(function(x){return x.ruolo===r;});}
+/* i tasti dello stato: chi può fare cosa lo decide il database; qui si mostrano solo quelli sensati */
+function regTasti(g){
+  if(!g.stato)return "";
+  var mio=g.preso_da===io.id,autore=g.scritto_da===io.id,guida=io.coordina||io.nucleo,b=[];
+  if(g.stato==="aperto"){b.push('<button class="mini oro" data-rg="prendo|'+esc(g.id)+'">Lo prendo</button>');b.push('<button class="mini" data-rg="fatto|'+esc(g.id)+'">Fatto</button>');}
+  if(g.stato==="preso"&&(mio||autore||guida)){b.push('<button class="mini oro" data-rg="fatto|'+esc(g.id)+'">Fatto</button>');b.push('<button class="mini" data-rg="riapro|'+esc(g.id)+'">'+(mio?"Lo lascio":"Riapri")+'</button>');}
+  if(g.stato==="fatto"&&(mio||autore||guida))b.push('<button class="mini" data-rg="riapro|'+esc(g.id)+'">Riapri</button>');
+  if((g.stato==="aperto"||g.stato==="preso")&&(autore||guida))b.push('<button class="mini" data-rg="annullo|'+esc(g.id)+'">Annulla</button>');
+  return b.length?'<div class="fine">'+b.join("")+'</div>':"";
+}
+function regRiga(g,conData){
+  var chi=g.preso_da?(nomi[g.preso_da]||"qualcuno"):"",da=nomi[g.scritto_da]||"";
+  var quando=conData?new Date(g.scritto_il).toLocaleDateString("it-IT",{day:"numeric",month:"short"})+" ":"";
+  return '<div class="card rg-riga"><div class="rg-testa"><span class="m">'+esc(quando+hhmm(g.scritto_il))+'</span><span class="t">'+esc(g.testo)+'</span></div>'+
+    '<div class="rg-meta"><span class="pill s-in_coda">'+esc(REG_TIPO[g.tipo]||g.tipo)+'</span>'+(g.stato?'<span class="pill '+REG_STATO_C[g.stato]+'">'+esc(REG_STATO[g.stato])+(chi&&g.stato!=="aperto"?" · "+esc(chi):"")+'</span>':'')+
+      (g.voce?'<span class="chip">'+esc(g.voce)+'</span>':'')+(g.ruolo?'<span class="chip f-'+esc(g.funzione||"")+'">'+esc(regNomeRuolo(g.ruolo))+'</span>':'')+
+      '<span class="chip">'+esc(g.visibilita==="cerchio"?regNomeCerchio(regCerchioDi(g)):REG_VIS_N[g.visibilita]||"")+'</span></div>'+
+    (g.con_chi?'<span class="m">con '+esc(g.con_chi)+'</span>':'')+
+    (g.perche?'<span class="m rg-perche">perché: '+esc(g.perche)+'</span>':'')+
+    (g.prossimo?'<span class="m">prossimo passo: '+esc(g.prossimo)+'</span>':'')+
+    (g.entro_il?'<span class="m">entro il '+esc(new Date(g.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+
+    (da&&g.scritto_da!==io.id?'<span class="m">scritto da '+esc(da)+'</span>':'')+
+    regTasti(g)+'</div>';
+}
+function regLega(box,dopo){
+  box.querySelectorAll("[data-rg]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-rg").split("|");b.disabled=true;
+    db.rpc("fm_registro_"+p[0],{p_riga:p[1]}).then(function(r){if(r&&r.error)alert(errore(r.error));cache.obiettivi=null;dopo();},function(e){alert(errore(e));dopo();});};});
+}
+function regModulo(obiettivi){
+  var cer=[[VILLAGGIO,"Il villaggio"]].concat((reg.cerchi||[]).map(function(c){return [c.id,c.nome];}));
+  var dove=reg.guardo!=="tutto"?reg.guardo:VILLAGGIO;
+  return '<div class="card modulo rg-nuovo"><b>Aggiungi un\'informazione</b>'+
+    '<textarea id="rg-testo" maxlength="2000" aria-label="Aggiungi un\'informazione"></textarea>'+
+    '<div class="lg-filtri" role="radiogroup" aria-label="Tipo">'+REG_TIPI.map(function(t){return '<button type="button" class="chip'+(reg.tipo===t[0]?" on":"")+'" role="radio" aria-checked="'+(reg.tipo===t[0])+'" data-rgtipo="'+t[0]+'">'+t[1]+'</button>';}).join("")+'</div>'+
+    '<div class="due"><label>Dove<select id="rg-dove">'+cer.map(function(c){return '<option value="'+esc(c[0])+'"'+(c[0]===dove?" selected":"")+'>'+esc(c[1])+'</option>';}).join("")+'</select></label>'+
+    '<label>Chi la vede<select id="rg-vis">'+REG_VIS.map(function(v){return '<option value="'+v[0]+'">'+v[1]+'</option>';}).join("")+'</select></label></div>'+
+    '<details class="rg-altro"><summary>Voce, ruolo, perché, prossimo passo</summary><div class="modulo" style="margin-top:8px">'+
+      '<div class="due"><label>Voce<input type="text" id="rg-voce" list="rg-voci" maxlength="80"></label>'+
+      '<label>Per il ruolo<select id="rg-ruolo"><option value="">nessuno</option>'+regTuttiRuoli().map(function(r){return '<option value="'+esc(r[0]+":"+r[1])+'">'+esc(r[2])+'</option>';}).join("")+'</select></label></div>'+
+      '<datalist id="rg-voci"></datalist>'+
+      '<label>Con chi<input type="text" id="rg-con" maxlength="300"></label>'+
+      '<label>Perché<textarea id="rg-perche" maxlength="2000" style="min-height:60px"></textarea></label>'+
+      '<label>Prossimo passo<input type="text" id="rg-prossimo" maxlength="600"></label>'+
+      '<div class="due"><label>Entro il<input type="date" id="rg-entro"></label>'+
+      '<label>Obiettivo<select id="rg-ob"><option value="">nessuno</option>'+(obiettivi||[]).filter(function(o){return o.stadio!=="sviluppato";}).map(function(o){return '<option value="'+esc(o.id)+'">'+esc(o.titolo||o.contenuto||"")+'</option>';}).join("")+'</select></label></div>'+
+    '</div></details>'+
+    '<div class="azioni"><button class="btn pieno" id="rg-salva">Salva</button></div><div class="toast" id="rg-ok" hidden></div></div>';
+}
+function regSalva(dopo){
+  var t=val("rg-testo");if(!t)return mostra("#rg-ok","Scrivi cosa succede.",true);
+  var dove=val("rg-dove"),c=(reg.cerchi||[]).filter(function(x){return x.id===dove;})[0],ru=val("rg-ruolo").split(":");
+  var riga={testo:t,tipo:reg.tipo,visibilita:val("rg-vis")||"cerchio",voce:val("rg-voce")||null,con_chi:val("rg-con")||null,perche:val("rg-perche")||null,
+    prossimo:val("rg-prossimo")||null,entro_il:val("rg-entro")||null,obiettivo_id:val("rg-ob")||null,funzione:ru[1]?ru[0]:null,ruolo:ru[1]||null};
+  if(c)riga[{vicinato:"vicinato_id",gruppo:"squadra_id",azienda:"azienda_id"}[c.tipo]]=c.id;
+  var b=$("#rg-salva");b.disabled=true;
+  db.from("registro").insert(riga).then(function(r){b.disabled=false;
+    if(r&&r.error)return mostra("#rg-ok",errore(r.error),true);
+    $("#rg-testo").value="";mostra("#rg-ok","Salvato nel registro.");cache.obiettivi=null;setTimeout(dopo,600);
+  },function(e){b.disabled=false;mostra("#rg-ok",errore(e),true);});
+}
+/* Oggi: «Stai guardando», «Aggiungi un'informazione», le cose di oggi e quelle aperte per me o per il mio ruolo */
+function vRegistroOggi(){
+  var box=$("#o-reg");if(!box)return;
+  var oggi=oggiISO();
+  Promise.all([
+    regCerchi(),
+    db.from("registro").select("*").or("giorno.eq."+oggi+",stato.in.(aperto,preso)").order("scritto_il",{ascending:false}).limit(200).then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
+    leggiObiettivi(),
+    reg.cosaFa?Promise.resolve(reg.cosaFa):db.from("ruoli_cosa_fa").select("funzione,ruolo,cosa_fa").then(function(r){reg.cosaFa=(r&&!r.error&&r.data)||[];return reg.cosaFa;},function(){return [];})
+  ]).then(function(v){
+    if(vista!=="oggi"||!$("#o-reg"))return;
+    var righe=v[1];
+    if(righe===null){reg.manca=true;box.innerHTML=io.nucleo?'<p class="nota" style="margin:0 2px 10px">Il registro del team si apre con l\'SQL 90.</p>':'';return;}
+    reg.manca=false;
+    var g=reg.guardo;
+    if(g!=="tutto")righe=righe.filter(function(x){return regCerchioDi(x)===g;});
+    var miei=righe.filter(function(x){return x.giorno===oggi||x.preso_da===io.id||x.scritto_da===io.id||(x.ruolo&&regMioRuolo(x.ruolo));});
+    var ids=[];miei.forEach(function(x){ids.push(x.scritto_da,x.preso_da);});
+    leggiNomi(ids).then(function(){
+      var mieiRuoli=(io.ruoli||[]).map(function(r){var c=(reg.cosaFa||[]).filter(function(x){return x.ruolo===r.ruolo;})[0];return '<div class="card"><span class="chip f-'+esc(r.funzione)+'" style="align-self:flex-start">'+esc(nomeRuolo(r.funzione,r.ruolo))+'</span>'+
+        (c?'<span class="t">'+esc(c.cosa_fa)+'</span>':'<span class="m">Cosa fa chi ha questo ruolo lo scrive chi coordina.</span>')+'</div>';}).join("");
+      box.innerHTML='<p class="et">Stai guardando</p><div class="lg-filtri" style="margin-top:6px">'+
+          [["tutto","Tutto"],[VILLAGGIO,"Il villaggio"]].concat((reg.cerchi||[]).map(function(c){return [c.id,c.nome];})).map(function(c){return '<button class="chip'+(g===c[0]?" on":"")+'" data-rgguardo="'+esc(c[0])+'">'+esc(c[1])+'</button>';}).join("")+'</div>'+
+        regModulo(v[2])+
+        '<p class="et" style="margin-top:12px">Le cose di oggi</p>'+
+        (miei.length?'<div class="rg-lista">'+miei.map(function(x){return regRiga(x,x.giorno!==oggi);}).join("")+'</div>':'<div class="vuoto">Ancora niente oggi'+(g!=="tutto"?" qui":"")+'.</div>')+
+        (mieiRuoli?'<p class="et" style="margin-top:12px">Il tuo ruolo</p><div class="rg-lista">'+mieiRuoli+'</div>':'');
+      box.querySelectorAll("[data-rgguardo]").forEach(function(b){b.onclick=function(){reg.guardo=b.getAttribute("data-rgguardo");vRegistroOggi();};});
+      box.querySelectorAll("[data-rgtipo]").forEach(function(b){b.onclick=function(){reg.tipo=b.getAttribute("data-rgtipo");
+        box.querySelectorAll("[data-rgtipo]").forEach(function(y){var on=y===b;y.classList.toggle("on",on);y.setAttribute("aria-checked",on);});};});
+      var voci={};(v[1]||[]).forEach(function(x){if(x.voce)voci[x.voce]=1;});
+      $("#rg-voci").innerHTML=Object.keys(voci).sort().map(function(x){return '<option value="'+esc(x)+'">';}).join("");
+      $("#rg-salva").onclick=function(){regSalva(vRegistroOggi);};
+      regLega(box,vRegistroOggi);
+    });
+  });
+}
+
+/* IL BANCO DEI COMPITI · uno solo: le righe del registro con uno stato e i compiti della logistica (SQL 74), ognuno col suo stato */
+var banco={filtro:"tutti"};
+function vBanco(box,cerchioId){
+  if(!box)return;
+  db.rpc("fm_banco",{p_cerchio:cerchioId||null}).then(function(r){
+    if(!box.isConnected)return;
+    if(!r||r.error){box.innerHTML="";return;}
+    var l=r.data||[],ids=[];l.forEach(function(x){ids.push(x.preso_da,x.scritto_da);});
+    leggiNomi(ids).then(function(){
+      var ruoli={};l.forEach(function(x){if(x.ruolo)ruoli[x.ruolo]=1;});
+      var f=banco.filtro,q=l.filter(function(x){return f==="tutti"||(f==="miei"?(x.preso_da===io.id||x.scritto_da===io.id):x.ruolo===f);});
+      var col=[["aperto","Aperto"],["preso","Preso"],["fatto","Fatto · 30 giorni"]];
+      function carta(x){
+        var t=x.fonte==="logistica"?{id:x.id,stato:x.stato,preso_da:x.preso_da,scritto_da:x.scritto_da}:x;
+        var tasti=x.fonte==="logistica"?
+          (x.stato==="aperto"?'<div class="fine"><button class="mini oro" data-bclog="prendo|'+esc(x.id)+'">Lo prendo</button></div>':x.stato==="preso"&&(x.preso_da===io.id||io.coordina)?'<div class="fine"><button class="mini oro" data-bclog="fatto|'+esc(x.id)+'">Fatto</button></div>':''):regTasti(t);
+        return '<div class="card"><span class="t">'+esc(x.titolo)+'</span><div class="rg-meta">'+
+          (x.fonte==="logistica"?(x.ruolo?'':'<span class="chip f-logistica">logistica</span>'):'<span class="pill s-in_coda">'+esc(REG_TIPO[x.tipo]||x.tipo)+'</span>')+
+          (x.ruolo?'<span class="chip f-'+esc(x.funzione||"")+'">'+esc(regNomeRuolo(x.ruolo))+'</span>':'')+(x.voce?'<span class="chip">'+esc(x.voce)+'</span>':'')+'</div>'+
+          '<span class="m">'+(x.preso_da?esc(nomi[x.preso_da]||"preso"):"nessuno ancora")+(x.entro_il?" · entro il "+esc(new Date(x.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span>'+tasti+'</div>';}
+      box.innerHTML='<p class="et">Il banco dei compiti</p>'+
+        '<div class="lg-conta" style="grid-template-columns:repeat(3,1fr)">'+col.map(function(c){return '<div><b>'+q.filter(function(x){return x.stato===c[0];}).length+'</b><small>'+c[1].split(" ·")[0].toLowerCase()+'</small></div>';}).join("")+'</div>'+
+        '<div class="lg-filtri">'+[["tutti","Tutti"],["miei","I miei"]].concat(Object.keys(ruoli).map(function(k){return [k,regNomeRuolo(k).split(" · ").pop()];})).map(function(c){return '<button class="chip'+(f===c[0]?" on":"")+'" data-bcf="'+esc(c[0])+'">'+esc(c[1])+'</button>';}).join("")+'</div>'+
+        '<div class="lg-banco">'+col.map(function(c){var z=q.filter(function(x){return x.stato===c[0];});
+          return '<div class="lg-col"><p class="et">'+c[1]+' · '+z.length+'</p>'+(z.length?z.map(carta).join(""):'<div class="vuoto" style="padding:10px">—</div>')+'</div>';}).join("")+'</div>';
+      function di(){vBanco(box,cerchioId);}
+      box.querySelectorAll("[data-bcf]").forEach(function(b){b.onclick=function(){banco.filtro=b.getAttribute("data-bcf");di();};});
+      box.querySelectorAll("[data-bclog]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-bclog").split("|"),a={p_compito:p[1]};b.disabled=true;
+        db.rpc("fm_compito_"+p[0],a).then(function(x){if(x&&x.error)alert(errore(x.error));di();},function(){di();});};});
+      regLega(box,di);
+    });
+  },function(){box.innerHTML="";});
+}
+
+/* IL CERVELLO PER VOCE · il sistema di coscienza: il cosa e il perché.
+   20 ott 12:01, Gab: «sistema di coscienza è il contesto che integra il cosa e il perchè».
+   Si legge solo quello che le regole del registro fanno vedere: chi è nel gruppo, chi ha il ruolo, il villaggio; «solo io» resta di chi l'ha scritto. */
+function vVociRegistro(box,cerchioId){
+  if(!box)return;
+  var A=new Date(Date.now()-90*864e5).toISOString();
+  var qy=db.from("registro").select("*").gte("scritto_il",A).order("scritto_il",{ascending:false}).limit(400);
+  Promise.all([qy.then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),regCerchi()]).then(function(v){
+    if(!box.isConnected)return;
+    var l=v[0];if(l===null){box.innerHTML="";return;}
+    l=l.filter(function(x){return x.stato!=="annullato"&&(!cerchioId||regCerchioDi(x)===cerchioId);});
+    if(!l.length){box.innerHTML='<p class="et" style="margin-top:14px">Il registro per voce</p><div class="vuoto">Le righe scritte in Oggi compaiono qui, divise per voce.</div>';return;}
+    var ids=[];l.forEach(function(x){ids.push(x.scritto_da,x.preso_da);});
+    leggiNomi(ids).then(function(){
+      var per={};l.forEach(function(x){var k=x.voce||"Senza voce";(per[k]=per[k]||[]).push(x);});
+      var chiavi=Object.keys(per).sort(function(a,b){return a==="Senza voce"?1:b==="Senza voce"?-1:per[b].length-per[a].length;});
+      box.innerHTML='<p class="et" style="margin-top:14px">Il registro per voce</p>'+chiavi.map(function(k){var z=per[k];
+        var chi={};z.forEach(function(x){[x.scritto_da,x.preso_da].forEach(function(p){if(p&&nomi[p])chi[nomi[p]]=1;});});
+        var suc=z.filter(function(x){return x.stato==="aperto"||x.stato==="preso"||x.tipo==="fatto"||x.tipo==="incontro"||x.tipo==="chiamata";}).slice(0,6);
+        var dec=z.filter(function(x){return x.tipo==="decisione"||x.perche;}).slice(0,6);
+        return '<details class="card rg-voce"><summary><b>'+esc(k)+'</b><span class="m">'+z.length+(z.length===1?" riga":" righe")+'</span></summary>'+
+          '<div class="rg-blocchi"><div><p class="et">Chi c\'è</p><span class="t">'+(Object.keys(chi).map(esc).join(", ")||"—")+'</span></div>'+
+          '<div><p class="et">Cosa succede</p>'+(suc.length?'<ul>'+suc.map(function(x){return '<li>'+esc(x.testo)+(x.stato?' <span class="pill '+REG_STATO_C[x.stato]+'">'+REG_STATO[x.stato]+'</span>':'')+'</li>';}).join("")+'</ul>':'<span class="m">—</span>')+'</div>'+
+          '<div><p class="et">Perché · decisioni</p>'+(dec.length?'<ul>'+dec.map(function(x){return '<li>'+esc(x.tipo==="decisione"?x.testo:x.perche)+'<span class="m"> · '+esc(new Date(x.scritto_il).toLocaleDateString("it-IT",{day:"numeric",month:"short"}))+'</span></li>';}).join("")+'</ul>':'<span class="m">—</span>')+'</div></div>'+
+          '<p class="nota" style="margin-top:6px">'+esc(Object.keys(z.reduce(function(a,x){a[REG_VIS_N[x.visibilita]]=1;return a;},{})).join(" · "))+'</p></details>';}).join("");
+    });
+  });
+}
+
+/* RUOLI · cambiare un ruolo in un passo, e scrivere cosa fa chi lo ha (SQL 90) */
+function regRuoliExtra(box){
+  if(!box)return;
+  box.querySelectorAll("[data-chiudi-r]").forEach(function(b){
+    var s=document.createElement("select");s.className="rg-cambia";s.setAttribute("aria-label","Cambia ruolo");
+    s.innerHTML='<option value="">cambia in…</option>'+regTuttiRuoli().map(function(r){return '<option value="'+esc(r[0]+":"+r[1])+'">'+esc(r[2])+'</option>';}).join("");
+    s.onchange=function(){if(!s.value)return;var p=s.value.split(":");s.disabled=true;
+      db.rpc("fm_ruolo_cambia",{p_ruolo:b.getAttribute("data-chiudi-r"),p_funzione:p[0],p_nuovo:p[1]}).then(function(r){s.disabled=false;
+        if(r&&r.error)return mostra("#r-ok",/fm_ruolo_cambia|function/i.test(r.error.message||"")?"Si apre con l'SQL 90.":errore(r.error),true);
+        if(r.data!=="ok")return mostra("#r-ok",r.data,true);
+        reg.cosaFa=null;vRuoli();},function(){s.disabled=false;});};
+    var w=document.createElement("div");w.className="rg-az";b.parentNode.insertBefore(w,b);w.appendChild(s);w.appendChild(b);
+  });
+  var k=document.createElement("div");k.className="card modulo";k.style.marginTop="10px";
+  k.innerHTML='<b>Cosa fa chi ha il ruolo</b><label>Ruolo<select id="cf-r">'+regTuttiRuoli().map(function(r){return '<option value="'+esc(r[0]+":"+r[1])+'">'+esc(r[2])+'</option>';}).join("")+'</select></label>'+
+    '<label>Cosa fa<textarea id="cf-t" maxlength="2000" style="min-height:70px"></textarea></label><div class="azioni"><button class="btn pieno" id="cf-salva">Salva</button></div><div class="toast" id="cf-ok" hidden></div>';
+  box.appendChild(k);
+  function carica(){var p=val("cf-r").split(":"),c=(reg.cosaFa||[]).filter(function(x){return x.funzione===p[0]&&x.ruolo===p[1];})[0];$("#cf-t").value=c?c.cosa_fa:"";}
+  (reg.cosaFa?Promise.resolve(reg.cosaFa):db.from("ruoli_cosa_fa").select("funzione,ruolo,cosa_fa").then(function(r){if(r&&r.error){k.remove();return null;}reg.cosaFa=r.data||[];return reg.cosaFa;},function(){k.remove();return null;})).then(function(x){if(x)carica();});
+  $("#cf-r").onchange=carica;
+  $("#cf-salva").onclick=function(){var p=val("cf-r").split(":"),t=val("cf-t");if(!t)return mostra("#cf-ok","Scrivi cosa fa.",true);var b=this;b.disabled=true;
+    db.from("ruoli_cosa_fa").upsert({funzione:p[0],ruolo:p[1],cosa_fa:t,scritto_da:io.id,scritto_il:new Date().toISOString()}).then(function(r){b.disabled=false;
+      if(r&&r.error)return mostra("#cf-ok",errore(r.error),true);reg.cosaFa=null;mostra("#cf-ok","Salvato.");},function(e){b.disabled=false;mostra("#cf-ok",errore(e),true);});};
+}
+
+/* ═══ GIORNALE · modello 4 ═══
+   Gab 20 ott 01:42 sul modello 4: «bello». 01:48: «ok anteprima si è giusto».
+   Gab 20 ott 10:32: il Settimanale del 20/10 è «troppo approssimativo», «non lo devo far leggere a nessuno» → nessun testo del Settimanale qui.
+   Testi fissi solo da fonti già approvate: pagina del Festival, SQL 77 (le voci, audio 20/10 01:31), SQL 84-85 (le tre funzioni), Cervello (i prezzi).
+   Gli articoli del giorno si leggono dal database: i pubblici in tessere grandi, gli altri in «Solo per i villaggi».
+   Bolli del palinsesto e «dall'ultima volta» dall'SQL 77 (fm_giornale_entro, fm_giornale_voci_mosse); senza, le voci sono tutte uguali. */
+var FEST_ID="bfff97a1-3431-4939-b15e-304f14087509";
+var VOCI_G4=[["pratiche_risveglio","Pratiche di risveglio",1],["bambini","Contenuti per bambini",2],["sapere_mondo","Sapere del mondo",5],["storie","Storie",3],["musica","Bella musica",4],["maestrie","Le maestrie",3],["insegnamenti","Insegnamenti",5],["creativita","Creatività",1],["notte","Programmi della notte",4],["tecnologia","Tecnologia",5],["economia","Economia",3]];
+var DATE_G4=[["2026-10-25","25 ottobre","L'incontro dei vicinati · Cas'ale · Baratili · dalle 10"],["2026-11-21","21 novembre","Felicitas Festival · Baratili San Pietro · dalle 10:00"]]; /* dalla pagina del Festival */
+var g4Entro;
+function g4Testa(g){
+  var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime(),L=luna();
+  var giorni=Math.max(0,Math.ceil((new Date("2026-11-21T00:00:00").getTime()-new Date().setHours(0,0,0,0))/864e5));
+  var ico=function(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true">'+d+'</svg>';};
+  var s1=function(x){return ' g4-sale';};
+  return '<div class="g4-apre"><div class="g4-data">'+esc(g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}))+' · '+esc(L.nome)+'</div><h1>Giornale<br>Felicitas</h1><p class="grande" id="g4-mosse" hidden></p></div>'+
+    '<div id="g4-radio"></div><div id="g4-art" style="display:flex;flex-direction:column;gap:10px"></div>'+
+    (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="festival-evento-bozza.html?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
+      '<div class="g4-occ">In evidenza</div><h2>Felicitas Festival</h2>'+
+      '<p>TRAME · la forza di essere connessi<br>Sabato 21 novembre 2026 · dalle 10:00<br>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</p>'+
+      '<div class="g4-num"><div><b>'+giorni+'</b><small>giorni</small></div><div id="g4-fatti" hidden><b></b><small>compiti fatti</small></div><div id="g4-servono" hidden><b></b><small>cose che servono</small></div></div>'+
+      '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
+      '<a class="g4-tasto" href="festival-evento-bozza.html?c=10182300">Il programma</a></div></div>':'')+
+    '<div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
+    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div>'+
+    '<div class="g4-mos"><div class="g4-titolo g4-sale"><div class="g4-occ">Le tre linee · per i team</div><h3>Logistica, tecnologia e comunità</h3></div>'+
+      '<a class="g4-cat g4-c1 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>')+'<div><h3>Logistica</h3><p>Emporio · Magazzino · Produttori · Eventi · Contabilità</p></div></a>'+
+      '<a class="g4-cat g4-c5 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')+'<div><h3>Tecnologia</h3><p>Piattaforma · Giornale · Radio · Gestionale · Sicurezza</p></div></a>'+
+      '<a class="g4-cat g4-c2 g4-sale" style="grid-column:1/-1;min-height:120px" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="7" cy="9" r="2.5"/><circle cx="17" cy="9" r="2.5"/><circle cx="12" cy="6" r="2.5"/><path d="M3 20c.6-3 2.4-5 4-5M21 20c-.6-3-2.4-5-4-5M8 20c.6-3 2.2-5 4-5s3.4 2 4 5"/>')+'<div><h3>Comunità</h3><p>Vicinati e villaggi · Formazione · Assistenza comunitaria integrata · Economia</p></div></a>'+
+      '</div>'+
+    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Il percorso</div><h2>Praticantato Antaḥkaraṇa</h2>'+
+      '<div class="g4-prezzi"><div><b>Gratis</b><small>leggere il cervello Felicitas</small></div><div><b>10 €</b><small>al mese senza AI</small></div><div><b>26 €</b><small>al mese con l\'AI</small></div><div><b>20 €</b><small>a settimana il percorso, cioè 80 € al mese, oppure il karma yoga</small></div></div></div></div>'+
+    '<div class="g4-t g4-sale"><div class="in" id="g4-date"><div class="g4-occ">Le date</div>'+g4Date([])+'</div></div>'+
+    '<div id="g4-vil"></div>';
+}
+function g4Date(lez){
+  var oggi=new Date();oggi.setHours(0,0,0,0);var r=[];
+  lez.forEach(function(l){var t=new Date(l.inizio_il);if(t<Date.now()-36e5)return;var d=new Date(t);d.setHours(0,0,0,0);
+    r.push({t:t.getTime(),b:(d.getTime()===oggi.getTime()?"oggi":t.toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+", "+hhmm(l.inizio_il),s:l.titolo+(l.luogo?" · "+l.luogo:"")});});
+  DATE_G4.forEach(function(x){var t=new Date(x[0]+"T00:00:00").getTime();if(t>=oggi.getTime())r.push({t:t,b:x[1],s:x[2]});});
+  r.sort(function(p,q){return p.t-q.t;});
+  return r.slice(0,8).map(function(x){return '<div class="g4-d"><b>'+esc(x.b)+'</b><span>'+esc(x.s)+'</span></div>';}).join("");
+}
+function g4Sale(){
+  var el=[].slice.call(document.querySelectorAll("#corpo .g4-sale:not(.visto)"));
+  if(!("IntersectionObserver" in window)){el.forEach(function(e){e.classList.add("visto");});return;}
+  var o=new IntersectionObserver(function(v){v.forEach(function(x){if(x.isIntersecting){x.target.classList.add("visto");o.unobserve(x.target);}});},{rootMargin:"0px 0px -8% 0px"});
+  el.forEach(function(e){o.observe(e);});
+}
+function g4Articoli(arti,firme){
+  var pub=arti.filter(function(x){return x.o.visibilita==="pubblico";}),dentro=arti.filter(function(x){return x.o.visibilita!=="pubblico";});
+  var A=$("#g4-art");if(A)A.innerHTML=pub.map(function(x){return '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Articolo</div>'+voce(x,firme)+'</div></div>';}).join("");
+  var V=$("#g4-vil");if(V)V.innerHTML=io.id&&dentro.length?'<div class="g4-t g4-vil g4-sale"><div class="in"><div class="g4-occ">Solo per i villaggi</div>'+
+    dentro.map(function(x){return '<details class="g4-gg"><summary><span>'+esc(x.o.titolo||"Articolo")+'</span><span>›</span></summary>'+voce(x,firme)+'</details>';}).join("")+'</div></div>':"";
+  [A,V].forEach(function(c){if(!c)return;
+    c.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(c);});
+  g4Sale();
+}
+function g4Riempi(da,a,questo){
+  g4Sale();
+  function ok(){return vista==="giornale"&&giorno===questo;}
+  lezioni().then(function(l){var d=$("#g4-date");if(ok()&&d)d.innerHTML='<div class="g4-occ">Le date</div>'+g4Date(l);});
+  if(!db)return;
+  /* la puntata radio: l'ultima diretta fino a questo giorno */
+  db.from("orme").select(CAMPI+",link").eq("tipo","diretta").lt("momento",new Date(a).toISOString()).order("momento",{ascending:false}).limit(1).then(function(r){
+    var o=r&&!r.error&&r.data&&r.data[0];if(!o||!ok())return;
+    var au=(o.orma_file||[]).filter(function(f){return /audio/.test(f.tipo||"")||/\.(m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||"");});
+    return firmaURL(au).then(function(fm){if(!ok())return;var u=au.length&&fm[au[0].indirizzo];
+      var onda='<div class="g4-onda" aria-hidden="true">'+[30,60,45,90,70,40,80,55,35,75,50,65,30,85,45,60].map(function(h){return '<i style="height:'+h+'%"></i>';}).join("")+'</div>';
+      $("#g4-radio").innerHTML='<div class="g4-t g4-radio g4-sale"><div class="in"><div class="g4-occ">Radio Felicitas · '+esc(new Date(o.inizio_il||o.momento).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</div>'+
+        (o.titolo?'<h2>'+esc(o.titolo)+'</h2>':'')+(o.contenuto?'<p>'+esc(String(o.contenuto).slice(0,600))+'</p>':'')+onda+
+        (u?'<audio controls preload="none" src="'+esc(u)+'"></audio>':'')+
+        '<a class="g4-tasto" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'&c=10182300">▶ Ascolta</a></div></div>';g4Sale();});
+  },function(){});
+  /* il Festival: cosa serve, dagli articoli pubblici del Festival (SQL 76) */
+  if($("#g4-serve"))db.from("orme").select("id").eq("tipo","articolo").eq("visibilita","pubblico").eq("orma_madre_id",FEST_ID).limit(5).then(function(r){
+    var ids=((r&&!r.error&&r.data)||[]).map(function(x){return x.id;});if(!ids.length)return;
+    return Promise.all(ids.map(function(id){return db.rpc("fm_giornale_compiti_fuori",{p_articolo:id}).then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];});})).then(function(v){
+      if(!ok())return;var tutti=[].concat.apply([],v),fatti=tutti.filter(function(c){return c.stato==="fatto";}),servono=tutti.filter(function(c){return c.stato==="da_prendere";});
+      if(!tutti.length)return;
+      var F=$("#g4-fatti"),S=$("#g4-servono"),C=$("#g4-serve");
+      F.querySelector("b").textContent=fatti.length;F.hidden=false;S.querySelector("b").textContent=servono.length;S.hidden=false;
+      if(servono.length){C.hidden=false;C.insertAdjacentHTML("beforeend",servono.slice(0,5).map(function(c){
+        return '<div class="g4-cp"><span>'+esc(c.titolo)+'<small>'+esc([c.luogo,c.entro_il?"entro il "+new Date(c.entro_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}):""].filter(Boolean).join(" · "))+'</small></span>'+
+          (io.id?'<button class="g4-mini" data-mano="'+esc(c.id)+'">Do una mano</button>':'<a class="g4-mini" href="'+ENTRA+'">Do una mano</a>')+'</div>';}).join(""));
+        C.querySelectorAll("[data-mano]").forEach(function(b){b.onclick=function(){b.disabled=true;
+          db.rpc("fm_compito_do_una_mano",{p_compito:b.getAttribute("data-mano")}).then(function(x){if(x&&x.error){alert(errore(x.error));b.disabled=false;return;}b.textContent="✓";},function(){b.disabled=false;});};});}
+    });
+  },function(){});
+  /* palinsesto e «dall'ultima volta» (SQL 77): l'ultima visita si legge una volta sola a ogni apertura dell'app */
+  var entro=g4Entro!==undefined?Promise.resolve(g4Entro):io.id?db.rpc("fm_giornale_entro").then(function(x){g4Entro=x&&!x.error?(x.data||null):null;return g4Entro;},function(){g4Entro=null;return null;}):Promise.resolve(null);
+  entro.then(function(dal){return db.rpc("fm_giornale_voci_mosse",{p_dal:dal}).then(function(x){
+    if(!ok()||!x||x.error||!x.data)return;var tot=0,m={};x.data.forEach(function(v){m[v.voce]=+v.nuove||0;tot+=m[v.voce];});
+    document.querySelectorAll("#g4-pal [data-voce]").forEach(function(t){var n=m[t.getAttribute("data-voce")]||0;
+      t.classList.toggle("ferma",!n);t.insertAdjacentHTML(n?"afterbegin":"beforeend",n?'<span class="g4-bollo">'+n+(n===1?" novità":" novità")+'</span>':'<p>niente di nuovo</p>');});
+    var M=$("#g4-mosse");if(io.id&&dal&&tot&&M){M.innerHTML="Dall'ultima volta che sei entrato "+(tot===1?"si è mossa <b>1 cosa</b>.":"si sono mosse <b>"+tot+" cose</b>.");M.hidden=false;}
+  });},function(){});
+}
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
 var apriF={},apriA={};
@@ -466,7 +914,7 @@ function vGiornale(){
   var da=g.getTime(),a=da+864e5;
   var nome=giorno===0?"Oggi":giorno===-1?"Ieri":giorno===1?"Domani":"";
   var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  c.innerHTML='<p class="et">Giornale · l\'edizione del giorno</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
+  c.innerHTML=g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
     (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
     '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>';
   c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
@@ -475,10 +923,12 @@ function vGiornale(){
     if(vista!=="giornale"||giorno!==questo)return;
     var voci=v[0].map(function(o){return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
     v[1].forEach(function(l){var t=new Date(l.inizio_il).getTime();if(t>=da&&t<a)voci.push({l:l,t:t});});
-    var files=[];voci.forEach(function(x){if(x.o)(x.o.orma_file||[]).forEach(function(f){if(/image|audio/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic|m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||""))files.push(f);});});
-    return Promise.all([leggiNomi(voci.filter(function(x){return x.o;}).map(function(x){return x.o.persona_id;})),firmaURL(files)]).then(function(w){
+    var arti=voci.filter(function(x){return x.o&&x.o.tipo==="articolo";});voci=voci.filter(function(x){return !(x.o&&x.o.tipo==="articolo");});
+    var files=[];voci.concat(arti).forEach(function(x){if(x.o)(x.o.orma_file||[]).forEach(function(f){if(/image|audio/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic|m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||""))files.push(f);});});
+    return Promise.all([leggiNomi(voci.concat(arti).filter(function(x){return x.o;}).map(function(x){return x.o.persona_id;})),firmaURL(files)]).then(function(w){
       if(vista!=="giornale"||giorno!==questo)return;
       var firme=w[1];
+      g4Articoli(arti,firme);
       var sez=FASCE.map(function(F){
         var vv=voci.filter(function(x){var h=new Date(x.t).getHours();return h>=F[1]&&h<F[2];})
           .sort(function(p,q){return ((q.o&&q.o.tipo==="articolo")?1:0)-((p.o&&p.o.tipo==="articolo")?1:0)||p.t-q.t;});
@@ -498,6 +948,7 @@ function vGiornale(){
       legaVis(gc);
     });
   });
+  g4Riempi(da,a,questo);
 }
 function mediaHTML(o,firme){
   return (o.orma_file||[]).map(function(f){var u=firme[f.indirizzo];if(!u)return "";
@@ -536,6 +987,8 @@ function vCervello(){
     '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
     /* Gab, 15/10, ripreso il 19/10 19:35 */
     '<p class="nota" style="margin:8px 2px 0">Il Cervello è open source, senza rivendita dei dati, e l\'esportazione completa resta sempre disponibile.</p>'+
+    /* 20 ott 12:01-12:03, Gab: «sistema di coscienza è il contesto che integra il cosa e il perchè» · «nella pagina cervello va aggiunto sotto, dove c e anche open source, sistema di coscienza» */
+    '<p class="nota" style="margin:6px 2px 0"><b>Sistema di coscienza</b>: «il contesto che integra il cosa e il perché».</p>'+
     '<p class="et" style="margin-top:14px">Cosa puoi fare nel Cervello</p>'+
     '<div class="due-col">'+
       '<div class="card"><b>Senza AI</b><span class="m">10 € al mese</span>'+
@@ -551,7 +1004,7 @@ function vCervello(){
     (io.id?
       '<p class="et" style="margin-top:14px">Il cervello digitale</p>'+
       '<button class="cerchio-b" data-cerchio="io"><span><b>Il percorso del talento</b><small>i capitoli di '+esc(io.nome||"chi entra")+' · li legge solo chi li scrive</small></span><span>›</span></button>'+
-      '<p class="et" style="margin-top:14px">I cerchi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'
+      '<p class="et" style="margin-top:14px">I cerchi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div><div id="ce-voci"></div>'
     :'<div class="card" style="margin-top:14px"><span class="t">Il percorso del talento e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
     (io.id&&io.nucleo?'<p class="et" style="margin-top:14px">Porta un\'azienda nel Cervello · per il nucleo</p><div class="card modulo" id="az-apri">'+
       /* dal file dei costi (Attiva il tuo cervello, 19/10), riga Azienda; la consegna a domicilio non è pronta (Gab 19:33) */
@@ -563,6 +1016,7 @@ function vCervello(){
   if(!io.id)return;
   cerchiCache={io:{id:"io",tipo:"io",nome:"Il percorso del talento",dentro:true}};
   legaCerchi(c);
+  vVociRegistro($("#ce-voci"));
   if(io.nucleo)$("#az-vai").onclick=function(){var b=this,n=$("#az-nome").value.trim();if(n.length<2){$("#az-esito").textContent="Il nome serve.";return;}
     b.disabled=true;db.rpc("fm_azienda_apri",{p_nome:n,p_territorio:$("#az-terr").value.trim(),p_mail_referente:$("#az-ref").value.trim()}).then(function(r){b.disabled=false;
       if(r&&r.error){$("#az-esito").textContent=errore(r.error);return;}
@@ -747,12 +1201,17 @@ function vCerchio(){
   if(x.tipo==="villaggio"){
     /* Gab, 19/10 20:18, verbatim (refuso corretto): «villaggio è un team operativo organizzato in vicinati, con l intento di portare avanti i progetti logistici e tecnologici legati a felicitas» */
     var vv=Object.keys(cerchiCache).map(function(k){return cerchiCache[k];}).filter(function(y){return y.tipo==="vicinato";});
+    var inLog=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
     c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Un team operativo organizzato in vicinati, con l\'intento di portare avanti i progetti logistici e tecnologici legati a Felicitas.</span></div>'+
+      '<div id="ce-banco" style="margin-top:12px"></div><div id="ce-voci"></div>'+
+      (inLog?'<div id="lg"></div>':'')+
       (vv.length?'<p class="et" style="margin-top:12px">I vicinati</p><div class="cerchi">'+vv.map(function(y){return '<button class="cerchio-b" data-cerchio="'+esc(y.id)+'"><span><b>'+esc(y.nome)+'</b><small>'+(y.territorio?esc(y.territorio)+' · ':'')+(+y.persone===1?'1 persona':(+y.persone)+' persone')+'</small></span><span>›</span></button>';}).join("")+'</div>':'')+
       (io.coordina?'<div id="o-ruoli"></div>':'');
     $("#ce-indietro").onclick=function(){vai("cervello");};
     legaCerchi(c);
     if(io.coordina)vRuoli();
+    if(inLog)vLogistica();
+    vBanco($("#ce-banco"),VILLAGGIO);vVociRegistro($("#ce-voci"),VILLAGGIO);
     fondoIndietro(c);
     return;
   }
@@ -769,12 +1228,14 @@ function vCerchio(){
     (vic&&(x.guido||io.coordina)?'<p class="et" style="margin-top:12px">Dai un ruolo · per chi guida</p><div class="card modulo" id="ce-ruoli"></div>':'')+
     (x.tipo==="azienda"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il referente</p><div class="card modulo" id="az-aggiungi"></div>':'')+
     (x.tipo==="gruppo"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il capofila</p><div class="card modulo" id="gr-aggiungi"></div>':'')+
+    '<div id="ce-banco" style="margin-top:12px"></div><div id="ce-voci"></div>'+
     (x.tipo!=="azienda"?'<p class="et" style="margin-top:12px">Il giornale del '+(vic?'vicinato':'gruppo')+'</p><div class="foglio-g" id="ce-giornale"><p class="nota">Un momento…</p></div>':'');
   if(x.tipo==="azienda"&&(x.guido||io.nucleo))aziendaAggiungi(cerchio);
   if(x.tipo==="gruppo"&&(x.guido||io.nucleo))gruppoAggiungi(cerchio);
   if(conLibro)libro($("#lb"),{campo:vic?"vicinato_id":"squadra_id",id:cerchio,occ:(vic?"Il cervello del vicinato":"Il cervello del gruppo")+(x.territorio?" · "+x.territorio:""),titolo:x.nome});
   fondoIndietro(c);
   $("#ce-indietro").onclick=function(){vai("cervello");};
+  vBanco($("#ce-banco"),cerchio);vVociRegistro($("#ce-voci"),cerchio);
   var questo=cerchio;
   db.rpc("fm_cerchio_persone",{p_vicinato:questo}).then(function(r){
     var e=$("#ce-persone");if(!e||cerchio!==questo)return;var l=(r&&!r.error&&r.data)||[];
@@ -794,6 +1255,122 @@ function vCerchio(){
       legaVis(g);
     });
   },function(){});
+}
+/* ═══ LA LOGISTICA DEL VILLAGGIO ═══
+   20 ott 12:16, Gab: «io non posso vendere fuori qualcosa che non faccio dentro […] cosa stiamo proponendo fuori lo dobbiamo avere dentro, al massimo del livello» · 12:21 «Ok».
+   20 ott 07:11, Gab: il Cervello è il gestionale: «chi c'è, chi sta facendo cosa, quanti sono i prodotti in uscita, quanti sono i prodotti in entrata, chi è stato pagato».
+   Solo SQL già lanciati: 74 (merce_lotti, logistica_compiti, fm_compito_*, fm_giacenze, fm_rendiconto) e 75 (fm_luoghi_del_villaggio).
+   Chi vede cosa lo decidono le regole del 74: ognuno i compiti del suo ruolo, chi coordina tutto; il rendiconto a chi coordina, all'Emporio e ai Produttori. */
+var RUOLI_LOG=[["emporio","Emporio"],["magazzino","Magazzino"],["produttori","Produttori"],["eventi","Eventi"]];
+var MOVIMENTI=[["arrivo","Arrivo dal produttore"],["vendita","Vendita"],["consegna","Consegna a una persona"],["reso_persona","Reso di una persona"],["riconsegna_produttore","Riconsegna al produttore"],["uscita_verso_punto","Uscita verso un altro punto"],["entrata_da_punto","Entrata da un altro punto"],["scarto","Scarto"]];
+var lgFiltro="tutti";
+function lgData(t){return t?new Date(t).toLocaleDateString("it-IT",{day:"numeric",month:"short"}):"";}
+function lgNum(n){n=+n||0;return (Math.round(n*1000)/1000).toLocaleString("it-IT");}
+function lgEuro(n){return (+n||0).toLocaleString("it-IT",{style:"currency",currency:"EUR"});}
+function vLogistica(){
+  var box=$("#lg");if(!box)return;
+  var questo=cerchio;
+  box.innerHTML='<p class="et" style="margin-top:12px">La logistica · per chi ci lavora</p><p class="nota">Un momento…</p>';
+  var dal=new Date(Date.now()-30*864e5).toISOString();
+  function ok(r){return r&&!r.error?(r.data||[]):[];}
+  function no(){return [];}
+  Promise.all([
+    db.from("logistica_compiti").select("id,punto_id,ruolo,titolo,nota,entro_il,movimento,lotto_id,quantita,preso_da,preso_il,fatto_da,fatto_il,annullato_il,creato_il").is("annullato_il",null).order("creato_il",{ascending:false}).limit(300).then(ok,no),
+    db.from("merce_lotti").select("id,partner_id,nome,unita,prezzo_vendita,prezzo_produttore,lotto,scade_il,chiuso_il").order("creato_il",{ascending:false}).then(ok,no),
+    db.rpc("fm_luoghi_del_villaggio",{p_villaggio:VILLAGGIO}).then(ok,no),
+    db.rpc("fm_giacenze").then(ok,no),
+    db.rpc("fm_rendiconto").then(ok,no),
+    db.from("partner").select("id,nome").order("nome").then(ok,no),
+    db.from("orme").select("id,titolo").eq("id",FEST_ID).then(ok,no)
+  ]).then(function(v){
+    if(cerchio!==questo||!$("#lg"))return;
+    var comp=v[0].filter(function(c){return !c.fatto_il||c.fatto_il>=dal;}),lotti=v[1],luoghi=v[2],gia=v[3],ren=v[4],partner=v[5],feste=v[6];
+    var punti={},lot={};
+    luoghi.forEach(function(l){punti[l.id]=l.titolo;});feste.forEach(function(f){punti[f.id]=f.titolo;});
+    lotti.forEach(function(l){lot[l.id]=l;});
+    var ids=[];comp.forEach(function(c){ids.push(c.preso_da,c.fatto_da);});
+    leggiNomi(ids).then(function(){
+      if(cerchio!==questo||!$("#lg"))return;
+      var aperti=comp.filter(function(c){return !c.preso_da&&!c.fatto_il;}),presi=comp.filter(function(c){return c.preso_da&&!c.fatto_il;}),fatti=comp.filter(function(c){return c.fatto_il;});
+      var nei=gia.filter(function(g){return +g.giacenza>0;});
+      function filtra(l){return lgFiltro==="tutti"?l:l.filter(function(c){return c.ruolo===lgFiltro;});}
+      function scheda(c){
+        var l=lot[c.lotto_id],q=c.movimento?(c.quantita!=null?lgNum(c.quantita)+" "+((l&&l.unita)||"")+" · ":"")+((l&&l.nome)||"merce"):"";
+        var mov=c.movimento?(MOVIMENTI.filter(function(m){return m[0]===c.movimento;})[0]||[0,c.movimento])[1]:"";
+        var chi=c.fatto_il?"fatto da "+(nomi[c.fatto_da]||"—")+" · "+lgData(c.fatto_il):c.preso_da?"preso da "+(c.preso_da===io.id?"te":(nomi[c.preso_da]||"—"))+" · "+lgData(c.preso_il):"";
+        var mio=(io.ruoli||[]).some(function(r){return r.funzione==="logistica"&&r.ruolo===c.ruolo;})||io.coordina;
+        return '<div class="card"><span class="t">'+esc(c.titolo)+'</span>'+
+          '<span class="m">'+esc(nomeRuolo("logistica",c.ruolo))+' · '+esc(punti[c.punto_id]||"un punto")+(c.entro_il&&!c.fatto_il?' · entro il '+esc(lgData(c.entro_il)):'')+'</span>'+
+          (q?'<span class="m">'+esc(mov)+' · '+esc(q)+'</span>':'')+
+          (c.nota?'<span class="m">'+esc(c.nota)+'</span>':'')+
+          (chi?'<span class="m">'+esc(chi)+'</span>':'')+
+          (!c.fatto_il&&mio?'<div class="fine">'+(!c.preso_da?'<button class="mini oro" data-lprendo="'+esc(c.id)+'">Lo prendo</button>':'')+
+            '<button class="mini" data-lfatto="'+esc(c.id)+'"'+(c.movimento?' data-q="'+esc(c.quantita==null?"":c.quantita)+'"':'')+'>Fatto</button>'+
+            (io.coordina?'<button class="mini" data-lannullo="'+esc(c.id)+'">Annulla</button>':'')+'</div>':'')+
+          '</div>';}
+      function colonna(tit,l,vuoto){return '<div class="lg-col"><p class="et">'+tit+' · '+l.length+'</p>'+(l.length?l.map(scheda).join(""):'<div class="vuoto">'+vuoto+'</div>')+'</div>';}
+      /* giacenze per punto */
+      var perPunto={};nei.forEach(function(g){(perPunto[g.punto]=perPunto[g.punto]||[]).push(g);});
+      var giaH=Object.keys(perPunto).length?Object.keys(perPunto).map(function(p){return '<div class="card"><b>'+esc(p)+'</b><div class="lg-scroll"><table class="lg-tab"><thead><tr><th>Merce</th><th>Produttore</th><th class="n">C\'è</th><th class="n">Scade</th></tr></thead><tbody>'+
+        perPunto[p].map(function(g){return '<tr><td>'+esc(g.merce)+'</td><td>'+esc(g.produttore||"")+'</td><td class="n">'+lgNum(g.giacenza)+' '+esc(g.unita||"")+'</td><td class="n">'+esc(g.scade_il?lgData(g.scade_il):"")+'</td></tr>';}).join("")+'</tbody></table></div></div>';}).join("")
+        :'<div class="vuoto">Nei punti non c\'è merce. Si riempie quando un compito con la merce è fatto.</div>';
+      /* rendiconto per produttore */
+      var perProd={};ren.forEach(function(r){(perProd[r.produttore]=perProd[r.produttore]||[]).push(r);});
+      var renH=Object.keys(perProd).length?Object.keys(perProd).map(function(p){var tot=0;perProd[p].forEach(function(r){if(!r.chiuso_il)tot+=+r.da_pagare||0;});
+        return '<div class="card"><div class="riga-m"><b>'+esc(p)+'</b><span class="m">da pagare '+lgEuro(tot)+'</span></div><div class="lg-scroll"><table class="lg-tab"><thead><tr><th>Merce</th><th class="n">Arrivato</th><th class="n">Venduto</th><th class="n lg-meno">Tornato</th><th class="n">Nei punti</th><th class="n">Da pagare</th></tr></thead><tbody>'+
+          perProd[p].map(function(r){return '<tr><td>'+esc(r.merce)+(r.chiuso_il?' <span class="m">· chiuso il '+esc(lgData(r.chiuso_il))+'</span>':'')+'</td><td class="n">'+lgNum(r.arrivato)+' '+esc(r.unita||"")+'</td><td class="n">'+lgNum(r.venduto)+'</td><td class="n lg-meno">'+lgNum(r.tornato)+'</td><td class="n">'+lgNum(r.nei_punti)+'</td><td class="n">'+lgEuro(r.da_pagare)+'</td></tr>';}).join("")+'</tbody></table></div></div>';}).join("")
+        :'<div class="vuoto">Ancora nessun produttore con merce in conto vendita.</div>';
+      var puoLotto=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica"&&(r.ruolo==="emporio"||r.ruolo==="produttori");});
+      var luoghiOpt=luoghi.map(function(l){return '<option value="'+esc(l.id)+'">'+esc(l.titolo)+'</option>';}).join("")+feste.map(function(f){return '<option value="'+esc(f.id)+'">'+esc(f.titolo)+'</option>';}).join("");
+      var lottiAperti=lotti.filter(function(l){return !l.chiuso_il;});
+      $("#lg").innerHTML='<p class="et" style="margin-top:12px">La logistica · per chi ci lavora</p>'+
+        '<div class="lg-conta"><div><b>'+aperti.length+'</b><small>da prendere</small></div><div><b>'+presi.length+'</b><small>in corso</small></div><div><b>'+fatti.length+'</b><small>fatti in 30 giorni</small></div><div><b>'+nei.length+'</b><small>merci nei punti</small></div></div>'+
+        '<p class="et">Il banco dei compiti</p>'+
+        '<div class="lg-filtri">'+[["tutti","Tutti"]].concat(RUOLI_LOG).map(function(r){return '<button class="chip'+(lgFiltro===r[0]?' on':'')+'" data-lgf="'+r[0]+'" aria-pressed="'+(lgFiltro===r[0])+'">'+r[1]+'</button>';}).join("")+'</div>'+
+        '<div class="lg-banco">'+colonna("Da prendere",filtra(aperti),"Niente da prendere.")+colonna("In corso",filtra(presi),"Nessuno ci sta lavorando.")+colonna("Fatti",filtra(fatti),"Ancora niente di fatto negli ultimi 30 giorni.")+'</div>'+
+        (luoghi.length||feste.length?'<details class="lg-nuovo"><summary>Nuovo compito</summary><div class="modulo">'+
+          '<label>Cosa c\'è da fare<input type="text" id="lg-tit" maxlength="140" autocomplete="off"></label>'+
+          '<div class="due"><label>Dove<select id="lg-punto">'+luoghiOpt+'</select></label><label>Per quale ruolo<select id="lg-ruolo">'+RUOLI_LOG.map(function(r){return '<option value="'+r[0]+'">'+r[1]+'</option>';}).join("")+'</select></label></div>'+
+          '<div class="due"><label>Entro il<input type="date" id="lg-entro"></label><label>Muove la merce?<select id="lg-mov"><option value="">no</option>'+MOVIMENTI.map(function(m){return '<option value="'+m[0]+'">'+m[1]+'</option>';}).join("")+'</select></label></div>'+
+          '<div class="due" id="lg-merce" hidden><label>Quale merce<select id="lg-lotto">'+lottiAperti.map(function(l){return '<option value="'+esc(l.id)+'">'+esc(l.nome)+(l.lotto?' · '+esc(l.lotto):'')+'</option>';}).join("")+'</select></label><label>Quanta<input type="number" id="lg-q" min="0" step="any"></label></div>'+
+          '<label>Una nota<textarea id="lg-nota" maxlength="600"></textarea></label>'+
+          '<p class="nota">Gli indirizzi delle case non si scrivono qui.</p>'+
+          '<div class="azioni"><button class="btn pieno" id="lg-crea">Crea il compito</button></div><div class="toast" id="lg-ok" hidden></div></div></details>'
+          :'<p class="nota" style="margin-top:8px">Per creare compiti serve almeno un luogo con una funzione (punto di ritiro, magazzino, mensa, produzione).</p>')+
+        '<p class="et" style="margin-top:14px">La merce nei punti</p>'+giaH+
+        (ren.length||puoLotto?'<p class="et" style="margin-top:14px">Il rendiconto dei produttori</p>'+renH:'')+
+        (puoLotto?'<details class="lg-nuovo"><summary>Nuova merce in conto vendita</summary><div class="modulo">'+
+          (partner.length?'<label>Produttore<select id="ll-p">'+partner.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.nome)+'</option>';}).join("")+'</select></label>'+
+          '<div class="due"><label>Cosa<input type="text" id="ll-nome" maxlength="120" autocomplete="off"></label><label>Unità<select id="ll-u"><option>kg</option><option>g</option><option>l</option><option>pz</option><option>conf</option></select></label></div>'+
+          '<div class="due"><label>Prezzo a chi compra, per unità (€)<input type="number" id="ll-pv" min="0" step="0.01"></label><label>Al produttore, per unità (€)<input type="number" id="ll-pp" min="0" step="0.01"></label></div>'+
+          '<div class="due"><label>Lotto<input type="text" id="ll-lotto" maxlength="60" autocomplete="off"></label><label>Scade il<input type="date" id="ll-scade"></label></div>'+
+          '<p class="nota">La merce entra nei punti quando il compito «Arrivo dal produttore» è fatto.</p>'+
+          '<div class="azioni"><button class="btn pieno" id="ll-crea">Aggiungi la merce</button></div><div class="toast" id="ll-ok" hidden></div>'
+          :'<p class="nota">Prima il produttore va aggiunto tra i partner.</p>')+'</div></details>':'');
+      var e=$("#lg");
+      function dopo(x){if(x&&x.error)alert(errore(x.error));vLogistica();}
+      e.querySelectorAll("[data-lgf]").forEach(function(b){b.onclick=function(){lgFiltro=b.getAttribute("data-lgf");vLogistica();};});
+      e.querySelectorAll("[data-lprendo]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_compito_prendo",{p_compito:b.getAttribute("data-lprendo")}).then(dopo,dopo);};});
+      e.querySelectorAll("[data-lannullo]").forEach(function(b){b.onclick=function(){if(!confirm("Annullare questo compito?"))return;b.disabled=true;db.rpc("fm_compito_annullo",{p_compito:b.getAttribute("data-lannullo")}).then(dopo,dopo);};});
+      e.querySelectorAll("[data-lfatto]").forEach(function(b){b.onclick=function(){var a={p_compito:b.getAttribute("data-lfatto")};
+        if(b.hasAttribute("data-q")){var x=prompt("Quanta merce, davvero?",b.getAttribute("data-q"));if(x===null)return;x=parseFloat(String(x).replace(",","."));if(x>0)a.p_quantita=x;}
+        b.disabled=true;db.rpc("fm_compito_fatto",a).then(dopo,dopo);};});
+      var mv=$("#lg-mov");if(mv)mv.onchange=function(){$("#lg-merce").hidden=!mv.value;};
+      var cr=$("#lg-crea");if(cr)cr.onclick=function(){
+        var t=$("#lg-tit").value.trim(),m=$("#lg-mov").value,a={p_punto:$("#lg-punto").value,p_ruolo:$("#lg-ruolo").value,p_titolo:t};
+        if(!t)return mostra("#lg-ok","Scrivi cosa c'è da fare.",true);
+        if($("#lg-entro").value)a.p_entro=new Date($("#lg-entro").value+"T18:00:00").toISOString();
+        if($("#lg-nota").value.trim())a.p_nota=$("#lg-nota").value.trim();
+        if(m){var qq=parseFloat(String($("#lg-q").value).replace(",","."));if(!$("#lg-lotto").value)return mostra("#lg-ok","Prima va aggiunta la merce, qui sotto.",true);if(!(qq>0))return mostra("#lg-ok","Scrivi quanta merce.",true);a.p_movimento=m;a.p_lotto=$("#lg-lotto").value;a.p_quantita=qq;}
+        cr.disabled=true;db.rpc("fm_logistica_compito",a).then(function(x){cr.disabled=false;if(x&&x.error)return mostra("#lg-ok",errore(x.error),true);vLogistica();},function(){cr.disabled=false;});};
+      var lc=$("#ll-crea");if(lc)lc.onclick=function(){
+        var n=$("#ll-nome").value.trim();if(!n)return mostra("#ll-ok","Scrivi cosa arriva.",true);
+        var r={partner_id:$("#ll-p").value,nome:n,unita:$("#ll-u").value,villaggio_id:VILLAGGIO};
+        var pv=parseFloat($("#ll-pv").value),pp=parseFloat($("#ll-pp").value);if(pv>=0)r.prezzo_vendita=pv;if(pp>=0)r.prezzo_produttore=pp;
+        if($("#ll-lotto").value.trim())r.lotto=$("#ll-lotto").value.trim();if($("#ll-scade").value)r.scade_il=$("#ll-scade").value;
+        lc.disabled=true;db.from("merce_lotti").insert(r).then(function(x){lc.disabled=false;if(x&&x.error)return mostra("#ll-ok",errore(x.error),true);vLogistica();},function(){lc.disabled=false;});};
+    });
+  });
 }
 /* i ruoli di un vicinato · li dà chi guida il vicinato, chi coordina, il nucleo (SQL 79) */
 function ruoliCerchio(vic,persone){
@@ -950,7 +1527,10 @@ function cardObiettivo(o){
   var nomiChi=chi.map(function(p){return nomi[p.persona_id];}).filter(Boolean);
   return '<div class="card"><div class="riga"><div><span class="t">'+esc(o.titolo||o.contenuto)+'</span><br><span class="m">'+
     (nomiChi.length?esc(nomiChi.join(", ")):(chi.length?(chi.length===1?"1 persona":chi.length+" persone"):"nessuno l'ha preso"))+
-    (o.quanti_servono?" · servono "+o.quanti_servono:"")+(o.entro_il?" · entro il "+esc(new Date(o.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span></div></div>'+
+    (o.quanti_servono?" · "+chi.length+" su "+o.quanti_servono:"")+(o.entro_il?" · entro il "+esc(new Date(o.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span></div></div>'+
+    (o.quanti_servono?'<div class="barra-ob"><i style="width:'+Math.min(100,Math.round(100*chi.length/o.quanti_servono))+'%"></i></div>':'')+
+    /* SQL 90: l'avanzamento si calcola dai compiti fatti, nessuno lo scrive a mano */
+    (cache.avanz&&cache.avanz[o.id]?'<span class="m">'+cache.avanz[o.id].fatti+' di '+cache.avanz[o.id].compiti+' compiti fatti</span><div class="barra-ob"><i style="width:'+Math.round(100*cache.avanz[o.id].fatti/Math.max(1,cache.avanz[o.id].compiti))+'%"></i></div>':'')+
     '<div class="fine">'+(io.id&&(mio||o.persona_id===io.id||io.coordina)?'<button class="pill s-'+s+'" data-stadio="'+esc(o.id)+'" style="border:0;cursor:pointer" aria-label="Cambia stato">'+STADI[s]+'</button>':'<span class="pill s-'+s+'">'+STADI[s]+'</span>')+
     (io.id?(mio?'<button class="mini" data-lascia="'+esc(o.id)+'">Lo lascio</button>':(s!=="sviluppato"?'<button class="mini oro" data-prendo="'+esc(o.id)+'">Lo prendo</button>':'')):'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';
 }
@@ -976,17 +1556,28 @@ function legaObiettivi(c){
 }
 function vObiettivi(){
   var c=$("#corpo");
-  c.innerHTML='<p class="et">Obiettivi · con le persone associate</p><h3>Da fare, in corso, fatto</h3>'+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
+  /* 19 ott 23:29, Gab: «Obiettivi è pieno di roba, ma non si capisce come funziona obiettivi. Non c'è nulla che identifichi lo stato delle cose.»
+     Come funziona: la frase già approvata della bacheca (bacheca-bozza.html). Lo stato: quanti da fare, in corso, fatti; ogni obiettivo con quanti l'hanno preso su quanti servono. */
+  c.innerHTML='<p class="et">Obiettivi</p><h3>Quello di cui il villaggio ha bisogno</h3>'+
+    '<div class="card"><span class="t">Quello di cui il villaggio ha bisogno, per chi può fare. Si tocca «lo prendo» e la cosa entra tra le tue cose da fare.</span><span class="m">Chi l\'ha preso tocca lo stato per spostarlo avanti: da fare, in corso, fatto.</span></div>'+
+    '<div class="stato-ob" id="ob-stato"></div>'+(io.id?'<div id="ob-banco" style="margin:10px 0 14px"></div>':'')+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
   invitoPrat=false;
+  if(io.id)vBanco($("#ob-banco"));
   leggiObiettivi().then(function(lista){
+    if(!io.id||!lista.length)return lista;
+    return db.rpc("fm_obiettivi_avanzamento",{p_obiettivi:lista.map(function(o){return o.id;})}).then(function(r){cache.avanz={};((r&&!r.error&&r.data)||[]).forEach(function(x){cache.avanz[x.obiettivo_id]=x;});return lista;},function(){return lista;});
+  }).then(function(lista){
     var e=$("#ob");if(!e||vista!=="obiettivi")return;
     var ord={in_avanzamento:0,in_coda:1,sviluppato:2};
     lista=lista.slice().sort(function(a,b){return ord[a.stadio||"in_coda"]-ord[b.stadio||"in_coda"];});
-    var bis=cache.bisogni||[];
-    e.innerHTML=(lista.map(cardObiettivo).join("")||'<div class="vuoto">Nessun obiettivo qui, per ora.</div>')+
+    var bis=cache.bisogni||[],conta={in_avanzamento:0,in_coda:0,sviluppato:0};lista.forEach(function(o){conta[o.stadio||"in_coda"]++;});
+    var st=$("#ob-stato");if(st)st.innerHTML=["in_coda","in_avanzamento","sviluppato"].map(function(k){return '<span class="s-'+k+'">'+STADI[k]+' · '+conta[k]+'</span>';}).join("");
+    var gruppi=[["in_avanzamento","In corso"],["in_coda","Da fare"],["sviluppato","Fatti"]];
+    e.innerHTML=(gruppi.map(function(g){var q=lista.filter(function(o){return (o.stadio||"in_coda")===g[0];});
+      return q.length?'<p class="et" style="margin-top:8px">'+g[1]+' · '+q.length+'</p>'+q.map(cardObiettivo).join(""):'';}).join("")||'<div class="vuoto">Nessun obiettivo qui, per ora.</div>')+
       (bis.length?'<p class="et" style="margin-top:8px">I bisogni del villaggio</p>'+bis.map(function(x){return '<div class="card"><span class="t">'+esc(x.titolo)+'</span>'+(x.dettaglio?'<span class="m">'+esc(x.dettaglio)+'</span>':'')+
         '<div class="fine">'+(x.entro?'<span class="m">entro il '+esc(new Date(x.entro).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</span>':'')+(io.id?'<button class="mini oro" data-bisogno="'+esc(x.id)+'">Lo prendo</button>':'<a class="mini" href="'+ENTRA+'">Entra per prenderlo</a>')+'</div></div>';}).join(""):"")+
-      (io.id?'<p class="nota">Tocca lo stato per spostarlo avanti.</p>':'');
+      '';
     legaVai(e);legaObiettivi(e);
   });
 }
@@ -1093,6 +1684,7 @@ function vRuoli(){
         '<div class="azioni"><button class="btn pieno" id="r-dai">Dai il ruolo</button></div><div class="toast" id="r-ok" hidden></div></div>';
       function ruoliDi(f){$("#r-r").innerHTML=RUOLI[f].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");}
       ruoliDi("tecnologica");$("#r-f").onchange=function(e){ruoliDi(e.target.value);};
+      regRuoliExtra(box);
       box.querySelectorAll("[data-chiudi-r]").forEach(function(b){b.onclick=function(){b.disabled=true;db.from("ruoli").update({fino_al:oggiISO()}).eq("id",b.getAttribute("data-chiudi-r")).then(function(r){if(r.error){mostra("#r-ok",errore(r.error),true);b.disabled=false;return;}vRuoli();});};});
       $("#r-dai").onclick=function(){
         var n=val("r-cerca").toLowerCase(),p=(tutteLePersone||[]).filter(function(x){return String(x.nome||"").toLowerCase()===n;});
