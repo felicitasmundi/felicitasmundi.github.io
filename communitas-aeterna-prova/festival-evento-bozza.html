@@ -142,7 +142,7 @@ section{padding:60px 0 14px}
 @media (max-width:760px){.riga-p{grid-template-columns:1fr;gap:4px;padding:14px 0}}
 .riga-p .ora{font-family:'Cormorant Garamond',serif;font-size:23px;color:var(--oro);line-height:1.1}
 .riga-p h4{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:25px;line-height:1.1}
-.riga-p h4.verde{color:var(--t5)}.riga-p h4.viola{color:#b48be0}
+.riga-p.sola{grid-template-columns:1fr}.riga-p h4.verde{color:var(--t5)}.riga-p h4.viola{color:#b48be0}
 .riga-p p{font-size:14.5px;color:rgba(245,240,230,.82);margin-top:5px;line-height:1.5}
 .riga-p .con{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12.5px;color:var(--grigio)}
 .riga-p .con img,.riga-p .con i{width:26px;height:26px;border-radius:50%;object-fit:cover;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;border:1px solid rgba(245,240,230,.35)}
@@ -246,7 +246,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <a class="q grande" href="#programma" style="--c:var(--t1)"><img src="casa/festival-trame-banda.jpg" alt=""><div class="qt"><small>TRAME</small><b>la forza di essere connessi</b><span class="va">Il programma ›</span></div></a>
     <a class="q" href="#partecipa" style="--c:var(--t4)"><small>Quando</small><b class="num">21</b><b>novembre 2026</b><span>sabato · dalle 10:00</span></a>
     <a class="q" href="https://maps.app.goo.gl/6X5Xmu7jTp6Fewt2A" target="_blank" rel="noopener" style="--c:var(--t2)"><small>Dove</small><b>Centro Sociale</b><b>Centro polifunzionale · ex Cantina Madau</b><span>Baratili San Pietro, Oristano</span><span class="va">Apri la mappa ›</span></a>
-    <a class="q largo" href="#voci" style="--c:var(--t3)"><small>Conferenze · ospiti</small><b>Lamberto Rimondini · L'altra storia d'Italia</b><b>dottoressa Randaccio · La zona franca</b><b>Gruppo Sardo Surra</b><span class="va">Chi parla ›</span></a>
+    <a class="q largo" href="#voci" style="--c:var(--t3)"><small>Conferenze · ospiti</small><b>Lamberto Rimondini · L'altra storia d'Italia</b><b>dottoressa Randaccio · La zona franca</b><span class="va">Chi parla ›</span></a>
     <a class="q" href="#stanze" style="--c:var(--t5)"><small>Quattro stanze</small><b>Mestieri antichi · Emporio · Mutuo aiuto · Sala conferenze</b><span class="va">Le stanze ›</span></a>
     <a class="q" href="#app" style="--c:var(--oro)"><small>Svelato per la prima volta</small><b>L'app FelicitasMundi</b><span class="va">Scopri ›</span></a>
     <a class="q largo" href="index.html?p=evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6" style="--c:var(--terra)"><small>Prima del Festival</small><b>25 ottobre · l'incontro dei vicinati</b><span>Cas'ale · Baratili · dalle 10</span><span class="va">Ci vengo ›</span></a>
@@ -294,20 +294,17 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <!-- ═══ il programma ═══ -->
 <section id="programma"><div class="in">
-  <div class="sez-capo"><div><span class="fm-occ">IL PROGRAMMA</span><h2>Sabato 21 novembre.</h2></div><p>La mattina nelle stanze, il pomeriggio in sala conferenze. L'apertura va in onda sulla radio di FelicitasMundi.</p></div>
+  <div class="sez-capo"><div><span class="fm-occ">IL PROGRAMMA</span><h2>Sabato 21 novembre.</h2></div><p>La mattina comunità e distribuzione, il pomeriggio cervello digitale, zona franca e geopolitica. L'apertura va in onda sulla radio di FelicitasMundi.</p></div>
   <div class="giorno">
     <div class="parte">la mattina</div>
-    <div class="riga-p"><div class="ora">10:00</div><div><h4>Antaḥkaraṇa · percorso e strumenti per vicinati</h4><p>Strumenti pratici per fare assieme, con Gabriele Dettori. Insieme al kirtan, musica del cuore, e al cerchio di condivisione con i vicinati.</p><div class="con"><img src="casa/gab.jpg" alt="">Gabriele Dettori</div></div></div>
-    <div class="riga-p"><div class="ora">13:00</div><div><h4 class="verde">Pranzo vegetariano di condivisione</h4><p>Per conoscerci e passare insieme momenti di condivisione.</p></div></div>
+    <div class="riga-p sola"><div><h4>Comunità e distribuzione</h4><p>Mattina dedicata ai vicinati e logistica.</p></div></div>
+    <div class="riga-p sola"><div><h4 class="verde">Pranzo su prenotazione</h4><p>Con buffet e pizza.</p></div></div>
     <div class="parte">il pomeriggio · sala conferenze</div>
-    <div class="riga-p"><div class="ora">15:00–15:30</div><div><h4>Mutuo aiuto</h4><p>Presentazione degli operatori locali e dei progetti di gruppo d'acquisto.</p></div></div>
-    <div class="riga-p"><div class="ora">15:30–16:00</div><div><h4 class="viola">Kirtan e meditazione</h4><p>Musica del cuore.</p></div></div>
-    <div class="riga-p"><div class="ora">16:00–16:40</div><div><h4>La zona franca</h4><p>Conferenza con la dottoressa Randaccio.</p><div class="con"><i>R</i>dottoressa Randaccio</div></div></div>
-    <div class="riga-p"><div class="ora">16:40–17:00</div><div><h4 class="viola">Momento musicale</h4><p>Drum circle.</p></div></div>
-    <div class="riga-p"><div class="ora">17:00–17:40</div><div><h4>Gruppo Sardo Surra</h4><p>Conferenza.</p><div class="con"><i>S</i>Gruppo Sardo Surra</div></div></div>
-    <div class="riga-p"><div class="ora">17:40–18:00</div><div><h4>Il progetto Villaggio Felicitas</h4><p>Che sorgerà in un terreno a Paulilatino.</p></div></div>
-    <div class="riga-p"><div class="ora">18:00–19:30</div><div><h4>L'altra storia d'Italia</h4><p>Con Lamberto Rimondini.</p><div class="con"><i>LR</i>Lamberto Rimondini</div></div></div>
-    <div class="riga-p"><div class="ora">19:30</div><div><h4 class="verde">Cena vegetariana</h4><p>Per chiudere la serata insieme.</p></div></div>
+    <div class="riga-p sola"><div><h4 class="viola">Canti e insegnamento</h4></div></div>
+    <div class="riga-p sola"><div><h4>Il cervello digitale</h4></div></div>
+    <div class="riga-p sola"><div><h4>La zona franca</h4><p>Conferenza con la dottoressa Randaccio.</p><div class="con"><i>R</i>dottoressa Randaccio</div></div></div>
+    <div class="riga-p sola"><div><h4>Geopolitica · L'altra storia d'Italia</h4><p>Con Lamberto Rimondini.</p><div class="con"><i>LR</i>Lamberto Rimondini</div></div></div>
+    <div class="riga-p sola"><div><h4 class="verde">Cena su prenotazione</h4><p>Con buffet e pizza.</p></div></div>
   </div>
 </div></section>
 
@@ -315,10 +312,9 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <section id="voci"><div class="in">
   <div class="sez-capo"><div><span class="fm-occ">CHI PARLA</span><h2>Le voci del Festival.</h2></div></div>
   <div class="griglia">
-    <div class="tess"><div class="im"><img src="casa/gab.jpg" alt=""></div><div class="t"><b>Gabriele Dettori</b><small>FelicitasMundi · Antaḥkaraṇa, percorso e strumenti per vicinati · 10:00</small></div></div>
-    <div class="tess"><div class="im">LR</div><div class="t"><b>Lamberto Rimondini</b><small>L'altra storia d'Italia · 18:00</small></div></div>
-    <div class="tess"><div class="im">R</div><div class="t"><b>dottoressa Randaccio</b><small>La zona franca · 16:00</small></div></div>
-    <div class="tess"><div class="im">S</div><div class="t"><b>Gruppo Sardo Surra</b><small>Conferenza · 17:00</small></div></div>
+    <div class="tess"><div class="im"><img src="casa/gab.jpg" alt=""></div><div class="t"><b>Gabriele Dettori</b><small>FelicitasMundi</small></div></div>
+    <div class="tess"><div class="im">LR</div><div class="t"><b>Lamberto Rimondini</b><small>L'altra storia d'Italia</small></div></div>
+    <div class="tess"><div class="im">R</div><div class="t"><b>dottoressa Randaccio</b><small>La zona franca</small></div></div>
   </div>
   <p class="fm-nota" style="margin-top:12px">Le foto e una riga su ognuno: <span class="ph">[ con le cose di domani ]</span></p>
 </div></section>
@@ -363,7 +359,7 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="sez-capo"><div><span class="fm-occ">PARTECIPARE</span><h2>Vieni, e porta chi risuona.</h2></div></div>
   <div class="partecipa">
     <div class="blocco oro"><h4>Ci sarò</h4><p>Un tocco: il Festival entra nel tuo calendario, in Bacheca. Dentro trovi:</p><div class="dentro"><span>la conversazione</span><span>quello che serve sapere</span><span>le cose da fare</span><span>gli aggiornamenti dalla squadra</span></div><div class="tasti"><button class="fm-tasto" type="button" data-fest="ci-saro">Ci sarò</button><button class="fm-tasto secondario" type="button" data-fest="invita">Invita chi risuona</button></div><p class="fest-esito" aria-live="polite"></p></div>
-    <div class="blocco"><h4>I pasti</h4><p>Pranzo vegetariano di condivisione alle 13:00 e cena vegetariana alle 19:30.</p><div class="tasti"><button class="fm-tasto piccolo secondario" type="button" data-fest="ci-saro" data-pasto="pranzo">Prenoto il pranzo</button><button class="fm-tasto piccolo secondario" type="button" data-fest="ci-saro" data-pasto="cena">Prenoto la cena</button><button class="fm-tasto piccolo secondario" type="button" data-fest="ci-saro" data-pasto="laboratori_bambini">Prenoto i laboratori per i bambini</button></div><p class="fest-esito pren-esito" aria-live="polite"></p></div>
+    <div class="blocco"><h4>I pasti</h4><p>Pranzo e cena su prenotazione, con buffet e pizza.</p><div class="tasti"><button class="fm-tasto piccolo secondario" type="button" data-fest="ci-saro" data-pasto="pranzo">Prenoto il pranzo</button><button class="fm-tasto piccolo secondario" type="button" data-fest="ci-saro" data-pasto="cena">Prenoto la cena</button><button class="fm-tasto piccolo secondario" type="button" data-fest="ci-saro" data-pasto="laboratori_bambini">Prenoto i laboratori per i bambini</button></div><p class="fest-esito pren-esito" aria-live="polite"></p></div>
     <div class="blocco"><h4>Come arrivare</h4><div class="fm-riga"><b>Dove</b><span>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</span></div><div class="fm-riga"><b>Indirizzo</b><span>Via Chiesa, 18 · 09070 Baratili San Pietro (OR)</span></div><div class="fm-riga"><b>Dove dormire</b><span class="ph">[ … ]</span></div><div class="tasti"><a class="fm-tasto piccolo secondario" href="https://maps.app.goo.gl/6X5Xmu7jTp6Fewt2A" target="_blank" rel="noopener">Apri la mappa</a></div></div>
     <div class="blocco"><h4>Condividi</h4><p>La locandina da scaricare, il QR del Festival, il messaggio pronto per WhatsApp.</p><div class="tasti"><a class="fm-tasto piccolo secondario" href="casa/festival-trame.jpg" download="felicitas-festival-21-novembre.jpg">La locandina</a><button class="fm-tasto piccolo secondario" type="button" data-fest="qr">Il QR</button><a class="fm-tasto piccolo secondario" data-fest="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a></div><div class="fest-qr" hidden></div></div>
   </div>
@@ -416,7 +412,7 @@ window.FM_EN = {
   "Mutuo aiuto":"Mutual aid","Gli operatori presentano i loro trattamenti e percorsi. Dalla mattina al pomeriggio, trattamenti da seguire.":"The practitioners present their treatments and paths. From morning to afternoon, treatments to follow.",
   "Sala conferenze":"Conference hall","mattina e pomeriggio":"morning and afternoon","Antaḥkaraṇa, le conferenze, la musica del cuore. Il programma qui sotto.":"Antaḥkaraṇa, the talks, the music of the heart. The programme below.",
   "IL PROGRAMMA":"THE PROGRAMME","Sabato 21 novembre.":"Saturday 21 November.","La mattina nelle stanze, il pomeriggio in sala conferenze. L'apertura va in onda sulla radio di FelicitasMundi.":"Morning in the rooms, afternoon in the conference hall. The opening goes on air on FelicitasMundi radio.",
-  "la mattina":"the morning","Antaḥkaraṇa · percorso e strumenti per vicinati":"Antaḥkaraṇa · path and tools for neighbourhoods","Strumenti pratici per fare assieme, con Gabriele Dettori. Insieme al kirtan, musica del cuore, e al cerchio di condivisione con i vicinati.":"Practical tools for doing things together, with Gabriele Dettori. Together with kirtan, music of the heart, and the sharing circle with the neighbourhoods.",
+  "la mattina":"the morning","Comunità e distribuzione":"Community and distribution","Mattina dedicata ai vicinati e logistica.":"A morning devoted to neighbourhoods and logistics.","Pranzo su prenotazione":"Lunch by booking","Con buffet e pizza.":"With buffet and pizza.","Canti e insegnamento":"Songs and teaching","Il cervello digitale":"The digital brain","Geopolitica · L'altra storia d'Italia":"Geopolitics · The other history of Italy","Cena su prenotazione":"Dinner by booking","La mattina comunità e distribuzione, il pomeriggio cervello digitale, zona franca e geopolitica. L'apertura va in onda sulla radio di FelicitasMundi.":"Morning: community and distribution. Afternoon: the digital brain, the free zone and geopolitics. The opening is broadcast on FelicitasMundi radio.","L'altra storia d'Italia":"The other history of Italy","La zona franca":"The free zone","FelicitasMundi":"FelicitasMundi","Antaḥkaraṇa · percorso e strumenti per vicinati":"Antaḥkaraṇa · path and tools for neighbourhoods","Strumenti pratici per fare assieme, con Gabriele Dettori. Insieme al kirtan, musica del cuore, e al cerchio di condivisione con i vicinati.":"Practical tools for doing things together, with Gabriele Dettori. Together with kirtan, music of the heart, and the sharing circle with the neighbourhoods.",
   "Pranzo vegetariano di condivisione":"Shared vegetarian lunch","Per conoscerci e passare insieme momenti di condivisione.":"To get to know each other and spend moments of sharing together.",
   "il pomeriggio · sala conferenze":"the afternoon · conference hall","Presentazione degli operatori locali e dei progetti di gruppo d'acquisto.":"Presentation of the local practitioners and of the buying-group projects.",
   "Kirtan e meditazione":"Kirtan and meditation","Musica del cuore.":"Music of the heart.","La zona franca":"The free zone","Conferenza con la dottoressa Randaccio.":"Talk with Dr Randaccio.","dottoressa Randaccio":"Dr Randaccio",
@@ -433,7 +429,7 @@ window.FM_EN = {
   "[ espositore ]":"[ exhibitor ]","[ mestiere · comune ]":"[ craft · town ]","[ partner ]":"[ partner ]","[ cosa porta ]":"[ what they bring ]","Ogni espositore e ogni partner hanno la loro scheda nell'Emporio o nel Mutuo aiuto, e il QR code di Felicitas con la loro storia.":"Every exhibitor and every partner has a card in the Emporio or in Mutual aid, and the Felicitas QR code with their story.",
   "I PANIERI DEL FESTIVAL":"THE FESTIVAL BASKETS","Comprare insieme.":"Buying together.","Le promozioni dei gruppi d'acquisto. Si chiede insieme, si ritira al Festival.":"The buying groups' promotions. Ordered together, collected at the Festival.","PANIERE":"BASKET","[ il primo paniere ]":"[ the first basket ]","[ cosa c'è dentro · il produttore · fino a quando si chiede ]":"[ what's inside · the producer · order deadline ]","Aggiungi al paniere":"Add to the basket","[ il secondo paniere ]":"[ the second basket ]","NELL'EMPORIO":"IN THE EMPORIO","I libri":"The books","Vai all'Emporio":"Go to the Emporio",
   "PARTECIPARE":"TAKE PART","Vieni, e porta chi risuona.":"Come, and bring those who resonate.","Un tocco: entri nell'orma del Festival. Là c'è la conversazione, quello che serve sapere, le cose da fare e gli aggiornamenti dalla squadra.":"One tap: you enter the Festival's footprint. There you find the conversation, what you need to know, the things to do and the updates from the team.",
-  "I pasti":"The meals","Pranzo vegetariano di condivisione alle 13:00 e cena vegetariana alle 19:30.":"Shared vegetarian lunch at 13:00 and vegetarian dinner at 19:30.","Prenoto il pranzo":"Book lunch","Prenoto la cena":"Book dinner","Prenoto i laboratori per i bambini":"Book the children's workshops",
+  "I pasti":"The meals","Pranzo e cena su prenotazione, con buffet e pizza.":"Lunch and dinner by booking, with buffet and pizza.","Pranzo vegetariano di condivisione alle 13:00 e cena vegetariana alle 19:30.":"Shared vegetarian lunch at 13:00 and vegetarian dinner at 19:30.","Prenoto il pranzo":"Book lunch","Prenoto la cena":"Book dinner","Prenoto i laboratori per i bambini":"Book the children's workshops",
   "Come arrivare":"How to get there","Dove":"Where","Indirizzo":"Address","[ via e numero ]":"[ street and number ]","Dove dormire":"Where to stay","Apri la mappa":"Open the map",
   "Condividi":"Share","La locandina da scaricare, il QR del Festival, il messaggio pronto per WhatsApp.":"The poster to download, the Festival QR, the ready message for WhatsApp.","Il QR":"The QR",
   "IL VILLAGGIO DIETRO IL FESTIVAL":"THE VILLAGE BEHIND THE FESTIVAL","Si prepara insieme.":"Prepared together.","Per far nascere il villaggio si organizza insieme il prossimo Festival nel territorio.":"To bring the village to life, the next Festival in the territory is organised together.",
