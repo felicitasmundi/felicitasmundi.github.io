@@ -155,6 +155,7 @@ details.lg-nuovo summary{cursor:pointer;font-weight:600;font-size:14px}
 details.lg-nuovo .modulo{margin-top:10px}
 .punti{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45}
 .ce-gr small.ce-stato{color:var(--oro);margin-top:2px}.ce-libro,.ce-altri{margin-top:14px}.ce-libro>summary,.ce-altri>summary{cursor:pointer;font-weight:600;padding:10px 2px}.ce-altri .cerchi{margin-top:6px}
+.rg-vuota{display:flex;flex-direction:row;justify-content:space-between;align-items:center;text-align:left;opacity:.7;margin-top:6px}
 .cerchio-b{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:var(--foglio);cursor:pointer;font:inherit;color:inherit;width:100%}
 .cerchio-b b{display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.1}
 .cerchio-b small{display:block;font-size:12.5px;color:var(--tenue);margin-top:2px}
@@ -623,6 +624,7 @@ function logisticaOggi(){
    Senza l'SQL 90 queste parti non compaiono. */
 var REG_TIPI=[["da_fare","da fare"],["chiamata","chiamata"],["incontro","incontro"],["fatto","fatto"],["decisione","decisione"],["idea","idea"]];
 var REG_TIPO={richiesta:"prenotazione"};REG_TIPI.forEach(function(x){REG_TIPO[x[0]]=x[1];});
+var REG_VOCI=["Villaggi","Festival","Economia","Zona franca","Assistenza spirituale","Cervello digitale","Sviluppo"];
 var REG_STATO={aperto:"aperto",preso:"preso",fatto:"fatto",annullato:"annullato"};
 var REG_STATO_C={aperto:"s-in_coda",preso:"s-in_avanzamento",fatto:"s-sviluppato",annullato:"s-in_coda"};
 var REG_VIS=[["cerchio","il gruppo"],["villaggio","il villaggio"],["solo_me","solo io"]];
@@ -733,6 +735,7 @@ function vRegistroOggi(){
       box.querySelectorAll("[data-rgtipo]").forEach(function(b){b.onclick=function(){reg.tipo=b.getAttribute("data-rgtipo");
         box.querySelectorAll("[data-rgtipo]").forEach(function(y){var on=y===b;y.classList.toggle("on",on);y.setAttribute("aria-checked",on);});};});
       var voci={};(v[1]||[]).forEach(function(x){if(x.voce)voci[x.voce]=1;});
+      REG_VOCI.forEach(function(k){voci[k]=1;});
       $("#rg-voci").innerHTML=Object.keys(voci).sort().map(function(x){return '<option value="'+esc(x)+'">';}).join("");
       $("#rg-salva").onclick=function(){regSalva(vRegistroOggi);};
       regLega(box,vRegistroOggi);
@@ -785,15 +788,17 @@ function vVociRegistro(box,cerchioId){
     if(!box.isConnected)return;
     var l=v[0];if(l===null){box.innerHTML="";return;}
     l=l.filter(function(x){return x.stato!=="annullato"&&(!cerchioId||regCerchioDi(x)===cerchioId);});
-    if(!l.length){box.innerHTML='<p class="et" style="margin-top:14px">Il registro per voce</p><div class="vuoto">Le righe scritte in Oggi compaiono qui, divise per voce.</div>';return;}
     var ids=[];l.forEach(function(x){ids.push(x.scritto_da,x.preso_da);});
     leggiNomi(ids).then(function(){
-      var per={};l.forEach(function(x){var k=x.voce||"Senza voce";(per[k]=per[k]||[]).push(x);});
-      var chiavi=Object.keys(per).sort(function(a,b){return a==="Senza voce"?1:b==="Senza voce"?-1:per[b].length-per[a].length;});
+      /* le sette voci si vedono sempre, anche vuote (schema approvato il 20/10 alle 14:37, sezione 6; Gab 10:31) */
+      var per={};REG_VOCI.forEach(function(k){per[k]=[];});
+      l.forEach(function(x){var k=x.voce||"Senza voce",t=REG_VOCI.filter(function(v){return v.toLowerCase()===String(k).toLowerCase();})[0];(per[t||k]=per[t||k]||[]).push(x);});
+      var chiavi=REG_VOCI.concat(Object.keys(per).filter(function(k){return REG_VOCI.indexOf(k)<0&&k!=="Senza voce";}).sort()).concat(per["Senza voce"]?["Senza voce"]:[]);
       box.innerHTML='<p class="et" style="margin-top:14px">Il registro per voce</p>'+chiavi.map(function(k){var z=per[k];
         var chi={};z.forEach(function(x){[x.scritto_da,x.preso_da].forEach(function(p){if(p&&nomi[p])chi[nomi[p]]=1;});});
         var suc=z.filter(function(x){return x.stato==="aperto"||x.stato==="preso"||x.tipo==="fatto"||x.tipo==="incontro"||x.tipo==="chiamata";}).slice(0,6);
         var dec=z.filter(function(x){return x.tipo==="decisione"||x.perche;}).slice(0,6);
+        if(!z.length)return '<div class="card rg-voce rg-vuota"><b>'+esc(k)+'</b><span class="m">ancora nessuna riga</span></div>';
         return '<details class="card rg-voce"><summary><b>'+esc(k)+'</b><span class="m">'+z.length+(z.length===1?" riga":" righe")+'</span></summary>'+
           '<div class="rg-blocchi"><div><p class="et">Chi c\'è</p><span class="t">'+(Object.keys(chi).map(esc).join(", ")||"—")+'</span></div>'+
           '<div><p class="et">Cosa succede</p>'+(suc.length?'<ul>'+suc.map(function(x){return '<li>'+esc(x.testo)+(x.stato?' <span class="pill '+REG_STATO_C[x.stato]+'">'+REG_STATO[x.stato]+'</span>':'')+'</li>';}).join("")+'</ul>':'<span class="m">—</span>')+'</div>'+
@@ -1107,12 +1112,13 @@ function vCervello(){
      I quattro punti sono le sue parole (20:17), così come le ha scritte. */
   /* 20 ott, Gab: «sistema integrato che mi mostri visivamente il punto della situazione»; 21 ott 00:08: «avevamo detto che cervello diventava un contesto piu chiaro legato ai gruppi e alla gestion del registro con tanto di area chat e dirette».
      In cima i gruppi (lo spazio: chat, diretta, registro), poi il registro per voce, poi il percorso del talento; il libro e cosa puoi fare in fondo. */
-  var libroH=''+
-    '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
+  var coscienzaH=''+
     /* Gab, 15/10, ripreso il 19/10 19:35 */
     '<p class="nota" style="margin:8px 2px 0">Il Cervello è open source, senza rivendita dei dati, e l\'esportazione completa resta sempre disponibile.</p>'+
     /* 20 ott 12:01-12:03, Gab: «sistema di coscienza è il contesto che integra il cosa e il perchè» · «nella pagina cervello va aggiunto sotto, dove c e anche open source, sistema di coscienza» */
-    '<p class="nota" style="margin:6px 2px 0"><b>Sistema di coscienza</b>: «il contesto che integra il cosa e il perché».</p>'+
+    '<p class="nota" style="margin:6px 2px 0"><b>Sistema di coscienza</b>: «il contesto che integra il cosa e il perché».</p>';
+  var libroH=''+
+    '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
     '<p class="et" style="margin-top:14px">Cosa puoi fare nel Cervello</p>'+
     '<div class="due-col">'+
       '<div class="card"><b>Senza AI</b>'+
@@ -1132,8 +1138,11 @@ function vCervello(){
       '<div id="ce-voci"></div>'+
       '<p class="et" style="margin-top:14px">Il cervello digitale</p>'+
       '<button class="cerchio-b" data-cerchio="io"><span><b>Il percorso del talento</b><small>i capitoli di '+esc(io.nome||"chi entra")+' · li legge solo chi li scrive</small></span><span>›</span></button>'+
+      /* 20 ott 12:00, Gab: «i prodotti e le stanze vanno resi visibili in cervello» */
+      '<p class="et" style="margin-top:14px">Prodotti e stanze</p><div class="stanze-o">'+STANZE_O.map(function(x){return '<a href="'+x[1]+'" style="--c:'+x[2]+'">'+esc(x[0])+'</a>';}).join("")+'</div><div id="ce-prodotti"></div>'+
+      coscienzaH+
       '<details class="ce-libro"><summary>Il libro Felicitas e cosa puoi fare nel Cervello</summary>'+libroH+'</details>'
-    :libroH+'<div class="card" style="margin-top:14px"><span class="t">Il percorso del talento e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
+    :coscienzaH+libroH+'<div class="card" style="margin-top:14px"><span class="t">Il percorso del talento e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
     (io.id&&io.nucleo?'<p class="et" style="margin-top:14px">Porta un\'azienda nel Cervello · per il nucleo</p><div class="card modulo" id="az-apri">'+
       /* dal file dei costi (Attiva il tuo cervello, 19/10), riga Azienda; la consegna a domicilio non è pronta (Gab 19:33) */
       '<span class="t">L\'azienda trova: gestionale e logistica, cervello aggiornato, comunicazione tra i team (mail delle 9 e delle 22 con la parte di ciascuno), visibilità su Felicitas.</span>'+
@@ -1145,6 +1154,10 @@ function vCervello(){
   cerchiCache={io:{id:"io",tipo:"io",nome:"Il percorso del talento",dentro:true}};
   legaCerchi(c);
   vVociRegistro($("#ce-voci"));
+  db.from("prodotti").select("id,nome,autore,prezzo,si_compra").eq("stato","pubblico").order("creato_il",{ascending:false}).limit(6).then(function(r){
+    var e=$("#ce-prodotti"),l=(r&&!r.error&&r.data)||[];if(!e||!l.length)return;
+    e.innerHTML='<div class="card"><p class="et">Gli ultimi prodotti nell\'Emporio</p>'+l.map(function(x){return '<div class="persona"><div><b>'+esc(x.nome||"")+'</b><small>'+esc(x.si_compra===false?"richiedi al responsabile":(x.prezzo?x.prezzo+" €":(x.autore||"")))+'</small></div></div>';}).join("")+
+      '<div class="fine"><a class="mini" href="stanze-bozza.html?s=emporio&c=10182300">Tutto l\'Emporio ›</a></div></div>';},function(){});
   if(io.nucleo)$("#az-vai").onclick=function(){var b=this,n=$("#az-nome").value.trim();if(n.length<2){$("#az-esito").textContent="Il nome serve.";return;}
     b.disabled=true;db.rpc("fm_azienda_apri",{p_nome:n,p_territorio:$("#az-terr").value.trim(),p_mail_referente:$("#az-ref").value.trim()}).then(function(r){b.disabled=false;
       if(r&&r.error){$("#az-esito").textContent=errore(r.error);return;}
