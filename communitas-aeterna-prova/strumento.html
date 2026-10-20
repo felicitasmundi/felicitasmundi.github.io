@@ -154,6 +154,7 @@ details.lg-nuovo{border:1px solid var(--linea);border-radius:12px;background:var
 details.lg-nuovo summary{cursor:pointer;font-weight:600;font-size:14px}
 details.lg-nuovo .modulo{margin-top:10px}
 .punti{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45}
+.ce-gr small.ce-stato{color:var(--oro);margin-top:2px}.ce-libro,.ce-altri{margin-top:14px}.ce-libro>summary,.ce-altri>summary{cursor:pointer;font-weight:600;padding:10px 2px}.ce-altri .cerchi{margin-top:6px}
 .cerchio-b{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:var(--foglio);cursor:pointer;font:inherit;color:inherit;width:100%}
 .cerchio-b b{display:block;font-family:var(--serif);font-size:21px;font-weight:600;line-height:1.1}
 .cerchio-b small{display:block;font-size:12.5px;color:var(--tenue);margin-top:2px}
@@ -1104,7 +1105,9 @@ function vCervello(){
      19 ott 21:07-21:08, Gab (thread «Attiva il tuo cervello»): il percorso «20 euro a settimana», «o paghi 80 euro al mese o fai il karma yoga» · «per l integrazione sono 26». I 10 € non includono più la base del praticantato.
      20 ott, Gab: «abbiamo superato il discorso 10 e 26»: i due prezzi sono tolti finché il prezzo per la singola persona non è deciso.
      I quattro punti sono le sue parole (20:17), così come le ha scritte. */
-  c.innerHTML='<p class="et">Cervello</p>'+
+  /* 20 ott, Gab: «sistema integrato che mi mostri visivamente il punto della situazione»; 21 ott 00:08: «avevamo detto che cervello diventava un contesto piu chiaro legato ai gruppi e alla gestion del registro con tanto di area chat e dirette».
+     In cima i gruppi (lo spazio: chat, diretta, registro), poi il registro per voce, poi il percorso del talento; il libro e cosa puoi fare in fondo. */
+  var libroH=''+
     '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
     /* Gab, 15/10, ripreso il 19/10 19:35 */
     '<p class="nota" style="margin:8px 2px 0">Il Cervello è open source, senza rivendita dei dati, e l\'esportazione completa resta sempre disponibile.</p>'+
@@ -1121,12 +1124,16 @@ function vCervello(){
         '<span class="t" style="margin-top:6px">In più l\'AI lavora con la memoria Felicitas: trascrive, scrive, impagina, «detta e organizza».</span></div>'+
     '</div>'+
     '<div class="card" style="margin-top:10px"><b>Il percorso · praticantato Antaḥkaraṇa</b><span class="m">20 € a settimana (80 € al mese), oppure karma yoga</span></div>'+
-    '<p class="nota" style="margin:8px 2px 0">Leggere il libro Felicitas e il proprio vicinato è gratis.</p>'+
+    '<p class="nota" style="margin:8px 2px 0">Leggere il libro Felicitas e il proprio vicinato è gratis.</p>';
+  c.innerHTML='<p class="et">Cervello</p>'+
     (io.id?
+      '<div id="ce-onda"></div>'+
+      '<p class="et" style="margin-top:10px">I tuoi gruppi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'+
+      '<div id="ce-voci"></div>'+
       '<p class="et" style="margin-top:14px">Il cervello digitale</p>'+
       '<button class="cerchio-b" data-cerchio="io"><span><b>Il percorso del talento</b><small>i capitoli di '+esc(io.nome||"chi entra")+' · li legge solo chi li scrive</small></span><span>›</span></button>'+
-      '<p class="et" style="margin-top:14px">I cerchi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div><div id="ce-voci"></div>'
-    :'<div class="card" style="margin-top:14px"><span class="t">Il percorso del talento e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
+      '<details class="ce-libro"><summary>Il libro Felicitas e cosa puoi fare nel Cervello</summary>'+libroH+'</details>'
+    :libroH+'<div class="card" style="margin-top:14px"><span class="t">Il percorso del talento e i cerchi, cioè il villaggio, i vicinati, i gruppi e le aziende, si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra</a></div></div>')+
     (io.id&&io.nucleo?'<p class="et" style="margin-top:14px">Porta un\'azienda nel Cervello · per il nucleo</p><div class="card modulo" id="az-apri">'+
       /* dal file dei costi (Attiva il tuo cervello, 19/10), riga Azienda; la consegna a domicilio non è pronta (Gab 19:33) */
       '<span class="t">L\'azienda trova: gestionale e logistica, cervello aggiornato, comunicazione tra i team (mail delle 9 e delle 22 con la parte di ciascuno), visibilità su Felicitas.</span>'+
@@ -1143,21 +1150,44 @@ function vCervello(){
       if(r&&r.error){$("#az-esito").textContent=errore(r.error);return;}
       if(r.data!=="ok"){$("#az-esito").textContent=r.data;if(!/^Azienda aperta/.test(r.data))return;}
       vCervello();},function(){b.disabled=false;});};
+  dirette().then(function(d){var e=$("#ce-onda");if(!e||vista!=="cervello"||!d.length)return;
+    e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
   Promise.all([
     db.rpc("fm_cerchi").then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
-    db.from("orme").select("id,titolo").eq("id",VILLAGGIO).maybeSingle().then(function(r){return (r&&r.data&&r.data.titolo)||"Il villaggio";},function(){return "Il villaggio";})
+    db.from("orme").select("id,titolo").eq("id",VILLAGGIO).maybeSingle().then(function(r){return (r&&r.data&&r.data.titolo)||"Il villaggio";},function(){return "Il villaggio";}),
+    /* lo spazio di ogni gruppo (SQL 92): il nome scelto, l'ultimo messaggio della chat */
+    db.from("spazi_gruppo").select("cerchio_id,nome").then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];}),
+    db.from("gruppo_messaggi").select("cerchio_id,scritto_il").order("scritto_il",{ascending:false}).limit(300).then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];}),
+    /* i compiti aperti del registro per gruppo (SQL 90) */
+    db.from("registro").select("vicinato_id,squadra_id,azienda_id,stato").in("stato",["aperto","preso"]).limit(1000).then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];})
   ]).then(function(v){
     var e=$("#ce-lista");if(!e||vista!=="cervello")return;
     var l=v[0];
-    if(l===null){e.innerHTML='<div class="vuoto">I cerchi non si leggono adesso.</div>';return;}
+    if(l===null){e.innerHTML='<div class="vuoto">I gruppi non si leggono adesso.</div>';return;}
     cerchiCache[VILLAGGIO]={id:VILLAGGIO,tipo:"villaggio",nome:v[1],dentro:true,guido:io.coordina};
     l.forEach(function(x){cerchiCache[x.id]=x;});
+    var nomeSp={},ultimo={},aperti={},presi={};
+    v[2].forEach(function(x){nomeSp[x.cerchio_id]=x.nome;});
+    v[3].forEach(function(x){if(!ultimo[x.cerchio_id])ultimo[x.cerchio_id]=x.scritto_il;});
+    v[4].forEach(function(g){var k=g.vicinato_id||g.squadra_id||g.azienda_id||VILLAGGIO;aperti[k]=(aperti[k]||0)+(g.stato==="aperto"?1:0);presi[k]=(presi[k]||0)+(g.stato==="preso"?1:0);});
     var vic=l.filter(function(x){return x.tipo==="vicinato";});
-    function bott(x){return '<button class="cerchio-b" data-cerchio="'+esc(x.id)+'"><span><b>'+esc(x.nome)+'</b><small>'+esc(x.tipo)+(x.territorio?' · '+esc(x.territorio):'')+' · '+(+x.persone===1?'1 persona':(+x.persone)+' persone')+'</small></span>'+
-      (x.guido?'<span class="chip on">'+(x.tipo==="azienda"?"referente":"guidi")+'</span>':x.dentro?'<span class="chip on">dentro</span>':'<span>›</span>')+'</button>';}
+    function quando(t){var d=new Date(t),o=new Date();return d.toDateString()===o.toDateString()?"oggi alle "+hhmm(t):d.toLocaleDateString("it-IT",{day:"numeric",month:"long"});}
+    function bott(x,sotto){
+      var k=x.id,stato=[];
+      if(aperti[k])stato.push(aperti[k]+(aperti[k]===1?" da prendere":" da prendere"));
+      if(presi[k])stato.push(presi[k]+" in corso");
+      if(ultimo[k])stato.push("chat: "+quando(ultimo[k]));
+      return '<button class="cerchio-b ce-gr" data-cerchio="'+esc(k)+'"><span><b>'+esc(nomeSp[k]||x.nome)+'</b><small>'+esc(sotto)+'</small>'+
+        (stato.length?'<small class="ce-stato">'+esc(stato.join(" · "))+'</small>':'')+'</span>'+
+        (x.guido?'<span class="chip on">'+(x.tipo==="azienda"?"referente":"guidi")+'</span>':x.dentro?'<span class="chip on">dentro</span>':'<span>›</span>')+'</button>';}
+    function sottoDi(x){return (nomeSp[x.id]&&nomeSp[x.id]!==x.nome?x.nome+' · ':'')+x.tipo+(x.territorio?' · '+x.territorio:'')+' · '+(+x.persone===1?'1 persona':(+x.persone)+' persone');}
     /* Gab, 19/10 20:18: «villaggio è un team operativo organizzato in vicinati» */
-    var vil='<button class="cerchio-b" data-cerchio="'+VILLAGGIO+'"><span><b>'+esc(v[1])+'</b><small>il villaggio, un team operativo organizzato in vicinati · '+vic.length+(vic.length===1?' vicinato':' vicinati')+'</small></span><span>›</span></button>';
-    e.innerHTML=vil+["vicinato","gruppo","azienda"].map(function(t){return l.filter(function(x){return x.tipo===t;}).map(bott).join("");}).join("");
+    var vil=bott(cerchiCache[VILLAGGIO],'il villaggio, un team operativo organizzato in vicinati · '+vic.length+(vic.length===1?' vicinato':' vicinati'));
+    var ordine=["gruppo","vicinato","azienda"];
+    function lista(f){return ordine.map(function(t){return l.filter(function(x){return x.tipo===t&&f(x);}).map(function(x){return bott(x,sottoDi(x));}).join("");}).join("");}
+    var miei=lista(function(x){return x.dentro||x.guido;}),altri=lista(function(x){return !(x.dentro||x.guido);});
+    e.innerHTML=(miei||'<p class="nota">Non sei ancora in un gruppo: ti aggiunge chi guida il gruppo, con la mail con cui sei entrato.</p>')+vil+
+      (altri?'<details class="ce-altri"><summary>Gli altri gruppi'+(io.nucleo?' · li vedi perché sei nel nucleo':'')+'</summary><div class="cerchi">'+altri+'</div></details>':'');
     legaCerchi(e);
   });
 }
