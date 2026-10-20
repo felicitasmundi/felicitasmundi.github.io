@@ -313,6 +313,19 @@ body.notte .corpo .art{border-bottom:0}
 .rg-blocchi{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px}@media (min-width:640px){.rg-blocchi{grid-template-columns:repeat(3,1fr)}}
 .rg-blocchi ul{margin:4px 0 0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:3px}
 .rg-az{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex:none;width:44%;max-width:190px}select.rg-cambia{width:100%;font-size:12.5px;padding:4px 6px}
+.sp-capo{display:flex;flex-direction:column;gap:4px;margin:6px 0 8px}
+.sp-diretta{display:flex;align-items:center;gap:10px;justify-content:space-between;text-decoration:none;color:var(--cosmo-testo);background:var(--cosmo);background-image:var(--cosmo-cielo);border:1px solid rgba(212,175,106,.35);border-radius:12px;padding:10px 12px;margin:0 0 8px;font-size:14px}
+.sp-diretta>span:nth-child(2){flex:1;min-width:0}.sp-punto{width:9px;height:9px;border-radius:50%;background:#E0533D;flex:none}
+.sp-due{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:6px}@media (min-width:760px){.sp-due{grid-template-columns:1.4fr 1fr}}
+.sp-lato{display:flex;flex-direction:column;gap:10px}
+.sp-msg{display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto;padding:4px 0}
+.sp-m{display:flex;flex-direction:column;gap:2px;background:var(--carta);border-radius:10px;padding:8px 10px;max-width:92%;align-self:flex-start}
+.sp-m.mio{align-self:flex-end;background:var(--oro-chiaro)}
+.sp-m .t{font-size:14.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+select.sp-segna{width:auto;align-self:flex-start;font-size:12px;padding:2px 6px;margin-top:2px;background:transparent}
+.sp-segnato{color:var(--ok)!important}
+.sp-scrivi{display:flex;gap:8px;align-items:flex-end;margin-top:6px}.sp-scrivi textarea{min-height:44px;flex:1}
+.sp-ob{display:flex;flex-direction:column;gap:3px;padding:4px 0}
 </style>
 </head>
 <body>
@@ -343,7 +356,7 @@ var FUNZIONI={tecnologica:"Tecnologia",logistica:"Logistica",comunitaria:"Comuni
 /* 19 ott 23:48, Gab: «logistica ok emporio magazzino produttori eventi / tecnologia piattaforma giornale radio gestionale / comunità vicinati e villaggi, formazione ed assistenza comunitaria integrata» (SQL 84)
    Settimanale 19 ott: «Alla tecnologia va aggiunta anche la voce sicurezza» · «economia sia da mettere nell'aspetto comunità» · 23:34: «contabilità mettila in logistica» (SQL 85) */
 var RUOLI={tecnologica:[["piattaforma","Piattaforma"],["giornale","Giornale"],["radio","Radio"],["gestionale","Gestionale"],["sicurezza","Sicurezza"]],
-  logistica:[["emporio","Emporio"],["magazzino","Magazzino"],["produttori","Produttori"],["eventi","Eventi"],["contabilita","Contabilità"]],
+  logistica:[["emporio","Emporio"],["magazzino","Magazzino"],["produttori","Produttori"],["eventi","Eventi"],["contabilita","Contabilità"],["cibo","Cibo"]],
   comunitaria:[["vicinati","Vicinati e villaggi"],["formazioni","Formazione"],["assistenza","Assistenza comunitaria integrata"],["economia","Economia"]]};
 function nomeRuolo(f,r){var x=(RUOLI[f]||[]).filter(function(y){return y[0]===r;})[0];return x?x[1]:r;}
 var VIS={solo_me:"solo io",vicinato:"il vicinato",pubblico:"tutti"};
@@ -470,7 +483,7 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){if(typeof spazioFerma==="function")spazioFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-v"));};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
@@ -607,11 +620,12 @@ function logisticaOggi(){
    Una tavola sola (registro): si scrive in Oggi, si muove nel banco dei compiti (Obiettivi), resta nel Cervello per voce.
    Senza l'SQL 90 queste parti non compaiono. */
 var REG_TIPI=[["da_fare","da fare"],["chiamata","chiamata"],["incontro","incontro"],["fatto","fatto"],["decisione","decisione"],["idea","idea"]];
-var REG_TIPO={};REG_TIPI.forEach(function(x){REG_TIPO[x[0]]=x[1];});
+var REG_TIPO={richiesta:"prenotazione"};REG_TIPI.forEach(function(x){REG_TIPO[x[0]]=x[1];});
 var REG_STATO={aperto:"aperto",preso:"preso",fatto:"fatto",annullato:"annullato"};
 var REG_STATO_C={aperto:"s-in_coda",preso:"s-in_avanzamento",fatto:"s-sviluppato",annullato:"s-in_coda"};
 var REG_VIS=[["cerchio","il gruppo"],["villaggio","il villaggio"],["solo_me","solo io"]];
-var REG_VIS_N={cerchio:"il gruppo",villaggio:"il villaggio",solo_me:"solo io"};
+var REG_VIS_N={cerchio:"il gruppo",villaggio:"il villaggio",solo_me:"solo io",ruolo:"chi ha il ruolo"};
+function regQuanti(n){return n?" · "+n+(n===1?" persona":" persone"):"";}
 var reg={guardo:"tutto",tipo:"da_fare",cerchi:null,cosaFa:null,manca:false};
 function regCerchi(){
   if(reg.cerchi)return Promise.resolve(reg.cerchi);
@@ -635,7 +649,7 @@ function regTasti(g){
 function regRiga(g,conData){
   var chi=g.preso_da?(nomi[g.preso_da]||"qualcuno"):"",da=nomi[g.scritto_da]||"";
   var quando=conData?new Date(g.scritto_il).toLocaleDateString("it-IT",{day:"numeric",month:"short"})+" ":"";
-  return '<div class="card rg-riga"><div class="rg-testa"><span class="m">'+esc(quando+hhmm(g.scritto_il))+'</span><span class="t">'+esc(g.testo)+'</span></div>'+
+  return '<div class="card rg-riga"><div class="rg-testa"><span class="m">'+esc(quando+hhmm(g.scritto_il))+'</span><span class="t">'+esc(g.testo+regQuanti(g.quanti))+'</span></div>'+
     '<div class="rg-meta"><span class="pill s-in_coda">'+esc(REG_TIPO[g.tipo]||g.tipo)+'</span>'+(g.stato?'<span class="pill '+REG_STATO_C[g.stato]+'">'+esc(REG_STATO[g.stato])+(chi&&g.stato!=="aperto"?" · "+esc(chi):"")+'</span>':'')+
       (g.voce?'<span class="chip">'+esc(g.voce)+'</span>':'')+(g.ruolo?'<span class="chip f-'+esc(g.funzione||"")+'">'+esc(regNomeRuolo(g.ruolo))+'</span>':'')+
       '<span class="chip">'+esc(g.visibilita==="cerchio"?regNomeCerchio(regCerchioDi(g)):REG_VIS_N[g.visibilita]||"")+'</span></div>'+
@@ -690,7 +704,9 @@ function vRegistroOggi(){
     regCerchi(),
     db.from("registro").select("*").or("giorno.eq."+oggi+",stato.in.(aperto,preso)").order("scritto_il",{ascending:false}).limit(200).then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
     leggiObiettivi(),
-    reg.cosaFa?Promise.resolve(reg.cosaFa):db.from("ruoli_cosa_fa").select("funzione,ruolo,cosa_fa").then(function(r){reg.cosaFa=(r&&!r.error&&r.data)||[];return reg.cosaFa;},function(){return [];})
+    reg.cosaFa?Promise.resolve(reg.cosaFa):db.from("ruoli_cosa_fa").select("funzione,ruolo,cosa_fa").then(function(r){reg.cosaFa=(r&&!r.error&&r.data)||[];return reg.cosaFa;},function(){return [];}),
+    /* SQL 92: i totali delle prenotazioni del Festival, per chi ha il ruolo Cibo o Formazione e per chi coordina */
+    (io.coordina||regMioRuolo("cibo")||regMioRuolo("formazioni"))?db.rpc("fm_prenotazioni_conta").then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];}):Promise.resolve([])
   ]).then(function(v){
     if(vista!=="oggi"||!$("#o-reg"))return;
     var righe=v[1];
@@ -703,6 +719,8 @@ function vRegistroOggi(){
     leggiNomi(ids).then(function(){
       var mieiRuoli=(io.ruoli||[]).map(function(r){var c=(reg.cosaFa||[]).filter(function(x){return x.ruolo===r.ruolo;})[0];return '<div class="card"><span class="chip f-'+esc(r.funzione)+'" style="align-self:flex-start">'+esc(nomeRuolo(r.funzione,r.ruolo))+'</span>'+
         (c?'<span class="t">'+esc(c.cosa_fa)+'</span>':'<span class="m">Cosa fa chi ha questo ruolo lo scrive chi coordina.</span>')+'</div>';}).join("");
+      var PREN={pranzo:"Pranzo",cena:"Cena",laboratori_bambini:"Laboratori per i bambini"},pc=v[4]||[];
+      if(pc.length)mieiRuoli+='<div class="card"><b>Prenotazioni del Festival</b><div class="lg-conta" style="grid-template-columns:repeat('+pc.length+',1fr);margin:6px 0 0">'+pc.map(function(x){return '<div><b>'+(+x.persone)+'</b><small>'+esc(PREN[x.prenota]||x.prenota)+' · persone</small></div>';}).join("")+'</div><span class="m">Le singole prenotazioni sono nel banco dei compiti, in Obiettivi.</span></div>';
       box.innerHTML='<p class="et">Stai guardando</p><div class="lg-filtri" style="margin-top:6px">'+
           [["tutto","Tutto"],[VILLAGGIO,"Il villaggio"]].concat((reg.cerchi||[]).map(function(c){return [c.id,c.nome];})).map(function(c){return '<button class="chip'+(g===c[0]?" on":"")+'" data-rgguardo="'+esc(c[0])+'">'+esc(c[1])+'</button>';}).join("")+'</div>'+
         regModulo(v[2])+
@@ -736,7 +754,7 @@ function vBanco(box,cerchioId){
         var t=x.fonte==="logistica"?{id:x.id,stato:x.stato,preso_da:x.preso_da,scritto_da:x.scritto_da}:x;
         var tasti=x.fonte==="logistica"?
           (x.stato==="aperto"?'<div class="fine"><button class="mini oro" data-bclog="prendo|'+esc(x.id)+'">Lo prendo</button></div>':x.stato==="preso"&&(x.preso_da===io.id||io.coordina)?'<div class="fine"><button class="mini oro" data-bclog="fatto|'+esc(x.id)+'">Fatto</button></div>':''):regTasti(t);
-        return '<div class="card"><span class="t">'+esc(x.titolo)+'</span><div class="rg-meta">'+
+        return '<div class="card"><span class="t">'+esc(x.titolo+regQuanti(x.quanti))+'</span><div class="rg-meta">'+
           (x.fonte==="logistica"?(x.ruolo?'':'<span class="chip f-logistica">logistica</span>'):'<span class="pill s-in_coda">'+esc(REG_TIPO[x.tipo]||x.tipo)+'</span>')+
           (x.ruolo?'<span class="chip f-'+esc(x.funzione||"")+'">'+esc(regNomeRuolo(x.ruolo))+'</span>':'')+(x.voce?'<span class="chip">'+esc(x.voce)+'</span>':'')+'</div>'+
           '<span class="m">'+(x.preso_da?esc(nomi[x.preso_da]||"preso"):"nessuno ancora")+(x.entro_il?" · entro il "+esc(new Date(x.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span>'+tasti+'</div>';}
@@ -780,6 +798,70 @@ function vVociRegistro(box,cerchioId){
           '<div><p class="et">Perché · decisioni</p>'+(dec.length?'<ul>'+dec.map(function(x){return '<li>'+esc(x.tipo==="decisione"?x.testo:x.perche)+'<span class="m"> · '+esc(new Date(x.scritto_il).toLocaleDateString("it-IT",{day:"numeric",month:"short"}))+'</span></li>';}).join("")+'</ul>':'<span class="m">—</span>')+'</div></div>'+
           '<p class="nota" style="margin-top:6px">'+esc(Object.keys(z.reduce(function(a,x){a[REG_VIS_N[x.visibilita]]=1;return a;},{})).join(" · "))+'</p></details>';}).join("");
     });
+  });
+}
+
+/* ═══ LO SPAZIO DEL GRUPPO · SQL 92 ═══
+   20 ott 12:27, Gab: «Per me un gruppo può avere un area diretta dove può usare la chat / Quindi quella diventa la situazione di utilizzo dello strumento»
+   12:31: «nulla toglie al registro di essere proprio il contesto diretta e chat» · 14:34: il nome «La facciamo scegliere al gruppo in base alla tematica».
+   23:45: «si» a costruirlo adesso. La chat resta chat: un messaggio diventa riga del registro solo quando qualcuno lo segna.
+   La diretta resta del thread delle dirette (diretta-bozza.html, comune/fm-diretta.js): qui c'è solo il passaggio verso la diretta in onda.
+   Senza l'SQL 92 lo spazio non compare. */
+var spazio={sub:null,timer:null,id:null};
+function spazioFerma(){
+  try{if(spazio.sub&&db.removeChannel)db.removeChannel(spazio.sub);}catch(e){}
+  if(spazio.timer)clearInterval(spazio.timer);
+  spazio.sub=null;spazio.timer=null;spazio.id=null;
+}
+function vSpazio(box,id,x){
+  if(!box)return;
+  spazioFerma();
+  Promise.all([
+    db.from("gruppo_messaggi").select("id,testo,scritto_da,scritto_il,registro_id").eq("cerchio_id",id).order("scritto_il",{ascending:false}).limit(60).then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
+    db.from("spazi_gruppo").select("nome").eq("cerchio_id",id).maybeSingle().then(function(r){return (r&&!r.error&&r.data&&r.data.nome)||"";},function(){return "";}),
+    dirette(),
+    db.from("registro").select("id,voce,obiettivo_id,stato,vicinato_id,squadra_id,azienda_id").or("vicinato_id.eq."+id+",squadra_id.eq."+id+",azienda_id.eq."+id).limit(400).then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];}),
+    leggiObiettivi()
+  ]).then(function(v){
+    if(!box.isConnected||cerchio!==id)return;
+    var msg=v[0];if(msg===null){box.innerHTML="";return;}
+    var nome=v[1],dir=v[2]||[],righe=v[3],guida=x.guido||io.nucleo||io.coordina;
+    var voci={};righe.forEach(function(g){if(g.voce)voci[g.voce]=(voci[g.voce]||0)+1;});
+    var obs={};righe.forEach(function(g){if(g.obiettivo_id&&g.stato){var o=obs[g.obiettivo_id]=obs[g.obiettivo_id]||{c:0,f:0};o.c++;if(g.stato==="fatto")o.f++;}});
+    var tit={};(cache.obiettivi||[]).forEach(function(o){tit[o.id]=o.titolo||o.contenuto;});
+    box.innerHTML='<div class="sp-capo"><p class="et">Lo spazio del gruppo</p><h3>'+esc(nome||x.nome)+'</h3>'+
+        (guida?'<details class="rg-altro"><summary>'+(nome?"Cambia il nome dello spazio":"Il nome lo sceglie il gruppo")+'</summary><div class="azioni" style="margin-top:6px"><input type="text" id="sp-nome" maxlength="80" value="'+esc(nome)+'" style="flex:1;min-width:0"><button class="mini oro" id="sp-nome-ok">Salva</button></div></details>':'')+'</div>'+
+      (dir.length?dir.map(function(d){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(d.titolo||"")+'</span><span>entra ›</span></a>';}).join(""):'')+
+      '<div class="sp-due"><div class="card sp-chat"><p class="et">Chat del gruppo</p><div class="sp-msg" id="sp-msg"></div>'+
+        '<div class="sp-scrivi"><textarea id="sp-testo" maxlength="2000" aria-label="Scrivi nella chat del gruppo"></textarea><button class="btn pieno" id="sp-invia">Invia</button></div><div class="toast" id="sp-ok" hidden></div></div>'+
+      '<div class="sp-lato"><div class="card"><p class="et">Argomenti trattati</p>'+(Object.keys(voci).length?'<div class="rg-meta">'+Object.keys(voci).sort(function(a,b){return voci[b]-voci[a];}).map(function(k){return '<span class="chip">'+esc(k)+' · '+voci[k]+'</span>';}).join("")+'</div>':'<span class="m">Le voci delle righe del registro di questo gruppo.</span>')+'</div>'+
+        '<div class="card"><p class="et">Gli obiettivi del gruppo</p>'+(Object.keys(obs).length?Object.keys(obs).map(function(k){var o=obs[k];return '<div class="sp-ob"><span class="t">'+esc(tit[k]||"Obiettivo")+'</span><span class="m">'+o.f+' di '+o.c+' compiti fatti</span><div class="barra-ob"><i style="width:'+Math.round(100*o.f/Math.max(1,o.c))+'%"></i></div></div>';}).join(""):'<span class="m">Gli obiettivi a cui sono legati i compiti di questo gruppo.</span>')+'</div></div></div>';
+    spazio.id=id;
+    disegnaMsg(msg.reverse());
+    $("#sp-invia").onclick=function(){var t=val("sp-testo");if(!t)return;var b=this;b.disabled=true;
+      db.from("gruppo_messaggi").insert({cerchio_id:id,testo:t,scritto_da:io.id}).then(function(r){b.disabled=false;
+        if(r&&r.error)return mostra("#sp-ok",errore(r.error),true);$("#sp-testo").value="";mostra("#sp-ok","");ricarica();},function(e){b.disabled=false;mostra("#sp-ok",errore(e),true);});};
+    var nb=$("#sp-nome-ok");if(nb)nb.onclick=function(){var n=val("sp-nome");if(!n)return;nb.disabled=true;
+      db.from("spazi_gruppo").upsert({cerchio_id:id,nome:n,scritto_da:io.id,scritto_il:new Date().toISOString()}).then(function(r){nb.disabled=false;if(r&&r.error){alert(errore(r.error));return;}vSpazio(box,id,x);},function(){nb.disabled=false;});};
+    function ricarica(){
+      if(spazio.id!==id||cerchio!==id||vista!=="cerchio"){spazioFerma();return;}
+      db.from("gruppo_messaggi").select("id,testo,scritto_da,scritto_il,registro_id").eq("cerchio_id",id).order("scritto_il",{ascending:false}).limit(60).then(function(r){if(r&&!r.error)disegnaMsg((r.data||[]).reverse());},function(){});
+    }
+    function disegnaMsg(l){
+      leggiNomi(l.map(function(m){return m.scritto_da;})).then(function(){
+        var e=$("#sp-msg");if(!e)return;var giu=e.scrollHeight-e.scrollTop-e.clientHeight<40;
+        e.innerHTML=l.length?l.map(function(m){return '<div class="sp-m'+(m.scritto_da===io.id?" mio":"")+'"><span class="m">'+esc(nomi[m.scritto_da]||"")+' · '+esc(hhmm(m.scritto_il))+'</span><span class="t">'+esc(m.testo)+'</span>'+
+          (m.registro_id?'<span class="m sp-segnato">→ nel registro</span>':'<select class="sp-segna" data-segna="'+esc(m.id)+'" aria-label="Segna nel registro"><option value="">segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+'</div>';}).join(""):'<p class="nota" style="text-align:center;padding:10px 0">Ancora nessun messaggio.</p>';
+        if(giu||!e.dataset.visto){e.scrollTop=e.scrollHeight;e.dataset.visto="1";}
+        e.querySelectorAll("[data-segna]").forEach(function(s){s.onchange=function(){if(!s.value)return;s.disabled=true;
+          db.rpc("fm_messaggio_segna",{p_messaggio:s.getAttribute("data-segna"),p_tipo:s.value}).then(function(r){
+            if(r&&r.error){alert(errore(r.error));s.disabled=false;return;}if(r.data!=="ok"){alert(r.data);s.disabled=false;return;}
+            cache.obiettivi=null;ricarica();vBanco($("#ce-banco"),id);vVociRegistro($("#ce-voci"),id);},function(){s.disabled=false;});};});
+      });
+    }
+    /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
+    try{if(db.channel){spazio.sub=db.channel("chat-"+id).on("postgres_changes",{event:"INSERT",schema:"public",table:"gruppo_messaggi",filter:"cerchio_id=eq."+id},ricarica).subscribe();}}catch(e){}
+    spazio.timer=setInterval(ricarica,20000);
   });
 }
 
@@ -1223,7 +1305,8 @@ function vCerchio(){
     $("#ce-indietro").onclick=function(){vai("cervello");};fondoIndietro(c);return;
   }
   var conLibro=x.tipo!=="azienda"&&(x.dentro||x.guido);
-  c.innerHTML=(conLibro?'<div class="giro" style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div><div id="lb"></div>':testa)+
+  var conSpazio=x.dentro||x.guido||io.nucleo;
+  c.innerHTML=(conLibro?'<div class="giro" style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div>'+(conSpazio?'<div id="ce-spazio"></div>':'')+'<div id="lb"></div>':testa+(conSpazio?'<div id="ce-spazio"></div>':''))+
     '<p class="et" style="margin-top:12px">Chi c\'è</p><div class="card" id="ce-persone"><p class="nota">Un momento…</p></div>'+
     (vic&&(x.guido||io.coordina)?'<p class="et" style="margin-top:12px">Dai un ruolo · per chi guida</p><div class="card modulo" id="ce-ruoli"></div>':'')+
     (x.tipo==="azienda"&&(x.guido||io.nucleo)?'<p class="et" style="margin-top:12px">Aggiungi una persona · per il referente</p><div class="card modulo" id="az-aggiungi"></div>':'')+
@@ -1236,6 +1319,7 @@ function vCerchio(){
   fondoIndietro(c);
   $("#ce-indietro").onclick=function(){vai("cervello");};
   vBanco($("#ce-banco"),cerchio);vVociRegistro($("#ce-voci"),cerchio);
+  if(conSpazio)vSpazio($("#ce-spazio"),cerchio,x);
   var questo=cerchio;
   db.rpc("fm_cerchio_persone",{p_vicinato:questo}).then(function(r){
     var e=$("#ce-persone");if(!e||cerchio!==questo)return;var l=(r&&!r.error&&r.data)||[];
