@@ -185,6 +185,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     <div class="griglia" style="margin-top:12px"></div>
     <div class="vu" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="chi-parla"><div class="c" id="cp-c" style="display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--oro)">·</div><div><b id="cp-nome">nessuno sta parlando</b><small id="cp-sot">entra per sentire</small></div><span class="reg" id="reg-segno" style="display:none"><i></i>REC</span></div>
+    <div class="sot" id="reg-stato" style="display:none;margin-top:8px;color:#ff8a8a;position:relative"></div>
     <div id="ospite-dati" hidden style="display:flex;gap:8px;margin-top:12px;position:relative"><label>come ti chiami<input class="campo" id="osp-nome" maxlength="40" autocomplete="off" style="min-width:0;font:inherit;color:var(--avorio);outline:none"></label><label>da dove parli<input class="campo" id="osp-da" maxlength="40" autocomplete="off" style="min-width:0;font:inherit;color:var(--avorio);outline:none"></label></div>
     <div class="tasti" style="display:flex;gap:8px;margin-top:12px;position:relative"><button class="fm-tasto pieno" id="entra" style="flex:1;justify-content:center" data-s="entra nella diretta">Entra</button><button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla diretta">Esci</button><button class="fm-tasto secondario" id="chiudi" hidden data-s="chiudi la diretta per tutti" style="color:var(--manca);border-color:rgba(180,87,74,.5)">Chiudi la diretta</button><button class="fm-tasto pieno" id="suono" hidden data-s="tocca per sentire" style="flex:1;justify-content:center">🔊 Tocca per sentire</button></div>
     <div class="esito" id="esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px;position:relative"></div>
@@ -453,39 +454,55 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   /* 13 ott 23:07, Gab: «la diretta registrata deve essere in mp3, è in webm» → si registra direttamente in MP3 (lamejs, 128 kbps mono,
      codifica mentre si registra: poca memoria anche per un'ora). Se lamejs non si carica, resta il registratore del navigatore (webm/m4a). */
   function finito(blob, tipo, est){ ultimo={blob:blob,tipo:tipo,secondi:Math.round((Date.now()-t0)/1000)}; var url=URL.createObjectURL(blob);
-    var nome='diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+est; ultimo.nome=nome;
+    var nome=reg&&reg.nome?reg.nome:'diretta-'+new Date().toISOString().slice(0,16).replace(/[T:]/g,'-')+est; ultimo.nome=nome;
     $('reg-box').style.display='block'; $('reg-info').textContent=nome+' · '+Math.round(blob.size/1024)+' KB'; $('file-audio').src=url; $('file-scarica').href=url; $('file-scarica').download=nome; $('pubblica').disabled=false; $('pubblica').textContent='Pubblica come Diretta'; $('pub-esito').textContent='';  salvaCopia(); }
   /* 20 ott 17:32, Gab: «ho schiacciato registra e poi ho messo scarica e non ho ancora iniziato a scaricare» →
      (1) appena si ferma, una copia sale da sola nel deposito della diretta (dirette/<villaggio>/), così non si perde chiudendo la pagina;
      (2) «Scarica il file» sul telefono apre la condivisione (iPhone: «Salva in File»), dove il download diretto non parte */
   function salvaCopia(){ if(!ultimo||ultimo.salvato) return; var e=$('pub-esito'); e.textContent='Salvo una copia nel deposito…';
     db.storage.from('dirette').upload(VILLAGGIO+'/'+ultimo.nome, ultimo.blob,{contentType:ultimo.tipo,upsert:false}).then(function(r){
-      if(r.error&&!/already exists|duplicate/i.test(r.error.message||'')) throw r.error; ultimo.salvato=true; e.textContent='Una copia è salva nel deposito della diretta ('+ultimo.nome+').'; })
-    .catch(function(err){ e.textContent='La copia nel deposito non è salita ('+(err&&err.message?err.message:'—')+'): scarica il file prima di chiudere la pagina.'; }); }
+      if(r.error&&!/already exists|duplicate/i.test(r.error.message||'')) throw r.error; ultimo.salvato=true; e.textContent='Salvata nel deposito della diretta ('+ultimo.nome+').'; var r0=reg; if(r0){ var togli=function(){ if(r0.nomi.length) db.storage.from('dirette').remove(r0.nomi).then(function(){},function(){}); }; if(r0.coda.length) r0.dopo=togli; else togli(); } })
+    .catch(function(err){ e.textContent='La copia nel deposito non è salita ('+(err&&err.message?err.message:'—')+'). I pezzi da 30 secondi sono nel deposito; per sicurezza scarica anche il file.'; ultimo.salvato=!!(reg&&!reg.coda.length&&reg.nomi.length); }); }
   $('file-scarica').addEventListener('click',function(ev){ if(!ultimo) return; try{ var f=new File([ultimo.blob],ultimo.nome,{type:ultimo.tipo});
       if(navigator.canShare&&navigator.canShare({files:[f]})&&/iPhone|iPad|Android/i.test(navigator.userAgent)){ ev.preventDefault(); navigator.share({files:[f],title:ultimo.nome}).catch(function(){}); } }catch(e){} });
+  /* 20 ott 18:36, Gab: «l'ideale è che ci sia subito una registrazione della diretta quando si schiaccia registra e che rimanga nel database …
+     fino a 25 megabyte» · 18:39 «Vai» → mentre registri, ogni 30 secondi un pezzo sale da solo nel deposito (dirette/<villaggio>/registrazioni/…):
+     se la pagina si chiude si perdono al massimo gli ultimi 30 secondi. Tetto 25 MB a registrazione, qualità voce (mp3 64 kbps, circa 50 minuti). */
+  var TETTO=25*1024*1024, PEZZO_MS=30000, reg=null, pezziT=null;
+  function mmss(ms){ var s=Math.max(0,Math.floor(ms/1000)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+  function regNuova(est,tipo){ var st=new Date().toISOString().slice(0,16).replace(/[T:]/g,'-'); reg={cartella:VILLAGGIO+'/registrazioni/diretta-'+st, nome:'diretta-'+st+est, est:est, tipo:tipo, n:0, coda:[], nomi:[], byte:0, fino:0, sale:false, errore:''}; regStato(); }
+  function regPezzo(blob, finoA){ if(!reg||!blob||!blob.size) return; reg.n++; reg.byte+=blob.size; reg.coda.push({via:reg.cartella+'/pezzo-'+String(reg.n).padStart(3,'0')+reg.est, blob:blob, fino:finoA}); regStato(); regSali(); }
+  function regSali(){ var r0=reg; if(!r0||r0.sale||!r0.coda.length) return; var p=r0.coda[0]; r0.sale=true;
+    db.storage.from('dirette').upload(p.via,p.blob,{contentType:r0.tipo,upsert:false}).then(function(r){ if(r.error&&!/already exists|duplicate/i.test(r.error.message||'')) throw r.error;
+      r0.sale=false; r0.errore=''; r0.coda.shift(); r0.nomi.push(p.via); r0.fino=p.fino; regStato(); regSali(); if(!r0.coda.length&&r0.dopo){ var f=r0.dopo; r0.dopo=null; f(); } })
+    .catch(function(e){ r0.sale=false; r0.errore=(e&&e.message)||'—'; regStato(); setTimeout(regSali,5000); }); }
+  function regStato(){ var el=$('reg-stato'); if(!el||!reg) return; el.style.display='';
+    el.textContent='salvato fino a '+mmss(reg.fino)+' · '+(reg.byte/1048576).toFixed(1).replace('.',',')+' MB su 25'+(reg.coda.length?' · '+reg.coda.length+(reg.coda.length===1?' pezzo aspetta':' pezzi aspettano')+' la rete':'')+(reg.errore?' ('+reg.errore+')':''); }
+  function avviaOrologio(){ clearInterval(orologio); orologio=setInterval(function(){ var t=mmss(Date.now()-t0); $('reg-segno').innerHTML='<i></i>REC '+t; $('b-rec').innerHTML='<i>■</i>ferma '+t; },1000); }
   function registra(){ if(!stanza) return;
     if(typeof lamejs==='undefined'&&!window.__lameNo){ dice('Un momento…'); var lj=document.createElement('script'); lj.src='https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js'; lj.onload=function(){ dice(''); registra(); }; lj.onerror=function(){ window.__lameNo=true; registra(); }; document.head.appendChild(lj); return; }
     ctx=new (window.AudioContext||window.webkitAudioContext)(); dest=ctx.createMediaStreamDestination(); sorgenti=[];
     stanza.remoteParticipants.forEach(function(p){ p.audioTrackPublications.forEach(function(pub){ if(pub.track) mescola(pub.track); }); });
     stanza.localParticipant.audioTrackPublications.forEach(function(pub){ if(pub.track) mescola(pub.track); });
     if(typeof lamejs!=='undefined'){
-      var enc=new lamejs.Mp3Encoder(1, ctx.sampleRate, 128), mp3=[], tap=ctx.createMediaStreamSource(dest.stream), proc=ctx.createScriptProcessor(4096,1,1), muto=ctx.createGain(); muto.gain.value=0;
-      proc.onaudioprocess=function(e){ var f=e.inputBuffer.getChannelData(0), n=f.length, s16=new Int16Array(n); for(var i=0;i<n;i++){ var v=Math.max(-1,Math.min(1,f[i])); s16[i]=v<0?v*32768:v*32767; } var out=enc.encodeBuffer(s16); if(out&&out.length) mp3.push(new Int8Array(out)); };
+      var enc=new lamejs.Mp3Encoder(1, ctx.sampleRate, 64), mp3=[], ora=[], byte=0, tap=ctx.createMediaStreamSource(dest.stream), proc=ctx.createScriptProcessor(4096,1,1), muto=ctx.createGain(); muto.gain.value=0;
+      regNuova('.mp3','audio/mpeg');
+      proc.onaudioprocess=function(e){ var f=e.inputBuffer.getChannelData(0), n=f.length, s16=new Int16Array(n); for(var i=0;i<n;i++){ var v=Math.max(-1,Math.min(1,f[i])); s16[i]=v<0?v*32768:v*32767; } var out=enc.encodeBuffer(s16); if(out&&out.length){ var b=new Int8Array(out); mp3.push(b); ora.push(b); byte+=b.length; if(byte>=TETTO-64*1024&&rec&&rec.state==='recording'){ ferma(); chat_sys('■ arrivata a 25 MB: la registrazione si è fermata'); } } };
       tap.connect(proc); proc.connect(muto); muto.connect(ctx.destination);
-      rec={state:'recording', stop:function(){ rec.state='inactive'; try{ tap.disconnect(); proc.disconnect(); muto.disconnect(); }catch(e){} var out=enc.flush(); if(out&&out.length) mp3.push(new Int8Array(out)); finito(new Blob(mp3,{type:'audio/mpeg'}),'audio/mpeg','.mp3'); }};
-      t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i>■</i>ferma 00:00'; chat_sys('● la registrazione è partita (mp3)');
-      clearInterval(orologio); orologio=setInterval(function(){ var s=Math.floor((Date.now()-t0)/1000), t=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); $('reg-segno').innerHTML='<i></i>REC '+t; $('b-rec').innerHTML='<i>■</i>ferma '+t; },1000);
-      return;
+      clearInterval(pezziT); pezziT=setInterval(function(){ if(!ora.length) return; var b=new Blob(ora,{type:'audio/mpeg'}); ora=[]; regPezzo(b, Date.now()-t0); },PEZZO_MS);
+      rec={state:'recording', stop:function(){ rec.state='inactive'; clearInterval(pezziT); try{ tap.disconnect(); proc.disconnect(); muto.disconnect(); }catch(e){} var out=enc.flush(); if(out&&out.length){ var b=new Int8Array(out); mp3.push(b); ora.push(b); } if(ora.length){ regPezzo(new Blob(ora,{type:'audio/mpeg'}), Date.now()-t0); ora=[]; } finito(new Blob(mp3,{type:'audio/mpeg'}),'audio/mpeg','.mp3'); }};
+      t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i>■</i>ferma 00:00'; chat_sys('● la registrazione è partita: si salva da sola ogni 30 secondi');
+      avviaOrologio(); return;
     }
     var tipo=['audio/webm;codecs=opus','audio/mp4','audio/webm'].filter(function(t){ return window.MediaRecorder&&MediaRecorder.isTypeSupported(t); })[0];
     if(!tipo){ dice('Questo navigatore non sa registrare.',true); return; }
-    pezzi=[]; rec=new MediaRecorder(dest.stream,{mimeType:tipo});
-    rec.ondataavailable=function(e){ if(e.data&&e.data.size) pezzi.push(e.data); };
-    rec.onstop=function(){ finito(new Blob(pezzi,{type:tipo}), tipo, tipo.indexOf('mp4')>=0?'.m4a':'.webm'); };
-    rec.start(1000); t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i>■</i>ferma 00:00'; chat_sys('● la registrazione è partita');
-    clearInterval(orologio); orologio=setInterval(function(){ var s=Math.floor((Date.now()-t0)/1000), t=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); $('reg-segno').innerHTML='<i></i>REC '+t; $('b-rec').innerHTML='<i>■</i>ferma '+t; },1000); }
-  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); $('reg-segno').style.display='none'; $('reg-segno').innerHTML='<i></i>REC'; $('b-rec').classList.remove('on'); $('b-rec').innerHTML='<i>●</i>registra'; chat_sys('■ la registrazione è ferma: il file è qui sotto'); }
+    var est=tipo.indexOf('mp4')>=0?'.m4a':'.webm';
+    pezzi=[]; rec=new MediaRecorder(dest.stream,{mimeType:tipo,audioBitsPerSecond:64000}); regNuova(est,tipo.split(';')[0]);
+    rec.ondataavailable=function(e){ if(e.data&&e.data.size){ pezzi.push(e.data); regPezzo(e.data, Date.now()-t0); if(reg&&reg.byte>=TETTO-64*1024&&rec.state==='recording'){ ferma(); chat_sys('■ arrivata a 25 MB: la registrazione si è fermata'); } } };
+    rec.onstop=function(){ finito(new Blob(pezzi,{type:tipo}), tipo, est); };
+    rec.start(PEZZO_MS); t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i>■</i>ferma 00:00'; chat_sys('● la registrazione è partita: si salva da sola ogni 30 secondi');
+    avviaOrologio(); }
+  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); clearInterval(pezziT); $('reg-segno').style.display='none'; $('reg-segno').innerHTML='<i></i>REC'; $('b-rec').classList.remove('on'); $('b-rec').innerHTML='<i>●</i>registra'; chat_sys('■ la registrazione è ferma: il file è qui sotto'); }
   $('b-rec').onclick=function(){ if($('b-rec').disabled) return; if(rec&&rec.state==='recording') ferma(); else registra(); };
 
   /* la Diretta in Bacheca (SQL 55) */
