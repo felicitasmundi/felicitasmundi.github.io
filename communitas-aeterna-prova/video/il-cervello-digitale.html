@@ -94,6 +94,8 @@ svg text{font-family:var(--f-uso)}
   display:flex;gap:6px;align-items:center;padding:6px;border-radius:999px;background:rgba(17,17,26,.86);
   border:1px solid var(--linea);transition:opacity .4s;backdrop-filter:blur(6px)}
 .idle .ctl{opacity:0;pointer-events:none}
+.room:has(.guarda:not([hidden])) .ctl{display:none}
+@container (max-width: 480px){.ctl button{padding:8px 9px;min-width:36px;font-size:12px}}
 .ctl button{font:600 13px/1 var(--f-uso);color:var(--avorio);background:transparent;border:0;border-radius:999px;
   padding:10px 14px;cursor:pointer;min-width:44px;min-height:40px}
 .ctl button:hover{background:var(--linea)}
