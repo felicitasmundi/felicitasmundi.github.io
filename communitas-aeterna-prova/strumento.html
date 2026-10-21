@@ -97,6 +97,7 @@ h3{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1;margi
 .vuoto{border:1px dashed var(--linea);border-radius:12px;padding:16px;color:var(--tenue);font-size:13.5px;text-align:center}
 .video{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;margin:6px 0}
 .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid169{position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#0a0a0f;margin:6px 0}.vid169 iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.vid-come>summary{cursor:pointer;font-weight:600}.vid-come .et{margin-top:10px}
 button.yt{display:block;border:0;cursor:pointer;font:inherit}button.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.yt-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;padding-left:4px}.yt-tit{font-weight:600;margin:2px 0 6px;font-size:15px}
 .foto{width:100%;max-height:420px;object-fit:cover;border-radius:10px;margin:6px 0;display:block}
 .lnk{display:inline-block;margin:4px 0;font-size:13px;word-break:break-all}
@@ -425,6 +426,10 @@ function ytTitoli(){
 (function(){var t=null,c=document.getElementById("corpo");if(c&&window.MutationObserver)new MutationObserver(function(){clearTimeout(t);t=setTimeout(ytTitoli,250);}).observe(c,{childList:true,subtree:true});})();
 function ytChiedi(orma){try{if(db&&db.functions)db.functions.invoke("youtube-info",{body:orma?{orma:orma}:{}}).then(function(){},function(){});}catch(e){}}
 
+/* LE DUE ANIMAZIONI · 21 ott 11:32-11:36, Gab: «rendere questi video una costante della piattaforma […] che non si disperdano e restino visibili» · «ok per tutto, rendi operativa».
+   I file in video/ li aggiorna il thread «Due animazioni per il Festival». Con #pagina partono ferme col tasto «Guarda». */
+var VIDEO={cervello:["il-cervello-digitale","Il cervello digitale"],villaggi:["villaggi-e-vicinati","Villaggi e vicinati"]};
+function videoHTML(k){var v=VIDEO[k];return '<div class="vid169"><iframe src="video/'+v[0]+'.html#pagina" title="'+esc(v[1])+'" loading="lazy" allow="fullscreen" allowfullscreen></iframe></div>';}
 /* la luna di oggi: ciclo sinodico medio */
 function luna(){
   var f=(((Date.now()-Date.UTC(2000,0,6,18,14))/864e5)/29.530588853)%1;if(f<0)f+=1;
@@ -588,12 +593,15 @@ function mieiOggi(){
 }
 function vOggi(){
   var c=$("#corpo"),l=luna(),d=new Date();
+  var prima=false;try{prima=!localStorage.getItem("fm-come-visto");localStorage.setItem("fm-come-visto","1");}catch(e){}
+  setTimeout(function(){var d=$("#o-come");if(d&&prima)d.open=true;},0);
   var g0=new Date();g0.setHours(0,0,0,0);var da=g0.getTime(),a=da+864e5;
   /* 19 ott 16:21, Gab: «aprendo l app […] anche oggi non è comprensibile» da chi arriva da fuori → in cima chi siamo (parole dell'invito al Festival) e il Festival in evidenza, voce fissa fino al 21 novembre
      20 ott 01:44, Gab: «puoi mettere la copertina dell evento nel festival in evidenza in oggi?» */
   var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime();
   c.innerHTML=(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
     (fest?'<a class="evid" href="festival-evento-bozza.html?c=10182300"><img class="copertina" src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · TRAME: la forza di essere connessi"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
+    '<details class="card vid-come" id="o-come"><summary>Come funziona</summary><p class="et">Villaggi e vicinati</p>'+videoHTML("villaggi")+'<p class="et">Il cervello digitale</p>'+videoHTML("cervello")+'</details>'+
     '<p class="et">Oggi · Felicitas</p>'+
     '<div class="card"><div class="giorno">'+l.svg+'<div><b>'+esc(d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"}))+'</b><span id="o-cielo">'+esc(l.nome)+'</span></div></div></div>'+
     '<div id="o-appunt"></div>'+
@@ -937,6 +945,7 @@ function g4Testa(g){
     (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="festival-evento-bozza.html?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
       '<div class="g4-occ">In evidenza</div><h2>Felicitas Festival</h2>'+
       '<p>TRAME · la forza di essere connessi<br>Sabato 21 novembre 2026 · dalle 10:00<br>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</p>'+
+      videoHTML("villaggi")+videoHTML("cervello")+
       '<div class="g4-num"><div><b>'+giorni+'</b><small>giorni</small></div><div id="g4-fatti" hidden><b></b><small>compiti fatti</small></div><div id="g4-servono" hidden><b></b><small>cose che servono</small></div></div>'+
       '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
       '<a class="g4-tasto" href="festival-evento-bozza.html?c=10182300">Il programma</a></div></div>':'')+
@@ -1151,7 +1160,7 @@ function vCervello(){
     '</div>'+
     '<div class="card" style="margin-top:10px"><b>Il percorso · praticantato Antaḥkaraṇa</b><span class="m">20 € a settimana (80 € al mese), oppure karma yoga</span></div>'+
     '<p class="nota" style="margin:8px 2px 0">Leggere il libro Felicitas e il proprio vicinato è gratis.</p>';
-  c.innerHTML='<p class="et">Cervello</p>'+
+  c.innerHTML='<p class="et">Cervello</p>'+videoHTML("cervello")+
     (io.id?
       '<div id="ce-onda"></div>'+
       '<p class="et" style="margin-top:10px">I tuoi gruppi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'+
@@ -1386,7 +1395,7 @@ function vCerchio(){
     /* Gab, 19/10 20:18, verbatim (refuso corretto): «villaggio è un team operativo organizzato in vicinati, con l intento di portare avanti i progetti logistici e tecnologici legati a felicitas» */
     var vv=Object.keys(cerchiCache).map(function(k){return cerchiCache[k];}).filter(function(y){return y.tipo==="vicinato";});
     var inLog=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
-    c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Un team operativo organizzato in vicinati, con l\'intento di portare avanti i progetti logistici e tecnologici legati a Felicitas.</span></div>'+
+    c.innerHTML=testa+'<div class="card" style="margin-top:8px"><span class="t">Un team operativo organizzato in vicinati, con l\'intento di portare avanti i progetti logistici e tecnologici legati a Felicitas.</span></div>'+videoHTML("villaggi")+
       '<div id="ce-banco" style="margin-top:12px"></div><div id="ce-voci"></div>'+
       (inLog?'<div id="lg"></div>':'')+
       (vv.length?'<p class="et" style="margin-top:12px">I vicinati</p><div class="cerchi">'+vv.map(function(y){return '<button class="cerchio-b" data-cerchio="'+esc(y.id)+'"><span><b>'+esc(y.nome)+'</b><small>'+(y.territorio?esc(y.territorio)+' · ':'')+(+y.persone===1?'1 persona':(+y.persone)+' persone')+'</small></span><span>›</span></button>';}).join("")+'</div>':'')+
