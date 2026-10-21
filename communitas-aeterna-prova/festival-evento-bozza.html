@@ -177,7 +177,7 @@ section{padding:60px 0 14px}
 .blocco h4{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;line-height:1.05}
 .blocco p{font-size:14.5px;color:rgba(245,240,230,.82);line-height:1.55;margin-top:8px}
 .blocco .fm-riga{font-size:13.5px}
-.blocco .tasti{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.blocco .tasti{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.vid-tasti{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 6px}.ric-esito{margin:0 0 14px;min-height:0}.ric-esito:empty{display:none}
 .blocco.oro{border-color:var(--oro);background:linear-gradient(180deg,rgba(212,175,106,.12),transparent)}
 
 /* i panieri */
@@ -298,10 +298,12 @@ footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="giorno">
     <div class="parte">la mattina</div>
     <div class="vid169"><iframe src="video/villaggi-e-vicinati.html#pagina" title="Villaggi e vicinati" loading="lazy" allow="fullscreen" allowfullscreen></iframe></div>
+    <div class="vid-tasti"><button class="fm-tasto piccolo secondario" type="button" data-fest="richiesta" data-cosa="aiuto_festival">Aiutaci a organizzare il festival</button><button class="fm-tasto piccolo secondario" type="button" data-fest="richiesta" data-cosa="gruppo_festival">Proponiti come gruppo organizzativo nel tuo territorio</button></div><p class="ric-esito" data-per="aiuto_festival" aria-live="polite"></p>
     <div class="riga-p sola"><div><h4>Comunità e distribuzione</h4><p>Mattina dedicata ai vicinati e logistica.</p></div></div>
     <div class="riga-p sola"><div><h4 class="verde">Pranzo su prenotazione</h4><p>Con buffet e pizza.</p></div></div>
     <div class="parte">il pomeriggio · sala conferenze</div>
     <div class="vid169"><iframe src="video/il-cervello-digitale.html#pagina" title="Il cervello digitale" loading="lazy" allow="fullscreen" allowfullscreen></iframe></div>
+    <div class="vid-tasti"><button class="fm-tasto piccolo secondario" type="button" data-fest="richiesta" data-cosa="attivazione_cervello">Attiva il cervello digitale evoluto della tua azienda</button><button class="fm-tasto piccolo secondario" type="button" data-fest="richiesta" data-cosa="conferenza">Organizza una conferenza nel tuo territorio</button></div><p class="ric-esito" data-per="attivazione_cervello" aria-live="polite"></p>
     <div class="riga-p sola"><div><h4 class="viola">Canti e insegnamento</h4></div></div>
     <div class="riga-p sola"><div><h4>Il cervello digitale</h4></div></div>
     <div class="riga-p sola"><div><h4>La zona franca</h4><p>Conferenza con la dottoressa Randaccio.</p><div class="con"><i>R</i>dottoressa Randaccio</div></div></div>
@@ -438,7 +440,7 @@ window.FM_EN = {
   "L'incontro dei vicinati · 25 ottobre":"The meeting of the neighbourhoods · 25 October","Cas'ale · Baratili · dalle 10 · prima del Festival":"Cas'ale · Baratili · from 10 · before the Festival","Locandina presentazione":"Presentation poster","cosa serve · scritto da Gabriele Dettori":"what is needed · written by Gabriele Dettori","lo prendo":"I'll take it","Materiale comunicativo per emporio":"Communication material for the Emporio","La squadra del Festival":"The Festival team","la lavagna, chi c'è, le spese":"the board, who is in, the expenses",
   "Proponiti per farne parte":"Apply to join","Si apre una chat nel Mutuo aiuto, tu e il coordinamento del Villaggio Felicitas · Civiltà Sarda. Chi coordina riceve l'avviso nell'app e per mail.":"A chat opens in Mutual aid, between you and the coordination of Villaggio Felicitas · Sardinian Civilisation. The coordinators are notified in the app and by email.","Proponiti":"Apply","Lo organizza Gabriele Dettori, con il villaggio.":"Organised by Gabriele Dettori, with the village.",
   "Contatti stampa e partner:":"Press and partner contacts:","[ mail ]":"[ email ]","Invita":"Invite","preso da te":"taken by you",
-  "la barra":"the bar","Felicitas Festival · TRAME: la forza di essere connessi":"Felicitas Festival · TRAME: the strength of being connected"
+  "la barra":"the bar","Aiutaci a organizzare il festival":"Help us organise the festival","Proponiti come gruppo organizzativo nel tuo territorio":"Offer to be the organising group in your area","Attiva il cervello digitale evoluto della tua azienda":"Activate the evolved digital brain for your company","Organizza una conferenza nel tuo territorio":"Organise a conference in your area","Felicitas Festival · TRAME: la forza di essere connessi":"Felicitas Festival · TRAME: the strength of being connected"
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -482,6 +484,26 @@ var db = (window.supabase && supabase.createClient) ? supabase.createClient("htt
       });
     });
   }
+  /* 21 ott 12:59 e 13:09, Gab: sotto i video «Attiva il cervello digitale evoluto della tua azienda», «Organizza una conferenza nel tuo territorio»,
+     «Aiutaci a organizzare il festival», «Proponiti come gruppo organizzativo nel tuo territorio» (SQL 103): arrivano al ruolo Eventi, con «dove». */
+  var NOME_R={attivazione_cervello:"Attivazione del cervello digitale evoluto",conferenza:"Conferenza nel tuo territorio",aiuto_festival:"Aiuto per il festival",gruppo_festival:"Gruppo organizzativo nel tuo territorio"};
+  function ricEsito(cosa,t){ var c=(cosa==="conferenza")?"attivazione_cervello":(cosa==="gruppo_festival"?"aiuto_festival":cosa);
+    document.querySelectorAll('.ric-esito[data-per="'+c+'"]').forEach(function(e){ e.textContent=t||''; }); }
+  function richiesta(cosa){
+    if(!NOME_R[cosa]) return;
+    sessione().then(function(s){
+      if(!s){ location.href = "accesso.html?torna=" + encodeURIComponent(location.pathname + "?richiesta=" + cosa); return; }
+      var d=prompt("Dove? Paese o città (si può lasciare vuoto)",""); if(d===null) return;
+      ricEsito(cosa,"Un momento…");
+      return trovaEvento().then(function(id){
+        var a={ p_cosa:cosa, p_dove:d }; if(id) a.p_evento=id;
+        return db.rpc("fm_prenota",a);
+      }).then(function(r){
+        if(r&&r.error){ ricEsito(cosa,"Non è stato salvato. Si può riprovare."); return; }
+        ricEsito(cosa,r&&r.data==="ok"?"Richiesta arrivata: "+NOME_R[cosa]+(d.trim()?" · "+d.trim():"")+".":(r&&r.data)||"");
+      },function(){ ricEsito(cosa,"Non è stato salvato. Si può riprovare."); });
+    });
+  }
   function invita(){
     sessione().then(function(s){
       if(s && window.SpazioVivo && SpazioVivo.invito){ trovaEvento().then(function(id){ SpazioVivo.invito(id?{evento:id}:null); }); return; }
@@ -494,13 +516,14 @@ var db = (window.supabase && supabase.createClient) ? supabase.createClient("htt
     var k = b.getAttribute('data-fest');
     if(k==='ci-saro'){ e.preventDefault(); ciSaro(b.getAttribute('data-pasto')); }
     if(k==='invita'){ e.preventDefault(); invita(); }
+    if(k==='richiesta'){ e.preventDefault(); richiesta(b.getAttribute('data-cosa')); }
     if(k==='qr'){ e.preventDefault(); var box=document.querySelector('.fest-qr'); box.hidden=!box.hidden; if(!box.hidden&&!box.firstChild){
         var img=new Image(); img.alt="QR del Festival"; img.src="https://api.qrserver.com/v1/create-qr-code/?size=440x440&margin=0&data="+encodeURIComponent(QUI); box.appendChild(img);
         var sm=document.createElement('small'); sm.textContent="inquadralo col telefono: apre questa pagina"; box.appendChild(sm); } }
   });
   var wa=document.querySelector('[data-fest="whatsapp"]'); if(wa) wa.href="https://wa.me/?text="+encodeURIComponent(MSG);
   /* tornando dall'accesso con ?ci-saro=1, il gesto si completa */
-  var q=new URLSearchParams(location.search); if(q.get('ci-saro')==='1') ciSaro(q.get('pasto'));
+  var q=new URLSearchParams(location.search); if(q.get('ci-saro')==='1') ciSaro(q.get('pasto')); if(q.get('richiesta')) richiesta(q.get('richiesta'));
   /* il titolo e i quadranti si accendono quando entrano nello schermo */
   var vivi=document.querySelectorAll('.aspetta,.bento');
   if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ es.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('vivo'); io.unobserve(x.target); } }); },{threshold:.2}); vivi.forEach(function(v){ io.observe(v); }); }
