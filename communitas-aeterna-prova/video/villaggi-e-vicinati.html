@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Villaggi e vicinati</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=DM+Sans:wght@400;600&display=swap">
+<style>
+/* Proiezione in sala: palcoscenico 16:9 (9:14 sul telefono in verticale), disegno sopra, parole sotto.
+   Una sola veste scura, scelta per il proiettore: gli stessi cinque colori della pagina del Festival. */
+:root{
+  --notte:#07070c; --notte2:#11111a; --avorio:#f3eee4; --fioco:#9a96a6; --linea:#2a2836;
+  --t1:#F39A3A; --t2:#2BB3C9; --t3:#E0498A; --t4:#F5D27A; --t5:#8ED06B;
+  --f-titolo:'Cinzel', 'Trajan Pro', Georgia, serif;
+  --f-voce:'Cormorant Garamond', 'Garamond', Georgia, serif;
+  --f-uso:'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{margin:0}
+body{background:var(--notte);color:var(--avorio);font-family:var(--f-uso);overflow:hidden}
+.room{height:100%;container-type:size;display:grid;place-items:center;position:relative;
+  padding-left:max(0px, env(safe-area-inset-left, 0px));padding-right:max(0px, env(safe-area-inset-right, 0px))}
+.room.idle{cursor:none}
+.stage{width:min(100cqw, 100cqh * 16 / 9);aspect-ratio:16/9;max-width:100%;container-type:size;position:relative;
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 10%, var(--notte2), var(--notte) 70%)}
+@container (max-aspect-ratio: 1/1){
+  .stage{width:100cqw;height:100cqh;aspect-ratio:auto;grid-template-rows:auto auto minmax(0,1fr)}
+  svg.draw{height:auto;aspect-ratio:1600/580;margin-top:4cqh}
+}
+.top{display:flex;justify-content:space-between;align-items:center;gap:2cqw;padding:2.2cqh 3.4cqw 0}
+.brand{font-family:var(--f-titolo);font-weight:700;letter-spacing:.32em;font-size:max(9px,1.05cqw);color:var(--t4)}
+.count{font-family:var(--f-uso);font-size:max(9px,1cqw);color:var(--fioco);font-variant-numeric:tabular-nums;letter-spacing:.08em}
+.bars{position:absolute;left:3.4cqw;right:3.4cqw;top:.9cqh;display:flex;gap:.5cqw}
+.bars i{flex:1;height:3px;background:var(--linea);border-radius:2px;overflow:hidden}
+.bars i b{display:block;height:100%;width:0;background:var(--t4)}
+svg.draw{width:100%;height:100%;display:block}
+.cap{padding:0 6cqw 4.6cqh;display:grid;gap:1.1cqh;justify-items:center;text-align:center;min-height:30cqh;align-content:start}
+.kick{font-family:var(--f-titolo);font-weight:700;color:var(--t4);font-size:2.3cqw;letter-spacing:.06em;text-wrap:balance;line-height:1.2}
+.txt{font-family:var(--f-voce);font-size:2.55cqw;line-height:1.28;max-width:72ch;text-wrap:balance}
+.txt.q{font-style:italic}
+.txt small{display:block;font-family:var(--f-uso);font-style:normal;font-size:.62em;color:var(--fioco);margin-top:.5em}
+.src{font-family:var(--f-uso);font-size:max(9px,1.05cqw);letter-spacing:.18em;text-transform:uppercase;color:var(--fioco)}
+@container (max-aspect-ratio: 1/1){
+  .top{padding:2cqh 5cqw 0}
+  .brand,.count{font-size:3.6cqw}
+  .cap{padding:2cqh 5cqw 8cqh;min-height:0;gap:1.6cqh;align-content:center}
+  .kick{font-size:7.8cqw}
+  .txt{font-size:7.6cqw;line-height:1.22}
+  .txt small{font-size:.78em}
+  .src{font-size:3.6cqw;letter-spacing:.1em}
+  .lab{font-size:34px;letter-spacing:.06em}
+  .lab.s{font-size:30px}
+}
+@container (max-width: 640px) and (min-aspect-ratio: 1/1){
+  .cap{padding:0 4cqw 3cqh;min-height:36cqh;gap:.6cqh}
+  .kick{font-size:3.6cqw}
+  .txt{font-size:3.6cqw;line-height:1.2}
+  .src{font-size:2.1cqw}
+}
+.cap.in > *{animation:capin .9s cubic-bezier(.2,.7,.2,1) both}
+.cap.in > *:nth-child(2){animation-delay:.15s}
+.cap.in > *:nth-child(3){animation-delay:.35s}
+@keyframes capin{from{opacity:0;transform:translateY(12px)}}
+
+/* scene */
+.scene{display:none}
+.scene.on{display:inline}
+.a{transform-box:fill-box;transform-origin:50% 50%}
+.ob{transform-origin:50% 100%}
+.ol{transform-origin:0 50%}
+.scene.on .a{animation-name:var(--k);animation-duration:var(--t,.9s);animation-delay:var(--d,0s);
+  animation-timing-function:cubic-bezier(.2,.7,.2,1);animation-fill-mode:both}
+.scene.on .lp{animation-duration:var(--t,3s);animation-delay:var(--d,0s);animation-iteration-count:infinite;animation-timing-function:ease-in-out;animation-name:var(--k)}
+.paused .a,.paused .lp,.paused .cap > *{animation-play-state:paused!important}
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{opacity:0;transform:translateY(40px)}}
+@keyframes pop{0%{opacity:0;transform:scale(.2)}70%{opacity:1;transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes grow{from{transform:scaleY(0)}}
+@keyframes growx{from{transform:scaleX(0)}}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes move{0%{opacity:0;transform:translate(var(--dx,0),var(--dy,0))}15%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes leave{0%{opacity:1;transform:none}85%{opacity:1}100%{opacity:0;transform:translate(var(--dx,0),var(--dy,0))}}
+@keyframes ripple{0%{opacity:.9;transform:scale(.2)}100%{opacity:0;transform:scale(1.8)}}
+@keyframes lit{from{fill:var(--notte2);stroke:var(--linea)}}
+@keyframes bob{50%{transform:translateY(-14px)}}
+@keyframes tw{50%{opacity:.25}}
+@keyframes glow{50%{opacity:.45}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes kan{0%,22%{transform:none}38%,58%{transform:translate(350px,0)}74%,100%{transform:translate(700px,0)}}
+@keyframes shut{from{transform:translateY(-34px)}}
+.dl{stroke-dasharray:1;stroke-dashoffset:0}
+svg text{font-family:var(--f-uso)}
+.lab{font-family:var(--f-titolo);font-weight:700;letter-spacing:.14em;font-size:20px;fill:var(--avorio);text-anchor:middle}
+.lab.s{font-size:16px;fill:var(--fioco)}
+
+/* comandi */
+.ctl{position:absolute;left:50%;transform:translateX(-50%);bottom:max(14px, env(safe-area-inset-bottom, 0px));
+  display:flex;gap:6px;align-items:center;padding:6px;border-radius:999px;background:rgba(17,17,26,.86);
+  border:1px solid var(--linea);transition:opacity .4s;backdrop-filter:blur(6px)}
+.idle .ctl{opacity:0;pointer-events:none}
+.room:has(.guarda:not([hidden])) .ctl{display:none}
+@container (max-width: 480px){.ctl button{padding:8px 9px;min-width:36px;font-size:12px}}
+.ctl button{font:600 13px/1 var(--f-uso);color:var(--avorio);background:transparent;border:0;border-radius:999px;
+  padding:10px 14px;cursor:pointer;min-width:44px;min-height:40px}
+.ctl button:hover{background:var(--linea)}
+.ctl button:focus-visible{outline:2px solid var(--t4);outline-offset:2px}
+.guarda{position:absolute;inset:0;display:grid;place-items:center;background:rgba(7,7,12,.55);border:0;cursor:pointer;color:var(--avorio);font:700 18px/1 var(--f-titolo);letter-spacing:.2em}
+@container (max-aspect-ratio: 1/1){.guarda{align-items:start;padding-top:calc(6cqh + 13cqw)}}
+.guarda span{padding:18px 30px;border:2px solid var(--t4);border-radius:999px;background:var(--notte)}
+.guarda:focus-visible span{outline:2px solid var(--t4);outline-offset:4px}
+.ctl .sep{width:1px;height:22px;background:var(--linea)}
+@media (prefers-reduced-motion: reduce){
+  .scene.on .a{animation-duration:.01s!important;animation-delay:0s!important}
+  .scene.on .lp{animation:none!important}
+  .cap.in > *{animation:none}
+}
+</style>
+
+<div class="room" id="room">
+  <div class="stage" id="stage" aria-live="polite">
+    <div class="bars" id="bars"></div>
+    <div class="top"><span class="brand">FELICITASMUNDI</span><span class="count" id="count"></span></div>
+    <svg class="draw" id="draw" viewBox="0 0 1600 580" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Villaggi e vicinati"></svg>
+    <div class="cap" id="cap"><div class="kick" id="kick"></div><div class="txt" id="txt"></div><div class="src" id="src"></div></div>
+  </div>
+  <button class="guarda" id="guarda" hidden><span id="guardaT">▶ GUARDA</span></button>
+  <div class="ctl" id="ctl">
+    <button id="prev" aria-label="Quadro precedente">‹</button>
+    <button id="play" aria-label="Pausa">Pausa</button>
+    <button id="next" aria-label="Quadro successivo">›</button>
+    <span class="sep"></span>
+    <button id="restart">Da capo</button>
+    <button id="full">Schermo intero</button>
+  </div>
+</div>
+
+<script>
+/* disegni */
+const an=(k,d,inner,o={})=>`<g class="a ${o.c||''}" style="--k:${k};--d:${d}s;${o.t?`--t:${o.t}s;`:''}${o.dx!=null?`--dx:${o.dx}px;`:''}${o.dy!=null?`--dy:${o.dy}px;`:''}">${inner}</g>`;
+const lp=(k,d,inner,t=3)=>`<g class="lp a" style="--k:${k};--d:${d}s;--t:${t}s">${inner}</g>`;
+const line=(d,c,w=3,dash='')=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="dl" ${dash}/>`;
+const drawn=(d,k,path,c,w=3,t=1.4)=>`<g class="a" style="--k:fade;--d:${k}s;--t:.01s"><path d="${path}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="dl a" style="--k:draw;--d:${k}s;--t:${t}s"/></g>`;
+const lab=(x,y,t,s='')=>`<text x="${x}" y="${y}" class="lab ${s}">${t}</text>`;
+const person=(x,y,c,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-6 -33 L-7 -2 M6 -33 L7 -2" stroke="${c}" stroke-width="7" stroke-linecap="round"/><path d="M-11 -2 h7 M4 -2 h7" stroke="${c}" stroke-width="5" stroke-linecap="round" opacity=".8"/><path d="M-12 -60 Q0 -64 12 -60 L14 -31 Q0 -27 -14 -31Z" fill="${c}"/><path d="M-12 -58 Q-19 -45 -17 -30 M12 -58 Q19 -45 17 -30" stroke="${c}" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="-3" y="-66" width="6" height="7" fill="${c}"/><circle cy="-74" r="9.5" fill="${c}"/><path d="M-9.5 -75 a9.5 9.5 0 0 1 19 0 q-9.5 -5 -19 0z" fill="#000" opacity=".28"/></g>`;
+const seated=(x,y,c,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-12 -34 Q0 -38 12 -34 L13 4 H-13Z" fill="${c}"/><path d="M-12 -32 Q-20 -18 -9 -4 M12 -32 Q20 -18 9 -4" stroke="${c}" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="-3" y="-40" width="6" height="7" fill="${c}"/><circle cy="-48" r="9.5" fill="${c}"/><path d="M-9.5 -49 a9.5 9.5 0 0 1 19 0 q-9.5 -5 -19 0z" fill="#000" opacity=".28"/></g>`;
+const back=(x,y,c,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-15 -36 Q0 -41 15 -36 L16 8 H-16Z" fill="${c}"/><rect x="-3" y="-42" width="6" height="7" fill="${c}"/><circle cy="-51" r="10.5" fill="${c}"/><circle cy="-52" r="10.5" fill="#000" opacity=".3"/></g>`;
+const house=(x,y,c,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M-30 0 V-40 L0 -66 L30 -40 V0Z" fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round"/><rect x="-8" y="-22" width="16" height="22" fill="${c}"/></g>`;
+const star=(x,y,r,c='var(--avorio)')=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`;
+const stars=(n,y0,y1,seed=3,d=0)=>{let s=seed,o='';const R=()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};for(let i=0;i<n;i++){const x=40+R()*1520,y=y0+R()*(y1-y0),r=1+R()*2.2;o+=an('fade',d+R()*1.5,lp('tw',R()*2,star(x,y,r),2+R()*3))}return o};
+const phone=(x,y,w,h,inner)=>`<g transform="translate(${x} ${y})"><rect width="${w}" height="${h}" rx="30" fill="var(--notte)" stroke="var(--avorio)" stroke-width="4"/><rect x="${w/2-30}" y="14" width="60" height="8" rx="4" fill="var(--linea)"/>${inner}</g>`;
+const crate=(x,y,c='var(--t5)')=>`<g transform="translate(${x} ${y})"><rect x="-34" y="-30" width="68" height="30" rx="4" fill="none" stroke="var(--t1)" stroke-width="3"/><circle cx="-18" cy="-36" r="9" fill="${c}"/><circle cx="0" cy="-40" r="10" fill="var(--t5)"/><circle cx="18" cy="-35" r="9" fill="var(--t3)"/></g>`;
+const loaf=(x,y)=>`<g transform="translate(${x} ${y})"><ellipse rx="26" ry="14" fill="#c98a4b"/><path d="M-12 -6 l6 10 M0 -8 l6 10 M12 -6 l6 10" stroke="#8a5a2b" stroke-width="2.5" stroke-linecap="round"/></g>`;
+const env=(x,y,c='var(--avorio)',s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-34" y="-22" width="68" height="44" rx="5" fill="var(--notte2)" stroke="${c}" stroke-width="3"/><path d="M-32 -19 L0 4 L32 -19" fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round"/></g>`;
+const SCENES=(()=>{
+const GDF='Gabriele Dettori · fondatore FelicitasMundi';
+const SARD='M40 20 L70 45 L100 50 L140 35 L175 15 L200 25 L230 40 L245 75 L235 110 L240 150 L232 190 L228 230 L238 280 L230 320 L235 350 L205 345 L175 330 L150 345 L120 380 L95 395 L70 385 L55 355 L65 320 L50 290 L60 250 L80 215 L70 190 L55 170 L45 140 L30 110 L20 90 L35 60 Z';
+const COL=['var(--t1)','var(--t2)','var(--t3)','var(--t4)','var(--t5)'];
+
+/* il vicinato: orti, tempio, tavolata, forno */
+const orti=(d)=>{let o=`<g transform="translate(0 0)">`;
+  o+=an('up',d,`<path d="M150 420 V340 L215 300 L280 340 V420Z" fill="none" stroke="var(--t1)" stroke-width="4" stroke-linejoin="round"/><rect x="198" y="370" width="34" height="50" fill="var(--t1)"/>`);
+  for(let r=0;r<3;r++)for(let c=0;c<7;c++){const x=110+c*38+r*10,y=450+r*22;
+    o+=an('grow',d+.5+c*.08+r*.15,`<path d="M${x} ${y} q-8 -14 0 -26 q8 12 0 26" fill="var(--t5)"/>`,{c:'ob'});}
+  return o+`</g>`};
+const tempio=(d)=>an('up',d,`<rect x="525" y="440" width="190" height="16" fill="var(--t4)"/><rect x="540" y="428" width="160" height="12" fill="var(--t4)"/>${[0,1,2,3].map(i=>`<rect x="${552+i*42}" y="330" width="16" height="98" fill="none" stroke="var(--t4)" stroke-width="3"/>`).join('')}<path d="M528 330 H712 L620 272Z" fill="none" stroke="var(--t4)" stroke-width="4" stroke-linejoin="round"/>`)+an('fade',d+.8,lp('glow',0,`<circle cx="620" cy="306" r="9" fill="var(--t1)"/>`,2.4));
+const tavolata=(d)=>{let o='';const xs=[900,950,1000,1050,1100];
+  xs.forEach((x,i)=>o+=an('up',d+.2+i*.1,seated(x,400,COL[i],.95)));
+  o+=an('up',d,`<path d="M866 398 H1134 V428 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -22 0 q-11 7 -24 0Z" fill="var(--avorio)"/><path d="M880 428 V500 M1120 428 V500" stroke="#8a5a2b" stroke-width="7"/>`);
+  o+=an('pop',d+.8,`<g transform="translate(940 394)"><ellipse rx="20" ry="9" fill="#c98a4b"/><path d="M-9 -4 l5 7 M3 -5 l5 7" stroke="#8a5a2b" stroke-width="2"/></g>`)+an('pop',d+.9,`<path d="M990 396 v-26 q0 -6 6 -8 h8 q6 2 6 8 v26z" fill="var(--avorio)" stroke="var(--notte)" stroke-width="2"/><path d="M1010 376 q10 2 6 12" fill="none" stroke="var(--avorio)" stroke-width="3"/>`)+an('pop',d+1,`<path d="M1040 384 a16 9 0 0 0 32 0z" fill="var(--t5)"/><circle cx="1050" cy="383" r="4" fill="var(--t3)"/><circle cx="1061" cy="382" r="4" fill="var(--t1)"/>`)+an('pop',d+1.1,`<rect x="900" y="380" width="9" height="16" rx="2" fill="var(--avorio)" stroke="var(--notte)" stroke-width="1.5"/><rect x="1098" y="380" width="9" height="16" rx="2" fill="var(--avorio)" stroke="var(--notte)" stroke-width="1.5"/>`);
+  o+=an('up',d+1.3,`<rect x="900" y="476" width="200" height="10" rx="3" fill="#8a5a2b"/><path d="M912 486 V500 M1088 486 V500" stroke="#8a5a2b" stroke-width="5"/>`+back(955,478,'var(--t3)',.95)+back(1045,478,'var(--t2)',.95));
+  return o};
+const forno=(d)=>an('up',d,`<path d="M1330 458 Q1330 345 1420 345 Q1510 345 1510 458Z" fill="none" stroke="var(--t3)" stroke-width="4"/><rect x="1320" y="458" width="200" height="12" fill="var(--t3)"/>`)+an('fade',d+.6,lp('glow',0,`<path d="M1388 458 Q1388 410 1420 410 Q1452 410 1452 458Z" fill="var(--t1)"/>`,1.6))+an('up',d+.9,person(1265,470,'var(--avorio)',.8))+an('pop',d+1.4,loaf(1265,420));
+
+const S=[];
+/* 1 */
+S.push({kick:'FelicitasMundi è una rete di villaggi diffusi.',t:'Il primo è la Sardegna.',
+ svg:`<g transform="translate(655 60) scale(1.18)">${drawn(0,0.2,SARD,'var(--t4)',2.5,2.4)}
+ ${[[80,200,0],[70,170,1],[150,90,2],[200,300,3],[120,320,4],[210,180,1],[60,120,2]].map(([x,y,c],i)=>an('pop',1.6+i*.25,lp('glow',i*.3,`<circle cx="${x}" cy="${y}" r="9" fill="${COL[c]}"/>`,2.6)+`<circle cx="${x}" cy="${y}" r="3.5" fill="var(--avorio)"/>`)).join('')}</g>
+ ${stars(40,10,560,7,0)}`});
+/* 2 */
+S.push({t:'Il villaggio diffuso è composto da tanti vicinati.',
+ svg:`${an('pop',0,`<circle cx="800" cy="290" r="250" fill="none" stroke="var(--t4)" stroke-width="2" stroke-dasharray="6 10"/>`,{t:1.2})}
+ ${[[650,180],[790,120],[940,170],[1010,290],[930,410],[790,450],[650,400],[580,290],[720,290],[870,290],[800,210],[800,365]].map(([x,y],i)=>an('pop',.8+i*.18,`<circle cx="${x}" cy="${y}" r="34" fill="var(--notte2)" stroke="${COL[i%5]}" stroke-width="3"/>${house(x,y+14,COL[i%5],.42)}`)).join('')}
+ ${lab(800,568,'IL VILLAGGIO','s')}`});
+/* 3 */
+S.push({t:'Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.',dur:12000,
+ svg:`${an('growx',0,`<rect x="60" y="500" width="1480" height="3" fill="var(--linea)"/>`,{c:'ol',t:1.2})}
+ ${orti(.4)}${tempio(2.2)}${tavolata(4)}${forno(5.8)}
+ ${an('fade',1.2,lab(215,545,'GLI ORTI'))}${an('fade',3,lab(620,545,'IL TEMPIO'))}${an('fade',4.8,lab(1005,545,'LA TAVOLATA'))}${an('fade',6.6,lab(1390,545,'IL FORNO'))}
+ ${stars(18,10,220,11,0)}`});
+/* 4 */
+S.push({q:1,t:'supportare i produttori investendo nella produzione, distribuendo in punti di ritiro e con servizi di consegna a domicilio e nelle aziende',s:GDF,
+ svg:`${orti(0)}${an('up',.6,person(370,470,'var(--t5)'))}
+ ${an('move',1.2,person(450,470,'var(--t2)',.9),{dx:-260,t:1.6})}${an('move',1.5,person(300,470,'var(--t3)',.9),{dx:-260,t:1.6})}
+ ${drawn(0,2.2,'M480 430 C600 360 760 360 860 410','var(--fioco)',2,1.2)}
+ ${an('pop',2.4,`<circle cx="930" cy="430" r="80" fill="none" stroke="var(--t4)" stroke-width="3" stroke-dasharray="4 8"/>`)}
+ ${an('move',2.8,crate(905,450),{dx:-420,dy:-10,t:1.6})}${an('move',3.1,loaf(965,440),{dx:-480,dy:-10,t:1.6})}
+ ${an('fade',2.6,lab(930,545,'PUNTO DI RITIRO','s'))}
+ ${drawn(0,4,'M1010 410 C1100 330 1180 250 1250 230','var(--t2)',3,1)}${drawn(0,4.4,'M1015 450 C1120 470 1200 470 1270 455','var(--t3)',3,1)}
+ ${an('pop',4.6,house(1320,260,'var(--t2)',1.3))}${an('fade',4.9,lab(1320,300,'A DOMICILIO','s'))}
+ ${an('pop',5,`<g transform="translate(1330 380)"><rect x="-55" y="0" width="110" height="100" fill="var(--notte2)" stroke="var(--t3)" stroke-width="4"/>${[0,1,2].map(r=>[0,1,2].map(k=>`<rect x="${-38+k*28}" y="${14+r*26}" width="18" height="16" fill="var(--t3)" opacity=".7"/>`).join('')).join('')}</g>`)}${an('fade',5.3,lab(1330,545,'NELLE AZIENDE','s'))}`});
+/* 5 */
+S.push({t:'In ogni vicinato attiviamo un punto di raccolta che può fungere anche dal magazzino.',
+ svg:`${an('growx',0,`<rect x="60" y="470" width="1480" height="3" fill="var(--linea)"/>`,{c:'ol'})}
+ ${[200,400,1300,1450].map((x,i)=>an('up',.2+i*.15,house(x,470,COL[i],1.2))).join('')}
+ ${an('up',.6,`<path d="M640 470 V300 L800 200 L960 300 V470Z" fill="var(--notte2)" stroke="var(--t4)" stroke-width="4" stroke-linejoin="round"/>`)}
+ ${[340,390,440].map((y,i)=>drawn(0,1.4+i*.2,`M675 ${y} H925`,'var(--t4)',3,.8)).join('')}
+ ${[[700,340],[760,340],[840,340],[720,390],[800,390],[880,390],[740,440],[860,440]].map(([x,y],i)=>an('pop',2.4+i*.18,`<rect x="${x-18}" y="${y-30}" width="36" height="28" rx="3" fill="${COL[i%5]}"/>`)).join('')}
+ ${an('move',3.2,`<g transform="translate(1080 470)"><rect x="-70" y="-60" width="100" height="50" rx="6" fill="var(--avorio)"/><path d="M30 -45 H62 L80 -24 V-10 H30Z" fill="var(--avorio)"/><circle cx="-40" cy="-6" r="12" fill="var(--notte)" stroke="var(--avorio)" stroke-width="4"/><circle cx="50" cy="-6" r="12" fill="var(--notte)" stroke="var(--avorio)" stroke-width="4"/></g>`,{dx:500,t:2})}
+ ${an('fade',2,lab(800,545,'PUNTO DI RACCOLTA · MAGAZZINO','s'))}`});
+/* 6 */
+S.push({kick:'La persona o il gruppo d\'acquisto ordinano la spesa.',t:'Dall\'app sceglie il prodotto e il punto di ritiro. La quantità resta bloccata per la richiesta.',
+ svg:`${an('up',0,phone(680,30,240,500,
+   [0,1,2].map(i=>`<g transform="translate(22 ${70+i*92})"><rect width="196" height="76" rx="12" fill="var(--notte2)" stroke="var(--linea)" stroke-width="2"/><rect x="12" y="14" width="48" height="48" rx="8" fill="${COL[i+1]}"/><rect x="74" y="22" width="100" height="10" rx="5" fill="var(--avorio)"/><rect x="74" y="44" width="64" height="8" rx="4" fill="var(--fioco)"/></g>`).join('')
+   +an('fade',1.4,`<rect x="22" y="162" width="196" height="76" rx="12" fill="none" stroke="var(--t3)" stroke-width="4"/>`)
+   +an('ripple',1.2,`<circle cx="120" cy="200" r="34" fill="var(--t3)"/>`,{t:1})
+   +an('up',2.6,`<g transform="translate(22 360)"><rect width="196" height="96" rx="12" fill="var(--notte2)" stroke="var(--t4)" stroke-width="3"/><path d="M40 70 C14 40 22 18 40 18 C58 18 66 40 40 70Z" fill="var(--t4)"/><circle cx="40" cy="36" r="7" fill="var(--notte)"/><text x="72" y="44" fill="var(--avorio)" font-size="17" font-weight="600">Punto</text><text x="72" y="66" fill="var(--avorio)" font-size="17" font-weight="600">di ritiro</text></g>`)))}
+ ${an('pop',4,`<g transform="translate(1180 300)">${crate(0,30)}<circle cx="40" cy="-34" r="26" fill="var(--t3)"/><path d="M28 -34 l8 9 l16 -18" fill="none" stroke="var(--avorio)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>`)}
+ ${an('fade',4.4,lab(1190,400,'BLOCCATA PER LA RICHIESTA','s'))}
+ ${an('move',1,person(500,470,'var(--t2)',1.1),{dx:-120})}${[0,1,2].map(i=>an('move',1.4+i*.15,person(175+i*55,470,COL[[0,2,4][i]],.95),{dx:-120})).join('')}${an('fade',2,`<ellipse cx="230" cy="430" rx="110" ry="70" fill="none" stroke="var(--fioco)" stroke-width="2" stroke-dasharray="4 8"/>`)}${an('fade',2.2,lab(230,545,'GRUPPO D\'ACQUISTO','s'))}${an('fade',1.6,lab(500,545,'PERSONA','s'))}`});
+/* 7 */
+S.push({t:'Poi si possono ritirare nel weekend o durante la settimana, se c\'è disponibilità dalle famiglie coinvolte.',
+ svg:`${['L','M','M','G','V','S','D'].map((g,i)=>an('up',i*.08,`<rect x="${382+i*122}" y="40" width="108" height="108" rx="10" fill="var(--notte2)" stroke="var(--linea)" stroke-width="2"/><text x="${436+i*122}" y="108" text-anchor="middle" font-family="var(--f-titolo)" font-weight="700" font-size="40" fill="var(--fioco)">${g}</text>`)).join('')}
+ ${[5,6].map((i,k)=>an('pop',1+k*.4,`<rect x="${382+i*122}" y="40" width="108" height="108" rx="10" fill="var(--t4)"/><text x="${436+i*122}" y="108" text-anchor="middle" font-family="var(--f-titolo)" font-weight="700" font-size="40" fill="var(--notte)">${['S','D'][k]}</text>`)).join('')}
+ ${[0,1,2,3,4].map(i=>an('pop',3.4+i*.12,`<rect x="${382+i*122}" y="40" width="108" height="108" rx="10" fill="none" stroke="var(--t2)" stroke-width="4" stroke-dasharray="8 8"/>`)).join('')}
+ ${an('up',.4,`<path d="M560 520 V360 L680 290 L800 360 V520Z" fill="var(--notte2)" stroke="var(--t4)" stroke-width="4" stroke-linejoin="round"/><rect x="655" y="450" width="50" height="70" fill="var(--t4)"/>`)}
+ ${an('fade',.8,lab(680,560,'PUNTO DI RITIRO','s'))}
+ ${an('growx',0,`<rect x="60" y="520" width="1480" height="3" fill="var(--linea)"/>`,{c:'ol'})}
+ ${[0,1].map(i=>an('move',1.6+i*.7,person(470-i*90,520,COL[i],.95),{dx:-320,t:1.8})).join('')}
+ ${[1050,1220,1390].map((x,i)=>an('up',3.8+i*.2,house(x,520,'var(--t2)',1.3))).join('')}${an('fade',4.4,lab(1220,560,'FAMIGLIE COINVOLTE','s'))}
+ ${an('move',4.8,`${person(1290,520,'var(--t5)',.95)}<rect x="1304" y="470" width="22" height="26" rx="4" fill="var(--t1)"/>`,{dx:-60,t:1.4})}`});
+/* 8 */
+S.push({q:1,t:'Il punto di ritiro organizza attività terapeutiche, laboratori, corsi, giochi, percorsi e la mensa, per far vivere il senso di comunità',s:GDF,
+ svg:`${an('fade',0,`<path d="M240 520 V250 L800 90 L1360 250 V520" fill="none" stroke="var(--t4)" stroke-width="3" stroke-linejoin="round" opacity=".7"/>`)}
+ ${an('growx',0,`<rect x="60" y="520" width="1480" height="3" fill="var(--linea)"/>`,{c:'ol'})}
+ ${an('up',.4,person(420,515,'var(--t2)',.85))}
+ ${[0,1,2].map(i=>an('pop',.8+i*.2,lp('bob',i*.35,`<circle cx="${385+i*35}" cy="${360-(i%2)*24}" r="11" fill="${COL[i*2%5]}"/>`,1.1))).join('')}
+ ${an('up',1.6,`<rect x="670" y="440" width="260" height="14" rx="3" fill="var(--avorio)"/><path d="M685 454 V515 M915 454 V515" stroke="var(--avorio)" stroke-width="5"/>`)}
+ ${[700,760,820,880].map((x,i)=>an('pop',2+i*.12,`<ellipse cx="${x+10}" cy="436" rx="16" ry="5" fill="var(--t4)"/>`)).join('')}
+ ${an('up',2.2,`<path d="M740 410 q-10 -20 0 -40 q10 -20 0 -40" fill="none" stroke="var(--fioco)" stroke-width="3" stroke-linecap="round"/><path d="M790 405 q-10 -20 0 -40 q10 -20 0 -40" fill="none" stroke="var(--fioco)" stroke-width="3" stroke-linecap="round"/>`)}
+ ${an('fade',3,`<g transform="translate(1140 400)">${lp('spin',0,[0,1,2,3,4,5].map(i=>{const a=i*Math.PI/3;return `<circle cx="${Math.cos(a)*90}" cy="${Math.sin(a)*70}" r="18" fill="${COL[i%5]}"/>`}).join('')+`<circle r="98" fill="none" stroke="transparent"/>`,18)}</g>`)}
+ ${an('fade',1,lab(420,560,'GIOCHI','s'))}${an('fade',2.2,lab(800,560,'LA MENSA','s'))}${an('fade',3.2,lab(1140,560,'CORSI E PERCORSI','s'))}`});
+/* 9 */
+const bar=(x,h,c,n,l,d)=>an('grow',d,`<rect x="${x}" y="${470-h}" width="150" height="${h}" rx="6" fill="${c}"/>`,{c:'ob',t:1.3})+an('up',d+1,`<text x="${x+75}" y="${450-h}" text-anchor="middle" font-family="var(--f-titolo)" font-weight="700" font-size="44" fill="var(--avorio)">${n}</text>`)+an('fade',d+.6,`<text x="${x+75}" y="505" text-anchor="middle" font-size="19" fill="var(--fioco)">${l}</text>`);
+S.push({kick:'Il rendiconto.',t:'50 kg arrivati · 42 venduti · 8 tornano indietro · 42 pagati al produttore.',note:'Un esempio per capire, non dati veri.',
+ svg:`${an('growx',0,`<rect x="300" y="470" width="1040" height="3" fill="var(--linea)"/>`,{c:'ol'})}
+ ${bar(330,300,'var(--t2)','50 kg','arrivati',.3)}${bar(590,252,'var(--t5)','42','venduti',1)}${bar(850,48,'var(--t3)','8','tornano indietro',1.7)}${bar(1110,252,'var(--t4)','42','pagati al produttore',2.4)}
+ ${drawn(0,3.4,'M925 405 C925 -100 200 -100 190 365','var(--t3)',3,1.6)}
+ ${an('up',3.2,person(190,470,'var(--t1)'))}${an('fade',3.6,lab(190,505,'IL PRODUTTORE','s'))}
+ ${an('fade',.2,`<g transform="translate(1390 40)"><rect width="160" height="38" rx="19" fill="none" stroke="var(--fioco)" stroke-width="2"/><text x="80" y="25" text-anchor="middle" font-size="16" fill="var(--fioco)" letter-spacing="2">ESEMPIO</text></g>`)}`});
+/* 10 */
+const NET=(f)=>{const V=[[360,400],[800,430],[1240,400]],P=[800,270];let o='';
+  V.forEach(([vx,vy],k)=>[-120,-40,40,120].forEach((dx,j)=>{const x=vx+dx,y=530;
+    o+=drawn(0,f(0.3+k*.25+j*.06),`M${x} ${y-12} L${vx} ${vy+26}`,COL[(k+j)%5],2,.7)+an('pop',f(0.1+k*.2+j*.05),`<circle cx="${x}" cy="${y}" r="11" fill="${COL[(k+j)%5]}"/>`);}));
+  V.forEach(([vx,vy],k)=>{o+=drawn(0,f(1.8+k*.15),`M${vx} ${vy-26} L${P[0]} ${P[1]+52}`,'var(--t4)',3,.8)+an('pop',f(1.2+k*.15),`<circle cx="${vx}" cy="${vy}" r="26" fill="var(--notte2)" stroke="var(--t4)" stroke-width="4"/>`)});
+  o+=an('pop',f(2.4),lp('glow',0,`<circle cx="${P[0]}" cy="${P[1]}" r="66" fill="var(--t4)" opacity=".25"/>`,2.8)+`<circle cx="${P[0]}" cy="${P[1]}" r="50" fill="var(--notte2)" stroke="var(--t4)" stroke-width="5"/><circle cx="${P[0]-14}" cy="${P[1]-6}" r="20" fill="none" stroke="var(--t2)" stroke-width="3"/><circle cx="${P[0]+14}" cy="${P[1]-6}" r="20" fill="none" stroke="var(--t3)" stroke-width="3"/><circle cx="${P[0]}" cy="${P[1]+16}" r="20" fill="none" stroke="var(--t5)" stroke-width="3"/>`);
+  o+=drawn(0,f(3.2),`M800 218 L800 70`,'var(--avorio)',3,1);
+  o+=an('fade',f(3.6),`<path d="M120 70 Q800 -40 1480 70" fill="none" stroke="var(--t2)" stroke-width="2" opacity=".6"/>`);
+  o+=stars(46,8,120,5,f(3.6));
+  o+=an('fade',f(.4),lab(1460,535,'VICINATI','s'))+an('fade',f(1.4),lab(1460,410,'VILLAGGI','s'))+an('fade',f(2.6),lab(1460,278,'PIATTAFORMA','s'))+an('fade',f(4),lab(1440,112,'COSCIENZA COSMICA','s'));
+  return o};
+S.push({t:'I vicinati diventano interconnessi a questi villaggi e i villaggi sono uniti alla piattaforma che è allineata alla Coscienza Cosmica.',dur:12000,svg:NET(x=>x*1.3)});
+/* 11 */
+S.push({t:'L\'evento del 21 novembre a Baratili, Oristano, sarà proprio l\'espressione di come può funzionare un punto di rivendita, un punto dove verranno ritirati i prodotti.',
+ svg:`${stars(30,8,200,9,0)}
+ ${an('growx',0,`<rect x="60" y="500" width="1480" height="3" fill="var(--linea)"/>`,{c:'ol'})}
+ ${an('up',.2,`<rect x="520" y="250" width="560" height="250" fill="var(--notte2)" stroke="var(--avorio)" stroke-width="4"/><path d="M500 252 H1100 L1060 214 H540Z" fill="var(--avorio)"/>${[580,680,880,980].map(x=>`<rect x="${x}" y="300" width="50" height="60" fill="var(--t4)" opacity=".85"/>`).join('')}<rect x="760" y="390" width="80" height="110" fill="var(--t4)"/>`)}
+ ${an('pop',1,`<rect x="530" y="120" width="540" height="70" rx="6" fill="var(--t3)"/><text x="800" y="168" text-anchor="middle" font-family="var(--f-titolo)" font-weight="700" font-size="36" letter-spacing="6" fill="var(--avorio)">FELICITAS FESTIVAL</text>`)}
+ ${an('fade',1.6,lab(800,545,'CENTRO SOCIALE · BARATILI SAN PIETRO'))}
+ ${an('pop',2.2,`<g transform="translate(1290 300)"><rect x="-115" y="-80" width="230" height="170" rx="14" fill="var(--notte2)" stroke="var(--t4)" stroke-width="3"/><text y="10" text-anchor="middle" font-family="var(--f-titolo)" font-weight="700" font-size="74" fill="var(--t4)">21</text><text y="52" text-anchor="middle" font-size="20" fill="var(--avorio)" letter-spacing="2">NOVEMBRE 2026</text></g>`)}
+ ${[0,1,2].map(i=>an('move',2.6+i*.5,person(400-i*80,500,COL[i+1],.85),{dx:-300,t:1.8})).join('')}
+ ${an('move',3,crate(1000,500),{dx:200,t:1.4})}`});
+/* 12 */
+S.push({kick:'Felicitas Festival · TRAME, la forza di essere connessi',t:'21 novembre 2026 · Baratili San Pietro',note:'Partecipa coi tuoi prodotti · Proponi il tuo vicinato',dur:10000,svg:NET(x=>x*.35)});
+return S;})()
+;
+
+/* motore */
+const $=id=>document.getElementById(id);
+const room=$('room'),draw=$('draw'),cap=$('cap'),bars=$('bars');
+draw.innerHTML=SCENES.map((s,i)=>`<g class="scene" id="sc${i}">${s.svg}</g>`).join('');
+bars.innerHTML=SCENES.map(()=>'<i><b></b></i>').join('');
+const segs=[...bars.querySelectorAll('b')];
+const dur=s=>s.dur||Math.max(7,Math.min(12,3.5+((s.kick||'').length+(s.t||'').length)/24))*1000;
+const PAGINA=location.hash==='#pagina';
+let cur=-1,el=0,playing=!PAGINA,last=performance.now();
+function go(i){
+  i=(i+SCENES.length)%SCENES.length;
+  if(cur>=0)$('sc'+cur).classList.remove('on');
+  const g=$('sc'+i);void g.getBBox;g.classList.remove('on');void draw.getBoundingClientRect();g.classList.add('on');
+  cur=i;el=0;const s=SCENES[i];
+  $('kick').textContent=s.kick||'';$('kick').hidden=!s.kick;
+  $('txt').className='txt'+(s.q?' q':'');$('txt').innerHTML=s.t?(s.q?[].concat(s.t).map(x=>`«${x}»`).join(' · '):s.t)+(s.note?`<small>${s.note}</small>`:''):'';$('txt').hidden=!s.t;
+  $('src').textContent=s.s||'';$('src').hidden=!s.s;
+  cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in');
+  $('count').textContent=`${i+1} / ${SCENES.length}`;
+  segs.forEach((b,j)=>b.style.width=j<i?'100%':'0');
+}
+function tick(now){
+  const dt=now-last;last=now;
+  if(playing){el+=dt;if(el>=dur(SCENES[cur])){if(PAGINA&&cur===SCENES.length-1){el=dur(SCENES[cur]);setPlay(false);$('guardaT').textContent='↺ RIVEDI';$('guarda').hidden=false;}else go(cur+1);}}
+  segs[cur].style.width=Math.min(100,el/dur(SCENES[cur])*100)+'%';
+  requestAnimationFrame(tick);
+}
+function setPlay(p){playing=p;room.classList.toggle('paused',!p);$('play').textContent=p?'Pausa':'Avvia';$('play').setAttribute('aria-label',p?'Pausa':'Avvia')}
+$('prev').onclick=()=>go(cur-1);
+$('next').onclick=()=>go(cur+1);
+$('play').onclick=()=>{$('guarda').hidden=true;setPlay(!playing)};
+$('restart').onclick=()=>{go(0);setPlay(true)};
+$('full').onclick=()=>{try{const p=document.fullscreenElement?document.exitFullscreen():room.requestFullscreen();p&&p.catch&&p.catch(()=>{})}catch(e){}};
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'){go(cur+1);e.preventDefault()}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){go(cur-1);e.preventDefault()}
+  else if(e.key===' '){setPlay(!playing);e.preventDefault()}
+  else if(e.key==='f'||e.key==='F'){$('full').click()}
+  wake();
+});
+let idleT;function wake(){room.classList.remove('idle');clearTimeout(idleT);idleT=setTimeout(()=>room.classList.add('idle'),2600)}
+['mousemove','touchstart','pointerdown'].forEach(ev=>room.addEventListener(ev,wake,{passive:true}));
+try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}
+$('guarda').onclick=()=>{$('guarda').hidden=true;if(cur===SCENES.length-1&&!playing)go(0);setPlay(true)};
+if(PAGINA){$('guarda').hidden=false;$('play').textContent='Avvia'}
+go(0);wake();requestAnimationFrame(t=>{last=t;tick(t)});
+</script>
+
+</html>
