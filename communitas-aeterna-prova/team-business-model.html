@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Il business model · team</title>
+<link rel="stylesheet" href="comune/caratteri.css">
+<style>
+/* 22/10/2026 · Gab: la pagina del business model «in stile evento», dentro il team «Logistica, progettazione e sviluppo»;
+   «il contesto team è legato unicamente alle persone del team, nessun altro le devono vedere».
+   Disegno: business-model-canvas/pagina-evento/business-model-pagina.html (thread del Canvas). Contatti tolti (Gab 20:22).
+   In questo file non c'è nessun contenuto del business model: i testi arrivano dal cervello del team (SQL 83 e 110),
+   che il database fa leggere solo alle persone del team e al nucleo. */
+:root{--notte:#070814;--notte2:#0f1226;--avorio:#f5f0e6;--fioco:#c9c3d6;--oro:#d6b56c;--riga:rgba(214,181,108,.28);
+--t1:#F39A3A;--t2:#2BB3C9;--t3:#E0498A;--t4:#F5D27A;--t5:#8ED06B;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--notte)}
+body{background-image:radial-gradient(ellipse 120% 60% at 50% 0%,#1b2150 0%,var(--notte) 70%);background-repeat:no-repeat;color:var(--avorio);font:20px/1.5 "DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--oro)}
+.pagina{max-width:640px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:22px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.marca{font-family:Cinzel,serif;font-size:16px;letter-spacing:.06em;color:var(--oro);text-decoration:none}
+.solo{font-size:14px;border:1px solid var(--riga);border-radius:999px;padding:4px 12px;color:var(--fioco);white-space:nowrap}
+.occhiello{font-family:Cinzel,serif;font-size:14px;letter-spacing:.2em;color:var(--oro);text-transform:uppercase}
+h1{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:46px;line-height:1;margin:6px 0 10px}
+.chi{color:var(--fioco);font-size:18px}
+.trama{height:3px;border-radius:2px;background:linear-gradient(90deg,var(--t1),var(--t4),var(--t2),var(--t3),var(--t5))}
+.t{border:1px solid var(--riga);border-radius:22px;background:rgba(15,18,38,.78);padding:20px;cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%;display:block}
+.t:focus-visible{outline:2px solid var(--oro);outline-offset:3px}
+.t h2{font-family:Cinzel,serif;font-weight:600;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--oro);margin:0 0 8px}
+.t p{margin:0 0 6px;font-size:20px}
+.t .sub{font-size:16px;color:var(--fioco);margin-top:8px}
+.apri{display:inline-block;margin-top:10px;color:var(--oro);font-weight:600;font-size:18px}
+.nota{color:var(--fioco);font-size:18px}
+.tasto{display:inline-flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:999px;background:var(--oro);color:#1a1405;font-weight:600;font-size:19px;border:0;text-decoration:none;cursor:pointer;font-family:inherit}
+.tasto.vuoto{background:none;border:2px solid var(--oro);color:var(--oro)}
+.archivio{margin-top:8px}
+.archivio summary{cursor:pointer;color:var(--fioco);font-size:18px}
+.archivio .t{margin-top:12px;opacity:.85}
+/* la scheda */
+.velo{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:5}
+.scheda{position:fixed;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;max-height:92vh;overflow:auto;background:var(--notte2);border-top:2px solid var(--oro);border-radius:26px 26px 0 0;padding:14px 18px 34px;display:none;z-index:6;overscroll-behavior:contain}
+.aperta .velo,.aperta .scheda{display:block}
+.aperta{overflow:hidden}
+.maniglia{width:48px;height:5px;border-radius:3px;background:var(--riga);margin:0 auto 14px}
+.chiudi{float:right;background:none;border:1px solid var(--riga);color:var(--fioco);border-radius:999px;padding:4px 14px;font:inherit;font-size:16px;cursor:pointer}
+.scheda h3{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:36px;line-height:1.05;margin:4px 0 10px}
+.scheda h4{font-family:Cinzel,serif;font-weight:600;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--oro);margin:22px 0 6px}
+.r{border-top:1px solid var(--riga);padding:12px 0}
+.r p{margin:0;font-size:19px}
+.com{margin:8px 0 0 12px;padding-left:12px;border-left:2px solid var(--riga);font-size:17px;color:var(--fioco)}
+.com b{color:var(--avorio);font-weight:600}
+.scrivi{display:none;margin-top:8px}
+.scrivi.su{display:block}
+.scrivi textarea{width:100%;min-height:80px;border-radius:14px;border:1px solid var(--riga);background:rgba(245,240,230,.06);color:var(--avorio);font:inherit;font-size:18px;padding:10px}
+.scrivi .tasto{margin-top:8px;padding:10px 18px;font-size:17px}
+.mini{background:none;border:0;color:var(--oro);font:inherit;font-size:16px;cursor:pointer;padding:6px 0 0}
+@media (prefers-reduced-motion:no-preference){.t{transition:transform .2s}.t:active{transform:scale(.99)}}
+</style>
+</head>
+<body>
+<div class="pagina">
+  <div class="top"><a class="marca" href="strumento.html">FelicitasMundi</a><span class="solo">🔒 solo il team</span></div>
+  <div>
+    <div class="occhiello">Team · Logistica, progettazione e sviluppo</div>
+    <h1>Il business model di Felicitas</h1>
+    <div class="chi" id="chi"></div>
+  </div>
+  <div class="trama"></div>
+  <div id="corpo"><p class="nota">Un momento…</p></div>
+</div>
+<div class="velo" id="velo"></div>
+<div class="scheda" id="scheda" role="dialog" aria-modal="true" aria-labelledby="sc-tit"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+var TEAM="Logistica, progettazione e sviluppo";
+var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}):null;
+var corpo=document.getElementById("corpo"),scheda=document.getElementById("scheda");
+var CAP=[],RIGHE={},COM={},NOMI={},io=null,aperto=null;
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function fuori(msg,entra){corpo.innerHTML='<p class="nota">'+msg+'</p>'+(entra?'<p style="margin-top:16px"><a class="tasto" href="accesso.html?torna='+encodeURIComponent(location.pathname)+'">Entra</a></p>':'');}
+function corto(s,n){s=String(s||"");return s.length>n?s.slice(0,n).replace(/\s+\S*$/,"")+"…":s;}
+
+if(!db){fuori("La pagina non riesce a collegarsi. Riprova tra poco.");return;}
+db.auth.getSession().then(function(r){
+  var s=r&&r.data&&r.data.session;
+  if(!s){fuori("Questa pagina la vede solo chi fa parte del team.",true);return;}
+  io=s.user.id;
+  return db.from("squadre").select("id,nome").eq("nome",TEAM).maybeSingle().then(function(q){
+    if(!q||q.error||!q.data){fuori("Questa pagina la vede solo chi fa parte del team «"+TEAM+"».");return;}
+    var sid=q.data.id;
+    db.rpc("fm_cerchio_persone",{p_vicinato:sid}).then(function(p){
+      var l=((p&&p.data)||[]);l.forEach(function(x){NOMI[x.persona_id]=x.nome;});
+      if(l.length)document.getElementById("chi").textContent=l.map(function(x){return x.nome;}).filter(Boolean).join(" · ");
+    },function(){});
+    return db.from("cervello_capitoli").select("id,titolo,ordine,aperto_il").eq("squadra_id",sid).order("ordine").order("aperto_il").then(function(c){
+      if(c.error){fuori("Non riesco a leggere il cervello del team.");return;}
+      CAP=c.data||[];
+      var ids=CAP.map(function(x){return x.id;});
+      if(!ids.length){fuori("Il business model non è ancora nel cervello del team.");return;}
+      return db.from("cervello_righe").select("id,capitolo_id,testo,scritta_il").in("capitolo_id",ids).order("scritta_il").then(function(rr){
+        (rr.data||[]).forEach(function(x){(RIGHE[x.capitolo_id]=RIGHE[x.capitolo_id]||[]).push(x);});
+        var rid=(rr.data||[]).map(function(x){return x.id;});
+        return (rid.length?db.from("cervello_commenti").select("id,riga_id,testo,audio,scritto_da,scritto_il").in("riga_id",rid).order("scritto_il"):Promise.resolve({data:[]})).then(function(cc){
+          ((cc&&cc.data)||[]).forEach(function(x){(COM[x.riga_id]=COM[x.riga_id]||[]).push(x);});
+          disegna();
+        });
+      });
+    });
+  });
+}).catch(function(){fuori("Qualcosa non è andato. Riprova tra poco.");});
+
+/* i capitoli: quelli con «›» stanno dentro il loro capitolo; quelli del 19/10 in fondo, chiusi */
+function gruppi(){
+  var g=[],perTitolo={},arch=[];
+  CAP.forEach(function(c){
+    if(c.ordine>=500){arch.push({c:c,sotto:[]});return;}
+    var i=c.titolo.indexOf(" › ");
+    if(i>0&&perTitolo[c.titolo.slice(0,i)]){perTitolo[c.titolo.slice(0,i)].sotto.push(c);return;}
+    var x={c:c,sotto:[]};perTitolo[c.titolo]=x;g.push(x);
+  });
+  return {g:g,arch:arch};
+}
+function carta(x,n){
+  var r=(RIGHE[x.c.id]||[])[0];
+  var quanti=(RIGHE[x.c.id]||[]).length+x.sotto.reduce(function(a,s){return a+(RIGHE[s.id]||[]).length;},0);
+  var nc=0;[x.c].concat(x.sotto).forEach(function(k){(RIGHE[k.id]||[]).forEach(function(z){nc+=(COM[z.id]||[]).length;});});
+  return '<button class="t" type="button" data-n="'+n+'"><h2>'+esc(x.c.titolo)+'</h2>'+
+    (r?'<p>'+esc(corto(r.testo,220))+'</p>':'')+
+    '<p class="sub">'+quanti+(quanti===1?' voce':' voci')+(x.sotto.length?' · '+x.sotto.map(function(s){return esc(s.titolo.split(" › ")[1]);}).join(" · "):'')+(nc?' · '+nc+(nc===1?' commento':' commenti'):'')+'</p>'+
+    '<span class="apri">apri ›</span></button>';
+}
+var G;
+function disegna(){
+  G=gruppi();
+  var tutti=G.g.concat(G.arch);
+  corpo.innerHTML=G.g.map(function(x,i){return carta(x,i);}).join('<div style="height:14px"></div>')+
+    (G.arch.length?'<details class="archivio"><summary>La versione del 19 ottobre · '+G.arch.length+' capitoli, con i loro commenti</summary>'+
+      G.arch.map(function(x,i){return carta(x,G.g.length+i);}).join("")+'</details>':'')+
+    '<p class="nota" style="margin-top:22px">Gli audio si lasciano dal <a href="strumento.html">Cervello del team</a>.</p>';
+  corpo.querySelectorAll("[data-n]").forEach(function(b){b.onclick=function(){apri(tutti[+b.getAttribute("data-n")]);};});
+  if(aperto){var k=tutti.filter(function(x){return x.c.id===aperto;})[0];if(k)apri(k);}
+}
+function righeHTML(cap){
+  return (RIGHE[cap.id]||[]).map(function(r){
+    return '<div class="r"><p>'+esc(r.testo)+'</p>'+
+      (COM[r.id]||[]).map(function(c){return '<div class="com"><b>'+esc(NOMI[c.scritto_da]||"")+'</b> '+esc(c.testo||"")+(c.audio?' · 🎙 audio':'')+'</div>';}).join("")+
+      '<button class="mini" type="button" data-scrivi="'+r.id+'">Commenta</button>'+
+      '<div class="scrivi" id="s-'+r.id+'"><textarea aria-label="Il tuo commento" maxlength="4000"></textarea><button class="tasto" type="button" data-manda="'+r.id+'">Manda</button><p class="nota" aria-live="polite"></p></div></div>';
+  }).join("");
+}
+function apri(x){
+  aperto=x.c.id;
+  scheda.innerHTML='<button class="chiudi" type="button" id="sc-chiudi">Chiudi</button><div class="maniglia"></div>'+
+    '<div class="occhiello">Business model</div><h3 id="sc-tit">'+esc(x.c.titolo.replace(/^19\/10 · /,""))+'</h3>'+righeHTML(x.c)+
+    x.sotto.map(function(s){return '<h4>'+esc(s.titolo.split(" › ")[1])+'</h4>'+righeHTML(s);}).join("");
+  document.body.classList.add("aperta");scheda.scrollTop=0;
+  document.getElementById("sc-chiudi").onclick=chiudi;
+  scheda.querySelectorAll("[data-scrivi]").forEach(function(b){b.onclick=function(){var w=document.getElementById("s-"+b.getAttribute("data-scrivi"));w.classList.toggle("su");if(w.classList.contains("su"))w.querySelector("textarea").focus();};});
+  scheda.querySelectorAll("[data-manda]").forEach(function(b){b.onclick=function(){
+    var id=b.getAttribute("data-manda"),w=document.getElementById("s-"+id),t=w.querySelector("textarea").value.trim(),e=w.querySelector(".nota");
+    if(!t){e.textContent="Scrivi qualcosa prima.";return;}
+    b.disabled=true;e.textContent="Salvo…";
+    db.from("cervello_commenti").insert({riga_id:id,testo:t}).select("id,riga_id,testo,audio,scritto_da,scritto_il").single().then(function(r){
+      b.disabled=false;
+      if(r.error){e.textContent="Non sono riuscito a salvarlo. Riprova.";return;}
+      (COM[id]=COM[id]||[]).push(r.data);disegna();
+    },function(){b.disabled=false;e.textContent="Non sono riuscito a salvarlo. Riprova.";});
+  };});
+}
+function chiudi(){aperto=null;document.body.classList.remove("aperta");}
+document.getElementById("velo").onclick=chiudi;
+document.addEventListener("keydown",function(e){if(e.key==="Escape")chiudi();});
+})();
+</script>
+</body>
+</html>
