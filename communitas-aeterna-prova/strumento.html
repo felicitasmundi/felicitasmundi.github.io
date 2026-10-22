@@ -10,6 +10,7 @@
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icona-felicitas-ios-180.png?v=1019"><link rel="icon" type="image/png" sizes="48x48" href="favicon-felicitas-48.png?v=1019"><meta name="theme-color" content="#F5F0E6"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="comune/caratteri.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="comune/fm-video.js?v=10221330"></script>
 <style>
 :root{
   --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
@@ -98,7 +99,7 @@ h3{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1;margi
 .video{position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;margin:6px 0}
 .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .art-img{display:block;width:100%;height:auto;border-radius:12px;margin:0 0 10px}
-.vid169{position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#0a0a0f;margin:6px 0}.vid169 iframe{position:absolute;inset:0;width:100%;height:100%;border:0}@media(max-width:599px){.vid169{padding-top:177.78%}}.vid-come>summary{cursor:pointer;font-weight:600}.vid-tasti{display:flex;flex-direction:column;gap:8px;margin:4px 0 8px}.vid-tasti .btn{font-size:16px}.ric-esito{margin:0 2px 10px;font-size:15px}.ric-esito:empty{display:none}.vid-come .et{margin-top:10px}
+.vid169{position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#0a0a0f;margin:6px 0}.vid169 iframe{position:absolute;inset:0;width:100%;height:100%;border:0}@media(max-width:599px){.vid169{padding-top:177.78%}}.fm-vid{transform-origin:50% 40%;will-change:transform,opacity}.vid-come>summary{cursor:pointer;font-weight:600}.vid-tasti{display:flex;flex-direction:column;gap:8px;margin:4px 0 8px}.vid-tasti .btn{font-size:16px}.ric-esito{margin:0 2px 10px;font-size:15px}.ric-esito:empty{display:none}.vid-come .et{margin-top:10px}
 button.yt{display:block;border:0;cursor:pointer;font:inherit}button.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.yt-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;padding-left:4px}.yt-tit{font-weight:600;margin:2px 0 6px;font-size:15px}
 .foto{width:100%;max-height:420px;object-fit:cover;border-radius:10px;margin:6px 0;display:block}
 .lnk{display:inline-block;margin:4px 0;font-size:13px;word-break:break-all}
@@ -428,9 +429,9 @@ function ytTitoli(){
 function ytChiedi(orma){try{if(db&&db.functions)db.functions.invoke("youtube-info",{body:orma?{orma:orma}:{}}).then(function(){},function(){});}catch(e){}}
 
 /* LE DUE ANIMAZIONI · 21 ott 11:32-11:36, Gab: «rendere questi video una costante della piattaforma […] che non si disperdano e restino visibili» · «ok per tutto, rendi operativa».
-   I file in video/ li aggiorna il thread «Due animazioni per il Festival». Con #pagina partono ferme col tasto «Guarda». */
+   I file in video/ li aggiorna il thread «Due animazioni per il Festival». 22 ott, Gab: niente «Guarda», partono da sole quando si vedono e crescono mentre si scorre (comune/fm-video.js). */
 var VIDEO={cervello:["il-cervello-digitale","Il cervello digitale"],villaggi:["villaggi-e-vicinati","Villaggi e vicinati"]};
-function videoHTML(k){var v=VIDEO[k];return '<div class="vid169"><iframe src="video/'+v[0]+'.html#pagina" title="'+esc(v[1])+'" loading="lazy" allow="fullscreen" allowfullscreen></iframe></div>';}
+function videoHTML(k){var v=VIDEO[k];return '<div class="vid169 fm-vid"><iframe data-fm-video="video/'+v[0]+'.html" title="'+esc(v[1])+'" allow="fullscreen" allowfullscreen></iframe></div>';}
 /* 21 ott 12:59 e 13:09, Gab: sotto il video del cervello «Attiva il cervello digitale evoluto della tua azienda» e «Organizza una conferenza nel tuo territorio» (SQL 103): arrivano al ruolo Eventi, con «dove». */
 var NOME_R={attivazione_cervello:"Attivazione del cervello digitale evoluto",conferenza:"Conferenza nel tuo territorio"};
 function ricTasti(){return '<div class="vid-tasti"><button class="btn" data-ric="attivazione_cervello">Attiva il cervello digitale evoluto della tua azienda</button><button class="btn" data-ric="conferenza">Organizza una conferenza nel tuo territorio</button></div><p class="ric-esito" aria-live="polite"></p>';}

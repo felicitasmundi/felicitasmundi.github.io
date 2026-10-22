@@ -79,8 +79,9 @@ section p{margin:0;font-size:22px;line-height:1.55}
 .ph{color:var(--t4);background:rgba(245,210,122,.12);padding:0 6px;border-radius:6px}
 @media (max-width:420px){body{font-size:19px}.quando{padding:20px}.quando .num{font-size:84px}}
 
-.video iframe{aspect-ratio:16/9}
-@media (max-width:700px){.video iframe{aspect-ratio:9/16}}
+.fm-vid{border-radius:16px;overflow:hidden;border:1px solid var(--riga);background:#07070c;transform-origin:50% 40%;will-change:transform,opacity}
+.fm-vid iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#07070c}
+@media (max-width:700px){.fm-vid iframe{aspect-ratio:9/16}}
 .parte{font-family:var(--f-titolo);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
 .lettera p{font-family:var(--f-voce);font-size:25px;line-height:1.45}
 .dove a.tasto{margin-top:6px}
@@ -129,7 +130,7 @@ button.tasto.vuoto{border:2px solid var(--oro)}
     <div class="parte">La mattina · dalle 10</div>
     <figure>
       <figcaption>Villaggi e logistica</figcaption>
-      <iframe src="video/villaggi-e-vicinati.html#pagina" title="Villaggi e vicinati" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+      <div class="fm-vid"><iframe data-fm-video="video/villaggi-e-vicinati.html" title="Villaggi e vicinati" allow="fullscreen" allowfullscreen></iframe></div>
     </figure>
     <div class="tasti">
       <button class="tasto" type="button" data-cosa="aiuto_festival">Aiutaci a organizzare il festival</button>
@@ -142,7 +143,7 @@ button.tasto.vuoto{border:2px solid var(--oro)}
     <div class="parte">Il pomeriggio</div>
     <figure>
       <figcaption>Tecnologia · il cervello digitale evoluto</figcaption>
-      <iframe src="video/il-cervello-digitale.html#pagina" title="Il cervello digitale" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+      <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
     </figure>
     <div class="tasti">
       <button class="tasto" type="button" data-cosa="attivazione_cervello">Attiva il cervello digitale evoluto della tua azienda</button>
@@ -234,6 +235,7 @@ var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://g
   if(q.get('richiesta')) richiesta(q.get('richiesta'));
 })();
 </script>
+<script src="comune/fm-video.js?v=10221330"></script>
 <script src="comune/fm-statistiche.js?v=10122255" data-pagina="festival-trame"></script>
 </body>
 </html>
