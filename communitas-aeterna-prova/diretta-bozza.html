@@ -243,6 +243,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   <button id="b-esci" class="esc" type="button"><i>↩</i>Esci</button>
 </div></div>
 
+<script>var SALVA_VERO=navigator.share?navigator.share.bind(navigator):null;</script>
 <script src="comune/fm-riga.js?v=10132105"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -464,7 +465,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
       if(r.error&&!/already exists|duplicate/i.test(r.error.message||'')) throw r.error; ultimo.salvato=true; e.textContent='Salvata nel deposito della diretta ('+ultimo.nome+').'; var r0=reg; if(r0){ var togli=function(){ if(r0.nomi.length) db.storage.from('dirette').remove(r0.nomi).then(function(){},function(){}); }; if(r0.coda.length) r0.dopo=togli; else togli(); } })
     .catch(function(err){ e.textContent='La copia nel deposito non è salita ('+(err&&err.message?err.message:'—')+'). I pezzi da 30 secondi sono nel deposito; per sicurezza scarica anche il file.'; ultimo.salvato=!!(reg&&!reg.coda.length&&reg.nomi.length); }); }
   $('file-scarica').addEventListener('click',function(ev){ if(!ultimo) return; try{ var f=new File([ultimo.blob],ultimo.nome,{type:ultimo.tipo});
-      if(navigator.canShare&&navigator.canShare({files:[f]})&&/iPhone|iPad|Android/i.test(navigator.userAgent)){ ev.preventDefault(); navigator.share({files:[f],title:ultimo.nome}).catch(function(){}); } }catch(e){} });
+      if(navigator.canShare&&navigator.canShare({files:[f]})&&/iPhone|iPad|Android/i.test(navigator.userAgent)){ ev.preventDefault(); (SALVA_VERO||navigator.share.bind(navigator))({files:[f],title:ultimo.nome}).then(function(){ if(window.fmConta) window.fmConta('tasto','Salva registrazione'); },function(){}); } }catch(e){} });
   /* 20 ott 18:36, Gab: «l'ideale è che ci sia subito una registrazione della diretta quando si schiaccia registra e che rimanga nel database …
      fino a 25 megabyte» · 18:39 «Vai» → mentre registri, ogni 30 secondi un pezzo sale da solo nel deposito (dirette/<villaggio>/registrazioni/…):
      se la pagina si chiude si perdono al massimo gli ultimi 30 secondi. Tetto 25 MB a registrazione, qualità voce (mp3 64 kbps, circa 50 minuti). */
@@ -522,5 +523,6 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
 </script>
 <div id="suoni" hidden></div>
 <script src="comune/fm-statistiche.js?v=10122255" data-pagina="diretta-sala-bozza"></script>
+<script src="comune/fm-numeri.js" defer></script>
 </body>
 </html>
