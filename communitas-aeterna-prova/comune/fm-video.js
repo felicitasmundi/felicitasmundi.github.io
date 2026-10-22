@@ -8,7 +8,7 @@
 (function(){
   if(window.fmVideo) return;
   var fermo = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var visti = [];
+  var visti = [], scatole = [];
   var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
     es.forEach(function(x){
       var f = x.target, src = f.getAttribute('data-fm-video');
@@ -19,8 +19,7 @@
 
   function cresci(){
     var h = window.innerHeight || 800;
-    visti.forEach(function(f){
-      var box = f.parentNode; if(!box || !box.classList.contains('fm-vid')) return;
+    scatole.forEach(function(box){
       var r = box.getBoundingClientRect();
       if(r.bottom < 0 || r.top > h) return;
       /* 0 quando la cima del riquadro è in fondo allo schermo, 1 quando arriva a un terzo dall'alto */
@@ -37,6 +36,7 @@
       if(f._fmv) return; f._fmv = 1; visti.push(f);
       if(io) io.observe(f); else f.setAttribute('src', f.getAttribute('data-fm-video'));
     });
+    scatole = [].slice.call(document.querySelectorAll('.fm-vid'));   /* anche i riquadri senza animazione (YouTube) */
     if(!fermo) cresci();
   }
   window.fmVideo = { cerca: cerca };
