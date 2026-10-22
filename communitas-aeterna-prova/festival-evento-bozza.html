@@ -176,11 +176,11 @@ button.tasto.vuoto{border:2px solid var(--oro)}
   <section class="video">
     <div class="parte">Il pomeriggio</div>
     <figure>
-      <figcaption>Tecnologia · il cervello digitale evoluto</figcaption>
+      <figcaption>Tecnologia · il Cervello Digitale Evoluto</figcaption>
       <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
     </figure>
     <div class="tasti">
-      <button class="tasto" type="button" data-cosa="attivazione_cervello">Attiva il cervello digitale evoluto della tua azienda</button>
+      <button class="tasto" type="button" data-cosa="attivazione_cervello">Attiva il Cervello Digitale Evoluto della tua azienda</button>
       <button class="tasto vuoto" type="button" data-cosa="conferenza">Organizza una conferenza nel tuo territorio</button>
     </div>
     <p class="esito" data-per="attivazione_cervello" aria-live="polite"></p>
@@ -191,6 +191,15 @@ button.tasto.vuoto{border:2px solid var(--oro)}
     <div class="fm-vid yt"><button class="yt-anteprima" type="button" data-yt="J9UArYxSv8s" aria-label="Guarda il video di Lamberto Rimondini"><img src="https://i.ytimg.com/vi/J9UArYxSv8s/hqdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
     <div class="yt-titolo"><span>Il video: l'Italia risorge | Mine Vaganti #23 · Lamberto Rimondini</span></div>
     <p>Lamberto Rimondini sarà con noi durante il pomeriggio al Felicitas Festival. L'inizio è dalle 10.</p>
+  </section>
+
+  <!-- 22/10, Gab: «dopo rimondini metti ivano». Testi dalla proposta di Ivano Becciu Naiely (IVANO INTERVENTO.pdf) -->
+  <section class="video">
+    <h2 class="conferenza">Dal Mito al Dogma, dal Ritmo alla Materia: La Spiritualità come Azione sul Territorio</h2>
+    <div class="fm-vid"><img class="anteprima" src="casa/ivano-becciu-naiely.jpg" alt="Ivano Becciu Naiely con il tamburo, sulla spiaggia" width="1200" height="675" loading="lazy"></div>
+    <div class="yt-titolo"><span>Ivano Becciu Naiely · Maestro del Tamburo Medicina</span></div>
+    <p>L'intervento traccia un ponte tra storia antropologica, dinamiche geopolitiche contemporanee e la responsabilità spirituale del singolo all'interno della comunità.</p>
+    <p>Relazione teorico-antropologica integrata da una riflessione partecipata e un momento di presenza/risonanza simbolica. Durata indicativa: 30–40 minuti.</p>
   </section>
 
   <section class="pranzo">
@@ -237,7 +246,7 @@ var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://g
     });
   }
   /* le quattro richieste sotto i video: arrivano al ruolo Eventi (SQL 103) */
-  var NOME_R={attivazione_cervello:"Attivazione del cervello digitale evoluto",conferenza:"Conferenza nel tuo territorio",aiuto_festival:"Aiuto per il festival",gruppo_festival:"Gruppo organizzativo nel tuo territorio"};
+  var NOME_R={attivazione_cervello:"Attivazione del Cervello Digitale Evoluto",conferenza:"Conferenza nel tuo territorio",aiuto_festival:"Aiuto per il festival",gruppo_festival:"Gruppo organizzativo nel tuo territorio"};
   function riga(c){ return (c==="conferenza")?"attivazione_cervello":(c==="gruppo_festival"?"aiuto_festival":c); }
   function richiesta(c){
     if(!NOME_R[c]) return;
