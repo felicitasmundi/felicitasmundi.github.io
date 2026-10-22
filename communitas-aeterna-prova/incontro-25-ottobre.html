@@ -74,6 +74,9 @@ section p{margin:0;font-size:22px;line-height:1.55}
 .testa{display:flex;align-items:center;justify-content:space-between;gap:12px}.tasto.invita{align-self:center;border:0;cursor:pointer;font-family:inherit;padding:12px 22px}.invita-scelta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:-24px}.invita-scelta .tasto{align-self:auto;padding:12px 20px}
 .presenti ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:22px}.presenti li{padding:12px 16px;border-radius:14px;background:rgba(245,240,230,.06)}.presenti li b{font-weight:600}
 .anteprima{display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--riga)}
+.fm-vid{border-radius:16px;overflow:hidden;border:1px solid var(--riga);background:#07070c;transform-origin:50% 40%;will-change:transform,opacity}
+.fm-vid iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#07070c}
+@media (max-width:700px){.fm-vid iframe{aspect-ratio:9/16}}
 .piede{border-top:1px solid var(--riga);padding-top:22px;text-align:center;font-size:16px;color:var(--fioco)}.piede a{color:var(--oro)}
 .ph{color:var(--t4);background:rgba(245,210,122,.12);padding:0 6px;border-radius:6px}
 @media (max-width:420px){body{font-size:19px}.quando{padding:20px}.quando .num{font-size:84px}}
@@ -103,6 +106,8 @@ section p{margin:0;font-size:22px;line-height:1.55}
     </div>
   </div>
 
+  <div class="fm-vid"><iframe data-fm-video="video/villaggi-e-vicinati.html" title="Villaggi e vicinati" allow="fullscreen" allowfullscreen></iframe></div>
+
   <section class="dove">
     <h2>Dove</h2>
     <b>Baratili, pochi chilometri da Oristano</b>
@@ -115,6 +120,8 @@ section p{margin:0;font-size:22px;line-height:1.55}
     <h2>Di cosa parleremo</h2>
     <p class="voce">Parleremo degli aspetti comunitari, logistici e tecnologici del progetto Felicitas in Sardegna, con particolare attenzione all’organizzazione del festival.</p>
   </section>
+
+  <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
 
   <section class="pranzo">
     <h2>Pranzo condiviso</h2>
@@ -151,18 +158,6 @@ section p{margin:0;font-size:22px;line-height:1.55}
     </div>
   </section>
 
-  <section class="video">
-    <h2>Guarda prima di venire</h2>
-    <figure>
-      <figcaption>Villaggi e vicinati</figcaption>
-      <iframe src="video/villaggi-e-vicinati.html#pagina" title="Villaggi e vicinati" loading="lazy"></iframe>
-    </figure>
-    <figure>
-      <figcaption>Il cervello digitale</figcaption>
-      <iframe src="video/il-cervello-digitale.html#pagina" title="Il cervello digitale" loading="lazy"></iframe>
-    </figure>
-  </section>
-
   <section class="festival">
     <h2>Felicitas Festival</h2>
     <div class="titolo">sabato 21 novembre 2026</div>
@@ -184,3 +179,4 @@ section p{margin:0;font-size:22px;line-height:1.55}
   document.getElementById('invita').addEventListener('click',function(){ sc.hidden=!sc.hidden; });
 })();
 </script>
+<script src="comune/fm-video.js?v=10221330"></script>
