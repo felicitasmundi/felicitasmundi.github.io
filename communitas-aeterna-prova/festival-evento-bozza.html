@@ -129,7 +129,7 @@ button.tasto.vuoto{border:2px solid var(--oro)}
 </head>
 <body>
 <div class="pagina">
-  <div class="testa"><div class="marca">FelicitasMundi</div><button class="tasto invita" type="button" id="invita">Invita ›</button></div>
+  <div class="testa"><div class="marca">FelicitasMundi</div><button class="tasto invita" type="button" id="invita" data-conta="tasto:Invita">Invita ›</button></div>
   <div class="invita-scelta" id="invita-scelta" hidden>
     <a class="tasto" id="inv-wa" target="_blank" rel="noopener">WhatsApp</a>
     <a class="tasto" id="inv-tg" target="_blank" rel="noopener">Telegram</a>
@@ -168,8 +168,8 @@ button.tasto.vuoto{border:2px solid var(--oro)}
       <div class="fm-vid"><iframe data-fm-video="video/villaggi-e-vicinati.html" title="Villaggi e vicinati" allow="fullscreen" allowfullscreen></iframe></div>
     </figure>
     <div class="tasti">
-      <button class="tasto" type="button" data-cosa="aiuto_festival">Aiutaci a organizzare il festival</button>
-      <button class="tasto vuoto" type="button" data-cosa="gruppo_festival">Proponiti come gruppo organizzativo nel tuo territorio</button>
+      <button class="tasto" type="button" data-cosa="aiuto_festival" data-conta="tasto:aiuto_festival">Aiutaci a organizzare il festival</button>
+      <button class="tasto vuoto" type="button" data-cosa="gruppo_festival" data-conta="tasto:gruppo_festival">Proponiti come gruppo organizzativo nel tuo territorio</button>
     </div>
     <p class="esito" data-per="aiuto_festival" aria-live="polite"></p>
   </section>
@@ -181,8 +181,8 @@ button.tasto.vuoto{border:2px solid var(--oro)}
       <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
     </figure>
     <div class="tasti">
-      <button class="tasto" type="button" data-cosa="attivazione_cervello">Attiva il cervello digitale evoluto della tua azienda</button>
-      <button class="tasto vuoto" type="button" data-cosa="conferenza">Organizza una conferenza nel tuo territorio</button>
+      <button class="tasto" type="button" data-cosa="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il cervello digitale evoluto della tua azienda</button>
+      <button class="tasto vuoto" type="button" data-cosa="conferenza" data-conta="tasto:conferenza">Organizza una conferenza nel tuo territorio</button>
     </div>
     <p class="esito" data-per="attivazione_cervello" aria-live="polite"></p>
   </section>
@@ -277,5 +277,6 @@ var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://g
 </script>
 <script src="comune/fm-video.js?v=10221330"></script>
 <script src="comune/fm-statistiche.js?v=10122255" data-pagina="festival-trame"></script>
+<script src="comune/fm-numeri.js?v=10221400" defer></script>
 </body>
 </html>
