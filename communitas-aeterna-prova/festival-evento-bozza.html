@@ -87,6 +87,14 @@ section p{margin:0;font-size:22px;line-height:1.55}
 .dove a.tasto{margin-top:6px}
 button.tasto{border:0;cursor:pointer;font-family:inherit}
 button.tasto.vuoto{border:2px solid var(--oro)}
+.yt .yt-anteprima{display:block;position:relative;width:100%;aspect-ratio:16/9;padding:0;border:0;background:#000;cursor:pointer}
+.yt img{width:100%;height:100%;object-fit:cover;display:block}
+.yt-play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:rgba(7,8,20,.72);border:2px solid var(--oro)}
+.yt-play::after{content:"";position:absolute;left:30px;top:22px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent var(--avorio)}
+.yt iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.conferenza{font-family:var(--f-voce);font-size:38px;line-height:1.1;font-weight:600;letter-spacing:0;text-transform:none;color:var(--avorio)}
+.yt-titolo b{display:block;font-family:var(--f-voce);font-size:30px;line-height:1.15;font-weight:600}
+.yt-titolo span{font-size:17px;color:var(--fioco)}
 .esito{font-size:18px;color:var(--fioco)}.esito:empty{display:none}
 .rimando{padding:24px;border-radius:20px;border:1px solid var(--riga);background:rgba(15,18,38,.75)}
 .rimando .titolo{font-family:var(--f-voce);font-size:32px;line-height:1.1}
@@ -150,6 +158,13 @@ button.tasto.vuoto{border:2px solid var(--oro)}
       <button class="tasto vuoto" type="button" data-cosa="conferenza">Organizza una conferenza nel tuo territorio</button>
     </div>
     <p class="esito" data-per="attivazione_cervello" aria-live="polite"></p>
+  </section>
+
+  <section class="video">
+    <h2 class="conferenza">La vera storia d'Italia</h2>
+    <div class="fm-vid yt"><button class="yt-anteprima" type="button" data-yt="J9UArYxSv8s" aria-label="Guarda il video di Lamberto Rimondini"><img src="https://i.ytimg.com/vi/J9UArYxSv8s/hqdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+    <div class="yt-titolo"><span>Il video: l'Italia risorge | Mine Vaganti #23 · Lamberto Rimondini</span></div>
+    <p>Lamberto Rimondini sarà con noi durante il pomeriggio al Felicitas Festival. L'inizio è dalle 10.</p>
   </section>
 
   <section class="pranzo">
@@ -224,6 +239,13 @@ var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://g
       },function(){ di(riga(c),"Non è stato salvato. Si può riprovare."); });
     });
   }
+  /* 22/10, Gab: il video di Lamberto Rimondini «con il titolo»; si apre al tocco, da YouTube senza cookie */
+  document.addEventListener('click',function(e){
+    var y=e.target.closest('[data-yt]'); if(!y) return;
+    var f=document.createElement('iframe'); f.src="https://www.youtube-nocookie.com/embed/"+y.getAttribute('data-yt')+"?autoplay=1&rel=0";
+    f.title="l'Italia risorge | Mine Vaganti #23"; f.allow="autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen=true;
+    y.replaceWith(f);
+  });
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-pasto],[data-cosa]'); if(!b) return;
     e.preventDefault();
