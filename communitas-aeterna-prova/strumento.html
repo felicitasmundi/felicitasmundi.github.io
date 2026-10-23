@@ -333,17 +333,35 @@ select.sp-segna{width:auto;align-self:flex-start;font-size:12px;padding:2px 6px;
 .sp-segnato{color:var(--ok)!important}
 .sp-scrivi{display:flex;gap:8px;align-items:flex-end;margin-top:6px}.sp-scrivi textarea{min-height:44px;flex:1}
 .sp-ob{display:flex;flex-direction:column;gap:3px;padding:4px 0}
+
+/* Azione · 23 ott (stile Festival) */
+.az-tit{font-family:'Cinzel',Georgia,serif;font-weight:500;font-size:30px;letter-spacing:.05em;text-align:center;margin:10px 0 12px;color:#F5F0E6}
+.az-filo{height:1px;background:linear-gradient(90deg,transparent,#E07A55,#C9A15A,#8DBF5E,#6FA8D6,#B08AE0,transparent);margin:0 0 16px}
+.az-griglia{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.q-az{position:relative;border-radius:22px;min-height:132px;padding:16px 14px;border:1px solid rgba(214,181,108,.28);background:linear-gradient(160deg,color-mix(in srgb,var(--e) 30%,transparent),rgba(255,255,255,.03));color:#F5F0E6;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;text-decoration:none;font:inherit;cursor:pointer}
+.q-az.largo{grid-column:1/-1;min-height:96px;flex-direction:row;align-items:center;justify-content:flex-start;gap:16px}
+.q-az i{width:34px;height:34px;border-radius:50%;border:2px solid var(--e);box-shadow:0 0 18px var(--e)}
+.q-az b{font-family:'Cormorant Garamond',Georgia,serif;font-size:25px;font-weight:600;line-height:1.05}
+.az-l{display:block;font-size:17px;margin:14px 0 6px;color:#c9c3d6}
+body.notte .corpo input[type=text],body.notte .corpo input[type=number],body.notte .corpo textarea{background:rgba(245,240,230,.06);color:#F5F0E6;border:1px solid rgba(214,181,108,.4);border-radius:12px;font-size:18px;padding:12px;width:100%;box-sizing:border-box}
+.az-esito{color:#F5F0E6}
+.az-esito{font-size:18px;min-height:1em}
+.lezione-1{border-left:4px solid #B08AE0}
+.cos-cima{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}.cos-cima .alto-b{align-self:flex-start}
+.alto-b.piani{display:inline-flex;align-items:center;gap:6px}
+.alto-b.piani i{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-style:normal;font-size:11px}
+@media (min-width:700px){.alto-b.piani span{display:none}.alto-b.piani{padding:4px}}
 </style>
 </head>
 <body>
 <header class="top"><span class="marchio">FelicitasMundi</span><span class="chi"><span class="chi" id="alto"></span><span class="chi" id="testa"></span></span></header>
 <main class="corpo" id="corpo" aria-live="polite"><p class="nota">Un momento…</p></main>
 <nav class="nav" id="nav" aria-label="Parti dell'app">
-  <button data-v="oggi"><span class="ic">☼</span>Oggi</button>
   <button data-v="giornale"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><g transform="translate(0.599 17.067) scale(0.01431)"><path d="M587 -708Q583 -658 581.5 -611.5Q580 -565 580 -540Q580 -519 581.0 -500.0Q582 -481 583 -468H560Q543 -551 513.0 -598.5Q483 -646 447.5 -665.5Q412 -685 376 -685H363Q337 -685 324.0 -680.5Q311 -676 306.5 -663.0Q302 -650 302 -622V-116Q302 -76 310.5 -55.5Q319 -35 343.0 -29.0Q367 -23 413 -23V0Q379 -1 324.0 -2.0Q269 -3 207 -3Q161 -3 115.0 -2.0Q69 -1 28 0V-20Q59 -22 74.0 -28.0Q89 -34 94.0 -52.0Q99 -70 99 -106V-602Q99 -639 94.0 -656.5Q89 -674 73.5 -680.5Q58 -687 28 -688V-708Q72 -707 121.5 -706.5Q171 -706 219.5 -705.5Q268 -705 309.5 -705.0Q351 -705 378 -705Q424 -705 482.5 -705.5Q541 -706 587 -708ZM442 -366Q442 -366 442.0 -356.0Q442 -346 442 -346H272Q272 -346 272.0 -356.0Q272 -366 272 -366ZM471 -498Q467 -441 467.5 -411.0Q468 -381 468 -356Q468 -331 469.0 -301.0Q470 -271 474 -214H451Q445 -251 426.5 -281.0Q408 -311 379.0 -328.5Q350 -346 312 -346V-366Q340 -366 363.0 -378.0Q386 -390 403.5 -410.0Q421 -430 432.5 -453.0Q444 -476 448 -498Z M1565 -708V-688Q1535 -687 1519.5 -680.5Q1504 -674 1499.0 -656.5Q1494 -639 1494 -602V-106Q1494 -70 1499.5 -52.0Q1505 -34 1520.0 -28.0Q1535 -22 1565 -20V0Q1534 -2 1486.0 -2.5Q1438 -3 1388 -3Q1334 -3 1286.5 -2.5Q1239 -2 1210 0V-20Q1244 -22 1261.5 -28.0Q1279 -34 1285.0 -52.0Q1291 -70 1291 -106V-641L1301 -643L1050 -1H1034L752 -643V-196Q752 -129 757.5 -93.5Q763 -58 784.5 -42.5Q806 -27 853 -20V0Q833 -2 801.0 -2.5Q769 -3 741 -3Q719 -3 696.0 -2.5Q673 -2 658 0V-20Q689 -27 704.0 -41.5Q719 -56 724.0 -88.0Q729 -120 729 -176V-602Q729 -639 724.0 -656.5Q719 -674 703.5 -680.5Q688 -687 658 -688V-708Q673 -707 696.0 -706.0Q719 -705 741 -705Q799 -705 852.0 -706.0Q905 -707 948 -708L1146 -262L1116 -229L1301 -705Q1321 -705 1344.0 -705.0Q1367 -705 1388 -705Q1438 -705 1486.0 -706.0Q1534 -707 1565 -708Z"/></g></svg></span>Giornale</button>
-  <button data-v="megafono" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</button>
+  <button data-v="oggi"><span class="ic">☼</span>Oggi</button>
+  <button data-v="azione" class="console" aria-label="Azione"><span class="ic">✦</span>Azione</button>
   <button data-v="obiettivi"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity=".45"/><path d="M12 12V7.3M12 12l4.1 2.4M12 12l-4.1 2.4"/><circle cx="12" cy="5.2" r="2.1"/><circle cx="17.9" cy="15.4" r="2.1"/><circle cx="6.1" cy="15.4" r="2.1"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span>Obiettivi</button>
-  <button data-v="cervello"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.2C8.6 2.4 6.3 3.4 5.6 5.4 3.7 5.9 2.8 7.8 3.4 9.6 2.2 11 2.4 13.3 3.8 14.4 3.4 16.6 4.8 18.6 7 18.8 7.8 20.6 9.6 21.4 11 20.8Z"/><path d="M13 3.2C15.4 2.4 17.7 3.4 18.4 5.4 20.3 5.9 21.2 7.8 20.6 9.6 21.8 11 21.6 13.3 20.2 14.4 20.6 16.6 19.2 18.6 17 18.8 16.2 20.6 14.4 21.4 13 20.8Z"/><path d="M5.6 5.4C7 6 8 7.2 8 8.6M3.6 11.8C5.4 11.4 7.4 12 8.4 13.4M7 18.8C7.2 17 8.4 15.8 9.8 15.6" opacity=".75"/><path d="M18.4 5.4C17 6 16 7.2 16 8.6M20.4 11.8C18.6 11.4 16.6 12 15.6 13.4M17 18.8C16.8 17 15.6 15.8 14.2 15.6" opacity=".75"/></svg></span>Cervello</button>
+  <button data-v="cervello"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.2C8.6 2.4 6.3 3.4 5.6 5.4 3.7 5.9 2.8 7.8 3.4 9.6 2.2 11 2.4 13.3 3.8 14.4 3.4 16.6 4.8 18.6 7 18.8 7.8 20.6 9.6 21.4 11 20.8Z"/><path d="M13 3.2C15.4 2.4 17.7 3.4 18.4 5.4 20.3 5.9 21.2 7.8 20.6 9.6 21.8 11 21.6 13.3 20.2 14.4 20.6 16.6 19.2 18.6 17 18.8 16.2 20.6 14.4 21.4 13 20.8Z"/><path d="M5.6 5.4C7 6 8 7.2 8 8.6M3.6 11.8C5.4 11.4 7.4 12 8.4 13.4M7 18.8C7.2 17 8.4 15.8 9.8 15.6" opacity=".75"/><path d="M18.4 5.4C17 6 16 7.2 16 8.6M20.4 11.8C18.6 11.4 16.6 12 15.6 13.4M17 18.8C16.8 17 15.6 15.8 14.2 15.6" opacity=".75"/></svg></span>Coscienza</button>
 </nav>
 
 <script>
@@ -377,7 +395,7 @@ var TIPO_NOME={karma_yoga:"dono · scambio",articolo:"articolo",festa:"festa",di
 
 /* chi guarda */
 var io={id:null,nome:"",grado:"ospite",nucleo:false,coordina:false,ruoli:[]};
-var vista="oggi", giorno=0;
+var vista="azione", giorno=0;
 var nomi={};
 
 function errore(e){
@@ -525,8 +543,10 @@ function testa(){
     c.push('<button class="mini" id="esci">Esci</button>');
   }
   $("#testa").innerHTML=c.join("");
-  $("#alto").innerHTML='<button class="alto-b" data-alto="cartelle">\u25a4 Cartelle</button>'+(io.id?'<button class="alto-b" data-alto="dati"><span class="ic-alto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.1"/><path d="M12 6.8V14.6M12 14.6L8.6 21.2M12 14.6L15.4 21.2"/><path d="M12 9.2L17.2 7.6"/><path d="M17.2 9.4V1.6M15.6 7.4H18.8" /><path d="M12 9.6L9 10.6"/><path d="M4.6 8.6C6.4 8 8.4 8 9.6 8.6V12.6C9.6 14.6 8 15.8 7.1 16.4 6.2 15.8 4.6 14.6 4.6 12.6Z" fill="currentColor" fill-opacity=".18"/></svg></span>I miei dati</button>':'');
+  $("#alto").innerHTML='<button class="alto-b piani" data-piani="1" title="Piani" aria-label="Piani"><i>P</i><span>Piani</span></button>'+(io.id?'<button class="alto-b" data-alto="dati"><span class="ic-alto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.1"/><path d="M12 6.8V14.6M12 14.6L8.6 21.2M12 14.6L15.4 21.2"/><path d="M12 9.2L17.2 7.6"/><path d="M17.2 9.4V1.6M15.6 7.4H18.8" /><path d="M12 9.6L9 10.6"/><path d="M4.6 8.6C6.4 8 8.4 8 9.6 8.6V12.6C9.6 14.6 8 15.8 7.1 16.4 6.2 15.8 4.6 14.6 4.6 12.6Z" fill="currentColor" fill-opacity=".18"/></svg></span>I miei dati</button>':'');
   document.querySelectorAll("[data-alto]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-alto"));};});
+  /* 23 ott, Gab: un solo loghetto al posto di Cartelle; sul telefono «deve dire cosa apre, può essere piano», sul computer «Piani» al passaggio del mouse. Apre «Come funziona». */
+  var pb=document.querySelector("[data-piani]");if(pb)pb.onclick=function(){vai("oggi");setTimeout(function(){var d=$("#o-come");if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"});}},0);};
   var e=$("#esci");if(e)e.onclick=function(){db.auth.signOut().then(function(){location.href="strumento.html";});};
 }
 
@@ -536,8 +556,54 @@ document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
   document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
-  document.body.classList.toggle("notte",vista==="giornale");
-  ({oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio})[vista]();
+  document.body.classList.toggle("notte",/^(giornale|azione|compra|assistenza)$/.test(vista));
+  ({azione:vAzione,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio})[vista]();
+}
+
+/* AZIONE · 23 ott, thread «Il cervello come gestionale», Gab: «Ok, bisogna creare quei quadranti» · menu Giornale · Oggi · Azione · Obiettivi · Coscienza, si entra da Azione.
+   «Entra» sparisce a chi è dentro; con il ruolo si aggiunge il Megafono. Compra e Chiedi assistenza: SQL 114. */
+function vAzione(){
+  var c=$("#corpo"),q=[];
+  function quad(t,col,attr,largo){return '<'+(attr.indexOf("href=")===0?'a ':'button type="button" ')+attr+' class="q-az'+(largo?' largo':'')+'" style="--e:'+col+'"><i></i><b>'+esc(t)+'</b></'+(attr.indexOf("href=")===0?'a':'button')+'>';}
+  if(!io.id)q.push(quad("Entra","#d6b56c",'href="'+ENTRA+'"',true));
+  q.push(quad("Partecipa al Festival","#E07A55",'href="festival-evento-bozza.html?c=10182300"'));
+  q.push(quad("Prenota","#C9A15A",'href="festival-evento-bozza.html?c=10182300#pranzo"'));
+  q.push(quad("Compra","#8DBF5E",'data-vai="compra"'));
+  q.push(quad("Chiedi assistenza","#6FA8D6",'data-vai="assistenza"'));
+  q.push(quad("Praticantato","#B08AE0",'data-vai="oggi"'));
+  if(io.id)q.push(quad("Megafono","#d6b56c",'data-vai="megafono"'));
+  c.innerHTML='<h2 class="az-tit">Azione</h2><div class="az-filo"></div><div class="az-griglia">'+q.join("")+'</div>';
+  legaVai(c);
+}
+function moduloAz(tit,campi,rpc,args){
+  var c=$("#corpo");
+  if(!io.id){c.innerHTML='<h2 class="az-tit">'+esc(tit)+'</h2><div class="az-filo"></div><div class="card"><span class="t">Per mandare la richiesta serve entrare.</span><div class="fine"><a class="btn pieno" href="'+ENTRA+'">Entra</a></div></div><p><button class="mini" data-vai="azione">‹ Azione</button></p>';legaVai(c);return;}
+  c.innerHTML='<h2 class="az-tit">'+esc(tit)+'</h2><div class="az-filo"></div>'+campi+
+    '<p style="margin-top:18px"><button class="btn pieno az-invia" type="button" id="az-invia">Invia la richiesta</button></p><p class="az-esito" id="az-esito" aria-live="polite"></p>'+
+    '<p><button class="mini" data-vai="azione">‹ Azione</button></p>';
+  legaVai(c);
+  $("#az-invia").onclick=function(){var b=this,e=$("#az-esito"),a=args();if(typeof a==="string"){e.textContent=a;return;}
+    b.disabled=true;e.textContent="Un momento…";
+    db.rpc(rpc,a).then(function(r){b.disabled=false;
+      if(r&&r.error){e.textContent="Non è stata salvata. Si può riprovare.";return;}
+      if(r&&r.data==="ok"){e.textContent="Richiesta arrivata.";c.querySelectorAll("input,textarea").forEach(function(x){x.value=x.type==="number"?"1":"";});}else e.textContent=(r&&r.data)||"";},
+      function(){b.disabled=false;e.textContent="Non è stata salvata. Si può riprovare.";});};
+}
+function vCompra(){
+  moduloAz("Compra",
+    '<label class="az-l" for="az-p">Cosa vuoi comprare</label><input type="text" id="az-p" maxlength="200">'+
+    '<label class="az-l" for="az-q">Quanti</label><input type="number" id="az-q" min="1" max="999" value="1">'+
+    '<label class="az-l" for="az-r">Dove lo ritiri</label><input type="text" id="az-r" maxlength="200">'+
+    '<label class="az-l" for="az-n">Note</label><textarea id="az-n" maxlength="1000"></textarea>',
+    "fm_chiedi_acquisto",
+    function(){var p=$("#az-p").value.trim();if(!p)return "Scrivi cosa vuoi comprare.";
+      return {p_prodotto:p,p_quanti:Math.max(1,parseInt($("#az-q").value,10)||1),p_ritiro:$("#az-r").value,p_note:$("#az-n").value};});
+}
+function vAssistenza(){
+  moduloAz("Chiedi assistenza",
+    '<label class="az-l" for="az-t">Di cosa hai bisogno?</label><textarea id="az-t" maxlength="2000" style="min-height:200px"></textarea>',
+    "fm_chiedi_assistenza",
+    function(){var t=$("#az-t").value.trim();if(!t)return "Scrivi di cosa hai bisogno.";return {p_testo:t};});
 }
 
 /* OGGI */
@@ -619,7 +685,8 @@ function vOggi(){
   /* 19 ott 16:21, Gab: «aprendo l app […] anche oggi non è comprensibile» da chi arriva da fuori → in cima chi siamo (parole dell'invito al Festival) e il Festival in evidenza, voce fissa fino al 21 novembre
      20 ott 01:44, Gab: «puoi mettere la copertina dell evento nel festival in evidenza in oggi?» */
   var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime();
-  c.innerHTML=(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
+  /* 23 ott, Gab: «La lezione è lunedì alle 19» · in cima a Oggi la prima lezione del praticantato (non ancora nel database) */
+  c.innerHTML='<p class="et">Praticantato</p><div class="card lezione-1"><b>La prima lezione</b><span class="t">lunedì alle 19 · con Gabriele Dettori</span></div>'+(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
     (fest?'<a class="evid" href="festival-evento-bozza.html?c=10182300"><img class="copertina" src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · TRAME: la forza di essere connessi"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
     '<details class="card vid-come" id="o-come"><summary>Come funziona</summary><p class="et">Villaggi e vicinati</p>'+videoHTML("villaggi")+'<p class="et">Il cervello digitale</p>'+videoHTML("cervello")+'</details>'+
     '<p class="et">Oggi · Felicitas</p>'+
@@ -1156,6 +1223,8 @@ function voce(x,firme){
 var cerchio=null,cerchiCache=null;
 function vCervello(){
   var c=$("#corpo");
+  /* 23 ott, Gab: «Schiacci coscienza e si apre il tasto che ti porta nel cervello digitale Felicitas»; le Cartelle vanno dentro Coscienza */
+  setTimeout(function(){if(vista!=="cervello"||$("#cos-cima"))return;c.insertAdjacentHTML("afterbegin",'<div id="cos-cima" class="cos-cima"><a class="evid" href="coscienza.html"><small>Coscienza</small><b>La mappa della Coscienza ›</b></a>'+(io.id?'<button class="alto-b" data-vai="cartelle">\u25a4 Cartelle</button>':'')+'</div>');legaVai($("#cos-cima"));},0);
   /* 19 ott 20:16-20:20, Gab: cosa puoi fare, con e senza AI. «10 euro al mese […]» · «ok 10 o karma yoga».
      19 ott 21:07-21:08, Gab (thread «Attiva il tuo cervello»): il percorso «20 euro a settimana», «o paghi 80 euro al mese o fai il karma yoga» · «per l integrazione sono 26». I 10 € non includono più la base del praticantato.
      20 ott, Gab: «abbiamo superato il discorso 10 e 26»: i due prezzi sono tolti finché il prezzo per la singola persona non è deciso.
@@ -1924,7 +1993,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello)$/.test(q))vista=q;}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|azione|compra|assistenza)$/.test(q))vista=q;}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){
