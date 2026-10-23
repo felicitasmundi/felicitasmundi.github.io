@@ -349,6 +349,9 @@ body.notte .corpo input[type=text],body.notte .corpo input[type=number],body.not
 .lezione-1{border-left:4px solid #B08AE0}
 .cos-cima{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}.cos-cima .alto-b{align-self:flex-start}
 .alto-b.piani{display:inline-flex;align-items:center;gap:6px}
+.alto-b.invita{background:#d6b56c!important;color:#1A1405!important;border-color:#d6b56c!important}
+.invita-scelta{position:sticky;top:0;z-index:4;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;padding:10px 16px;background:#0A0C1A;border-bottom:1px solid rgba(212,175,106,.25)}
+.invita-scelta .alto-b{font-size:15px;padding:8px 14px;text-decoration:none;background:rgba(245,240,230,.08);color:#F5F0E6;border-color:rgba(245,240,230,.25)}
 .alto-b.piani i{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-style:normal;font-size:11px}
 @media (min-width:700px){.alto-b.piani span{display:none}.alto-b.piani{padding:4px}}
 </style>
@@ -543,9 +546,20 @@ function testa(){
     c.push('<button class="mini" id="esci">Esci</button>');
   }
   $("#testa").innerHTML=c.join("");
-  $("#alto").innerHTML='<button class="alto-b piani" data-piani="1" title="Piani" aria-label="Piani"><i>P</i><span>Piani</span></button>'+(io.id?'<button class="alto-b" data-alto="dati"><span class="ic-alto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.1"/><path d="M12 6.8V14.6M12 14.6L8.6 21.2M12 14.6L15.4 21.2"/><path d="M12 9.2L17.2 7.6"/><path d="M17.2 9.4V1.6M15.6 7.4H18.8" /><path d="M12 9.6L9 10.6"/><path d="M4.6 8.6C6.4 8 8.4 8 9.6 8.6V12.6C9.6 14.6 8 15.8 7.1 16.4 6.2 15.8 4.6 14.6 4.6 12.6Z" fill="currentColor" fill-opacity=".18"/></svg></span>I miei dati</button>':'');
+  $("#alto").innerHTML='<button class="alto-b invita" data-invita="1">Invita ›</button><button class="alto-b piani" data-piani="1" title="Piani" aria-label="Piani"><i>P</i><span>Piani</span></button>'+(io.id?'<button class="alto-b" data-alto="dati"><span class="ic-alto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.1"/><path d="M12 6.8V14.6M12 14.6L8.6 21.2M12 14.6L15.4 21.2"/><path d="M12 9.2L17.2 7.6"/><path d="M17.2 9.4V1.6M15.6 7.4H18.8" /><path d="M12 9.6L9 10.6"/><path d="M4.6 8.6C6.4 8 8.4 8 9.6 8.6V12.6C9.6 14.6 8 15.8 7.1 16.4 6.2 15.8 4.6 14.6 4.6 12.6Z" fill="currentColor" fill-opacity=".18"/></svg></span>I miei dati</button>':'');
   document.querySelectorAll("[data-alto]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-alto"));};});
   /* 23 ott, Gab: un solo loghetto al posto di Cartelle; sul telefono «deve dire cosa apre, può essere piano», sul computer «Piani» al passaggio del mouse. Apre «Come funziona». */
+  /* 23 ott 17:59, Gab: «aggiungi il tasto invita in alto» · come l'Invita del Festival: WhatsApp, Telegram, Mail, copia il link dell'app. Testo: le parole di Gab in Oggi. */
+  var ib=document.querySelector("[data-invita]");if(ib)ib.onclick=function(){
+    var v=$("#invita-scelta");if(v){v.remove();return;}
+    var url=location.origin+location.pathname,msg="FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna.";
+    document.querySelector("header.top").insertAdjacentHTML("afterend",'<div class="invita-scelta" id="invita-scelta">'+
+      '<a class="alto-b" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(msg+"\n"+url)+'">WhatsApp</a>'+
+      '<a class="alto-b" target="_blank" rel="noopener" href="https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(msg)+'">Telegram</a>'+
+      '<a class="alto-b" href="mailto:?subject='+encodeURIComponent("FelicitasMundi")+'&body='+encodeURIComponent(msg+"\n"+url)+'">Mail</a>'+
+      '<button class="alto-b" type="button" id="inv-copia">Copia il link</button></div>');
+    $("#inv-copia").onclick=function(){var b=this;(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){b.textContent="Link copiato";},function(){prompt("Copia il link",url);});};
+  };
   var pb=document.querySelector("[data-piani]");if(pb)pb.onclick=function(){vai("oggi");setTimeout(function(){var d=$("#o-come");if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"});}},0);};
   var e=$("#esci");if(e)e.onclick=function(){db.auth.signOut().then(function(){location.href="strumento.html";});};
 }
