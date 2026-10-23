@@ -64,6 +64,18 @@ h3.sez{font-family:var(--f-titolo);font-weight:600;font-size:17px;letter-spacing
 .firma{font-family:var(--f-voce);font-size:26px;text-align:center;margin:0}
 .piede{border-top:1px solid var(--riga);padding-top:22px;text-align:center;font-size:16px;color:var(--fioco)}.piede a{color:var(--oro)}
 .testa{display:flex;align-items:center;justify-content:space-between;gap:12px}.tasto.invita{align-self:center;border:0;cursor:pointer;font-family:inherit;padding:12px 22px}.invita-scelta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:10px}.invita-scelta .tasto{font-size:17px;padding:12px 18px;border:0;cursor:pointer;font-family:inherit}
+.quadranti{display:flex;flex-direction:column;gap:16px}
+.quad{border-radius:24px;border:1px solid var(--riga);background:linear-gradient(160deg,color-mix(in srgb,var(--e) 28%,transparent),rgba(255,255,255,.03))}
+.quad summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:18px;padding:26px 22px;min-height:120px}
+.quad summary::-webkit-details-marker{display:none}
+.quad summary i{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--e);box-shadow:0 0 20px var(--e)}
+.quad summary span{flex:1;display:flex;flex-direction:column;gap:6px}
+.quad summary b{font-family:var(--f-voce);font-size:32px;font-weight:600;line-height:1.05}
+.quad summary small{font-size:17px;color:var(--fioco)}
+.quad summary em{font-style:normal;font-size:34px;color:var(--oro);transition:transform .2s}
+.quad[open] summary em{transform:rotate(90deg)}
+.quad-dentro{display:flex;flex-direction:column;gap:40px;padding:4px 22px 28px}
+.quad summary:focus-visible{outline:3px solid var(--avorio);outline-offset:3px;border-radius:24px}
 @media (max-width:420px){body{font-size:19px}.data .num{font-size:62px}article h2{font-size:32px}}
 </style>
 </head>
@@ -96,60 +108,10 @@ h3.sez{font-family:var(--f-titolo);font-weight:600;font-size:17px;letter-spacing
 
   <div class="trama"></div>
 
-  <article>
-    <div class="rubrica">Dal 2021</div>
-    <h2>FelicitasMundi e la rete eco sarda</h2>
-    <p>Questo progetto parte dalla piattaforma FelicitasMundi, attiva già dal 2021, che già in varie occasioni ha comunicato della rete eco sarda o ha interagito con alcuni dei partecipanti, sia in occasione in primis dell'incendio del Montiferru del 2021, appunto l'anno in cui è nato Felicitas, poi varie collaborazioni con l'interazione per gli incontri di Maria Sonia Baldoni, dopodiché la collaborazione con i gruppi della Gallura e di Oristano e della zona di Quartu per la realizzazione di vari eventi.</p>
-    <p>Sul vecchio sito sono usciti anche gli articoli di sostegno alle manifestazioni legate ai fatti non coerenti rispetto alle problematiche ambientali, paesaggistiche nate a causa delle pale eoliche e di tutto ciò che ruota attorno, e il sostegno alle leggi già esistenti legate alla zona franca e alla fiscalità privilegiata già in vigore nel territorio extradoganale in cui ci troviamo.</p>
-  </article>
-
-  <article>
-    <div class="rubrica">Il progetto</div>
-    <h2>Logistica e tecnologia a favore della comunità</h2>
-    <p>Ora stiamo realizzando un sistema basato sulla logistica e tecnologia a favore della comunità, che vive di principi etici e filosofici universali e che quindi, per sostenersi e portare un supporto vivo al villaggio Sardegna, al villaggio diffuso formato da tanti vicinati, ha un progetto chiaro che poi si estende anche negli altri territori italici, come dice qualcuno.</p>
-  </article>
-
-  <article>
-    <div class="rubrica">L'obiettivo</div>
-    <h2>Connettere i vicinati sardi</h2>
-    <p>L'obiettivo è quello di poter realizzare in tutta la Sardegna, dare visibilità e connettere quelli che sono i vicinati sardi, che sarebbero in realtà attorno ai 30-40 km di raggio, che vengono creati partendo da quelli già esistenti, che sono nell'Oristanese, nella zona attorno a Baratili, lì Oristano, la zona di Olbia attorno a San Simplicio, la zona di Quartu, e in parte altri andranno a unirsi a quelli delle reti esistenti nei territori che hanno dei principi, ovviamente, come vi ho già detto, solidali ed altro.</p>
-  </article>
-
-  <article>
-    <div class="rubrica">Sicurezza</div>
-    <h2>Un sistema open source</h2>
-    <p>Questi vicinati vengono messi all'interno di un sistema open source, dove c'è una grande visione di sicurezza e di esportabilità dei contenuti, in modo da non poter essere soggiogati alla tecnologia, ma allo stesso tempo in cui la tecnologia, comprese le più alte forme date all'uomo legate alla tecnologia di intelligenza artificiale, possono essere al supporto delle comunità locali senza per questo ovviamente esserne sotto il controllo.</p>
-    <p>E per questo lavorare su data center strutturati, protetti, aiuta per poter poi permettere a questi vicinati di condividere materiali che possono essere sia pubblici che privati. Quelli privati ovviamente vengono protetti da più fasi di sicurezza.</p>
-  </article>
-
-  <article>
-    <div class="rubrica">I vicinati</div>
-    <h2>Una visione a 360 gradi</h2>
-    <p>E quindi la funzione è quella di poter attivare questi vicinati, che tra loro andranno prima a dare una chiara leggibilità di quelle che sono le risorse in campo, i centri dove vengono fatte produzioni, dove vengono dati insegnamenti, quali sono le persone che portano avanti i progetti attivi nel territorio, progetti economici, progetti che comunque hanno una funzionalità anche terapeutica, cioè una visione totale a 360 gradi di tutto quello che accade nei vicinati.</p>
-  </article>
-
-  <article>
-    <div class="rubrica">La logistica</div>
-    <h2>Dal gruppo d'acquisto ai punti di ritiro</h2>
-    <p>Questo ci permetterà di sviluppare una rete di logistica formata sia da luoghi che diventano punti di ritiro e che vengono interconnessi attraverso la piattaforma Felicitas, che dà la possibilità di far fare acquisti della spesa settimanale sia in ambito di punti di ritiro, sia in ambito di distribuzione a casa o in altri punti di ritiro di quei prodotti.</p>
-    <p>Quindi un lavoro che parte proprio dal gruppo d'acquisto, l'acquisto e il supporto alle attività produttive in primis, quindi sia dal punto di vista economico ma anche dal punto di vista di mani che vanno ad aiutare. È un sistema che ti permette di sapere anche orari, obiettivi e tutto quanto.</p>
-    <p>Quindi un sistema pratico, chiaro, che aiuta sia a fare degli acquisti in gruppo d'acquisto, quindi supportare il sistema grazie a questo, sviluppare programmazioni cicliche, settimanali di vendita di questi prodotti e contestualmente inserire tutto quello che è l'ambiente di attività, dai seminari ai laboratori, ai corsi, ai trattamenti, a una programmazione che poi tecnicamente, come avviene nei centri spirituali, nei centri del benessere, quei contesti diventano poi man mano giornalieri e non solo ciclici.</p>
-  </article>
-
-  <article>
-    <div class="rubrica">Aree di civiltà</div>
-    <h2>Una lingua, una tradizione, una cultura</h2>
-    <p>La cosa importante è che ogni regione, in ogni civiltà, i villaggi diffusi ragionano come aree di civiltà legate a un linguaggio, legate a una tradizione, a una cultura. Quindi nell'area sarda ovviamente vengono messi più vicinati, interagendo, integrando i gruppi, le persone e le famiglie soprattutto già attive, e integrando però anche il mondo della società ordinaria, perché quelli possono diventare coloro che usufruiscono dei nostri servizi e dei nostri prodotti.</p>
-    <p>E questo permette alla piattaforma e all'azienda che lo gestisce di poter sostenere i costi e sostenere anche le risorse umane che servono per portare avanti la pianificazione logistica, tecnologica e di sviluppo della comunità.</p>
-  </article>
-
-  <article>
-    <div class="rubrica">Tecnologia</div>
-    <h2>Il Cervello Digitale Evoluto</h2>
-    <p>Riccardo Myst si occuperà con me della parte tecnologica, essendo lui uno sviluppatore, un programmatore: lui avrà questo compito, lo sviluppo del sistema del Cervello Digitale Evoluto. Sono tematiche, linguaggi nuovi che possono essere funzionali allo sviluppo della rete, anche per il funzionamento di questo Cervello Digitale Evoluto, cioè lì dove anche le reti vanno avanti con cartelle non condivise, nessun tipo di sviluppo di automazioni tra email, tra obiettivi di ogni squadra, gestione dello stato d'avanzamento delle task, gestione coordinata delle attività, degli insegnamenti, della produzione.</p>
-    <p>A questo serve il Cervello Digitale Evoluto di Felicitas, che permette da una parte di poter partecipare a tutti con un costo di licenza mensile abbordabile e che può essere anche integrato all'AI, e poi invece alle aziende interessate può essere proprio attivato un cervello proprio che sviluppa e supporta il proprio team di lavoro e che poi può interagire con la piattaforma Felicitas.</p>
-  </article>
-
+  <div class="quadranti">
+  <details class="quad" style="--e:#E07A55">
+    <summary><i></i><span><b>Il Festival</b><small>21 novembre · Baratili</small></span><em aria-hidden="true">›</em></summary>
+    <div class="quad-dentro">
   <article>
     <div class="rubrica">25 ottobre · 21 novembre</div>
     <h2>Ne parleremo a Baratili</h2>
@@ -159,6 +121,79 @@ h3.sez{font-family:var(--f-titolo);font-weight:600;font-size:17px;letter-spacing
     <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/incontro-25-ottobre.html" target="_blank" rel="noopener">L'incontro del 25 ottobre ›</a>
     <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/festival-evento-bozza.html" target="_blank" rel="noopener">Il Felicitas Festival del 21 novembre ›</a>
   </article>
+      <p style="margin:0"><a class="tasto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/festival-evento-bozza.html">Il Felicitas Festival del 21 novembre ›</a></p>
+    </div>
+  </details>
+  <details class="quad" style="--e:#8DBF5E">
+    <summary><i></i><span><b>La comunità che fa la logistica</b><small>vicinati · punti di ritiro · gruppo d'acquisto</small></span><em aria-hidden="true">›</em></summary>
+    <div class="quad-dentro">
+  <article>
+    <div class="rubrica">L'obiettivo</div>
+    <h2>Connettere i vicinati sardi</h2>
+    <p>L'obiettivo è quello di poter realizzare in tutta la Sardegna, dare visibilità e connettere quelli che sono i vicinati sardi, che sarebbero in realtà attorno ai 30-40 km di raggio, che vengono creati partendo da quelli già esistenti, che sono nell'Oristanese, nella zona attorno a Baratili, lì Oristano, la zona di Olbia attorno a San Simplicio, la zona di Quartu, e in parte altri andranno a unirsi a quelli delle reti esistenti nei territori che hanno dei principi, ovviamente, come vi ho già detto, solidali ed altro.</p>
+  </article>
+  <article>
+    <div class="rubrica">I vicinati</div>
+    <h2>Una visione a 360 gradi</h2>
+    <p>E quindi la funzione è quella di poter attivare questi vicinati, che tra loro andranno prima a dare una chiara leggibilità di quelle che sono le risorse in campo, i centri dove vengono fatte produzioni, dove vengono dati insegnamenti, quali sono le persone che portano avanti i progetti attivi nel territorio, progetti economici, progetti che comunque hanno una funzionalità anche terapeutica, cioè una visione totale a 360 gradi di tutto quello che accade nei vicinati.</p>
+  </article>
+  <article>
+    <div class="rubrica">La logistica</div>
+    <h2>Dal gruppo d'acquisto ai punti di ritiro</h2>
+    <p>Questo ci permetterà di sviluppare una rete di logistica formata sia da luoghi che diventano punti di ritiro e che vengono interconnessi attraverso la piattaforma Felicitas, che dà la possibilità di far fare acquisti della spesa settimanale sia in ambito di punti di ritiro, sia in ambito di distribuzione a casa o in altri punti di ritiro di quei prodotti.</p>
+    <p>Quindi un lavoro che parte proprio dal gruppo d'acquisto, l'acquisto e il supporto alle attività produttive in primis, quindi sia dal punto di vista economico ma anche dal punto di vista di mani che vanno ad aiutare. È un sistema che ti permette di sapere anche orari, obiettivi e tutto quanto.</p>
+    <p>Quindi un sistema pratico, chiaro, che aiuta sia a fare degli acquisti in gruppo d'acquisto, quindi supportare il sistema grazie a questo, sviluppare programmazioni cicliche, settimanali di vendita di questi prodotti e contestualmente inserire tutto quello che è l'ambiente di attività, dai seminari ai laboratori, ai corsi, ai trattamenti, a una programmazione che poi tecnicamente, come avviene nei centri spirituali, nei centri del benessere, quei contesti diventano poi man mano giornalieri e non solo ciclici.</p>
+  </article>
+  <article>
+    <div class="rubrica">Aree di civiltà</div>
+    <h2>Una lingua, una tradizione, una cultura</h2>
+    <p>La cosa importante è che ogni regione, in ogni civiltà, i villaggi diffusi ragionano come aree di civiltà legate a un linguaggio, legate a una tradizione, a una cultura. Quindi nell'area sarda ovviamente vengono messi più vicinati, interagendo, integrando i gruppi, le persone e le famiglie soprattutto già attive, e integrando però anche il mondo della società ordinaria, perché quelli possono diventare coloro che usufruiscono dei nostri servizi e dei nostri prodotti.</p>
+    <p>E questo permette alla piattaforma e all'azienda che lo gestisce di poter sostenere i costi e sostenere anche le risorse umane che servono per portare avanti la pianificazione logistica, tecnologica e di sviluppo della comunità.</p>
+  </article>
+    </div>
+  </details>
+  <details class="quad" style="--e:#6FA8D6">
+    <summary><i></i><span><b>La tecnologia</b><small>open source · Cervello Digitale Evoluto</small></span><em aria-hidden="true">›</em></summary>
+    <div class="quad-dentro">
+  <article>
+    <div class="rubrica">Il progetto</div>
+    <h2>Logistica e tecnologia a favore della comunità</h2>
+    <p>Ora stiamo realizzando un sistema basato sulla logistica e tecnologia a favore della comunità, che vive di principi etici e filosofici universali e che quindi, per sostenersi e portare un supporto vivo al villaggio Sardegna, al villaggio diffuso formato da tanti vicinati, ha un progetto chiaro che poi si estende anche negli altri territori italici, come dice qualcuno.</p>
+  </article>
+  <article>
+    <div class="rubrica">Sicurezza</div>
+    <h2>Un sistema open source</h2>
+    <p>Questi vicinati vengono messi all'interno di un sistema open source, dove c'è una grande visione di sicurezza e di esportabilità dei contenuti, in modo da non poter essere soggiogati alla tecnologia, ma allo stesso tempo in cui la tecnologia, comprese le più alte forme date all'uomo legate alla tecnologia di intelligenza artificiale, possono essere al supporto delle comunità locali senza per questo ovviamente esserne sotto il controllo.</p>
+    <p>E per questo lavorare su data center strutturati, protetti, aiuta per poter poi permettere a questi vicinati di condividere materiali che possono essere sia pubblici che privati. Quelli privati ovviamente vengono protetti da più fasi di sicurezza.</p>
+  </article>
+  <article>
+    <div class="rubrica">Tecnologia</div>
+    <h2>Il Cervello Digitale Evoluto</h2>
+    <p>Riccardo Myst si occuperà con me della parte tecnologica, essendo lui uno sviluppatore, un programmatore: lui avrà questo compito, lo sviluppo del sistema del Cervello Digitale Evoluto. Sono tematiche, linguaggi nuovi che possono essere funzionali allo sviluppo della rete, anche per il funzionamento di questo Cervello Digitale Evoluto, cioè lì dove anche le reti vanno avanti con cartelle non condivise, nessun tipo di sviluppo di automazioni tra email, tra obiettivi di ogni squadra, gestione dello stato d'avanzamento delle task, gestione coordinata delle attività, degli insegnamenti, della produzione.</p>
+    <p>A questo serve il Cervello Digitale Evoluto di Felicitas, che permette da una parte di poter partecipare a tutti con un costo di licenza mensile abbordabile e che può essere anche integrato all'AI, e poi invece alle aziende interessate può essere proprio attivato un cervello proprio che sviluppa e supporta il proprio team di lavoro e che poi può interagire con la piattaforma Felicitas.</p>
+  </article>
+    </div>
+  </details>
+  <details class="quad" style="--e:#C9A15A">
+    <summary><i></i><span><b>Dal 2021</b><small>FelicitasMundi e la rete eco sarda</small></span><em aria-hidden="true">›</em></summary>
+    <div class="quad-dentro">
+  <article>
+    <div class="rubrica">Dal 2021</div>
+    <h2>FelicitasMundi e la rete eco sarda</h2>
+    <p>Questo progetto parte dalla piattaforma FelicitasMundi, attiva già dal 2021, che già in varie occasioni ha comunicato della rete eco sarda o ha interagito con alcuni dei partecipanti, sia in occasione in primis dell'incendio del Montiferru del 2021, appunto l'anno in cui è nato Felicitas, poi varie collaborazioni con l'interazione per gli incontri di Maria Sonia Baldoni, dopodiché la collaborazione con i gruppi della Gallura e di Oristano e della zona di Quartu per la realizzazione di vari eventi.</p>
+    <p>Sul vecchio sito sono usciti anche gli articoli di sostegno alle manifestazioni legate ai fatti non coerenti rispetto alle problematiche ambientali, paesaggistiche nate a causa delle pale eoliche e di tutto ciò che ruota attorno, e il sostegno alle leggi già esistenti legate alla zona franca e alla fiscalità privilegiata già in vigore nel territorio extradoganale in cui ci troviamo.</p>
+  </article>
+    </div>
+  </details>
+  </div>
+
+
+
+
+
+
+
+
 
   <div class="trama"></div>
 
