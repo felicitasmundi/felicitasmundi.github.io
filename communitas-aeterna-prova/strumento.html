@@ -7,7 +7,7 @@
      · «rendila operativa, nessun link non funzionante». La prova di stamattina (lo strumento su claude.ai) diventa l'app:
      Oggi · Giornale · Megafono · Obiettivi, con i dati veri su Supabase. Le regole d'accesso le decide il database (RLS). -->
 <title>FelicitasMundi</title>
-<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icona-felicitas-ios-180.png?v=1019"><link rel="icon" type="image/png" sizes="48x48" href="favicon-felicitas-48.png?v=1019"><meta name="theme-color" content="#F5F0E6"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icona-felicitas-ios-180.png?v=1024"><link rel="icon" type="image/png" sizes="48x48" href="favicon-felicitas-48.png?v=1024"><meta name="theme-color" content="#F5F0E6"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="comune/caratteri.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="comune/fm-video.js?v=10221330"></script>
@@ -586,8 +586,9 @@ function vAzione(){
   q.push(quad("Chiedi assistenza","#6FA8D6",'data-vai="assistenza"'));
   q.push(quad("Praticantato","#B08AE0",'data-vai="oggi"'));
   if(io.id)q.push(quad("Megafono","#d6b56c",'data-vai="megafono"'));
-  c.innerHTML='<h2 class="az-tit">Azione</h2><div class="az-filo"></div><div class="az-griglia">'+q.join("")+'</div>';
-  legaVai(c);
+  /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
+  c.innerHTML='<h2 class="az-tit">Azione</h2><div class="az-filo"></div><div class="az-griglia">'+q.join("")+'</div><div data-fm-installa></div>';
+  legaVai(c);if(window.fmInstallaAvvia)fmInstallaAvvia();
 }
 function moduloAz(tit,campi,rpc,args){
   var c=$("#corpo");
@@ -2028,6 +2029,7 @@ body.con-diretta{padding-bottom:130px}
 (function(){function segui(){try{if(!localStorage.getItem("fm_diretta"))return;document.body.classList.add("con-diretta");if(window.FM_DIRETTA){window.FM_DIRETTA.avvia();return;}var sd=document.createElement("script");sd.src="comune/fm-diretta.js?v=10182055";document.head.appendChild(sd);}catch(e){}}
 segui();window.addEventListener("pageshow",function(e){if(e.persisted)segui();});})();
 </script>
+<script src="comune/fm-installa.js?v=10241330"></script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 </body>
 </html>
