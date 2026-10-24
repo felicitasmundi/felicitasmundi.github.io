@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Chiavi delle notifiche</title>
+<!-- 24/10/2026, Gab: «ok crea le chiavi da mettere su secrets».
+     Le chiavi nascono qui, nel tuo browser, e non vanno da nessuna parte: questa pagina non manda niente in rete.
+     La privata la copi tu nei Secrets di Supabase. La pubblica la mandi a Claude, che la mette nell'app. -->
+<style>
+body{margin:0;background:#0A0C1A;color:#F5F0E6;font:19px/1.5 system-ui,-apple-system,sans-serif}
+.p{max-width:640px;margin:0 auto;padding:28px 16px 48px}
+h1{font-size:28px;margin:0 0 10px}
+p{margin:0 0 14px}
+button{font:inherit;font-weight:600;padding:14px 22px;border-radius:999px;border:0;background:#d6b56c;color:#1A1405;cursor:pointer}
+.k{margin:18px 0;padding:16px;border:1px solid rgba(214,181,108,.4);border-radius:16px}
+.k b{display:block;color:#d6b56c;margin-bottom:6px}
+.k code{display:block;word-break:break-all;font:16px ui-monospace,Menlo,monospace;background:rgba(245,240,230,.06);padding:10px;border-radius:10px;margin-bottom:8px}
+.k button{font-size:16px;padding:8px 14px}
+.nota{font-size:16px;color:#c9c3d6}
+</style>
+</head>
+<body><div class="p">
+<h1>Chiavi delle notifiche</h1>
+<p>Tocca il tasto una volta sola. Le due chiavi nascono qui, nel tuo browser, e non vengono mandate da nessuna parte.</p>
+<p><button id="crea">Crea le chiavi</button></p>
+<div id="out" hidden>
+  <div class="k"><b>VAPID_PRIVATA · va nei Secrets di Supabase, non darla a nessuno</b><code id="priv"></code><button data-c="priv">Copia</button></div>
+  <div class="k"><b>VAPID_PUBBLICA · va nei Secrets di Supabase e la mandi a Claude</b><code id="pub"></code><button data-c="pub">Copia</button></div>
+  <div class="k"><b>VAPID_SOGGETTO · va nei Secrets di Supabase</b><p class="nota" style="margin:0 0 6px">Scrivi la mail di FelicitasMundi a cui i servizi delle notifiche possono scrivere.</p><input id="mail" type="email" style="width:100%;box-sizing:border-box;font:inherit;padding:10px;border-radius:10px;border:1px solid rgba(214,181,108,.4);background:rgba(245,240,230,.06);color:inherit;margin-bottom:8px"><code id="sogg"></code><button data-c="sogg">Copia</button></div>
+  <p class="nota">In Supabase: Edge Functions → Secrets → Add new secret, una riga per ognuna delle tre, col nome scritto sopra. Se ricarichi la pagina, le chiavi di adesso spariscono: copiale prima.</p>
+</div>
+</div>
+<script>
+function b64u(buf){var s="",a=new Uint8Array(buf);for(var i=0;i<a.length;i++)s+=String.fromCharCode(a[i]);return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+document.getElementById("crea").onclick=async function(){
+  var k=await crypto.subtle.generateKey({name:"ECDSA",namedCurve:"P-256"},true,["sign","verify"]);
+  var pub=await crypto.subtle.exportKey("raw",k.publicKey);
+  var jwk=await crypto.subtle.exportKey("jwk",k.privateKey);
+  document.getElementById("pub").textContent=b64u(pub);
+  document.getElementById("priv").textContent=jwk.d;
+  document.getElementById("out").hidden=false;this.disabled=true;this.textContent="Chiavi create";
+};
+document.getElementById("mail").oninput=function(){document.getElementById("sogg").textContent=this.value.trim()?"mailto:"+this.value.trim():"";};
+document.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){var t=document.getElementById(b.getAttribute("data-c")).textContent;
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent="Copiata";},function(){prompt("Copia",t);});};});
+</script>
+</body>
+</html>

@@ -587,8 +587,8 @@ function vAzione(){
   q.push(quad("Praticantato","#B08AE0",'data-vai="oggi"'));
   if(io.id)q.push(quad("Megafono","#d6b56c",'data-vai="megafono"'));
   /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
-  c.innerHTML='<h2 class="az-tit">Azione</h2><div class="az-filo"></div><div class="az-griglia">'+q.join("")+'</div><div data-fm-installa></div>';
-  legaVai(c);if(window.fmInstallaAvvia)fmInstallaAvvia();
+  c.innerHTML='<h2 class="az-tit">Azione</h2><div class="az-filo"></div><div class="az-griglia">'+q.join("")+'</div><div data-fm-installa></div>'+(io.id?'<div data-fm-notifiche></div>':'');
+  legaVai(c);if(window.fmInstallaAvvia)fmInstallaAvvia();if(io.id&&window.fmNotifiche)fmNotifiche(db);
 }
 function moduloAz(tit,campi,rpc,args){
   var c=$("#corpo");
@@ -2072,6 +2072,7 @@ body.con-diretta{padding-bottom:130px}
 segui();window.addEventListener("pageshow",function(e){if(e.persisted)segui();});})();
 </script>
 <script src="comune/fm-installa.js?v=10241325"></script>
+<script src="comune/fm-notifiche.js?v=10241400"></script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 </body>
 </html>
