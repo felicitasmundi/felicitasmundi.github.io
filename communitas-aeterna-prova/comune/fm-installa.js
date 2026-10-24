@@ -15,7 +15,7 @@
   window.addEventListener('appinstalled', function(){ document.querySelectorAll('.fi-box').forEach(function(b){ b.innerHTML = '<p class="fi-ok">L\'app è sul tuo schermo.</p>'; }); });
 
   var CSS = '.fi-box{margin:14px 0}'+
-    '.fi-tasto{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:16px 20px;border-radius:999px;border:2px solid #d6b56c;background:none;color:#d6b56c;font-family:'DM Sans',system-ui,-apple-system,sans-serif;font-weight:600;font-size:19px;cursor:pointer}'+
+    '.fi-tasto{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:16px 20px;border-radius:999px;border:2px solid #d6b56c;background:none;color:#d6b56c;font-family:DM Sans,system-ui,-apple-system,sans-serif;font-weight:600;font-size:19px;cursor:pointer}'+
     '.fi-tasto img{width:30px;height:30px;border-radius:50%}'+
     '.fi-guida{margin-top:12px;border:1px solid rgba(214,181,108,.35);border-radius:20px;padding:18px;background:rgba(15,18,38,.92);color:#F5F0E6}'+
     '.fi-guida ol{margin:0;padding-left:26px}.fi-guida li{font-size:20px;line-height:1.5;margin:0 0 10px}'+
@@ -48,7 +48,8 @@
     setTimeout(function(){ f.remove(); }, 12000);
   }
   function monta(box){
-    if(giaApp) return;
+    /* 24/10 13:21, Gab: «riconoscendo il terminale […] in modo da non farlo vedere ad uno che ha android» → il tasto si vede solo su iPhone e iPad */
+    if(giaApp || !iphone) return;
     box.classList.add('fi-box');
     box.innerHTML = '<button class="fi-tasto" type="button" data-conta="tasto:installa_app"><img src="icona-felicitas-192.png?v=1024" alt="">Metti l\'app sullo schermo</button><div class="fi-guida" hidden></div>';
     var g = box.querySelector('.fi-guida');

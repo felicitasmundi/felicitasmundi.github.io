@@ -200,6 +200,17 @@
 
   /* dopo il patto: chi non ha talenti va alla soglia */
   async function dentro(R, torna) {
+    /* ⭐ 24 ottobre (SQL 116), Gab: il link personale dello staff del Festival — ?staff= dà ruolo e gruppo.
+       Vale solo con la mail scritta dal nucleo; se non risponde entro 4 secondi si entra lo stesso. */
+    var staff = param("staff");
+    if (staff) {
+      try {
+        await Promise.race([
+          db.rpc("fm_staff_accetta", { p_codice: staff }),
+          new Promise(function (ok) { setTimeout(ok, 4000); })
+        ]);
+      } catch (es) { console.warn("staff:", es); }
+    }
     var prima = await primaVolta();
     /* ⛔ 5 ottobre: si torna solo dentro FelicitasMundi — niente indirizzi esterni */
     if (torna && (/^[a-z][a-z0-9+.-]*:/i.test(torna) || torna.indexOf("//") === 0 || torna.indexOf("\\") > -1)) torna = null;
