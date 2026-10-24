@@ -571,7 +571,7 @@ function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.oncli
 function disegna(){
   document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
   document.body.classList.toggle("notte",/^(giornale|azione|compra|assistenza)$/.test(vista));
-  ({azione:vAzione,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio})[vista]();
+  ({azione:vAzione,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
 }
 
 /* AZIONE · 23 ott, thread «Il cervello come gestionale», Gab: «Ok, bisogna creare quei quadranti» · menu Giornale · Oggi · Azione · Obiettivi · Coscienza, si entra da Azione.
@@ -586,6 +586,8 @@ function vAzione(){
   q.push(quad("Chiedi assistenza","#6FA8D6",'data-vai="assistenza"'));
   q.push(quad("Praticantato","#B08AE0",'data-vai="oggi"'));
   if(io.id)q.push(quad("Megafono","#d6b56c",'data-vai="megafono"'));
+  /* 24 ott 13:27, Gab: «dovrebbe essere un azione che io oggi faccio, quindi vado in azione, inserisco una persona, ed esce su oggi» (SQL 116, solo il nucleo) */
+  if(io.nucleo)q.push(quad("Aggiungi una persona","#E8C77A",'data-vai="staff"'));
   /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
   c.innerHTML='<h2 class="az-tit">Azione</h2><div class="az-filo"></div><div class="az-griglia">'+q.join("")+'</div><div data-fm-installa></div>'+(io.id?'<div data-fm-notifiche></div>':'');
   legaVai(c);if(window.fmInstallaAvvia)fmInstallaAvvia();if(io.id&&window.fmNotifiche)fmNotifiche(db);
@@ -709,7 +711,7 @@ function vOggi(){
     '<div id="o-appunt"></div>'+
     /* 18 ott 20:36 e 22:36, Gab: «oggi può essere anche il contesto "di cosa hai bisogno?"» · da oggi «si possa entrare nella visione completa dei prodotti e assistenza» */
     /* 19 ott 18:05, Gab: «prima di cosa hai bisogno, forse vanno segnati i task che uno ha accettato, per ricordare a che punto si trova» */
-    (io.id?'<div id="o-reg"></div><div id="o-miei"></div><div id="o-logistica"></div>':'')+
+    (io.id?'<div id="o-staff"></div><div id="o-reg"></div><div id="o-miei"></div><div id="o-logistica"></div>':'')+
     /* 19 ott 18:05, Gab: ogni voce scritta come parola, sotto una fila di rettangolini; 23:32 «per ora rendi visibile ciò che c e permetendo a tutto il resto di entrare una volta inserito» */
     '<p class="et" style="margin-top:6px">Di cosa hai bisogno?</p>'+STANZE_O.map(function(s){return '<div class="voce-o" style="--c:'+s[2]+'"><a class="capo-o" href="'+s[1]+'"><b>'+esc(s[0])+'</b><span>tutto ›</span></a><div class="fila-o" id="fila-'+s[3]+'"></div>'+(s[3]==="emporio"?paniereHTML():'')+'</div>';}).join("")+
     (io.id?'':'<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span></div>')+
@@ -718,7 +720,7 @@ function vOggi(){
   santo().then(function(s){var e=$("#o-cielo");if(e&&s)e.textContent=s+" · "+l.nome;});
   Promise.all([lezioni(),dirette()]).then(function(v){var e=$("#o-appunt");if(!e)return;var h=appuntamentiHTML(v[0],v[1],da,a);
     e.innerHTML=h?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p><div class="appunt">'+h+'</div>':'';});
-  fileOggi();
+  fileOggi();vOggiStaff();
   if(io.id)vRegistroOggi();
   if(io.id)mieiOggi();
   if(io.id)logisticaOggi();
@@ -1970,11 +1972,31 @@ function vCartelle(){
 }
 
 
+/* la pagina di Azione «Aggiungi una persona»: solo il nucleo */
+function vStaffPagina(){
+  var c=$("#corpo");
+  if(!io.nucleo){vista="azione";vAzione();return;}
+  c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2><div id="st-box"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
+  legaVai(c);vStaff($("#st-box"));
+}
+/* in Oggi: «Hai aggiunto …» per le persone aggiunte oggi, e chi è entrato oggi dal link */
+function vOggiStaff(){
+  var box=$("#o-staff");if(!box||!io.nucleo)return;
+  var da=new Date();da.setHours(0,0,0,0);var d=da.toISOString();
+  db.from("inviti_staff").select("nome,funzione,ruolo,creato_il,usato_il").is("annullato_il",null).or("creato_il.gte."+d+",usato_il.gte."+d).order("creato_il",{ascending:false}).limit(50).then(function(r){
+    if(vista!=="oggi"||!$("#o-staff"))return;
+    var l=(r&&!r.error&&r.data)||[];
+    box.innerHTML=l.length?'<p class="et" style="margin:4px 0 6px">Persone aggiunte</p><div class="card">'+l.map(function(x){
+      return '<div class="persona"><div><b>Hai aggiunto '+esc(x.nome)+'</b><small>'+esc(FUNZIONI[x.funzione]||x.funzione)+' · '+esc(nomeRuolo(x.funzione,x.ruolo))+' · '+(x.usato_il?'è entrato':'link da mandare o non ancora usato')+'</small></div></div>';}).join("")+
+      '<div class="fine"><button class="mini" data-vai="staff">Apri</button></div></div>':'';
+    legaVai(box);
+  },function(){});
+}
 /* STAFF DEL FESTIVAL: solo il nucleo (SQL 116). 23 ott 13:54, Gab: «Ho bisogno della pagina per inserire le persone del festival e parlarne domenica».
    22 ott 21:54: un link d'invito per persona, col ruolo già dato. Il link vale una volta e solo con la mail scritta qui. */
 function vStaff(box){
   var w=document.createElement("div");box.appendChild(w);
-  w.innerHTML='<p class="et" style="margin-top:14px">Staff del Festival · solo il nucleo</p><div class="card modulo">'+
+  w.innerHTML='<p class="et" style="margin-top:14px">Staff del Festival</p><div class="card modulo">'+
     '<div id="st-lista"><p class="nota">Un momento…</p></div>'+
     '<label>Nome e cognome<input type="text" id="st-nome" autocomplete="off"></label>'+
     '<label>Mail<input type="email" id="st-mail" autocomplete="off" inputmode="email"></label>'+
@@ -2006,7 +2028,7 @@ function vStaff(box){
       b.disabled=false;
       if(r.error)return mostra("#st-ok",/fm_staff_invita|function/i.test(r.error.message||"")?"Si apre con l'SQL 116.":errore(r.error),true);
       ["st-nome","st-mail","st-vill"].forEach(function(k){$("#"+k).value="";});
-      mostra("#st-ok","Link creato per "+n+": mandalo da qui sopra.");lista();vRuoli();
+      mostra("#st-ok","Link creato per "+n+": mandalo da qui sopra.");lista();
     },function(){b.disabled=false;});
   };
 }
@@ -2029,7 +2051,6 @@ function vRuoli(){
       function ruoliDi(f){$("#r-r").innerHTML=RUOLI[f].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");}
       ruoliDi("tecnologica");$("#r-f").onchange=function(e){ruoliDi(e.target.value);};
       regRuoliExtra(box);
-      if(io.nucleo)vStaff(box);
       box.querySelectorAll("[data-chiudi-r]").forEach(function(b){b.onclick=function(){b.disabled=true;db.from("ruoli").update({fino_al:oggiISO()}).eq("id",b.getAttribute("data-chiudi-r")).then(function(r){if(r.error){mostra("#r-ok",errore(r.error),true);b.disabled=false;return;}vRuoli();});};});
       $("#r-dai").onclick=function(){
         var n=val("r-cerca").toLowerCase(),p=(tutteLePersone||[]).filter(function(x){return String(x.nome||"").toLowerCase()===n;});
@@ -2050,7 +2071,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|azione|compra|assistenza)$/.test(q))vista=q;}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|azione|compra|assistenza|staff)$/.test(q))vista=q;}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){
