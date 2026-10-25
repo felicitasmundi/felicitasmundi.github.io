@@ -11,6 +11,8 @@
 <link rel="stylesheet" href="comune/caratteri.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="comune/fm-video.js?v=10221330"></script>
+<script src="comune/fm-installa.js?v=10251000"></script>
+<script src="comune/fm-notifiche.js?v=10251000"></script>
 <style>
 :root{
   --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
@@ -2095,8 +2097,6 @@ body.con-diretta{padding-bottom:130px}
 (function(){function segui(){try{if(!localStorage.getItem("fm_diretta"))return;document.body.classList.add("con-diretta");if(window.FM_DIRETTA){window.FM_DIRETTA.avvia();return;}var sd=document.createElement("script");sd.src="comune/fm-diretta.js?v=10182055";document.head.appendChild(sd);}catch(e){}}
 segui();window.addEventListener("pageshow",function(e){if(e.persisted)segui();});})();
 </script>
-<script src="comune/fm-installa.js?v=10241325"></script>
-<script src="comune/fm-notifiche.js?v=10250900"></script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 </body>
 </html>
