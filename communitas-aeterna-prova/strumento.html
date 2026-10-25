@@ -717,8 +717,7 @@ function vOggi(){
     (io.id?'<div id="o-staff"></div><div id="o-reg"></div><div id="o-miei"></div><div id="o-logistica"></div>':'')+
     /* 19 ott 18:05, Gab: ogni voce scritta come parola, sotto una fila di rettangolini; 23:32 «per ora rendi visibile ciò che c e permetendo a tutto il resto di entrare una volta inserito» */
     '<p class="et" style="margin-top:6px">Di cosa hai bisogno?</p>'+STANZE_O.map(function(s){return '<div class="voce-o" style="--c:'+s[2]+'"><a class="capo-o" href="'+s[1]+'"><b>'+esc(s[0])+'</b><span>tutto ›</span></a><div class="fila-o" id="fila-'+s[3]+'"></div>'+(s[3]==="emporio"?paniereHTML():'')+'</div>';}).join("")+
-    (io.id?'':'<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span></div>')+
-    (io.coordina?'<div id="o-ruoli"></div>':'');
+    (io.id?'':'<div class="card"><b>Cosa si può fare</b><span class="t">Leggere il giornale del giorno, venire agli eventi, ascoltare le dirette, dare una mano con i bisogni del villaggio.</span></div>');
   legaVai(c);legaPaniere(c);
   santo().then(function(s){var e=$("#o-cielo");if(e&&s)e.textContent=s+" · "+l.nome;});
   Promise.all([lezioni(),dirette()]).then(function(v){var e=$("#o-appunt");if(!e)return;var h=appuntamentiHTML(v[0],v[1],da,a);
@@ -727,7 +726,6 @@ function vOggi(){
   if(io.id)vRegistroOggi();
   if(io.id)mieiOggi();
   if(io.id)logisticaOggi();
-  if(io.coordina)vRuoli();
 }
 /* 18 ott 23:05, Gab: «alla fine le task sono legate al sistema logistico» (thread «Gestionale della logistica», SQL 74).
    I compiti del mio ruolo logistico, in Oggi. Finché il 74 non c'è, o se non ho compiti, non compare niente. */
@@ -1979,8 +1977,9 @@ function vCartelle(){
 function vStaffPagina(){
   var c=$("#corpo");
   if(!io.nucleo){vista="azione";vAzione();return;}
-  c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2><div id="st-box"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
-  legaVai(c);vStaff($("#st-box"));
+  /* 25 ott 15:22, Gab: «Che differenza c è tra il dare ruolo qua su azione? Secondo me qua su oggi nn ci fa nulla» · «Vai» → Persone e ruoli esce da Oggi e sta qui */
+  c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2><div id="st-box"></div><div id="o-ruoli"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
+  legaVai(c);vStaff($("#st-box"));vRuoli();
 }
 /* in Oggi: «Hai aggiunto …» per le persone aggiunte oggi, e chi è entrato oggi dal link */
 function vOggiStaff(){
