@@ -3,7 +3,7 @@
    Su iPhone le notifiche esistono solo con l'app messa sullo schermo (iOS 16.4 o più). */
 (function(){
   if(window.fmNotifiche) return;
-  var VAPID = "";   /* la chiave pubblica che crea Gab con chiavi-notifiche.html: finché manca, il tasto non si vede */
+  var VAPID = "BB6GhoQTLwM0w2Cs7PhOSkOvFeUMqqvkmsPlorbnaXO0m6Y03EBZ3NkPUG0W5p_TQ41EKK4fYbWP-GGampqrhXc";   /* la chiave pubblica che crea Gab con chiavi-notifiche.html: finché manca, il tasto non si vede */
   var ok = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
   var ua = navigator.userAgent || "";
   var iphone = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
