@@ -1981,15 +1981,25 @@ function vStaffPagina(){
   c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2><div id="st-box"></div><div id="o-ruoli"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
   legaVai(c);vStaff($("#st-box"));vRuoli();
 }
+/* 25 ott 19:09, Gab: «manca la possibilità di fare piu ruoli, sennò siamo rigidi» → i ruoli si scelgono con le spunte, anche più di uno (SQL 124) */
+function ruoliSceltaHTML(id){
+  return '<div class="ruoli-scelta" id="'+id+'"><span class="m">Ruoli (anche più di uno)</span>'+Object.keys(FUNZIONI).map(function(f){
+    return '<fieldset style="border:0;margin:6px 0 0;padding:0"><legend class="m" style="font-weight:600;padding:0">'+esc(FUNZIONI[f])+'</legend>'+RUOLI[f].map(function(x){
+      return '<label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:inherit;margin:4px 0"><input type="checkbox" value="'+f+':'+x[0]+'" style="width:18px;height:18px;margin:0;flex:none">'+esc(x[1])+'</label>';}).join("")+'</fieldset>';}).join("")+'</div>';
+}
+function ruoliScelti(id){return [].slice.call(document.querySelectorAll("#"+id+" input:checked")).map(function(i){return i.value.split(":");});}
+function ruoliTesto(x){
+  return [[x.funzione,x.ruolo]].concat((x.altri_ruoli||[]).map(function(a){return [a.funzione,a.ruolo];})).map(function(a){return (FUNZIONI[a[0]]||a[0])+' · '+nomeRuolo(a[0],a[1]);}).join(", ");
+}
 /* in Oggi: «Hai aggiunto …» per le persone aggiunte oggi, e chi è entrato oggi dal link */
 function vOggiStaff(){
   var box=$("#o-staff");if(!box||!io.nucleo)return;
   var da=new Date();da.setHours(0,0,0,0);var d=da.toISOString();
-  db.from("inviti_staff").select("nome,funzione,ruolo,creato_il,usato_il").is("annullato_il",null).or("creato_il.gte."+d+",usato_il.gte."+d).order("creato_il",{ascending:false}).limit(50).then(function(r){
+  db.from("inviti_staff").select("nome,funzione,ruolo,altri_ruoli,creato_il,usato_il").is("annullato_il",null).or("creato_il.gte."+d+",usato_il.gte."+d).order("creato_il",{ascending:false}).limit(50).then(function(r){
     if(vista!=="oggi"||!$("#o-staff"))return;
     var l=(r&&!r.error&&r.data)||[];
     box.innerHTML=l.length?'<p class="et" style="margin:4px 0 6px">Persone aggiunte</p><div class="card">'+l.map(function(x){
-      return '<div class="persona"><div><b>Hai aggiunto '+esc(x.nome)+'</b><small>'+esc(FUNZIONI[x.funzione]||x.funzione)+' · '+esc(nomeRuolo(x.funzione,x.ruolo))+' · '+(x.usato_il?'è entrato':'link da mandare o non ancora usato')+'</small></div></div>';}).join("")+
+      return '<div class="persona"><div><b>Hai aggiunto '+esc(x.nome)+'</b><small>'+esc(ruoliTesto(x))+' · '+(x.usato_il?'è entrato':'link da mandare o non ancora usato')+'</small></div></div>';}).join("")+
       '<div class="fine"><button class="mini" data-vai="staff">Apri</button></div></div>':'';
     legaVai(box);
   },function(){});
@@ -2004,18 +2014,16 @@ function vStaff(box){
     '<label>Numero di telefono<input type="tel" id="st-tel" autocomplete="off" inputmode="tel" placeholder="+39 …"></label>'+
     '<label>Mail (se ce l\'hai: allora il link vale solo con quella)<input type="email" id="st-mail" autocomplete="off" inputmode="email"></label>'+
     '<label>Villaggio<input type="text" id="st-vill" autocomplete="off"></label>'+
-    '<div class="due"><label>Funzione<select id="st-f">'+Object.keys(FUNZIONI).map(function(f){return '<option value="'+f+'">'+FUNZIONI[f]+'</option>';}).join("")+'</select></label><label>Ruolo<select id="st-r"></select></label></div>'+
+    ruoliSceltaHTML("st-rr")+
     '<div class="azioni"><button class="btn pieno" id="st-crea">Crea il link</button></div><div class="toast" id="st-ok" hidden></div></div>';
-  function ruoliDi(f){$("#st-r").innerHTML=RUOLI[f].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");}
-  ruoliDi("tecnologica");$("#st-f").onchange=function(e){ruoliDi(e.target.value);};
   function link(c){return new URL("accesso.html?staff="+encodeURIComponent(c)+"&torna=strumento.html",location.href).href;}
   function lista(){
-    db.from("inviti_staff").select("id,codice,nome,telefono,villaggio,funzione,ruolo,usato_il,annullato_il,creato_il").is("annullato_il",null).order("creato_il",{ascending:false}).limit(200).then(function(r){
+    db.from("inviti_staff").select("id,codice,nome,telefono,villaggio,funzione,ruolo,altri_ruoli,usato_il,annullato_il,creato_il").is("annullato_il",null).order("creato_il",{ascending:false}).limit(200).then(function(r){
       var e=$("#st-lista");if(!e)return;
       if(r.error){e.innerHTML='<p class="nota">'+(/inviti_staff|relation|schema cache/i.test(r.error.message||"")?"Si apre con l'SQL 116.":esc(errore(r.error)))+'</p>';return;}
       var d=r.data||[];
       e.innerHTML=d.length?d.map(function(x){var u=link(x.codice);
-        return '<div class="persona"><div><b>'+esc(x.nome)+'</b><small>'+esc(FUNZIONI[x.funzione]||x.funzione)+' · '+esc(nomeRuolo(x.funzione,x.ruolo))+(x.villaggio?' · '+esc(x.villaggio):'')+' · '+(x.usato_il?'entrato':'non ancora entrato')+'</small></div>'+
+        return '<div class="persona"><div><b>'+esc(x.nome)+'</b><small>'+esc(ruoliTesto(x))+(x.villaggio?' · '+esc(x.villaggio):'')+' · '+(x.usato_il?'entrato':'non ancora entrato')+'</small></div>'+
           (x.usato_il?'':'<span class="rg-az"><a class="mini oro" href="https://wa.me/'+(x.telefono?esc(String(x.telefono).replace(/[^0-9]/g,"").replace(/^(?=3)/,"39")):'')+'?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a><button class="mini" data-st-copia="'+esc(u)+'">Copia</button><button class="mini" data-st-annulla="'+esc(x.id)+'">Annulla</button></span>')+'</div>';}).join(""):'<p class="nota">Ancora nessun invito.</p>';
       e.querySelectorAll("[data-st-copia]").forEach(function(b){b.onclick=function(){var u=b.getAttribute("data-st-copia");(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){b.textContent="Copiato";},function(){prompt("Copia il link",u);});};});
       e.querySelectorAll("[data-st-annulla]").forEach(function(b){b.onclick=function(){b.disabled=true;db.from("inviti_staff").update({annullato_il:new Date().toISOString()}).eq("id",b.getAttribute("data-st-annulla")).then(function(x){if(x.error){mostra("#st-ok",errore(x.error),true);b.disabled=false;return;}lista();});};});
@@ -2028,11 +2036,14 @@ function vStaff(box){
     if(!tel&&!m)return mostra("#st-ok","Scrivi il numero.",true);
     if(tel&&!/^\+?[0-9 ]{6,20}$/.test(tel))return mostra("#st-ok","Il numero ha solo cifre, con + davanti se serve.",true);
     if(m&&m.indexOf("@")<1)return mostra("#st-ok","Questa mail non sembra giusta.",true);
+    var sc=ruoliScelti("st-rr");if(!sc.length)return mostra("#st-ok","Scegli almeno un ruolo.",true);
     var b=this;b.disabled=true;
-    db.rpc("fm_staff_invita",{p_nome:n,p_mail:m,p_villaggio:val("st-vill"),p_funzione:val("st-f"),p_ruolo:val("st-r"),p_telefono:tel||null}).then(function(r){
+    db.rpc("fm_staff_invita",{p_nome:n,p_mail:m,p_villaggio:val("st-vill"),p_funzione:sc[0][0],p_ruolo:sc[0][1],p_telefono:tel||null,
+      p_altri:sc.slice(1).map(function(a){return {funzione:a[0],ruolo:a[1]};})}).then(function(r){
       b.disabled=false;
-      if(r.error)return mostra("#st-ok",/fm_staff_invita|function|p_telefono/i.test(r.error.message||"")?"Si apre con l'SQL 118.":errore(r.error),true);
+      if(r.error)return mostra("#st-ok",/fm_staff_invita|function|p_telefono|p_altri/i.test(r.error.message||"")?"Si apre con l'SQL 124.":errore(r.error),true);
       ["st-nome","st-tel","st-mail","st-vill"].forEach(function(k){$("#"+k).value="";});
+      document.querySelectorAll("#st-rr input:checked").forEach(function(i){i.checked=false;});
       mostra("#st-ok","Link creato per "+n+": mandalo da qui sopra.");lista();
     },function(){b.disabled=false;});
   };
@@ -2051,20 +2062,22 @@ function vRuoli(){
       box.innerHTML='<p class="et" style="margin-top:10px">Persone e ruoli · per chi coordina</p><div class="card modulo">'+
         (rr.length?rr.map(function(x){return '<div class="persona"><div><b>'+esc(nomi[x.persona_id]||"—")+'</b><small>'+esc(FUNZIONI[x.funzione]||x.funzione)+' · '+esc(nomeRuolo(x.funzione,x.ruolo))+'</small></div><button class="mini" data-chiudi-r="'+esc(x.id)+'">Chiudi</button></div>';}).join(""):'<p class="nota">Ancora nessuno ha un ruolo.</p>')+
         '<label>Dai un ruolo a<input type="search" id="r-cerca" list="r-persone" autocomplete="off" placeholder="Nome"></label><datalist id="r-persone">'+(tutteLePersone||[]).map(function(p){return '<option value="'+esc(p.nome)+'">';}).join("")+'</datalist>'+
-        '<div class="due"><label>Funzione<select id="r-f">'+Object.keys(FUNZIONI).map(function(f){return '<option value="'+f+'">'+FUNZIONI[f]+'</option>';}).join("")+'</select></label><label>Ruolo<select id="r-r"></select></label></div>'+
-        '<div class="azioni"><button class="btn pieno" id="r-dai">Dai il ruolo</button></div><div class="toast" id="r-ok" hidden></div></div>';
-      function ruoliDi(f){$("#r-r").innerHTML=RUOLI[f].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");}
-      ruoliDi("tecnologica");$("#r-f").onchange=function(e){ruoliDi(e.target.value);};
+        ruoliSceltaHTML("r-rr")+
+        '<div class="azioni"><button class="btn pieno" id="r-dai">Dai i ruoli</button></div><div class="toast" id="r-ok" hidden></div></div>';
       regRuoliExtra(box);
       box.querySelectorAll("[data-chiudi-r]").forEach(function(b){b.onclick=function(){b.disabled=true;db.from("ruoli").update({fino_al:oggiISO()}).eq("id",b.getAttribute("data-chiudi-r")).then(function(r){if(r.error){mostra("#r-ok",errore(r.error),true);b.disabled=false;return;}vRuoli();});};});
       $("#r-dai").onclick=function(){
         var n=val("r-cerca").toLowerCase(),p=(tutteLePersone||[]).filter(function(x){return String(x.nome||"").toLowerCase()===n;});
         if(!n)return mostra("#r-ok","Scrivi il nome.",true);
         if(p.length!==1)return mostra("#r-ok",p.length?"Ci sono più persone con questo nome: scrivilo intero.":"Nessuno con questo nome tra chi è entrato.",true);
+        var sc=ruoliScelti("r-rr");if(!sc.length)return mostra("#r-ok","Scegli almeno un ruolo.",true);
+        var ha=rr.filter(function(x){return x.persona_id===p[0].id;}).map(function(x){return x.ruolo;});
+        var nuovi=sc.filter(function(a){return ha.indexOf(a[1])<0;});
+        if(!nuovi.length)return mostra("#r-ok","Questa persona ha già questi ruoli.",true);
         var b=$("#r-dai");b.disabled=true;
-        db.from("ruoli").insert({persona_id:p[0].id,funzione:val("r-f"),ruolo:val("r-r"),dato_da:io.id}).then(function(r){
+        db.from("ruoli").insert(nuovi.map(function(a){return {persona_id:p[0].id,funzione:a[0],ruolo:a[1],dato_da:io.id};})).then(function(r){
           b.disabled=false;
-          if(r.error)return mostra("#r-ok",/duplicate|unique/i.test(r.error.message||"")?"Questa persona ha già questo ruolo.":errore(r.error),true);
+          if(r.error)return mostra("#r-ok",/duplicate|unique/i.test(r.error.message||"")?"Questa persona ha già uno di questi ruoli.":errore(r.error),true);
           vRuoli();
         });
       };
