@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Partecipa come artista, artigiano o autoproduttore · Felicitas Festival</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="comune/fm-comune.css?v=10131608">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!--
+  25 ottobre 2026 · thread «Company brain per i team».
+  Gab 18:06: «nel festival aggiungi il modello e il bottone per partecipare come artista/artigiano e auto produttore»; 18:09: «vai e fammi 123».
+  Le risposte vanno nella tavola partecipazioni_festival con fm_partecipa_festival (SQL 123): arrivano al ruolo Eventi, come le richieste del Festival (SQL 103).
+  Lo stile e le righe sulla privacy e sulla conferma vengono da partecipa-prodotti.html.
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#050507;color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:var(--oro)}
+.in{max-width:820px;margin:0 auto;padding:0 18px}
+.trama{height:3px;background:linear-gradient(90deg,#F39A3A,#F5D27A,#2BB3C9,#E0498A,#8ED06B,#F39A3A);border-radius:2px}
+.su{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0}
+.su a{font-size:13px;text-decoration:none}
+.su .marca{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;color:var(--avorio);opacity:.75}
+header{padding:28px 0 8px}
+header h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,7vw,52px);line-height:1.02;margin:8px 0 10px}
+header p{color:var(--grigio);font-size:15.5px;max-width:640px}
+.indice{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.indice a{font-size:12.5px;border:1px solid var(--riga);border-radius:99px;padding:5px 12px;text-decoration:none;color:var(--avorio)}
+section{padding:22px 0 6px;border-top:1px solid var(--riga);margin-top:22px}
+h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(26px,5vw,34px);line-height:1.1;margin:6px 0 10px}
+h2 .n{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.14em;color:var(--oro);display:block;margin-bottom:4px}
+p.t,li{font-size:15.5px;color:rgba(245,240,230,.88)}
+ul.t{padding-left:20px;display:flex;flex-direction:column;gap:6px;margin:6px 0 12px}
+.blocco{border:1px solid var(--riga);border-radius:18px;padding:18px;background:var(--carta);margin:12px 0}
+.blocco.oro{border-color:rgba(212,175,106,.5)}
+.blocco h3{font-family:'Cinzel',serif;font-weight:500;font-size:13px;letter-spacing:.14em;color:var(--oro);margin-bottom:8px;text-transform:uppercase}
+.due{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:640px){.due{grid-template-columns:1fr 1fr}}
+label.c{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--grigio)}
+input[type=text],input[type=email],input[type=tel],input[type=url],textarea,select{width:100%;font:16px/1.4 'DM Sans',system-ui,sans-serif;color:var(--avorio);background:#0A0C1A;border:1px solid rgba(245,240,230,.2);border-radius:10px;padding:10px 12px}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus,select:focus,a:focus-visible,button:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.scelta{display:flex;gap:10px;align-items:flex-start;font-size:15px;padding:9px 12px;border:1px solid var(--riga);border-radius:12px;cursor:pointer;background:#0A0C1A}
+.scelta input{margin-top:4px;accent-color:#D4AF6A;width:18px;height:18px;flex:none}
+.scelta small{display:block;color:var(--grigio);font-size:13px}
+.scelte{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:640px){.scelte.a2{grid-template-columns:1fr 1fr}.scelte.a4{grid-template-columns:1fr 1fr 1fr 1fr}}
+.conferma{border:1px solid var(--oro);background:rgba(212,175,106,.1)}
+.nota{font-size:13px;color:var(--grigio)}
+.esito{margin-top:10px;font-size:14.5px}
+.esito.err{color:#E89A8E}
+.esito.ok{color:#9CCB86}
+.solo-stampa{display:none;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:28px;font-size:12px;color:#222}.solo-stampa div{border-top:1px solid #999;padding-top:6px;min-height:50px}
+.banner-prova{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;margin:10px 0}
+.banner-prova img{border-radius:6px;max-width:100%;height:auto}
+pre{white-space:pre-wrap;word-break:break-all;background:#0A0C1A;border:1px solid var(--riga);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--avorio);margin:8px 0}
+.tasti{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+footer{border-top:1px solid var(--riga);margin-top:36px;padding:18px 0 40px;font-size:12px;color:var(--grigio)}
+@media print{html,body{background:#fff!important;background-image:none!important;color:#111!important}.su,.indice,form .tasti,.no-stampa,.trama{display:none!important}.blocco{background:#fff;border-color:#bbb}p.t,li,label.c,.nota,header p{color:#222}h2 .n,.blocco h3{color:#7a5a1a}input[type],textarea,select{background:#fff!important;color:#111!important;border-color:#999!important}html body::before{display:none!important}.solo-stampa{display:grid!important}.scelta{background:#fff}section{break-inside:avoid-page}}
+</style>
+</head>
+<body>
+<div class="trama"></div>
+<div class="in">
+  <div class="su"><a href="festival-evento-bozza.html">← Felicitas Festival</a><span class="marca">FELICITASMUNDI</span></div>
+
+  <header>
+    <span class="fm-occ">FELICITAS FESTIVAL · 21 NOVEMBRE 2026 · BARATILI SAN PIETRO</span>
+    <h1>Partecipa come artista, artigiano o autoproduttore.</h1>
+    <p>Ci farà piacere averti con noi, con le tue idee, la tua esperienza e ciò che vorrai condividere.</p>
+  </header>
+
+  <form id="mod" novalidate>
+  <section style="border-top:0;margin-top:0">
+    <div class="blocco">
+      <h3>Partecipo come</h3>
+      <div class="scelte">
+        <label class="scelta"><input type="radio" name="come" value="artista">artista</label>
+        <label class="scelta"><input type="radio" name="come" value="artigiano">artigiano</label>
+        <label class="scelta"><input type="radio" name="come" value="autoproduttore">autoproduttore</label>
+      </div>
+    </div>
+    <div class="blocco">
+      <div class="due">
+        <label class="c">Nome<input type="text" name="nome" required maxlength="200" autocomplete="name"></label>
+        <label class="c">Paese o città<input type="text" name="dove" maxlength="80"></label>
+      </div>
+      <label class="c" style="margin-top:12px">Cosa porti al Festival<textarea name="porta" required maxlength="1500"></textarea></label>
+      <label class="c" style="margin-top:12px">Lo spazio che serve<input type="text" name="spazio" maxlength="300"></label>
+    </div>
+    <div class="blocco">
+      <h3>Il contatto</h3>
+      <div class="due">
+        <label class="c">Telefono<input type="tel" name="telefono" maxlength="40" autocomplete="tel"></label>
+        <label class="c">Email<input type="email" name="email" maxlength="200" autocomplete="email"></label>
+      </div>
+      <label class="c" style="margin-top:12px">Note<textarea name="note" maxlength="1500"></textarea></label>
+    </div>
+  </section>
+
+  <section id="conferma">
+    <p class="t">I dati si trattano come scritto nella <a href="privacy.html">privacy di FelicitasMundi</a>.</p>
+    <label class="scelta conferma" style="margin-top:14px"><input type="checkbox" name="conferma" value="si" required><span><b>Confermo le mie scelte.</b><small>Chi conferma è entrato con il codice via mail: il modulo porta il suo nome, il giorno e l'ora.</small></span></label>
+    <div class="tasti">
+      <button class="fm-tasto" type="submit" id="manda">Confermo e mando</button>
+    </div>
+    <p class="esito" id="esito" role="status" aria-live="polite"></p>
+  </section>
+  </form>
+
+  <footer>Felicitas Omnia S.r.l.s. · Sassari · P.IVA 03075740906 · FelicitasMundi · Comunità Eterna</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var EV="bfff97a1-3431-4939-b15e-304f14087509";   /* il Felicitas Festival, orma */
+var BOZZA="fm_artisti_bozza";
+var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}):null;
+var f=document.getElementById("mod"),esito=document.getElementById("esito"),manda=document.getElementById("manda");
+var CAMPI=["nome","dove","porta","spazio","telefono","email","note"];
+function dati(){
+  var d={};CAMPI.forEach(function(k){var v=(f.elements[k].value||"").trim();d[k]=v||null;});
+  var x=f.querySelector('input[name="come"]:checked');d.come=x?x.value:null;d.conferma=f.elements.conferma.checked;return d;
+}
+function rimetti(d){
+  CAMPI.forEach(function(k){if(d[k]!=null)f.elements[k].value=d[k];});
+  if(d.come){var x=f.querySelector('input[name="come"][value="'+d.come+'"]');if(x)x.checked=true;}
+  f.elements.conferma.checked=!!d.conferma;
+}
+function di(t,tipo){esito.textContent=t;esito.className="esito"+(tipo?" "+tipo:"");}
+try{var b=localStorage.getItem(BOZZA);if(b)rimetti(JSON.parse(b));}catch(e){}
+
+f.addEventListener("submit",function(ev){
+  ev.preventDefault();
+  var d=dati();
+  if(!d.come){di("Scegli come partecipi.","err");return;}
+  if(!d.nome||d.nome.length<2){di("Manca il nome.","err");f.elements.nome.focus();return;}
+  if(!d.porta||d.porta.length<2){di("Scrivi cosa porti al Festival.","err");f.elements.porta.focus();return;}
+  if(!d.telefono&&!d.email){di("Lascia un telefono o una mail, per risponderti.","err");f.elements.telefono.focus();return;}
+  if(!d.conferma){di("Per mandarlo serve il segno «Confermo le mie scelte».","err");return;}
+  if(!db){di("La pagina non riesce a collegarsi. Controlla la connessione e riprova.","err");return;}
+  manda.disabled=true;di("Un momento…");
+  db.auth.getSession().then(function(s){
+    var u=s&&s.data&&s.data.session&&s.data.session.user;
+    if(!u){
+      try{localStorage.setItem(BOZZA,JSON.stringify(d));}catch(e){}
+      location.href="accesso.html?torna="+encodeURIComponent(location.pathname+"#conferma");return;
+    }
+    return db.rpc("fm_partecipa_festival",{p_come:d.come,p_nome:d.nome,p_porta:d.porta,p_spazio:d.spazio,p_dove:d.dove,
+      p_telefono:d.telefono,p_email:d.email,p_note:d.note,p_evento:EV}).then(function(r){
+      manda.disabled=false;
+      if(r.error){var m=String(r.error.message||"");
+        di(/does not exist|schema cache|Could not find/i.test(m)?"Il modulo non è ancora aperto: riprova tra poco.":"Non è stato mandato. Si può riprovare.","err");return;}
+      if(r.data!=="ok"){di(r.data||"Non è stato mandato. Si può riprovare.","err");return;}
+      try{localStorage.removeItem(BOZZA);}catch(e){}
+      di("Ricevuto. Il modulo è arrivato a chi coordina il Festival, con il tuo nome, il giorno e l'ora.","ok");
+    });
+  }).catch(function(){manda.disabled=false;di("Non è stato mandato. Si può riprovare.","err");});
+});
+})();
+</script>
+<script src="comune/fm-numeri.js?v=10221400" defer></script>
+</body>
+</html>
