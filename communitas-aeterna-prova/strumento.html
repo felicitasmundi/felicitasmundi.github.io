@@ -568,7 +568,8 @@ function testa(){
 
 /* ── disegno ── */
 function vai(v){if(typeof spazioFerma==="function")spazioFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
-document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-v"));};});
+/* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
+document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");if(v==="cervello"){location.href="coscienza.html";return;}vai(v);};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
   document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
@@ -1039,7 +1040,7 @@ function regRuoliExtra(box){
    Bolli del palinsesto e «dall'ultima volta» dall'SQL 77 (fm_giornale_entro, fm_giornale_voci_mosse); senza, le voci sono tutte uguali. */
 var FEST_ID="bfff97a1-3431-4939-b15e-304f14087509";
 var VOCI_G4=[["pratiche_risveglio","Pratiche di risveglio",1],["bambini","Contenuti per bambini",2],["sapere_mondo","Sapere del mondo",5],["storie","Storie",3],["musica","Bella musica",4],["maestrie","Le maestrie",3],["insegnamenti","Insegnamenti",5],["creativita","Creatività",1],["notte","Programmi della notte",4],["tecnologia","Tecnologia",5],["economia","Economia",3]];
-var DATE_G4=[["2026-10-25","25 ottobre","L'incontro dei vicinati · Cas'ale · Baratili · dalle 11"],["2026-11-21","21 novembre","Felicitas Festival · Baratili San Pietro · dalle 10:00"]]; /* dalla pagina del Festival */
+var DATE_G4=[["2026-10-25","25 ottobre","L'incontro dei vicinati · Baratili · dalle 11"],["2026-11-21","21 novembre","Felicitas Festival · Baratili San Pietro · dalle 10:00"]]; /* dalla pagina del Festival */
 var g4Entro;
 function g4Testa(g){
   var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime(),L=luna();
