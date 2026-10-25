@@ -562,7 +562,7 @@ function testa(){
       '<button class="alto-b" type="button" id="inv-copia">Copia il link</button></div>');
     $("#inv-copia").onclick=function(){var b=this;(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){b.textContent="Link copiato";},function(){prompt("Copia il link",url);});};
   };
-  var pb=document.querySelector("[data-piani]");if(pb)pb.onclick=function(){vai("oggi");setTimeout(function(){var d=$("#o-come");if(d){d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"});}},0);};
+  var pb=document.querySelector("[data-piani]");/* 25/10, Gab «su piani non c e nulla» → «vai»: il loghetto apre la pagina Piani (thread «Il cervello come gestionale») */if(pb)pb.onclick=function(){location.href="piani.html";};
   var e=$("#esci");if(e)e.onclick=function(){db.auth.signOut().then(function(){location.href="strumento.html";});};
 }
 

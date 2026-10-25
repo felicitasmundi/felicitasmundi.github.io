@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piani · FelicitasMundi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+/* Una colonna: dal gratis all'azienda, un piano per riquadro, testi grandi (over 60) */
+:root{--notte:#070814;--notte2:#11142b;--avorio:#f5f0e6;--fioco:#cdc7da;--oro:#d6b56c;--riga:rgba(214,181,108,.32);
+--tit:'Cinzel',Georgia,serif;--voce:'Cormorant Garamond',Garamond,Georgia,serif;--uso:'DM Sans',system-ui,-apple-system,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--notte)}
+body{color:var(--avorio);font-family:var(--uso);font-size:20px;line-height:1.5;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.pagina{max-width:720px;margin:0 auto;padding-block:28px 64px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+.torna{color:var(--fioco);text-decoration:none;font-size:17px}
+.torna:focus-visible,.piano a:focus-visible{outline:2px solid var(--oro);outline-offset:3px;border-radius:6px}
+.marchio{font-family:var(--tit);letter-spacing:.14em;color:var(--oro);font-size:15px;text-align:center;margin:8px 0 0}
+h1{font-family:var(--tit);font-weight:500;font-size:clamp(34px,8vw,46px);letter-spacing:.06em;text-align:center;margin:0}
+.filo{height:1px;background:linear-gradient(90deg,transparent,#E07A55,#C9A15A,#8DBF5E,#6FA8D6,#B08AE0,transparent)}
+.piano{border:1px solid var(--riga);border-radius:24px;padding:22px 20px;background:linear-gradient(160deg,rgba(214,181,108,.08),rgba(255,255,255,.02));display:flex;flex-direction:column;gap:10px}
+.piano h2{font-family:var(--voce);font-weight:600;font-size:31px;line-height:1.1;margin:0}
+.prezzo{font-family:var(--tit);font-size:26px;color:var(--oro);letter-spacing:.03em;margin:0}
+.prezzo small{font-family:var(--uso);font-size:17px;color:var(--fioco);letter-spacing:0}
+.piano p{margin:0}
+.parole{font-family:var(--voce);font-style:italic;font-size:23px;line-height:1.35;color:var(--fioco)}
+ul{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.voci{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.voci li{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--riga);padding-bottom:8px}
+.voci li span:last-child{font-family:var(--tit);color:var(--oro);white-space:nowrap}
+.nota{font-size:17px;color:var(--fioco)}
+.o{font-family:var(--tit);text-align:center;color:var(--oro);letter-spacing:.2em;font-size:16px;margin:-8px 0}
+</style>
+</head>
+<body>
+<div class="pagina">
+<a class="torna" href="strumento.html">‹ Torna all'app</a>
+<p class="marchio">FELICITASMUNDI</p>
+<h1>Piani</h1>
+<div class="filo"></div>
+
+<section class="piano">
+<h2>Leggere e scrivere a mano</h2>
+<p class="prezzo">Gratis</p>
+<p>Leggere il libro Felicitas e il proprio vicinato è gratis.</p>
+<p class="parole">«Se una persona lo vuole fare manualmente lo può fare gratuitamente.»</p>
+</section>
+
+<section class="piano">
+<h2>Il praticantato</h2>
+<p class="prezzo">80 € <small>ogni 4 settimane</small></p>
+<p class="parole">«La formazione, il praticantato che unisce sia l'aspetto introspettivo che l'utilizzo dell'applicazione.»</p>
+<p>Con la possibilità di avere accesso alle lezioni gratuite.</p>
+<p class="o">OPPURE</p>
+<p class="prezzo">Karma yoga</p>
+<p class="parole">«O paghi 80 euro al mese o fai il karma yoga. Perché poi quello è il contesto che ti permette di avere un'intuizione, iniziare a scrivere le cose.»</p>
+</section>
+
+<section class="piano">
+<h2>Il Cervello con l'AI</h2>
+<p class="prezzo">26 € <small>al mese</small></p>
+<p class="parole">«Per usare cervello c'è bisogno dell'integrazione AI, quindi di per sé questo è il primo servizio per cui uno paga 26 euro al mese.»</p>
+</section>
+
+<section class="piano">
+<h2>Assistenza personale</h2>
+<p class="prezzo">80 € <small>all'ora</small></p>
+<p class="parole">«Assistenza personale che può essere data sia proprio nell'ambito dello sviluppo di questo lavoro, cioè dal progetto senso allo sviluppo della cooperazione.»</p>
+</section>
+
+<section class="piano">
+<h2>Per le aziende</h2>
+<p class="prezzo">Avvio: da 1.500 €</p>
+<p>Il prezzo dipende dal contesto e dai bisogni:</p>
+<ul>
+<li>le ore di sviluppo per creare l'avvio;</li>
+<li>l'archivio da impostare;</li>
+<li>i dipendenti;</li>
+<li>l'ambiente logistico e gestionale da sviluppare.</li>
+</ul>
+<p>Si definisce insieme, dopo l'incontro sui bisogni.</p>
+<p class="prezzo" style="margin-top:8px">Ogni mese</p>
+<ul class="voci">
+<li><span>Licenza Felicitas</span><span>30 € a persona</span></li>
+<li><span>Infrastruttura: database, repository e mail dell'azienda</span><span>50 €</span></li>
+<li><span>Assistenza, 2 ore comprese</span><span>160 €</span></li>
+</ul>
+<p>Quando entrano dati di persone (clienti, dipendenti, pagamenti) serve il lavoro sulla sicurezza: ruoli e accessi per ogni dato e l'AI che non legge dati personali. Si conta a ore, a 80 €.</p>
+<p class="nota">Prezzi per le aziende IVA esclusa. L'AI la paga l'azienda a parte, direttamente.</p>
+</section>
+
+</div>
+</body>
+</html>
