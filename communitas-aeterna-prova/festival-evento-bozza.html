@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Felicitas Festival · 21 novembre 2026 · Baratili San Pietro</title>
-<meta name="description" content="Felicitas Festival. Sabato 21 novembre 2026, dalle 10, Centro Sociale e Centro polifunzionale ex Cantina Madau, Baratili San Pietro, Oristano.">
+<meta name="description" content="Felicitas Festival. Sabato 21 novembre 2026, dalle 10, Centro Sociale e Centro Polifunzionale, Baratili San Pietro, Oristano.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FelicitasMundi">
 <meta property="og:title" content="Felicitas Festival · sabato 21 novembre 2026">
-<meta property="og:description" content="Dalle 10 · Centro Sociale e Centro polifunzionale ex Cantina Madau, Baratili San Pietro, Oristano. Pranzo e cena su prenotazione, con buffet e pizza.">
+<meta property="og:description" content="Dalle 10 · Centro Sociale e Centro Polifunzionale, Baratili San Pietro, Oristano. Ingresso gratuito, conferenze, workshop, pasti vegetariani, laboratori per bambini e ragazzi.">
 <meta property="og:url" content="https://app.felicitasmundi.com/communitas-aeterna-prova/festival-evento-bozza.html">
 <meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna-prova/casa/festival-copertina-og.jpg">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 /* Una sola veste scura, come l'app e la pagina del Festival: notte, oro, avorio.
    Colonna unica stretta, testo grande per il telefono (lettori spesso over 60). */
 :root{
-  --notte:#070814; --notte2:#0f1226; --avorio:#f5f0e6; --fioco:#c9c3d6; --oro:#d6b56c; --riga:rgba(214,181,108,.28);
+  --notte:#0a1430; --notte2:#1a2148; --carta:#1a2148; --avorio:#f5f0e6; --fioco:#c9c3d6; --oro:#d6b56c; --riga:rgba(214,181,108,.28);
   --t1:#F39A3A; --t2:#2BB3C9; --t3:#E0498A; --t4:#F5D27A; --t5:#8ED06B;
   --f-titolo:'Cinzel', 'Trajan Pro', Georgia, serif;
   --f-voce:'Cormorant Garamond', Garamond, Georgia, serif;
@@ -29,7 +29,7 @@
   color-scheme:dark;
 }
 [hidden]{display:none!important}
-body{margin:0;background:var(--notte);background-image:radial-gradient(ellipse 120% 60% at 50% 0%, #1b2150 0%, var(--notte) 70%);background-attachment:fixed;color:var(--avorio);font-family:var(--f-uso);font-size:20px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body{margin:0;background:linear-gradient(180deg,#1d2f66 0%,#122050 45%,#0a1430 100%) fixed #0a1430;color:var(--avorio);font-family:var(--f-uso);font-size:20px;line-height:1.55;-webkit-font-smoothing:antialiased}
 .pagina{max-width:640px;margin:0 auto;padding-block:28px 56px;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:40px}
 .marca{font-family:var(--f-titolo);font-size:17px;letter-spacing:.06em;color:var(--oro)}
 .trama{height:3px;border-radius:2px;background:linear-gradient(90deg,var(--t1),var(--t4),var(--t2),var(--t3),var(--t5))}
@@ -40,7 +40,7 @@ body{margin:0;background:var(--notte);background-image:radial-gradient(ellipse 1
 .occhiello{font-family:var(--f-titolo);font-size:15px;letter-spacing:.2em;color:var(--oro);text-transform:uppercase;margin-top:10px}
 h1{font-family:var(--f-voce);font-weight:500;font-size:clamp(46px,12vw,68px);line-height:1;margin:0;text-wrap:balance}
 
-.quando{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;align-items:center;padding:24px;border:1px solid var(--riga);border-radius:20px;background:rgba(15,18,38,.75)}
+.quando{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;align-items:center;padding:24px;border:1px solid var(--riga);border-radius:20px;background:rgba(26,33,72,.85)}
 .quando .num{grid-row:span 2;font-family:var(--f-voce);font-weight:600;font-size:96px;line-height:.85;color:var(--t4)}
 .quando b{font-family:var(--f-titolo);font-weight:600;font-size:22px;letter-spacing:.05em}
 .quando span{font-size:20px;color:var(--fioco)}
@@ -69,7 +69,7 @@ section p{margin:0;font-size:22px;line-height:1.55}
 @media (max-width:700px){.video iframe{aspect-ratio:9/14}}
 
 .tasti{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
-.festival{padding:24px;border-radius:20px;border:1px solid var(--riga);background:rgba(15,18,38,.75)}
+.festival{padding:24px;border-radius:20px;border:1px solid var(--riga);background:rgba(26,33,72,.85)}
 .festival .titolo{font-family:var(--f-voce);font-size:34px;line-height:1.1}
 
 .testa{display:flex;align-items:center;justify-content:space-between;gap:12px}.tasto.invita{align-self:center;border:0;cursor:pointer;font-family:inherit;padding:12px 22px}.invita-scelta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:-24px}.invita-scelta .tasto{align-self:auto;padding:12px 20px}
@@ -108,7 +108,7 @@ button.tasto.vuoto{border:2px solid var(--oro)}
 .aspetta.vivo .pa:nth-child(2){transition-delay:.12s}.aspetta.vivo .pa:nth-child(3){transition-delay:.24s}.aspetta.vivo .pa:nth-child(4){transition-delay:.42s}
 .aspetta .luogo{background:linear-gradient(90deg,var(--t1),var(--t4),var(--t2),var(--t3),var(--t5),var(--t1));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:scorre 14s linear infinite;font-style:italic;padding-right:.08em}
 .bento{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(170px,auto);gap:12px}
-.bento .q{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 16%,#0c0d14),#0a0a0f 70%);border:1px solid color-mix(in srgb,var(--c) 32%,transparent);overflow:hidden;text-decoration:none;color:var(--avorio);opacity:0;transform:translateY(18px)}
+.bento .q{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 18%,#1a2148),#1a2148 70%);border:1px solid color-mix(in srgb,var(--c) 32%,transparent);overflow:hidden;text-decoration:none;color:var(--avorio);opacity:0;transform:translateY(18px)}
 .bento.vivo .q{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1),border-color .35s}
 .bento .q small{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--c)}
 .bento .q b{font-family:var(--f-voce);font-weight:600;font-size:24px;line-height:1.15}
@@ -123,8 +123,28 @@ button.tasto.vuoto{border:2px solid var(--oro)}
 @media (max-width:420px){.bento .q{padding:16px}.bento .q b{font-size:21px}.bento .q b.num{font-size:78px}}
 @media (prefers-reduced-motion:reduce){.copertina img{animation:none;opacity:1;transform:none}.aspetta .pa,.bento .q{opacity:1;transform:none;filter:none;transition:none}.aspetta .luogo{animation:none}}
 .esito{font-size:18px;color:var(--fioco)}.esito:empty{display:none}
-.rimando{padding:24px;border-radius:20px;border:1px solid var(--riga);background:rgba(15,18,38,.75)}
+.rimando{padding:24px;border-radius:20px;border:1px solid var(--riga);background:rgba(26,33,72,.85)}
 .rimando .titolo{font-family:var(--f-voce);font-size:32px;line-height:1.1}
+.scopri ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.scopri li{padding:14px 18px;border-radius:16px;background:var(--carta);border:1px solid var(--riga);font-size:21px}
+.scopri li b{display:block;font-weight:600}.scopri li span{display:block;font-size:19px;color:var(--fioco);margin-top:4px}
+.ospite{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;background:var(--carta);border:1px solid var(--oro)}
+.ospite img,.con-foto img{flex:none;width:84px;height:98px;object-fit:cover;border-radius:14px;border:2px solid var(--oro)}
+.ospite small{display:block;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
+.ospite b{display:block;font-family:var(--f-voce);font-size:28px;line-height:1.1}.ospite span{color:var(--fioco)}
+.programma{gap:20px;scroll-margin-top:80px}
+.luogo-blocco{display:flex;flex-direction:column;gap:18px;padding:22px 20px;border-radius:22px;background:color-mix(in srgb,var(--c) 10%,rgba(26,33,72,.85));border:1px solid color-mix(in srgb,var(--c) 45%,transparent)}
+.luogo-blocco>.parte{color:var(--c);font-size:16px}
+.voce-p{display:flex;flex-direction:column;gap:10px;padding-top:16px;border-top:1px solid var(--riga)}
+.luogo-blocco>.parte+.voce-p{border-top:0;padding-top:0}
+.ora{font-family:var(--f-titolo);font-size:22px;font-weight:600;color:var(--c);letter-spacing:.04em}
+.pren{display:inline-block;margin-left:8px;padding:2px 12px;border-radius:999px;background:#F39A3A;color:#1a1405;font-family:var(--f-uso);font-size:16px;letter-spacing:0;vertical-align:middle}
+h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;margin:0}
+.chi{font-size:19px!important;color:var(--fioco)}
+.nota{font-size:20px!important;color:var(--fioco)}
+.con-foto{display:flex;gap:16px;align-items:center}
+.elenco{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:21px}
+.rinvio{color:var(--oro);font-size:19px;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -144,10 +164,12 @@ button.tasto.vuoto{border:2px solid var(--oro)}
 
   <h2 class="aspetta" aria-label="Ti aspettiamo a Baratili."><span class="pa">Ti</span> <span class="pa">aspettiamo</span> <span class="pa">a</span> <span class="pa luogo">Baratili.</span></h2>
 
+  <!-- 27/10 21:16, Gab: «aggiustare la pagina del evento sul sito»: programma e locandina definitivi (festival-manifesto/programma.html, locandina.html) -->
   <div class="bento">
     <div class="q" style="--c:var(--t4)"><small>Quando</small><b class="num">21</b><b>novembre 2026</b><span>sabato · dalle 10</span></div>
-    <a class="q" href="https://maps.app.goo.gl/6X5Xmu7jTp6Fewt2A" target="_blank" rel="noopener" style="--c:var(--t2)"><small>Dove</small><b>Centro Sociale</b><b>Centro polifunzionale · ex Cantina Madau</b><span>Baratili San Pietro, Oristano</span><span class="va">Apri la mappa ›</span></a>
-    <a class="q largo" href="incontro-25-ottobre.html" style="--c:var(--t3)"><small>Prima del Festival</small><b>25 ottobre · l'incontro dei vicinati</b><span>Baratili · dalle 11</span><span class="va">L'invito ›</span></a>
+    <a class="q" href="https://maps.app.goo.gl/6X5Xmu7jTp6Fewt2A" target="_blank" rel="noopener" style="--c:var(--t2)"><small>Dove</small><b>Centro Sociale e Centro Polifunzionale</b><span>Baratili San Pietro, Oristano</span><span class="va">Apri la mappa ›</span></a>
+    <a class="q largo" href="#programma" style="--c:var(--t3)"><small>Il programma</small><b>Dalle 10 alla cena</b><span class="va">Scopri il programma ›</span></a>
+    <a class="q largo" href="casa/felicitas-festival-locandina-e-programma.pdf" target="_blank" rel="noopener" style="--c:var(--t5)"><small>Da scaricare</small><b>Locandina e programma</b><span class="va">PDF ›</span></a>
   </div>
 
   <section class="lettera">
@@ -158,45 +180,135 @@ button.tasto.vuoto{border:2px solid var(--oro)}
     <p>Ci farà piacere averti con noi, con le tue idee, la tua esperienza e ciò che vorrai condividere.</p>
   </section>
 
+  <section class="scopri">
+    <h2>Scopri il FelicitasFestival</h2>
+    <ul>
+      <li>Ingresso gratuito</li>
+      <li>Fai la spesa solidale</li>
+      <li>Conferenze gratuite su spiritualità e territori, zona franca extradoganale, progetti territoriali e Altra Storia d'Italia</li>
+      <li><b>Scopri Vicinati del cibo</b><span>Una rete di vicinati in tutta la Sardegna: il cibo del territorio passa dal produttore alla comunità, entro 20 km di raggio dal centro di ritiro.</span></li>
+      <li><b>Workshop tra Coscienza e Tecnologia</b><span>con Gabriele Dettori, fondatore FelicitasMundi: riconosci il tuo talento e il tuo progetto di senso, e portalo dal singolo al team con il Cervello Digitale Evoluto.</span></li>
+      <li>Pasti vegetariani</li>
+      <li>Laboratori per bambini e ragazzi</li>
+      <li>Estemporanee artistiche</li>
+      <li>Scambio semi e vendita piante</li>
+    </ul>
+    <div class="ospite"><img src="casa/festival-lamberto-rimondini.jpg" alt="Lamberto Rimondini" width="171" height="199" loading="lazy"><div><small>Ospite speciale</small><b>Lamberto Rimondini</b><span>l'Altra Storia d'Italia</span></div></div>
+  </section>
+
   <div class="trama"></div>
 
-  <section class="video">
-    <div class="parte">La mattina · dalle 10</div>
-    <figure>
-      <figcaption>Villaggi e logistica</figcaption>
-      <div class="fm-vid"><iframe data-fm-video="video/villaggi-e-vicinati.html" title="Villaggi e vicinati" allow="fullscreen" allowfullscreen></iframe></div>
-    </figure>
-    <!-- 22/10, Gab: tasti dei vicinati «proporre vicinato, sapere come si entra, proporre festival» (comune/fm-vicinato.js) -->
-    <div data-fm-vicinato></div>
-  </section>
+  <section class="programma" id="programma">
+    <h2>Il programma</h2>
+    <p class="fonte">Sabato 21 novembre 2026 · dalle 10 · Centro Sociale e Centro Polifunzionale · Baratili San Pietro, Oristano</p>
 
-  <section class="video">
-    <div class="parte">Il pomeriggio</div>
-    <figure>
-      <figcaption>Tecnologia · il Cervello Digitale Evoluto</figcaption>
-      <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
-    </figure>
-    <div class="tasti">
-      <button class="tasto" type="button" data-cosa="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il Cervello Digitale Evoluto della tua azienda</button>
-      <button class="tasto vuoto" type="button" data-cosa="conferenza" data-conta="tasto:conferenza">Organizza una conferenza nel tuo territorio</button>
+    <div class="luogo-blocco" style="--c:var(--t5)">
+      <div class="parte">Centro Sociale</div>
+
+      <article class="voce-p">
+        <div class="ora">10:00</div>
+        <h3>Vicinati del cibo · Modello Sardegna</h3>
+        <p class="chi">conferenza di Gabriele Dettori, fondatore FelicitasMundi</p>
+        <p>Oltre la grande distribuzione, i cui utili si concentrano in larga parte fuori dall'isola. I vicinati come distretti rurali della Sardegna; lavoro e formazione con aziende agricole, studenti, volontari e WWOOFer; un'alimentazione consapevole; punti di ritiro che ospitano laboratori, corsi, attività terapeutiche e servizio mensa; il Cervello Digitale Evoluto come sistema gestionale della rete.</p>
+        <div class="fm-vid"><iframe data-fm-video="video/villaggi-e-vicinati.html" title="Villaggi e vicinati" allow="fullscreen" allowfullscreen></iframe></div>
+        <!-- 22/10, Gab: tasti dei vicinati «proporre vicinato, sapere come si entra, proporre festival» (comune/fm-vicinato.js) -->
+        <div data-fm-vicinato></div>
+      </article>
+
+      <article class="voce-p">
+        <div class="ora">11:30</div>
+        <h3>Tavolo Educazione · Rete eco sarda</h3>
+        <p class="chi">con Cindy Muscas</p>
+        <p>Promuove, nei territori della Sardegna, la connessione tra le famiglie che hanno scelto percorsi di educazione parentale e alternativa, e la costruzione di una rete tra educatori, famiglie e luoghi in natura.</p>
+      </article>
+
+      <article class="voce-p">
+        <div class="ora">13:00</div>
+        <h3>Pranzo vegetariano</h3>
+        <a class="rinvio" href="#pranzo">Prenota il pranzo ›</a>
+      </article>
+
+      <article class="voce-p">
+        <div class="ora">15:00</div>
+        <div class="con-foto"><img src="casa/festival-ivano-becciu-naiely.jpg" alt="Ivano Becciu Naiely" width="320" height="383" loading="lazy"><div>
+          <h3>Dal Mito al Dogma, dal Ritmo alla Materia: la Spiritualità come Azione sul Territorio</h3>
+          <p class="chi">Ivano Becciu Naiely · Maestro del Tamburo Medicina</p>
+        </div></div>
+        <p>Un ponte tra storia antropologica, dinamiche geopolitiche contemporanee e responsabilità spirituale del singolo nella comunità. Dalle radici legate ai cicli della Terra e al tamburo ancestrale, fino ai dogmi che hanno allontanato l'uomo dalla sacralità del luogo. La parola, la preghiera consapevole e l'intenzione vissuta sul proprio territorio agiscono sulla materia e sulle relazioni di vicinato.</p>
+        <p class="nota"><b>Cerchio di radicamento e connessione con i tamburi</b><br>I tamburi medicina sono chiamati a riunirsi per questa occasione</p>
+      </article>
+
+      <article class="voce-p">
+        <div class="ora">16:00</div>
+        <h3>Progetti territoriali</h3>
+        <ul class="elenco">
+          <li>Il ponte per l'autosufficienza, con Sirio Sechi</li>
+          <li>Movimento per l'autodeterminazione del popolo sardo: soluzioni e creazione di nuove comunità, con Muddy Caboni e Angelica Ibba</li>
+          <li>Casa dei Semi della Sardegna, come salvare i semi della biodiversità agricola sarda</li>
+        </ul>
+      </article>
+
+      <article class="voce-p">
+        <div class="ora">17:00</div>
+        <h3>Zona franca extradoganale</h3>
+        <p class="chi">un diritto negato da 30 anni</p>
+        <p>Interverranno la dottoressa Maria Rosaria Randaccio, che parlerà dei diritti dei sardi a usufruire della zona franca extradoganale, e Mariano Carta, presidente dell'Associazione Zona Franca Eleonora d'Arborea Oristano, che parlerà dello scopo dell'associazione. Presenta Marco Caddeo.</p>
+      </article>
     </div>
-    <p class="esito" data-per="attivazione_cervello" aria-live="polite"></p>
-  </section>
 
-  <section class="video">
-    <h2 class="conferenza">La vera storia d'Italia</h2>
-    <div class="fm-vid yt"><button class="yt-anteprima" type="button" data-yt="J9UArYxSv8s" aria-label="Guarda il video di Lamberto Rimondini"><img src="https://i.ytimg.com/vi/J9UArYxSv8s/hqdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-    <div class="yt-titolo"><span>Il video: l'Italia risorge | Mine Vaganti #23 · Lamberto Rimondini</span></div>
-    <p>Lamberto Rimondini sarà con noi durante il pomeriggio al Felicitas Festival. L'inizio è dalle 10.</p>
-  </section>
+    <div class="luogo-blocco" style="--c:var(--t3)">
+      <div class="parte">Centro Polifunzionale</div>
 
-  <!-- 22/10, Gab: «dopo rimondini metti ivano». Testi dalla proposta di Ivano Becciu Naiely (IVANO INTERVENTO.pdf) -->
-  <section class="video">
-    <h2 class="conferenza">Dal Mito al Dogma, dal Ritmo alla Materia: La Spiritualità come Azione sul Territorio</h2>
-    <div class="fm-vid"><img class="anteprima" src="casa/ivano-becciu-naiely.jpg" alt="Ivano Becciu Naiely con il tamburo, sulla spiaggia" width="1200" height="675" loading="lazy"></div>
-    <div class="yt-titolo"><span>Ivano Becciu Naiely · Maestro del Tamburo Medicina</span></div>
-    <p>L'intervento traccia un ponte tra storia antropologica, dinamiche geopolitiche contemporanee e la responsabilità spirituale del singolo all'interno della comunità.</p>
-    <p>Relazione teorico-antropologica integrata da una riflessione partecipata e un momento di presenza/risonanza simbolica.</p>
+      <article class="voce-p">
+        <div class="ora">17:00 <span class="pren">su prenotazione</span></div>
+        <div class="con-foto"><img src="casa/festival-gabriele-dettori.jpg" alt="Gabriele Dettori" width="354" height="414" loading="lazy"><div>
+          <h3>Tra Coscienza e Tecnologia · Workshop</h3>
+          <p class="chi">mindset e innovazione tecnologica · con Gabriele Dettori</p>
+        </div></div>
+        <p>Riconosci il tuo talento e il tuo progetto di senso. Allena un'attenzione indomabile, la coerenza tra pensiero, parola e azione, e porta a terra la tua creatività. Poi fai il salto dal singolo al team: smetti di concentrare conoscenze e relazioni su una sola persona e affidale a un Cervello Digitale Evoluto che, insieme all'AI, ordina file, agende, mail e obiettivi e segue lo sviluppo della tua azienda e del tuo progetto.</p>
+        <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
+        <div class="tasti">
+          <button class="tasto" type="button" data-cosa="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il Cervello Digitale Evoluto della tua azienda</button>
+          <button class="tasto vuoto" type="button" data-cosa="conferenza" data-conta="tasto:conferenza">Organizza una conferenza nel tuo territorio</button>
+        </div>
+        <p class="esito" data-per="attivazione_cervello" aria-live="polite"></p>
+      </article>
+
+      <article class="voce-p">
+        <div class="ora">18:30</div>
+        <div class="con-foto"><img src="casa/festival-lamberto-rimondini.jpg" alt="Lamberto Rimondini" width="171" height="199" loading="lazy"><div>
+          <h3>Lamberto Rimondini presenta l'Altra Storia d'Italia</h3>
+          <p class="chi">Ospite speciale</p>
+        </div></div>
+        <p>In un mondo dove il pensiero critico è scoraggiato e la verità spesso manipolata, Rimondini invita il lettore a rompere il velo della narrazione ufficiale. Le sue opere non si limitano a far riflettere: mettono in crisi certezze, scuotono convinzioni e aprono squarci su realtà volutamente oscurate.</p>
+        <div class="fm-vid yt"><button class="yt-anteprima" type="button" data-yt="J9UArYxSv8s" aria-label="Il video di Lamberto Rimondini"><img src="https://i.ytimg.com/vi/J9UArYxSv8s/hqdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+        <div class="yt-titolo"><span>Il video: l'Italia risorge | Mine Vaganti #23 · Lamberto Rimondini</span></div>
+      </article>
+
+      <article class="voce-p">
+        <div class="ora">a seguire</div>
+        <h3>Cena vegetariana</h3>
+        <a class="rinvio" href="#pranzo">Prenota la cena ›</a>
+      </article>
+    </div>
+
+    <div class="luogo-blocco" style="--c:var(--t2)">
+      <div class="parte">e poi</div>
+      <ul class="elenco">
+        <li>Estemporanee artistiche</li>
+        <li>Spesa solidale nell'Emporio</li>
+        <li>Zona franca · info point</li>
+        <li>Scambio semi e vendita piante</li>
+      </ul>
+    </div>
+
+    <div class="luogo-blocco" style="--c:var(--t1)">
+      <div class="parte">bimbi e ragazzi</div>
+      <h3>Laboratori dell'Associazione Arghentu</h3>
+      <p>Un'educazione alternativa e laboratoriale, dove bambini e ragazzi imparano facendo, all'aria aperta e in comunità: cestineria, palline d'argilla con i semi (seedbombs), traforo, fumetto collettivo e area giocoleria.</p>
+    </div>
+
+    <a class="tasto vuoto" href="casa/felicitas-festival-locandina-e-programma.pdf" target="_blank" rel="noopener">Scarica locandina e programma (PDF)</a>
   </section>
 
   <!-- 25/10 18:06, Gab: «aggiungi il modello e il bottone per partecipare come artista/artigiano e auto produttore» (SQL 123) -->
@@ -205,8 +317,8 @@ button.tasto.vuoto{border:2px solid var(--oro)}
   </section>
 
   <section class="pranzo" id="pranzo">
-    <h2>Pranzo e cena</h2>
-    <p>Su prenotazione, con buffet e pizza.</p>
+    <h2>Pasti vegetariani</h2>
+    <p>Pranzo e cena su prenotazione.</p>
     <div class="tasti">
       <button class="tasto" type="button" data-pasto="pranzo">Prenoto il pranzo</button>
       <button class="tasto" type="button" data-pasto="cena">Prenoto la cena</button>

@@ -40,6 +40,14 @@ h1{font-family:'Cinzel',serif;font-weight:600;font-size:36px;letter-spacing:.04e
 .gia a{color:var(--oro);text-decoration:underline}
 footer{text-align:center;font-size:15px;color:var(--fioco);margin-top:10px}
 footer a{text-decoration:underline}
+.evento{display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:var(--carta);border:2px solid var(--oro);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.evento img{display:block;width:100%;height:300px;object-fit:cover;object-position:50% 0}
+.ev-t{display:flex;flex-direction:column;gap:4px;padding:20px 22px 24px}
+.ev-t small{font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
+.ev-t b{font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;line-height:1.05;margin-bottom:4px}
+.ev-t span{font-size:20px;color:var(--avorio)}
+.ev-t em{font-style:normal;font-weight:600;color:var(--oro);font-size:21px;margin-top:10px}
+.evento:focus-visible{outline:3px solid var(--avorio);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -52,8 +60,13 @@ footer a{text-decoration:underline}
 
   <a class="entra" href="accesso.html?torna=strumento.html" data-conta="tasto:entra_accoglienza">Entra ›</a>
 
+  <!-- 27/10 21:16, Gab: «far in modo che nella pagina felicitasmundi.com si arrivi facilmente all evento in programma» -->
+  <a class="evento" href="festival-evento-bozza.html#programma" data-conta="tasto:festival_accoglienza">
+    <img src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · 21 novembre 2026" width="946" height="1520">
+    <span class="ev-t"><small>Il prossimo evento</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10</span><span>Baratili San Pietro, Oristano</span><span>Ingresso gratuito</span><em>Scopri il programma ›</em></span>
+  </a>
+
   <a class="card" href="strumento.html?v=giornale" style="--e:#D4AF6A"><i></i><span><b>Il Giornale</b><small>ogni mattina alle 9</small></span><em aria-hidden="true">›</em></a>
-  <a class="card" href="festival-evento-bozza.html" style="--e:#E07A55"><i></i><span><b>Il Festival</b><small>21 novembre · Baratili</small></span><em aria-hidden="true">›</em></a>
   <a class="card" href="rete-eco-sarda.html" style="--e:#8DBF5E"><i></i><span><b>La comunità che fa la logistica</b><small>vicinati · punti di ritiro · gruppo d'acquisto</small></span><em aria-hidden="true">›</em></a>
   <a class="card" href="coscienza.html" style="--e:#6FA8D6"><i></i><span><b>La tecnologia</b><small>open source · Cervello Digitale Evoluto</small></span><em aria-hidden="true">›</em></a>
   <a class="card" href="piani.html" style="--e:#9966CC"><i></i><span><b>Piani</b><small>gratis, praticantato, Cervello con l'AI</small></span><em aria-hidden="true">›</em></a>
