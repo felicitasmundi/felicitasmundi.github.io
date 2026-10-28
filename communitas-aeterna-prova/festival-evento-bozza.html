@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Felicitas Festival · 21 novembre 2026 · Baratili San Pietro</title>
-<meta name="description" content="Felicitas Festival. Sabato 21 novembre 2026, dalle 10, Centro Sociale e Centro Polifunzionale, Baratili San Pietro, Oristano.">
+<title>FELICITAS FESTIVAL · 21 novembre 2026</title>
+<meta name="description" content="TRAME, la forza di essere connessi. Sabato 21 novembre 2026, dalle 10, Centro Sociale e Centro Polifunzionale, Baratili San Pietro, Oristano.">
+<!-- 28/10/2026 19:28, Gab: «se comunque le prenotazioni, i tasti funzionano e mandano da qualche parte, possiamo comunque mettere questa edizione». Disegno del thread «Rendere viva la pagina del Festival»; prenotazioni SQL 130. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="FelicitasMundi">
 <meta property="og:title" content="Felicitas Festival · sabato 21 novembre 2026">
@@ -18,394 +19,629 @@
 <meta name="twitter:title" content="Felicitas Festival · sabato 21 novembre 2026">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://app.felicitasmundi.com/communitas-aeterna-prova/casa/festival-anteprima-og-2810.jpg">
-<link rel="stylesheet" href="comune/caratteri.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@400;500;700&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-/* Una sola veste scura, come l'app e la pagina del Festival: notte, oro, avorio.
-   Colonna unica stretta, testo grande per il telefono (lettori spesso over 60). */
 :root{
-  --notte:#0a1430; --notte2:#1a2148; --carta:#1a2148; --avorio:#f5f0e6; --fioco:#c9c3d6; --oro:#d6b56c; --riga:rgba(214,181,108,.28);
-  --t1:#F39A3A; --t2:#2BB3C9; --t3:#E0498A; --t4:#F5D27A; --t5:#8ED06B;
-  --f-titolo:'Cinzel', 'Trajan Pro', Georgia, serif;
-  --f-voce:'Cormorant Garamond', Garamond, Georgia, serif;
-  --f-uso:'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  color-scheme:dark;
+  --c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;
+  --oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9cbe0;--riga:rgba(212,175,106,.28);
+  --t1:#F39A3A;--t2:#2BB3C9;--t3:#E0498A;--t4:#F5D27A;--t5:#8ED06B;--t6:#B48CF0;
+  --sociale:var(--t2);--poli:var(--t3);
 }
-[hidden]{display:none!important}
-body{margin:0;background:linear-gradient(180deg,#1d2f66 0%,#122050 45%,#0a1430 100%) fixed #0a1430;color:var(--avorio);font-family:var(--f-uso);font-size:20px;line-height:1.55;-webkit-font-smoothing:antialiased}
-.pagina{max-width:640px;margin:0 auto;padding-block:28px 56px;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:40px}
-.marca{font-family:var(--f-titolo);font-size:17px;letter-spacing:.06em;color:var(--oro)}
-.trama{height:3px;border-radius:2px;background:linear-gradient(90deg,var(--t1),var(--t4),var(--t2),var(--t3),var(--t5))}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;font-size:20px;line-height:1.5;
+  background:linear-gradient(180deg,var(--c1) 0%,var(--c2) 30%,var(--c3) 100%);background-color:var(--c3);overflow-x:hidden}
+a{color:inherit}
+img{display:block;max-width:100%}
+.serif{font-family:'Cormorant Garamond',serif}
+.arcobaleno{background:linear-gradient(90deg,#f7efe0 0%,var(--t4) 22%,var(--t2) 42%,var(--t1) 60%,var(--t3) 78%,var(--t5) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.trama{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--t1),var(--t4),var(--t2),var(--t3),var(--t5))}
+.largo{max-width:1120px;margin:0 auto;padding:0 20px}
 
-.apertura{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px}
-.nexus{width:168px;height:168px;border-radius:50%;background:#fff;border:4px solid var(--oro);box-shadow:0 0 0 14px rgba(214,181,108,.08),0 0 0 30px rgba(214,181,108,.04),0 20px 60px rgba(0,0,0,.5);display:grid;place-items:center;overflow:hidden}
+/* barra in alto */
+.barra{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));background:rgba(10,20,48,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--riga)}
+.casa{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:'Cinzel',serif;font-size:18px;letter-spacing:.06em;color:var(--oro)}
+.nexus{width:40px;height:40px;border-radius:50%;background:#fff;border:3px solid var(--oro);display:grid;place-items:center;overflow:hidden;flex-shrink:0}
 .nexus img{width:86%;height:86%;object-fit:contain}
-.occhiello{font-family:var(--f-titolo);font-size:15px;letter-spacing:.2em;color:var(--oro);text-transform:uppercase;margin-top:10px}
-h1{font-family:var(--f-voce);font-weight:500;font-size:clamp(46px,12vw,68px);line-height:1;margin:0;text-wrap:balance}
+.barra .mini{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:18px;padding:9px 18px;border-radius:999px;background:var(--oro);color:var(--c3);text-decoration:none;opacity:0;transform:translateY(-6px);transition:.35s;pointer-events:none}
+.barra.su .mini{opacity:1;transform:none;pointer-events:auto}
 
-.quando{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;align-items:center;padding:24px;border:1px solid var(--riga);border-radius:20px;background:rgba(26,33,72,.85)}
-.quando .num{grid-row:span 2;font-family:var(--f-voce);font-weight:600;font-size:96px;line-height:.85;color:var(--t4)}
-.quando b{font-family:var(--f-titolo);font-weight:600;font-size:22px;letter-spacing:.05em}
-.quando span{font-size:20px;color:var(--fioco)}
-.ore{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.ore div{flex:1 1 140px;padding:12px 16px;border-radius:14px;background:rgba(245,240,230,.06)}
-.ore small{display:block;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--oro)}
-.ore strong{font-size:26px;font-weight:600}
+/* tasti */
+.tasti{display:flex;flex-wrap:wrap;gap:12px}
+.tasto{display:inline-flex;align-items:center;justify-content:center;min-height:58px;padding:14px 28px;border-radius:999px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:21px;letter-spacing:.02em;text-decoration:none;cursor:pointer;border:2px solid var(--oro);transition:transform .2s,background .2s}
+.tasto.pieno{background:var(--oro);color:var(--c3)}
+.tasto.vuoto{background:transparent;color:var(--avorio)}
+.tasto:active{transform:scale(.97)}
 
-section{display:flex;flex-direction:column;gap:12px}
-h2{font-family:var(--f-titolo);font-weight:600;font-size:17px;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);margin:0}
-section p{margin:0;font-size:22px;line-height:1.55}
-.voce{font-family:var(--f-voce);font-size:28px;line-height:1.35}
-.fonte{font-size:16px;color:var(--fioco)}
+/* 1 · apertura */
+.apertura{min-height:100svh;padding-top:62px;display:flex;flex-direction:column}
+.apertura .quadro{position:relative;height:31svh;min-height:220px;overflow:hidden}
+.apertura .quadro img{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;object-position:50% 30%;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 70%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 14%,#000 70%,transparent 100%);
+  animation:respiro 26s ease-in-out infinite alternate}
+@keyframes respiro{from{transform:scale(1)}to{transform:scale(1.08) translateY(-1.5%)}}
+.apertura .testi{padding:6px 20px 28px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.apertura h1{margin:0;font-family:'Josefin Sans',sans-serif;font-weight:400;font-size:clamp(52px,14vw,132px);line-height:.95}
+.apertura .festival{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:clamp(24px,6.4vw,46px);letter-spacing:.6em;margin-right:-.6em;margin-top:4px}
+.apertura .motto{margin-top:10px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(28px,7.4vw,44px);line-height:1.1}
+.apertura .motto b{display:block;font-family:'Josefin Sans',sans-serif;color:var(--oro);letter-spacing:.14em;font-size:1.05em}
+.apertura .quando{margin-top:14px;width:100%;max-width:560px;padding:12px 0;border-top:3px solid var(--oro);border-bottom:3px solid var(--oro)}
+.apertura .quando b{display:block;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:clamp(26px,7vw,40px);color:var(--t4);letter-spacing:.03em}
+.apertura .quando span{font-size:20px;color:var(--fioco)}
+.apertura .tasti{margin-top:16px;justify-content:center;width:100%;max-width:560px}
+.apertura .tasti .tasto{flex:1 1 140px}
+.gratis{margin-top:16px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:var(--t5)}
 
-.dove b{font-size:26px;font-weight:600}
-.tasto{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;background:var(--oro);color:#1a1405;font-weight:600;font-size:20px;text-decoration:none}
-.tasto.vuoto{background:none;border:2px solid var(--oro);color:var(--oro)}
-.tasto:focus-visible{outline:3px solid var(--avorio);outline-offset:3px}
+/* capitoli */
+.capitolo{padding:90px 0}
+.etichetta{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:18px;letter-spacing:.22em;text-transform:uppercase;color:var(--oro)}
+.grande{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(44px,11vw,92px);line-height:1.02;margin:10px 0 0}
+.medio{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(36px,8.6vw,64px);line-height:1.05;margin:0}
+.corpo{font-size:21px;line-height:1.55;max-width:680px}
+.fioco{color:var(--fioco)}
 
-.pranzo{padding:24px;border-radius:20px;border:1px solid var(--riga);background:linear-gradient(160deg,rgba(243,154,58,.12),rgba(142,208,107,.08))}
+/* 2 · scopri: una frase per schermata */
+.schermo{min-height:60svh;display:flex;flex-direction:column;justify-content:center;padding:40px 0;border-top:1px solid var(--riga)}
+.schermo:first-of-type{border-top:none}
+.schermo .filo{width:72px;height:6px;border-radius:3px;background:var(--c,var(--oro));margin-bottom:22px}
+.schermo .grande{color:var(--avorio)}
+.schermo .grande em{font-style:normal;color:var(--c,var(--oro))}
+.schermo p{margin:18px 0 0}
+.giorno{list-style:none;margin:30px 0 0;padding:0;display:flex;flex-direction:column;gap:26px}
+.giorno li{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(34px,8.4vw,58px);line-height:1.05;padding-left:30px;position:relative}
+.giorno li::before{content:"";position:absolute;left:0;top:.38em;width:16px;height:16px;border-radius:50%;background:var(--c);box-shadow:0 0 18px var(--c)}
+.giorno li small{display:block;font-family:'DM Sans',sans-serif;font-weight:400;font-size:20px;color:var(--fioco);margin-top:4px}
 
-.video{display:flex;flex-direction:column;gap:22px}
-.video figure{margin:0;display:flex;flex-direction:column;gap:10px}
-.video figcaption{font-family:var(--f-voce);font-size:28px}
-.video iframe{display:block;width:100%;max-width:100%;aspect-ratio:16/9;border:1px solid var(--riga);border-radius:16px;background:#07070c}
-@media (max-width:700px){.video iframe{aspect-ratio:9/14}}
+/* 3 · keynote */
+.keynote{background:radial-gradient(ellipse 90% 60% at 50% 20%,rgba(212,175,106,.16),transparent 70%)}
+.keynote .palco{display:grid;gap:30px;align-items:center}
+.keynote .foto{border-radius:28px;overflow:hidden;border:3px solid var(--oro);box-shadow:0 30px 80px rgba(0,0,0,.45);aspect-ratio:1;max-width:460px;width:100%;justify-self:center}
+.keynote .foto img{width:100%;height:100%;object-fit:cover}
+.keynote h2{margin:8px 0 0}
+.keynote .chi{font-family:'Josefin Sans',sans-serif;font-weight:400;font-size:22px;color:var(--t4);margin-top:10px}
+.prezzo{margin:24px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.prezzo s{font-size:24px;color:var(--fioco)}
+.prezzo b{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:34px;color:var(--oro)}
+.prezzo span{flex-basis:100%;font-size:20px;color:var(--fioco)}
 
-.tasti{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
-.festival{padding:24px;border-radius:20px;border:1px solid var(--riga);background:rgba(26,33,72,.85)}
-.festival .titolo{font-family:var(--f-voce);font-size:34px;line-height:1.1}
+/* 4 · cervello */
+.cervello{text-align:center}
+.cervello .medio{color:var(--oro);font-family:'Cinzel',serif;font-weight:600;letter-spacing:.04em;font-size:clamp(32px,8vw,60px)}
+.schermovideo{margin:34px auto 0;border-radius:28px;overflow:hidden;border:2px solid var(--riga);background:#05060c;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.schermovideo video{display:block;width:100%;height:auto}
+.v-oriz{display:none!important}
+.schermovideo{max-width:360px}
+.tre{list-style:none;margin:50px auto 0;padding:0;max-width:760px;display:flex;flex-direction:column;gap:0;text-align:left;position:relative}
+.tre li{position:relative;padding:0 0 46px 64px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(28px,6.8vw,44px);line-height:1.15}
+.tre li:last-child{padding-bottom:0}
+.tre li::before{content:"";position:absolute;left:14px;top:.25em;width:22px;height:22px;border-radius:50%;background:var(--c3);border:3px solid var(--c);box-shadow:0 0 0 0 var(--c);transition:background .6s,box-shadow .6s}
+.tre li::after{content:"";position:absolute;left:24px;top:calc(.25em + 26px);bottom:6px;width:3px;background:linear-gradient(var(--c),transparent)}
+.tre li:last-child::after{display:none}
+.tre li.vista::before{background:var(--c);box-shadow:0 0 24px 4px var(--c)}
+.firma{margin-top:30px;font-family:'Josefin Sans',sans-serif;font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:var(--fioco)}
 
-.testa{display:flex;align-items:center;justify-content:space-between;gap:12px}.tasto.invita{align-self:center;border:0;cursor:pointer;font-family:inherit;padding:12px 22px}.invita-scelta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:-24px}.invita-scelta .tasto{align-self:auto;padding:12px 20px}
-.presenti ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:22px}.presenti li{padding:12px 16px;border-radius:14px;background:rgba(245,240,230,.06)}.presenti li b{font-weight:600}
-.anteprima{display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--riga)}
-.piede{border-top:1px solid var(--riga);padding-top:22px;text-align:center;font-size:16px;color:var(--fioco)}.piede a{color:var(--oro)}
-.ph{color:var(--t4);background:rgba(245,210,122,.12);padding:0 6px;border-radius:6px}
-@media (max-width:420px){body{font-size:19px}.quando{padding:20px}.quando .num{font-size:84px}}
+/* 5 · programma */
+.sedi{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.sede{display:inline-flex;align-items:center;gap:10px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:18px;letter-spacing:.1em;text-transform:uppercase}
+.sede i{width:16px;height:16px;border-radius:50%;background:var(--c)}
+.linea{position:relative;margin-top:40px;padding-left:38px}
+.linea::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:3px;border-radius:2px;background:rgba(245,240,230,.14)}
+.linea .avanza{position:absolute;left:11px;top:6px;width:3px;border-radius:2px;height:calc(var(--p,0)*100%);max-height:calc(100% - 12px);background:linear-gradient(var(--t4),var(--t2),var(--t3),var(--t6))}
+.voce{position:relative;padding:0 0 44px}
+.voce::before{content:"";position:absolute;left:-36px;top:8px;width:22px;height:22px;border-radius:50%;background:var(--c3);border:3px solid var(--c,var(--t4))}
+.voce .ora{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:30px;color:var(--c,var(--t4));line-height:1}
+.voce .ora small{font-family:'DM Sans',sans-serif;font-weight:500;font-size:18px;color:var(--fioco);margin-left:10px;letter-spacing:.06em;text-transform:uppercase}
+.voce h3{margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(30px,7.2vw,42px);line-height:1.08}
+.voce .sub{margin-top:6px;font-size:20px;color:var(--fioco)}
+.voce .con{display:flex;gap:16px;align-items:center;margin-top:14px}
+.voce .con img{width:84px;height:84px;border-radius:50%;object-fit:cover;object-position:50% 25%;border:3px solid var(--c,var(--t4));flex-shrink:0}
+.voce details{margin-top:12px}
+.voce summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:19px;color:var(--oro);padding:8px 0}
+.voce summary::-webkit-details-marker{display:none}
+.voce summary::after{content:"+";font-size:24px;line-height:1}
+.voce details[open] summary::after{content:"−"}
+.voce details p{margin:6px 0 0;font-size:20px;line-height:1.55}
+.voce ul{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.voce ul li{font-size:20px;line-height:1.4;padding-left:20px;position:relative}
+.voce ul li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:50%;background:var(--t5)}
+.voce.chiave{background:linear-gradient(160deg,rgba(224,73,138,.16),transparent 70%);border:2px solid rgba(224,73,138,.5);border-radius:22px;padding:18px 18px 22px;margin:0 0 44px -10px}
+.voce.chiave::before{left:-26px;top:26px}
+.tutto{margin-top:20px;padding:26px 22px;border-radius:24px;background:var(--carta);border:2px solid var(--riga)}
+.tutto h3{margin:0;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:22px;letter-spacing:.18em;text-transform:uppercase;color:var(--t5)}
+.tutto .medio{font-size:clamp(30px,7vw,40px);margin-top:10px}
 
-.fm-vid{border-radius:16px;overflow:hidden;border:1px solid var(--riga);background:#07070c;transform-origin:50% 40%;will-change:transform,opacity}
-.fm-vid iframe{display:block;width:100%;aspect-ratio:16/9;border:0;background:#07070c}
-@media (max-width:700px){.fm-vid iframe{aspect-ratio:9/16}}
-.parte{font-family:var(--f-titolo);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
-.lettera p{font-family:var(--f-voce);font-size:25px;line-height:1.45}
-.dove a.tasto{margin-top:6px}
-button.tasto{border:0;cursor:pointer;font-family:inherit}
-button.tasto.vuoto{border:2px solid var(--oro)}
-.yt .yt-anteprima{display:block;position:relative;width:100%;aspect-ratio:16/9;padding:0;border:0;background:#000;cursor:pointer}
-.yt img{width:100%;height:100%;object-fit:cover;display:block}
-.yt-play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:rgba(7,8,20,.72);border:2px solid var(--oro)}
-.yt-play::after{content:"";position:absolute;left:30px;top:22px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent var(--avorio)}
-.yt iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
-.conferenza{font-family:var(--f-voce);font-size:38px;line-height:1.1;font-weight:600;letter-spacing:0;text-transform:none;color:var(--avorio)}
-.yt-titolo b{display:block;font-family:var(--f-voce);font-size:30px;line-height:1.15;font-weight:600}
-.yt-titolo span{font-size:17px;color:var(--fioco)}
+/* 6 · luogo */
+.luogo .indirizzo{margin-top:16px;font-size:24px;line-height:1.4}
+.segnaposto{display:inline-block;padding:2px 10px;border-radius:8px;border:2px dashed var(--t1);color:var(--t1);font-size:.85em}
 
-.copertina{display:flex;flex-direction:column;align-items:center;gap:18px}
-.copertina img{width:100%;max-width:520px;height:auto;border-radius:22px;box-shadow:0 40px 120px rgba(243,154,58,.18);opacity:0;transform:scale(1.06);animation:entra 1.6s cubic-bezier(.2,.7,.2,1) .1s forwards}
-@keyframes entra{to{opacity:1;transform:none}}
-.copertina .tre{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-family:var(--f-titolo);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--fioco)}
-.copertina .tre span+span::before{content:"·";margin-right:14px;color:var(--t1)}
-@keyframes scorre{to{background-position:300% 0}}
-.aspetta{font-family:var(--f-voce);font-weight:500;font-size:clamp(42px,11vw,96px);line-height:.95;margin:0;text-align:center;overflow-wrap:anywhere;text-transform:none;letter-spacing:-.01em;color:var(--avorio)}
-.aspetta .pa{display:inline-block;opacity:0;transform:translateY(.35em);filter:blur(6px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1),filter .9s ease}
-.aspetta.vivo .pa{opacity:1;transform:none;filter:none}
-.aspetta.vivo .pa:nth-child(2){transition-delay:.12s}.aspetta.vivo .pa:nth-child(3){transition-delay:.24s}.aspetta.vivo .pa:nth-child(4){transition-delay:.42s}
-.aspetta .luogo{background:linear-gradient(90deg,var(--t1),var(--t4),var(--t2),var(--t3),var(--t5),var(--t1));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:scorre 14s linear infinite;font-style:italic;padding-right:.08em}
-.bento{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(170px,auto);gap:12px}
-.bento .q{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:24px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 18%,#1a2148),#1a2148 70%);border:1px solid color-mix(in srgb,var(--c) 32%,transparent);overflow:hidden;text-decoration:none;color:var(--avorio);opacity:0;transform:translateY(18px)}
-.bento.vivo .q{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1),border-color .35s}
-.bento .q small{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--c)}
-.bento .q b{font-family:var(--f-voce);font-weight:600;font-size:24px;line-height:1.15}
-.bento .q b.num{font-size:96px;line-height:.85;color:var(--c)}
-.bento .q span{font-size:18px;color:var(--fioco)}
-.bento .q .va{margin-top:auto;padding-top:10px;font-size:17px;color:var(--c)}
-.bento .grande{grid-column:span 2;min-height:300px;padding:0;justify-content:flex-end}
-.bento .grande img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
-.bento .grande .qt{position:relative;display:flex;flex-direction:column;gap:6px;padding:22px;background:linear-gradient(0deg,rgba(5,5,7,.92),rgba(5,5,7,0))}
-.bento .grande .qt b{font-size:30px}
-.bento .largo{grid-column:span 2}
-@media (max-width:420px){.bento .q{padding:16px}.bento .q b{font-size:21px}.bento .q b.num{font-size:78px}}
-@media (prefers-reduced-motion:reduce){.copertina img{animation:none;opacity:1;transform:none}.aspetta .pa,.bento .q{opacity:1;transform:none;filter:none;transition:none}.aspetta .luogo{animation:none}}
-.esito{font-size:18px;color:var(--fioco)}.esito:empty{display:none}
-.rimando{padding:24px;border-radius:20px;border:1px solid var(--riga);background:rgba(26,33,72,.85)}
-.rimando .titolo{font-family:var(--f-voce);font-size:32px;line-height:1.1}
-.scopri ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
-.scopri li{padding:14px 18px;border-radius:16px;background:var(--carta);border:1px solid var(--riga);font-size:21px}
-.scopri li b{display:block;font-weight:600}.scopri li span{display:block;font-size:19px;color:var(--fioco);margin-top:4px}
-.ospite{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;background:var(--carta);border:1px solid var(--oro)}
-.ospite img,.con-foto img{flex:none;width:84px;height:98px;object-fit:cover;border-radius:14px;border:2px solid var(--oro)}
-.ospite small{display:block;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
-.ospite b{display:block;font-family:var(--f-voce);font-size:28px;line-height:1.1}.ospite span{color:var(--fioco)}
-.programma{gap:20px;scroll-margin-top:80px}
-.luogo-blocco{display:flex;flex-direction:column;gap:18px;padding:22px 20px;border-radius:22px;background:color-mix(in srgb,var(--c) 10%,rgba(26,33,72,.85));border:1px solid color-mix(in srgb,var(--c) 45%,transparent)}
-.luogo-blocco>.parte{color:var(--c);font-size:16px}
-.voce-p{display:flex;flex-direction:column;gap:10px;padding-top:16px;border-top:1px solid var(--riga)}
-.luogo-blocco>.parte+.voce-p{border-top:0;padding-top:0}
-.ora{font-family:var(--f-titolo);font-size:22px;font-weight:600;color:var(--c);letter-spacing:.04em}
-.pren{display:inline-block;margin-left:8px;padding:2px 12px;border-radius:999px;background:#F39A3A;color:#1a1405;font-family:var(--f-uso);font-size:16px;letter-spacing:0;vertical-align:middle}
-h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;margin:0}
-.chi{font-size:19px!important;color:var(--fioco)}
-.nota{font-size:20px!important;color:var(--fioco)}
-.con-foto{display:flex;gap:16px;align-items:center}
-.elenco{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:21px}
-.prezzo{font-size:24px!important}.prezzo s{color:var(--fioco)}.prezzo b{color:var(--oro)}
-.rinvio{color:var(--oro);font-size:19px;text-decoration:underline}
-#prenota{scroll-margin-top:80px}
+/* 7 · partecipa */
+.carte{display:grid;gap:18px;margin-top:34px}
+.carta{border-radius:26px;padding:28px 24px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 22%,var(--carta)),var(--carta) 70%);border:2px solid color-mix(in srgb,var(--c) 65%,transparent);display:flex;flex-direction:column;gap:12px}
+.carta h3{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;line-height:1.05}
+.carta p{margin:0;font-size:20px;color:var(--fioco)}
+.carta .tasto{margin-top:auto;align-self:flex-start}
+
+/* chiusura */
+.chiusura{text-align:center;padding:90px 0 120px}
+.chiusura .nexus{width:120px;height:120px;border-width:5px;margin:0 auto}
+.chiusura .medio{margin-top:24px}
+.chiusura .sito{margin-top:12px;font-family:'Cinzel',serif;font-size:24px;letter-spacing:.08em;color:var(--oro)}
+.chiusura .tasti{justify-content:center;margin-top:30px}
+
+/* rivelazione */
+.anima .rivela{transform:translateY(26px);opacity:.55;transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.anima .rivela.vista{opacity:1;transform:none}
+.anteprima .rivela{opacity:1!important;transform:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){.anima .rivela{opacity:1;transform:none;transition:none}.apertura .quadro img{animation:none}}
+.ferma .apertura .quadro img{animation:none}
+
+
+/* tasti piccoli e calendario */
+.tasto.piccolo{min-height:50px;padding:10px 22px;font-size:19px}
+button.tasto{font-family:'Josefin Sans',sans-serif}
+.giorno li .tasto{display:inline-flex}
+.calendario{margin-top:14px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:20px;color:var(--oro);text-underline-offset:5px}
+.barra .mini{border:none;cursor:pointer}
+.carta .tasti{margin-top:auto}
+:focus-visible{outline:3px solid var(--t4);outline-offset:3px}
+
+/* finestre: prenota e invita */
+.velo{position:fixed;inset:0;z-index:50;background:rgba(5,10,28,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center}
+.velo[hidden]{display:none!important}
+.finestra{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:linear-gradient(180deg,var(--c1),var(--c2));border:2px solid var(--riga);border-radius:28px 28px 0 0;padding:24px 20px calc(28px + env(safe-area-inset-bottom,0px));box-shadow:0 -20px 60px rgba(0,0,0,.5)}
+.finestra .testa{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.finestra h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;line-height:1.05}
+.chiudi{width:48px;height:48px;border-radius:50%;border:2px solid var(--riga);background:transparent;color:var(--avorio);font-size:28px;line-height:1;cursor:pointer;flex-shrink:0}
+.scelte{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 6px}
+.scelta{position:relative}
+.scelta input{position:absolute;opacity:0;width:1px;height:1px}
+.scelta span{display:inline-flex;align-items:center;min-height:50px;padding:10px 18px;border-radius:999px;border:2px solid var(--riga);font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:19px;cursor:pointer}
+.scelta input:checked+span{background:var(--oro);border-color:var(--oro);color:var(--c3)}
+.scelta input:focus-visible+span{outline:3px solid var(--t4);outline-offset:3px}
+.costo{margin:6px 0 0;font-size:18px;color:var(--fioco)}
+.campi{display:grid;gap:14px;margin-top:18px}
+.campi label{display:flex;flex-direction:column;gap:6px;font-size:19px;color:var(--fioco)}
+.campi input{min-height:56px;padding:12px 16px;border-radius:14px;border:2px solid var(--riga);background:var(--c3);color:var(--avorio);font:inherit;font-size:20px}
+.campi input:focus{outline:none;border-color:var(--oro)}
+.finestra .invia{width:100%;margin-top:20px}
+.esito{margin-top:16px;padding:14px 16px;border-radius:14px;border:2px dashed var(--t1);color:var(--t1);font-size:18px}
+.canali{display:grid;gap:12px;margin-top:20px}
+.canale{display:flex;align-items:center;gap:16px;min-height:64px;padding:12px 18px;border-radius:18px;border:2px solid var(--riga);background:var(--carta);color:var(--avorio);text-decoration:none;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:21px;cursor:pointer;width:100%;text-align:left}
+.canale i{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:18px;color:#fff;flex-shrink:0}
+.anteprima-invito{margin-top:16px;padding:14px 16px;border-radius:14px;background:var(--c3);border:1px solid var(--riga);font-size:18px;line-height:1.45;color:var(--fioco);user-select:all}
+@media (min-width:700px){.velo{align-items:center}.finestra{border-radius:28px}}
+
+
+.consenso{display:flex;gap:12px;align-items:flex-start;margin-top:18px;font-size:19px;line-height:1.45}
+.consenso input{width:24px;height:24px;margin-top:3px;accent-color:var(--oro);flex-shrink:0}
+.consenso a{color:var(--oro)}
+
+/* computer */
+@media (min-width:900px){
+  body{font-size:21px}
+  .barra{padding:12px 32px}
+  .apertura{flex-direction:row;align-items:stretch;min-height:100vh}
+  .apertura .quadro{flex:1 1 52%;height:auto;min-height:0}
+  .apertura .quadro img{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 72%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 72%,transparent 100%);object-position:50% 40%}
+  .apertura .testi{flex:1 1 48%;justify-content:center;padding:40px 48px 40px 0}
+  .capitolo{padding:130px 0}
+  .largo{padding:0 48px}
+  .schermo{min-height:70vh}
+  .keynote .palco{grid-template-columns:460px 1fr;gap:64px}
+  .v-vert{display:none!important}.v-oriz{display:block!important}
+  .schermovideo{max-width:900px}
+  .linea{padding-left:56px;max-width:900px}
+  .voce::before{left:-54px}.voce.chiave::before{left:-44px}
+  .linea::before,.linea .avanza{left:20px}
+  .carte{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
-<div class="pagina">
-  <div class="testa"><div class="marca">FelicitasMundi</div><button class="tasto invita" type="button" id="invita" data-conta="tasto:Invita">Invita ›</button></div>
-  <div class="invita-scelta" id="invita-scelta" hidden>
-    <a class="tasto" id="inv-wa" target="_blank" rel="noopener">WhatsApp</a>
-    <a class="tasto" id="inv-tg" target="_blank" rel="noopener">Telegram</a>
-    <a class="tasto" id="inv-mail">Mail</a>
+
+<header class="barra" id="barra">
+  <a class="casa" id="fv-casa" href="accoglienza.html" aria-label="Torna alla home">
+    <span class="nexus"><img src="festival-viva/img/nexus.png" alt=""></span>FelicitasMundi
+  </a>
+  <button class="mini" type="button" data-prenota="presenza">Ci sarò</button>
+</header>
+
+<!-- 1 · APERTURA: tutto quello che serve nel primo schermo -->
+<section class="apertura">
+  <div class="quadro"><img src="festival-viva/img/donna-cervello.jpg" alt=""></div>
+  <div class="testi">
+    <h1 class="arcobaleno">FELICITAS</h1>
+    <div class="festival">FESTIVAL</div>
+    <div class="motto"><b>TRAME</b>la forza di essere connessi</div>
+    <div class="quando">
+      <b>Sabato 21 novembre 2026 · dalle 10</b>
+      <span>Centro Sociale e Centro Polifunzionale · Baratili San Pietro, Oristano</span>
+    </div>
+    <div class="tasti">
+      <button class="tasto pieno" type="button" data-prenota="presenza">Ci sarò</button>
+      <button class="tasto vuoto" type="button" data-invita>Invita</button>
+    </div>
+    <a class="calendario" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=FELICITAS+FESTIVAL+%C2%B7+TRAME%2C+la+forza+di+essere+connessi&amp;dates=20261121T090000Z/20261121T220000Z&amp;location=Centro+Sociale+e+Centro+Polifunzionale%2C+Baratili+San+Pietro%2C+Oristano&amp;details=felicitasmundi.com" target="_blank" rel="noopener">Aggiungi al calendario</a>
+    <div class="gratis">Ingresso gratuito</div>
   </div>
+</section>
 
-  <!-- 22/10, Gab: «rimetti tutto l'effetto iniziale con la copertina e le scritte in movimento con i riquadri della data» -->
-  <header class="copertina">
-    <img src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · 21 novembre 2026 · Oristano (Baratili San Pietro)" width="946" height="1520">
-    <div class="tre"><span>Benessere</span><span>Tecnologia</span><span>Logistica</span></div>
-  </header>
+<!-- 2 · SCOPRI: una voce per schermata -->
+<section class="capitolo" id="scopri" style="padding-bottom:0">
+  <div class="largo">
+    <div class="etichetta rivela">Scopri il FelicitasFestival</div>
 
-  <h2 class="aspetta" aria-label="Ti aspettiamo a Baratili."><span class="pa">Ti</span> <span class="pa">aspettiamo</span> <span class="pa">a</span> <span class="pa luogo">Baratili.</span></h2>
+    <div class="schermo rivela" style="--c:var(--t5)">
+      <div class="filo"></div>
+      <h2 class="grande">Vicinati <em>del cibo</em></h2>
+      <p class="corpo">Una rete di vicinati in tutta la Sardegna: il cibo del territorio passa dal produttore alla comunità, entro 20 km di raggio dal centro di ritiro.</p>
+    </div>
 
-  <!-- 27/10 21:16, Gab: «aggiustare la pagina del evento sul sito»: programma e locandina definitivi (festival-manifesto/programma.html, locandina.html) -->
-  <div class="bento">
-    <div class="q" style="--c:var(--t4)"><small>Quando</small><b class="num">21</b><b>novembre 2026</b><span>sabato · dalle 10</span></div>
-    <a class="q" href="https://maps.app.goo.gl/6X5Xmu7jTp6Fewt2A" target="_blank" rel="noopener" style="--c:var(--t2)"><small>Dove</small><b>Centro Sociale e Centro Polifunzionale</b><span>Baratili San Pietro, Oristano</span><span class="va">Apri la mappa ›</span></a>
-    <a class="q largo" href="#programma" style="--c:var(--t3)"><small>Il programma</small><b>Dalle 10 alla cena</b><span class="va">Scopri il programma ›</span></a>
-    <a class="q largo" href="casa/felicitas-festival-21-novembre-programma.pdf?v=0d92" target="_blank" rel="noopener" style="--c:var(--t5)"><small>Da scaricare</small><b>Locandina e programma</b><span class="va">PDF ›</span></a>
+    <div class="schermo rivela" style="--c:var(--t2)">
+      <div class="filo"></div>
+      <h2 class="grande">Conferenze <em>gratuite</em></h2>
+      <p class="corpo">su spiritualità e territori, Zona Franca Extradoganale, progetti territoriali e Altra Storia d'Italia</p>
+    </div>
+
+    <div class="schermo rivela" style="--c:var(--t3)">
+      <div class="filo"></div>
+      <div class="etichetta" style="color:var(--t3)">Ospite Speciale</div>
+      <h2 class="grande">Lamberto Rimondini</h2>
+      <p class="corpo serif" style="font-size:30px;font-style:italic">l'Altra Storia d'Italia</p>
+    </div>
+
+    <div class="schermo" style="--c:var(--t4)">
+      <div class="etichetta rivela">Tutto il giorno</div>
+      <ul class="giorno">
+        <li class="rivela" style="--c:var(--t5)">Pasti vegetariani<small>pranzo alle 13:00 · cena ore 20:00</small><button class="tasto vuoto piccolo" type="button" data-prenota="pranzo" style="margin-top:10px">Prenota i pasti</button></li>
+        <li class="rivela" style="--c:var(--t2)">Laboratori<small>per bambini e ragazzi</small><button class="tasto vuoto piccolo" type="button" data-prenota="laboratori" style="margin-top:10px">Prenota i laboratori</button></li>
+        <li class="rivela" style="--c:var(--t6)">Estemporanee artistiche</li>
+        <li class="rivela" style="--c:var(--t1)">Scambio semi autoctoni<small>e vendita piante</small></li>
+        <li class="rivela" style="--c:var(--t4)">Spesa e trattamenti solidali</li>
+      </ul>
+    </div>
   </div>
+</section>
 
-  <section class="lettera">
-    <p>Con piacere ti invito a partecipare al Festival Felicitas che si terrà a Baratili San Pietro il 21 novembre.</p>
-    <p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p>
-    <p>Il festival è la prima occasione di incontro per conoscere la piattaforma FelicitasMundi che integra coscienza, tecnologia e logistica nella comunità. È un'occasione per avviare l'integrazione di questo progetto con altri progetti e reti attivi nel villaggio Sardegna, a vantaggio di tutto il territorio.</p>
-    <p>Dato che non siamo e non vogliamo essere isolati dal resto del mondo, ci sarà anche l'intervento di uno studioso di geopolitica che illustrerà un punto di vista originale sulla situazione internazionale.</p>
-    <p>Ci farà piacere averti con noi, con le tue idee, la tua esperienza e ciò che vorrai condividere.</p>
-  </section>
+<!-- 3 · IL MOMENTO KEYNOTE -->
+<section class="capitolo keynote" id="workshop">
+  <div class="largo palco">
+    <div class="foto rivela"><img src="festival-viva/img/gabriele-dettori-originale.jpg" alt="Gabriele Dettori"></div>
+    <div class="rivela">
+      <div class="etichetta">17:00 · Centro Polifunzionale · su prenotazione</div>
+      <h2 class="grande arcobaleno">Tra Coscienza e Tecnologia</h2>
+      <div class="chi">Workshop · mindset e innovazione tecnologica · con Gabriele Dettori</div>
+      <p class="corpo">Riconosci il tuo talento e il tuo progetto-senso. Allena un'attenzione indomabile, la coerenza tra pensiero, parola e azione, e porta a terra la forza creativa. Poi fai il salto dal singolo al team: smetti di concentrare conoscenze e relazioni su una sola persona e affidale a un Cervello Digitale Evoluto che, insieme all'AI, ordina file, agende, mail e obiettivi e segue lo sviluppo della tua azienda e del tuo progetto.</p>
+      <div class="prezzo"><s>80 €</s><b>50 € per il Festival</b></div>
+      <div class="tasti" style="margin-top:24px"><button class="tasto pieno" type="button" data-prenota="workshop">Prenota il workshop</button></div>
+    </div>
+  </div>
+</section>
 
-  <section class="scopri">
-    <h2>Scopri il FelicitasFestival</h2>
-    <ul>
-      <li>Ingresso gratuito</li>
-      <li>Fai la spesa solidale</li>
-      <li>Conferenze gratuite su spiritualità e territori, Zona Franca Extradoganale, progetti territoriali e Altra Storia d'Italia</li>
-      <li><b>Scopri Vicinati del cibo</b><span>Una rete di vicinati in tutta la Sardegna: il cibo del territorio passa dal produttore alla comunità, entro 20 km di raggio dal centro di ritiro.</span></li>
-      <li><b>Workshop tra Coscienza e Tecnologia</b><span>con Gabriele Dettori, fondatore FelicitasMundi: riconosci il tuo talento e il tuo progetto-senso, e portalo dal singolo al team con il Cervello Digitale Evoluto.</span></li>
-      <li>Pasti vegetariani</li>
-      <li>Laboratori per bambini e ragazzi</li>
-      <li>Estemporanee artistiche</li>
-      <li>Scambio semi e vendita piante</li>
-    </ul>
-    <div class="ospite"><img src="casa/festival-lamberto-rimondini.jpg" alt="Lamberto Rimondini" width="171" height="199" loading="lazy"><div><small>Ospite speciale</small><b>Lamberto Rimondini</b><span>l'Altra Storia d'Italia</span></div></div>
-  </section>
+<!-- 4 · CERVELLO DIGITALE EVOLUTO -->
+<section class="capitolo cervello" id="cervello">
+  <div class="largo">
+    <h2 class="medio rivela">Cervello Digitale Evoluto</h2>
+    <div class="schermovideo rivela">
+      <video class="v-vert" src="festival-viva/video/il-cervello-digitale-verticale.mp4" poster="festival-viva/video/il-cervello-digitale-verticale.jpg" autoplay muted loop playsinline preload="metadata"></video>
+      <video class="v-oriz" src="festival-viva/video/il-cervello-digitale.mp4" poster="festival-viva/video/il-cervello-digitale.jpg" autoplay muted loop playsinline preload="metadata"></video>
+    </div>
+    <ol class="tre">
+      <li class="rivela" style="--c:var(--t4)">Tutti i file sono ordinati dentro le cartelle</li>
+      <li class="rivela" style="--c:var(--t2)">Vengono collegati i team ad agende, mail e task coordinate ed automatizzate</li>
+      <li class="rivela" style="--c:var(--t3)">Felicitas permette di rendere visibili ed acquistabili prodotti e servizi</li>
+    </ol>
+    <div class="firma rivela">Gabriele Dettori · fondatore FelicitasMundi</div>
+  </div>
+</section>
 
-  <div class="trama"></div>
+<!-- 5 · PROGRAMMA -->
+<section class="capitolo" id="programma">
+  <div class="largo">
+    <div class="etichetta rivela">Il programma</div>
+    <h2 class="grande rivela" style="margin-top:6px">Sabato 21 novembre</h2>
+    <div class="sedi rivela">
+      <span class="sede" style="--c:var(--sociale)"><i></i>Centro Sociale</span>
+      <span class="sede" style="--c:var(--poli)"><i></i>Centro Polifunzionale</span>
+    </div>
 
-  <section class="programma" id="programma">
-    <h2>Il programma</h2>
-    <p class="fonte">Sabato 21 novembre 2026 · dalle 10 · Centro Sociale e Centro Polifunzionale · Baratili San Pietro, Oristano</p>
+    <div class="linea" id="linea">
+      <div class="avanza"></div>
 
-    <div class="luogo-blocco" style="--c:var(--t5)">
-      <div class="parte">Centro Sociale</div>
-
-      <article class="voce-p">
+      <div class="voce rivela" style="--c:var(--sociale)">
         <div class="ora">10:00</div>
         <h3>Vicinati del cibo · Modello Sardegna</h3>
-        <p class="chi">conferenza di Gabriele Dettori, fondatore FelicitasMundi</p>
-        <p>Oltre la grande distribuzione, i cui utili si concentrano in larga parte fuori dall'isola. I vicinati come distretti rurali della Sardegna; lavoro e formazione con aziende agricole, studenti, volontari e WWOOFer; un'alimentazione consapevole; punti di ritiro che ospitano laboratori, corsi, attività terapeutiche e servizio mensa; il Cervello Digitale Evoluto come sistema gestionale della rete.</p>
-        <div class="fm-vid"><iframe data-fm-video="video/villaggi-e-vicinati.html" title="Villaggi e vicinati" allow="fullscreen" allowfullscreen></iframe></div>
-        <!-- 22/10, Gab: tasti dei vicinati «proporre vicinato, sapere come si entra, proporre festival» (comune/fm-vicinato.js) -->
-        <div data-fm-vicinato></div>
-      </article>
+        <div class="con"><img src="festival-viva/img/gabriele-dettori-workshop.jpg" alt=""><div class="sub" style="margin:0">conferenza di Gabriele Dettori, fondatore FelicitasMundi</div></div>
+        <details><summary>Leggi</summary><p>Oltre la grande distribuzione, i cui utili si concentrano in larga parte fuori dall'isola. I vicinati come distretti rurali della Sardegna; lavoro e formazione con aziende agricole, studenti, volontari e WWOOFer; un'alimentazione consapevole; punti di ritiro che ospitano laboratori, corsi, attività terapeutiche e servizio mensa; il Cervello Digitale Evoluto come sistema gestionale della rete.</p></details>
+      </div>
 
-      <article class="voce-p">
+      <div class="voce rivela" style="--c:var(--sociale)">
         <div class="ora">11:30</div>
         <h3>Tavolo Educazione · Rete eco sarda</h3>
-        <p>Promuove, nei territori della Sardegna, la connessione tra le famiglie che hanno scelto percorsi di educazione parentale e alternativa, e la costruzione di una rete tra educatori, famiglie e luoghi in natura.</p>
-      </article>
+        <details><summary>Leggi</summary><p>Promuove, nei territori della Sardegna, la connessione tra le famiglie che hanno scelto percorsi di educazione parentale e alternativa, e la costruzione di una rete tra educatori, famiglie e luoghi in natura.</p></details>
+      </div>
 
-      <article class="voce-p">
+      <div class="voce rivela" style="--c:var(--t5)">
         <div class="ora">13:00</div>
         <h3>Pranzo vegetariano</h3>
-        <a class="rinvio" href="#prenota" data-fm-scegli="pranzo">Prenota il pranzo ›</a>
-      </article>
+        <div class="tasti" style="margin-top:12px"><button class="tasto vuoto piccolo" type="button" data-prenota="pranzo">Prenota il pranzo</button></div>
+      </div>
 
-      <article class="voce-p">
+      <div class="voce rivela" style="--c:var(--sociale)">
         <div class="ora">15:00</div>
-        <div class="con-foto"><img src="casa/festival-ivano-becciu-naiely.jpg" alt="Ivano Becciu Naiely" width="320" height="383" loading="lazy"><div>
-          <h3>Dal Mito al Dogma, dal Ritmo alla Materia: la Spiritualità come Azione sul Territorio</h3>
-          <p class="chi">Ivano Becciu Naiely · Maestro del Tamburo Medicina</p>
-        </div></div>
-        <p>Un ponte tra storia antropologica, dinamiche geopolitiche contemporanee e responsabilità spirituale del singolo nella comunità. Dalle radici legate ai cicli della Terra e al tamburo ancestrale, fino ai dogmi che hanno allontanato l'uomo dalla sacralità del luogo. La parola, la preghiera consapevole e l'intenzione vissuta sul proprio territorio agiscono sulla materia e sulle relazioni di vicinato.</p>
-        <p class="nota"><b>Cerchio di radicamento e connessione con i tamburi</b><br>I tamburi medicina sono chiamati a riunirsi per questa occasione</p>
-      </article>
+        <h3>Dal Mito al Dogma, dal Ritmo alla Materia: la Spiritualità come Azione sul Territorio</h3>
+        <div class="con"><img src="festival-viva/img/ivano-becciu-naiely.jpg" alt=""><div class="sub" style="margin:0">Ivano Becciu Naiely · Maestro del Tamburo Medicina</div></div>
+        <details><summary>Leggi</summary><p>Un ponte tra storia antropologica, dinamiche geopolitiche contemporanee e responsabilità spirituale del singolo nella comunità. Dalle radici legate ai cicli della Terra e al tamburo ancestrale, fino ai dogmi che hanno allontanato l'uomo dalla sacralità del luogo. La parola, la preghiera consapevole e l'intenzione vissuta sul proprio territorio agiscono sulla materia e sulle relazioni di vicinato.</p><p><b>Cerchio di radicamento e connessione con i tamburi</b><br>I tamburi medicina sono chiamati a riunirsi per questa occasione</p></details>
+      </div>
 
-      <article class="voce-p">
+      <div class="voce rivela" style="--c:var(--sociale)">
         <div class="ora">16:00</div>
         <h3>Progetti territoriali</h3>
-        <ul class="elenco">
+        <ul>
           <li>Il ponte per l'autosufficienza, con Sirio Sechi</li>
           <li>Movimento per l'autodeterminazione del popolo sardo: soluzioni e creazione di nuove comunità, con Angelica Ibba e Muddy Caboni</li>
           <li>Casa dei Semi della Sardegna, come salvare i semi della biodiversità agricola sarda, con Prantas Antigas, Alice e Daniele</li>
         </ul>
-      </article>
+      </div>
 
-      <article class="voce-p">
-        <div class="ora">17:00</div>
+      <div class="voce rivela" style="--c:var(--sociale)">
+        <div class="ora">17:00 <small>Centro Sociale</small></div>
         <h3>Zona Franca Extradoganale</h3>
-        <p class="chi">un diritto negato da 30 anni</p>
-        <p>Interverranno la dottoressa Maria Rosaria Randaccio, che parlerà dei diritti dei sardi a usufruire della Zona Franca Extradoganale, e Mariano Carta, presidente dell'Associazione Zona Franca Eleonora d'Arborea Oristano, che parlerà dello scopo dell'associazione. Presenta Marco Caddeo.</p>
-      </article>
-    </div>
+        <div class="sub">un diritto negato da 30 anni</div>
+        <details><summary>Leggi</summary><p>Interverranno la dottoressa Maria Rosaria Randaccio, che parlerà dei diritti dei sardi a usufruire della Zona Franca Extradoganale, e Mariano Carta, presidente dell'Associazione Zona Franca Eleonora d'Arborea Oristano, che parlerà dello scopo dell'associazione. Presenta Marco Caddeo.</p></details>
+      </div>
 
-    <div class="luogo-blocco" style="--c:var(--t3)">
-      <div class="parte">Centro Polifunzionale</div>
+      <div class="voce chiave rivela" style="--c:var(--poli)">
+        <div class="ora">17:00 <small>Centro Polifunzionale</small></div>
+        <h3>Tra Coscienza e Tecnologia · Workshop</h3>
+        <div class="sub">mindset e innovazione tecnologica · con Gabriele Dettori · su prenotazione</div>
+        <div class="tasti" style="margin-top:14px"><button class="tasto pieno piccolo" type="button" data-prenota="workshop">Prenota il workshop</button><a class="tasto vuoto piccolo" href="#workshop">Scopri il workshop</a></div>
+      </div>
 
-      <article class="voce-p">
-        <div class="ora">17:00 <span class="pren">su prenotazione</span></div>
-        <div class="con-foto"><img src="casa/festival-gabriele-dettori.jpg" alt="Gabriele Dettori" width="354" height="414" loading="lazy"><div>
-          <h3>Tra Coscienza e Tecnologia · Workshop</h3>
-          <p class="chi">mindset e innovazione tecnologica · con Gabriele Dettori</p>
-        </div></div>
-        <p>Riconosci il tuo talento e il tuo progetto-senso. Allena un'attenzione indomabile, la coerenza tra pensiero, parola e azione, e porta a terra la forza creativa. Poi fai il salto dal singolo al team: smetti di concentrare conoscenze e relazioni su una sola persona e affidale a un Cervello Digitale Evoluto che, insieme all'AI, ordina file, agende, mail e obiettivi e segue lo sviluppo della tua azienda e del tuo progetto.</p>
-        <!-- 28/10 13:53, Gab: «il workshop deve riportare la scritta 80euro sbarrato, 50 euro per il festival» -->
-        <p class="prezzo"><s>80 euro</s> <b>50 euro per il Festival</b></p>
-        <!-- 28/10 19:21, Gab: «togli le 3 lezioni online» -->
-        <a class="rinvio" href="#prenota" data-fm-scegli="workshop" data-conta="tasto:workshop">Prenota il workshop ›</a>
-        <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
-        <div class="tasti">
-          <button class="tasto" type="button" data-cosa="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il Cervello Digitale Evoluto della tua azienda</button>
-          <button class="tasto vuoto" type="button" data-cosa="conferenza" data-conta="tasto:conferenza">Organizza una conferenza nel tuo territorio</button>
-        </div>
-        <p class="esito" data-per="attivazione_cervello" aria-live="polite"></p>
-      </article>
-
-      <article class="voce-p">
+      <div class="voce rivela" style="--c:var(--sociale)">
         <div class="ora">18:30</div>
-        <div class="con-foto"><img src="casa/festival-lamberto-rimondini.jpg" alt="Lamberto Rimondini" width="171" height="199" loading="lazy"><div>
-          <h3>Lamberto Rimondini presenta l'Altra Storia d'Italia</h3>
-          <p class="chi">Ospite speciale</p>
-        </div></div>
-        <p>In un mondo dove il pensiero critico è scoraggiato e la verità spesso manipolata, Rimondini invita il lettore a rompere il velo della narrazione ufficiale. Le sue opere non si limitano a far riflettere: mettono in crisi certezze, scuotono convinzioni e aprono squarci su realtà volutamente oscurate.</p>
-        <div class="fm-vid yt"><button class="yt-anteprima" type="button" data-yt="J9UArYxSv8s" aria-label="Il video di Lamberto Rimondini"><img src="https://i.ytimg.com/vi/J9UArYxSv8s/hqdefault.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-        <div class="yt-titolo"><span>Il video: l'Italia risorge | Mine Vaganti #23 · Lamberto Rimondini</span></div>
-      </article>
+        <h3>Lamberto Rimondini presenta l'Altra Storia d'Italia</h3>
+        <div class="con"><img src="festival-viva/img/lamberto-rimondini.jpg" alt=""></div>
+        <details><summary>Leggi</summary><p>In un mondo dove il pensiero critico è scoraggiato e la verità spesso manipolata, Rimondini invita il lettore a rompere il velo della narrazione ufficiale. Le sue opere non si limitano a far riflettere: mettono in crisi certezze, scuotono convinzioni e aprono squarci su realtà volutamente oscurate.</p></details>
+      </div>
 
-      <article class="voce-p">
-        <div class="ora">a seguire</div>
+      <div class="voce rivela" style="--c:var(--t5)">
+        <div class="ora">20:00</div>
         <h3>Cena vegetariana</h3>
-        <a class="rinvio" href="#prenota" data-fm-scegli="cena">Prenota la cena ›</a>
-      </article>
+        <div class="tasti" style="margin-top:12px"><button class="tasto vuoto piccolo" type="button" data-prenota="cena">Prenota la cena</button></div>
+      </div>
+
+      <div class="voce rivela" style="--c:var(--t6);padding-bottom:0">
+        <div class="ora">e poi</div>
+        <h3>Estemporanee artistiche</h3>
+        <div class="tasti" style="margin-top:12px"><a class="tasto vuoto piccolo" href="partecipa-artisti.html" target="_blank" rel="noopener">Proponiti come artista</a></div>
+      </div>
     </div>
 
-    <div class="luogo-blocco" style="--c:var(--t2)">
-      <div class="parte">e poi</div>
-      <ul class="elenco">
-        <li>Estemporanee artistiche</li>
-        <li>Spesa e trattamenti solidali</li>
-        <li>Zona franca · info point</li>
-        <li>Scambio semi autoctoni e vendita piante</li>
+    <div class="tutto rivela">
+      <h3>Tutto il giorno</h3>
+      <div class="medio">Laboratori didattici per bimbi e ragazzi</div>
+      <p class="corpo">Al festival FelicitasMundi, l'associazione Arghentu cura l'Area Educazione: uno spazio speciale dove artisti e artigiani, provenienti da tutta la Sardegna guidano bambini e ragazzi in coinvolgenti laboratori didattici e creativi. Troverai Laboratori di cestineria, di traforo su legno, Giocoleria, fumetto e agricoltura del non fare.</p>
+      <div class="tasti" style="margin-top:6px"><button class="tasto pieno" type="button" data-prenota="laboratori">Prenota i laboratori</button></div>
+      <ul class="giorno" style="margin-top:26px;gap:14px">
+        <li style="--c:var(--t4);font-size:30px">Spesa e trattamenti solidali</li>
+        <li style="--c:var(--t2);font-size:30px">Zona franca · info point</li>
+        <li style="--c:var(--t1);font-size:30px">Scambio semi autoctoni e vendita piante</li>
       </ul>
     </div>
+  </div>
+</section>
 
-    <div class="luogo-blocco" style="--c:var(--t1)">
-      <div class="parte">Tutto il giorno</div>
-      <h3>Laboratori didattici per bimbi e ragazzi</h3>
-      <p>L'associazione Arghentu cura l'Area Educazione: uno spazio speciale dove artisti e artigiani, provenienti da tutta la Sardegna guidano bambini e ragazzi in coinvolgenti laboratori didattici e creativi. Troverai Laboratori di cestineria, di traforo su legno, Giocoleria, fumetto e agricoltura del non fare.</p>
-      <a class="rinvio" href="#prenota" data-fm-scegli="laboratori_bambini">Prenota i laboratori ›</a>
+<!-- 6 · LUOGO -->
+<section class="capitolo luogo" id="luogo" style="padding-top:20px">
+  <div class="largo rivela">
+    <div class="etichetta">Dove</div>
+    <h2 class="grande">Baratili San Pietro</h2>
+    <div class="indirizzo">Centro Sociale e Centro Polifunzionale · Baratili San Pietro, Oristano</div>
+    <div class="tasti" style="margin-top:26px">
+            <a class="tasto vuoto" href="https://maps.app.goo.gl/6X5Xmu7jTp6Fewt2A" target="_blank" rel="noopener">Come arrivare</a>
     </div>
-    <a class="tasto vuoto" href="casa/felicitas-festival-21-novembre-programma.pdf?v=0d92" target="_blank" rel="noopener">Scarica locandina e programma (PDF)</a>
-  </section>
+  </div>
+</section>
 
-  <!-- 28/10 19:03, Gab: «per ora prenotiamo la presenza, coi dati, poi mettiamo i costi» (SQL 130, comune/fm-prenota-festival.js) -->
-  <section id="prenota">
-    <span id="pranzo"></span>
-    <div data-fm-prenota="ci_saro,pranzo,cena,workshop,laboratori_bambini"></div>
-  </section>
+<!-- 7 · PARTECIPA -->
+<section class="capitolo" id="partecipa" style="padding-top:20px">
+  <div class="largo">
+    <div class="etichetta rivela">Partecipa</div>
+    <h2 class="grande rivela">Sabato 21 novembre 2026</h2>
+    <div class="carte">
+      <div class="carta rivela" style="--c:var(--t4)">
+        <h3>Ci sarò</h3>
+        <p>Ingresso gratuito</p>
+        <div class="tasti"><button class="tasto pieno" type="button" data-prenota="presenza">Ci sarò</button><button class="tasto vuoto" type="button" data-invita>Invita</button></div>
+      </div>
+      <div class="carta rivela" style="--c:var(--t5)">
+        <h3>Pranzo e cena vegetariani</h3>
+        <p>Pranzo vegetariano alle 13:00 · Cena vegetariana ore 20:00</p>
+        <div class="tasti"><button class="tasto pieno" type="button" data-prenota="pranzo">Prenota il pranzo</button><button class="tasto pieno" type="button" data-prenota="cena">Prenota la cena</button></div>
+      </div>
+      <div class="carta rivela" style="--c:var(--t3)">
+        <h3>Workshop · Tra Coscienza e Tecnologia</h3>
+        <p><s>80 €</s> <b style="color:var(--oro)">50 € per il Festival</b></p>
+        <button class="tasto pieno" type="button" data-prenota="workshop">Prenota il workshop</button>
+      </div>
+      <div class="carta rivela" style="--c:var(--t2)">
+        <h3>Laboratori didattici per bimbi e ragazzi</h3>
+        <p>Tutto il giorno · Area Educazione a cura dell'associazione Arghentu</p>
+        <button class="tasto pieno" type="button" data-prenota="laboratori">Prenota i laboratori</button>
+      </div>
+      <div class="carta rivela" style="--c:var(--t1)">
+        <h3>Prodotti e artisti</h3>
+                <div class="tasti"><a class="tasto pieno" href="partecipa-prodotti.html" target="_blank" rel="noopener">Proponi i tuoi prodotti</a><a class="tasto pieno" href="partecipa-artisti.html" target="_blank" rel="noopener">Proponiti come artista</a></div>
+      </div>
+      <div class="carta rivela" style="--c:var(--t6)">
+        <h3>Invita</h3>
+        <p>WhatsApp · Telegram · mail · copia link</p>
+        <button class="tasto pieno" type="button" data-invita>Invita</button>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- 25/10 18:06, Gab: «aggiungi il modello e il bottone per partecipare come artista/artigiano e auto produttore» (SQL 123) -->
-  <section class="pranzo" id="artisti">
-    <div class="tasti"><a class="tasto" href="partecipa-artisti.html" data-conta="tasto:partecipa_artisti">Partecipa come artista, artigiano o autoproduttore</a></div>
-  </section>
+<!-- CHIUSURA -->
+<section class="chiusura">
+  <div class="largo rivela">
+    <div class="nexus"><img src="festival-viva/img/nexus.png" alt=""></div>
+    <div class="medio">La forza di essere connessi</div>
+    <div class="trama" style="max-width:320px;margin:22px auto 0"></div>
+    <div class="sito">felicitasmundi.com</div>
+    <div class="tasti">
+      <a class="tasto vuoto" href="casa/felicitas-festival-21-novembre-programma.pdf?v=0d92" target="_blank" rel="noopener">Locandina e programma</a>
+      <a class="tasto pieno" id="fv-torna" href="accoglienza.html">Torna alla home</a>
+    </div>
+  </div>
+</section>
 
 
-  <footer class="piede">&copy; 2026 Felicitas Omnia Srls &middot; P.IVA 03075740906 &middot; <a href="privacy.html">Privacy</a> &middot; <a href="cookie.html">Cookie</a></footer>
+<!-- FINESTRA PRENOTA: un solo modulo per presenza, pasti, workshop e laboratori -->
+<div class="velo" id="velo-prenota" hidden>
+  <form class="finestra" id="modulo" role="dialog" aria-modal="true" aria-labelledby="titolo-prenota">
+    <div class="testa"><h2 id="titolo-prenota">Prenota</h2><button class="chiudi" type="button" data-chiudi aria-label="Chiudi">×</button></div>
+    <div class="scelte">
+      <label class="scelta"><input type="radio" id="p-presenza" name="cosa" value="presenza"><span>Ci sarò</span></label>
+      <label class="scelta"><input type="radio" id="p-pranzo" name="cosa" value="pranzo"><span>Pranzo vegetariano</span></label>
+      <label class="scelta"><input type="radio" id="p-cena" name="cosa" value="cena"><span>Cena vegetariana</span></label>
+      <label class="scelta"><input type="radio" id="p-workshop" name="cosa" value="workshop"><span>Workshop</span></label>
+      <label class="scelta"><input type="radio" id="p-laboratori" name="cosa" value="laboratori"><span>Laboratori didattici</span></label>
+    </div>
+    <p class="costo" id="costo">Ingresso gratuito</p>
+    <div class="campi">
+      <label for="f-nome">Nome<input id="f-nome" name="nome" autocomplete="given-name" required></label>
+      <label for="f-cognome">Cognome<input id="f-cognome" name="cognome" autocomplete="family-name" required></label>
+      <label for="f-tel">Telefono<input id="f-tel" name="telefono" type="tel" autocomplete="tel" required></label>
+      <label for="f-mail">Mail<input id="f-mail" name="mail" type="email" autocomplete="email" required></label>
+      <label for="f-persone">Quante persone<input id="f-persone" name="persone" type="number" min="1" value="1" inputmode="numeric"></label>
+    </div>
+    <label class="consenso" for="f-privacy"><input type="checkbox" id="f-privacy" name="privacy" required><span>Ho letto l'<a href="privacy.html" target="_blank" rel="noopener">informativa privacy</a> e acconsento all'uso di questi dati per la prenotazione.</span></label>
+    <button class="tasto pieno invia" type="submit" id="invia">Prenota</button>
+    <div class="esito" id="esito" hidden></div>
+  </form>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-/* 21/10 22:43, Gab: «lasciamo proprio il centro … inseriamo solo ciò che abbiamo, quindi i due video e il fatto del mangiare». */
-var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}):null;
-(function(){
-  var EV='bfff97a1-3431-4939-b15e-304f14087509';   /* l'orma del Festival */
-  var url=location.origin+location.pathname;
-  var msg="Felicitas Festival · sabato 21 novembre 2026, dalle 10 · Baratili San Pietro, Oristano";
-  document.getElementById('inv-wa').href="https://wa.me/?text="+encodeURIComponent(msg+"\n"+url);
-  document.getElementById('inv-tg').href="https://t.me/share/url?url="+encodeURIComponent(url)+"&text="+encodeURIComponent(msg);
-  document.getElementById('inv-mail').href="mailto:?subject="+encodeURIComponent("Felicitas Festival · 21 novembre")+"&body="+encodeURIComponent(msg+"\n"+url);
-  var sc=document.getElementById('invita-scelta');
-  document.getElementById('invita').addEventListener('click',function(){ sc.hidden=!sc.hidden; });
 
-  function sessione(){ return db?db.auth.getSession().then(function(r){return r.data&&r.data.session;}).catch(function(){return null;}):Promise.resolve(null); }
-  function di(per,t){ document.querySelectorAll('.esito[data-per="'+per+'"]').forEach(function(e){e.textContent=t||'';}); }
-  function entra(q){ location.href="accesso.html?torna="+encodeURIComponent(location.pathname+"?"+q); }
-  /* pranzo e cena: arrivano al ruolo Cibo (SQL 92) */
-  var NOME_P={pranzo:"il pranzo",cena:"la cena"};
-  function pasto(p){
-    sessione().then(function(s){
-      if(!s){ entra("pasto="+p); return; }
-      var n=prompt("Per quante persone prenoti "+NOME_P[p]+"?","1"); if(n===null) return;
-      n=parseInt(n,10); if(!(n>=1&&n<=50)){ di("pasti","Scrivi un numero da 1 a 50."); return; }
-      di("pasti","Un momento…");
-      db.rpc("fm_prendi_orma",{p_orma:EV}).catch(function(){}).then(function(){ return db.rpc("fm_prenota",{p_cosa:p,p_quanti:n,p_evento:EV}); })
-        .then(function(r){ if(r&&r.error){ di("pasti","Non è stato salvato. Si può riprovare."); return; }
-          di("pasti",r&&r.data==="ok"?"Prenotato: "+NOME_P[p]+", "+n+(n===1?" persona.":" persone."):(r&&r.data)||""); },
-          function(){ di("pasti","Non è stato salvato. Si può riprovare."); });
-    });
-  }
-  /* le quattro richieste sotto i video: arrivano al ruolo Eventi (SQL 103) */
-  var NOME_R={attivazione_cervello:"Attivazione del Cervello Digitale Evoluto",conferenza:"Conferenza nel tuo territorio",aiuto_festival:"Aiuto per il festival",gruppo_festival:"Gruppo organizzativo nel tuo territorio"};
-  function riga(c){ return (c==="conferenza")?"attivazione_cervello":(c==="gruppo_festival"?"aiuto_festival":c); }
-  function richiesta(c){
-    if(!NOME_R[c]) return;
-    sessione().then(function(s){
-      if(!s){ entra("richiesta="+c); return; }
-      var d=prompt("Dove? Paese o città (si può lasciare vuoto)",""); if(d===null) return;
-      di(riga(c),"Un momento…");
-      db.rpc("fm_prenota",{p_cosa:c,p_dove:d,p_evento:EV}).then(function(r){
-        if(r&&r.error){ di(riga(c),"Non è stato salvato. Si può riprovare."); return; }
-        di(riga(c),r&&r.data==="ok"?"Richiesta arrivata: "+NOME_R[c]+(d.trim()?" · "+d.trim():"")+".":(r&&r.data)||"");
-      },function(){ di(riga(c),"Non è stato salvato. Si può riprovare."); });
-    });
-  }
-  /* 22/10, Gab: il video di Lamberto Rimondini «con il titolo»; si apre al tocco, da YouTube senza cookie */
-  document.addEventListener('click',function(e){
-    var y=e.target.closest('[data-yt]'); if(!y) return;
-    var f=document.createElement('iframe'); f.src="https://www.youtube-nocookie.com/embed/"+y.getAttribute('data-yt')+"?autoplay=1&rel=0";
-    f.title="l'Italia risorge | Mine Vaganti #23"; f.allow="autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen=true;
-    y.replaceWith(f);
-  });
-  document.addEventListener('click',function(e){
-    var b=e.target.closest('[data-pasto],[data-cosa]'); if(!b) return;
-    e.preventDefault();
-    if(b.hasAttribute('data-pasto')) pasto(b.getAttribute('data-pasto')); else richiesta(b.getAttribute('data-cosa'));
-  });
-  /* il titolo e i riquadri si accendono quando entrano nello schermo (come la pagina di prima) */
-  var vivi=document.querySelectorAll('.aspetta,.bento');
-  if('IntersectionObserver' in window){ var ov=new IntersectionObserver(function(es){ es.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('vivo'); ov.unobserve(x.target); } }); },{threshold:.2}); vivi.forEach(function(v){ ov.observe(v); }); }
-  else vivi.forEach(function(v){ v.classList.add('vivo'); });
-  document.querySelectorAll('.bento .q').forEach(function(q,i){ q.style.transitionDelay=(i*90)+'ms'; });
-  /* tornando dall'accesso il gesto si completa */
+<!-- FINESTRA INVITA -->
+<div class="velo" id="velo-invita" hidden>
+  <div class="finestra" role="dialog" aria-modal="true" aria-labelledby="titolo-invita">
+    <div class="testa"><h2 id="titolo-invita">Invita</h2><button class="chiudi" type="button" data-chiudi aria-label="Chiudi">×</button></div>
+    <div class="canali">
+      <a class="canale" id="c-wa" target="_blank" rel="noopener"><i style="background:#25D366">W</i>WhatsApp</a>
+      <a class="canale" id="c-tg" target="_blank" rel="noopener"><i style="background:#229ED9">T</i>Telegram</a>
+      <a class="canale" id="c-mail"><i style="background:var(--t3)">@</i>Mail</a>
+      <button class="canale" type="button" id="c-copia"><i style="background:var(--oro);color:var(--c3)">⧉</i><span>Copia link</span></button>
+    </div>
+    <div class="anteprima-invito" id="testo-invito"></div>
+  </div>
+</div>
+
+<script src="comune/fm-prenota-festival.js?v=10281920"></script>
+<script>
+(function(){
   var q=new URLSearchParams(location.search);
-  if(NOME_P[q.get('pasto')]) pasto(q.get('pasto'));
-  if(q.get('richiesta')) richiesta(q.get('richiesta'));
+  if(q.has('anteprima'))document.documentElement.classList.add('anteprima');
+  if(q.has('ferma')||(navigator.connection&&navigator.connection.saveData))document.documentElement.classList.add('ferma');
+
+  // le parti si accendono quando ci arrivi
+  var els=document.querySelectorAll('.rivela');
+  if('IntersectionObserver' in window&&!q.has('anteprima')){
+    document.documentElement.classList.add('anima');
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vista');io.unobserve(e.target)}})},{rootMargin:'0px 0px -12% 0px'});
+    els.forEach(function(el){io.observe(el)});
+  }else els.forEach(function(el){el.classList.add('vista')});
+
+  // barra: «Ci sarò» compare dopo il primo schermo; la linea del programma avanza
+  var barra=document.getElementById('barra'),linea=document.getElementById('linea'),avanza=linea.querySelector('.avanza');
+  function scorri(){
+    barra.classList.toggle('su',scrollY>innerHeight*.8);
+    var r=linea.getBoundingClientRect(),p=(innerHeight*.6-r.top)/r.height;
+    avanza.style.setProperty('--p',Math.max(0,Math.min(1,p)));
+  }
+  addEventListener('scroll',scorri,{passive:true});scorri();
+  if(q.has('anteprima'))avanza.style.setProperty('--p',1);
+
+  // prenota: un modulo, la voce giusta già scelta
+  var vp=document.getElementById('velo-prenota'),vi=document.getElementById('velo-invita'),esito=document.getElementById('esito');
+  function apri(v){v.hidden=false;document.body.style.overflow='hidden';var f=v.querySelector('input,button,a');if(f)f.focus()}
+  function chiudi(){vp.hidden=true;vi.hidden=true;document.body.style.overflow=''}
+  // il modulo salva con FMPrenotaFestival (Company brain, comune/fm-prenota-festival.js, SQL 130);
+  // il workshop porta al pagamento di 50 €, il resto per ora si prenota con i dati
+  var VOCE={presenza:'ci_saro',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori:'laboratori_bambini'};
+  var NOMI={presenza:'Ci sarò',pranzo:'Pranzo',cena:'Cena',workshop:'Workshop',laboratori:'Laboratori didattici'};
+  var modulo=document.getElementById('modulo'),workshop=document.getElementById('p-workshop'),invia=document.getElementById('invia'),costo=document.getElementById('costo');
+  function scelta(){var c=modulo.querySelector('input[name=cosa]:checked');return c?c.value:'presenza'}
+  function aggiorna(){
+    var w=workshop.checked;
+    var paga=w&&window.FMPrenotaFestival&&FMPrenotaFestival.LINK_STRIPE.workshop;invia.textContent=paga?'Prenota e paga 50 €':'Prenota';
+    costo.innerHTML=w?'Workshop: <s>80 €</s> · 50 € per il Festival':'Ingresso gratuito';
+  }
+  modulo.querySelectorAll('input[name=cosa]').forEach(function(r){r.addEventListener('change',aggiorna)});
+  document.querySelectorAll('[data-prenota]').forEach(function(b){b.addEventListener('click',function(){
+    document.getElementById('p-'+b.dataset.prenota).checked=true;
+    esito.hidden=true;aggiorna();apri(vp);
+  })});
+  modulo.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var k=scelta(),d={cosa:VOCE[k],nome:modulo.nome.value.trim(),cognome:modulo.cognome.value.trim(),telefono:modulo.telefono.value.trim(),
+      email:modulo.mail.value.trim(),persone:parseInt(modulo.persone.value,10)||1,privacy:modulo.privacy.checked};
+    var F=window.FMPrenotaFestival;
+    if(!F){esito.textContent='Bozza: qui la prenotazione viene salvata'+(k==='workshop'?' e si passa al pagamento':'')+'.';esito.hidden=false;return}
+    invia.disabled=true;
+    Promise.resolve(F.invia(d)).then(function(r){
+      invia.disabled=false;
+      if(!r||!r.ok){esito.textContent=(r&&r.errore)||'La prenotazione non è andata a buon fine: riprova.';esito.hidden=false;return}
+      if(F.aPagamento&&F.aPagamento(d.cosa,r.id,d.email)){esito.textContent='Prenotazione salvata. Ti porto al pagamento…';esito.hidden=false;return}
+      esito.textContent='Prenotato: '+NOMI[k]+', '+d.persone+(d.persone===1?' persona':' persone')+'. Ti arriva una mail di conferma.';esito.hidden=false;
+    },function(){invia.disabled=false;esito.textContent='La prenotazione non è andata a buon fine: riprova.';esito.hidden=false});
+  });
+  document.querySelectorAll('[data-chiudi]').forEach(function(b){b.addEventListener('click',chiudi)});
+  [vp,vi].forEach(function(v){v.addEventListener('click',function(e){if(e.target===v)chiudi()})});
+  addEventListener('keydown',function(e){if(e.key==='Escape')chiudi()});
+
+  // invita: WhatsApp, Telegram, mail, copia link
+  var link='https://app.felicitasmundi.com/communitas-aeterna-prova/festival-evento-bozza.html';
+  var testo='FELICITAS FESTIVAL · TRAME, la forza di essere connessi · Sabato 21 novembre 2026, dalle 10 · Centro Sociale e Centro Polifunzionale, Baratili San Pietro, Oristano';
+  document.getElementById('testo-invito').textContent=testo+' · '+link;
+  document.getElementById('c-wa').href='https://wa.me/?text='+encodeURIComponent(testo+' '+link);
+  document.getElementById('c-tg').href='https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(testo);
+  document.getElementById('c-mail').href='mailto:?subject='+encodeURIComponent('FELICITAS FESTIVAL · 21 novembre')+'&body='+encodeURIComponent(testo+'\n'+link);
+  document.getElementById('c-copia').addEventListener('click',function(){
+    var s=this.querySelector('span');
+    function fatto(){s.textContent='Link copiato'}
+    function scegli(){var r=document.createRange();r.selectNodeContents(document.getElementById('testo-invito'));var g=getSelection();g.removeAllRanges();g.addRange(r);s.textContent='Testo selezionato: copialo'}
+    try{navigator.clipboard.writeText(link).then(fatto,scegli)}catch(e){scegli()}
+  });
+  document.querySelectorAll('[data-invita]').forEach(function(b){b.addEventListener('click',function(){apri(vi)})});
+
+  // video: partono quando si vedono, si fermano quando escono
+  document.querySelectorAll('video').forEach(function(v){
+    if(!('IntersectionObserver' in window))return;
+    new IntersectionObserver(function(es){es.forEach(function(e){
+      if(getComputedStyle(v).display==='none')return;
+      e.isIntersecting?v.play().catch(function(){}):v.pause();
+    })},{threshold:.25}).observe(v);
+  });
+  // dalla newsletter: ?presenza=1 o ?prenota=<voce> apre il modulo con la voce scelta; ?pagato=1 al ritorno da Stripe
+  var DA={ci_saro:'presenza',presenza:'presenza',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori_bambini:'laboratori',laboratori:'laboratori'};
+  var v=q.get('presenza')==='1'?'presenza':DA[q.get('prenota')||''];
+  if(v){document.getElementById('p-'+v).checked=true;esito.hidden=true;aggiorna();apri(vp)}
+  if(q.get('pagato')==='1'){esito.textContent='Pagamento ricevuto. Grazie!';esito.hidden=false;apri(vp)}
+
+  // ritorno: chi arriva dall'app torna all'app, gli altri alla home (Gab 28/10)
+  try{
+    if(/[?&]da=home(&|$)/.test(location.search))sessionStorage.setItem('fm_origine','home');
+    if(sessionStorage.getItem('fm_origine')==='app'){
+      document.getElementById('fv-casa').href='strumento.html?v=azione';document.getElementById('fv-casa').setAttribute('aria-label','Torna all\'app');
+      document.getElementById('fv-torna').href='strumento.html?v=azione';document.getElementById('fv-torna').textContent='Torna all\'app';
+    }
+  }catch(e){}
 })();
 </script>
-<script src="comune/fm-vicinato.js?v=10222120"></script>
-<script src="comune/fm-video.js?v=10221330"></script>
-<script src="comune/fm-statistiche.js?v=10122255" data-pagina="festival-trame"></script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
-<script src="comune/fm-torna.js?v=10281800" data-ignoto="home"></script>
-<script src="comune/fm-prenota-festival.js?v=10281920"></script>
 </body>
 </html>
