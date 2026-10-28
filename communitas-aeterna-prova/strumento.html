@@ -2110,6 +2110,10 @@ body.con-diretta{padding-bottom:130px}
 (function(){function segui(){try{if(!localStorage.getItem("fm_diretta"))return;document.body.classList.add("con-diretta");if(window.FM_DIRETTA){window.FM_DIRETTA.avvia();return;}var sd=document.createElement("script");sd.src="comune/fm-diretta.js?v=10182055";document.head.appendChild(sd);}catch(e){}}
 segui();window.addEventListener("pageshow",function(e){if(e.persisted)segui();});})();
 </script>
+<script>
+/* 28/10/2026 Gab: chi entra dalla home torna alla home, chi entra nell'app torna all'app (vedi comune/fm-torna.js). */
+(function(){try{if(/[?&]da=home(&|$)/.test(location.search)){sessionStorage.setItem("fm_origine","home");var t=document.createElement("script");t.src="comune/fm-torna.js?v=10281800";document.head.appendChild(t);}else sessionStorage.setItem("fm_origine","app");}catch(e){}})();
+</script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 </body>
 </html>
