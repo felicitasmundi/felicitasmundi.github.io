@@ -32,7 +32,7 @@ h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px
 .sch p{margin:0;font-size:21px}
 .riga-oro{width:72px;height:3px;border-radius:2px;background:var(--oro)}
 .testa{min-height:92svh;justify-content:center;align-items:center;text-align:center;padding-top:40px}
-.nexus{width:190px;height:190px;border-radius:50%;background:#fff;border:5px solid var(--oro);box-shadow:0 0 0 10px rgba(212,175,106,.14),0 0 90px rgba(212,175,106,.35);overflow:hidden;display:flex;align-items:center;justify-content:center;animation:respira 6s ease-in-out infinite}
+.nexus{width:190px;height:190px;border-radius:50%;background:#fff;border:5px solid var(--oro);box-shadow:0 0 0 10px rgba(212,175,106,.14),0 0 90px rgba(212,175,106,.35);overflow:hidden;display:flex;align-items:center;justify-content:center;}
 .nexus img{width:86%;height:86%;object-fit:contain;display:block}
 @keyframes respira{50%{box-shadow:0 0 0 16px rgba(212,175,106,.08),0 0 130px rgba(212,175,106,.5)}}
 .frase{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:30px;line-height:1.3;margin:0}
@@ -40,7 +40,7 @@ h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px
 .tasti{display:flex;flex-direction:column;gap:12px;width:100%;max-width:440px}
 .tasto{display:block;text-align:center;font-weight:600;font-size:21px;padding:18px 22px;border-radius:999px;background:var(--oro);color:#1A1405;box-shadow:0 8px 30px rgba(0,0,0,.3)}
 .tasto.vuoto{background:none;color:var(--oro);border:2px solid var(--oro);box-shadow:none}
-.giu{font-size:34px;color:var(--oro);animation:scende 2.4s ease-in-out infinite}
+.giu{font-size:34px;color:var(--oro)}
 @keyframes scende{50%{transform:translateY(8px);opacity:.6}}
 .evento{display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:var(--carta);border:2px solid var(--oro);box-shadow:0 10px 40px rgba(0,0,0,.35)}
 .evento img{display:block;width:100%;height:auto}
@@ -159,7 +159,6 @@ footer a{text-decoration:underline}
     <div class="blocco rivela"><h3>Un unico strumento di condivisione</h3><p>Ne risulta un unico strumento di condivisione delle informazioni, anche dal punto di vista giornalistico, che permette a ogni utente di sviluppare azioni quotidiane: azioni orientate agli obiettivi dei team, allo sviluppo dei progetti e alla condivisione di articoli, racconti e note su ciò che accade nel proprio territorio.</p><p>Queste informazioni diventano giornale e confluiscono nella pagina del Cervello Digitale Evoluto, una sorta di wiki, un&#x27;enciclopedia condivisa. FelicitasMundi permette inoltre di rendere visibili e acquistabili prodotti e servizi.</p></div>
     <div class="carte">
       <a class="card rivela" href="strumento.html?v=giornale" style="--e:#D4AF6A"><i></i><span><b>Il Giornale</b><small>ogni mattina alle 9</small></span><em aria-hidden="true">›</em></a>
-      <a class="card rivela" href="coscienza.html" style="--e:#6FA8D6"><i></i><span><b>La tecnologia</b><small>open source · Cervello Digitale Evoluto</small></span><em aria-hidden="true">›</em></a>
     </div>
   </section>
 
@@ -205,12 +204,12 @@ footer a{text-decoration:underline}
   var vivi=document.querySelectorAll('.rivela');
   if('IntersectionObserver' in window){var o=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vivo');o.unobserve(x.target);}});},{threshold:.12});vivi.forEach(function(v){o.observe(v);});}
   else vivi.forEach(function(v){v.classList.add('vivo');});
-  /* il cielo: poche stelle che brillano piano */
+  /* il cielo: stelle ferme, disegnate una volta sola (Gab 28/10: «i simboli in movimento rallentano») */
   var c=document.getElementById('stelle'),g=c.getContext&&c.getContext('2d'); if(!g) return;
   var S=[],W,H,r=Math.min(window.devicePixelRatio||1,2),fermo=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   function misura(){W=c.width=innerWidth*r;H=c.height=innerHeight*r;S=[];for(var i=0;i<Math.round(innerWidth*innerHeight/9000);i++)S.push({x:Math.random()*W,y:Math.random()*H,s:(Math.random()*1.3+.3)*r,f:Math.random()*6.28,v:.004+Math.random()*.012});}
-  function disegna(){g.clearRect(0,0,W,H);for(var i=0;i<S.length;i++){var s=S[i];s.f+=s.v;g.globalAlpha=.25+.5*(.5+.5*Math.sin(s.f));g.fillStyle=i%7?'#F5F0E6':'#D4AF6A';g.beginPath();g.arc(s.x,s.y,s.s,0,6.28);g.fill();}if(!fermo)requestAnimationFrame(disegna);}
-  misura();disegna();addEventListener('resize',misura);
+  function disegna(){g.clearRect(0,0,W,H);for(var i=0;i<S.length;i++){var s=S[i];g.globalAlpha=.25+.5*(.5+.5*Math.sin(s.f));g.fillStyle=i%7?'#F5F0E6':'#D4AF6A';g.beginPath();g.arc(s.x,s.y,s.s,0,6.28);g.fill();}}
+  misura();disegna();addEventListener('resize',function(){misura();disegna();});
 })();
 </script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
