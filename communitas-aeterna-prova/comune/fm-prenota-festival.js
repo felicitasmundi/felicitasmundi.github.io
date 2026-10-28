@@ -3,7 +3,8 @@
    Salva con fm_prenota_festival (SQL 130): funziona anche per chi non è entrato; il database manda la mail di conferma.
    Uso:
      <div data-fm-prenota="ci_saro,pranzo,cena,workshop,laboratori_bambini"></div>  → disegna il modulo (la prima voce è già scelta;
-       ?prenota=<voce> nell'indirizzo la sceglie, ?presenza=1 sceglie «Ci sarò» e porta al modulo)
+       ?prenota=<voce> nell'indirizzo la sceglie, ?presenza=1 sceglie «Ci sarò» e porta al modulo;
+       un link <a href="#prenota" data-fm-scegli="<voce>"> sceglie la voce e scorre al modulo)
      FMPrenotaFestival.invia({cosa, nome, cognome, telefono, email, persone, privacy}) → Promise {ok, id, errore}
    Pagamento: con un link Stripe in LINK_STRIPE la voce, dopo il salvataggio, porta al pagamento
    (client_reference_id = id della prenotazione, così in Stripe si ritrova). Senza link si prenota e basta. */
@@ -95,6 +96,11 @@
   function avvia(){
     if (!document.getElementById("fp-stile")){ var s = document.createElement("style"); s.id = "fp-stile"; s.textContent = CSS; document.head.appendChild(s); }
     [].forEach.call(document.querySelectorAll("[data-fm-prenota]"), disegna);
+    document.addEventListener("click", function(e){
+      var a = e.target.closest && e.target.closest("[data-fm-scegli]"); if (!a) return;
+      var r = document.querySelector('[data-fm-prenota] input[name=cosa][value="' + a.getAttribute("data-fm-scegli") + '"]');
+      if (r){ r.checked = true; r.dispatchEvent(new Event("change", { bubbles: true })); }
+    });
   }
   window.FMPrenotaFestival = { invia: invia, aPagamento: aPagamento, LINK_STRIPE: LINK_STRIPE, NOMI: NOMI };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", avvia); else avvia();

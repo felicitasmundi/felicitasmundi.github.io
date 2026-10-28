@@ -146,7 +146,9 @@ h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;mar
 .nota{font-size:20px!important;color:var(--fioco)}
 .con-foto{display:flex;gap:16px;align-items:center}
 .elenco{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font-size:21px}
+.prezzo{font-size:24px!important}.prezzo s{color:var(--fioco)}.prezzo b{color:var(--oro)}
 .rinvio{color:var(--oro);font-size:19px;text-decoration:underline}
+#prenota{scroll-margin-top:80px}
 </style>
 </head>
 <body>
@@ -226,7 +228,7 @@ h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;mar
       <article class="voce-p">
         <div class="ora">13:00</div>
         <h3>Pranzo vegetariano</h3>
-        <a class="rinvio" href="#pranzo">Prenota il pranzo ›</a>
+        <a class="rinvio" href="#prenota" data-fm-scegli="pranzo">Prenota il pranzo ›</a>
       </article>
 
       <article class="voce-p">
@@ -267,6 +269,10 @@ h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;mar
           <p class="chi">mindset e innovazione tecnologica · con Gabriele Dettori</p>
         </div></div>
         <p>Riconosci il tuo talento e il tuo progetto-senso. Allena un'attenzione indomabile, la coerenza tra pensiero, parola e azione, e porta a terra la forza creativa. Poi fai il salto dal singolo al team: smetti di concentrare conoscenze e relazioni su una sola persona e affidale a un Cervello Digitale Evoluto che, insieme all'AI, ordina file, agende, mail e obiettivi e segue lo sviluppo della tua azienda e del tuo progetto.</p>
+        <!-- 28/10 13:53, Gab: «il workshop deve riportare la scritta 80euro sbarrato, 50 euro per il festival» -->
+        <p class="prezzo"><s>80 euro</s> <b>50 euro per il Festival</b></p>
+        <!-- 28/10 19:21, Gab: «togli le 3 lezioni online» -->
+        <a class="rinvio" href="#prenota" data-fm-scegli="workshop" data-conta="tasto:workshop">Prenota il workshop ›</a>
         <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
         <div class="tasti">
           <button class="tasto" type="button" data-cosa="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il Cervello Digitale Evoluto della tua azienda</button>
@@ -289,7 +295,7 @@ h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;mar
       <article class="voce-p">
         <div class="ora">a seguire</div>
         <h3>Cena vegetariana</h3>
-        <a class="rinvio" href="#pranzo">Prenota la cena ›</a>
+        <a class="rinvio" href="#prenota" data-fm-scegli="cena">Prenota la cena ›</a>
       </article>
     </div>
 
@@ -307,8 +313,15 @@ h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;mar
       <div class="parte">Tutto il giorno</div>
       <h3>Laboratori didattici per bimbi e ragazzi</h3>
       <p>L'associazione Arghentu cura l'Area Educazione: uno spazio speciale dove artisti e artigiani, provenienti da tutta la Sardegna guidano bambini e ragazzi in coinvolgenti laboratori didattici e creativi. Troverai Laboratori di cestineria, di traforo su legno, Giocoleria, fumetto e agricoltura del non fare.</p>
+      <a class="rinvio" href="#prenota" data-fm-scegli="laboratori_bambini">Prenota i laboratori ›</a>
     </div>
     <a class="tasto vuoto" href="casa/felicitas-festival-21-novembre-programma.pdf?v=0d92" target="_blank" rel="noopener">Scarica locandina e programma (PDF)</a>
+  </section>
+
+  <!-- 28/10 19:03, Gab: «per ora prenotiamo la presenza, coi dati, poi mettiamo i costi» (SQL 130, comune/fm-prenota-festival.js) -->
+  <section id="prenota">
+    <span id="pranzo"></span>
+    <div data-fm-prenota="ci_saro,pranzo,cena,workshop,laboratori_bambini"></div>
   </section>
 
   <!-- 25/10 18:06, Gab: «aggiungi il modello e il bottone per partecipare come artista/artigiano e auto produttore» (SQL 123) -->
@@ -316,15 +329,6 @@ h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;mar
     <div class="tasti"><a class="tasto" href="partecipa-artisti.html" data-conta="tasto:partecipa_artisti">Partecipa come artista, artigiano o autoproduttore</a></div>
   </section>
 
-  <section class="pranzo" id="pranzo">
-    <h2>Pasti vegetariani</h2>
-    <p>Pranzo e cena su prenotazione.</p>
-    <div class="tasti">
-      <button class="tasto" type="button" data-pasto="pranzo">Prenoto il pranzo</button>
-      <button class="tasto" type="button" data-pasto="cena">Prenoto la cena</button>
-    </div>
-    <p class="esito" data-per="pasti" aria-live="polite"></p>
-  </section>
 
   <footer class="piede">&copy; 2026 Felicitas Omnia Srls &middot; P.IVA 03075740906 &middot; <a href="privacy.html">Privacy</a> &middot; <a href="cookie.html">Cookie</a></footer>
 </div>
@@ -402,5 +406,6 @@ var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://g
 <script src="comune/fm-statistiche.js?v=10122255" data-pagina="festival-trame"></script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 <script src="comune/fm-torna.js?v=10281800" data-ignoto="home"></script>
+<script src="comune/fm-prenota-festival.js?v=10281920"></script>
 </body>
 </html>
