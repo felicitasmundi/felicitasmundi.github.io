@@ -266,6 +266,9 @@ h3{font-family:var(--f-voce);font-weight:600;font-size:30px;line-height:1.15;mar
           <p class="chi">mindset e innovazione tecnologica · con Gabriele Dettori</p>
         </div></div>
         <p>Riconosci il tuo talento e il tuo progetto di senso. Allena un'attenzione indomabile, la coerenza tra pensiero, parola e azione, e porta a terra la tua creatività. Poi fai il salto dal singolo al team: smetti di concentrare conoscenze e relazioni su una sola persona e affidale a un Cervello Digitale Evoluto che, insieme all'AI, ordina file, agende, mail e obiettivi e segue lo sviluppo della tua azienda e del tuo progetto.</p>
+        <!-- 28/10, Gab: «ok facciamo sql nuovo» (SQL 127): il workshop si prenota come pranzo e cena, arriva al ruolo Eventi -->
+        <div class="tasti"><button class="tasto" type="button" data-pasto="workshop" data-conta="tasto:workshop">Prenoto il workshop</button></div>
+        <p class="esito" data-per="workshop" aria-live="polite"></p>
         <div class="fm-vid"><iframe data-fm-video="video/il-cervello-digitale.html" title="Il cervello digitale" allow="fullscreen" allowfullscreen></iframe></div>
         <div class="tasti">
           <button class="tasto" type="button" data-cosa="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il Cervello Digitale Evoluto della tua azienda</button>
@@ -346,17 +349,17 @@ var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://g
   function di(per,t){ document.querySelectorAll('.esito[data-per="'+per+'"]').forEach(function(e){e.textContent=t||'';}); }
   function entra(q){ location.href="accesso.html?torna="+encodeURIComponent(location.pathname+"?"+q); }
   /* pranzo e cena: arrivano al ruolo Cibo (SQL 92) */
-  var NOME_P={pranzo:"il pranzo",cena:"la cena"};
+  var NOME_P={pranzo:"il pranzo",cena:"la cena",workshop:"il workshop"};
   function pasto(p){
     sessione().then(function(s){
       if(!s){ entra("pasto="+p); return; }
       var n=prompt("Per quante persone prenoti "+NOME_P[p]+"?","1"); if(n===null) return;
-      n=parseInt(n,10); if(!(n>=1&&n<=50)){ di("pasti","Scrivi un numero da 1 a 50."); return; }
-      di("pasti","Un momento…");
+      n=parseInt(n,10); if(!(n>=1&&n<=50)){ di(p==="workshop"?"workshop":"pasti","Scrivi un numero da 1 a 50."); return; }
+      di(p==="workshop"?"workshop":"pasti","Un momento…");
       db.rpc("fm_prendi_orma",{p_orma:EV}).catch(function(){}).then(function(){ return db.rpc("fm_prenota",{p_cosa:p,p_quanti:n,p_evento:EV}); })
-        .then(function(r){ if(r&&r.error){ di("pasti","Non è stato salvato. Si può riprovare."); return; }
-          di("pasti",r&&r.data==="ok"?"Prenotato: "+NOME_P[p]+", "+n+(n===1?" persona.":" persone."):(r&&r.data)||""); },
-          function(){ di("pasti","Non è stato salvato. Si può riprovare."); });
+        .then(function(r){ if(r&&r.error){ di(p==="workshop"?"workshop":"pasti","Non è stato salvato. Si può riprovare."); return; }
+          di(p==="workshop"?"workshop":"pasti",r&&r.data==="ok"?"Prenotato: "+NOME_P[p]+", "+n+(n===1?" persona.":" persone."):(r&&r.data)||""); },
+          function(){ di(p==="workshop"?"workshop":"pasti","Non è stato salvato. Si può riprovare."); });
     });
   }
   /* le quattro richieste sotto i video: arrivano al ruolo Eventi (SQL 103) */
