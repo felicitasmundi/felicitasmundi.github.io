@@ -69,7 +69,7 @@ footer{border-top:1px solid var(--riga);margin-top:36px;padding:18px 0 40px;font
 <body>
 <div class="trama"></div>
 <div class="in">
-  <div class="su"><a href="festival-evento-bozza.html">← Felicitas Festival</a><span class="marca">FELICITASMUNDI</span></div>
+  <div class="su"><a href="/felicitas-festival-21-novembre-baratili/">← Felicitas Festival</a><span class="marca">FELICITASMUNDI</span></div>
 
   <header>
     <span class="fm-occ">FELICITAS FESTIVAL · 21 NOVEMBRE 2026 · BARATILI SAN PIETRO</span>
@@ -228,7 +228,7 @@ var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://g
 var f=document.getElementById("dich"),esito=document.getElementById("esito"),manda=document.getElementById("manda");
 
 /* il codice del banner: un'immagine con il link, niente script sul sito degli altri */
-function codice(w,h){return '<a href="'+BASE+'festival-evento-bozza.html" target="_blank" rel="noopener"><img src="'+BASE+'casa/banner-festival-'+w+'x'+h+'.png" width="'+w+'" height="'+h+'" alt="Felicitas Festival · 21 novembre 2026 · Baratili San Pietro" style="max-width:100%;height:auto;border:0"></a>';}
+function codice(w,h){return '<a href="https://app.felicitasmundi.com/felicitas-festival-21-novembre-baratili/" target="_blank" rel="noopener"><img src="'+BASE+'casa/banner-festival-'+w+'x'+h+'.png" width="'+w+'" height="'+h+'" alt="Felicitas Festival · 21 novembre 2026 · Baratili San Pietro" style="max-width:100%;height:auto;border:0"></a>';}
 document.getElementById("cod-quadrato").textContent=codice(300,250);
 document.getElementById("cod-striscia").textContent=codice(728,90);
 document.querySelectorAll("[data-copia]").forEach(function(b){b.onclick=function(){

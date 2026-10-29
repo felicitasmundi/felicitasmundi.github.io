@@ -1255,7 +1255,7 @@ function vOggi(){
   var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime();
   /* 23 ott, Gab: «La lezione è lunedì alle 19» · in cima a Oggi la prima lezione del praticantato (non ancora nel database) */
   c.innerHTML='<p class="et">Praticantato</p><div class="card lezione-1"><b>La prima lezione</b><span class="t">lunedì alle 19 · con Gabriele Dettori</span></div>'+(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
-    (fest?'<a class="evid" href="festival-evento-bozza.html?c=10182300"><img class="copertina" src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · TRAME: la forza di essere connessi"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
+    (fest?'<a class="evid" href="/felicitas-festival-21-novembre-baratili/?c=10182300"><img class="copertina" src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · TRAME: la forza di essere connessi"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
     '<details class="card vid-come" id="o-come"><summary>Come funziona</summary><p class="et">Villaggi e vicinati</p>'+videoHTML("villaggi")+'<p class="et">Il cervello digitale</p>'+videoHTML("cervello")+'</details>'+
     '<p class="et">Oggi · Felicitas</p>'+
     '<div class="card"><div class="giorno">'+l.svg+'<div><b>'+esc(d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"}))+'</b><span id="o-cielo">'+esc(l.nome)+'</span></div></div></div>'+
@@ -1595,13 +1595,13 @@ function g4Testa(g){
   var s1=function(x){return ' g4-sale';};
   return '<div class="g4-apre"><div class="g4-data">'+esc(g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}))+' · '+esc(L.nome)+'</div><h1>Giornale<br>Felicitas</h1><p class="grande" id="g4-mosse" hidden></p></div>'+
     '<div id="g4-radio"></div><div id="g4-art" style="display:flex;flex-direction:column;gap:10px"></div>'+
-    (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="festival-evento-bozza.html?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
+    (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="/felicitas-festival-21-novembre-baratili/?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
       '<div class="g4-occ">In evidenza</div><h2>Felicitas Festival</h2>'+
       '<p>TRAME · la forza di essere connessi<br>Sabato 21 novembre 2026 · dalle 10:00<br>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</p>'+
       videoHTML("villaggi")+videoHTML("cervello")+
       '<div class="g4-num"><div><b>'+giorni+'</b><small>giorni</small></div><div id="g4-fatti" hidden><b></b><small>compiti fatti</small></div><div id="g4-servono" hidden><b></b><small>cose che servono</small></div></div>'+
       '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
-      '<a class="g4-tasto" href="festival-evento-bozza.html?c=10182300">Il programma</a></div></div>':'')+
+      '<a class="g4-tasto" href="/felicitas-festival-21-novembre-baratili/?c=10182300">Il programma</a></div></div>':'')+
     '<div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
     '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div>'+
     '<div class="g4-mos"><div class="g4-titolo g4-sale"><div class="g4-occ">Le tre linee · per i team</div><h3>Logistica, tecnologia e comunità</h3></div>'+
