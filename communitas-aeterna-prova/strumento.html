@@ -344,6 +344,72 @@ select.sp-segna{width:auto;align-self:flex-start;font-size:12px;padding:2px 6px;
 .q-az.largo{grid-column:1/-1;min-height:96px;flex-direction:row;align-items:center;justify-content:flex-start;gap:16px}
 .q-az i{width:34px;height:34px;border-radius:50%;border:2px solid var(--e);box-shadow:0 0 18px var(--e)}
 .q-az b{font-family:'Cormorant Garamond',Georgia,serif;font-size:25px;font-weight:600;line-height:1.05}
+/* AZIONE · i team e la chat (SQL 128) · disegno azione-chat/bozza-azione, ok di Gab 28/10 */
+html:has(body.cosmo-az),body.notte.cosmo-az{background:linear-gradient(180deg,#1d2f66,#122050 55%,#0a1430) fixed #0a1430}
+.tm-et{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#D4AF6A;margin:22px 0 8px}
+.tm-tit{font-family:'Cinzel',Georgia,serif;font-weight:500;font-size:28px;letter-spacing:.04em;margin:0 0 10px;color:#F5F0E6}
+.tm-lista{display:flex;flex-direction:column;border-top:1px solid rgba(212,175,106,.3)}
+.tm-ch{display:flex;align-items:center;gap:14px;padding:12px 2px;border:0;border-bottom:1px solid rgba(245,240,230,.09);background:transparent;color:#F5F0E6;font:inherit;text-align:left;cursor:pointer;width:100%}
+.tm-seg{flex:0 0 52px;height:52px;border-radius:50%;border:2px solid #D4AF6A;background:#1a2148;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',Georgia,serif;font-size:22px;color:#D4AF6A;box-sizing:border-box}
+.tm-ch.base .tm-seg{background:#D4AF6A;color:#0a1430}
+.tm-mezzo{flex:1;min-width:0}
+.tm-mezzo b{display:block;font-size:20px;font-weight:600;line-height:1.25}
+.tm-base{display:inline-block;font-size:13px;color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:10px;padding:0 8px;margin-left:8px;vertical-align:3px;font-weight:500}
+.tm-ul{display:block;font-size:17px;color:rgba(245,240,230,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm-dx{flex:0 0 auto;text-align:right;font-size:15px;color:rgba(245,240,230,.7);line-height:1.3}
+.tm-dx em{display:inline-block;font-style:normal;min-width:26px;height:26px;border-radius:13px;background:#D4AF6A;color:#0a1430;font-size:15px;font-weight:600;line-height:26px;text-align:center;margin-top:4px;padding:0 6px;box-sizing:border-box}
+.tm-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tm-g a,.tm-g button{min-height:112px;background:#1a2148;border:1px solid rgba(212,175,106,.35);border-radius:16px;text-align:center;padding:12px 4px 10px;color:#F5F0E6;text-decoration:none;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.tm-g.ruolo a,.tm-g.ruolo button{background:transparent;border-style:dashed}
+.tm-g svg{width:38px;height:38px;flex:none}
+.tm-g b{font-size:17px;line-height:1.15;font-weight:500}
+.tm-prop{background:#1a2148;border:1px solid rgba(212,175,106,.3);border-radius:16px;padding:12px 14px;margin:0 0 10px;color:#F5F0E6}
+.tm-prop .m{font-size:15px;color:#D4AF6A}.tm-prop img{display:block;max-width:100%;max-height:260px;border-radius:12px;margin:8px 0}
+.tc-testa{display:flex;align-items:center;gap:12px;padding:4px 0 12px;border-bottom:1px solid rgba(212,175,106,.3)}
+.tc-ind{border:0;background:transparent;color:#D4AF6A;font-size:36px;line-height:1;padding:0 4px 4px 0;cursor:pointer}
+.tc-testa .tm-seg{flex-basis:46px;height:46px;background:#D4AF6A;color:#0a1430;font-size:19px}
+.tc-nome{flex:1;min-width:0}
+.tc-nome b{display:block;font-family:'Cinzel',Georgia,serif;font-weight:500;font-size:21px;line-height:1.15;color:#F5F0E6}
+.tc-nome small{display:block;font-size:15px;color:rgba(245,240,230,.7)}
+.tc-arg{flex:0 0 auto;border:1px solid #D4AF6A;border-radius:20px;padding:7px 13px;font:500 16px 'DM Sans',system-ui,sans-serif;color:#D4AF6A;background:transparent;display:flex;align-items:center;gap:8px;cursor:pointer}
+.tc-segno{display:inline-block;flex:none;width:12px;height:12px;border-radius:7px 7px 2px 7px;background:#D4AF6A;transform:rotate(45deg)}
+.tc-msg{display:flex;flex-direction:column;padding:12px 0 6px}
+.tc-giorno{text-align:center;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:19px;color:rgba(245,240,230,.7);margin:6px 0 10px}
+.tc-m{background:#1a2148;border:1px solid rgba(245,240,230,.08);border-radius:18px 18px 18px 4px;padding:10px 14px;margin:0 44px 10px 0;color:#F5F0E6;cursor:pointer;align-self:stretch}
+.tc-m.mio{margin:0 0 10px 44px;border-radius:18px 18px 4px 18px;background:#24306b}
+.tc-m.apre{border-left:3px solid #D4AF6A}
+.tc-m.scelto{outline:2px solid #D4AF6A;outline-offset:2px}
+.tc-m .chi{font-size:15px;color:#D4AF6A;margin-bottom:2px}
+.tc-m .t{font-size:18px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.tc-m .ora{font-size:13px;color:rgba(245,240,230,.62);text-align:right;margin-top:3px}
+.tc-m .arg{display:flex;align-items:center;gap:8px;font-size:16px;color:#D4AF6A;font-weight:600;margin-bottom:4px}
+.tc-m .pill-o{display:inline-block;font-size:14px;color:#D4AF6A;border:1px solid rgba(212,175,106,.5);border-radius:12px;padding:1px 10px;margin:6px 6px 0 0}
+.tc-m img{display:block;max-width:100%;max-height:360px;border-radius:12px;margin:4px 0}
+.tc-az{display:flex;flex-wrap:wrap;gap:8px;margin:-2px 0 12px}
+.tc-az button,.tc-az select{flex:1 1 28%;width:auto;font:500 16px 'DM Sans',system-ui,sans-serif;border-radius:14px;padding:10px 6px;background:#0a1430;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);cursor:pointer;min-height:48px}
+.tc-az .cerv{background:#D4AF6A;color:#0a1430;border-color:#D4AF6A;font-weight:600}
+.tc-err{min-height:0;margin:0 0 6px;font-size:16px;color:#FFB4A8}
+.tc-piede{position:sticky;bottom:calc(66px + env(safe-area-inset-bottom,0px));z-index:3;display:flex;gap:8px;align-items:flex-end;background:#0a1430;border-top:1px solid rgba(212,175,106,.3);margin:0 -16px;padding:10px 16px}
+.tc-foto{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;box-sizing:border-box}
+body.notte .corpo .tc-piede textarea{flex:1;min-height:52px;height:52px;max-height:160px;border-radius:26px;padding:12px 18px;resize:none;font-size:18px;line-height:1.4;background:#1a2148}
+.tc-manda{flex:0 0 52px;height:52px;border-radius:26px;border:0;background:#D4AF6A;color:#0a1430;font-size:26px;font-weight:600;cursor:pointer}
+.tc-manda[disabled]{opacity:.6;cursor:wait}
+.tc-velo{position:fixed;inset:0;background:rgba(10,20,48,.72);z-index:20}
+.tc-foglio{position:fixed;left:0;right:0;bottom:0;max-height:85vh;overflow-y:auto;background:#122050;border-top:2px solid #D4AF6A;border-radius:22px 22px 0 0;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));z-index:21;color:#F5F0E6;max-width:720px;margin:0 auto;box-sizing:border-box}
+.tc-presa{width:48px;height:5px;border-radius:3px;background:rgba(212,175,106,.45);margin:0 auto 12px}
+.tc-foglio h2{font-family:'Cinzel',Georgia,serif;font-weight:500;font-size:23px;margin:0 0 4px;color:#F5F0E6}
+.tc-foglio p{font-size:17px;color:rgba(245,240,230,.72);margin:0 0 8px}
+.tc-ar{display:flex;align-items:center;gap:12px;padding:13px 0;border:0;border-bottom:1px solid rgba(245,240,230,.09);background:transparent;color:#F5F0E6;font:inherit;width:100%;text-align:left;cursor:pointer}
+.tc-ar b{flex:1;font-size:19px;font-weight:500}
+.tc-ar small{font-size:15px;color:rgba(245,240,230,.68)}
+.tc-ar.vecchio{opacity:.65}
+.tc-citato{background:#1a2148;border-left:3px solid #D4AF6A;border-radius:10px;padding:10px 12px;margin:12px 0;font-size:18px;white-space:pre-wrap;overflow-wrap:anywhere}
+.tc-foglio label{display:block;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A;margin:14px 0 6px}
+.tc-foglio select,.tc-foglio input[type=text],.tc-campo{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}
+.tc-campo{color:rgba(245,240,230,.65)}
+.tc-btn{width:100%;margin-top:18px;height:54px;border-radius:27px;border:0;background:#D4AF6A;color:#0a1430;font:600 18px 'DM Sans',system-ui,sans-serif;cursor:pointer}
+.tc-btn[disabled]{opacity:.6;cursor:wait}
+.tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
 .az-l{display:block;font-size:17px;margin:14px 0 6px;color:#c9c3d6}
 body.notte .corpo input[type=text],body.notte .corpo input[type=number],body.notte .corpo textarea{background:rgba(245,240,230,.06);color:#F5F0E6;border:1px solid rgba(214,181,108,.4);border-radius:12px;font-size:18px;padding:12px;width:100%;box-sizing:border-box}
 .az-esito{color:#F5F0E6}
@@ -567,33 +633,317 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){if(typeof spazioFerma==="function")spazioFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){if(typeof spazioFerma==="function")spazioFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 /* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");if(v==="cervello"){location.href="coscienza.html";return;}vai(v);};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
-  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
-  document.body.classList.toggle("notte",/^(giornale|azione|compra|assistenza)$/.test(vista));
-  ({azione:vAzione,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
+  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello")||(vista==="team"&&v==="azione"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  document.body.classList.toggle("notte",/^(giornale|azione|team|compra|assistenza)$/.test(vista));
+  document.body.classList.toggle("cosmo-az",/^(azione|team)$/.test(vista)); /* Azione e la chat dei team in blu cosmo, come il disegno del 28/10 */
+  ({azione:vAzione,team:vTeam,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
 }
 
-/* AZIONE · 23 ott, thread «Il cervello come gestionale», Gab: «Ok, bisogna creare quei quadranti» · menu Giornale · Oggi · Azione · Obiettivi · Coscienza, si entra da Azione.
-   «Entra» sparisce a chi è dentro; con il ruolo si aggiunge il Megafono. Compra e Chiedi assistenza: SQL 114. */
+/* AZIONE · 29/10/2026, SQL 128 (thread «Chat interna dei team in Azione»; disegno azione-chat/bozza-azione, Gab 28/10: «Comunque per me va bene / fai sql e pubblichiamo»;
+   29/10 07:52: «voglio che rendi operative le info chat, oggi attivo il team festival»).
+   Sopra i team dove sei (fm_miei_team: il team base «Praticantato» per primo), sotto le azioni: per tutti Emporio, Mutuo aiuto, Stampa;
+   per chi ha il ruolo Scrivi un articolo e Crea diretta, che aprono i moduli del Megafono. Festival e Prenota non stanno in Azione (Gab 28/10).
+   Senza l'SQL 128 l'elenco dei team non compare. */
+var ICO_AZ={
+  emporio:'<svg viewBox="0 0 60 60" fill="none" stroke="#4488BB" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M30 6l21 12v24L30 54 9 42V18z"/><path d="M30 6L18 30h24zM18 30L9 18M42 30l9-12M18 30l12 24 12-24M18 30L9 42M42 30l9 12"/></svg>',
+  mutuo:'<svg viewBox="0 0 60 60" fill="none" stroke="#CC6644" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M30 8l24 42H6z"/><path d="M30 8l-6 42M30 8l6 42"/></svg>',
+  stampa:'<svg viewBox="0 0 60 60" fill="none" stroke="#669944" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 22V10h24v12"/><path d="M10 22h40v18H10z"/><path d="M18 34h24v16H18z"/></svg>',
+  articolo:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M30 6l20 24-20 24-20-24z"/><path d="M10 30h40M30 6l-8 24 8 24 8-24z"/></svg>',
+  diretta:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="30" cy="30" r="5"/><path d="M19 19a16 16 0 0 0 0 22M41 19a16 16 0 0 1 0 22M12 12a26 26 0 0 0 0 36M48 12a26 26 0 0 1 0 36"/></svg>',
+  persona:'<svg viewBox="0 0 60 60" fill="none" stroke="#E8C77A" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="30" cy="20" r="9"/><path d="M12 52c2-11 9-17 18-17s16 6 18 17"/><path d="M46 10v12M40 16h12"/></svg>',
+  foto:'<svg width="26" height="26" viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M8 18h12l4-6h12l4 6h12v30H8z"/><circle cx="30" cy="32" r="9"/></svg>'
+};
+var team={lista:null,id:null,sub:null,timer:null,letto:0,msg:[],prop:{},url:{},scelto:null,dal:null,foglio:null};
+function teamFerma(){
+  try{if(team.sub&&db.removeChannel)db.removeChannel(team.sub);}catch(e){}
+  if(team.timer)clearInterval(team.timer);
+  team.sub=null;team.timer=null;team.scelto=null;team.dal=null;team.foglio=null;
+}
+function giornoRoma(t){return new Date(t).toLocaleDateString("it-IT",{timeZone:"Europe/Rome"});}
+function quandoTm(t){
+  var d=new Date(t),ora=new Date(),ieri=new Date(ora.getTime()-864e5);
+  if(giornoRoma(d)===giornoRoma(ora))return hhmm(t);
+  if(giornoRoma(d)===giornoRoma(ieri))return "ieri";
+  if(ora-d<6*864e5)return d.toLocaleDateString("it-IT",{weekday:"short",timeZone:"Europe/Rome"}).replace(".","");
+  return d.toLocaleDateString("it-IT",{day:"numeric",month:"short",timeZone:"Europe/Rome"}).replace(".","");
+}
+function giornoTm(t){
+  var d=new Date(t),ora=new Date();
+  if(giornoRoma(d)===giornoRoma(ora))return "oggi";
+  if(giornoRoma(d)===giornoRoma(new Date(ora.getTime()-864e5)))return "ieri";
+  return d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",timeZone:"Europe/Rome"});
+}
+function iniziale(n){return (String(n||"").trim().charAt(0)||"·").toUpperCase();}
 function vAzione(){
-  var c=$("#corpo"),q=[];
-  function quad(t,col,attr,largo){return '<'+(attr.indexOf("href=")===0?'a ':'button type="button" ')+attr+' class="q-az'+(largo?' largo':'')+'" style="--e:'+col+'"><i></i><b>'+esc(t)+'</b></'+(attr.indexOf("href=")===0?'a':'button')+'>';}
-  if(!io.id)q.push(quad("Entra","#d6b56c",'href="'+ENTRA+'"',true));
-  q.push(quad("Partecipa al Festival","#E07A55",'href="festival-evento-bozza.html?c=10182300"'));
-  q.push(quad("Prenota","#C9A15A",'href="festival-evento-bozza.html?c=10182300#pranzo"'));
-  q.push(quad("Compra","#8DBF5E",'data-vai="compra"'));
-  q.push(quad("Chiedi assistenza","#6FA8D6",'data-vai="assistenza"'));
-  q.push(quad("Praticantato","#B08AE0",'data-vai="oggi"'));
-  if(io.id)q.push(quad("Megafono","#d6b56c",'data-vai="megafono"'));
-  /* 24 ott 13:27, Gab: «dovrebbe essere un azione che io oggi faccio, quindi vado in azione, inserisco una persona, ed esce su oggi» (SQL 116, solo il nucleo) */
-  if(io.nucleo)q.push(quad("Aggiungi una persona","#E8C77A",'data-vai="staff"'));
-  /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
-  c.innerHTML='<h2 class="az-tit">Azione</h2><div class="az-filo"></div><div class="az-griglia">'+q.join("")+'</div><div data-fm-installa></div>'+(io.id?'<div data-fm-notifiche></div>':'');
-  legaVai(c);if(window.fmInstallaAvvia)fmInstallaAvvia();if(io.id&&window.fmNotifiche)fmNotifiche(db);
+  var c=$("#corpo");
+  function carta(t,ico,attr){var a=attr.indexOf("href=")===0;return '<'+(a?'a ':'button type="button" ')+attr+'>'+ico+'<b>'+esc(t)+'</b></'+(a?'a':'button')+'>';}
+  var tutti=[carta("Acquista in Emporio",ICO_AZ.emporio,'href="stanze-bozza.html?s=emporio&amp;c=10182300"'),carta("Mutuo aiuto",ICO_AZ.mutuo,'href="stanze-bozza.html?s=mutuo&amp;c=10182300"'),carta("Stampa",ICO_AZ.stampa,'href="stampa-bozza.html?c=10182300"')];
+  var ruolo=[];
+  if(io.id){
+    ruolo.push(carta("Scrivi un articolo",ICO_AZ.articolo,'data-mega="articolo"'));
+    if(io.coordina)ruolo.push(carta("Crea diretta",ICO_AZ.diretta,'data-mega="diretta"'));
+    /* 24 ott 13:27, Gab: «vado in azione, inserisco una persona, ed esce su oggi» (SQL 116, solo il nucleo) */
+    if(io.nucleo)ruolo.push(carta("Aggiungi una persona",ICO_AZ.persona,'data-vai="staff"'));
+  }
+  c.innerHTML='<p class="tm-et" style="margin-top:6px">Azione</p>'+
+    (io.id?'<h2 class="tm-tit">I tuoi team</h2><div id="tm-box"></div><div id="tm-attesa"></div>':
+      '<div class="az-griglia" style="margin-top:10px"><a href="'+ENTRA+'" class="q-az largo" style="--e:#d6b56c"><i></i><b>Entra</b></a></div>')+
+    '<p class="tm-et">Per tutti</p><div class="tm-g">'+tutti.join("")+'</div>'+
+    (ruolo.length?'<p class="tm-et">Per chi ha il ruolo</p><div class="tm-g ruolo">'+ruolo.join("")+'</div>':'')+
+    /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
+    '<div data-fm-installa></div>'+(io.id?'<div data-fm-notifiche></div>':'');
+  legaVai(c);
+  c.querySelectorAll("[data-mega]").forEach(function(b){b.onclick=function(){M.tipo=b.getAttribute("data-mega");M.msg="";vai("megafono");};});
+  if(window.fmInstallaAvvia)fmInstallaAvvia();if(io.id&&window.fmNotifiche)fmNotifiche(db);
+  if(io.id){mieiTeam();if(io.nucleo)daApprovare();}
+}
+function leggiTeam(){
+  return db.rpc("fm_miei_team").then(function(r){if(!r||r.error||!r.data)return null;team.lista=r.data;return r.data;},function(){return null;});
+}
+function mieiTeam(){
+  leggiTeam().then(function(l){
+    var box=$("#tm-box");if(!box||vista!=="azione")return;
+    if(!l){box.innerHTML="";var h=$(".tm-tit");if(h)h.remove();return;}
+    leggiNomi(l.map(function(t){return t.ultimo_da;})).then(function(){
+      if(!box.isConnected)return;
+      box.innerHTML='<div class="tm-lista">'+l.map(function(t){
+        var chi=t.ultimo_da?(t.ultimo_da===io.id?"Tu":(nomi[t.ultimo_da]||"")):"";
+        var ul=t.ultimo_il?(chi?chi+": ":"")+(t.ultimo_testo||(t.ultimo_foto?"Foto":"")):"Ancora nessun messaggio";
+        return '<button type="button" class="tm-ch'+(t.base?' base':'')+'" data-team="'+esc(t.team_id)+'"><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
+          '<span class="tm-mezzo"><b>'+esc(t.nome)+(t.base?'<span class="tm-base">per tutti</span>':'')+'</b><span class="tm-ul">'+esc(ul)+'</span></span>'+
+          '<span class="tm-dx">'+(t.ultimo_il?esc(quandoTm(t.ultimo_il)):'')+(t.non_letti?'<br><em aria-label="'+t.non_letti+' da leggere">'+t.non_letti+'</em>':'')+'</span></button>';}).join("")+'</div>';
+      box.querySelectorAll("[data-team]").forEach(function(b){b.onclick=function(){team.id=b.getAttribute("data-team");vai("team");};});
+    });
+  });
+}
+/* le proposte «Metti nel Cervello» in attesa: le decide il nucleo (fm_proposta_decidi) */
+function daApprovare(){
+  var box=$("#tm-attesa");if(!box)return;
+  db.from("cervello_proposte").select("id,squadra_id,capitolo_id,capitolo_nuovo,testo,foto,autore_id,proposta_il").eq("stato","in_attesa").order("proposta_il").limit(30).then(function(r){
+    var l=(r&&!r.error&&r.data)||[];if(!l.length||!box.isConnected){box.innerHTML="";return;}
+    var caps=l.map(function(p){return p.capitolo_id;}).filter(Boolean);
+    Promise.all([
+      caps.length?db.from("cervello_capitoli").select("id,titolo").in("id",caps).then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];}):Promise.resolve([]),
+      fotoUrl(l.map(function(p){return p.foto;})),
+      leggiNomi(l.map(function(p){return p.autore_id;}))
+    ]).then(function(v){
+      var tit={};v[0].forEach(function(x){tit[x.id]=x.titolo;});
+      var nt={};(team.lista||[]).forEach(function(t){nt[t.team_id]=t.nome;});
+      box.innerHTML='<p class="tm-et">Da mettere nel Cervello</p>'+l.map(function(p){
+        return '<div class="tm-prop"><span class="m">'+esc([nt[p.squadra_id],p.capitolo_id?tit[p.capitolo_id]:p.capitolo_nuovo+" · capitolo nuovo",nomi[p.autore_id]].filter(Boolean).join(" · "))+'</span>'+
+          (p.testo?'<div class="tc-citato">'+esc(p.testo)+'</div>':'')+(p.foto&&team.url[p.foto]?'<img src="'+esc(team.url[p.foto])+'" alt="">':'')+
+          '<div class="tc-az"><button type="button" class="cerv" data-decidi="'+esc(p.id)+'" data-si="1">Sì, nel Cervello</button><button type="button" data-decidi="'+esc(p.id)+'">No</button></div></div>';}).join("")+'<p class="az-esito" id="tm-att-esito" aria-live="polite"></p>';
+      box.querySelectorAll("[data-decidi]").forEach(function(b){b.onclick=function(){b.disabled=true;
+        db.rpc("fm_proposta_decidi",{p_proposta:b.getAttribute("data-decidi"),p_si:b.hasAttribute("data-si")}).then(function(x){
+          if(x&&!x.error&&x.data==="ok"){daApprovare();return;}b.disabled=false;$("#tm-att-esito").textContent=(x&&x.data)||errore(x&&x.error);},
+          function(){b.disabled=false;});};});
+    });
+  },function(){});
+}
+/* le foto della chat stanno nello spazio privato «chat»: si vedono con un link che dura un'ora */
+function fotoUrl(paths){
+  paths=paths.filter(function(p,i,a){return p&&a.indexOf(p)===i&&!team.url[p];});
+  if(!paths.length||!db.storage)return Promise.resolve();
+  return db.storage.from("chat").createSignedUrls(paths,3600).then(function(r){
+    ((r&&!r.error&&r.data)||[]).forEach(function(x){if(x.signedUrl&&x.path)team.url[x.path]=x.signedUrl;});},function(){});
+}
+function vTeam(){
+  var c=$("#corpo"),id=team.id;
+  if(!io.id||!id){vai("azione");return;}
+  var t=(team.lista||[]).filter(function(x){return x.team_id===id;})[0];
+  if(!t){
+    c.innerHTML='<p class="nota" style="text-align:center;padding:30px 0">Un momento…</p>';
+    leggiTeam().then(function(l){if(vista!=="team"||team.id!==id)return;
+      if(l&&l.some(function(x){return x.team_id===id;}))vTeam();else vai("azione");});
+    return;
+  }
+  c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
+      '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>chat del team</small></div><button type="button" class="tc-arg" id="tc-arg"><span class="tc-segno" aria-hidden="true"></span>Argomenti</button></div>'+
+    '<div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
+    '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
+    '<div class="tc-piede"><label class="tc-foto" for="tc-file" aria-label="Manda una foto">'+ICO_AZ.foto+'</label><input type="file" id="tc-file" accept="image/*" hidden>'+
+      '<textarea id="tc-testo" maxlength="2000" rows="1" placeholder="Scrivi al team…" aria-label="Scrivi al team"></textarea><button type="button" class="tc-manda" id="tc-manda" aria-label="Manda">↑</button></div>'+
+    '<div id="tc-foglio"></div>';
+  $("#tc-ind").onclick=function(){vai("azione");};
+  $("#tc-arg").onclick=argomenti;
+  var ta=$("#tc-testo");ta.oninput=function(){ta.style.height="auto";ta.style.height=Math.min(160,ta.scrollHeight)+"px";};
+  $("#tc-manda").onclick=function(){var x=ta.value.trim();if(!x)return;var b=this;b.disabled=true;
+    db.from("gruppo_messaggi").insert({cerchio_id:id,testo:x,scritto_da:io.id}).then(function(r){b.disabled=false;
+      if(r&&r.error){$("#tc-err").textContent=errore(r.error);return;}ta.value="";ta.style.height="";$("#tc-err").textContent="";ricaricaTeam(true);},
+      function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});};
+  $("#tc-file").onchange=function(e){var f=e.target.files&&e.target.files[0];e.target.value="";if(f)mandaFoto(id,f);};
+  dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length)return;
+    e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
+  team.msg=[];team.prop={};
+  ricaricaTeam(true);
+  /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
+  try{if(db.channel){team.sub=db.channel("team-"+id).on("postgres_changes",{event:"*",schema:"public",table:"gruppo_messaggi",filter:"cerchio_id=eq."+id},function(){ricaricaTeam(false);}).subscribe();}}catch(e){}
+  team.timer=setInterval(function(){ricaricaTeam(false);},20000);
+}
+function ricaricaTeam(giu){
+  var id=team.id;if(vista!=="team"||!id){teamFerma();return;}
+  var q=db.from("gruppo_messaggi").select("id,testo,foto,scritto_da,scritto_il,registro_id,argomento,argomento_da").eq("cerchio_id",id);
+  if(team.dal)q=q.gte("scritto_il",team.dal);
+  q.order("scritto_il",{ascending:false}).limit(team.dal?500:80).then(function(r){
+    if(vista!=="team"||team.id!==id)return;
+    if(!r||r.error){var e=$("#tc-msg");if(e&&!team.msg.length)e.innerHTML='<p class="nota" style="text-align:center">La chat non si apre adesso. Si può riprovare.</p>';return;}
+    var l=(r.data||[]).reverse(),ids=l.map(function(m){return m.id;});
+    var nuovi=l.length&&(!team.msg.length||l[l.length-1].id!==team.msg[team.msg.length-1].id);
+    Promise.all([
+      ids.length?db.from("cervello_proposte").select("messaggio_id,stato").in("messaggio_id",ids).neq("stato","scartata").then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];}):Promise.resolve([]),
+      fotoUrl(l.map(function(m){return m.foto;})),
+      leggiNomi(l.map(function(m){return m.scritto_da;}))
+    ]).then(function(v){
+      if(vista!=="team"||team.id!==id)return;
+      team.prop={};v[0].forEach(function(p){team.prop[p.messaggio_id]=p.stato;});
+      var basso=window.innerHeight+window.scrollY>=document.body.scrollHeight-120;
+      team.msg=l;disegnaTeam();
+      if(giu||(nuovi&&basso)){window.scrollTo(0,document.body.scrollHeight);
+        /* le foto arrivano dopo: quando si caricano, si torna in fondo */
+        [].forEach.call(document.querySelectorAll("#tc-msg img"),function(im){if(!im.complete)im.addEventListener("load",function(){if(!team.scelto)window.scrollTo(0,document.body.scrollHeight);},{once:true});});}
+      if(nuovi||giu)segnaLetto(id);
+    });
+  },function(){});
+}
+function segnaLetto(id){
+  if(Date.now()-team.letto<30000)return;team.letto=Date.now();
+  db.rpc("fm_team_letto",{p_team:id}).then(function(){(team.lista||[]).forEach(function(t){if(t.team_id===id)t.non_letti=0;});},function(){});
+}
+function disegnaTeam(){
+  var e=$("#tc-msg");if(!e)return;
+  var giorno="",h=[];
+  team.msg.forEach(function(m){
+    var g=giornoRoma(m.scritto_il);if(g!==giorno){giorno=g;h.push('<div class="tc-giorno">'+esc(giornoTm(m.scritto_il))+'</div>');}
+    var mio=m.scritto_da===io.id,p=team.prop[m.id];
+    h.push('<div class="tc-m'+(mio?' mio':'')+(m.argomento?' apre':'')+(team.scelto===m.id?' scelto':'')+'" data-m="'+esc(m.id)+'" role="button" tabindex="0" aria-expanded="'+(team.scelto===m.id)+'">'+
+      (m.argomento?'<div class="arg"><span class="tc-segno" aria-hidden="true"></span>'+esc(m.argomento)+'</div>':'')+
+      (mio?'':'<div class="chi">'+esc(nomi[m.scritto_da]||"")+'</div>')+
+      (m.foto?(team.url[m.foto]?'<img src="'+esc(team.url[m.foto])+'" alt="Foto" loading="lazy">':'<div class="t" style="opacity:.7">Foto</div>'):'')+
+      (m.testo?'<div class="t">'+esc(m.testo)+'</div>':'')+
+      (m.registro_id?'<span class="pill-o">→ nel registro</span>':'')+
+      (p?'<span class="pill-o">'+(p==="approvata"?"nel Cervello":"nel Cervello · in attesa")+'</span>':'')+
+      '<div class="ora">'+esc(hhmm(m.scritto_il))+'</div></div>');
+    if(team.scelto===m.id)h.push(azioniMsg(m));
+  });
+  e.innerHTML=h.length?h.join(""):'<p class="nota" style="text-align:center;padding:20px 0">Ancora nessun messaggio. Scrivi il primo.</p>';
+  e.querySelectorAll("[data-m]").forEach(function(d){
+    function tocca(){var i=d.getAttribute("data-m");team.scelto=team.scelto===i?null:i;disegnaTeam();}
+    d.onclick=function(ev){if(ev.target.closest("a"))return;tocca();};
+    d.onkeydown=function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();tocca();}};
+  });
+  legaAzioniMsg(e);
+}
+/* toccando un messaggio: Rispondi · Apri argomento · Metti nel Cervello (disegno 4), e «segna nel registro» che c'era già dal 92 */
+function azioniMsg(m){
+  var chiude=m.argomento&&(m.argomento_da===io.id||io.nucleo);
+  return '<div class="tc-az" id="tc-az"><button type="button" data-az="rispondi">Rispondi</button>'+
+    (m.argomento?(chiude?'<button type="button" data-az="chiudi">Chiudi argomento</button>':''):'<button type="button" data-az="apri">Apri argomento</button>')+
+    (team.prop[m.id]?'':'<button type="button" class="cerv" data-az="cervello">Metti nel Cervello</button>')+
+    (m.registro_id||!m.testo?'':'<select data-az="registro" aria-label="Segna nel registro"><option value="">Segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+
+    '</div>';
+}
+function legaAzioniMsg(e){
+  var box=e.querySelector("#tc-az");if(!box)return;
+  var m=team.msg.filter(function(x){return x.id===team.scelto;})[0];if(!m)return;
+  function esito(r){if(r&&!r.error&&r.data==="ok"){team.scelto=null;ricaricaTeam(false);return;}$("#tc-err").textContent=(r&&r.data)||errore(r&&r.error);}
+  box.querySelectorAll("button[data-az]").forEach(function(b){b.onclick=function(){var a=b.getAttribute("data-az");
+    if(a==="rispondi"){team.scelto=null;disegnaTeam();var t=$("#tc-testo");if(t){t.focus();t.scrollIntoView({block:"center"});}return;}
+    if(a==="cervello"){mettiNelCervello(m);return;}
+    if(a==="chiudi"){b.disabled=true;db.rpc("fm_messaggio_argomento",{p_messaggio:m.id,p_titolo:""}).then(esito,function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});return;}
+    if(a==="apri"){
+      box.innerHTML='<input type="text" id="tc-arg-t" maxlength="80" placeholder="Il nome dell\'argomento" aria-label="Il nome dell\'argomento" style="flex:1 1 100%"><button type="button" class="cerv" id="tc-arg-ok">Apri</button><button type="button" id="tc-arg-no">Annulla</button>';
+      var i=$("#tc-arg-t");i.focus();
+      $("#tc-arg-no").onclick=function(){team.scelto=null;disegnaTeam();};
+      $("#tc-arg-ok").onclick=function(){var v=i.value.trim();if(!v){i.focus();return;}this.disabled=true;
+        db.rpc("fm_messaggio_argomento",{p_messaggio:m.id,p_titolo:v}).then(esito,function(e){$("#tc-err").textContent=errore(e);});};
+      i.onkeydown=function(ev){if(ev.key==="Enter")$("#tc-arg-ok").click();};
+    }};});
+  var s=box.querySelector("select[data-az]");if(s)s.onchange=function(){if(!s.value)return;s.disabled=true;
+    db.rpc("fm_messaggio_segna",{p_messaggio:m.id,p_tipo:s.value}).then(function(r){cache.obiettivi=null;esito(r);},function(){s.disabled=false;});};
+}
+function foglioTeam(h){
+  var f=$("#tc-foglio");if(!f)return null;
+  f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+h+'</div>';
+  f.querySelector("[data-chiudi-f]").onclick=function(){f.innerHTML="";};
+  return f.querySelector(".tc-foglio");
+}
+function argomenti(){
+  var id=team.id,f=foglioTeam('<h2>Argomenti</h2><p>Tocca un argomento: la chat torna al messaggio che l\'ha aperto.</p><div id="tc-ar"><p class="nota">Un momento…</p></div>');if(!f)return;
+  db.rpc("fm_team_argomenti",{p_team:id}).then(function(r){var e=$("#tc-ar");if(!e)return;
+    var l=(r&&!r.error&&r.data)||[];
+    if(!l.length){e.innerHTML='<p>Ancora nessun argomento. Tocca un messaggio e scegli «Apri argomento».</p>';return;}
+    var oggi=giornoRoma(new Date());
+    e.innerHTML=l.map(function(a){return '<button type="button" class="tc-ar'+(giornoRoma(a.aperto_il)===oggi?'':' vecchio')+'" data-vai-m="'+esc(a.messaggio_id)+'" data-dal="'+esc(a.aperto_il)+'"><span class="tc-segno" aria-hidden="true"></span><b>'+esc(a.argomento)+'</b><small>'+esc(quandoTm(a.aperto_il))+' · '+a.messaggi+'</small></button>';}).join("");
+    e.querySelectorAll("[data-vai-m]").forEach(function(b){b.onclick=function(){var mid=b.getAttribute("data-vai-m"),dal=b.getAttribute("data-dal");
+      $("#tc-foglio").innerHTML="";
+      function vaiA(){var d=document.querySelector('[data-m="'+mid+'"]');if(!d)return false;team.scelto=mid;disegnaTeam();d=document.querySelector('[data-m="'+mid+'"]');d.scrollIntoView({block:"center"});return true;}
+      if(vaiA())return;
+      team.dal=dal;ricaricaTeamPoi(vaiA);};});
+  },function(){var e=$("#tc-ar");if(e)e.innerHTML='<p>Gli argomenti non si aprono adesso.</p>';});
+}
+function ricaricaTeamPoi(fn){
+  var n=0,t=setInterval(function(){n++;if(fn()||n>20)clearInterval(t);},150);
+  ricaricaTeam(false);
+}
+function mettiNelCervello(m){
+  var id=team.id;
+  var f=foglioTeam('<h2>Metti nel Cervello</h2><p>Diventa una voce del wiki del team.</p>'+
+    (m.testo?'<div class="tc-citato">'+esc(m.testo)+'</div>':'')+
+    '<label for="tc-cap">Capitolo del Cervello</label><select id="tc-cap"><option value="">Un momento…</option></select>'+
+    '<div id="tc-cap-nuovo" hidden><label for="tc-cap-t">Titolo del capitolo nuovo</label><input type="text" id="tc-cap-t" maxlength="200"></div>'+
+    '<label>Foto (se c\'è)</label>'+(m.foto&&team.url[m.foto]?'<img src="'+esc(team.url[m.foto])+'" alt="" style="max-width:100%;max-height:220px;border-radius:12px">':'<div class="tc-campo">'+(m.foto?"la foto del messaggio":"nessuna foto")+'</div>')+
+    '<button type="button" class="tc-btn" id="tc-cerv-ok">Manda al Cervello</button><p class="tc-nota" id="tc-cerv-esito" aria-live="polite">Resta «in attesa» finché non viene approvata.</p>');
+  if(!f)return;
+  var s=$("#tc-cap"),nb=$("#tc-cap-nuovo");
+  db.from("cervello_capitoli").select("id,titolo").eq("squadra_id",id).order("ordine").then(function(r){
+    var l=(r&&!r.error&&r.data)||[];
+    s.innerHTML=l.map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.titolo)+'</option>';}).join("")+'<option value="nuovo">Un capitolo nuovo…</option>';
+    if(!l.length){s.value="nuovo";nb.hidden=false;}
+  },function(){s.innerHTML='<option value="nuovo">Un capitolo nuovo…</option>';nb.hidden=false;});
+  s.onchange=function(){nb.hidden=s.value!=="nuovo";if(!nb.hidden)$("#tc-cap-t").focus();};
+  $("#tc-cerv-ok").onclick=function(){var b=this,e=$("#tc-cerv-esito"),nuovo=s.value==="nuovo",tt=$("#tc-cap-t").value.trim();
+    if(!s.value)return;
+    if(nuovo&&!tt){e.textContent="Scrivi il titolo del capitolo nuovo.";return;}
+    b.disabled=true;e.textContent="Un momento…";
+    db.rpc("fm_metti_nel_cervello",{p_messaggio:m.id,p_capitolo:nuovo?null:s.value,p_capitolo_nuovo:nuovo?tt:null}).then(function(r){
+      if(r&&!r.error&&r.data==="ok"){e.textContent="Mandato. Resta «in attesa» finché il nucleo non lo approva.";team.scelto=null;
+        setTimeout(function(){var x=$("#tc-foglio");if(x)x.innerHTML="";ricaricaTeam(false);},1600);return;}
+      b.disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){b.disabled=false;e.textContent=errore(x);});};
+}
+/* la foto: si rimpicciolisce sul telefono (lato lungo 1600), si scrive il messaggio che la nomina, poi si carica (le regole dello spazio «chat» lo chiedono in quest'ordine) */
+function riduciFoto(f){
+  return new Promise(function(ok){
+    if(!/^image\//.test(f.type)||/gif$/.test(f.type)){ok(f);return;}
+    var u=URL.createObjectURL(f),im=new Image();
+    im.onload=function(){var k=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement("canvas");
+      cv.width=Math.round(im.naturalWidth*k);cv.height=Math.round(im.naturalHeight*k);cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(u);
+      cv.toBlob(function(b){ok(b&&b.size<f.size?b:f);},"image/jpeg",0.82);};
+    im.onerror=function(){URL.revokeObjectURL(u);ok(f);};
+    im.src=u;
+  });
+}
+function mandaFoto(id,f){
+  var e=$("#tc-err"),ta=$("#tc-testo"),b=$("#tc-manda");
+  e.textContent="Carico la foto…";if(b)b.disabled=true;
+  riduciFoto(f).then(function(blob){
+    if(blob.size>10485760){e.textContent="La foto supera i 10 MB.";if(b)b.disabled=false;return;}
+    var est=blob.type==="image/jpeg"?"jpg":((blob.type.split("/")[1]||"jpg").replace(/[^a-z0-9]/g,"")||"jpg");
+    var path=id+"/"+io.id+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+"."+est,testo=ta.value.trim()||null;
+    db.from("gruppo_messaggi").insert({cerchio_id:id,testo:testo,foto:path,scritto_da:io.id}).select("id").single().then(function(r){
+      if(r&&r.error){e.textContent=errore(r.error);if(b)b.disabled=false;return;}
+      var mid=r.data&&r.data.id;
+      db.storage.from("chat").upload(path,blob,{contentType:blob.type||"image/jpeg",upsert:false}).then(function(u){
+        if(b)b.disabled=false;
+        if(u&&u.error){e.textContent="La foto non è stata caricata. Si può riprovare.";if(mid)db.from("gruppo_messaggi").delete().eq("id",mid).then(function(){ricaricaTeam(false);},function(){});return;}
+        e.textContent="";if(testo){ta.value="";ta.style.height="";}ricaricaTeam(true);
+      },function(){if(b)b.disabled=false;e.textContent="La foto non è stata caricata. Si può riprovare.";});
+    },function(x){if(b)b.disabled=false;e.textContent=errore(x);});
+  });
 }
 function moduloAz(tit,campi,rpc,args){
   var c=$("#corpo");
@@ -2090,6 +2440,8 @@ if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collega
 chiSono().then(function(){
   testa();
   try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|azione|compra|assistenza|staff)$/.test(q))vista=q;}catch(e){}
+  /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
+  try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;vista="team";}}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){
