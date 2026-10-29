@@ -17,12 +17,21 @@
   var NOMI = { ci_saro: "Ci sarò", pranzo: "Pranzo", cena: "Cena", workshop: "Workshop Tra Coscienza e Tecnologia",
                laboratori_bambini: "Laboratori didattici per bimbi e ragazzi" };
 
+  /* d.dettaglio (la scelta dei laboratori) va con lo SQL 133; finché non è lanciato si riprova senza, così la prenotazione si salva comunque */
   function invia(d){
-    return fetch(URL + "/rest/v1/rpc/fm_prenota_festival", {
-      method: "POST",
-      headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_cosa: d.cosa, p_nome: d.nome, p_cognome: d.cognome, p_telefono: d.telefono, p_email: d.email,
-                             p_persone: parseInt(d.persone, 10) || 1, p_privacy: !!d.privacy, p_evento: EVENTO })
+    var corpo = { p_cosa: d.cosa, p_nome: d.nome, p_cognome: d.cognome, p_telefono: d.telefono, p_email: d.email,
+                  p_persone: parseInt(d.persone, 10) || 1, p_privacy: !!d.privacy, p_evento: EVENTO };
+    if (d.dettaglio) corpo.p_dettaglio = String(d.dettaglio).slice(0, 500);
+    function manda(c){
+      return fetch(URL + "/rest/v1/rpc/fm_prenota_festival", {
+        method: "POST",
+        headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json" },
+        body: JSON.stringify(c)
+      });
+    }
+    return manda(corpo).then(function(r){
+      if (!r.ok && corpo.p_dettaglio && r.status === 404){ delete corpo.p_dettaglio; return manda(corpo); }
+      return r;
     }).then(function(r){ return r.json().then(function(j){ return r.ok ? j : { ok: false, errore: "Non è stato salvato. Si può riprovare." }; }); })
       .catch(function(){ return { ok: false, errore: "Non è stato salvato. Controlla la connessione e riprova." }; });
   }
