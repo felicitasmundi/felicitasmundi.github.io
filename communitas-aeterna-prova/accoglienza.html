@@ -7,9 +7,12 @@
 <meta name="description" content="FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna.">
 <!-- 28/10/2026, Gab 12:29: «rendere visivo il sito Felicitas Mundi puntando su tutto quello di cui abbiamo parlato nel progetto Vicinati del Cibo e che integri l'evento Felicitas Festival e anche ovviamente da qualche parte la storia e la gestione del cervello evoluto»; 13:31 «vai» · «fammi prima sognare con la nuova home».
      Testi verbatim dal PDF pubblico vicinati-del-cibo-pubblico.pdf (MD5 2f56652d…), generati da progetto-cibo/pdf-sorgente/progetto-cibo-pubblico.html. Disegni dello stesso PDF, sfondo reso trasparente. Blu cosmo (regola 27/10).
-     Chi è già entrato passa dritto all'app (tranne con ?anteprima). -->
+     Chi è già entrato passa dritto all'app (tranne con ?anteprima).
+     29/10/2026 Gab: «se uno va su felicitasmundi.com, deve stare su felicitasmundi.com. È solo se uno ha scaricato l'applicazione, dall'applicazione entra nell'applicazione»
+     → il passaggio all'app avviene solo dentro l'app installata (schermata Home); nel browser si resta sulla home. -->
 <script>
 (function(){try{if(/[?&]anteprima/.test(location.search))return;
+if(!(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)&&navigator.standalone!==true)return;
 for(var i=0;i<localStorage.length;i++){if(/^sb-.*-auth-token$/.test(localStorage.key(i))){location.replace("strumento.html?v=azione");return;}}}catch(e){}})();
 </script>
 <link rel="icon" type="image/png" sizes="48x48" href="favicon-felicitas-48.png?v=1024">
