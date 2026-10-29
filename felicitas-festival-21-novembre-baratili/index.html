@@ -189,7 +189,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
 
 /* finestre: prenota e invita */
 .velo{position:fixed;inset:0;z-index:50;background:rgba(5,10,28,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center}
-.velo[hidden],.labs[hidden],.singoli[hidden],[data-alloggio][hidden]{display:none!important}
+.velo[hidden],.labs[hidden],.singoli[hidden],[data-alloggio][hidden],[data-dopo133][hidden],#fattura-cf[hidden]{display:none!important}
 .finestra{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:linear-gradient(180deg,var(--c1),var(--c2));border:2px solid var(--riga);border-radius:28px 28px 0 0;padding:24px 20px calc(28px + env(safe-area-inset-bottom,0px));box-shadow:0 -20px 60px rgba(0,0,0,.5)}
 .finestra .testa{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .finestra h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;line-height:1.05}
@@ -494,7 +494,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
       </div>
       <div class="carta rivela" style="--c:var(--t5)">
         <h3>Pranzo e cena vegetariani</h3>
-        <p>Pranzo vegetariano alle 13:00 · Cena vegetariana ore 20:00</p>
+        <p>Pranzo vegetariano alle 13:00 · Cena vegetariana ore 20:00 · 14 € a pasto</p>
         <div class="tasti"><button class="tasto pieno" type="button" data-prenota="pranzo">Prenota il pranzo</button><button class="tasto pieno" type="button" data-prenota="cena">Prenota la cena</button></div>
       </div>
       <div class="carta rivela" style="--c:var(--t3)">
@@ -571,6 +571,11 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
       <label for="f-mail">Mail<input id="f-mail" name="mail" type="email" autocomplete="email" required></label>
       <label for="f-persone">Quante persone<input id="f-persone" name="persone" type="number" min="1" value="1" inputmode="numeric"></label>
     </div>
+    <!-- 29/10, Gab: ricevuta a chi paga e «su richiesta si manda la fattura»; la fattura si fa a parte (SQL 133) -->
+    <div id="fattura" data-dopo133 hidden>
+      <label class="consenso" for="f-fattura"><input type="checkbox" id="f-fattura" name="fattura"><span>Voglio la fattura</span></label>
+      <div class="campi" id="fattura-cf" hidden><label for="f-cf">Partita IVA o codice fiscale<input id="f-cf" name="cf" autocomplete="off" maxlength="20" autocapitalize="characters"></label></div>
+    </div>
     <label class="consenso" for="f-privacy"><input type="checkbox" id="f-privacy" name="privacy" required><span>Ho letto l'<a href="../communitas-aeterna-prova/privacy.html" target="_blank" rel="noopener">informativa privacy</a> e acconsento all'uso di questi dati per la prenotazione.</span></label>
     <button class="tasto pieno invia" type="submit" id="invia">Prenota</button>
     <div class="esito" id="esito" hidden></div>
@@ -591,7 +596,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   </div>
 </div>
 
-<script src="../communitas-aeterna-prova/comune/fm-prenota-festival.js?v=10292100"></script>
+<script src="../communitas-aeterna-prova/comune/fm-prenota-festival.js?v=10292230"></script>
 <script>
 (function(){
   var q=new URLSearchParams(location.search);
@@ -632,15 +637,18 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   function aggiorna(){
     var w=workshop.checked,l=scelta()==='laboratori',tutti=(modulo.querySelector('input[name=labtipo]:checked')||{}).value!=='singoli';
     labs.hidden=!l;singoli.hidden=!l||tutti;var al=scelta()==='alloggio';document.getElementById('camere').hidden=!al;
-    var paga=w&&window.FMPrenotaFestival&&FMPrenotaFestival.LINK_STRIPE.workshop;invia.textContent=paga?'Prenota e paga 50 €':'Prenota';
+    var k0=scelta(),paga=window.FMPrenotaFestival&&FMPrenotaFestival.LINK_STRIPE[VOCE[k0]];invia.textContent=paga?(w?'Prenota e paga 50 €':'Prenota e paga'):'Prenota';
+    var fb=document.getElementById('fattura');fb.style.display=k0==='presenza'?'none':'';
+    document.getElementById('fattura-cf').hidden=!document.getElementById('f-fattura').checked;
     /* pranzo e cena: i costi li dà Gab; finché non ci sono la riga non si vede */
-    var k=scelta();costo.hidden=!(w||l||al||k==='presenza');
+    var k=scelta(),pasto=k==='pranzo'||k==='cena';costo.hidden=!(w||l||al||pasto||k==='presenza');
     if(w)costo.innerHTML='Workshop: <s>80 €</s> · 50 € per il Festival';
+    else if(pasto)costo.textContent='14 € a pasto';
     else if(al)costo.textContent='Prezzo speciale per il Festival: 25 € a persona';
     else if(l)costo.textContent=tutti?'Tutti i laboratori · 30 € · si paga sul posto':'7 € ciascun laboratorio · si paga sul posto';
     else costo.textContent='Ingresso gratuito';
   }
-  modulo.querySelectorAll('input[name=labtipo],input[name=lab],input[name=camera]').forEach(function(r){r.addEventListener('change',aggiorna)});
+  modulo.querySelectorAll('input[name=labtipo],input[name=lab],input[name=camera],input[name=fattura]').forEach(function(r){r.addEventListener('change',aggiorna)});
   modulo.persone.addEventListener('input',aggiorna);
   modulo.querySelectorAll('input[name=cosa]').forEach(function(r){r.addEventListener('change',aggiorna)});
   document.querySelectorAll('[data-prenota]').forEach(function(b){b.addEventListener('click',function(){
@@ -654,6 +662,9 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
     if(k==='laboratori'){var tl=(modulo.querySelector('input[name=labtipo]:checked')||{}).value!=='singoli',ls=labScelti();
       if(!tl&&!ls.length){esito.textContent='Scegli almeno un laboratorio.';esito.hidden=false;return}
       d.dettaglio=tl?'Tutti i laboratori':'Singoli: '+ls.join(', ')}
+    if(k!=='presenza'&&modulo.fattura.checked){var cf=modulo.cf.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+      if(!/^([0-9]{11}|[A-Z0-9]{16})$/.test(cf)){esito.textContent='Per la fattura scrivi la partita IVA (11 cifre) o il codice fiscale (16 caratteri).';esito.hidden=false;return}
+      d.fattura=cf}
     if(k==='alloggio')d.dettaglio=(modulo.querySelector('input[name=camera]:checked')||{}).value||'';
     var F=window.FMPrenotaFestival;
     if(!F){esito.textContent='Bozza: qui la prenotazione viene salvata'+(d.dettaglio?' ('+d.dettaglio+')':'')+(k==='workshop'?' e si passa al pagamento':'')+'.';esito.hidden=false;return}
@@ -692,10 +703,10 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
       e.isIntersecting?v.play().catch(function(){}):v.pause();
     })},{threshold:.25}).observe(v);
   });
-  // alloggio: il tasto compare quando il database accetta la voce (SQL 133); la prova ha il nome vuoto, quindi non salva niente
+  // alloggio e «Voglio la fattura»: compaiono quando il database accetta la voce (SQL 133); la prova ha il nome vuoto, quindi non salva niente
   try{fetch('https://gfnveesogkfvkrdudpfg.supabase.co/rest/v1/rpc/fm_prenota_festival',{method:'POST',headers:{'apikey':'sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU','Authorization':'Bearer sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU','Content-Type':'application/json'},
     body:JSON.stringify({p_cosa:'alloggio',p_nome:'',p_cognome:'',p_telefono:'',p_email:''})}).then(function(r){return r.json()}).then(function(j){
-      if(j&&j.errore&&!/Scegli cosa/.test(j.errore))document.querySelectorAll('[data-alloggio]').forEach(function(e){e.hidden=false});},function(){});}catch(e){}
+      if(j&&j.errore&&!/Scegli cosa/.test(j.errore))document.querySelectorAll('[data-alloggio],[data-dopo133]').forEach(function(e){e.hidden=false});},function(){});}catch(e){}
   // dalla newsletter: ?presenza=1 o ?prenota=<voce> apre il modulo con la voce scelta; ?pagato=1 al ritorno da Stripe
   var DA={ci_saro:'presenza',presenza:'presenza',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori_bambini:'laboratori',laboratori:'laboratori',alloggio:'alloggio'};
   var v=q.get('presenza')==='1'?'presenza':DA[q.get('prenota')||''];
