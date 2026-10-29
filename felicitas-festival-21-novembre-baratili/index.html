@@ -549,6 +549,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
       <label><input type="radio" name="camera" value="Camera quadrupla" checked><span>Camera quadrupla</span></label>
       <label><input type="radio" name="camera" value="Camera tripla"><span>Camera tripla</span></label>
       <label><input type="radio" name="camera" value="Camera doppia"><span>Camera doppia</span></label>
+      <small id="camere-nota" hidden></small>
     </div>
     <div class="labs" id="labs" hidden>
       <label><input type="radio" name="labtipo" value="tutti" checked><span>Tutti i laboratori · 30 €</span></label>
@@ -649,8 +650,20 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   function apriVoce(v,pasto){
     voce=v;if(v==='pasti'){var r=modulo.querySelector('input[name=pasto][value='+(pasto||'pranzo')+']');if(r)r.checked=true}
     var c=document.getElementById('p-'+(v==='pasti'?scelta():v));if(c)c.checked=true;
-    document.getElementById('titolo-prenota').textContent=TITOLI[v]||'Prenota';
+    document.getElementById('titolo-prenota').textContent=TITOLI[v]||'Prenota';invia.disabled=false;if(v==='alloggio')camereLibere();
     esito.hidden=true;aggiorna();apri(vp);
+  }
+  // alloggio: le camere già confermate da chi gestisce l'alloggio non si scelgono più (SQL 135)
+  function camereLibere(){
+    try{fetch('https://gfnveesogkfvkrdudpfg.supabase.co/rest/v1/rpc/fm_alloggio_libere',{method:'POST',headers:{'apikey':'sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU','Authorization':'Bearer sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU','Content-Type':'application/json'},body:'{}'})
+      .then(function(r){return r.ok?r.json():null}).then(function(lib){
+        if(!Array.isArray(lib))return;
+        var rs=[].slice.call(modulo.querySelectorAll('input[name=camera]')),nota=document.getElementById('camere-nota');
+        rs.forEach(function(r){var ok=lib.indexOf(r.value)>=0;r.disabled=!ok;r.parentNode.style.opacity=ok?'':'.45';r.nextElementSibling.textContent=r.value+(ok?'':' · non disponibile')});
+        var prima=rs.filter(function(r){return !r.disabled})[0];
+        if(prima&&(modulo.querySelector('input[name=camera]:checked')||{}).disabled!==false)prima.checked=true;
+        nota.hidden=!!prima;nota.textContent='Le camere per il Festival sono tutte prenotate.';invia.disabled=!prima;
+      },function(){});}catch(e){}
   }
   document.querySelectorAll('[data-prenota]').forEach(function(b){b.addEventListener('click',function(){apriVoce(b.dataset.prenota)})});
   modulo.addEventListener('submit',function(ev){
