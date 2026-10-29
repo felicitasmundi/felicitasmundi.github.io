@@ -194,8 +194,20 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
 .finestra .testa{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .finestra h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;line-height:1.05}
 .chiudi{width:48px;height:48px;border-radius:50%;border:2px solid var(--riga);background:transparent;color:var(--avorio);font-size:28px;line-height:1;cursor:pointer;flex-shrink:0}
-.pagato{position:relative;z-index:6;margin:72px 16px 0;padding:16px 20px;border-radius:16px;background:#1f3a2a;border:2px solid #8DBF5E;color:#F5F0E6;font-size:20px;text-align:center}
+.pagato{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(10,20,48,.82);backdrop-filter:blur(6px);animation:pg-entra .5s ease both}
 .pagato[hidden]{display:none}
+.pagato.via{animation:pg-esce .8s ease forwards}
+.pg-carta{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:30px 26px;border-radius:24px;background:var(--carta);border:2px solid var(--oro);max-width:420px;animation:pg-sale .7s cubic-bezier(.2,.7,.2,1) both}
+.pg-carta svg{width:120px;height:120px}
+.pg-giro{fill:none;stroke:var(--oro);stroke-width:5;stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:327;transform:rotate(-90deg);transform-origin:center;animation:pg-disegna 1.1s .3s ease forwards}
+.pg-segno{fill:none;stroke:#8DBF5E;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:70;stroke-dashoffset:70;animation:pg-disegna .5s 1.3s ease forwards}
+.pg-carta b{font-family:'Cormorant Garamond',serif;font-size:36px;line-height:1.1;animation:pg-sale .6s 1.5s both}
+.pg-carta span{font-size:20px;color:var(--fioco);animation:pg-sale .6s 1.7s both}
+@keyframes pg-disegna{to{stroke-dashoffset:0}}
+@keyframes pg-entra{from{opacity:0}}
+@keyframes pg-esce{to{opacity:0;visibility:hidden}}
+@keyframes pg-sale{from{opacity:0;transform:translateY(18px)}}
+@media (prefers-reduced-motion:reduce){.pagato,.pg-carta,.pg-carta b,.pg-carta span,.pg-giro,.pg-segno{animation:none;stroke-dashoffset:0}}
 .scelte[hidden],.alloggio-dove [hidden]{display:none!important}
 .alloggio-dove{margin:22px 0 0;padding:18px 20px;border-radius:18px;background:var(--carta);border:2px solid var(--riga);display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .alloggio-dove b{font-size:21px}.alloggio-dove span{font-size:19px;color:var(--fioco)}
@@ -336,7 +348,9 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
 </header>
 
 <!-- 1 · APERTURA: tutto quello che serve nel primo schermo -->
-<div class="pagato" id="pagato" role="status" hidden>Pagamento ricevuto. Grazie!</div>
+<div class="pagato" id="pagato" role="status" hidden><div class="pg-carta">
+  <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pg-giro" cx="60" cy="60" r="52"/><path class="pg-segno" d="M38 62 L54 77 L84 44"/></svg>
+  <b>Pagamento ricevuto</b><span>Grazie! Ci vediamo il 21 novembre a Baratili.</span></div></div>
 <section class="apertura">
   <div class="quadro"><img src="img/donna-cervello.jpg" alt=""></div>
   <div class="testi">
@@ -716,7 +730,9 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   var DA={ci_saro:'presenza',presenza:'presenza',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori_bambini:'laboratori',laboratori:'laboratori',alloggio:'alloggio'};
   var v=q.get('presenza')==='1'?'presenza':DA[q.get('prenota')||''];
   if(v){if(v==='pranzo'||v==='cena')apriVoce('pasti',v);else apriVoce(v)}
-  if(q.get('pagato')==='1')document.getElementById('pagato').hidden=false;
+  if(q.get('pagato')==='1'){var pg=document.getElementById('pagato');pg.hidden=false;
+    function via(){if(pg.classList.contains('via'))return;pg.classList.add('via');setTimeout(function(){pg.hidden=true},800)}
+    pg.addEventListener('click',via);setTimeout(via,4200);}
   // ritorno: chi arriva dall'app torna all'app, gli altri alla home (Gab 28/10)
   try{
     if(/[?&]da=home(&|$)/.test(location.search))sessionStorage.setItem('fm_origine','home');
