@@ -276,6 +276,8 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
 .zf-nota{margin:18px 0 0;padding:18px;border-radius:16px;background:rgba(10,20,48,.45);border:1px solid color-mix(in srgb,var(--c) 55%,transparent)}
 .zf-nota b{display:block;font-size:20px}.zf-nota span{display:block;font-size:17px;color:var(--fioco);margin:2px 0 10px}.zf-nota p{margin:0;font-size:18px;line-height:1.55;overflow-wrap:anywhere}
 .ivano .tamburi{margin:18px 0 0;font-size:20px;line-height:1.5}
+.passi-ws{margin:18px 0 6px}
+@media (min-width:900px){.punti.passi-ws{grid-template-columns:1fr}}
 @media (min-width:900px){.punti{grid-template-columns:1fr 1fr}.ivano{padding:30px 32px}.ivano-testa img{width:140px;height:140px}}
 @media (min-width:900px){.ambiti.conferenze{grid-template-columns:repeat(2,1fr)}}
 .temi-rimondini{margin-top:4px;margin-bottom:22px}
@@ -434,9 +436,14 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
       <div class="etichetta">17:00 · Centro Polifunzionale · su prenotazione</div>
       <h2 class="grande arcobaleno">Tra Coscienza e Tecnologia</h2>
       <div class="chi">Workshop · mindset e innovazione tecnologica · con Gabriele Dettori</div>
-      <p class="corpo">Riconosci il tuo talento e il tuo progetto-senso. Allena un'attenzione indomabile, la coerenza tra pensiero, parola e azione, e porta a terra la forza creativa. Poi fai il salto dal singolo al team: smetti di concentrare conoscenze e relazioni su una sola persona e affidale a un Cervello Digitale Evoluto che, insieme all'AI, ordina file, agende, mail e obiettivi e segue lo sviluppo della tua azienda e del tuo progetto.</p>
+      <p class="corpo">Prima di scegliere uno strumento, capire chi lo usa e perché.</p>
+      <div class="punti passi-ws">
+        <div style="--c:var(--t4)"><b>1 · Se stessi</b><p>Comprendere prima se stessi, con un lavoro introspettivo.</p></div>
+        <div style="--c:var(--t2)"><b>2 · Il perché</b><p>Capire perché si mette la propria energia in un progetto: riconoscere i propri bisogni per sviluppare il proprio sogno, il proprio progetto-senso.</p></div>
+        <div style="--c:var(--t3)"><b>3 · Gli strumenti</b><p>Riconoscere gli strumenti e le risorse a disposizione per raggiungere l'obiettivo. Tra questi il Cervello Digitale Evoluto, un sistema di gestione attento che unisce il funzionamento della coscienza, gli aspetti dell'attenzione e lo sviluppo di un progetto.</p></div>
+      </div>
       <div class="prezzo"><s>80 €</s><b>50 € per il Festival</b></div>
-      <div class="tasti" style="margin-top:24px"><button class="tasto pieno" type="button" data-prenota="workshop">Prenota il workshop</button></div>
+      <div class="tasti" style="margin-top:24px;display:flex;flex-wrap:wrap;gap:12px"><button class="tasto pieno" type="button" data-prenota="workshop">Prenota il workshop</button><a class="tasto vuoto" href="../communitas-aeterna-prova/cervello-digitale-evoluto.html?da=festival">Scopri il Cervello Digitale Evoluto</a></div>
     </div>
   </div>
 </section>

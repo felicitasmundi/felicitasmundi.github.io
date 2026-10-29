@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cervello Digitale Evoluto · FelicitasMundi</title>
+<meta name="description" content="Cervello Digitale Evoluto · Tra Coscienza e Tecnologia. Cosa c'è oggi, cosa lo rende diverso, il percorso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;600;700&family=Josefin+Sans:wght@600&display=swap">
+<style>
+/* Pagina del Cervello: testi dal documento «Cervello Digitale Evoluto · Tra Coscienza e Tecnologia», ottobre 2026. Blu cosmo, testo grande, a card. */
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9c6d8;--riga:rgba(212,175,106,.3);--t1:#8DBF5E;--t2:#5FA8D3;--t3:#E07A5F;--t4:#D4AF6A;--t5:#B49BEA;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,var(--c1),var(--c2) 40%,var(--c3));background-color:var(--c3);min-height:100svh;color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;font-size:20px;line-height:1.55}
+a{color:inherit}
+.testa{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(10,20,48,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--riga)}
+.testa .torna{text-decoration:none;font-family:'Josefin Sans',sans-serif;font-size:17px;color:var(--oro);white-space:nowrap}
+.testa .titolo{flex:1;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px;line-height:1.1;text-align:right}
+main{max-width:860px;margin:0 auto;padding:26px 16px 80px}
+.etichetta{font-family:'Josefin Sans',sans-serif;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(40px,10vw,68px);line-height:1.02;margin:8px 0 6px}
+.sotto{font-family:'Josefin Sans',sans-serif;font-size:19px;letter-spacing:.14em;text-transform:uppercase;color:var(--fioco);margin:0 0 6px}
+.firma{color:var(--fioco);font-size:18px;margin:0}
+h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(32px,7vw,46px);line-height:1.08;margin:0 0 8px}
+h3{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(26px,5.5vw,34px);line-height:1.12;margin:0 0 12px}
+p{margin:0 0 12px}
+.parti{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:12px}
+.parti a{display:flex;gap:16px;align-items:flex-start;text-decoration:none;padding:18px;border-radius:18px;background:var(--carta);border:2px solid var(--riga)}
+.parti a:hover{border-color:var(--oro)}
+.n{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--oro);color:var(--c3);font-weight:700}
+.parti b{display:block;font-size:21px}
+.parti small{display:block;font-size:18px;color:var(--fioco);line-height:1.4;margin-top:2px}
+@media (min-width:760px){.parti{grid-template-columns:repeat(3,1fr)}.parti a{flex-direction:column}}
+.parte{margin:56px 0 0;padding-top:26px;border-top:2px solid var(--riga)}
+.parte>.apre{font-size:22px;color:var(--fioco)}
+.card{margin:18px 0 0;padding:22px 20px;border-radius:22px;background:linear-gradient(160deg,color-mix(in srgb,var(--c,var(--oro)) 16%,var(--carta)),var(--carta) 70%);border:2px solid color-mix(in srgb,var(--c,var(--oro)) 55%,transparent)}
+.card .dove{font-family:'Josefin Sans',sans-serif;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--fioco);margin:0 0 6px}
+.due{display:grid;gap:14px}
+@media (min-width:760px){.due{grid-template-columns:1.25fr 1fr}}
+.oggi,.costr{padding:16px 18px;border-radius:16px}
+.oggi{background:rgba(10,20,48,.4);border-left:4px solid var(--t1)}
+.costr{border:2px dashed rgba(201,198,216,.45)}
+.oggi b,.costr b{display:block;font-family:'Josefin Sans',sans-serif;font-size:15px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+.oggi b{color:var(--t1)}.costr b{color:var(--fioco)}
+.oggi ul,.costr ul{margin:0;padding-left:20px}
+.oggi li,.costr li{margin:0 0 8px}
+.costr li{color:var(--fioco)}
+.nota{font-style:italic;color:var(--fioco);margin:14px 0 0}
+.righe{display:grid;gap:10px;margin:6px 0 0}
+.righe div{display:grid;gap:2px;padding:12px 16px;border-radius:14px;background:rgba(10,20,48,.4)}
+.righe dt,.righe .k{font-family:'Josefin Sans',sans-serif;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--oro)}
+.righe span{font-size:19px}
+.righe em{font-style:normal;color:var(--fioco);font-size:18px}
+@media (min-width:760px){.righe div{grid-template-columns:200px 1fr 1fr;gap:16px;align-items:start}}
+.righe.tre div{grid-template-columns:1fr}
+@media (min-width:760px){.righe.tre div{grid-template-columns:200px 1fr 1fr}}
+.passi{display:grid;gap:12px;margin:8px 0 0;padding:0;list-style:none}
+@media (min-width:760px){.passi.x3{grid-template-columns:repeat(3,1fr)}.passi.x4{grid-template-columns:repeat(2,1fr)}.passi.x5{grid-template-columns:repeat(5,1fr)}}
+.passi li{padding:16px 18px;border-radius:16px;background:rgba(10,20,48,.4);border-top:4px solid var(--c,var(--oro))}
+.passi b{display:block;font-size:21px;margin-bottom:4px}
+.passi span{display:block;font-size:19px;color:var(--fioco);line-height:1.45}
+.livelli{display:grid;gap:12px;margin:6px 0 0}
+.livelli div{padding:14px 16px;border-radius:14px;background:rgba(10,20,48,.4)}
+.livelli b{display:block;font-size:20px}
+.livelli span{display:block;font-size:18px;color:var(--fioco)}
+.livelli em{display:block;font-style:normal;font-size:18px;margin-top:4px;color:var(--t1)}
+.fine{margin:56px 0 0;text-align:center}
+.tasto{display:inline-flex;align-items:center;justify-content:center;min-height:58px;padding:14px 28px;border-radius:999px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:20px;text-decoration:none;border:2px solid var(--oro);background:var(--oro);color:var(--c3);margin:6px}
+.tasto.vuoto{background:transparent;color:var(--avorio)}
+[id]{scroll-margin-top:72px}
+</style>
+</head>
+<body>
+<header class="testa">
+  <a class="torna" id="torna" href="accoglienza.html#cervello">‹ Torna alla home</a>
+  <div class="titolo">Cervello FelicitasMundi</div>
+</header>
+<main>
+  <section>
+    <div class="etichetta">Cervello FelicitasMundi</div>
+    <h1>Cervello Digitale Evoluto</h1>
+    <p class="sotto">Tra Coscienza e Tecnologia</p>
+    <p class="firma">Gabriele Dettori · fondatore FelicitasMundi</p>
+    <ol class="parti">
+      <li><a href="#oggi"><span class="n">1</span><span><b>Cosa c'è oggi</b><small>Le funzioni che esistono davvero, separate da quelle in costruzione.</small></span></a></li>
+      <li><a href="#diverso"><span class="n">2</span><span><b>Cosa lo rende diverso</b><small>Il confronto con gli strumenti che un professionista usa già: Notion, Slack, Asana, i CRM.</small></span></a></li>
+      <li><a href="#percorso"><span class="n">3</span><span><b>Il percorso</b><small>Prima se stessi, poi il perché, poi gli strumenti. Con l'esperienza da cui è nato.</small></span></a></li>
+    </ol>
+
+    <div class="card">
+      <div class="dove">Da dove partiamo</div>
+      <h3>Cartelle, team, agende, mail, compiti: esistono già</h3>
+      <div class="righe tre">
+        <div><span>Cartelle e documenti ordinati</span><em>Chi lo fa già: Google Drive, Notion</em></div>
+        <div><span>La chat del team</span><em>Chi lo fa già: Slack</em></div>
+        <div><span>Compiti, scadenze, avanzamento</span><em>Chi lo fa già: Asana, ClickUp</em></div>
+        <div><span>Clienti e rapporti</span><em>Chi lo fa già: i CRM</em></div>
+        <div><span>Prodotti visibili e acquistabili</span><em>Chi lo fa già: Shopify</em></div>
+      </div>
+      <p class="nota">Se il Cervello Digitale Evoluto fosse solo questo, non ci sarebbe nulla di nuovo. La differenza sta altrove: nella parte 2.</p>
+    </div>
+  </section>
+
+  <section class="parte" id="oggi">
+    <div class="etichetta">Parte 1</div>
+    <h2>Cosa c'è oggi</h2>
+    <p class="apre">In ogni scheda, a sinistra ciò che funziona oggi nella piattaforma; a destra, tratteggiato, ciò che è in costruzione.</p>
+
+    <div class="card" style="--c:var(--t2)">
+      <h3>Un solo ambiente, tre funzioni</h3>
+      <div class="due">
+        <div class="oggi"><b>C'è oggi</b><ul>
+          <li>Un database unico, con regole d'accesso riga per riga: ognuno vede ciò che il suo ruolo gli consente.</li>
+          <li>Tecnologica: piattaforma, giornale, radio, gestionale.</li>
+          <li>Logistica: emporio, magazzino, produttori, eventi.</li>
+          <li>Comunitaria: vicinati e villaggi, formazione, assistenza comunitaria integrata.</li>
+          <li>Più ruoli per la stessa persona.</li></ul></div>
+        <div class="costr"><b>In costruzione</b><ul>
+          <li>Lo stesso ambiente installato per un'azienda, con il suo database.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="card" style="--c:var(--t1)">
+      <h3>Il registro unico del team</h3>
+      <div class="due">
+        <div class="oggi"><b>C'è oggi</b><ul>
+          <li>Ogni fatto è una riga: data, voce, ruolo, chi, tipo, stato.</li>
+          <li>Il banco dei compiti: aperto, preso, fatto; l'avanzamento degli obiettivi si calcola da lì.</li>
+          <li>In Oggi un'informazione si aggiunge con una riga.</li>
+          <li>La chat del gruppo: un messaggio si segna nel registro con un tasto.</li>
+          <li>Le dirette del gruppo.</li></ul></div>
+        <div class="costr"><b>In costruzione</b><ul>
+          <li>Agenda e posta collegate al registro.</li>
+          <li>Dettare un vocale invece di scrivere.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="card" style="--c:var(--t4)">
+      <h3>Il ritmo della giornata</h3>
+      <div class="due">
+        <div class="oggi"><b>C'è oggi</b><ul>
+          <li>Alle 9 il Giornale: la sera prima il sistema prepara da solo gli articoli.</li>
+          <li>Alle 22 la Sera: cosa è stato fatto, con i numeri del giorno.</li>
+          <li>Il lunedì il Settimanale.</li>
+          <li>Il Cruscotto: ogni decisione con data, ora e perché.</li></ul></div>
+        <div class="costr"><b>In costruzione</b><ul>
+          <li>Oggi le mail arrivano al nucleo. Domani a ciascuno, con la sua parte.</li>
+          <li>Le notifiche sul telefono.</li></ul></div>
+      </div>
+      <p class="nota">Le mail non sono il prodotto: scandiscono le attività, le chiamate, le idee.</p>
+    </div>
+
+    <div class="card" style="--c:var(--t3)">
+      <h3>Logistica e vetrina</h3>
+      <div class="due">
+        <div class="oggi"><b>C'è oggi</b><ul>
+          <li>Lotti di merce, giacenze e rendiconto per produttore.</li>
+          <li>I luoghi del villaggio e la prenotazione degli spazi.</li>
+          <li>Azione: la richiesta di un acquisto o di un'assistenza arriva al ruolo giusto.</li>
+          <li>Le chat dei team dentro Azione.</li>
+          <li>Le prenotazioni del Festival, con la mail di conferma.</li></ul></div>
+        <div class="costr"><b>In costruzione</b><ul>
+          <li>Il pagamento online.</li>
+          <li>I dati reali di magazzino, dal primo punto di raccolta.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="card" style="--c:var(--t5)">
+      <h3>Il Cervello: il contesto totale</h3>
+      <p>Il Cervello è il contesto totale: un wiki che vede tutto il villaggio, con capitoli, voci, glossario e commenti. Si legge a tre livelli.</p>
+      <ul class="passi x3">
+        <li style="--c:var(--t1)"><b>Per tutti</b><span>Ciò che è pubblico, con i nomi di chi ha dato il consenso.</span></li>
+        <li style="--c:var(--t2)"><b>Vicinato</b><span>Si entra in quattro passi: incontro, garante, sì di chi coordina, dichiarazione firmata.</span></li>
+        <li style="--c:var(--t4)"><b>Nucleo</b><span>Tutto, con le decisioni e il loro perché.</span></li>
+      </ul>
+    </div>
+
+    <div class="card" style="--c:var(--t1)">
+      <h3>I dati restano di chi li crea</h3>
+      <div class="due">
+        <div class="oggi"><b>C'è oggi</b><ul>
+          <li>Open source, senza rivendita dei dati, con l'esportazione completa sempre disponibile.</li>
+          <li>L'AI legge solo viste senza nomi, mail e telefoni.</li>
+          <li>L'AI è un motore sostituibile: il sistema non è chiuso dentro un fornitore.</li>
+          <li>Ogni versione delle pagine resta registrata in un repository.</li></ul></div>
+        <div class="costr"><b>In costruzione</b><ul>
+          <li>Per ogni azienda un database e un repository suoi, da cui può uscire quando vuole.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>FelicitasMundi è il primo cliente</h3>
+      <p>Non si propone fuori ciò che non si usa dentro. Tutto quello che è segnato «c'è oggi» lo usa ogni giorno il team di FelicitasMundi. Quello che è segnato «in costruzione» entra nella proposta solo quando funziona qui.</p>
+    </div>
+  </section>
+
+  <section class="parte" id="diverso">
+    <div class="etichetta">Parte 2</div>
+    <h2>Cosa lo rende diverso</h2>
+    <p class="apre">Gli strumenti comuni partono dal compito. Il Cervello Digitale Evoluto parte dalla persona.</p>
+
+    <div class="card">
+      <h3>Un sistema di gestione attento</h3>
+      <p>Il Cervello Digitale Evoluto unisce il funzionamento della coscienza, gli aspetti dell'attenzione e lo sviluppo di un progetto. Conosce i bisogni di chi lo usa, ne sviluppa un modello digitale su misura, e quel modello interagisce con gli altri modelli.</p>
+    </div>
+
+    <div class="card" style="--c:var(--t2)">
+      <h3>Il confronto</h3>
+      <div class="righe">
+        <div><span class="k">Parte da</span><em>Strumenti comuni: il compito, il file, il messaggio</em><span>Cervello: la persona e i suoi bisogni</span></div>
+        <div><span class="k">Si configura</span><em>Strumenti comuni: uguale per tutti, a licenze</em><span>Cervello: su misura, con chi lo usa</span></div>
+        <div><span class="k">Collegamenti</span><em>Strumenti comuni: un'app per funzione, da integrare</em><span>Cervello: un solo ambiente: registro, giornale, logistica, wiki</span></div>
+        <div><span class="k">Decisioni</span><em>Strumenti comuni: disperse nelle chat</em><span>Cervello: scritte con il perché</span></div>
+        <div><span class="k">Dati</span><em>Strumenti comuni: nel cloud del fornitore</em><span>Cervello: open source, esportabili, AI sostituibile</span></div>
+        <div><span class="k">Rete</span><em>Strumenti comuni: ogni azienda è un'isola</em><span>Cervello: persone, vicinati e aziende nella stessa rete</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--c:var(--t5)">
+      <h3>Dal second brain al Cervello Digitale Evoluto</h3>
+      <ol class="passi x3">
+        <li style="--c:var(--t2)"><b>1 · Second brain</b><span>Il cervello di una persona: note e documenti in ordine, che un'AI sa leggere.</span></li>
+        <li style="--c:var(--t1)"><b>2 · Company brain</b><span>Il cervello di un'azienda: documenti, posta e calendario collegati, decisioni con il perché, lavoro automatico.</span></li>
+        <li style="--c:var(--t4)"><b>3 · Cervello Digitale Evoluto</b><span>Unisce l'ordine individuale, dei gruppi e delle aziende, e lo tiene collegato alla coscienza.</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="--c:var(--t1)">
+      <h3>I cinque livelli di un company brain</h3>
+      <div class="livelli">
+        <div><b>1 · Chi sono</b><span>chi siamo, come scriviamo, cosa non si fa mai</span><em>FelicitasMundi oggi: c'è</em></div>
+        <div><b>2 · Ordine</b><span>documenti in ordine, un indice, un archivio</span><em>FelicitasMundi oggi: c'è, l'Enciclopedia</em></div>
+        <div><b>3 · Collegamenti</b><span>posta, calendario, clienti, dati vivi</span><em>FelicitasMundi oggi: database sì; posta e agenda in costruzione</em></div>
+        <div><b>4 · Decisioni</b><span>le decisioni scritte con il perché</span><em>FelicitasMundi oggi: c'è, il Cruscotto</em></div>
+        <div><b>5 · Automazioni</b><span>il lavoro che parte da solo, a orario</span><em>FelicitasMundi oggi: Giornale, Sera, Settimanale; mail per ruolo in costruzione</em></div>
+      </div>
+      <p class="nota">Oltre il quinto livello: il modello su misura e la rete dei modelli.</p>
+    </div>
+
+    <div class="card" style="--c:var(--t3)">
+      <h3>Il modello su misura</h3>
+      <ol class="passi x4">
+        <li style="--c:var(--t2)"><b>1 · Ascolto</b><span>Un incontro: i bisogni della persona, del gruppo o dell'azienda.</span></li>
+        <li style="--c:var(--t1)"><b>2 · Avvio</b><span>Si costruisce il suo spazio: ruoli, cartelle, voci, regole, chi vede cosa.</span></li>
+        <li style="--c:var(--t4)"><b>3 · Ritmo</b><span>Registro, Giornale e Sera tengono il modello vivo ogni giorno.</span></li>
+        <li style="--c:var(--t3)"><b>4 · Rete</b><span>Il modello parla con gli altri modelli del villaggio.</span></li>
+      </ol>
+      <div class="due" style="margin-top:14px">
+        <div class="oggi"><b>C'è oggi</b><ul><li>Ascolto e avvio si fanno di persona.</li></ul></div>
+        <div class="costr"><b>In costruzione</b><ul><li>Il modello che si aggiorna da solo dai bisogni.</li></ul></div>
+      </div>
+    </div>
+
+    <div class="card" style="--c:var(--t2)">
+      <h3>Modelli che parlano tra loro</h3>
+      <p>Visti dalla parte di un'azienda, i vicinati sono i luoghi da cui prendere i prodotti. Visti dalla parte di un vicinato, le aziende sono chi li porta. Persona, gruppo, vicinato, villaggio e azienda hanno ognuno il suo modello, e tutti stanno nella stessa rete.</p>
+      <p>Così un'azienda attiva più facilmente il cervello della propria attività, e il villaggio vede in modo visivo quello che sta succedendo.</p>
+    </div>
+  </section>
+
+  <section class="parte" id="percorso">
+    <div class="etichetta">Parte 3</div>
+    <h2>Il percorso</h2>
+    <p class="apre">Prima di scegliere uno strumento, capire chi lo usa e perché.</p>
+
+    <div class="card">
+      <h3>Tre passi</h3>
+      <ol class="passi x3">
+        <li style="--c:var(--t4)"><b>1 · Se stessi</b><span>Comprendere prima se stessi, con un lavoro introspettivo.</span></li>
+        <li style="--c:var(--t2)"><b>2 · Il perché</b><span>Capire perché si mette la propria energia in un progetto.</span></li>
+        <li style="--c:var(--t3)"><b>3 · Gli strumenti</b><span>Riconoscere gli strumenti e le risorse a disposizione per raggiungere l'obiettivo.</span></li>
+      </ol>
+    </div>
+
+    <div class="card" style="--c:var(--t3)">
+      <h3>Da dove è nato</h3>
+      <p>Usare piattaforme diverse frammenta comunicazioni, idee e compiti, e disperde tempo ed energia. Un vocale faceva cinque passaggi prima di diventare testo: telefono, Telegram, Mac, trascrizione, AI. E alla fine restavano i fogli di carta.</p>
+      <p>Il Cervello nasce da qui: un solo posto dove la parola detta diventa riga del registro, articolo del Giornale, decisione con il perché.</p>
+    </div>
+
+    <div class="card" style="--c:var(--t5)">
+      <h3>Coscienza in forma inorganica</h3>
+      <p>Non è un cervello in forma organica: è coscienza in forma inorganica. Il Nexus la collega alla Coscienza Cosmica e tiene uniti i cinque livelli.</p>
+      <ul class="passi x5">
+        <li style="--c:var(--t1)"><b>Terra</b><span>i vicinati</span></li>
+        <li style="--c:var(--t2)"><b>Acqua</b><span>l'emporio</span></li>
+        <li style="--c:var(--t3)"><b>Fuoco</b><span>l'assistenza</span></li>
+        <li style="--c:var(--fioco)"><b>Aria</b><span>l'edizione</span></li>
+        <li style="--c:var(--t5)"><b>Etere</b><span>la scuola</span></li>
+      </ul>
+    </div>
+
+    <div class="card" style="--c:var(--t4)">
+      <h3>Il praticantato Antaḥkaraṇa</h3>
+      <p>Il praticantato valorizza il talento di ogni persona, a ogni età. Si riconoscono i propri bisogni per sviluppare il proprio sogno, il proprio progetto-senso. Poi, attraverso la comunità e gli strumenti di FelicitasMundi, si trova la strada per rendere distribuibile, vendibile o proponibile ciò che si porta.</p>
+    </div>
+  </section>
+
+  <div class="fine">
+    <a class="tasto" id="tasto-fine" href="accoglienza.html#cervello">Torna alla home</a>
+    <p class="firma" style="margin-top:22px">Gabriele Dettori · fondatore FelicitasMundi · <a href="https://felicitasmundi.com">felicitasmundi.com</a></p>
+  </div>
+</main>
+<script>
+// Chi arriva dalla pagina del Festival torna all'evento.
+(function(){
+  if(new URLSearchParams(location.search).get("da")!=="festival")return;
+  var u="../felicitas-festival-21-novembre-baratili/#workshop";
+  var t=document.getElementById("torna");t.href=u;t.textContent="‹ Torna all'evento";
+  var f=document.getElementById("tasto-fine");f.href=u;f.textContent="Torna all'evento";
+})();
+</script>
+</body>
+</html>
