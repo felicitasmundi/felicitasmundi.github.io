@@ -15,7 +15,7 @@
   var LINK_STRIPE = { workshop: "", pranzo: "", cena: "", laboratori_bambini: "" };
   var PREZZO = { workshop: "50 €" };
   var NOMI = { ci_saro: "Ci sarò", pranzo: "Pranzo", cena: "Cena", workshop: "Workshop Tra Coscienza e Tecnologia",
-               laboratori_bambini: "Laboratori didattici per bimbi e ragazzi" };
+               laboratori_bambini: "Laboratori didattici e creativi per bambini e ragazzi" };
 
   /* d.dettaglio (laboratori, camera) e d.fattura (partita IVA o codice fiscale) vanno con lo SQL 133; finché non è lanciato si riprova senza, così la prenotazione si salva comunque */
   function invia(d){
