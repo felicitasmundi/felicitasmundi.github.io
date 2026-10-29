@@ -578,6 +578,8 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   function aggiorna(){
     var w=workshop.checked;
     var paga=w&&window.FMPrenotaFestival&&FMPrenotaFestival.LINK_STRIPE.workshop;invia.textContent=paga?'Prenota e paga 50 €':'Prenota';
+    /* pranzo, cena e laboratori: i costi li dà Gab (28/10 «poi mettiamo i costi appena domani ho conferme»); finché non ci sono la riga non si vede */
+    var k=scelta();costo.hidden=!(w||k==='presenza');
     costo.innerHTML=w?'Workshop: <s>80 €</s> · 50 € per il Festival':'Ingresso gratuito';
   }
   modulo.querySelectorAll('input[name=cosa]').forEach(function(r){r.addEventListener('change',aggiorna)});
