@@ -194,6 +194,8 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
 .finestra .testa{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .finestra h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;line-height:1.05}
 .chiudi{width:48px;height:48px;border-radius:50%;border:2px solid var(--riga);background:transparent;color:var(--avorio);font-size:28px;line-height:1;cursor:pointer;flex-shrink:0}
+.pagato{position:relative;z-index:6;margin:72px 16px 0;padding:16px 20px;border-radius:16px;background:#1f3a2a;border:2px solid #8DBF5E;color:#F5F0E6;font-size:20px;text-align:center}
+.pagato[hidden]{display:none}
 .scelte[hidden],.alloggio-dove [hidden]{display:none!important}
 .alloggio-dove{margin:22px 0 0;padding:18px 20px;border-radius:18px;background:var(--carta);border:2px solid var(--riga);display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .alloggio-dove b{font-size:21px}.alloggio-dove span{font-size:19px;color:var(--fioco)}
@@ -334,6 +336,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
 </header>
 
 <!-- 1 · APERTURA: tutto quello che serve nel primo schermo -->
+<div class="pagato" id="pagato" role="status" hidden>Pagamento ricevuto. Grazie!</div>
 <section class="apertura">
   <div class="quadro"><img src="img/donna-cervello.jpg" alt=""></div>
   <div class="testi">
@@ -713,7 +716,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   var DA={ci_saro:'presenza',presenza:'presenza',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori_bambini:'laboratori',laboratori:'laboratori',alloggio:'alloggio'};
   var v=q.get('presenza')==='1'?'presenza':DA[q.get('prenota')||''];
   if(v){if(v==='pranzo'||v==='cena')apriVoce('pasti',v);else apriVoce(v)}
-  if(q.get('pagato')==='1'){esito.textContent='Pagamento ricevuto. Grazie!';esito.hidden=false;apri(vp)}
+  if(q.get('pagato')==='1')document.getElementById('pagato').hidden=false;
   // ritorno: chi arriva dall'app torna all'app, gli altri alla home (Gab 28/10)
   try{
     if(/[?&]da=home(&|$)/.test(location.search))sessionStorage.setItem('fm_origine','home');
