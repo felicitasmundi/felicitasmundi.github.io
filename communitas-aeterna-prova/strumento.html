@@ -410,6 +410,28 @@ body.notte .corpo .tc-piede textarea{flex:1;min-height:52px;height:52px;max-heig
 .tc-btn{width:100%;margin-top:18px;height:54px;border-radius:27px;border:0;background:#D4AF6A;color:#0a1430;font:600 18px 'DM Sans',system-ui,sans-serif;cursor:pointer}
 .tc-btn[disabled]{opacity:.6;cursor:wait}
 .tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
+/* SQL 129 · 29/10: audio, file, posizione, chat a due, notifiche a scelta */
+.tc-piu{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);background:transparent;color:#D4AF6A;font-size:30px;line-height:1;cursor:pointer}
+.tc-menu{flex:0 0 auto;border:1px solid rgba(212,175,106,.5);border-radius:20px;background:transparent;color:#D4AF6A;font-size:22px;line-height:1;padding:6px 12px;cursor:pointer}
+.tc-allega{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tc-allega button,.tc-allega label{display:flex;flex-direction:column;align-items:center;gap:6px;background:#1a2148;border:1px solid rgba(212,175,106,.4);border-radius:16px;padding:16px 6px;color:#F5F0E6;font:500 18px 'DM Sans',system-ui,sans-serif;cursor:pointer;margin:0;letter-spacing:0;text-transform:none}
+.tc-allega svg{width:34px;height:34px}
+.tc-m audio{display:block;width:100%;margin:6px 0 2px}
+.tc-file{display:flex;align-items:center;gap:10px;background:#0a1430;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:10px 12px;margin:4px 0;color:#F5F0E6;text-decoration:none;font-size:17px;overflow-wrap:anywhere}
+.tc-mappa{display:block;width:100%;height:190px;border:0;border-radius:12px;margin:4px 0;background:#0a1430}
+.tc-mappa-l{display:inline-block;font-size:15px;color:#D4AF6A;margin-top:2px}
+.tc-rec{display:flex;align-items:center;gap:12px;font-size:20px;margin:12px 0}
+.tc-rec i{width:14px;height:14px;border-radius:7px;background:#e0485a;flex:none;animation:tcpunto 1s infinite}
+@keyframes tcpunto{50%{opacity:.3}}
+.tc-scelte button{display:block;width:100%;text-align:left;margin:8px 0;padding:14px;border-radius:14px;border:1px solid rgba(212,175,106,.4);background:#1a2148;color:#F5F0E6;font:500 18px 'DM Sans',system-ui,sans-serif;cursor:pointer}
+.tc-scelte button[aria-pressed=true]{background:#D4AF6A;color:#0a1430;border-color:#D4AF6A;font-weight:600}
+.tc-scelte small{display:block;font-size:15px;font-weight:400;opacity:.8}
+.tm-ric{background:#1a2148;border:1px solid rgba(212,175,106,.45);border-radius:16px;padding:12px 14px;margin:10px 0}
+.tm-ric b{display:block;font-size:19px}
+.tm-ric .t{display:block;font-size:17px;margin:6px 0 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.tm-ric .m{font-size:15px;color:rgba(245,240,230,.7)}
+.tm-nuova{display:block;width:100%;margin:10px 0 4px;padding:13px;border-radius:26px;border:1px solid #D4AF6A;background:transparent;color:#D4AF6A;font:600 17px 'DM Sans',system-ui,sans-serif;cursor:pointer}
+.tc-foglio textarea{width:100%;box-sizing:border-box;min-height:120px;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}
 .az-l{display:block;font-size:17px;margin:14px 0 6px;color:#c9c3d6}
 body.notte .corpo input[type=text],body.notte .corpo input[type=number],body.notte .corpo textarea{background:rgba(245,240,230,.06);color:#F5F0E6;border:1px solid rgba(214,181,108,.4);border-radius:12px;font-size:18px;padding:12px;width:100%;box-sizing:border-box}
 .az-esito{color:#F5F0E6}
@@ -656,14 +678,25 @@ var ICO_AZ={
   articolo:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M30 6l20 24-20 24-20-24z"/><path d="M10 30h40M30 6l-8 24 8 24 8-24z"/></svg>',
   diretta:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="30" cy="30" r="5"/><path d="M19 19a16 16 0 0 0 0 22M41 19a16 16 0 0 1 0 22M12 12a26 26 0 0 0 0 36M48 12a26 26 0 0 1 0 36"/></svg>',
   persona:'<svg viewBox="0 0 60 60" fill="none" stroke="#E8C77A" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="30" cy="20" r="9"/><path d="M12 52c2-11 9-17 18-17s16 6 18 17"/><path d="M46 10v12M40 16h12"/></svg>',
-  foto:'<svg width="26" height="26" viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M8 18h12l4-6h12l4 6h12v30H8z"/><circle cx="30" cy="32" r="9"/></svg>'
+  foto:'<svg width="26" height="26" viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M8 18h12l4-6h12l4 6h12v30H8z"/><circle cx="30" cy="32" r="9"/></svg>',
+  vocale:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><rect x="22" y="8" width="16" height="28" rx="8"/><path d="M14 30a16 16 0 0 0 32 0M30 46v8M22 54h16"/></svg>',
+  file:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2.6" stroke-linejoin="round" aria-hidden="true"><path d="M16 6h20l10 10v38H16z"/><path d="M36 6v10h10M22 28h16M22 36h16M22 44h10"/></svg>',
+  posizione:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2.6" stroke-linejoin="round" aria-hidden="true"><path d="M30 54S12 36 12 24a18 18 0 0 1 36 0c0 12-18 30-18 30z"/><circle cx="30" cy="24" r="6"/></svg>'
 };
-var team={lista:null,id:null,sub:null,timer:null,letto:0,msg:[],prop:{},url:{},scelto:null,dal:null,foglio:null};
+var team={lista:null,chat:null,tipo:"team",id:null,sub:null,timer:null,letto:0,msg:[],prop:{},url:{},scelto:null,dal:null,foglio:null,rec:null};
 function teamFerma(){
   try{if(team.sub&&db.removeChannel)db.removeChannel(team.sub);}catch(e){}
   if(team.timer)clearInterval(team.timer);
-  team.sub=null;team.timer=null;team.scelto=null;team.dal=null;team.foglio=null;
+  try{if(team.rec&&team.rec.state!=="inactive"){team.rec.annulla=true;team.rec.stop();}}catch(e){}
+  team.sub=null;team.timer=null;team.scelto=null;team.dal=null;team.foglio=null;team.rec=null;
 }
+/* i numerini sull'icona dell'app (SQL 129): messaggi non letti e richieste di chat in attesa. Funziona dove il telefono lo permette (app installata). */
+function numerini(){
+  if(!io.id||!db||!("setAppBadge" in navigator))return;
+  db.rpc("fm_non_letti_totale").then(function(r){if(!r||r.error)return;var n=+r.data||0;
+    try{if(n>0)navigator.setAppBadge(n);else navigator.clearAppBadge();}catch(e){}},function(){});
+}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")numerini();});
 function giornoRoma(t){return new Date(t).toLocaleDateString("it-IT",{timeZone:"Europe/Rome"});}
 function quandoTm(t){
   var d=new Date(t),ora=new Date(),ieri=new Date(ora.getTime()-864e5);
@@ -691,7 +724,7 @@ function vAzione(){
     if(io.nucleo)ruolo.push(carta("Aggiungi una persona",ICO_AZ.persona,'data-vai="staff"'));
   }
   c.innerHTML='<p class="tm-et" style="margin-top:6px">Azione</p>'+
-    (io.id?'<h2 class="tm-tit">I tuoi team</h2><div id="tm-box"></div><div id="tm-attesa"></div>':
+    (io.id?'<h2 class="tm-tit">I tuoi team</h2><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div>':
       '<div class="az-griglia" style="margin-top:10px"><a href="'+ENTRA+'" class="q-az largo" style="--e:#d6b56c"><i></i><b>Entra</b></a></div>')+
     '<p class="tm-et">Per tutti</p><div class="tm-g">'+tutti.join("")+'</div>'+
     (ruolo.length?'<p class="tm-et">Per chi ha il ruolo</p><div class="tm-g ruolo">'+ruolo.join("")+'</div>':'')+
@@ -700,7 +733,66 @@ function vAzione(){
   legaVai(c);
   c.querySelectorAll("[data-mega]").forEach(function(b){b.onclick=function(){M.tipo=b.getAttribute("data-mega");M.msg="";vai("megafono");};});
   if(window.fmInstallaAvvia)fmInstallaAvvia();if(io.id&&window.fmNotifiche)fmNotifiche(db);
-  if(io.id){mieiTeam();if(io.nucleo)daApprovare();}
+  if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();}
+}
+/* LE CHAT A DUE · SQL 129. Gab 29/10 07:59: «preferisco che uno riceva una richiesta di chat, con un messaggio di presentazione»;
+   08:00 niente «blocca» in Felicitas: c'è «Chiudi la conversazione». */
+function leggiChat(){
+  return db.rpc("fm_mie_chat").then(function(r){if(!r||r.error||!r.data)return null;team.chat=r.data;return r.data;},function(){return null;});
+}
+function mieChat(){
+  leggiChat().then(function(l){
+    var box=$("#tm-chat");if(!box||vista!=="azione")return;
+    if(!l){box.innerHTML="";return;}
+    leggiNomi(l.map(function(c){return c.altra_persona;}).concat(l.map(function(c){return c.ultimo_da;}))).then(function(){
+      if(!box.isConnected)return;
+      var ric=l.filter(function(c){return c.stato==="richiesta"&&!c.ho_chiesto;}),
+          mie=l.filter(function(c){return c.stato==="richiesta"&&c.ho_chiesto;}),
+          ap=l.filter(function(c){return c.stato==="aperta";});
+      box.innerHTML='<p class="tm-et">Le tue chat</p>'+
+        ric.map(function(c){return '<div class="tm-ric"><b>'+esc(nomi[c.altra_persona]||"Una persona di Felicitas")+'</b><span class="m">vuole parlarti</span>'+
+          '<span class="t">'+esc(c.presentazione)+'</span><div class="tc-az" style="margin:0"><button type="button" class="cerv" data-ris="'+esc(c.chat_id)+'" data-si="1">Accetta</button><button type="button" data-ris="'+esc(c.chat_id)+'">No grazie</button></div></div>';}).join("")+
+        (ap.length?'<div class="tm-lista">'+ap.map(function(c){var n=nomi[c.altra_persona]||"";
+          var ul=c.ultimo_il?((c.ultimo_da===io.id?"Tu: ":"")+(c.ultimo_testo||"Allegato")):"Chat aperta: scrivi il primo messaggio";
+          return '<button type="button" class="tm-ch" data-chat="'+esc(c.chat_id)+'"><span class="tm-seg" aria-hidden="true">'+esc(iniziale(n))+'</span>'+
+            '<span class="tm-mezzo"><b>'+esc(n)+'</b><span class="tm-ul">'+esc(ul)+'</span></span>'+
+            '<span class="tm-dx">'+(c.ultimo_il?esc(quandoTm(c.ultimo_il)):'')+(c.non_letti?'<br><em aria-label="'+c.non_letti+' da leggere">'+c.non_letti+'</em>':'')+'</span></button>';}).join("")+'</div>':'')+
+        mie.map(function(c){return '<div class="tm-ric"><b>'+esc(nomi[c.altra_persona]||"")+'</b><span class="m">la tua richiesta aspetta una risposta</span>'+
+          '<div class="tc-az" style="margin:8px 0 0"><button type="button" data-ritira="'+esc(c.chat_id)+'">Ritira la richiesta</button></div></div>';}).join("")+
+        '<button type="button" class="tm-nuova" id="tm-nuova">Nuova chat</button><p class="az-esito" id="tm-chat-esito" aria-live="polite"></p>';
+      box.querySelectorAll("[data-chat]").forEach(function(b){b.onclick=function(){team.id=b.getAttribute("data-chat");team.tipo="chat";vai("team");};});
+      box.querySelectorAll("[data-ris]").forEach(function(b){b.onclick=function(){b.disabled=true;
+        db.rpc("fm_chat_rispondi",{p_chat:b.getAttribute("data-ris"),p_si:b.hasAttribute("data-si")}).then(function(r){
+          if(r&&!r.error&&r.data==="ok"){mieChat();numerini();return;}b.disabled=false;$("#tm-chat-esito").textContent=(r&&r.data)||errore(r&&r.error);},function(){b.disabled=false;});};});
+      box.querySelectorAll("[data-ritira]").forEach(function(b){b.onclick=function(){b.disabled=true;
+        db.rpc("fm_chat_chiudi",{p_chat:b.getAttribute("data-ritira")}).then(function(){mieChat();},function(){b.disabled=false;});};});
+      $("#tm-nuova").onclick=nuovaChat;
+    });
+  });
+}
+/* nuova chat: si sceglie fra le persone dei propri team (fm_cerchio_persone, SQL 79) e si scrive una presentazione */
+function nuovaChat(){
+  var box=$("#tm-chat");if(!box)return;
+  var f=document.createElement("div");f.id="tc-foglio";document.body.appendChild(f);
+  function chiudi(){f.remove();}
+  f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+
+    '<h2>Nuova chat</h2><p>La persona riceve la tua richiesta con la presentazione, e sceglie se accettare.</p>'+
+    '<label for="nc-chi">Con chi</label><select id="nc-chi"><option value="">Un momento…</option></select>'+
+    '<label for="nc-pres">Presentati in due righe</label><textarea id="nc-pres" maxlength="1000"></textarea>'+
+    '<button type="button" class="tc-btn" id="nc-ok">Manda la richiesta</button><p class="tc-nota" id="nc-esito" aria-live="polite"></p></div>';
+  f.querySelector("[data-chiudi-f]").onclick=chiudi;
+  var ids=(team.lista||[]).map(function(t){return t.team_id;});
+  Promise.all(ids.map(function(id){return db.rpc("fm_cerchio_persone",{p_vicinato:id}).then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];});})).then(function(v){
+    var p={};v.forEach(function(l){l.forEach(function(x){if(x.persona_id&&x.persona_id!==io.id&&x.nome)p[x.persona_id]=x.nome;});});
+    var k=Object.keys(p).sort(function(a,b){return p[a].localeCompare(p[b],"it");});
+    $("#nc-chi").innerHTML=k.length?'<option value="">Scegli una persona</option>'+k.map(function(id){return '<option value="'+esc(id)+'">'+esc(p[id])+'</option>';}).join(""):'<option value="">Nei tuoi team non c\'è ancora nessuno</option>';
+  });
+  $("#nc-ok").onclick=function(){var b=this,e=$("#nc-esito"),chi=$("#nc-chi").value,t=$("#nc-pres").value.trim();
+    if(!chi){e.textContent="Scegli con chi.";return;}if(!t){e.textContent="Scrivi due righe per presentarti.";return;}
+    b.disabled=true;e.textContent="Un momento…";
+    db.rpc("fm_chat_richiedi",{p_persona:chi,p_presentazione:t}).then(function(r){
+      if(r&&!r.error&&r.data==="ok"){e.textContent="Richiesta mandata.";setTimeout(function(){chiudi();mieChat();},1200);return;}
+      b.disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){b.disabled=false;e.textContent=errore(x);});};
 }
 function leggiTeam(){
   return db.rpc("fm_miei_team").then(function(r){if(!r||r.error||!r.data)return null;team.lista=r.data;return r.data;},function(){return null;});
@@ -745,7 +837,7 @@ function daApprovare(){
     });
   },function(){});
 }
-/* le foto della chat stanno nello spazio privato «chat»: si vedono con un link che dura un'ora */
+/* foto, audio e file della chat stanno nello spazio privato «chat»: si vedono con un link che dura un'ora */
 function fotoUrl(paths){
   paths=paths.filter(function(p,i,a){return p&&a.indexOf(p)===i&&!team.url[p];});
   if(!paths.length||!db.storage)return Promise.resolve();
@@ -756,27 +848,37 @@ function vTeam(){
   var c=$("#corpo"),id=team.id;
   if(!io.id||!id){vai("azione");return;}
   var t=(team.lista||[]).filter(function(x){return x.team_id===id;})[0];
+  var ch=(team.chat||[]).filter(function(x){return x.chat_id===id&&x.stato==="aperta";})[0];
+  if(t)team.tipo="team";else if(ch){team.tipo="chat";t={team_id:id,nome:nomi[ch.altra_persona]||""};}
   if(!t){
     c.innerHTML='<p class="nota" style="text-align:center;padding:30px 0">Un momento…</p>';
-    leggiTeam().then(function(l){if(vista!=="team"||team.id!==id)return;
-      if(l&&l.some(function(x){return x.team_id===id;}))vTeam();else vai("azione");});
+    Promise.all([leggiTeam(),leggiChat()]).then(function(v){if(vista!=="team"||team.id!==id)return;
+      var ok=(v[0]||[]).some(function(x){return x.team_id===id;})||(v[1]||[]).some(function(x){return x.chat_id===id&&x.stato==="aperta";});
+      if(!ok){vai("azione");return;}
+      leggiNomi((v[1]||[]).map(function(x){return x.altra_persona;})).then(function(){if(vista==="team"&&team.id===id)vTeam();});});
     return;
   }
+  var duo=team.tipo==="chat";
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
-      '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>chat del team</small></div><button type="button" class="tc-arg" id="tc-arg"><span class="tc-segno" aria-hidden="true"></span>Argomenti</button></div>'+
+      '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div><button type="button" class="tc-arg" id="tc-arg"><span class="tc-segno" aria-hidden="true"></span>Argomenti</button>'+
+      '<button type="button" class="tc-menu" id="tc-menu" aria-label="Notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
     '<div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
-    '<div class="tc-piede"><label class="tc-foto" for="tc-file" aria-label="Manda una foto">'+ICO_AZ.foto+'</label><input type="file" id="tc-file" accept="image/*" hidden>'+
-      '<textarea id="tc-testo" maxlength="2000" rows="1" placeholder="Scrivi al team…" aria-label="Scrivi al team"></textarea><button type="button" class="tc-manda" id="tc-manda" aria-label="Manda">↑</button></div>'+
+    '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
+      '<input type="file" id="tc-doc" accept=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf" hidden>'+
+      '<textarea id="tc-testo" maxlength="2000" rows="1" placeholder="'+(duo?"Scrivi…":"Scrivi al team…")+'" aria-label="Scrivi"></textarea><button type="button" class="tc-manda" id="tc-manda" aria-label="Manda">↑</button></div>'+
     '<div id="tc-foglio"></div>';
   $("#tc-ind").onclick=function(){vai("azione");};
   $("#tc-arg").onclick=argomenti;
+  $("#tc-menu").onclick=menuChat;
+  $("#tc-piu").onclick=allega;
   var ta=$("#tc-testo");ta.oninput=function(){ta.style.height="auto";ta.style.height=Math.min(160,ta.scrollHeight)+"px";};
   $("#tc-manda").onclick=function(){var x=ta.value.trim();if(!x)return;var b=this;b.disabled=true;
     db.from("gruppo_messaggi").insert({cerchio_id:id,testo:x,scritto_da:io.id}).then(function(r){b.disabled=false;
       if(r&&r.error){$("#tc-err").textContent=errore(r.error);return;}ta.value="";ta.style.height="";$("#tc-err").textContent="";ricaricaTeam(true);},
       function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});};
   $("#tc-file").onchange=function(e){var f=e.target.files&&e.target.files[0];e.target.value="";if(f)mandaFoto(id,f);};
+  $("#tc-doc").onchange=function(e){var f=e.target.files&&e.target.files[0];e.target.value="";if(f)mandaAllegato(id,f,"file",f.name);};
   dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length)return;
     e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
   team.msg=[];team.prop={};
@@ -787,7 +889,7 @@ function vTeam(){
 }
 function ricaricaTeam(giu){
   var id=team.id;if(vista!=="team"||!id){teamFerma();return;}
-  var q=db.from("gruppo_messaggi").select("id,testo,foto,scritto_da,scritto_il,registro_id,argomento,argomento_da").eq("cerchio_id",id);
+  var q=db.from("gruppo_messaggi").select("id,testo,foto,audio,file,file_nome,lat,lon,scritto_da,scritto_il,registro_id,argomento,argomento_da").eq("cerchio_id",id);
   if(team.dal)q=q.gte("scritto_il",team.dal);
   q.order("scritto_il",{ascending:false}).limit(team.dal?500:80).then(function(r){
     if(vista!=="team"||team.id!==id)return;
@@ -796,7 +898,7 @@ function ricaricaTeam(giu){
     var nuovi=l.length&&(!team.msg.length||l[l.length-1].id!==team.msg[team.msg.length-1].id);
     Promise.all([
       ids.length?db.from("cervello_proposte").select("messaggio_id,stato").in("messaggio_id",ids).neq("stato","scartata").then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];}):Promise.resolve([]),
-      fotoUrl(l.map(function(m){return m.foto;})),
+      fotoUrl(l.map(function(m){return m.foto;}).concat(l.map(function(m){return m.audio;}),l.map(function(m){return m.file;}))),
       leggiNomi(l.map(function(m){return m.scritto_da;}))
     ]).then(function(v){
       if(vista!=="team"||team.id!==id)return;
@@ -812,7 +914,7 @@ function ricaricaTeam(giu){
 }
 function segnaLetto(id){
   if(Date.now()-team.letto<30000)return;team.letto=Date.now();
-  db.rpc("fm_team_letto",{p_team:id}).then(function(){(team.lista||[]).forEach(function(t){if(t.team_id===id)t.non_letti=0;});},function(){});
+  db.rpc("fm_team_letto",{p_team:id}).then(function(){(team.lista||[]).forEach(function(t){if(t.team_id===id)t.non_letti=0;});(team.chat||[]).forEach(function(t){if(t.chat_id===id)t.non_letti=0;});numerini();},function(){});
 }
 function disegnaTeam(){
   var e=$("#tc-msg");if(!e)return;
@@ -824,6 +926,9 @@ function disegnaTeam(){
       (m.argomento?'<div class="arg"><span class="tc-segno" aria-hidden="true"></span>'+esc(m.argomento)+'</div>':'')+
       (mio?'':'<div class="chi">'+esc(nomi[m.scritto_da]||"")+'</div>')+
       (m.foto?(team.url[m.foto]?'<img src="'+esc(team.url[m.foto])+'" alt="Foto" loading="lazy">':'<div class="t" style="opacity:.7">Foto</div>'):'')+
+      (m.audio?(team.url[m.audio]?'<audio controls preload="none" src="'+esc(team.url[m.audio])+'"></audio>':'<div class="t" style="opacity:.7">Vocale</div>'):'')+
+      (m.file?'<a class="tc-file"'+(team.url[m.file]?' href="'+esc(team.url[m.file])+'" target="_blank" rel="noopener"':'')+'>'+ICO_AZ.file.replace('<svg ','<svg width="26" height="26" ')+'<span>'+esc(m.file_nome||"File")+'</span></a>':'')+
+      (m.lat!=null&&m.lon!=null?mappaHTML(m.lat,m.lon):'')+
       (m.testo?'<div class="t">'+esc(m.testo)+'</div>':'')+
       (m.registro_id?'<span class="pill-o">→ nel registro</span>':'')+
       (p?'<span class="pill-o">'+(p==="approvata"?"nel Cervello":"nel Cervello · in attesa")+'</span>':'')+
@@ -833,7 +938,7 @@ function disegnaTeam(){
   e.innerHTML=h.length?h.join(""):'<p class="nota" style="text-align:center;padding:20px 0">Ancora nessun messaggio. Scrivi il primo.</p>';
   e.querySelectorAll("[data-m]").forEach(function(d){
     function tocca(){var i=d.getAttribute("data-m");team.scelto=team.scelto===i?null:i;disegnaTeam();}
-    d.onclick=function(ev){if(ev.target.closest("a"))return;tocca();};
+    d.onclick=function(ev){if(ev.target.closest("a,audio,iframe"))return;tocca();};
     d.onkeydown=function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();tocca();}};
   });
   legaAzioniMsg(e);
@@ -843,8 +948,8 @@ function azioniMsg(m){
   var chiude=m.argomento&&(m.argomento_da===io.id||io.nucleo);
   return '<div class="tc-az" id="tc-az"><button type="button" data-az="rispondi">Rispondi</button>'+
     (m.argomento?(chiude?'<button type="button" data-az="chiudi">Chiudi argomento</button>':''):'<button type="button" data-az="apri">Apri argomento</button>')+
-    (team.prop[m.id]?'':'<button type="button" class="cerv" data-az="cervello">Metti nel Cervello</button>')+
-    (m.registro_id||!m.testo?'':'<select data-az="registro" aria-label="Segna nel registro"><option value="">Segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+
+    (team.prop[m.id]||team.tipo==="chat"?'':'<button type="button" class="cerv" data-az="cervello">Metti nel Cervello</button>')+
+    (m.registro_id||!m.testo||team.tipo==="chat"?'':'<select data-az="registro" aria-label="Segna nel registro"><option value="">Segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+
     '</div>';
 }
 function legaAzioniMsg(e){
@@ -897,6 +1002,7 @@ function mettiNelCervello(m){
     '<label for="tc-cap">Capitolo del Cervello</label><select id="tc-cap"><option value="">Un momento…</option></select>'+
     '<div id="tc-cap-nuovo" hidden><label for="tc-cap-t">Titolo del capitolo nuovo</label><input type="text" id="tc-cap-t" maxlength="200"></div>'+
     '<label>Foto (se c\'è)</label>'+(m.foto&&team.url[m.foto]?'<img src="'+esc(team.url[m.foto])+'" alt="" style="max-width:100%;max-height:220px;border-radius:12px">':'<div class="tc-campo">'+(m.foto?"la foto del messaggio":"nessuna foto")+'</div>')+
+    (m.audio||m.file||m.lat!=null?'<label>Va anche nel Cervello</label><div class="tc-campo">'+esc([m.audio?"il vocale":"",m.file?(m.file_nome||"il file"):"",m.lat!=null?"la posizione":""].filter(Boolean).join(" · "))+'</div>':'')+
     '<button type="button" class="tc-btn" id="tc-cerv-ok">Manda al Cervello</button><p class="tc-nota" id="tc-cerv-esito" aria-live="polite">Resta «in attesa» finché non viene approvata.</p>');
   if(!f)return;
   var s=$("#tc-cap"),nb=$("#tc-cap-nuovo");
@@ -914,6 +1020,98 @@ function mettiNelCervello(m){
       if(r&&!r.error&&r.data==="ok"){e.textContent="Mandato. Resta «in attesa» finché il nucleo non lo approva.";team.scelto=null;
         setTimeout(function(){var x=$("#tc-foglio");if(x)x.innerHTML="";ricaricaTeam(false);},1600);return;}
       b.disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){b.disabled=false;e.textContent=errore(x);});};
+}
+/* SQL 129 · il tasto «+»: Foto · Vocale · File · Posizione */
+function allega(){
+  var f=foglioTeam('<h2>Manda</h2><div class="tc-allega"><label for="tc-file">'+ICO_AZ.foto.replace(' width="26" height="26"','')+'Foto</label>'+
+    '<button type="button" id="al-voc">'+ICO_AZ.vocale+'Vocale</button><label for="tc-doc">'+ICO_AZ.file+'File</label>'+
+    '<button type="button" id="al-pos">'+ICO_AZ.posizione+'Posizione</button></div>');
+  if(!f)return;
+  f.querySelectorAll("label").forEach(function(l){l.addEventListener("click",function(){setTimeout(function(){var x=$("#tc-foglio");if(x)x.innerHTML="";},300);});});
+  $("#al-voc").onclick=vocale;
+  $("#al-pos").onclick=posizione;
+}
+/* il vocale: si registra col microfono del telefono, si ascolta solo nella chat */
+function vocale(){
+  var id=team.id;
+  var f=foglioTeam('<h2>Vocale</h2><div class="tc-rec"><i></i><span id="vc-t">0:00</span></div><p id="vc-n">Parla: quando hai finito tocca «Manda».</p>'+
+    '<button type="button" class="tc-btn" id="vc-ok">Manda</button><button type="button" class="tc-btn" id="vc-no" style="background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5)">Annulla</button>');
+  if(!f)return;
+  if(!navigator.mediaDevices||!window.MediaRecorder){$("#vc-n").textContent="Il microfono qui non si apre.";$("#vc-ok").disabled=true;return;}
+  var pezzi=[],t0=Date.now(),tm=null;
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){
+    var rec=new MediaRecorder(st);team.rec=rec;
+    rec.ondataavailable=function(e){if(e.data.size)pezzi.push(e.data);};
+    rec.onstop=function(){clearInterval(tm);st.getTracks().forEach(function(x){x.stop();});var x=$("#tc-foglio");if(x)x.innerHTML="";
+      if(rec.annulla||!pezzi.length)return;
+      var tipo=(rec.mimeType||"audio/webm").split(";")[0],est=/mp4/.test(tipo)?"m4a":/ogg/.test(tipo)?"ogg":"webm";
+      mandaAllegato(id,new Blob(pezzi,{type:tipo}),"audio","vocale."+est);};
+    rec.start();
+    tm=setInterval(function(){var s=Math.floor((Date.now()-t0)/1000),e=$("#vc-t");if(e)e.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+      if(s>=600&&rec.state==="recording")rec.stop();},500);
+    $("#vc-ok").onclick=function(){if(rec.state==="recording")rec.stop();};
+    $("#vc-no").onclick=function(){rec.annulla=true;if(rec.state==="recording")rec.stop();else{var x=$("#tc-foglio");if(x)x.innerHTML="";}};
+    f.parentNode.querySelector("[data-chiudi-f]").onclick=function(){rec.annulla=true;if(rec.state==="recording")rec.stop();};
+  }).catch(function(){$("#vc-n").textContent="Il microfono qui non si apre: va dato il permesso al telefono.";$("#vc-ok").disabled=true;});
+}
+/* la posizione: si chiede una volta sola, si vede su OpenStreetMap, nessun tracciamento */
+function mappaHTML(lat,lon){
+  var la=+lat,lo=+lon,d=0.004;
+  var bb=[(lo-d).toFixed(5),(la-d/1.6).toFixed(5),(lo+d).toFixed(5),(la+d/1.6).toFixed(5)].join(",");
+  return '<iframe class="tc-mappa" loading="lazy" title="Mappa" src="https://www.openstreetmap.org/export/embed.html?bbox='+bb+'&amp;layer=mapnik&amp;marker='+la.toFixed(5)+','+lo.toFixed(5)+'"></iframe>'+
+    '<a class="tc-mappa-l" href="https://www.openstreetmap.org/?mlat='+la.toFixed(5)+'&amp;mlon='+lo.toFixed(5)+'#map=17/'+la.toFixed(5)+'/'+lo.toFixed(5)+'" target="_blank" rel="noopener">apri la mappa ›</a>';
+}
+function posizione(){
+  var id=team.id;
+  var f=foglioTeam('<h2>Posizione</h2><p>Si manda una volta sola, solo a questa chat. Mai la posizione di una casa privata.</p><div id="ps-m"><p class="tc-nota">Cerco dove sei…</p></div>'+
+    '<button type="button" class="tc-btn" id="ps-ok" disabled>Manda questa posizione</button>');
+  if(!f)return;
+  if(!navigator.geolocation){$("#ps-m").innerHTML='<p class="tc-nota">Questo telefono non dà la posizione.</p>';return;}
+  navigator.geolocation.getCurrentPosition(function(p){
+    var la=+p.coords.latitude.toFixed(5),lo=+p.coords.longitude.toFixed(5),e=$("#ps-m");if(!e)return;
+    e.innerHTML=mappaHTML(la,lo);var b=$("#ps-ok");b.disabled=false;
+    b.onclick=function(){b.disabled=true;
+      db.from("gruppo_messaggi").insert({cerchio_id:id,lat:la,lon:lo,scritto_da:io.id}).then(function(r){
+        if(r&&r.error){b.disabled=false;$("#tc-err").textContent=errore(r.error);return;}
+        var x=$("#tc-foglio");if(x)x.innerHTML="";ricaricaTeam(true);},function(x){b.disabled=false;$("#tc-err").textContent=errore(x);});};
+  },function(){var e=$("#ps-m");if(e)e.innerHTML='<p class="tc-nota">La posizione non è arrivata: va dato il permesso al telefono.</p>';},{enableHighAccuracy:true,timeout:15000,maximumAge:60000});
+}
+/* audio e file: si scrive il messaggio che li nomina, poi si carica (le regole dello spazio «chat» lo chiedono in quest'ordine) */
+function mandaAllegato(id,blob,campo,nome){
+  var e=$("#tc-err"),b=$("#tc-manda");
+  if(blob.size>26214400){e.textContent="Il file supera i 25 MB.";return;}
+  e.textContent=campo==="audio"?"Mando il vocale…":"Carico il file…";if(b)b.disabled=true;
+  var est=(String(nome||"").split(".").pop()||"bin").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,6)||"bin";
+  var path=id+"/"+io.id+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+"."+est;
+  var riga={cerchio_id:id,scritto_da:io.id};riga[campo]=path;if(campo==="file")riga.file_nome=String(nome||"file").slice(0,200);
+  db.from("gruppo_messaggi").insert(riga).select("id").single().then(function(r){
+    if(r&&r.error){e.textContent=errore(r.error);if(b)b.disabled=false;return;}
+    var mid=r.data&&r.data.id;
+    db.storage.from("chat").upload(path,blob,{contentType:blob.type||"application/octet-stream",upsert:false}).then(function(u){
+      if(b)b.disabled=false;
+      if(u&&u.error){e.textContent="Non è stato caricato. Si può riprovare.";if(mid)db.from("gruppo_messaggi").delete().eq("id",mid).then(function(){ricaricaTeam(false);},function(){});return;}
+      e.textContent="";ricaricaTeam(true);
+    },function(){if(b)b.disabled=false;e.textContent="Non è stato caricato. Si può riprovare.";});
+  },function(x){if(b)b.disabled=false;e.textContent=errore(x);});
+}
+/* il tasto «⋯»: le notifiche di questa chat (fm_chat_avvisi) e, nella chat a due, «Chiudi la conversazione» */
+function menuChat(){
+  var id=team.id,duo=team.tipo==="chat";
+  var f=foglioTeam('<h2>Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
+    [["ogni","A ogni messaggio",""],["ora","Una all'ora","se arrivano più messaggi, una sola notifica"],["mai","Mai","i messaggi li vedi quando apri l'app"]].map(function(x){
+      return '<button type="button" data-avv="'+x[0]+'" aria-pressed="false">'+x[1]+(x[2]?'<small>'+x[2]+'</small>':'')+'</button>';}).join("")+'</div>'+
+    (duo?'<label>La conversazione</label><button type="button" class="tc-btn" id="mc-chiudi" style="background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5)">Chiudi la conversazione</button>'+
+      '<p class="tc-nota">Si chiude per tutti e due. Per riaprirla serve una nuova richiesta, dopo 30 giorni.</p>':'')+
+    '<p class="tc-nota" id="mc-esito" aria-live="polite"></p>');
+  if(!f)return;
+  function segna(v){f.querySelectorAll("[data-avv]").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-avv")===v));});}
+  db.rpc("fm_mia_scelta_avvisi",{p_cerchio:id}).then(function(r){if(r&&!r.error)segna(r.data||"ora");},function(){});
+  f.querySelectorAll("[data-avv]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-avv");
+    db.rpc("fm_chat_avvisi",{p_cerchio:id,p_avvisi:v}).then(function(r){if(r&&!r.error&&r.data==="ok"){segna(v);$("#mc-esito").textContent="Fatto.";}else $("#mc-esito").textContent=(r&&r.data)||errore(r&&r.error);},function(){});};});
+  var cb=$("#mc-chiudi");if(cb)cb.onclick=function(){
+    if(cb.getAttribute("data-sicuro")!=="1"){cb.setAttribute("data-sicuro","1");cb.textContent="Tocca ancora per chiuderla";return;}
+    cb.disabled=true;db.rpc("fm_chat_chiudi",{p_chat:id}).then(function(r){if(r&&!r.error&&r.data==="ok"){team.chat=null;vai("azione");return;}
+      cb.disabled=false;$("#mc-esito").textContent=(r&&r.data)||errore(r&&r.error);},function(){cb.disabled=false;});};
 }
 /* la foto: si rimpicciolisce sul telefono (lato lungo 1600), si scrive il messaggio che la nomina, poi si carica (le regole dello spazio «chat» lo chiedono in quest'ordine) */
 function riduciFoto(f){
@@ -2441,7 +2639,9 @@ chiSono().then(function(){
   testa();
   try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|azione|compra|assistenza|staff)$/.test(q))vista=q;}catch(e){}
   /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
-  try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;vista="team";}}catch(e){}
+  try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;team.tipo="team";vista="team";}}catch(e){}
+  /* le notifiche delle chat a due aprono strumento.html?v=azione&chat=<id> (SQL 129): se è ancora una richiesta, si resta in Azione a rispondere */
+  try{var cq=new URLSearchParams(location.search).get("chat");if(io.id&&cq&&/^[0-9a-f-]{36}$/i.test(cq)){team.id=cq;team.tipo="chat";vista="team";}}catch(e){}
   disegna();
 });
 db.auth.onAuthStateChange(function(ev){
