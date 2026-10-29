@@ -189,7 +189,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
 
 /* finestre: prenota e invita */
 .velo{position:fixed;inset:0;z-index:50;background:rgba(5,10,28,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center}
-.velo[hidden]{display:none!important}
+.velo[hidden],.labs[hidden],.singoli[hidden],[data-alloggio][hidden]{display:none!important}
 .finestra{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:linear-gradient(180deg,var(--c1),var(--c2));border:2px solid var(--riga);border-radius:28px 28px 0 0;padding:24px 20px calc(28px + env(safe-area-inset-bottom,0px));box-shadow:0 -20px 60px rgba(0,0,0,.5)}
 .finestra .testa{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .finestra h2{margin:0;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:36px;line-height:1.05}
@@ -507,6 +507,12 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
         <p>La mattina dalle 10.00 alle 13.00 · il pomeriggio dalle 14.30 alle 18.00 · Area Educazione a cura dell'associazione Arghentu</p>
         <button class="tasto pieno" type="button" data-prenota="laboratori">Prenota i laboratori</button>
       </div>
+      <!-- 29/10 21:52, Gab: «Ho 1 quadrupla, 1 tripla, e una doppia / Narbolia / Disponibilità per il festival / Prezzo speciale 25 a persona / Il prezzo solo a chi prenota» -->
+      <div class="carta rivela" style="--c:var(--t6)">
+        <h3>Alloggio a Narbolia</h3>
+        <p>Disponibilità per il Festival: 1 quadrupla, 1 tripla e 1 doppia</p>
+        <button class="tasto pieno" type="button" data-prenota="alloggio" data-alloggio hidden>Prenota l'alloggio</button>
+      </div>
       <div class="carta rivela" style="--c:var(--t1)">
         <h3>Prodotti e artisti</h3>
         <div class="tasti"><a class="tasto pieno" href="https://app.felicitasmundi.com/communitas-aeterna-prova/partecipa-prodotti.html" target="_blank" rel="noopener">Proponi i tuoi prodotti</a><a class="tasto pieno" href="https://app.felicitasmundi.com/communitas-aeterna-prova/partecipa-artisti.html" target="_blank" rel="noopener">Proponiti come artista</a></div>
@@ -545,8 +551,14 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
       <label class="scelta"><input type="radio" id="p-cena" name="cosa" value="cena"><span>Cena vegetariana</span></label>
       <label class="scelta"><input type="radio" id="p-workshop" name="cosa" value="workshop"><span>Workshop</span></label>
       <label class="scelta"><input type="radio" id="p-laboratori" name="cosa" value="laboratori"><span>Laboratori didattici</span></label>
+      <label class="scelta" data-alloggio hidden><input type="radio" id="p-alloggio" name="cosa" value="alloggio"><span>Alloggio a Narbolia</span></label>
     </div>
     <p class="costo" id="costo">Ingresso gratuito</p>
+    <div class="labs" id="camere" hidden>
+      <label><input type="radio" name="camera" value="Camera quadrupla" checked><span>Camera quadrupla</span></label>
+      <label><input type="radio" name="camera" value="Camera tripla"><span>Camera tripla</span></label>
+      <label><input type="radio" name="camera" value="Camera doppia"><span>Camera doppia</span></label>
+    </div>
     <div class="labs" id="labs" hidden>
       <label><input type="radio" name="labtipo" value="tutti" checked><span>Tutti i laboratori · 30 €</span></label>
       <label><input type="radio" name="labtipo" value="singoli"><span>Scelgo i singoli laboratori · 7 € ciascuno</span></label>
@@ -611,23 +623,24 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   function chiudi(){vp.hidden=true;vi.hidden=true;document.body.style.overflow=''}
   // il modulo salva con FMPrenotaFestival (Company brain, comune/fm-prenota-festival.js, SQL 130);
   // il workshop porta al pagamento di 50 €, il resto per ora si prenota con i dati
-  var VOCE={presenza:'ci_saro',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori:'laboratori_bambini'};
-  var NOMI={presenza:'Ci sarò',pranzo:'Pranzo',cena:'Cena',workshop:'Workshop',laboratori:'Laboratori didattici'};
+  var VOCE={presenza:'ci_saro',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori:'laboratori_bambini',alloggio:'alloggio'};
+  var NOMI={presenza:'Ci sarò',pranzo:'Pranzo',cena:'Cena',workshop:'Workshop',laboratori:'Laboratori didattici',alloggio:'Alloggio a Narbolia'};
   var modulo=document.getElementById('modulo'),workshop=document.getElementById('p-workshop'),invia=document.getElementById('invia'),costo=document.getElementById('costo');
   function scelta(){var c=modulo.querySelector('input[name=cosa]:checked');return c?c.value:'presenza'}
   var labs=document.getElementById('labs'),singoli=document.getElementById('singoli');
   function labScelti(){return [].map.call(modulo.querySelectorAll('input[name=lab]:checked'),function(i){return i.value})}
   function aggiorna(){
     var w=workshop.checked,l=scelta()==='laboratori',tutti=(modulo.querySelector('input[name=labtipo]:checked')||{}).value!=='singoli';
-    labs.hidden=!l;singoli.hidden=!l||tutti;
+    labs.hidden=!l;singoli.hidden=!l||tutti;var al=scelta()==='alloggio';document.getElementById('camere').hidden=!al;
     var paga=w&&window.FMPrenotaFestival&&FMPrenotaFestival.LINK_STRIPE.workshop;invia.textContent=paga?'Prenota e paga 50 €':'Prenota';
     /* pranzo e cena: i costi li dà Gab; finché non ci sono la riga non si vede */
-    var k=scelta();costo.hidden=!(w||l||k==='presenza');
+    var k=scelta();costo.hidden=!(w||l||al||k==='presenza');
     if(w)costo.innerHTML='Workshop: <s>80 €</s> · 50 € per il Festival';
+    else if(al)costo.textContent='Prezzo speciale per il Festival: 25 € a persona';
     else if(l)costo.textContent=tutti?'Tutti i laboratori · 30 € · si paga sul posto':'7 € ciascun laboratorio · si paga sul posto';
     else costo.textContent='Ingresso gratuito';
   }
-  modulo.querySelectorAll('input[name=labtipo],input[name=lab]').forEach(function(r){r.addEventListener('change',aggiorna)});
+  modulo.querySelectorAll('input[name=labtipo],input[name=lab],input[name=camera]').forEach(function(r){r.addEventListener('change',aggiorna)});
   modulo.persone.addEventListener('input',aggiorna);
   modulo.querySelectorAll('input[name=cosa]').forEach(function(r){r.addEventListener('change',aggiorna)});
   document.querySelectorAll('[data-prenota]').forEach(function(b){b.addEventListener('click',function(){
@@ -641,6 +654,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
     if(k==='laboratori'){var tl=(modulo.querySelector('input[name=labtipo]:checked')||{}).value!=='singoli',ls=labScelti();
       if(!tl&&!ls.length){esito.textContent='Scegli almeno un laboratorio.';esito.hidden=false;return}
       d.dettaglio=tl?'Tutti i laboratori':'Singoli: '+ls.join(', ')}
+    if(k==='alloggio')d.dettaglio=(modulo.querySelector('input[name=camera]:checked')||{}).value||'';
     var F=window.FMPrenotaFestival;
     if(!F){esito.textContent='Bozza: qui la prenotazione viene salvata'+(d.dettaglio?' ('+d.dettaglio+')':'')+(k==='workshop'?' e si passa al pagamento':'')+'.';esito.hidden=false;return}
     invia.disabled=true;
@@ -678,8 +692,12 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
       e.isIntersecting?v.play().catch(function(){}):v.pause();
     })},{threshold:.25}).observe(v);
   });
+  // alloggio: il tasto compare quando il database accetta la voce (SQL 133); la prova ha il nome vuoto, quindi non salva niente
+  try{fetch('https://gfnveesogkfvkrdudpfg.supabase.co/rest/v1/rpc/fm_prenota_festival',{method:'POST',headers:{'apikey':'sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU','Authorization':'Bearer sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU','Content-Type':'application/json'},
+    body:JSON.stringify({p_cosa:'alloggio',p_nome:'',p_cognome:'',p_telefono:'',p_email:''})}).then(function(r){return r.json()}).then(function(j){
+      if(j&&j.errore&&!/Scegli cosa/.test(j.errore))document.querySelectorAll('[data-alloggio]').forEach(function(e){e.hidden=false});},function(){});}catch(e){}
   // dalla newsletter: ?presenza=1 o ?prenota=<voce> apre il modulo con la voce scelta; ?pagato=1 al ritorno da Stripe
-  var DA={ci_saro:'presenza',presenza:'presenza',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori_bambini:'laboratori',laboratori:'laboratori'};
+  var DA={ci_saro:'presenza',presenza:'presenza',pranzo:'pranzo',cena:'cena',workshop:'workshop',laboratori_bambini:'laboratori',laboratori:'laboratori',alloggio:'alloggio'};
   var v=q.get('presenza')==='1'?'presenza':DA[q.get('prenota')||''];
   if(v){document.getElementById('p-'+v).checked=true;esito.hidden=true;aggiorna();apri(vp)}
   if(q.get('pagato')==='1'){esito.textContent='Pagamento ricevuto. Grazie!';esito.hidden=false;apri(vp)}
