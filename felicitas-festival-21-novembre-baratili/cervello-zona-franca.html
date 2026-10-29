@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cervello · Zona Franca Extradoganale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;600;700&family=Josefin+Sans:wght@600&display=swap">
+<style>
+/* Lettore a pagine: indice all'inizio, un documento per schermata, avanti e indietro col tasto o col dito. Fondo blu cosmo, testo dei documenti su foglio chiaro. */
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9c6d8;--riga:rgba(212,175,106,.3);--foglio:#fbf8f1;--inchiostro:#1b2347;--zf:#9b7ff0;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,var(--c1),var(--c2) 40%,var(--c3));background-color:var(--c3);min-height:100svh;color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;font-size:20px;line-height:1.55}
+a{color:inherit}
+.testa{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(10,20,48,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--riga)}
+.testa .torna{text-decoration:none;font-family:'Josefin Sans',sans-serif;font-size:17px;color:var(--oro);white-space:nowrap}
+.testa .titolo{flex:1;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px;line-height:1.1;text-align:center}
+.testa button{font:600 16px 'Josefin Sans',sans-serif;color:var(--c3);background:var(--oro);border:0;border-radius:999px;padding:10px 16px;cursor:pointer}
+main{max-width:820px;margin:0 auto;padding:22px 16px 120px}
+.apertura .etichetta{font-family:'Josefin Sans',sans-serif;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--zf)}
+.apertura h1{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(38px,9vw,60px);line-height:1.02;margin:8px 0 10px}
+.apertura p{margin:0 0 8px;color:var(--fioco)}
+.indice{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.indice a{display:flex;gap:16px;align-items:flex-start;text-decoration:none;padding:16px 18px;border-radius:18px;background:var(--carta);border:2px solid color-mix(in srgb,var(--zf) 45%,transparent)}
+.indice a:hover{border-color:var(--zf)}
+.indice .n{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--zf);color:var(--c3);font-weight:700}
+.indice b{display:block;font-weight:600;line-height:1.3}
+.indice small{display:block;font-size:17px;color:var(--fioco);margin-top:4px;line-height:1.35}
+.evento{margin:18px 0 8px;padding:18px 20px;border-radius:18px;background:var(--carta);border:2px solid var(--oro);display:flex;flex-direction:column;gap:10px}
+.evento b{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--oro)}
+.evento a{align-self:flex-start;margin-top:4px;padding:11px 20px;border-radius:999px;background:var(--oro);color:var(--c3);text-decoration:none;font:600 17px 'Josefin Sans',sans-serif}
+.sez{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:34px;margin:34px 0 6px}
+.originale{display:inline-block;margin-top:26px;padding:14px 22px;border:2px solid var(--oro);border-radius:999px;text-decoration:none;font:600 18px 'Josefin Sans',sans-serif;color:var(--oro)}
+.doc .num{font-family:'Josefin Sans',sans-serif;font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--zf)}
+.doc h2{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:clamp(32px,7.5vw,48px);line-height:1.05;margin:8px 0 6px}
+.doc .sotto{margin:0 0 18px;color:var(--fioco)}
+.foglio{background:var(--foglio);color:var(--inchiostro);border-radius:18px;padding:24px 20px 28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.foglio p{margin:0 0 14px;overflow-wrap:anywhere}
+.foglio h3{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:700;margin:26px 0 8px;color:var(--c1)}
+.foglio .nota{font-size:16px;color:#5b6283;font-style:italic;border-bottom:1px solid #e3dccb;padding-bottom:10px}
+.piede{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(10,20,48,.94);border-top:1px solid var(--riga)}
+.piede button{font:600 17px 'Josefin Sans',sans-serif;color:var(--avorio);background:transparent;border:2px solid var(--oro);border-radius:999px;padding:11px 16px;cursor:pointer;min-width:120px}
+.piede[hidden]{display:none}
+.piede button:disabled{opacity:.35;cursor:default}
+.piede .dove{font-size:17px;color:var(--fioco);text-align:center}
+@media (min-width:700px){.foglio{padding:40px 48px 44px}.testa .titolo{font-size:24px}}
+</style>
+</head>
+<body>
+<header class="testa">
+  <a class="torna" href="index.html#scopri">‹ Torna all'evento</a>
+  <div class="titolo">Cervello · Zona Franca</div>
+  <button type="button" id="apri-indice">Indice</button>
+</header>
+<main>
+  <section class="apertura" id="indice">
+    <div class="etichetta">Cervello FelicitasMundi</div>
+    <h1>Documenti Zona Franca Extradoganale</h1>
+    <div class="evento"><b>Al FELICITAS FESTIVAL · 21 novembre · 17:00 · Centro Sociale</b><span>Zona Franca Extradoganale, un diritto negato da 30 anni. Interverranno la dottoressa Maria Rosaria Randaccio, che parlerà dei diritti dei sardi a usufruire della Zona Franca Extradoganale, e Mariano Carta, presidente dell'Associazione Zona Franca Eleonora d'Arborea Oristano, che parlerà dello scopo dell'associazione. Presenta Marco Caddeo.</span><span>Info point Zona Franca gestito da Sandro Masala, imprenditore che già opera in fiscalità privilegiata.</span><a href="index.html#scopri">Torna all'evento</a></div>
+    <h2 class="sez">I documenti</h2>
+    <p>Tocca un documento per leggerlo, poi sfoglia con le frecce o scorrendo col dito.</p>
+    <ol class="indice">
+<li><a href="#d1" data-vai="1"><span class="n">1</span><span><b>Decreto legislativo n. 75 del 1998</b><small>Norme di attuazione dello statuto speciale della Regione Sardegna concernenti l&#x27;istituzione di zone franche</small></span></a></li>
+<li><a href="#d2" data-vai="2"><span class="n">2</span><span><b>Comunicazione attivazione della zona franca nel territorio dell&#x27;isola di Sardegna</b><small>Regione Autonoma della Sardegna, Il Presidente, 8 febbraio 2013</small></span></a></li>
+<li><a href="#d3" data-vai="3"><span class="n">3</span><span><b>Legge regionale 25 luglio 2008, n. 10</b><small>Riordino delle funzioni in materia di aree industriali</small></span></a></li>
+<li><a href="#d4" data-vai="4"><span class="n">4</span><span><b>Delibera n. 9/7 del 12.2.2013</b><small>Giunta regionale: attivazione della zona franca nel territorio dell&#x27;isola di Sardegna e le sue isole minori circostanti</small></span></a></li>
+<li><a href="#d5" data-vai="5"><span class="n">5</span><span><b>Delibera n. 8/2 del 7.2.2013</b><small>Giunta regionale della Sardegna</small></span></a></li>
+<li><a href="#d6" data-vai="6"><span class="n">6</span><span><b>Delibera n. 21/3 del 15.4.2016</b><small>Giunta regionale della Sardegna</small></span></a></li>
+<li><a href="#d7" data-vai="7"><span class="n">7</span><span><b>Trasformazione della società di gestione zona franca da Cagliari Free Zone a Sardegna Free Zone</b><small>Legge regionale n. 20 del 2 agosto 2013</small></span></a></li>
+<li><a href="#d8" data-vai="8"><span class="n">8</span><span><b>Richiesta detassazione stipendio</b><small>Risposta della Ragioneria Territoriale dello Stato di Nuoro, 29 novembre 2023</small></span></a></li>
+<li><a href="#d9" data-vai="9"><span class="n">9</span><span><b>Delibera del Consiglio comunale di Oristano del 21.12.2012</b><small>Deliberazione n. 74</small></span></a></li>
+<li><a href="#d10" data-vai="10"><span class="n">10</span><span><b>Delibere</b></span></a></li>
+<li><a href="#d11" data-vai="11"><span class="n">11</span><span><b>Articolo 54 della Costituzione italiana</b></span></a></li>
+<li><a href="#d12" data-vai="12"><span class="n">12</span><span><b>Modulo richiesta cancellazione cartelle esattoriali</b><small>Proposto dalla dott.ssa Maria Rosaria Randaccio, tributarista</small></span></a></li>
+    </ol>
+    <a class="originale" href="indice-documenti-zona-franca-sardegna.pdf" target="_blank" rel="noopener">Scarica il PDF originale</a>
+  </section>
+<article class="doc" id="d1" hidden><div class="num">Documento 1 di 12</div><h2>Decreto legislativo n. 75 del 1998</h2><p class=sotto>Norme di attuazione dello statuto speciale della Regione Sardegna concernenti l&#x27;istituzione di zone franche</p><div class="foglio"><p>DECRETO LEGISLATIVO 10 marzo 1998 , n. 75 Norme di attuazione dello statuto speciale della regione Sardegna concernenti l&#x27;istituzione di zone franche.</p>
+<p>Vigente al : 12-8-2023</p>
+<p>IL PRESIDENTE DELLA REPUBBLICA</p>
+<p>Visto l&#x27;articolo 87, comma quinto, della Costituzione;</p>
+<p>Vista la legge costituzionale 26 febbraio 1948, n. 3, che ha approvato lo statuto speciale della regione autonoma della Sardegna;</p>
+<p>Vista la proposta della commissione paritetica prevista dall&#x27;articolo 56, primo comma, della legge costituzionale 26 febbraio 1948, n. 3, nonche&#x27; il parere del consiglio regionale della Sardegna;</p>
+<p>Vista la deliberazione del Consiglio dei Ministri, adottata nella riunione del 4 marzo 1998;</p>
+<p>Sulla proposta del Presidente del Consiglio dei Ministri e del Ministro per la funzione pubblica e gli affari regionali, di concerto con i Ministri del tesoro, del bilancio e della programmazione economica e delle finanze;</p>
+<p>E m a n a il seguente decreto legislativo:</p>
+<h3>Art. 1.</h3>
+<p>1. In attuazione dell&#x27;articolo 12 dello statuto speciale per la regione Sardegna approvato con legge costituzionale 26 febbraio 1948, n. 3, e successive modificazioni, sono istituite nella regione zone franche, secondo le disposizioni di cui ai regolamenti CEE n.</p>
+<p>2913/1992 (Consiglio) e n. 2454/1993 (Commissione), nei porti di Cagliari, Olbia, Oristano, Porto Torres, Portovesme, Arbatax ed in altri porti ed aree industriali ad essi funzionalmente collegate o collegabili.</p>
+<p>2. La delimitazione territoriale delle zone franche e la determinazione di ogni altra disposizione necessaria per la loro operativita&#x27; viene effettuata, su proposta della regione, con separati decreti del Presidente del Consiglio dei Ministri.</p>
+<p>3. In sede di prima applicazione la delimitazione territoriale del porto di Cagliari e&#x27; quella di cui all&#x27;allegato dell&#x27;atto aggiuntivo</p>
+<p>in data 13 febbraio 1997, dell&#x27;accordo di programma dell&#x27;8 agosto 1995 sottoscritto con il Ministero dei trasporti.</p>
+<p>Il presente decreto, munito del sigillo dello Stato, sara&#x27; inserito nella Raccolta ufficiale degli atti normativi della Repubblica italiana. E&#x27; fatto obbligo a chiunque spetti di osservarlo e di farlo osservare.</p>
+<p>Dato a Roma, addi&#x27; 10 marzo 1998 SCALFARO Prodi, Presidente del Consiglio dei Ministri Bassanini, Ministro per la funzione pubblica e gli affari regionali Ciampi, Ministro del tesoro, del bilancio e della programmazione economica Visco, Ministro delle finanze</p>
+<p>Visto, il Guardasigilli: Flick</p></div></article>
+<article class="doc" id="d2" hidden><div class="num">Documento 2 di 12</div><h2>Comunicazione attivazione della zona franca nel territorio dell&#x27;isola di Sardegna</h2><p class=sotto>Regione Autonoma della Sardegna, Il Presidente, 8 febbraio 2013</p><div class="foglio"><p class="nota">Trascrizione dalla copia scansionata.</p><p>REGIONE AUTÒNOMA DE SARDIGNA</p>
+<p>REGIONE AUTONOMA DELLA SARDEGNA</p>
+<p>IL PRESIDENTE</p>
+<p>Regione Autonoma della Sardegna, Ufficio di Gabinetto della Presidenza. Prot. Uscita del 08/02/2013 nr. 0000909. Classifica X.4.6. Fasc. 1</p>
+<p>Presidente della Commissione Europea</p>
+<p>Presidente del Parlamento Europeo</p>
+<p>Presidente del Consiglio dei Ministri</p>
+<p>Ministro dello sviluppo economico</p>
+<p>Autorità doganali</p>
+<p>Oggetto: Comunicazione attivazione della zona franca nel territorio dell&#x27;Isola di Sardegna.</p>
+<p>Gentilissimi,</p>
+<p>con la presente, richiamato l&#x27;art. 174 del Trattato di Lisbona e con riferimento a quanto sancito dal &quot;nuovo codice doganale comunitario&quot; n. 450/2008 che, ai sensi dell&#x27;art. 188, sarà definitivamente operativo entro il termine perentorio del 24 giugno 2013, si comunica che la Regione Autonoma della Sardegna con deliberazione del 7 febbraio u.s. ha stabilito l&#x27;attivazione di un regime doganale di zona franca esteso a tutto il territorio regionale con perimetrazione coincidente con i confini naturali dell&#x27;Isola di Sardegna e delle sue Isole minori.</p>
+<p>Si chiede pertanto di procedere alla modifica dell&#x27;art. 3 del Regolamento CE n. 450/2008, prevedendo che fra i territori extra-doganali dell&#x27;Italia sia indicato anche &quot;il territorio dell&#x27;Isola della Sardegna e le sue isole circostanti&quot;, in quanto i suddetti territori risultano giuridicamente equiparati a quelli definiti extra-doganali per l&#x27;Italia dallo stesso Regolamento CE n. 450/2008.</p>
+<p>Di tale deliberazione si procederà a dare informativa anche ai competenti uffici del Governo italiano ed alle competenti Autorità doganali per i conseguenti adempimenti di competenza ed attuativi del regime speciale richiesto.</p>
+<p>Con i più cordiali saluti.</p>
+<p>Ugo Cappellacci</p>
+<p>viale Trento 69, 09123 Cagliari</p></div></article>
+<article class="doc" id="d3" hidden><div class="num">Documento 3 di 12</div><h2>Legge regionale 25 luglio 2008, n. 10</h2><p class=sotto>Riordino delle funzioni in materia di aree industriali</p><div class="foglio"><p class="nota">Trascrizione dalla copia scansionata.</p><p>REGIONE AUTONOMA DE SARDIGNA REGIONE AUTONOMA DELLA SARDEGNA</p>
+<p>Legge Regionale 25 luglio 2008, n.10</p>
+<p>Riordino delle funzioni in materia di aree industriali.</p>
+<p>LEGGE REGIONALE 25 luglio 2008, n.10 Riordino delle funzioni in materia di aree industriali.</p>
+<p>Fonte: Supplemento Ordinario n. 4 al BOLLETTINO UFFICIALE DELLA REGIONE SARDEGNA N. 24, del 28 luglio 2008</p>
+<p>Il Consiglio Regionale</p>
+<p>ha approvato</p>
+<p>Il Presidente della Regione promulga</p>
+<p>la seguente legge:</p>
+<h3>Art. 1 Programmazione dello sviluppo economico territoriale</h3>
+<p>1. La Regione, nell&#x27;esercizio delle proprie funzioni in materia di programmazione dello sviluppo economico territoriale, provvede, con deliberazione della Giunta regionale, previo parere della Commissione consiliare competente, SU proposta dell&#x27;Assessore regionale dell&#x27;industria, a:</p>
+<p>a) rideterminare, attraverso la riduzione o l&#x27;ampliamento, le aree industriali e le aree ecologicamente attrezzate sul territorio regionale, assicurando la partecipazione degli enti locali e dei soggetti interessati;</p>
+<p>b) assicurare il coordinamento degli interventi per la realizzazione, l&#x27;ampliamento e il completamento delle aree ecologicamente attrezzate;</p>
+<p>c) promuovere piani e progetti di sviluppo generale, con particolare riguardo alla riqualificazione ambientale e al riutilizzo delle aree produttive eventualmente dismesse;</p>
+<p>d) promuovere l&#x27;attuazione delle disposizioni di cui agli articoli 1 e 2 del decreto legislativo 10 marzo 1998, n. 75 (Norma di attuazione dello Statuto speciale della Regione autonoma della Sardegna concernente l&#x27;istituzione delle zone franche), attivando idonea procedura per l&#x27;istituzione di una zona franca in ciascuno degli ambiti previsti dal predetto decreto legislativo e promuovere analoga iniziativa perché tali disposizioni siano estese per l&#x27;istituzione di una zona franca nelle aree di competenza di tutti i consorzi industriali provinciali di cui all&#x27;articolo 3.</p>
+<p>2. La Giunta regionale esercita il potere sostitutivo in caso di inadempienze e di inerzie degli enti locali e dei consorzi, relative agli adempimenti di cui alla presente legge, dalle quali possa derivare un grave pregiudizio agli interessi affidati alla cura della Regione. Il potere sostitutivo regionale è esercitato secondo i principi e con le modalità di cui all&#x27;articolo 9 della legge regionale 12 giugno</p>
+<p>2006. n. 9 (Conferimento di funzioni e compiti agli enti locali), e alla presente legge.</p>
+<p>3. Spettano alle province le funzioni di programmazione e di pianificazione per gli ambiti sovracomunali.</p>
+<p>4. Le province esercitano le competenze loro spettanti in coerenza con gli indirizzi emanati dalla Regione e d&#x27;intesa con i comuni competenti per territorio, nel quadro degli strumenti di programmazione economica e di politica industriale provinciale.</p>
+<h3>Art. 2</h3>
+<p>Trasferimento di funzioni agli enti locali</p>
+<p>1. in coerenza con la programmazione regionale e provinciale, nelle aree industriali di dimensione comunale spettano ai comuni le funzioni amministrative relative a:</p>
+<p>a) la progettazione e la realizzazione di opere di urbanizzazione, infrastrutture e servizi, nonché di spazi pubblici destinati ad attività collettive;</p>
+<p>b) l&#x27;acquisizione di aree, anche mediante procedure espropriative, la vendita, l&#x27;assegnazione e la concessione alle imprese di aree attrezzate per insediamenti produttivi;</p>
+<p>c) la realizzazione e la gestione di impianti comuni per la fornitura di servizi;</p>
+<p>d) la determinazione e la riscossione dei corrispettivi dovuti per i servizi di manutenzione delle</p>
+<p>opere e di gestione degli impianti;</p>
+<p>e) la realizzazione e il recupero dei rustici e immobili industriali, la retrocessione di aree non</p>
+<p>utilizzate per nuove destinazioni a fini produttivi e per l&#x27;attuazione dei programmi di reindustrializzazione;</p>
+<p>f) il riacquisto delle aree e degli stabilimenti industriali o artigianali, anche utilizzando le procedure</p>
+<p>e le agevolazioni previste dall&#x27;articolo 63 della legge 23 dicembre 1998, n. 448 (Misure di finanza - pubblica per la stabilizzazione e lo sviluppo), nel rispetto dei tempi previsti dalla legge o, per tempi inferiori, allorquando non si possano realizzare i progetti per i quali sono state assegnate le aree.</p>
+<p>2.I comuni, dalla data di entrata in vigore della presente legge, esercitano le competenze loro spettanti ai sensi del presente articolo nel quadro degli strumenti di programmazione economica</p>
+<p>e di politica industriale regionale e provinciale e in coerenza con i rispettivi piani urbanistici</p>
+<p>comunali,</p>
+<p>3. Le funzioni di cui al presente articolo, nelle aree a dimensione sovracomunale, sono esercitate</p>
+<p>dai consorzi industriali di cui all&#x27;articolo 3.</p>
+<p>4. I comuni facenti parte degli enti soppressi di cui alla tabella B possono entro sessanta giorni deliberare che le funzioni loro conferite dal comma 1 siano svolte dai consorzi industriali di cui all&#x27;articolo 3.</p>
+<p>5. I comuni di Macomer e Borore fanno parte del Consorzio industriale provinciale di Nuoro dalla</p>
+<p>data della sua attivazione.</p>
+<p>6. Dalla data di approvazione della presente legge i Comuni di Isili e Suni non fanno più parte del Consorzio per l&#x27;area industriale della Sardegna centrale di Nuoro. Gli stessi, entro i termini di cui al comma 4, possono deliberare che le funzioni loro conferite dal comma 1 siano svolte dai consorzi industriali provinciali competenti per territorio.</p>
+<h3>Art. 3</h3>
+<p>Funzioni dei consorzi industriali provinciali</p>
+<p>1. In ciascun ambito provinciale la gestione delle aree industriali aventi dimensione sovracomunale, di cui alla tabella A, è affidata ad un consorzio costituito ai sensi dell&#x27;articolo 31 del decreto legislativo 18 agosto 2000, n. 267 (Testo unico delle leggi sull&#x27;ordinamento degli enti locali) fra la provincia e i comuni nel cui territorio insistono le aree interessate.</p>
+<p>2. I consorzi di cui al comma 1 vengono denominati &quot;Consorzi industriali provinciali&quot;.</p>
+<p>3. I consorzi industriali provinciali esercitano nelle aree ad essi affidate le funzioni di cui all&#x27;articolo 2 e tutte le altre funzioni previste dalla legge finalizzate a favorire lo sviluppo e la valorizzazione delle imprese industriali.</p>
+<p>4. I consorzi industriali esercitano le proprie funzioni in coerenza con la programmazione regionale e in un rapporto di collaborazione con gli organismi operativi regionali per le politiche industriali.</p>
+<p>5. Nelle aree gestite dai consorzi i singoli comuni che fanno parte del consorzio ai sensi del comma 1 e quelli eventualmente ammessi ai sensi dell&#x27;articolo 2, commi 4 e 5, continuano ad esercitare le funzioni di pianificazione urbanistica ciascuno per il proprio territorio. Gli statuti disciplinano le modalità con cui il consorzio propone ai singoli comuni adeguamenti degli strumenti urbanistici al fine di coordinarli e renderli coerenti con le finalità del consorzio.</p>
+<p>6. Ai sensi dell&#x27;articolo 172, comma 6, del decreto legislativo 3 aprile 2006, n. 152 (Norme in materia ambientale), gli impianti acquedottistici, fognari e di depurazione gestiti dagli enti soppressi, ovvero da altri consorzi o enti pubblici, sono trasferiti in concessione d&#x27;uso al gestore</p>
+<p>del servizio idrico integrato dell&#x27;Ambito territoriale ottimale unico della Sardegna.</p>
+<p>7. Con decreto del Presidente della Regione, previa deliberazione della Giunta regionale, su proposta congiunta degli Assessori dell&#x27;industria, dei lavori pubblici e della difesa dell&#x27;ambiente, è approvato il piano dei trasferimenti di cui al comma 6.</p>
+<p>8. La conduzione degli impianti per la gestione dei rifiuti ed i servizi relativi sono disciplinati dalla normativa regionale da emanare in attuazione dell&#x27;articolo 199 del decreto legislativo n. 152 del 2006.</p>
+<p>9. Nella fase transitoria e sino alla emanazione della specifica normativa regionale le funzioni di conduzione degli impianti per la gestione dei rifiuti ed i servizi relativi sono assegnate ai nuovi consorzi industriali provinciali.</p>
+<h3>Art. 4</h3>
+<p>Organi dei consorzi industriali provinciali</p>
+<p>1. Sono organi del consorzio industriale provinciale:</p>
+<p>l&#x27;assemblea generale, il consiglio di amministrazione, il presidente e il collegio dei revisori dei conti.</p>
+<p>2. L&#x27;assemblea generale è composta dal sindaco di ciascun comune facente parte del consorzio o da un suo delegato, dal presidente della provincia nel cui territorio si trova il consorzio o da un suo delegato e da un rappresentante nominato dalla provincia fra gli imprenditori operanti nell&#x27;ambito provinciale sulla base di una terna di nomi proposta dalla Camera di commercio competente per territorio.</p>
+<p>3. Il consiglio di amministrazione di ciascun consorzio è composto da un massimo di cinque membri eletti fra componenti dell&#x27;assemblea generale, di cui al comma 2, compreso il Presidente:</p>
+<p>il rappresentante della provincia, il rappresentante degli imprenditori ed un massimo di tre componenti dei comuni le cui aree ricadono nel consorzio.</p>
+<p>4. Il consiglio di amministrazione dei consorzi costituiti sino a cinque soggetti coincide con l&#x27;assemblea generale.</p>
+<p>5. Il presidente dei consorzi industriali è eletto dall&#x27;assemblea generale tra i suoi componenti, con le modalità previste dallo statuto.</p>
+<p>6. Il collegio dei revisori dei conti è eletto dall&#x27;assemblea.</p>
+<p>7. I consorzi industriali provinciali deliberano alla chiusura dell&#x27;esercizio il pareggio di bilancio della gestione del consorzio stesso ponendo a carico dei consorziati il ripiano delle eventuali perdite.</p>
+<p>8. I consorzi industriali provinciali non possono costituire nuove società o acquistare partecipazioni, anche di minoranza, in società di ogni tipo, se non nei casi previsti dalla legge.</p>
+<p>9. Al Presidente del consorzio industriale provinciale è attribuita un&#x27;indennità non superiore al cinquanta per cento di quella prevista per il sindaco del comune capoluogo. Ai componenti il consiglio di amministrazione è attribuito un gettone di presenza di importo non superiore a quello riconosciuto ai componenti del consiglio provinciale. In nessun caso l&#x27;ammontare percepito nell&#x27;ambito di un mese da un componente del consiglio di amministrazione può superare un quarto dell&#x27;indennità massima prevista per il presidente del consorzio.</p>
+<h3>Art. 5</h3>
+<p>Disposizioni per l&#x27;attivazione</p>
+<p>dei consorzi industriali provinciali</p>
+<p>1. I consorzi industriali provinciali subentrano ai consorzi di cui alla tabella A nella titolarità dei beni strumentali all&#x27;esercizio delle funzioni di pubblica utilità e quelle previste dai precedenti articoli 2 e 3, Ad essi è inoltre attribuita la titolarità dei beni derivanti dal completamento delle procedure di liquidazione adottate ai sensi della presente legge nel rispetto delle disposizioni dell&#x27;articolo 36 dello statuto degli attuali consorzi industriali. Gli enti di cui all&#x27;articolo 3 svolgono le funzioni e le attività loro conferite a partire dalla data di insediamento dell&#x27;assemblea generale.</p>
+<p>2. In sede di prima applicazione della normativa, il presidente della provincia competente per territorio, entro novanta giorni dall&#x27;entrata in vigore della presente legge, convoca e presiede l&#x27;assemblea generale per la elezione degli organi previsti all&#x27;articolo 4.</p>
+<p>3. In sede di prima applicazione il presidente e il consiglio di amministrazione sono eletti ai sensi</p>
+<p>dell&#x27;articolo 20 dello statuto tipo dei consorzi per lo sviluppo industriale della Sardegna, approvato con decreto dell&#x27;Assessore dell&#x27;industria n. 115/1998, per quanto compatibile.</p>
+<p>4. Gli organi dei consorzi di cui alla tabella A, in carica alla data di entrata in vigore della presente legge, operano per la sola ordinaria amministrazione sino alla costituzione dei nuovi organi e in tale momento cessano automaticamente dalla carica.</p>
+<p>5. Entro centoventi giorni dall&#x27;entrata in vigore della presente legge i consorzi industriali provinciali, con deliberazione dell&#x27;assemblea generale, di cui al comma 2 dell&#x27;articolo 4, adottano lo statuto consortile,</p>
+<p>6. Lo statuto è adottato sulla base di uno schematico generale predisposto con deliberazione della Giunta regionale su proposta dell&#x27;Assessore dell&#x27;industria, previo parere della Commissione consiliare competente. Lo statuto disciplina, in conformità con la legislazione in materia di enti locali e nel rispetto delle previsioni della presente legge, le modalità di funzionamento di ciascun organo consortile e le specifiche attribuzioni oltre a quelle di legge, nonché le modalità di nomina e le attribuzioni del direttore generale del consorzio.</p>
+<p>7. Entro centottanta giorni dall&#x27;entrata in vigore della presente legge i consigli degli enti locali costituenti i consorzi industriali provinciali, con la deliberazione di cui all&#x27;articolo 31, comma 2, del decreto legislativo n. 267 del 2000, approvano lo statuto consortile, proposto dai consorzi industriali provinciali,</p>
+<p>8. Dalla data di insediamento degli organi previsti all&#x27;articolo 4 fino all&#x27;esecutività di tutte le delibere di adozione dello statuto restano in vigore quelli precedenti in quanto compatibili con le disposizioni della presente legge e di quelle degli articoli 31 e 114 del decreto legislativo n. 267 del 2000.</p>
+<p>9. Al fine di procedere alla liquidazione delle quote degli enti e dei soggetti pubblici e privati non facenti parte dei nuovi consorzi industriali e dei beni dei consorzi non aventi finalità pubblica, nonché al riordino ed alla razionalizzazione delle società partecipate dai consorzi, il Presidente della Regione nomina, con proprio decreto, un collegio di liquidatori, uno dei quali indicato dalla Regione, uno indicato dalla provincia ed uno indicato dal nuovo consorzio in rappresentanza dei comuni individuato tra il personale dipendente delle relative amministrazioni. La Giunta regionale, con propria deliberazione, su proposta dell&#x27;Assessore dell&#x27;industria, previo parere della Commissione consiliare competente, entro il trentesimo giorno dall&#x27;entrata in vigore della presente legge, impartisce al collegio dei liquidatori apposite direttive sui tempi e le modalità della procedura liquidatoria. Il collegio dei liquidatori provvede, entro novanta giorni dall&#x27;insediamento del nuovo consorzio, alla presentazione di un piano di liquidazione alla Giunta regionale per la sua approvazione. Il piano di liquidazione deve essere attuato entro i successivi novanta giorni,</p>
+<h3>Art. 6</h3>
+<p>Personale degli enti</p>
+<p>1. Il personale in servizio con rapporto di lavoro a tempo indeterminato alla data del 20 dicembre 2007 presso gli enti soppressi ai sensi della presente legge è trasferito agli enti che subentrano nelle medesime funzioni, con i criteri e le modalità di cui ai commi successivi.</p>
+<p>2. Al personale di cui al comma 1 si applica il contratto collettivo di lavoro previsto per gli enti locali. L&#x27;inquadramento avviene con le garanzie dell&#x27;articolo 2112 del Codice civile facendo riferimento alla posizione giuridica ricoperta nell&#x27;ente di provenienza.</p>
+<p>3. Al personale di cui al comma 1 viene garantito, con esclusione del personale con qualifica dirigenziale, mediante accordo quadro promosso dall&#x27;Assessorato regionale dell&#x27;industria con le organizzazioni sindacali, un trattamento economico non inferiore a quello corrisposto dal consorzio all&#x27;atto del trasferimento. L&#x27;eventuale differenza fra il trattamento economico in godimento e quello spettante per effetto del nuovo inquadramento è conservata con assegno personale non riassorbibile.</p>
+<p>4. Al personale con qualifica dirigenziale, qualora non acconsentisse all&#x27;inquadramento di cui al comma 2, si applicano le disposizioni del contratto collettivo di lavoro di categoria relative ai casi di ristrutturazione e organizzazione.</p>
+<p>5. Al fine di favorire l&#x27;esodo, il personale con qualifica dirigenziale che abbia maturato almeno trentacinque anni di servizio utili agli effetti pensionistici, può richiedere ai consorzi provinciali in alternativa all&#x27;indennità supplementare di fine rapporto, il versamento dei contributi assicurativi</p>
+<p>dovuti agli enti previdenziali per gli anni intercorrenti fino al compimento del quarantesimo anno utile per il pensionamento. 1 contributi saranno commisurati all&#x27;ultimo trattamento economico in godimento del dirigente. Al personale con qualifica dirigenziale che abbia maturato i requisiti per il pensionamento, si possono applicare le disposizioni del contratto collettivo nazionale di lavoro di categoria relative alle ipotesi di ristrutturazione e organizzazione dei consorzi compresi gli istituti di incentivazione all&#x27;esodo.</p>
+<p>6. Al personale non dirigente che abbia maturato i requisiti di legge per il pensionamento di anzianità alla data del trasferimento e chieda la risoluzione del rapporto di lavoro è corrisposta, a titolo di incentivazione, una indennità supplementare pari a tre mensilità della retribuzione fissa in godimento per ogni anno derivante dalla differenza tra sessantacinque anni e l&#x27;età anagrafica espressa in anni, posseduta alla cessazione del rapporto di lavoro, per un massimo di quattro anni,</p>
+<p>7. Al personale delle società controllate dagli enti consortili esistenti e del soppresso Consorzio industriale di Macomer, in servizio con rapporto di lavoro a tempo indeterminato alla data di entrata in vigore della presente legge, è garantita la continuità del rapporto di lavoro presso le stesse società. In caso di cessione, liquidazione o ristrutturazione delle suddette società ai sensi dell&#x27;articolo 5 si fa riferimento alle garanzie previste dall&#x27;articolo 2112 del Codice civile.</p>
+<p>8. Il personale degli enti di cui alla tabella B è trasferito:</p>
+<p>a) prioritariamente al comune o al nuovo consorzio provinciale di cui all&#x27;articolo 3 che subentra nelle funzioni dell&#x27;ente soppresso;</p>
+<p>b) in subordine alle province.</p>
+<p>9. Il personale degli enti di cui alla tabella A è trasferito:</p>
+<p>a) prioritariamente ai nuovi consorzi i quali subentrano nelle medesime funzioni;</p>
+<p>b) in caso di esubero rispetto alle dotazioni organiche dei nuovi enti ad uno dei comuni già facenti parte dei consorzi; y</p>
+<p>c) in ulteriore subordine alle province.</p>
+<p>10. In deroga a quanto previsto dai commi 7 e 8, il personale addetto agli impianti di acquedotto, fognatura e depurazione trasferiti in concessione d&#x27;uso al gestore del servizio idrico integrato è trasferito al gestore unico con il provvedimento di cui all&#x27;articolo 3, comma 7, della presente legge.</p>
+<p>11. In deroga a quanto previsto dai commi 7 e 8, il personale addetto ai servizi di gestione dei rifiuti è trasferito agli enti di nuova istituzione e successivamente ai soggetti cui sarà attribuita la gestione dei relativi impianti in base alle norme regionali in materia di rifiuti, da emanare in attuazione dell&#x27;articolo 199 del decreto legislativo n. 152 del 2006.</p>
+<p>12. Per il personale in esubero degli enti consortili trasferito ai comuni e alle province ai sensi dei commi 7 e 8, l&#x27;Amministrazione regionale garantisce agli enti locali un trasferimento di risorse finanziarie sufficiente all&#x27;integrale copertura delle maggiori spese derivanti dai trasferimenti fino alla cessazione dei relativi rapporti di lavoro.</p>
+<p>13. Le disposizioni del presente articolo si applicano integralmente anche al personale del soppresso consorzio di Macomer-Borore.</p>
+<p>14. Al personale delle società costituite o partecipate, nei limiti indicati dall&#x27;articolo 4, comma 8, si applicano le medesime procedure di assunzioni del personale previste per gli enti locali.</p>
+<h3>Art. 7</h3>
+<p>Norma transitoria</p>
+<p>1. I commi 35, 36, 37, 39 e 40 dell&#x27;articolo 7 della legge regionale 5 marzo 2008, n. 3 (legge finanziaria 2008), sono abrogati; rimangono comunque salvi gli effetti delle procedure attivate ai sensi dei medesimi commi.</p>
+<p>2. In sede di prima applicazione, al fine di garantire il regolare avvio della fase di trasformazione dei nuovi soggetti, i direttori generali dei consorzi di cui alla tabella A rimangono in carica fino alla nomina del nuovo direttore generale.</p>
+<h3>Art. 8 Norma finanziaria</h3>
+<p>1. Agli oneri derivanti dall&#x27;attuazione della presente legge si fa fronte con gli stanziamenti disposti</p>
+<p>dall&#x27;articolo 7, comma 42, della legge regionale n. 3 del 2008 (UPB S06.03.029).</p>
+<p>La presente legge sarà pubblicata nel Bollettino ufficiale della Regione.</p>
+<p>E&#x27; fatto obbligo a chiunque spetti di osservarla e di farla osservare come legge della Regione.</p>
+<p>Data a Cagliari, addì 25 luglio 2008</p>
+<p>Soru ,</p>
+<p>Ultimo aggiornamento: 25.07.08</p>
+<p>© 2022 Regione Autonoma della Sardegna</p></div></article>
+<article class="doc" id="d4" hidden><div class="num">Documento 4 di 12</div><h2>Delibera n. 9/7 del 12.2.2013</h2><p class=sotto>Giunta regionale: attivazione della zona franca nel territorio dell&#x27;isola di Sardegna e le sue isole minori circostanti</p><div class="foglio"><p>DELIBERAZIONE N. 9/7 DEL 12.2.2013</p>
+<p>Oggetto:</p>
+<p>Attivazione della zona franca nel territorio dell’Isola di Sardegna e le sue isole minori circostanti.</p>
+<p>Il Presidente, di concerto con l&#x27;Assessore dell&#x27;Industria, richiama la gravissima crisi che continua ad investire i settori produttivi della Sardegna e larghe fasce della popolazione con crescenti disagi di tipo economico e sociale.</p>
+<p>Il Presidente richiama, altresì, i presupposti normativi del Trattato di Lisbona che sanciscono l’impegno solenne dell’Unione Europea alla riduzione dei divari tra le Regioni ed al rafforzamento della coesione economica, sociale e territoriale, come recita l’art. 174 dello stesso Trattato che stabilisce che “Per promuovere uno sviluppo armonioso dell&#x27;insieme dell&#x27;Unione, questa sviluppa e prosegue la propria azione intesa a realizzare il rafforzamento della sua coesione economica, sociale e territoriale. In particolare l&#x27;Unione mira a ridurre il divario tra i livelli di sviluppo delle varie regioni ed il ritardo delle regioni meno favorite. Tra le regioni interessate, un&#x27;attenzione particolare è rivolta alle zone rurali, alle zone interessate da transizione industriale e alle regioni che presentano gravi e permanenti svantaggi naturali o demografici, quali le regioni più settentrionali con bassissima densità demografica e le regioni insulari, transfrontaliere e di montagna”.</p>
+<p>Il Presidente evidenzia, inoltre, che l’istituzione della zona franca consente di compensare lo svantaggio relativo alla natura insulare e ultraperiferica della Sardegna, di limitare il fenomeno dello spopolamento dell’isola e di mantenere la pace sociale.</p>
+<p>Entro tale quadro assumono una particolare importanza le recenti novità introdotte dal nuovo codice doganale comunitario n. 450/2008 che, ai sensi dell’art. 188, sarà definitivamente operativo entro il termine del 24 giugno 2013.</p>
+<p>Ricordato che il regime speciale della Regione Sardegna trova fondamento in ragioni storiche ed internazionali, precedenti al trattato istitutivo della stessa Comunità Europea, il Presidente sottolinea che in via prioritaria e principale i regimi agevolativi da riservare alla Sardegna da parte dell’Unione Europea debbano riguardare l’intero territorio regionale proprio per tenere conto, oltre</p>
+<p>DELIBERAZIONE N. 9/7 DEL 12.2.2013</p>
+<p>che dello stato d’isolamento, dell’insularità e della scarsa densità demografica della Regione.</p>
+<p>È lo stesso Trattato istitutivo della Comunità Europea che garantisce la salvaguardia degli impegni pattizi precedentemente sorti allo stesso e dispone, infatti, che “Le disposizioni del presente Trattato non pregiudicano i diritti e gli obblighi derivanti da convenzioni concluse, anteriormente all’entrata in vigore del trattato stesso, tra uno o più Stati membri da una parte e uno o più Stati terzi dall’altra” e che, pertanto, nel diritto internazionale pattizio è fatto divieto di modificare gli obblighi precedentemente assunti.</p>
+<p>Il Presidente ricorda che con il D.Lgs. n. 75/1998 veniva data attuazione all’art. 12 dello Statuto speciale della Regione Sardegna, approvato con legge costituzionale nel 26 febbraio 1948, e che lo stesso art. 12 prevede che “saranno istituiti nella Regione punti franchi”.</p>
+<p>A tal fine, e con riferimento alla perimetrazione della zona franca, il Presidente propone che la stessa per ragioni evidenti di opportunità ed economicità, sia disposta indicando quali punti di entrata e di uscita, i porti e gli aeroporti dell’isola attualmente esistenti e già sottoposti a vigilanza doganale, in quanto i confini marini consentono di poter delimitare fisicamente ed efficacemente l’area senza dover sopportare nuovi oneri di bilancio e spese aggiuntive per la Regione e che, pertanto, le esigenze di delimitazione della zona franca regionale della Sardegna siano garantite fisicamente dai confini naturali dell’isola.</p>
+<p>Il Presidente riferisce che nella medesima direzione si sono espressi formalmente e recentemente, con atti deliberativi conseguenti, oltre 240 Consigli comunali dell’isola e che, pertanto, anche in base al dettato dell’art. 1 della Costituzione che prevede che “la sovranità appartiene al Popolo, ritiene di dover dare corso alle sopra richiamate volontà delle comunità locali.</p>
+<p>La Direzione regionale dell’Agenzia delle Dogane, già dal 2001, si è espressa dichiarando che ai sensi del succitato D.Lgs. n. 75/1998 l’intero territorio dell’Isola della Sardegna dovesse venire individuato come zona franca extraterritoriale analogamente ai territori dei Comuni di Livigno e Campione d’Italia data la loro particolare posizione geografica, così come accordato anche a tutti i territori dell’Unione Europea posti in analoga situazione geografica.</p>
+<p>A tal proposito il Presidente richiama la sentenza della Corte Costituzionale n. 313 del 27 luglio 2001 ove si afferma che non spetta allo Stato modificare, integrare o dare esecuzione alle norme di attuazione delle leggi istitutive delle Regioni a Statuto speciale e che la competenza programmatoria dello Stato non può mai giungere a compromettere o limitare l’autonomia regionale.</p>
+<p>Il Presidente, infine, richiama gli orientamenti giurisprudenziali elaborati dalla Corte di Giustizia</p>
+<p>DELIBERAZIONE N. 9/7 DEL 12.2.2013</p>
+<p>dell’Unione Europea (per tutte, Corte di Giustizia C – 88/03 del 6 settembre 2006, “Azzorre”) in tema di fiscalità territoriale agevolata.</p>
+<p>Il Presidente, pertanto, ritiene necessario proporre di procedere alla modifica dell’articolo 3 del Regolamento CE n. 450/2008, prevedendo che fra i territori extra-doganali dell’Italia sia indicato “il territorio dell’isola della Sardegna e le sue isole minori circostanti” in quanto i suddetti territori risultano giuridicamente equiparati a quelli definiti extra-doganali dallo stesso Regolamento CE n.</p>
+<p>450/2008, come stabilito ai sensi del D.P.R. n. 1133/69 e dall’art. 2 del D.P.R. n. 43/1973. In quanto territori extra-doganali, i suddetti territori risultano esclusi dai dazi doganali, accise, IVA, come previsto dagli artt. 2 e 169 del D.P.R. n. 43/1973, nonché dal D.Lgs. n. 504/1995 e dall’art. 1 del D.Lgs. n. 18/2010.</p>
+<p>La Giunta regionale, udita e condivisa la proposta del Presidente, di concerto con l&#x27;Assessore dell&#x27;Industria</p>
+<p>DELIBERA</p>
+<p>−</p>
+<p>di dare atto delle circa 240 deliberazioni assunte dai Consigli Comunali della Sardegna, in ordine all’attivazione della zona franca;</p>
+<p>−</p>
+<p>di dare mandato al Presidente di comunicare alle autorità Europee e a quelle Doganali nazionali e regionali la volontà popolare di rendere immediatamente operative sul territorio dell’intera isola le prerogative già individuate nel Regolamento CE n. 2913/1992 e nel relativo Regolamento di attuazione n. 2454/1993, entrambi richiamati nel D.Lgs. n. 75/1998, con perimetrazione coincidente con i confini naturali dell’isola e delle sue isole minori circostanti, anche al fine di procedere alla modifica dell’art. 3 del Regolamento n. 450/2008, inserendo nello stesso articolo il territorio dell’isola della Sardegna e delle sue isole minori circostanti quale territorio extradoganale dell’Italia, e provvedendo a pubblicare la suddetta integrazione sulla prossima GUCE.</p>
+<p>Il Direttore Generale</p>
+<p>Il Presidente P residente</p>
+<p>Gabriella Massidda</p>
+<p>Ugo Cappellacci</p></div></article>
+<article class="doc" id="d5" hidden><div class="num">Documento 5 di 12</div><h2>Delibera n. 8/2 del 7.2.2013</h2><p class=sotto>Giunta regionale della Sardegna</p><div class="foglio"><p>DELIBERAZIONE N. 8/2 DEL 7.2.2013</p>
+<p>Oggetto:</p>
+<p>Comunicazione alla Commissione europea dell’attivazione della zona franca nel territorio dell’Isola di Sardegna.</p>
+<p>Il Presidente richiama la gravissima crisi che continua ad investire i settori produttivi della Sardegna e larghe fasce della popolazione con crescenti disagi di tipo economico e sociale.</p>
+<p>Tale situazione al di là degli interventi già avviati e programmati impone l’urgente adozione di misure straordinarie di tipo strutturale capaci di rilanciare e promuovere una reale crescita economica salvaguardando il tessuto produttivo esistente.</p>
+<p>Entro questo quadro, prosegue il Presidente, si rende necessario ed ineludibile affiancare alle azioni già avviate nei confronti dello Stato, nell’ambito della “Vertenza Sardegna”, una più ampia azione di rivendicazione nei confronti della Unione europea che preveda l’impiego anche di strumenti speciali che concorrano a colmare i divari di competitività, i maggiori costi legati alla condizione di insularità della Sardegna, la rimozione delle ulteriori conseguenze negative riguardanti il disagio economico e sociale, lo spopolamento dei territori ed il fenomeno dell’emigrazione.</p>
+<p>Sono gli stessi presupposti normativi del Trattato di Lisbona che sanciscono l’impegno solenne della Unione europea alla riduzione dei divari tra le regioni ed al rafforzamento della coesione economica, sociale e territoriale come recita l’art. 174 dello stesso Trattato che stabilisce che “Per promuovere uno sviluppo armonioso dell&#x27;insieme dell&#x27;Unione, questa sviluppa e prosegue la propria azione intesa a realizzare il rafforzamento della sua coesione economica, sociale e territoriale. In particolare l&#x27;Unione mira a ridurre il divario tra i livelli di sviluppo delle varie regioni ed il ritardo delle regioni meno favorite. Tra le regioni interessate, un&#x27;attenzione particolare è rivolta alle zone rurali, alle zone interessate da transizione industriale e alle regioni che presentano gravi e permanenti svantaggi naturali o demografici, quali le regioni più settentrionali con bassissima densità demografica e le regioni insulari, transfrontaliere e di montagna”.</p>
+<p>Si impone, pertanto, a tale riguardo la necessità di negoziare con la Commissione europea un pacchetto di misure volte a compensare gli svantaggi legati all’insularità che preveda condizioni</p>
+<p>DELIBERAZIONE N. 8/2 DEL 7.2.2013</p>
+<p>specifiche per l’applicazione delle disposizioni europee in materia di agevolazioni doganali, fiscalità di vantaggio e accesso ai fondi strutturali e deroghe in materia di aiuti di Stato.</p>
+<p>A tal fine il Presidente della Regione ritiene indispensabile rilanciare il tema della zona franca ed adottare i conseguenti atti necessari al conseguimento delle finalità sancite dall’art. 12 dello Statuto Speciale della Regione Sardegna, approvato con legge costituzionale n. 3 del 1948, rimuovendo le storiche difficoltà incontrate nel dare concreta attuazione al disposto statutario e al D.Lgs. n.</p>
+<p>75/1998 che prevede, come noto, la istituzione di punti franchi doganali, nel rispetto dei vigenti regolamenti comunitari, nei porti di Cagliari, Olbia, Oristano, Porto Torres, Portovesme, Arbatax ed in altri porti ed aree industriali ad essi funzionalmente collegate o collegabili.</p>
+<p>Entro tale quadro assumono una particolare importanza le recenti novità introdotte dal nuovo codice doganale comunitario n. 450/2008 che, ai sensi dell’art. 188, sarà definitivamente operativo entro il termine perentorio del 24 giugno 2013.</p>
+<p>Ricordato che il regime speciale di autonomia della Regione Sardegna trova fondamento in ragioni storiche, ed internazionali, precedenti al trattato istitutivo della stessa Comunità europea, il Presidente sottolinea che in via prioritaria e principale i regimi agevolativi da riservare alla Sardegna da parte della Unione europea debbano riguardare l’intero territorio regionale proprio per tenere conto oltre che dello stato d’isolamento, dell’insularità e della scarsa densità demografica della Regione.</p>
+<p>È lo stesso trattato istitutivo della Comunità Europea, che garantisce la salvaguardia degli impegni pattizi precedentemente sorti allo stesso e dispone, infatti, che “Le disposizioni del presente trattato non pregiudicano i diritti e gli obblighi derivanti da convenzioni concluse, anteriormente all&#x27;entrata in vigore del trattato stesso, tra uno o più Stati membri da una parte e uno o più Stati terzi dall&#x27;altra”</p>
+<p>e che, pertanto, nel diritto internazionale pattizio è fatto divieto di modificare gli obblighi precedentemente assunti.</p>
+<p>A tal fine, e con riferimento alla perimetrazione della zona franca, il Presidente propone che la stessa per ragioni evidenti di opportunità ed economicità, sia disposta indicando quali punti di entrata e di uscita, i porti e gli aeroporti dell’isola attualmente esistenti e già sottoposti a vigilanza doganale, in quanto i confini marini consentono di poter delimitare fisicamente ed efficacemente l’area senza dover sopportare nuovi oneri di bilancio o spese aggiuntive per la Regione e che, pertanto, le esigenze di delimitazione della zona franca regionale della Sardegna siano garantite fisicamente dai confini naturali dell’Isola.</p>
+<p>Il Presidente riferisce che nella medesima direzione si sono espressi formalmente e recentemente con atti deliberativi conseguenti oltre 200 Consigli comunali dell’Isola.</p>
+<p>DELIBERAZIONE N. 8/2 DEL 7.2.2013</p>
+<p>Si rende pertanto necessario procedere alla modifica dell’art. 3 del Regolamento CE n. 450/2008, prevedendo che fra i territori extra-doganali dell’Italia sia indicato anche “il territorio dell’Isola della Sardegna e le sue isole circostanti” in quanto i suddetti territori risultano giuridicamente equiparati a quelli definiti extra-doganali dallo stesso Regolamento CE n. 450/2008 come anche stabilito ai sensi del D.P.R. n. 1133/69 e dell’art. 2 del D.P.R. n. 43/1973. In quanto territori extra-doganali, i suddetti territori risultano esclusi da dazi doganali, accise ed IVA, come previsto dagli artt. 2 e 169 del D.P.R. n. 43/1973, nonché dal D.Lgs. n. 504/1995 e dall’art. 1 del D.Lgs. n.18/2010.</p>
+<p>Nel contempo il Presidente sottolinea che, nelle more della definitiva attuazione operativa del nuovo codice doganale comunitario n. 450/2008 e dei formali pronunciamenti dell’Unione europea concernenti il riconoscimento fra i territori extra-doganali dell’Italia anche del territorio dell’Isola della Sardegna in quanto giuridicamente equiparato a quelli definiti extra-doganali dallo stesso Regolamento CE n. 450/2008, la Regione intende chiedere al Governo la immediata attivazione di quanto già sancito con il D.Lgs. n. 75/1998.</p>
+<p>La immediata richiesta di attivazione delle zone franche doganali è improntata a tenere alto il livello del confronto con lo Stato e rilanciare la rivendicazione imperniata sul tema più complessivo della fiscalità di vantaggio (fiscalità di sviluppo) con l’obiettivo di integrare i vantaggi di natura doganale con quelli di natura fiscale, a partire da quelli doganali per poi passare a quelli fiscali, ampliando conseguentemente l’autonomia tributaria della Regione verso lo Stato al fine di modificare aliquote e prevedere esenzioni, detrazioni e deduzioni su tutti i tributi statali il cui gettito sia devoluto alla Regione.</p>
+<p>Il tema della fiscalità di vantaggio, ricorda il Presidente, faceva e fa parte integrante della “Vertenza Sardegna” e rappresenta uno dei pilastri della trattativa di attuazione del federalismo fiscale ad oggi in fase di stallo per inerzia dello Stato.</p>
+<p>La strategia della Regione in materia di federalismo fiscale è sempre stata questa: prima di tutto, come pregiudiziale posta dalla Sardegna, il Governo deve portare a soluzione la questione delle entrate e della ridefinizione del patto di stabilità interno, anche ad evitare l’inasprimento del conflitto istituzionale a seguito delle sentenze della Corte costituzionale che, via via, hanno riconosciuto la fondatezza della rivendicazione della Sardegna; successivamente, definita la questione pregiudiziale di cui sopra, deve essere aperta la trattativa sulla attuazione del federalismo fiscale con due questioni fondamentali da definire: a) dare immediata attuazione alle disposizioni in materia di perequazione infrastrutturale e riconoscimento della condizione di insularità; b) affrontare il tema della fiscalità di vantaggio (o fiscalità di sviluppo) anche quale possibile strumento per la risoluzione dei mancati trasferimenti legati alla vertenza entrate (mancati trasferimenti a far data dal 2010 – anno di entrata in vigore nuovo regime delle entrate).</p>
+<p>DELIBERAZIONE N. 8/2 DEL 7.2.2013</p>
+<p>A questo ultimo proposito il Presidente ricorda che il comma 3 dell’art. 27 (legge sul federalismo fiscale) consente il riconoscimento alla Regione di forme di fiscalità di sviluppo, ai sensi dell’art. 2, comma 2, lett. mm) - ove si prevede che tali istituti debbano essere conformi al diritto comunitario e rivolti, in particolare, alla creazione di nuove attività di impresa - e alle condizioni di cui all’art. 16, primo comma, lett. d) - ove si esplicitano le finalità di promozione dello sviluppo economico e della coesione delle aree sottoutilizzate, la solidarietà sociale, la rimozione degli squilibri economici e sociali, l’esercizio dei diritti della persona.</p>
+<p>Entro tale quadro si collocano anche gli orientamenti giurisprudenziali elaborati dalla Corte di giustizia dell’Unione europea (per tutte, Corte di giustizia C – 88/03 del 6 settembre 2006, “Azzorre”) in tema di fiscalità territoriale agevolata.</p>
+<p>Nel quadro dei prossimi sviluppi della complessa vertenza con lo Stato, dato atto della grave inerzia dello Stato sui temi della fiscalità di vantaggio e nelle more degli esiti della più ampia rivendicazione nei confronti della Unione europea, il Presidente propone che oltre alla comunicazione da inviare alla Unione europea sopra illustrata, sia immediatamente avviata anche la richiesta al Governo nazionale per la attivazione di quanto già sancito con il D.Lgs. n. 75/1998, in materia di punti franchi doganali, e dalla legge 17 dicembre 2012, n. 221 di conversione, con modificazioni, del decreto-legge 18 ottobre 2012, n. 179, recante ulteriori misure urgenti per la crescita del Paese, in materia di aree franche.</p>
+<p>La Giunta regionale, udita e condivisa la proposta del Presidente</p>
+<p>DELIBERA</p>
+<p>di dare mandato al Presidente per il formale inoltro ai competenti uffici della Commissione europea e alle Autorità doganali coinvolte della comunicazione riguardante la attivazione del regime doganale di zona franca della Sardegna esteso a tutto il territorio regionale con perimetrazione coincidente con i confini naturali dell’Isola di Sardegna e delle sue isole, affinché gli stessi uffici procedano ai conseguenti adempimenti legali di competenza e alla pubblicazione nella GUCE, anche e specificamente, ai fini della modifica dell’art. 3 del Regolamento CE n. 450/2008.</p>
+<p>Il Direttore Generale</p>
+<p>Il Presidente</p>
+<p>Gabriella Massidda</p>
+<p>Ugo Cappellacci</p></div></article>
+<article class="doc" id="d6" hidden><div class="num">Documento 6 di 12</div><h2>Delibera n. 21/3 del 15.4.2016</h2><p class=sotto>Giunta regionale della Sardegna</p><div class="foglio"><p>DELIBERAZIONE N. 21/3 DEL 15.4.2016</p>
+<p>Oggetto:</p>
+<p>Attivazione delle zone franche doganali previste dall’art. 12 dello Statuto speciale per la Sardegna. Decreto legislativo 10 marzo 1998, n. 75 &quot;Norme di attuazione dello statuto speciale della Regione Sardegna concernenti l&#x27;istituzione di zone franche&quot;.</p>
+<p>Il Presidente della Regione, d’intesa con l’Assessore della Programmazione, Bilancio, Credito e Assetto del Territorio e con l’Assessore dell’Industria, riafferma la necessità di rafforzare le condizioni per agevolare lo sviluppo e favorire la creazione di strumenti finalizzati al superamento della grave crisi che affligge la Sardegna. Al riguardo richiama l’attenzione sulle disposizioni di cui all’art. 12 che dispone l’istituzione di punti franchi in Sardegna (di seguito denominati zone franche), così come previsto dal D.Lgs. n. 75/1998, che detta le &quot;Norme di attuazione dello statuto speciale della regione Sardegna concernenti l&#x27;istituzione di zone franche&quot;.</p>
+<p>Preliminarmente fa osservare che poiché il D.Lgs. n. 75/1998 fa espressamente riferimento ai regolamenti CEE n. 2913/1992 (regolamento che istituisce e disciplina il Codice Doganale Europeo) e n. 2454/1993 (regolamento che detta le disposizioni applicative del predetto Codice Doganale) ne deriva che le zone franche attivabili ai sensi della normativa statutaria, sono soltanto quelle aventi natura doganale. Il Presidente, comunque, evidenzia che gli strumenti di carattere doganale non sono alternativi a quelli non aventi natura doganale, e che questi differenti istituti, anche se attivabili con procedure diverse, possono comunque convivere e agire in combinazione.</p>
+<p>A questo proposito il Presidente ribadisce l’esigenza di fare chiarezza sulla materia, distinguendo, in modo inequivocabile le azioni e gli istituti attivabili in base al dettato statutario, da quelli che potrebbero essere invece adottati soltanto sulla base delle specifiche norme statali e comunitarie.</p>
+<p>Tuttavia, prima di soffermarsi sui principali strumenti messi a disposizione dalla vigente normativa doganale e di spiegare in cosa consistono le facilitazioni che deriverebbero dalla loro attivazione, il Presidente ritiene utile precisare che l’attuale Giunta regionale, fermo restando l’imprescindibile rispetto dei vincoli di bilancio, è impegnata nell’esame e nello studio di tutti gli strumenti, anche di quelli non aventi carattere doganale (quali le zone economiche speciali, la fiscalità di vantaggio, la c.d. zona franca integrale), per la verifica della loro effettiva realizzabilità e per la ricerca della configurabilità giuridica più idonea ad innescare un processo di sviluppo nell’Isola.</p>
+<p>DELIBERAZIONE N. 21/3 DEL 15.4.2016</p>
+<p>Pur con diverse denominazioni, tutti i richiamati istituti di natura non doganale si prefiggono l’obiettivo di favorire, in particolari aree geografiche, la nascita e la crescita delle condizioni capaci di catalizzare l’interesse di imprese nazionali e/o internazionali, per rilanciare gli investimenti. In sostanza viene concessa una legislazione differente da quella in vigore nel resto dei rispettivi Paesi, che garantisce alle imprese un trattamento di favore in termini fiscali, economici, finanziari e logistici, di modo che, abbassando le tariffe e riducendo alcune tasse o anche azzerandole completamente, attraggano investitori all’interno delle suddette aree che non devono però dar luogo a una concorrenza fiscale sleale e tener conto che la legislazione comunitaria vieta gli aiuti pubblici alle imprese. Pertanto, la creazione (o il mantenimento) in talune zone svantaggiate dell’Unione europea, di agevolazioni comunque denominate deve avvenire in conformità del TFUE, ed è soggetta a controlli particolarmente rigidi e severi.</p>
+<p>Fatta questa premessa il Presidente afferma che le zone economiche speciali (ZES) sono di solito attivate nei territori depressi e/o particolarmente strategici come porti o aeroporti. Al loro interno, alcune tasse possono essere ridotte o anche completamente azzerate per attirare nuove imprese.</p>
+<p>Le aziende ivi allocate possono pagare tariffe più basse ed essere assoggettate ad adempimenti burocratici meno pesanti. I vincoli europei e statali rendono però sempre più difficoltosa la creazione di un area che garantisca efficaci e significativi agevolazioni in termini fiscali e non fiscali.</p>
+<p>È proprio per avere più peso nell’Unione Europea e nei rispettivi Stati e per accrescere le possibilità di creare una zona a fiscalità di vantaggio, intesa come misura compensativa dello stato di insularità, che da tempo la Giunta regionale sta lavorando alla costituzione di una macroregione, composta da Sardegna, Corsica e Baleari, accomunata da problemi e svantaggi economici e strutturali similari. In un simile scenario, si potrebbe evitare un ulteriore depauperamento delle entrate regionali, in quanto la perdita di gettito tributario, derivante da una minore pressione fiscale sulle imprese, potrebbe non ripercuotersi, integralmente o parzialmente e almeno per un congruo numero di anni, sulle casse regionali, ma su quelle nazionali o comunitarie.</p>
+<p>Il Presidente fa peraltro osservare che alcune forme di fiscalità di vantaggio sono previste anche dall’ordinamento nazionale e vengono già utilizzate dalla Regione. Si pensi ad esempio alle esenzioni IRAP concesse per le nuove iniziative produttive sorte nel territorio regionale. Questo tipo di agevolazioni non è però espandibile ulteriormente, in quanto determina un abbassamento delle entrate regionali che in questo momento la Sardegna non è in grado di sopportare.</p>
+<p>La zona franca integrale non è invece un istituto perfettamente inquadrato nella dottrina. Potrebbe essere assimilata alla zona franca d’impresa (le c.d. enterprise zones). Queste aree sono caratterizzate dalla esenzione dalle imposte dirette, dalla esenzione delle imposte sull’acquisto di</p>
+<p>DELIBERAZIONE N. 21/3 DEL 15.4.2016</p>
+<p>beni immobili strumentali, dalla esenzione dai tributi locali, dallo snellimento delle procedure necessarie per accedere ai finanziamenti agevolati in favore delle imprese, e possono accompagnarsi e combinarsi con le agevolazioni che caratterizzano le zone franche doganali.</p>
+<p>Però, considerate le restrittive regole comunitarie, tenuto conto della rigidità dell’ordinamento tributario statale e preso atto degli stringenti vincoli di bilancio regionale, nell’Unione Europea l’attivazione di una zona franca integrale appare una scelta di complessa attuazione e sulla quale devono comunque essere compiute precise valutazioni di impatto.</p>
+<p>Le zone franche previste dallo Statuto, invece, dovendo fare riferimento ai regolamenti doganali dell’Unione Europea, agiscono in modo assai differente. All’interno di esse, infatti, si applicano le regole che disciplinano la circolazione degli scambi internazionali. Ai fini fiscali sono inoltre fissate delle specifiche procedure per il controllo delle merci in entrata e in uscita da un determinato territorio doganale. Queste possono essere più o meno restrittive o convenienti per coloro che intendano cedere o acquistare merci, da commercializzare o da utilizzare per produrre altre merci.</p>
+<p>Le merci non UE che transitano nelle zone franche sono considerate merci non situate all’interno del territorio doganale della UE, pur essendo dette zone franche, a tutti gli effetti, parti del territorio doganale della Comunità europea.</p>
+<p>Per ragioni storiche e geografiche non sono invece considerate parti del territorio doganale della Comunità europea i territori di Livigno e Campione d’Italia e per questo motivo gli scambi con Livigno e Campione d’Italia devono essere considerati come scambi effettuati con Paesi terzi.</p>
+<p>Inoltre, considerato che Livigno e Campione d’Italia sono posti figurativamente fuori dal territorio italiano, in quei territori non è applicabile neppure l’IVA, in quanto non risulta soddisfatto uno dei requisiti essenziali richiesti dalla normativa tributaria per poter assoggettare ad imposta la cessione di beni e la prestazione di servizi: quello della territorialità.</p>
+<p>Esiste una moltitudine di regimi doganali. I più conosciuti sono quelli riferibili alla zona franca doganale interclusa, alla zona franca doganale non interclusa, al deposito doganale e al perfezionamento attivo. Detti regimi permettono di ottenere una sospensione totale o parziale dei diritti gravanti sulle merci vincolate a tali regimi, di agevolare le attività economiche, le attività di immagazzinamento, le attività di trasformazione e le altre attività legate al traffico internazionale.</p>
+<p>Come già sopra ricordato, è il decreto legislativo n. 75 del 10 marzo 1998 che ha disposto le modalità di attivazione delle zone franche previste dall’art. 12 dello Statuto, prevedendo che la delimitazione territoriale delle stesse e le norme per la loro operatività dovessero essere fissate con separati DPCM, previa specifica proposta della Regione. In sede di prima applicazione, si stabilì che la delimitazione del porto di Cagliari fosse quella risultante dall’atto aggiuntivo del 1998 dell’APQ sottoscritto col Ministero dei Trasporti nel 1995.</p>
+<p>DELIBERAZIONE N. 21/3 DEL 15.4.2016</p>
+<p>Su proposta della Regione fu poi adottato il D.P.C.M. 7 giugno 2001 e con esso furono dettate le disposizioni per rendere operativa la zona franca del porto di Cagliari. In particolare furono individuate le attività esercitabili, il soggetto gestore, i relativi compiti e la delimitazione delle aree interessate, come prescritto dal citato atto aggiuntivo.</p>
+<p>Proseguendo il Presidente informa che soltanto da pochi mesi si comincia a intravedere la fine del lungo e complesso processo che porterà all’attivazione della zona franca di Cagliari e comunica che anche le interlocuzioni per l’attivazione della zona franca di Olbia sono oramai in una fase avanzata. Fa però osservare che con la L.R. n. 20/2013 si è stabilito che la società “Cagliari Free Zone” fosse trasformata in “Sardegna Free Zone” per la gestione di tutte le zone franche isolane e che, se dette disposizioni non fossero state applicate entro 60 giorni, il Prefetto di Cagliari avrebbe dovuto esercitare i poteri sostitutivi. Al che, il Presidente, sottolinea quanto sia importante che la citata normativa venga modificata al più presto, se non altro per consentire alle istituzioni locali di operare liberamente le scelte riguardanti il loro territorio.</p>
+<p>Il Presidente comunica altresì la necessità di chiarire quali siano gli atti e gli adempimenti amministrativi che devono accompagnare le richieste provenienti dal territorio, affinché l’apposita proposta regionale (prevista dal D.Lgs. n. 75/1998) da inoltrare alla Presidenza del Consiglio dei Ministri, per la determinazione di ogni altra disposizione necessaria per la operatività delle zona franche, risulti in armonia con le decisioni assunte dalle amministrazioni locali.</p>
+<p>Il Presidente fa infine osservare che bisognerà tener conto della peculiarità di Portovesme, in quanto per la realizzazione della relativa zona franca è stato già stipulato un apposito protocollo d’intesa con il Governo (Piano Sulcis), recepito nella delibera CIPE n. 31 del 20 febbraio 2015.</p>
+<p>Tutto ciò premesso il Presidente della Regione, d’intesa con l’Assessore della Programmazione, Bilancio, Credito e Assetto del Territorio e con l’Assessore dell’Industria propone:</p>
+<p>1.</p>
+<p>di procedere all’approvazione preliminare della presente deliberazione;</p>
+<p>2.</p>
+<p>di trasmettere in forma urgente alla Commissione consiliare competente copia della presente deliberazione, affinché possa esprimere il parere come previsto dalla legge regionale n. 10 del 25 luglio 2008;</p>
+<p>3.</p>
+<p>di avviare l’attivazione delle zone franche previste dall’art. 12 dello Statuto così come stabilito dal D.Lgs. n. 75/1998;</p>
+<p>4.</p>
+<p>di dare mandato alla Direzione generale della Presidenza di predisporre un disegno di legge per l’abrogazione della legge regionale 2 agosto 2013, n. 20 al fine di abrogare le disposizioni che prevedono la trasformazione di “Cagliari Free Zone” in “Sardegna Free Zone” e le</p>
+<p>DELIBERAZIONE N. 21/3 DEL 15.4.2016</p>
+<p>disposizioni che stabiliscono che il Prefetto della provincia di Cagliari eserciti i poteri sostitutivi;</p>
+<p>5.</p>
+<p>di stabilire che le amministrazioni locali richiedenti l’attivazione delle zone franche di cui all’art.</p>
+<p>12 dello Statuto e/o i soggetti gestori, provvedano a trasmettere alla Regione un’apposita domanda nella quale sono riportate le imprese e le attività (volte ai traffici con i Paesi extra UE) già operanti sul territorio e quelle che presumibilmente si localizzeranno nella zona franca;</p>
+<p>6.</p>
+<p>di stabilire che le amministrazioni locali richiedenti l’attivazione delle zone franche di cui all’art.</p>
+<p>12 dello Statuto e/o i soggetti gestori, provvedano a inviare una bozza di regolamento, nel quale inter alia dovrà essere specificato:</p>
+<p>−</p>
+<p>l’esatta individuazione dell’area sulla quale dovrà insistere la nuova zona franca;</p>
+<p>−</p>
+<p>il tipo di regime doganale più confacente alle esigenze del loro territorio;</p>
+<p>−</p>
+<p>il gestore dell’istituenda zona franca, il quale fra l’altro, entro 60 giorni dall’emanazione del DPCM previsto dal D.Lgs. n. 75/1998, dovrà predisporre il relativo piano operativo;</p>
+<p>7.</p>
+<p>che vengano approvate e divulgate le schede informative (allegate alla presente deliberazione) per consentire ai soggetti interessati di analizzare e valutare le distinte caratteristiche di ciascun regime doganale, mettendo in risalto i vantaggi e gli eventuali svantaggi di ciascuno di essi;</p>
+<p>8.</p>
+<p>di stabilire che nel sito istituzionale della Regione venga predisposto uno specifico link attraverso il quale avere accesso a tutte le informazioni e a tutte le leggi che disciplinano la materia della “zona franca”.</p>
+<p>La Giunta regionale, condividendo quanto rappresentato e proposto dal Presidente, d’intesa con l’Assessore della Programmazione, Bilancio, Credito e Assetto del Territorio e con l’Assessore dell’Industria, acquisito il parere favorevole di legittimità del Direttore generale della Presidenza e del Direttore generale dell’Industria</p>
+<p>DELIBERA</p>
+<p>−</p>
+<p>di procedere all’approvazione preliminare della presente deliberazione;</p>
+<p>−</p>
+<p>di trasmettere in forma urgente alla Commissione Consiliare competente copia della presente deliberazione, affinché possa esprimere il parere come previsto dalla legge regionale n. 10 del 25 luglio 2008;</p>
+<p>−</p>
+<p>di avviare l’attivazione delle zone franche previste dall’art. 12 dello Statuto così come stabilito</p>
+<p>DELIBERAZIONE N. 21/3 DEL 15.4.2016</p>
+<p>dal D.Lgs. n. 75/1998;</p>
+<p>−</p>
+<p>di dare mandato alla Direzione generale della Presidenza di predisporre un disegno di legge per l’abrogazione della legge regionale 2 agosto 2013, n. 20 al fine di abrogare le disposizioni che prevedono la trasformazione di “Cagliari Free Zone” in “Sardegna Free Zone” e le disposizioni che stabiliscono che il Prefetto dela provincia di Cagliari eserciti i poteri sostitutivi;</p>
+<p>−</p>
+<p>di stabilire che le amministrazioni locali richiedenti l’attivazione delle zone franche di cui all’art.</p>
+<p>12 dello Statuto e/o i soggetti gestori, provvedano a trasmettere alla Regione un’apposita domanda nella quale sono riportate le imprese e le attività (volte ai traffici con i Paesi extra UE) già operanti sul territorio e quelle che presumibilmente si localizzeranno nella zona franca;</p>
+<p>−</p>
+<p>di stabilire che le amministrazioni locali richiedenti l’attivazione delle zone franche di cui all’art.</p>
+<p>12 dello Statuto e/o i soggetti gestori, provvedano a inviare una bozza di regolamento, nel quale inter alia dovrà essere specificato:</p>
+<p>a.</p>
+<p>l’esatta individuazione dell’area sulla quale dovrà insistere la nuova zona franca;</p>
+<p>b.</p>
+<p>il tipo di regime doganale più confacente alle esigenze del loro territorio;</p>
+<p>c.</p>
+<p>il gestore dell’istituenda zona franca, il quale fra l’altro, entro 60 giorni dall’emanazione del DPCM previsto dal D.Lgs. n. 75/1998, dovrà predisporre il relativo piano operativo;</p>
+<p>−</p>
+<p>di approvare che vengano approvate e divulgate le schede informative (allegate alla presente deliberazione) per consentire ai soggetti interessati di analizzare e valutare le distinte caratteristiche di ciascun regime doganale, mettendo in risalto i vantaggi e gli eventuali svantaggi di ciascuno di essi;</p>
+<p>−</p>
+<p>di stabilire che nel sito Web della Regione venga predisposto uno specifico link attraverso il quale avere accesso a tutte le informazioni e a tutte le leggi che disciplinano la materia della “zona franca”.</p>
+<p>Il Direttore Generale</p>
+<p>Il Presidente</p>
+<p>Alessandro De Martini</p>
+<p>Francesco Pigliaru</p></div></article>
+<article class="doc" id="d7" hidden><div class="num">Documento 7 di 12</div><h2>Trasformazione della società di gestione zona franca da Cagliari Free Zone a Sardegna Free Zone</h2><p class=sotto>Legge regionale n. 20 del 2 agosto 2013</p><div class="foglio"><p>REGIONE AUTONOMA DELLA SARDEGNA</p>
+<p>Il seguente documento è una copia dell&#x27;atto. La validità legale è riferita esclusivamente al fascicolo in formato PDF firmato digitalmente.</p>
+<p>Parte prima Leggi regionali Leggi regionali Presidenza della Regione Legge n. 20 del 02 agosto 2013 Norme urgenti per l&#x27;attuazione ed il funzionamento delle zone franche istituite nella Regione autonoma della Sardegna.</p>
+<p>Il Consiglio regionale ha approvato</p>
+<p>Il Presidente della Regione promulga la seguente legge:</p>
+<h3>Art. 1</h3>
+<p>Trasformazione di società di gestione</p>
+<p>1. Al fine di dare piena operatività alle zone franche della Sardegna istituite ai sensi del decreto legislativo 10 marzo 1998, n. 75 (Norme di attuazione dello Statuto speciale della Regione Sardegna concernenti l&#x27;istituzione di zone franche), la Giunta regionale, entro sessanta giorni dall&#x27;approvazione della presente legge, adotta apposita deliberazione contenente la proposta di modifica del decreto del Presidente del Consiglio dei ministri 7 giugno 2001 (Ulteriori disposizioni per l&#x27;operatività della zona franca di Cagliari), che preveda la trasformazione della società di gestione denominata &quot;Cagliari Free Zone&quot; in &quot;Sardegna Free Zone&quot; e avente la finalità di porre in capo a quest&#x27;ultima e per tutte le zone franche istituite, le competenze già previste agli articoli 7, 9 e 10 del citato decreto del Presidente del Consiglio dei ministri 7 giugno 2001. Nei termini previsti, la Presidenza della Regione raccoglie e, qualora non ancora perfezionata, definisce la delimitazione territoriale di tutte le zone franche della Sardegna.</p>
+<p>2. La società &quot;Sardegna Free Zone&quot; dispone di un capitale sociale così ripartito: il 33 per cento fra i comuni interessati, il 33 per cento fra le autorità di gestione dei porti e il restante 34 per cento detenuto dalla Regione autonoma della Sardegna.</p>
+<p>3. Entro i successivi sessanta giorni dall&#x27;adozione del decreto del Presidente del Consiglio dei ministri di</p>
+<p>REGIONE AUTONOMA DELLA SARDEGNA</p>
+<p>modifica, la Regione determina, ai sensi dell&#x27;articolo 12 del decreto del Presidente del Consiglio dei ministri 7 giugno 2001, gli indirizzi generali per l&#x27;attività del soggetto gestore delle zone franche di Cagliari, Olbia, Oristano, Porto Torres, Portovesme ed Arbatax.</p>
+<p>4. Decorsi inutilmente i termini di cui ai commi 1 e 3 i poteri sostitutivi, in caso di inerzia rispetto alle presenti disposizioni, sono esercitati dal Prefetto della Provincia di Cagliari sentiti i prefetti delle province sarde interessate.</p>
+<h3>Art. 2</h3>
+<p>Entrata in vigore</p>
+<p>1. La presente legge entra in vigore il giorno della sua pubblicazione nel Bollettino ufficiale della Regione autonoma della Sardegna (BURAS).</p>
+<p>La presente legge sarà pubblicata nel Bollettino ufficiale della Regione.</p>
+<p>E’ fatto obbligo a chiunque spetti di osservarla e di farla osservare come legge della Regione.</p>
+<p>Data a Cagliari, addì 2 agosto 2013 Cappellacci</p></div></article>
+<article class="doc" id="d8" hidden><div class="num">Documento 8 di 12</div><h2>Richiesta detassazione stipendio</h2><p class=sotto>Risposta della Ragioneria Territoriale dello Stato di Nuoro, 29 novembre 2023</p><div class="foglio"><p class="nota">Trascrizione dalla copia scansionata.</p><p>Ministero dell&#x27;Economia e delle Finanze</p>
+<p>RAGIONERIA TERRITORIALE DELLO STATO</p>
+<p>UFFICIO IV</p>
+<p>Nuoro, 29 novembre 2023</p>
+<p>INVIATA TRAMITE PEC</p>
+<p>Prot. NR. -/2023</p>
+<p>Rif. Prot. Entrata Nr. 7758/2023</p>
+<p>Sig. [nome oscurato nell&#x27;originale]</p>
+<p>OGGETTO: [oscurato nell&#x27;originale] – RISCONTRO A RICHIESTA DETASSAZIONE STIPENDIO PER RESIDENZA EXTRAEUROPEA/Z.F.</p>
+<p>In riscontro alla Sua richiesta, la presente per comunicare che, la Sardegna è stata riconosciuta come Zona Franca nel 1998 con il D.Lgs. 75/1998.</p>
+<p>Tuttavia l&#x27;art. 1 dello stesso Decreto rinvia all&#x27;emanazione di appositi DPCM che possano fornire indicazioni per l&#x27;effettiva operatività delle Zone Franche.</p>
+<p>Giova precisare che tali provvedimenti, però, non sono stati ancora adottati dai vari Governi che si sono avvicendati, pertanto lo Scrivente Ufficio non è tenuto a provvedere in merito.</p>
+<p>Si resta a disposizione per qualsiasi chiarimento e si porgono distinti saluti.</p>
+<p>Dott. Leonardo Tilocca</p>
+<p>Documento firmato digitalmente</p>
+<p>Ragioneria Territoriale dello Stato di Nuoro, Via Brofferio 26, 08100 Nuoro</p></div></article>
+<article class="doc" id="d9" hidden><div class="num">Documento 9 di 12</div><h2>Delibera del Consiglio comunale di Oristano del 21.12.2012</h2><p class=sotto>Deliberazione n. 74</p><div class="foglio"><p>Comune di Oristano Comuni de Aristanis</p>
+<p>Copia Deliberazione del Consiglio Comunale (Nr. 074 del 21.12.2012)</p>
+<p>Oggetto: Mozione Gruppo Consiliare Insieme: “ Presa d’atto dell’Istituzione della Zona Franca del Porto di Oristano e istituzione della Zona Franca nel Comune di Oristano.”</p>
+<p>Sessione di 1^ convocazione. Seduta pubblica.</p>
+<p>L’anno duemiladodici il giorno ventuno del mese di dicembre in Oristano nella sala delle adunanze consiliari, previo avvisi diramati a termini di regolamento si è riunito il Consiglio comunale di questo Comune e sono presenti i Signori:</p>
+<p>Presenti nr. 20</p>
+<p>Assenti nr. 5</p>
+<p>1. Tendas Guido</p>
+<p>2. Arzedi Donatella</p>
+<p>3. Cocco Corrado Ignazio</p>
+<p>4. Cossu Marco</p>
+<p>5. Falconi Antonio</p>
+<p>6. Lai Giuseppe</p>
+<p>7. Ledda Salvatore</p>
+<p>8. Lilliu Giampaolo</p>
+<p>9. Martani Roberto</p>
+<p>10. Massenti Mariangela</p>
+<p>11. Mocci Maria Lucia</p>
+<p>12. Mugheddu Gianluca</p>
+<p>13. Mureddu Stefano</p>
+<p>Presidente Dr. Marco Cossu Segretario Generale Dr. Luigi Mele</p>
+<p>14. Naitza Emilio</p>
+<p>15. Obinu Giuseppe</p>
+<p>16. Piras Renato</p>
+<p>17. Puddu Giuseppe</p>
+<p>18. Solinas Mauro</p>
+<p>19. Spanu Angelo Valerio</p>
+<p>20. Uras Giuliano</p>
+<p>1.</p>
+<p>2.</p>
+<p>3.</p>
+<p>4.</p>
+<p>5.</p>
+<p>Granese Alberto Lutzu Andrea Nurra Daniela Pisanu Roberto Serra Franco</p>
+<p>In prosecuzione di seduta.</p>
+<p>È presente in aula la Giunta Municipale.</p>
+<p>Il Consiglio comunale Udito il Presidente;</p>
+<p>Vista la proposta di Mozione del Gruppo Consiliare Insieme recante “Presa d’atto dell’Istituzione della Zona Franca del Porto di Oristano e istituzione della Zona Franca nel Comune di Oristano;”</p>
+<p>Vista, altresì, la proposta di deliberazione dei Consiglieri Uras, Puddu, Serra, Pisanu, Falconi, Lutzu e Solinas recante “Istituzione della Zona Franca nel territorio del Comune di Oristano e nel Porto di Oristano”;</p>
+<p>Uditi gli interventi di coloro che hanno partecipato al dibattito Uditi, in particolare, gli interventi dei Consiglieri Martani e Uras;</p>
+<p>Uditi gli interventi per la replica conclusiva dell’Assessore al Bilancio e Programmazione Giuseppina Uda e del Sindaco Guido Tendas;</p>
+<p>Dato atto che nel corso del dibattito i presentatori delle sopraccitate proposte hanno concordato un unico testo condiviso come di seguito riportato:</p>
+<p>Premesso che -la gravissima crisi che ha investito tutti i settori produttivi e dei servizi della Sardegna impone urgentemente l’adozione di adeguati ed efficaci provvedimenti volti a promuovere una reale crescita economica che portino a riequilibrare le conseguenze negative connesse all&#x27;insularità, ad abbattere il costo dell&#x27;energia e dei trasporti, a definire condizioni di fiscalità adeguate alle necessità della Sardegna, alla eliminazione o riduzione di gravami ed imposte che limitano la produzione e le iniziative economiche, Rilevato che -a seguito del Trattato di Parigi del 10/2/1947 l&#x27;Italia fu autorizzata a prevedere l&#x27;istituzione di regioni autonome a statuto speciale, nonché alla istituzione di Zone Franche e Punti Franchi nelle regioni periferiche a rischio spopolamento, considerati come soluzione idonea a compensare gli eccessivi costi dei trasporti e destinatarie di specifici aiuti atti a favorirne lo sviluppo ed a tutela della pace sociale;</p>
+<p>-con la Legge Costituzionale n. 3 del 1948 fu emanato lo Statuto Speciale per la Regione Sardegna che all&#x27;art. 12 prevedeva l&#x27;istituzione di punti franchi anche per la Sardegna;</p>
+<p>-l&#x27;art. 2 della L. Regionale n. 22 del / maggio 1953 ha previsto il finanziamento di attività industriali e commerciali nei Punti Franchi della Sardegna;</p>
+<p>-il Trattato di Roma del 25 marzo 1957, istitutivo della Comunità Economica Europea, all&#x27;art. 307 (ex 234) garantisce il rispetto degli accordi ed obblighi derivanti da convenzioni concluse anteriormente al 1 gennaio 1958;</p>
+<p>-il DPR 43/1973, TUILD ha recepito, integrandolo, il DPR 1133/69 (contenente disposizioni di attuazione delle direttive comunitarie sulla armonizzazione della disciplina delle Zone Franche), assimilando all&#x27;art. 2 il territorio ove insiste il Comune di Livigno ai territori extradoganali delle Zone e Punti Franchi;</p>
+<p>-il Codice Doganale Comunitario (CDC) istituito con Reg. CEE n. 2913 del 12.10.1992 ha fatto salvi gli speciali regimi fiscali dei territori della Valle d&#x27;Aosta e di Gorizia, dichiarati zona franca dall&#x27;art.</p>
+<p>14 della L. Costituzionale n. 4/48 e dall&#x27;art. 1 della L. 1438/48;</p>
+<p>-il Dlgs n. 75 del 10/3/1998, in attuazione dell&#x27;art. 12 della Legge Costituzionale n. 3 del 1948 ed in conformità a quanto previsto nel codice doganale Comunitario (CDC) n. 2913 del 1992 e delle Disposizioni di attuazione emanate con il Regolamento CEE n. 2454/1993, ha istituito le Zone Franche nei porti di Cagliari, Olbia, Oristano, Porto Torres, Portovesme ed Arbatax;</p>
+<p>Considerato che -l&#x27;istituzione della Zona Franca in tutto il territorio della Sardegna costituisce uno strumento essenziale di sviluppo al fine di creare le condizioni indispensabili per una reale crescita del nostro PIL, attrarre capitali, tecnologie e nuove competenze imprenditoriali, favorire la produzione, il commercio e l&#x27;esportazione di merci nell’ambito Mediterraneo, Comunitario ed in un contesto di globalizzazione, così come già avviene all’interno della Comunità Europea per le regioni periferiche e a scarsa densità demografica, per le isole e per le regioni con particolari Statuti di Autonomia,</p>
+<p>Preso atto che -la Regione Sardegna non ha dato attuazione al Decreto Legislativo 10 marzo 1998 n. 75, pubblicato nella Gazzetta Ufficiale del 7 aprile 1998 n. 81 che ha istituito, in attuazione dell&#x27;articolo 12 dello Statuto della Sardegna, le Zone franche nei porti di Cagliari, Olbia, Oristano, Porto Torres, Portovesme, Arbatax, in altri porti ed aree industriali ad essi funzionalmente collegate o collegabili prevedendo che &quot;la delimitazione territoriale delle zone franche e la determinazione di ogni altra disposizione necessaria per la loro operatività viene effettuata, su proposta della Regione, con separati decreti del Presidente del Consiglio dei Ministri”, -è rimasta lettera morta l&#x27;Intesa Istituzionale di Programma tra il Governo della Repubblica e la Giunta della Regione Autonoma della Sardegna firmata il 21 aprile del 1999 tra il Presidente del Consiglio dei Ministri e il Presidente della Regione Autonoma della Sardegna che prevedeva all&#x27;articolo 7 lettera C l&#x27;avvio di un percorso istituzionale per la &quot;verifica delle condizioni per l&#x27;introduzione sul territorio regionale di misure volte a realizzare, compatibilmente con la normativa comunitaria adottata per altre regioni europee, una zona franca fiscale finalizzata all&#x27;abbattimento dei costi dei fattori produttivi&quot;;</p>
+<p>-ai sensi dell&#x27;art. 4 del decreto legislativo n. 267/2000 (T.U.E.L.) la Regione Sardegna dall&#x27;emanazione del Decreto Legislativo n. 75 del 1998 non ha provveduto ad individuare le funzioni trasferite o delegate agli Enti Locali;</p>
+<p>-ai sensi dell&#x27;art. 7 del decreto legislativo n. 267/2000 (T.U.E.L.) il Comune di Oristano è tenuto ad emanare i regolamenti per l&#x27;organizzazione ed il funzionamento della Zona Franca;</p>
+<p>-la Corte Costituzionale con sentenza n. 313 depositata il 27/7/2001 ha precisato che &quot;non spetta allo stato modificare, integrare o dare esecuzione alle norme di attuazione delle leggi istitutive delle Regioni a Stauto Speciale e che la competenza programmatoria dello stato non può giungere va compromettere o limitare l&#x27;autonomia regionale (si vedano anche le sentenze n. 4/64, n. 20/70, n. 150/82, n. 40/83);</p>
+<p>Viste -la legge 623/49 la quale individua i prodotti per i quali è consentita la immissione in consumo in esenzione fiscale e per il fabbisogno locale, relativamente alla Valle d&#x27;Aosta, zona franca ex art. 2 del DPR 43/73 e che tali benefici si sarebbero dovuti estendere anche agli altri territori nazionali istituiti zona franca;</p>
+<p>-la dichiarazione di Laeken sottoscritta dall&#x27;Italia il 15.12.2001, per la quale è stata demandata alle regioni l&#x27;attuazione della Politica Comunitaria degli stati membri, per cui le Regioni esercitano tale attività attraverso i comuni (ai sensi dell&#x27;art. 3 della L. 142/90) ed in base al principio di sussidiarietà sancito dalla &quot;Costituzione Europea&quot;;</p>
+<p>Considerato ulteriormente che</p>
+<p>-l&#x27;art. 1 della L. 131/2003 prevede che i trattati internazionali sono costitutivi di obblighi e, pertanto, che la potestà legislativa statale sia vincolata dalle norme di diritto internazionale riconosciute dall&#x27;art. 10 della Costituzione e le modalità di gestione delle zone franche devono conformarsi alle norme di diritto internazionale;</p>
+<p>-la legge 84/94 (art. 8 comma h) prevede che al Presidente dell&#x27;Autorità Portuale compete l&#x27;amministrazione dei beni e delle aree del Demani Marittimo;</p>
+<p>-la L. 88/2001 (art. 9 comma 1) ha apportato modifiche all&#x27;art. 105 del DLGS 112/98 prevedendo che sono trasferite alle regioni ed agli enti locali tutte le funzioni non attribuite all&#x27;autorità portuale dalla L. 84/94;</p>
+<p>-la L. 42/2009 ha trasferito alle regioni ed agli enti locali la competenza al rilascio delle concessioni demaniali marittime;</p>
+<p>Ritenuto ancora che -si rappresenta l&#x27;urgenza di emanare tutti gli atti amministrativi attuativi delle disposizioni contenute nel DLGS 75/1998, dal momento che con il Trattato di Lisbona il valore giuridico della normativa comunitaria è divenuta prevalente rispetto alla normativa degli stati membri per cui dal 24 giugno 2013, entrando in vigore il Nuovo Codice Doganale approvato con Regolamento n.</p>
+<p>450/2008 verranno a cessare, secondo l&#x27;interpretazione che viene data dell&#x27;art. 188, gli effetti del dlgs 75/1998 istitutivo delle zone franche nei porti della Sardegna come sopra indicati;</p>
+<p>Sottolineato che -l&#x27;istituzione delle Zone Franche era contemplata nelle norme del precedente codice doganale che prevedeva (art. 167 dei regolamenti CE n. 2913/92 e n. 2454/93) che &quot;I paesi aderenti alla Comunità Europea che versino in disagio economico causato dallo spopolamento possano destinare alcune perti di territorio doganale della comunità a zone franche o a Punti Franchi&quot; e che &quot; debba esistere una discrimine positiva a favore delle regioni ultra periferiche a scarsa densità demografica, atta a compensare i sovracosti di trasporto e pertanto destinataria di specifici aiuti allo sviluppo economico reso indispensabile per la coesione sociale&quot; (art. 299 paragrafo 1 del Trattato Istitutivo la Commissione Europea);</p>
+<p>-il nuovo codice doganale prevede all&#x27;art. 188 del Reg. CE n. 450/2008 la sostituzione del regolamento CE n. 2454/1993 tramite l&#x27;emanazione di un nuovo regolamento attuativo che prevede il divieto di istituzione di Zone Franche in quanto le stesse vengono parificate agli Aiuti di Stato, vietati ormai dalla normativa comunitaria;</p>
+<p>-che la Sardegna, profondamente colpita dalla crisi economica e finanziaria, non può rinunciare a tale opportunità di crescita economica ed ai vantaggi della Zona Franca;</p>
+<p>-che il diritto alla zona franca è garantito dall&#x27;art. 307 (ex 234) del Trattato di Roma del 25.3.57 che faceva comunque salvi i diritti e gli obblighi derivanti dalle convenzioni concluse prima del 1.1.58 e che la Sardegna, ed i Sardi, hanno ottenuto il diritto alla costituzione della Zona Franca con la L.</p>
+<p>Costituzionale n. 3/1948 e che in attuazione di tale norma e diritto il D. lgs n. 75 del 1998 ha istituito, tra le altre, una zona franca nel porto di Oristano;</p>
+<p>-che il medesimo diritto è riconosciuto ad altri territori dello Stato, ad esempio per il territorio del Comune di Livigno;</p>
+<p>-che le esenzioni previste dall&#x27;istituto della Zona Franca riguardano:</p>
+<p>1) Tributi doganali (dpr 43/73)</p>
+<p>2) Accise (dlgs 504/95)</p>
+<p>3) IVA (dlgs 18/2010)</p>
+<p>4) gli altri benefici fiscali previsti dall&#x27;art. 8 della l. 3/1948 (modificata successivamente dalla l.</p>
+<p>296/06, art. 1, c. 834 e 835);</p>
+<p>5) i benefici previsti dalla normativa europea per gli altri punti franchi e zone franche;</p>
+<p>Ritenuto infine che -detti benefici per effetto della normativa Internazionale, Comunitaria, Nazionale e Regionale devono essere estesi alla Regione Sardegna il cui diritto è sancito dalla Legge Costituzionale n. 3 del 1948 che ha previsto l&#x27;istituzione dei Punti Franchi con le modalità di cui al Dlgs 75/1998;</p>
+<p>-sia necessaria l&#x27;adozione di atti immediati per rendere operative le norme che già prevedono l&#x27;istituzione di zone franche nelle città portuali della Sardegna e che appare perciò inspiegabile la mancata attuazione del predetto Decreto Legislativo n. 75 del 1998, il cui iter è colpevolmente ed incredibilmente bloccato per l&#x27;inerzia della Regione Sardegna che non ha ancora formulato la proposta di delimitazione e le norme di operatività delle aree interessate, -sia necessario sollecitare la Regione Sardegna a richiedere alla Presidenza del Consiglio dei Ministri di emanare le disposizioni necessarie per l&#x27;operatività della Zona Franca, ai sensi dell&#x27;art. 1 comma 2 del D. Legislativo n. 75 del 2008, Tutto ciò considerato;</p>
+<p>Visto l’esito delle votazioni:</p>
+<p>Votazione approvazione Mozione – Voti favorevoli 14 – Astenuti 6 (Ledda, Massenti, Mocci, Obinu, Piras, Spanu) – Assenti 5 (Granese, Lutzu, Nurra, Pisanu, Serra).</p>
+<p>Votazione immediata esecutività dell’atto – Voti favorevoli 14 – Astenuti 3 (Ledda, Mocci, Piras) – Presenti e non votanti 2 (Massenti, Spanu) – Assenti 6 (Granese, Lutzu, Nurra, Obinu, Pisanu, Serra).</p>
+<p>Delibera</p>
+<p>1. di prendere atto che, ai sensi del Dlgs n. 75/1998, è stata istituita la Zona Franca nel Porto di Oristano;</p>
+<p>2. di dichiarare l&#x27;istituzione della Zona Franca nel territorio del Comune di Oristano in quanto territorio collegato via terra con la Zona Franca del Porto di Oristano;</p>
+<p>3. di stabilire che la delimitazione della Zona Franca del Comune di Oristano è costituita nei confini del territorio del medesimo Comune;</p>
+<p>4. di impegnare il Sindaco e la Giunta a porre in essere, nel più breve tempo possibile, tutti gli atti politici e amministrativi necessari affinché si provveda con urgenza alla emanazione delle norme gestionali e operative specifiche per la Zona Franca nel territorio del Comune di Oristano, o complessive per tutti i Comuni ricadenti nell&#x27;ambito territoriale di riferimento del Porto di Oristano, così come individuate nella normativa sopra richiamata e nel D. Lgs. n. 75/1998 e secondo le norme di diritto internazionale;</p>
+<p>5. di dare inoltre mandato al Sindaco e alla Giunta di avviare tutte le possibili iniziative politiche e amministrative per perseguire l&#x27;obbiettivo di giungere anche all&#x27;Istituzione della Zona Franca in tutta la Sardegna con il coinvolgimento di tutti gli Enti e le Istituzioni interessate;</p>
+<p>6. di notificare la presente delibera alla Presidenza della Regione Sardegna, alla Presidenza del Consiglio Regionale, alla Commissione Europea, alla Provincia di Oristano, all&#x27;Agenzia delle Dogane Ufficio di Cagliari;</p>
+<p>7. di dichiarare con separata votazione, la presente delibera immediatamente esecutiva ai sensi di legge.</p>
+<p>“Della seduta è redatto resoconto stenotipico integrale, depositato agli atti dell’ufficio Servizio Segreteria Generale”.</p>
+<p>Dr. De Roma</p>
+<p>Letto, approvato e sottoscritto,</p>
+<p>Il Presidente F. to Marco Cossu Il Segretario Generale F. to Luigi Mele</p>
+<p>Certificato di Pubblicazione Si certifica che la presente deliberazione trovasi in corso di pubblicazione, per gg. 15 consecutivi dal 24.12.2012 al 08.01.2013.</p>
+<p>Dalla Residenza Municipale, lì 24.12.2012 Il Segretario Generale F. to Luigi Mele Pubblicata all’Albo Pretorio On-Line – Atto. nr. _________ L’Impiegato Incaricato |</p>
+<p>E’ copia conforme all’originale per uso amministrativo.</p>
+<p>Dalla Residenza Municipale, lì 24.12.2012 Il Funzionario Incaricato F.to Mariano De Roma</p></div></article>
+<article class="doc" id="d10" hidden><div class="num">Documento 10 di 12</div><h2>Delibere</h2><div class="foglio"><p>DELIBERA Facendo seguito ai seguenti provvedimenti:</p>
+<p>- Deliberazione n. 8/2 del 7 febbraio 2013, che dava mandato al Presidente per il formale inoltro ai competenti uffici della Commissione Europea e alle Autorità doganali coinvolte della comunicazione riguardante la attivazione del regime doganale di zona franca della Sardegna esteso a tutto il territorio regionale con perimetrazione coincidente con i confini naturali dell’isola di Sardegna e delle sue isole;</p>
+<p>- Deliberazione n. 9/2 del 12 febbraio 2013, che dava atto delle circa 240 deliberazioni favorevoli dei Consigli Comunali della Sardegna, in ordine all’attivazione della zona franca integrale in regime extradoganale e dava mandato al Presidente di comunicare alle autorità Europee e a quelle doganali nazionali e regionali, la volontà popolare di rendere immediatamente operative sul territorio dell’intera isola le prerogative già individuate nel regolamento CE n. 2913/92 e nel relativo regolamento di attuazione n.2454/1993, entrambi richiamati nel d.lgs. n.75/1998, con perimetrazione coincidente con i confini naturali dell’isola e delle sue isole minori circostanti, anche al fine di procedere alla modifica dell’art.3 del regolamento n.450/2008, inserendo nello stesso articolo il territorio dell’isola di Sardegna e delle sue isole minori circostanti indicando la Regione Autonoma della Sardegna quale territorio extradoganale dell’Italia, entrambe regolarmente pubblicate sul sito istituzionale.</p>
+<p>Verificate le seguenti comunicazioni:</p>
+<p>- Comunicazione prot. 909/2013, di attivazione della zona franca nel territorio dell’isola di Sardegna del 08.02.2013 resa al Presidente della Commissione Europea, al Presidente del Parlamento Europeo, al Presidente del Consiglio dei Ministri della Repubblica Italiana, al Ministro dello Sviluppo economico che prevede che il regime zona franca e quello extradoganale attivato sarà operativo entro il termine perentorio del 24 giugno 2013.</p>
+<p>Comunicazione prot. 972/2013, attivazione della zona franca nel territorio dell’isola di Sardegna realizzata ai sensi dell’art. 1 della Costituzione della Repubblica Italiana con la quale veniva trasmessa, a tutte le autorità dell’Unione Europea competenti ed a quelle doganali della Repubblica Italiana, la volontà popolare espressa dalla maggioranza delle amministrazioni comunali dell’attivazione immediata del regime di zona franca e di extraterritorialità.</p>
+<p>- Comunicazione resa il 12.03.2013 taxud.a2.(2013)361489, dalla Commissione Europea Direzione Generale Fiscalità Doganale che si rimette interamente alle decisioni dello stato membro in merito all’introduzione di una zona franca in Sardegna;</p>
+<p>Preso atto che</p>
+<p>- l’Ufficio Agenzia delle Dogane, quale organo dello stato membro, designato dal regolamento doganale dell’Unione all’art. 802 del Regolamento CEE n. 2454/1993, attuativo del Regolamento n. 2913/1992, risulta gravemente inadempiente agli obblighi comunitari, non avendo proceduto a comunicare tempestivamente alla Commissione europea le zone franche istituite in Sardegna dallo Stato Italiano in forza dell’art 1 del dlgs n.75/98 pubblicato sulla Gazzetta Ufficiale del 07/04/1998 serie generale n.81;</p>
+<p>- che tale inadempimento istituzionale risulta tanto più grave in quanto il d.lgs. n.75/1998 è norma di rilevanza costituzionale perché attuativa dell’art. 12 della legge costituzionale n.3 del 1948 (Statuto Autonomistico della Regione Sardegna);</p>
+<p>Constatata l’inerzia delle Autorità Nazionali della Repubblica Italiana, che ha omesso dal 07.04.1998 di vigilare sull’operato delle autorità doganali, in merito all’attivazione delle zone franche istituite con il suddetto decreto legislativo statale, attuativo dell’art. 12 della legge Costituzionale n.3 del 1948 e, da ultimo, di replicare alle comunicazioni scritte sopraindicate, della Commissione Europea e della Regione Autonoma della Sardegna, venendo meno agli obblighi previsti previsti dalla normativa dell’Unione e Nazionale.</p>
+<p>Vista la legge Costituzionale n.3 del 18 ottobre 2001 che ha riformato il Titolo V della Costituzione;</p>
+<p>Visto il d.lgs. 234\2001 “norme di attuazione dello Statuto Speciale della Regione Sardegna per il conferimento di funzioni amministrative, in attuazione del Capo I della legge 59\97”, che conferisce alla Regione e agli Enti Locali della Sardegna le funzioni e i compiti che l’art. 3 della legge 142\1990, l’art. 20 della legge 50\1957 e l’art. 10 del dlgs 112\1998 conferiscono alle regioni a statuto ordinario e ai loro enti locali;</p>
+<p>Visto l’art. 93 della legge 342\2000 che disciplina i poteri delle regioni Autonome a Statuto Speciale, sulla variazione delle aliquote delle loro imposte;</p>
+<p>Vista la legge 131\2003 dove si prevede che per le Regioni a Statuto Speciale e le Province autonome di Trento e Bolzano resta fermo quanto previsto nei rispettivi statuti speciali e dalle relative norme di attuazione, che tutti i trattati internazionali sono costitutivi d’obblighi che limitano la potestà legislativa degli Stati;</p>
+<p>Vista la legge 296\2006 art. 1 commi da 834 a 837, che nell’apportare modifiche all’art. 8 dello Statuto Speciale della Regione Autonoma della Sardegna, approvato con legge costituzionale n.</p>
+<p>3\1948, individua le aliquote sulle entrate fiscali spettanti alla regione Sardegna che, al comma 835 richiamando l’art. 38 del regolamento di attuazione dello Statuto, approvato con dpr 250\1949, vengono attribuiti alla regione oltre ai nove decimi del gettito dell’imposta sul valore aggiunto generata sul territorio regionale la devoluzione di euro 25 milioni annuali fino all’anno 2026 quali ulteriori quote di compartecipazione all’imposta;</p>
+<p>Visto l’art. 7 della legge 42\2009 che detta principi e criteri direttivi relativamente ai tributi delle regioni e alle compartecipazioni al gettito;</p>
+<p>Visto il dlgs 68\2011 che attribuisce alle regioni a statuto ordinario ed a quelle a statuto speciale per effetto del dlgs 234\2001, la potestà di aumentare o diminuire l’aliquota dell’addizionale regionale IRPEF, nonchè di ridurre le aliquote IRAP fino ad azzerarle, concedendo la possibilità di disporre deduzioni dalla base imponibile;</p>
+<p>Visto l’art. 1 del d.l. 112\2008 convertito nella legge 133\2008 che al co. 2° prevede “rimane ferma la facoltà per le Regioni e gli Enti Locali, secondo i propri ordinamenti, di stabilire procedure Amministrative semplificate per l’applicazione dei propri tributi”;</p>
+<p>Vista la legge Regionale 25 luglio 2008, n.10 art.1 lett. d) che, specificamente, rimette alla Regione, nell&#x27;esercizio delle proprie funzioni in materia di programmazione dello sviluppo economico territoriale, con deliberazione della Giunta regionale, previo parere della Commissione consiliare competente, su proposta dell&#x27;Assessore regionale dell&#x27;industria, la competenza di promuovere l&#x27;attuazione delle disposizioni di cui agli articoli 1 e 2 del decreto legislativo 10 marzo 1998, n. 75 (Norma di attuazione dello Statuto speciale della Regione autonoma della Sardegna concernente l&#x27;istituzione delle zone franche), attivando idonea procedura per l&#x27;istituzione di una zona franca in ciascuno degli ambiti previsti dal predetto decreto legislativo e promuovere analoga iniziativa perché tali disposizioni siano estese per l&#x27;istituzione di una zona franca nelle aree di competenza di tutti i consorzi industriali provinciali di cui all&#x27;articolo 3.</p>
+<p>Vista la Direttiva 2006\112\CEE del Consiglio del 28 nov. 2006, come modificata dalla Direttiva n. 2008\8\CEE e dalla Direttiva 2008\117\CEE relativa al sistema comune d’imposta sul valore aggiunto e sui prodotti soggetti ad accise,</p>
+<p>Considerato che l’art. 6 della suddetta Direttiva 2006\112\CEE prevede l’esclusione dall’applicazione dell’imposta sul valore aggiunto (IVA) e della stessa direttiva per il territorio extradoganale di Livigno, Campione d’Italia e le acque italiane del lago di Lugano;</p>
+<p>Considerato che la suddetta esclusione da dazi doganali iva ed accise riservata al territorio extradoganale di Livigno compete normativamente anche al territorio della Regione Valle d’Aosta, nonchè al territorio dove insiste la Provincia di Gorizia, territori tutti tra loro assimilati ai punti franchi e alle zone franche dall’art.2 del T.U. doganale Italiano, approvato con dpr 43\73, nell’unico concetto giuridico della extraterritorialità: termine che nel significato giuridico del diritto Internazionale significa “territorio esente dai comuni poteri giuridici dello Stato nel cui territorio</p>
+<p>si trova” appare evidente che il riferimento lessicale al solo territorio di Livigno e Campione d’Italia contenuto</p>
+<p>- all’art. 7 del dpr 633\72;</p>
+<p>- all’art. 1 del dlgs 504\95;</p>
+<p>- all’art. 1 del dlgs 18\2010;</p>
+<p>- all’art. 7 del DPR 26 ottobre 1972, n. 633;</p>
+<p>- all’art. 1 della legge 762/1973;</p>
+<p>non possa che venire inteso se non come “ Sineddoche”, ossia la figura retorica della lingua italiana, che nel lessico giuridico viene utilizzata per indicare una realtà più vasta rispetto a quella utilizzata a riferimento, nella specie tutte aree geografiche italiane in cui sono istituite zone franche e per tutta la durata del regime di zona franca, come previsto dall’art. 1 della legge 762/1973.</p>
+<p>Tale interpretazione viene confermata dal fatto che la definizione giuridica di zona franca contenuta all’art. 1 co. 2° della Direttiva 69\75\CEE del 4 marzo 1979 veniva confermata dal Regolamento CEE n. 2504\1988 del Consiglio, nel Regolamento CEE n. 2562\1990 della Commissione del 30 luglio 1990;</p>
+<p>Inoltre, la succitata definizione giuridica veniva recepita agli artt. 166 e 167 del Codice Doganale Comunitario approvato con Regolamento CEE 2913\1992 ove si prevede rispettivamente che :</p>
+<p>- “le zone franche sono parti del territorio doganale della Comunita Europea situate in tale territorio, ma separate dal resto di esso, considerate come territorio extradoganale, territorio compreso tra la linea doganale ed il confine politico dello Stato, e che le merci collocate in tale territorio circolano in sospensione dai Diritti Doganali, Iva e Accise (art.</p>
+<p>166)”;</p>
+<p>- “gli Stati Membri della Comunita Europea possono destinare alcune parti del loro territorio doganale della comunità a zona franca (art. 167)”</p>
+<p>Considerato, che il d.lgs. 75\1998 con il quale l’Isola della Sardegna è stata individuata come zona franca è stato emanato ai sensi del succitato Codice doganale Comunitario, appare evidente che anche al territorio della Sardegna (al pari di Livigno, della Regione Valle D’Aosta e del territorio della Provincia di Gorizia) debbano venire riservate le medesime compensazioni fiscali riservate a tutte le Zone Franche integrali dell’Italia e dell’Europa, compensazioni fiscali utilizzate come strumento necessario alla crescita economica e demografica della popolazione residente in un territorio classificato come “svantaggiato “ in quanto gravato da sovra costi del trasporto, essendo l’isola di fatto ultraperiferica e dove la disoccupazione ed il tenore di vita sono anormalmente più bassi rispetto al resto del paese.</p>
+<p>Alle popolazioni residenti nei territori con le suddette caratteristiche negative, il legislatore ha riservato da sempre un regime fiscale speciale al consumo, individuato in Italia dalla legge 623\1949 per il territorio della Regione Valle D’Aosta e della Legge 1438\1949 e i relativi diritti di prelievo sui generi di consumo, riservati ai Comuni dalla legge 762\1973.</p>
+<p>Tale regime fiscale che deve essere esteso ovviamente anche a tutti i Comuni dell’Isola della Sardegna, ai sensi dell’art. 20 bis del d.l. 1351\1964 convertito nella legge 28\1965, dove si prevede che lo stesso regime fiscale, compresi i diritti di prelievo, debba venire esteso a tutti i territori italiani aventi le stesse problematiche e, pertanto, ricadenti nella tutela riservata dall’art. 87 ex 92 del Trattato firmato a Roma il 25 marzo 1957 e ratificato dalla legge 1203 del 14 ottobre 1957.</p>
+<p>In tale trattato, con il quale è stata istituita la Comunità Economica Europea, si prevede che “non debbono venire considerati aiuti di Stato e, pertanto, sono compatibili con il Mercato Comune Europeo, gli aiuti destinati a favorire lo sviluppo di determinate Regioni dove il tenore di vita sia anormalmente basso oppure si abbia una grave forma di sottooccupazione” (legge 1203\57 art. 92).</p>
+<p>Vista la Direttiva 2003\96\CE del Consiglio del 27 ottobre 2003 sulla esenzione dalla tassazione dei prodotti energetici e dell’elettricità dei territori individuati nella tabella II richiamata all’art. 18 che individua il territorio della Valle D’Aosta come sineddoche di “zona franca italiana” per l’esenzione della tassazione dei prodotti energetici e dell’elettricità.</p>
+<p>Valutato che ai territori extradoganali e alle zone franche integrali competa il regime fiscale al consumo previsto dalla legge 762\1973 e i relativi diritti di prelievo come è stato di recente confermato dai seguenti provvedimenti:</p>
+<p>- Decreto del Ministero dell’Economia e Finanze del 10 luglio 2012 (G.U. 183 del 7.08.2012)</p>
+<p>- Decreto del Ministero dell’Economia e Finanze del 28 dicembre 2012 (G.U. 303 del 12.12.2012) Esaminato che nelle tabelle allegate a Decreto del Ministero dell’Economia e Finanze del 28 dicembre 2012 (G.U. 303 del 12.12.2012) vengono dettagliatamente indicate le attuali aliquote da applicare, ai diritti speciali di competenza comunale, sui prezzi dei beni assoggettati a diritto speciale dalla legge 762\1973;</p>
+<p>rilevato che tali aliquote devono estendersi a tutto il territorio della Regione come previsto dall’art.1 della legge “per tutta la durata del regime di zona franca”, per quanto sopra esposto la Regione, nell&#x27;esercizio delle proprie funzioni in materia di programmazione dello sviluppo economico territoriale,</p>
+<p>Visto il decreto legge 6\1991 convertito nella legge 80\91 sulla rideterminazione della misura dei diritti speciali di cui aal’art. 3 lett. a) della legge 762\73</p>
+<p>Visto l’art. 10 co. 4 del dlgs 286\99 che detta principi sull’attivita di controllo amministrativo e contabile degli Enti Locali</p>
+<p>Vista la legge 203\1994 che ratifica la convenzione sulla partecipazione degli stranieri alla vita pubblica a livello locale, fatta a Stasburgo il 5.02.1992,</p>
+<p>Visto l’art. 1 del dlgs 150\2009 dove si prevede che per le materie di legislazione concorrente relative ai rapporti internazionali spetta alle Regioni la potesta legislativa, e che le Regioni e le province autonome di Trento e Bolzano partecipano alle decisioni dirette alla formazione degli atti normativi comunitari e provvedono all’attuazione degli accordi internazionali e degli atti dell’Unione Europea, nel rispetto delle norme di procedura stabilite da legge dello Stato, che disciplina le modalità di esercizio del “potere sostitutivo in caso di inadempienza “ “ e che e compito delle leggi regionali rimuovere ogni ostacolo che impedisce la piena parita’ dei cittadini nella vita sociale, culturale ed economica compreso l’accesso alle cariche elettive”</p>
+<p>“ e che nelle materie di sua competenza la legge regionale ratifica le intese della regione con altre regioni e puo concludere accordi con altri Stati”</p>
+<p>Vista la sentenza della Corte Costituzionale n. 313 depositata il 27 luglio 2001 con la quale la Suprema Corte ha precisato che “ non spetta allo Stato modificare, integrare o dare esecuzione alle norme di attuazione delle leggi istitutive delle Regioni a Statuto Speciale” …….. e che “ la competenza programmatoria dello Stato non puo mai giungere a compromettere o limitare l’autonomia regionale “ ;</p>
+<p>Considerato che in occasione dell’emanazione del dlgs 75\1998 sono state portate a termine le procedure previste dal dlgs 281\1997 sulla conferenza permanente Stato - Regione Acquisito il previo parere della Commissione consiliare competente previsto dalla legge Regionale 25 luglio 2008 n.10, su proposta dell&#x27;Assessore regionale dell&#x27;industria</p>
+<p>DELIBERA -</p>
+<p>-</p>
+<p>Che in totale applicazione della legge 762/1973 per tutta la durata del regime di zona franca istituito nella Regione Autonoma della Sardegna dal dlgs 75\1998, sono estesi a tutto il territorio regionale i diritti speciali Comunali sui generi che fruiscono di particolari agevolazioni fiscali previste dalla legge 1438\1949 e dalla legge 762/1973;</p>
+<p>che tali diritti speciali affluiscano nelle casse Regionali attraverso………… sul conto n.</p>
+<p>……………. di cui al capitolo di bilancio n…………….</p>
+<p>;</p>
+<p>-</p>
+<p>che la Regione provvederà alla redistribuzione annuale degli utili a tutti i Comuni della Sardegna, tenuto conto delle necessita più urgenti e nel rispetto dei principi di uguaglianza e di ragionevolezza.</p>
+<p>Stante il lungo tempo trascorso dall’acquisizione del diritto che con la presente si intende esercitare, la presente delibera viene resa immediatamente esecutiva ai sensi dell’art. 4 co.</p>
+<p>4 del dlgs 267\2000</p></div></article>
+<article class="doc" id="d11" hidden><div class="num">Documento 11 di 12</div><h2>Articolo 54 della Costituzione italiana</h2><div class="foglio"><h3>Art. 54.</h3>
+<p>Tutti i cittadini hanno il dovere di essere fedeli alla Repubblica e di osservarne la Costituzione e le leggi.</p>
+<p>I cittadini cui sono affidate funzioni pubbliche hanno il dovere di adempierle con disciplina ed onore, prestando giuramento nei casi stabiliti dalla legge.</p></div></article>
+<article class="doc" id="d12" hidden><div class="num">Documento 12 di 12</div><h2>Modulo richiesta cancellazione cartelle esattoriali</h2><p class=sotto>Proposto dalla dott.ssa Maria Rosaria Randaccio, tributarista</p><div class="foglio"><p class="nota">Modulo proposto dalla dott.ssa Maria Rosaria Randaccio, tributarista: è il metodo da lei consigliato.</p><p>Alla direzione regionale delle entrate Via ottone bacaredda 27 09127 cagliari</p>
+<p>Oggetto : richiesta cancellazione cartelle esattoriali n ….....................</p>
+<p>….................................................................................................................</p>
+<p>il sottoscritto …...................................... residente in via............................</p>
+<p>a …................. cap...................</p>
+<p>cod fisc.............................................</p>
+<p>amministratore della ….......................................... con domicilio in via.......................................... a …................................(pr)....................</p>
+<p>chiede Ai sensi del divieto della doppia imposizione fiscale di cui all&#x27;articolo 220 del trattato di Roma retificato legge 1203/1957.</p>
+<p>CONSIDERATO CHE GLI UFFICI FISCALI ITALIANI OPERANTI IN SARDEGNA , QUANDO CI NOTIFICANO CARTELLE ESATTORIALI, DIMOSTRANO DI NON AVER ANCORA PRESO ATTO , CHE DALLA DATA DI EMANAZIONE DEL DLGS 75/1998 , I CUI REGOLAMENTI DI ATTUAZIONE SONO STATI EMANATI CON I REGOLAMENTI COMUNITARI N. 2913/1992 E N. 2454/1993 , E COME TALI RECEPITI DALLA LEGGE REGIONALE N. 10/2008 E DELLA LEGGE REGIONALE N. 20/2013, LA REGIONE SARDEGNA HA LA COMPETENZA PRIMARIA SUL DIRITTO ALLA ESAZIONE DEI TRIBUTI CALCOLATI SUI REDDITI PRODOTTI IN SARDEGNA. TASSAZIONE DEI REDDITI PRODOTTI IN SARDEGNA CHE AI SENSI DELL’ARTICOLO 8 dello statuto speciale della Sardegna emanato con la legge costituzionale n.3/1948, Statuto della regione</p>
+<p>a statuto speciale , dove si prevede che i suddetti tributi devono essere versati SOLO nelle casse della REGIONE SARDEGNA , E LA STESSA HA LA COMPETENZA PRIMARIA A FARE ACCERTAMENTI FISCALI E AD EMETTERE CARTELLE ESATTORIALI DI DIRITTO CHE COMPRENDE ANCHE L’ARTICOLAZIONE DELLE ALIQUOTE FISCALI , ALIQUOTE CHE NON POSSONO ESSERE QUELLE PREVISTE DAL FISCO ITALIANO, MA DEVONO ESSERE INFERIORI AL QUINDICI PER CENTO O ADDIRITTURA ANNULLATE !! COMPETENZA PRIMARIA DELLA REGIONE SARDEGNA alla riscossione dei tributi sui redditi prodotti in Sardegna, che è stato previsto dall’art 3 commi 158 e 159 della legge 662/1996 e confermato dal dlgs 446/1997 che all’articolo 24 individua i poteri delle Regioni a Statuto Speciale precisando al comma 2 del suddetto articolo 24 che le Regioni a statuto speciale PROVVEDONO CON LEGGE REGIONALE ALLA ATTUAZIONE DELLE DISPOSIZIONI DEL PRESENTE TITOLO ( poteri delle regioni) E IN CONFORMITÀ DELLE DISPOSIZIONI DELLA LEGGE 662/1996 , ARTICOLO 3 COMMI 158 E 159.</p>
+<p>delle Regioni a statuto speciale confermati anche dal dlgs 114/ 2016 e ribadito dalla Corte Costituzionale con la sentenza 154/2017 , ( sentenza emessa su una controversa instaurata dalla RAS sulla questione chiamare VERTENZA SARDEGNA ) dove si prevede che la Regione Sardegna deve articolare le aliquote fiscali sui redditi prodotti in Sardegna !! Diritto alla tassazione dei redditi con aliquote inferiori al quindici per cento, confermato anche di recente dalla sentenza della Corte Costituzionale n.46/2023 dove si precisa che GLI UFFICI FISCALI OPERANTI IN SARDEGNA, devono operare nel rispetto della legge 662/1996, legge che all’articolo 3 comma 160 lettera L) prevede che : al fine di evitare LA DOPPIA IMPOSIZIONE FISCALE VIETATA DALLA CONVENZIONE n. 90/436/CEE RECEPITA DALL’ITALIA NELLA LEGGE 99/1993, ATTUALMENTE CONFERMATA DALLA ITALIANO PERCHÉ CONSIDERATI RESIDENTI ALL’ESTERO OSSIA AL DI FUORI DELLA UNIONE EUROPEA OSSIA I RESIDENTI NELLE ZONE FRANCHE EXTRADOGANALI , HANNO DIRITTO ALLA NON APPLICAZIONE</p>
+<p>(DEI TRIBUTI ITALIANI , E CIÒ ANCHE AI SENSI DI QUANTO PREVISTO DAL DLGS 239/1996, OSSIA IL DECRETO EMANATO IN ATTUAZIONE DELL’ARTICOLO 3 comma 168 della legge 549/1995 lettera C) dove si conferma l’adozione di un REGIME FISCALE GENERALE DI NON APPLICAZIONE DI TRIBUTI NEI CONFRONTI DEI SOGGETTI NON RESIDENTI NEL TERRITORIO DELLO STATO ITALIANO , OSSIA DEI SOGGETTI RESIDENTI IN STATI O TERRITORI A REGIME FISCALE PRIVILEGIATO, IL CUI ESONERO DAL PAGAMENTO DELL’IVA E DI OGNI ALTRO TIPO DI TRIBUTO È STATO PREVISTO DALL’ART 127 bis del Testo unico delle imposte sul reddito emanato con DPR 917/1986 , il cui regolamento di attuazione è stato emanato con DM 429/2001 tutt’ora in vigore, così come precisato dal dlgs 142/2018 all’articolo 13 comma 7 , dove si prevede che i soggetti residenti nelle zone franche extradoganali essendo considerati residenti all’estero , hanno diritto alla FISCALITÀ PRIVILEGIATA! Fiscalità privilegiata che significa avere diritto all’esonero dal pagamento di Dazi Doganali, dell’IVA , delle Accise e di ogni altro tipo di tributo così come precisato dalla ai Direttiva 69/75/CEE confluita nel Regolamento n. 2504/1988 ( articolo 24) ! Direttiva e Regolamento sulla Armonizzazione della disciplina sulle ZONE FRANCHE EXTRADOGANALI DELLA UNIONE EUROPEA.</p>
+<p>Direttiva e Regolamento della Comunità economica europea , che si applicano direttamente a tutti gli Stati membri della Unione Europea e quindi anche in Italia così come precisato all’articolo 2 e 170 del codice doganale italiano emanato con DPR 43/1993. Articolo 170 dove si prevede che le zone franche extradoganali italiane sono disciplinate proprio dal suddetto DPR 43/1973 !!! Divieto della doppia imposizione fiscale per i residenti in Sardegna confermato anche nella Sentenza della Corte Costituzionale n. 154/2017 dove si conferma che sul concorso alle spese dello Stato , la regione Sardegna debba partecipare con le entrate derivanti dalla applicazione del dlgs 114/2016 ossia con i tributi sui quali esercita competenza primaria così come individuati dall’art 8 dello statuto speciale della Sardegna emanato con la legge costituzionale n. 3/1948. Tributi propri regionali, che</p>
+<p>devono essere calcolati applicando sui redditi prodotti nell’isola Aliquote fiscali inferiori al quindici per cento, aliquote che si applicano sui redditi dei contribuenti residenti in Sardegna dalla data di emanazione del dlgs 75/1998, decreto che ha istituito la zona franca extra doganale su tutto il territorio dell’isola della Sardegna e dal momento che la suddetta istituzione, si è realizzata ai sensi del Trattato di Roma articoli 92 e 93 dove si prevede che i residenti nei territori svantaggiati hanno diritto alle Franchigie Fiscali disciplinate dai codici doganali comunitari emanati con i Regolamenti 2913/1992 e 2454/1993 confluiti nel nuovo codice doganale comunitario emanato con regolamento 952/2013, nonché ai sensi della interpretazione autentica n. 33 dell’articolo 174 del trattato di Lisbona, dove si prevede che se si istituisce una zona franca nelle isole per zona franca si debba intendere tutta l’isola.</p>
+<p>Diritto alla suddetta fiscalità privilegiata confermato anche dalla Corte di Giustizia Europea con la sentenza Causa C- 571/15 del 1.6.2017 che ha precisato che la EXTRADOGANALITA delle zone franche si realizza al momento della loro istituzione senza necessità di ulteriori provvedimenti amministrativi o giurisdizionali. Normativa che come già detto, il legislatore italiano ha recepito emanando il dlgs 114/2016 ossia il decreto di attuazione dell’articolo 8 dello statuto speciale della Sardegna emanato con la legge costituzionale 3/1948, dove si prevede che al fine di EVITARE UNA DOPPIA IMPOSIZIONE FISCALE, LA TASSAZIONE DEI REDDITI PRODOTTI IN SARDEGNA È DI COMPETENZA ESCLUSIVA DELLA REGIONE SARDEGNA !!!! PURTROPPO , IL PRESIDENTE SOLINAS PRIMA E ORA LA PRESIDENTE TODDE ALESSANDRA , NON SI DECIDE ANCORA A DARE ATTUAZIONE all’articolo 14 del suddetto dlgs 114/2016 dove ( come detto) si prevede che la Sardegna essendo una Regione a Statuto speciale, DEVE apposita legge regionale, articolare le aliquote fiscali dei Sardi… FINO AD ANNULLARLE… E CHE L’ALIQUOTA PIÙ ALTA DEVE ESSERE INFERIORE AL 15 PER CENTO !!! Appare evidente che i numerosi consulenti che affiancano la nuova Presidente della Regione Alessandra Todde IGNORANO anche quello che prevede la legge 234/2012 , legge di livello</p>
+<p>costituzionale dove si prevede che la violazione della normativa europea e delle Sentenze della Corte di Giustizia Europea, comporta L’APPLICAZIONE DELLE PROCEDURE DI INFRAZIONE ( MULTE SEVERISSIME ) da parte della Unione Europea…. multe sulle quali l’ITALIA ESERCITA IL DIRITTO DI RIVALSA NEI CONFRONTI DEGLI ENTI TERRITORIALI CHE NON HANNO DATO PRONTA ESECUZIONE AGLI OBBLIGHI DERIVANTI DAL DIRITTO DELLA UNIONE EUROPEA , NORMATIVA ( Sardegna ) , NORMATIVA FISCALE EUROPEA CHE NELL’ORDINE GERARCHICO DELLE FONTI DEL DIRITTO È SOVRAORDINATO A QUELLO DEGLI STATI MEMBRI. Normativa succitata che gli uffici fiscali italiani ignorano, così come ignorano quello che la Corte Costituzionale ha tenuto a precisare con la sentenza n. 313/2001 del 27 luglio 2001 , dove si afferma che NON SPETTA ALLO STATO ITALIANO MODIFICARE , INTEGRARE O DARE ESECUZIONE ALLE NORME DI ATTUAZIONE DELLE LEGGI ISTITUTIVE DELLE REGIONI A STATUTO SPECIALE E CHE LA COMPETENZA PROGRAMMATORIA DELLO STATO NON PUÒ MAI GIUNGERE A COMPROMETTERE O LIMITARE L’AUTONOMIA REGIONALE . Tutti i Presidenti della Regione Sardegna che hanno governato l’isola dal 1998 ad oggi , non hanno ancora capito che il danno derivante dalla mancata emanazione della legge regionale prevista dall’art 14 del dlgs 114/2016 , che come detto ha dato attuazione non solo all’articolo 8 dello statuto sardo , ma anche al dlgs 75/1998, comporta un danno economico non solo al popolo Sardo ma anche a sessanta milioni di Italiani che aspettano da oltre 26 anni, di poter de localizzare le proprie attività in Sardegna ossia nell’UNICA ZONA FRANCA D’ITALIA di vaste dimensioni , nelle quale impiantare le proprie aziende al fine di POTER ESERCITARE IL DIRITTO ALLA LIBERA CONCORRENZA ALLA PARI DI FRANCIA SPAGNA INGHILTERRA E GERMANIA CHE DI ZONE FRANCHE NE HANNO ISTITUITO ALMENO DIECI A TESTA … E DA TANTO TEMPO FA !!! Speriamo che questo appello venga raccolto non solo dalla Presidente Todde ma anche e soprattutto da parte di chi ha il dovere di far rispettare la legge data firma</p></div></article>
+</main>
+<nav class="piede" id="piede" hidden>
+  <button type="button" id="prima">‹ Precedente</button>
+  <div class="dove" id="dove"></div>
+  <button type="button" id="dopo">Successivo ›</button>
+</nav>
+<script>
+(function(){
+  var TOT=12,ind=document.getElementById('indice'),piede=document.getElementById('piede'),dove=document.getElementById('dove');
+  var prima=document.getElementById('prima'),dopo=document.getElementById('dopo'),ora=0;
+  function mostra(n){
+    ora=n;
+    ind.hidden=n>0;piede.hidden=n===0;
+    for(var i=1;i<=TOT;i++)document.getElementById('d'+i).hidden=i!==n;
+    if(n){dove.textContent=n+' / '+TOT;prima.disabled=n===1;dopo.disabled=n===TOT}
+    window.scrollTo(0,0);
+  }
+  function daHash(){var m=location.hash.match(/^#d(\d+)$/);mostra(m?Math.min(TOT,Math.max(1,+m[1])):0)}
+  function vai(n){if(n<0||n>TOT)return;history.replaceState(null,'',n?'#d'+n:location.pathname+location.search);mostra(n)}
+  prima.onclick=function(){vai(ora-1)};dopo.onclick=function(){vai(ora+1)};
+  document.getElementById('apri-indice').onclick=function(){vai(0)};
+  document.querySelectorAll('[data-vai]').forEach(function(a){a.onclick=function(e){e.preventDefault();vai(+a.getAttribute('data-vai'))}});
+  var x0=null,y0=null;
+  addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+  addEventListener('touchend',function(e){if(x0===null||!ora)return;var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5)vai(dx<0?Math.min(TOT,ora+1):Math.max(1,ora-1));x0=null},{passive:true});
+  addEventListener('keydown',function(e){if(!ora)return;if(e.key==='ArrowRight')vai(Math.min(TOT,ora+1));if(e.key==='ArrowLeft')vai(Math.max(1,ora-1))});
+  addEventListener('hashchange',daHash);daHash();
+})();
+</script>
+</body>
+</html>
