@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Conferma alloggio · FELICITAS FESTIVAL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;600&family=Josefin+Sans:wght@600&display=swap">
+<style>
+/* Pagina di chi gestisce l'alloggio: arriva dal tasto della mail (SQL 135), conferma la camera con un tocco. */
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9c6d8;--riga:rgba(212,175,106,.3);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;background:linear-gradient(180deg,var(--c1),var(--c2) 45%,var(--c3));background-color:var(--c3);color:var(--avorio);font:20px/1.55 'DM Sans',system-ui,sans-serif;display:grid;place-items:center;padding:24px 16px}
+.carta{width:100%;max-width:520px;background:var(--carta);border:2px solid var(--riga);border-radius:22px;padding:28px 22px;text-align:center}
+.etichetta{font-family:'Josefin Sans',sans-serif;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro)}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,8vw,44px);line-height:1.08;margin:10px 0 12px}
+p{margin:0 0 16px;color:var(--fioco)}
+button{width:100%;min-height:58px;border:0;border-radius:999px;background:var(--oro);color:var(--c3);font:600 21px 'Josefin Sans',sans-serif;cursor:pointer}
+button[disabled]{opacity:.6;cursor:wait}
+.esito{margin:18px 0 0;font-size:21px;color:var(--avorio)}
+.esito.no{color:#FFB4A8}
+</style>
+</head>
+<body>
+<main class="carta">
+  <div class="etichetta">Felicitas Festival · Alloggio a Narbolia</div>
+  <h1>Conferma la camera</h1>
+  <p>Con la conferma la camera non è più prenotabile e a chi l'ha chiesta arriva la mail di conferma.</p>
+  <button type="button" id="conferma">Conferma la camera</button>
+  <p class="esito" id="esito" aria-live="polite" hidden></p>
+</main>
+<script>
+(function(){
+  var URL="https://gfnveesogkfvkrdudpfg.supabase.co",KEY="sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+  var codice=new URLSearchParams(location.search).get("c")||"",b=document.getElementById("conferma"),e=document.getElementById("esito");
+  function scrivi(t,no){e.textContent=t;e.className="esito"+(no?" no":"");e.hidden=false}
+  if(!/^[0-9a-f-]{36}$/i.test(codice)){b.hidden=true;scrivi("Il link non è valido.",true);return}
+  b.addEventListener("click",function(){
+    b.disabled=true;
+    fetch(URL+"/rest/v1/rpc/fm_alloggio_conferma",{method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":"application/json"},body:JSON.stringify({p_codice:codice})})
+      .then(function(r){return r.json()}).then(function(j){
+        if(j&&j.ok){b.hidden=true;scrivi((j.camera||"La camera")+(j.gia?" era già confermata.":" è confermata. Grazie!"))}
+        else{b.disabled=false;scrivi((j&&j.errore)||"Non è andata a buon fine: riprova.",true)}
+      },function(){b.disabled=false;scrivi("Non è andata a buon fine: controlla la connessione e riprova.",true)});
+  });
+})();
+</script>
+</body>
+</html>
