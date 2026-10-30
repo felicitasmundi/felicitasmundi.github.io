@@ -13,7 +13,8 @@
   var URL = "https://gfnveesogkfvkrdudpfg.supabase.co", KEY = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var EVENTO = "bfff97a1-3431-4939-b15e-304f14087509";
   /* 30/10/2026 16:13-16:15, Gab: link Stripe veri; «il primo è cena», «secondo pranzo terzo whork» */
-  var LINK_STRIPE = { workshop: "https://buy.stripe.com/9B63cwgjq6cy88C7335EY02", pranzo: "https://buy.stripe.com/fZu5kEffmasOdsW5YZ5EY01", cena: "https://buy.stripe.com/cNi14offmasO1Keaff5EY00", laboratori_bambini: "" };
+  /* 30/10/2026 19:38, Gab: link nuovi (cena EY04, pranzo EY05, workshop EY06) */
+  var LINK_STRIPE = { workshop: "https://buy.stripe.com/fZubJ25EM8kG3Sm9bb5EY06", pranzo: "https://buy.stripe.com/eVqbJ26IQ8kG74y8775EY05", cena: "https://buy.stripe.com/8x214o0ksgRcgF89bb5EY04", laboratori_bambini: "" };
   var PREZZO = { workshop: "50 €", pranzo: "14 €", cena: "14 €" };
   var NOMI = { ci_saro: "Ci sarò", pranzo: "Pranzo", cena: "Cena", workshop: "Workshop Tra Coscienza e Tecnologia",
                laboratori_bambini: "Laboratori didattici e creativi per bambini e ragazzi" };
