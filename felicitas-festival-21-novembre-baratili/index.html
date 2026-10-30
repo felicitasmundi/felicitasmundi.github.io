@@ -541,6 +541,97 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
     <h2 class="grande">Baratili San Pietro</h2>
     <!-- 30/10 08:12, Gab: «via roma 91 , Baratili» -->
     <div class="indirizzo">Centro Sociale e Centro Polifunzionale · Via Roma 91, Baratili San Pietro, Oristano</div>
+    <!-- 30/10 10:22, Gab (thread Mappa): «ok dove lo pubblichiamo nell evento?» · «si mandalo» · «e pubblica». Fonte: festival-mappa/mappa-festival.html MD5 22edc7d46f328640f9d18fa2dbc09ebc (09:24 «togli la parola area di emporio») -->
+    <div class="mappa-fm" id="mappa"><style>.mappa-fm{--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9cbe3;--riga:rgba(212,175,106,.3);--cosmo3:#0a1430;margin-top:34px;text-align:left}
+.mappa-fm #viste{display:flex;flex-direction:column;gap:44px}
+.mappa-fm .vista{display:grid;grid-template-columns:1fr;gap:18px;background:var(--carta);border:1px solid var(--riga);border-radius:18px;padding:20px}
+.mappa-fm .vista h2{margin:0;font-family:var(--f-titolo);font-size:clamp(28px,7vw,40px);color:var(--oro);line-height:1.1;text-wrap:balance}
+.mappa-fm .disegno{min-width:0;margin:0;border:0;border-radius:0;overflow:visible;background:none}
+.mappa-fm .disegno svg{width:100%;height:auto;display:block;max-height:70svh}
+.mappa-fm .legenda{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;min-width:0;align-self:center}
+.mappa-fm .legenda li{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center}
+.mappa-fm .num{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:24px;color:var(--cosmo3);background:var(--c)}
+.mappa-fm .voce{padding:0;position:static}
+.mappa-fm .voce::before{content:none}
+.mappa-fm .voce b{display:block;font-size:24px;line-height:1.2;color:var(--avorio)}
+.mappa-fm .voce span{display:block;font-size:20px;color:var(--fioco)}
+.mappa-fm .vista h2{font-family:'Cinzel','Trajan Pro',Georgia,serif;letter-spacing:.02em}
+@media (min-width:760px){
+  .mappa-fm .vista{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);column-gap:28px;padding:28px}
+  .mappa-fm .vista h2{grid-column:1/-1}
+}</style><div id="mappa-viste" style="display:flex;flex-direction:column;gap:44px"></div><script>
+(function(){
+const H=46, AC=Math.cos(0.42), AS=Math.sin(0.42);
+const pr=(x,y,z)=>[x*AC-y*AS,(x*AS+y*AC)*0.62-z];
+const prof=(x,y)=>x*AS+y*AC;
+const R=(a,b,c,d)=>[[a,b],[c,b],[c,d],[a,d]];
+const P1=(x,y)=>[170.6+0.62*x,652.5+0.62*y];
+const R1=(a,b,c,d)=>[P1(a,b),P1(c,b),P1(c,d),P1(a,d)];
+const pts=a=>a.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ');
+const GRIGIO='#9aa0c8';
+
+function scatola(pol,h,col,fo,wo){
+  let s=`<polygon points="${pts(pol.map(p=>pr(p[0],p[1],0)))}" fill="${col}" fill-opacity="${fo}" stroke="${col}" stroke-opacity=".95" stroke-width="2.5"/>`;
+  if(!h) return s;
+  const f=[];
+  for(let i=0;i<pol.length;i++){const a=pol[i],b=pol[(i+1)%pol.length];
+    f.push({d:prof(a[0],a[1])+prof(b[0],b[1]),p:[pr(a[0],a[1],0),pr(b[0],b[1],0),pr(b[0],b[1],h),pr(a[0],a[1],h)]});}
+  f.sort((u,v)=>u.d-v.d).forEach(x=>{s+=`<polygon points="${pts(x.p)}" fill="${col}" fill-opacity="${wo}" stroke="${col}" stroke-opacity=".6" stroke-width="1.5"/>`;});
+  s+=`<polygon points="${pts(pol.map(p=>pr(p[0],p[1],h)))}" fill="none" stroke="#F5F0E6" stroke-opacity=".55" stroke-width="2"/>`;
+  return s;
+}
+const centro=pol=>{let x=0,y=0;pol.forEach(p=>{x+=p[0];y+=p[1]});return [x/pol.length,y/pol.length];};
+
+const viste=[
+ {titolo:'Piano terra e cortile',
+  neutre:[R(380,1100,850,1150),R(380,1150,545,1222),R(710,1105,765,1165),R(765,1105,850,1170),R(245,1100,335,1280),
+    R(245,1280,340,1365),R(335,1150,380,1365),R(245,885,400,1095),R(130,720,275,880),R(130,885,245,1020)],
+  aree:[
+   {nome:'Ingresso',sotto:'accoglienza, estemporanea d\'arte',col:'#C99A5B',pol:R(550,1150,715,1365)},
+   {nome:'Scambio semi tra vicinati',col:'#E0498A',pol:R(380,1235,545,1365)},
+   {nome:'Emporio',sotto:'Spesa naturale e gruppi d\'acquisto<br>Test Quantum di Bio risonanza',col:'#8ED06B',pol:R(720,1170,915,1365)},
+   {nome:'Sala Agorà',sotto:'conferenze, musica e condivisione',col:'#F39A3A',pol:R(385,940,845,1095)},
+   {nome:'Cortile',sotto:'laboratori didattici e creativi, area cani',col:'#F2C94C',aperto:1,
+    pol:[[140,285],[560,285],[790,920],[400,920],[400,885],[275,885],[275,715],[140,715]]}
+  ],
+  ingresso:[632,1395]},
+ {titolo:'Primo piano',
+  neutre:[R1(345,700,640,975),R1(345,795,465,890),R1(465,795,585,890),R1(120,890,320,975),R1(810,775,1025,870)],
+  aree:[
+   {nome:'Sala mensa "Krishna Prema"',col:'#2BB3C9',pol:R1(120,375,380,890)},
+   {nome:'Zona Franca',sotto:'info point',col:'#B48CFF',pol:R1(380,495,570,700)},
+   {nome:'Artigiani ed esposizioni artistiche',col:'#FF8A3D',pol:R1(570,495,840,870)},
+   {nome:'Area Educazione',col:'#6FD3A0',pol:R1(840,485,1025,775)}
+  ]},
+ {titolo:'Sala polifunzionale',
+  neutre:[R(140,195,240,265),R(240,180,280,265)],
+  aree:[
+   {nome:'Workshop "Tra Coscienza e Tecnologia"',sotto:'ore 17:30',nome2:'Conferenza Lamberto Rimondini',sotto2:'ore 19:00',col:'#F5D27A',num:[300,150],pol:[[140,95],[385,95],[385,265],[280,265],[280,195],[140,195]]}
+  ]}
+];
+
+const cont=document.getElementById('mappa-viste');
+viste.forEach(v=>{
+  let g='';
+  v.neutre.forEach(r=>g+=scatola(r,H,GRIGIO,.10,.06));
+  v.aree.forEach(a=>g+=scatola(a.pol,a.aperto?0:H,a.col,a.aperto?.4:.55,.18));
+  let a=1e9,b=1e9,c=-1e9,d=-1e9;
+  v.neutre.concat(v.aree.map(x=>x.pol)).forEach(pol=>pol.forEach(p=>[0,H].forEach(z=>{const q=pr(p[0],p[1],z);a=Math.min(a,q[0]);b=Math.min(b,q[1]);c=Math.max(c,q[0]);d=Math.max(d,q[1]);})));
+  if(v.ingresso){const q=pr(v.ingresso[0],v.ingresso[1],0);d=Math.max(d,q[1]+30);}
+  const w=c-a,h=d-b,pad=Math.max(w,h)*0.08;
+  const r=Math.max(w,h)/17;
+  v.aree.forEach((ar,i)=>{const ce=ar.num||centro(ar.pol);const q=pr(ce[0],ce[1],ar.aperto?0:H/2);
+    g+=`<circle cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="${r.toFixed(1)}" fill="${ar.col}" stroke="#0a1430" stroke-width="${(r/8).toFixed(1)}"/>`+
+       `<text x="${q[0].toFixed(1)}" y="${q[1].toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="${(r*1.15).toFixed(1)}" fill="#0a1430">${i+1}</text>`;});
+  if(v.ingresso){const q=pr(v.ingresso[0],v.ingresso[1],0);
+    g+=`<path d="M${q[0]-r*.7},${q[1]-r*.2} L${q[0]},${q[1]-r} L${q[0]+r*.7},${q[1]-r*.2}" fill="none" stroke="#D4AF6A" stroke-width="${(r/4).toFixed(1)}" stroke-linecap="round" stroke-linejoin="round"/>`;}
+  const sec=document.createElement('section');sec.className='vista';
+  const leg=v.aree.map((ar,i)=>`<li style="--c:${ar.col}"><div class="num">${i+1}</div><div class="voce"><b>${ar.nome}</b>${ar.sotto?`<span>${ar.sotto}</span>`:''}${ar.nome2?`<b style="margin-top:10px">${ar.nome2}</b><span>${ar.sotto2}</span>`:''}</div></li>`).join('');
+  sec.innerHTML=`<h2>${v.titolo}</h2><div class="disegno"><svg viewBox="${(a-pad).toFixed(0)} ${(b-pad).toFixed(0)} ${(w+2*pad).toFixed(0)} ${(h+2*pad).toFixed(0)}" role="img" aria-label="${v.titolo}">${g}</svg></div><ol class="legenda">${leg}</ol>`;
+  cont.appendChild(sec);
+});
+})();
+</script></div>
     <!-- 29/10 21:52, Gab: «Ho 1 quadrupla, 1 tripla, e una doppia / Narbolia / Disponibilità per il festival / Prezzo speciale 25 a persona / Il prezzo solo a chi prenota» -->
     <div class="alloggio-dove"><b>Alloggio a Narbolia</b><span>Disponibilità per il Festival: 1 quadrupla, 1 tripla e 1 doppia</span>
       <button class="tasto pieno piccolo" type="button" data-prenota="alloggio" data-alloggio hidden>Prenota l'alloggio</button></div>
