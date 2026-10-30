@@ -348,6 +348,24 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   .linea::before,.linea .avanza{left:20px}
   .carte{grid-template-columns:repeat(2,1fr)}
 }
+
+/* card che scorrono: la giornata per immagini (30/10) */
+.scorri{padding:64px 0 24px}
+.scorri .etichetta{padding:0 20px;max-width:1120px;margin:0 auto}
+.fila{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:20px;padding:18px 20px 22px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.fila::-webkit-scrollbar{display:none}
+.fila a{flex:0 0 min(78vw,330px);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:24px;overflow:hidden;background:var(--carta,#1a2148);border:2px solid color-mix(in srgb,var(--c) 60%,transparent);text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.fila .foto{height:230px;background:#0a1430;overflow:hidden}
+.fila .foto img{width:100%;height:100%;object-fit:cover}
+.fila .tx{padding:16px 18px 20px;display:flex;flex-direction:column;gap:4px}
+.fila .ora{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:20px;letter-spacing:.06em;color:var(--c)}
+.fila b{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;line-height:1.05}
+.fila small{font-size:18px;color:var(--fioco)}
+.fila em{margin-top:8px;font-style:normal;font-weight:600;color:var(--oro);font-size:19px}
+.punti-fila{display:flex;justify-content:center;gap:8px}
+.punti-fila i{width:9px;height:9px;border-radius:50%;background:var(--riga)}
+.punti-fila i.on{background:var(--oro)}
+@media (min-width:900px){.fila{padding-left:max(48px,calc((100vw - 1120px)/2 + 48px));scroll-padding-inline:max(48px,calc((100vw - 1120px)/2 + 48px))}}
 </style>
 </head>
 <body>
@@ -381,12 +399,17 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
   </div>
 </section>
 
+<!-- 30/10 14:58-15:07, Gab: card che scorrono con le cose della giornata; testi dai suoi 8 punti; «Si» alla pubblicazione -->
+<section class="scorri" id="scorri">
+  <div class="etichetta rivela">Scopri il Felicitas Festival</div>
+  <div class="fila" id="fila"><a href="#g-vicinati" style="--c:var(--t5)"><div class="foto"><img src="img/vicinati-sardegna.jpg" alt="" loading="lazy" style="object-position:50% 50%"></div><div class="tx"><span class="ora">10:00</span><b>Vicinati del cibo</b><small>Cibo come aggregante sociale, entro 20 km da casa</small><em>Scopri ›</em></div></a><a href="#g-rimondini" style="--c:var(--t3)"><div class="foto"><img src="img/lamberto-rimondini.jpg" alt="" loading="lazy" style="object-position:50% 25%"></div><div class="tx"><span class="ora">19:00 · conferenza gratuita</span><b>l'Altra Storia d'Italia</b><small>con Lamberto Rimondini</small><em>Scopri ›</em></div></a><a href="#g-zonafranca" style="--c:var(--t6)"><div class="foto"><img src="img/zona-franca-incontro.jpg" alt="" loading="lazy" style="object-position:30% 40%"></div><div class="tx"><span class="ora">17:00</span><b>Zona Franca Extradoganale</b><small>un diritto negato da 30 anni, con Maria Rosaria Randaccio</small><em>Scopri ›</em></div></a><a href="#g-ivano" style="--c:var(--t2)"><div class="foto"><img src="img/ivano-becciu-naiely.jpg" alt="" loading="lazy" style="object-position:50% 25%"></div><div class="tx"><span class="ora">15:00</span><b>La Spiritualità come Azione sul Territorio</b><small>con Ivano Becciu Naiely, Maestro del Tamburo Medicina</small><em>Scopri ›</em></div></a><a href="#workshop" style="--c:var(--t4)"><div class="foto"><img src="img/gabriele-dettori-originale.jpg" alt="" loading="lazy" style="object-position:50% 40%"></div><div class="tx"><span class="ora">17:30 · Workshop</span><b>Tra Coscienza e Tecnologia</b><small>Il tuo cervello digitale, connesso alle realtà di FelicitasMundi.</small><em>Scopri ›</em></div></a><a href="#g-progetti" style="--c:var(--t5)"><div class="foto" style="background:radial-gradient(circle at 25% 35%,var(--t5),transparent 60%),radial-gradient(circle at 80% 70%,var(--t1),transparent 55%),#1a2148"></div><div class="tx"><span class="ora">16:00</span><b>Scambio semi, autosufficienza e autodeterminazione sarda</b><em>Scopri ›</em></div></a><a href="#g-labs" style="--c:var(--t1)"><div class="foto" style="background:radial-gradient(circle at 30% 30%,var(--t1),transparent 60%),radial-gradient(circle at 75% 70%,var(--t2),transparent 55%),#1a2148"></div><div class="tx"><span class="ora">10:00-13:00 · 14:30-18:00</span><b>Laboratori didattici e creativi</b><small>per bambini e ragazzi</small><em>Scopri ›</em></div></a><a href="#chef" style="--c:var(--t1)"><div class="foto"><img src="img/fausto-tavera-chef.jpg?v=3007" alt="" loading="lazy" style="object-position:50% 30%"></div><div class="tx"><span class="ora">13:00 · 20:00</span><b>Pasti vegetariani</b><small>Fausto Tavera, chef</small><em>Scopri ›</em></div></a></div>
+  <div class="punti-fila" id="punti-fila"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</section>
+
 <!-- 2 · SCOPRI: una voce per schermata -->
 <section class="capitolo" id="scopri" style="padding-bottom:0">
   <div class="largo">
-    <div class="etichetta rivela">Scopri il Felicitas Festival</div>
-
-    <div class="schermo rivela" style="--c:var(--t5)">
+    <div class="schermo rivela" style="--c:var(--t5)" id="g-vicinati">
       <div class="filo"></div>
       <div class="etichetta" style="color:var(--c)">Ore 10:00 · conferenza di Gabriele Dettori, fondatore FelicitasMundi</div>
       <h2 class="grande">Vicinati <em>del cibo</em></h2>
@@ -406,23 +429,23 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
     <div class="schermo rivela" style="--c:var(--t2)">
       <div class="filo"></div>
       <h2 class="grande">Conferenze <em>gratuite</em></h2>
-      <div class="ospite" style="--c:var(--t3)">
+      <div class="ospite" style="--c:var(--t3)" id="g-rimondini">
         <img src="img/lamberto-rimondini.jpg" alt="Lamberto Rimondini">
         <div><div class="etichetta" style="color:var(--t3)">Ospite Speciale · conferenza gratuita · ore 19:00</div><h3>Lamberto Rimondini</h3><p class="serif">l'Altra Storia d'Italia</p></div>
       </div>
       <ol class="ambiti temi-rimondini"><li class="ambito" style="--c:var(--t1)"><span class="num">1858</span><h3>L'Italia nasce sotto protettorato finanziario</h3><ul><li>Secondo Rimondini l'Italia nasce nel 1858 sotto il controllo finanziario di banche anglo-francesi.</li></ul></li><li class="ambito" style="--c:var(--t2)"><span class="num">1947</span><h3>Il Trattato di Pace del 10 febbraio</h3><ul><li>Firmato prima che la Costituzione entrasse in vigore, il 1° gennaio 1948: per Rimondini da quel giorno l'Italia non è uno Stato sovrano.</li></ul></li><li class="ambito" style="--c:var(--t3)"><span class="num">Documenti</span><h3>Settecento pagine desecretate</h3><ul><li>Allegate ai suoi due nuovi volumi, con il testo completo del Trattato di Pace e dei suoi allegati.</li></ul></li><li class="ambito" style="--c:var(--t4)"><span class="num">Storia</span><h3>Il Risorgimento e il Sud</h3><ul><li>I Mille di Garibaldi e la «primavera dei popoli» raccontati in modo diverso dai libri di storia.</li></ul></li><li class="ambito" style="--c:var(--t5)"><span class="num">Dal 1600</span><h3>La City di Londra</h3><ul><li>Dalle Compagnie delle Indie alla concentrazione del potere finanziario in un piccolo gruppo.</li></ul></li><li class="ambito" style="--c:var(--t6)"><span class="num">Olivetti</span><h3>La partecipazione agli utili</h3><ul><li>L'idea di Adriano Olivetti: i dipendenti partecipano agli utili dell'impresa e l'azienda diventa un bene per il territorio.</li></ul></li><li class="ambito" style="--c:var(--t2)"><span class="num">Mestieri</span><h3>La scuola dei mestieri</h3><ul><li>Falegnami, pizzaioli, panettieri, gelatai: salvare i saperi dell'artigianato prima che vadano persi.</li></ul></li><li class="ambito" style="--c:var(--t3)"><span class="num">Oggi</span><h3>Pax Multipolaris</h3><ul><li>La sua lettura dei nuovi equilibri tra Stati Uniti, Russia e Cina.</li></ul></li></ol>
       <div class="ivano" style="--c:var(--t2)">
-        <div class="ivano-testa"><img src="img/ivano-becciu-naiely.jpg" alt="Ivano Becciu Naiely"><div><div class="etichetta" style="color:var(--t2)">15:00 · Centro Sociale</div><h3>Dal Mito al Dogma, dal Ritmo alla Materia: la Spiritualità come Azione sul Territorio</h3><p class="chi">Ivano Becciu Naiely · Maestro del Tamburo Medicina</p></div></div>
+        <div class="ivano-testa" id="g-ivano"><img src="img/ivano-becciu-naiely.jpg" alt="Ivano Becciu Naiely"><div><div class="etichetta" style="color:var(--t2)">15:00 · Centro Sociale</div><h3>Dal Mito al Dogma, dal Ritmo alla Materia: la Spiritualità come Azione sul Territorio</h3><p class="chi">Ivano Becciu Naiely · Maestro del Tamburo Medicina</p></div></div>
         <p class="apre">L'intervento traccia un ponte tra storia antropologica, dinamiche geopolitiche contemporanee e la responsabilità spirituale del singolo all'interno della comunità.</p>
         <ul class="quattro"><li>Radici e Sedentarizzazione</li><li>L'Evoluzione dei Dogmi e le Fratture Storiche</li><li>Spiritualità e Geopolitica Contemporanea</li><li>Il Potere della Parola e della Preghiera Viva</li></ul>
         <p class="tamburi"><b>Cerchio di radicamento e connessione con i tamburi</b><br>I tamburi medicina sono chiamati a riunirsi per questa occasione</p>
       </div>
       <ol class="ambiti conferenze">
         
-        <li class="ambito" style="--c:var(--t5)"><span class="num">16:00</span><h3>Progetti territoriali</h3><ul><li>Ponte per Autosufficienza, con Sirio Sechi</li><li>Autodeterminazione del popolo sardo, con Angelica Ibba e Muddy Caboni</li><li>I semi della biodiversità sarda, con Prantas Antigas, Alice e Daniele</li></ul></li>
+        <li class="ambito" style="--c:var(--t5)" id="g-progetti"><span class="num">16:00</span><h3>Progetti territoriali</h3><ul><li>Ponte per Autosufficienza, con Sirio Sechi</li><li>Autodeterminazione del popolo sardo, con Angelica Ibba e Muddy Caboni</li><li>I semi della biodiversità sarda, con Prantas Antigas, Alice e Daniele</li></ul></li>
       </ol>
       <!-- 29/10 22:50, Gab: «non mi piace come sono messe le info della zona franca / puoi fare un quadrante inserendo anche le cose che ti ho inviato oggi? vorrei uno spazio piu grande simile a quello di ivano» -->
-      <div class="ivano zf" style="--c:var(--t6)">
+      <div class="ivano zf" style="--c:var(--t6)" id="g-zonafranca">
         <div class="etichetta" style="color:var(--t6)">17:00 · Centro Sociale</div>
         <h3>Zona Franca Extradoganale</h3>
         <p class="chi">un diritto negato da 30 anni</p>
@@ -443,7 +466,7 @@ button.tasto{font-family:'Josefin Sans',sans-serif}
     <div class="schermo rivela" style="--c:var(--t3);min-height:0">
       <div class="educa">
         <div class="tavolo" style="--c:var(--t3)"><div class="etichetta" style="color:var(--t3)">11:30</div><h3>Tavolo Educazione · Rete eco sarda</h3><p>Promuove, nei territori della Sardegna, la connessione tra le famiglie che hanno scelto percorsi di educazione parentale e alternativa, e la costruzione di una rete tra educatori, famiglie e luoghi in natura.</p></div>
-        <div class="ivano labblocco" style="--c:var(--t2)">
+        <div class="ivano labblocco" style="--c:var(--t2)" id="g-labs">
           <div class="etichetta" style="color:var(--t2)">Area Educazione a cura dell'associazione Arghentu</div>
           <h3>Laboratori didattici e creativi per bambini e ragazzi</h3>
           <p class="apre"><b>I Nostri Lab al Festival</b></p>
@@ -867,5 +890,10 @@ viste.forEach(v=>{
 })();
 </script>
 <script src="../communitas-aeterna-prova/comune/fm-numeri.js?v=10221400" defer></script>
+<script>
+(function(){var f=document.getElementById('fila'),p=[].slice.call(document.querySelectorAll('#punti-fila i'));if(!f)return;
+ function on(){var w=f.firstElementChild.offsetWidth+16,k=Math.round(f.scrollLeft/w);if(f.scrollLeft+f.clientWidth>=f.scrollWidth-4)k=p.length-1;p.forEach(function(x,i){x.classList.toggle('on',i===k)})}
+ f.addEventListener('scroll',on,{passive:true});on();})();
+</script>
 </body>
 </html>
