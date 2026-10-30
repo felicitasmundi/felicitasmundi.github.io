@@ -394,44 +394,6 @@ html:has(body.cosmo-az),body.notte.cosmo-az{background:linear-gradient(180deg,#1
 body.notte .corpo .tc-piede textarea{flex:1;min-height:52px;height:52px;max-height:160px;border-radius:26px;padding:12px 18px;resize:none;font-size:18px;line-height:1.4;background:#1a2148}
 .tc-manda{flex:0 0 52px;height:52px;border-radius:26px;border:0;background:#D4AF6A;color:#0a1430;font-size:26px;font-weight:600;cursor:pointer}
 .tc-manda[disabled]{opacity:.6;cursor:wait}
-/* CASSA · SQL 136 */
-.cs-riga{display:flex;gap:8px;align-items:center}
-.cs-leggi{width:100%;min-height:64px;background:#D4AF6A;color:#0a1430;border:0;border-radius:16px;font:600 20px 'DM Sans',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;margin:8px 0}
-.cs-leggi svg{width:30px;height:30px}
-.cs-in{flex:1;min-width:0;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}
-.cs-b{background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5);border-radius:12px;padding:12px 14px;font:500 17px 'DM Sans',system-ui,sans-serif;cursor:pointer}
-.cs-b.oro{background:#D4AF6A;color:#0a1430;border-color:#D4AF6A}
-.cs-b:disabled{opacity:.45;cursor:default}
-.cs-carta{background:#1a2148;border:1px solid rgba(212,175,106,.3);border-radius:16px;padding:12px 14px;margin:8px 0;color:#F5F0E6;display:block;width:100%;box-sizing:border-box;text-align:left;font:inherit}
-button.cs-carta{cursor:pointer}
-.cs-carta b{font-size:18px;font-weight:500}
-.cs-m{display:block;font-size:16px;color:rgba(245,240,230,.72);margin-top:3px}
-.cs-m.sotto{color:#ff9a8a}
-.cs-q{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
-.cs-q button{width:44px;height:44px;border-radius:50%;background:transparent;border:1px solid rgba(212,175,106,.5);color:#F5F0E6;font-size:22px;cursor:pointer}
-.cs-q span{min-width:34px;text-align:center;font-size:20px}
-.cs-q input{width:96px;box-sizing:border-box;background:#0a1430;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:10px;padding:9px;font:400 18px 'DM Sans',system-ui,sans-serif}
-.cs-x{margin-left:auto;background:none;border:0;color:rgba(245,240,230,.65);font-size:16px;cursor:pointer;min-height:44px;text-decoration:underline}
-.cs-q input[type=number]{width:96px!important;flex:0 0 96px;margin:0}
-.cs-q .cs-x{width:auto;height:auto;border:0;border-radius:0;font-size:16px;padding:0 4px}
-.cs-tot{display:flex;justify-content:space-between;align-items:baseline;font-size:20px;margin:14px 0 8px;color:#F5F0E6}
-.cs-tot b{font-family:'Cinzel',Georgia,serif;font-size:32px;color:#D4AF6A;font-weight:500}
-.cs-paga{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.cs-paga button{min-height:64px;border-radius:16px;font:600 20px 'DM Sans',system-ui,sans-serif;cursor:pointer;border:1px solid #D4AF6A;background:#D4AF6A;color:#0a1430}
-.cs-paga button+button{background:transparent;color:#F5F0E6}
-.cs-paga button:disabled{opacity:.4;cursor:default}
-.cs-nota{font-size:17px;color:rgba(245,240,230,.75);margin:6px 0}
-.cs-esito{font-size:18px;color:#E8C77A;margin:10px 0}
-.cs-esito.err{color:#ff9a8a}
-.cs-esito:empty{display:none}
-.cs-somme{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
-.cs-somme div{background:#1a2148;border-radius:14px;padding:10px;text-align:center}
-.cs-somme b{display:block;font-size:22px;color:#D4AF6A;font-weight:500}
-.cs-somme small{font-size:15px;color:rgba(245,240,230,.72)}
-.cs-video{width:100%;border-radius:14px;background:#000;aspect-ratio:4/3;object-fit:cover;display:block}
-.cs-via .cs-m:first-of-type,.cs-via b{text-decoration:line-through;opacity:.6}
-.cs-sel{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}
-.cs-lab{display:block;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A;margin:14px 0 6px}
 .tc-velo{position:fixed;inset:0;background:rgba(10,20,48,.72);z-index:20}
 .tc-foglio{position:fixed;left:0;right:0;bottom:0;max-height:85vh;overflow-y:auto;background:#122050;border-top:2px solid #D4AF6A;border-radius:22px 22px 0 0;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));z-index:21;color:#F5F0E6;max-width:720px;margin:0 auto;box-sizing:border-box}
 .tc-presa{width:48px;height:5px;border-radius:3px;background:rgba(212,175,106,.45);margin:0 auto 12px}
@@ -693,15 +655,15 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){if(typeof spazioFerma==="function")spazioFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 /* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");if(v==="cervello"){location.href="coscienza.html";return;}vai(v);};});
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
-  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello")||((vista==="team"||vista==="cassa")&&v==="azione"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
-  document.body.classList.toggle("notte",/^(giornale|azione|team|cassa|compra|assistenza)$/.test(vista));
-  document.body.classList.toggle("cosmo-az",/^(azione|team|cassa)$/.test(vista)); /* Azione e la chat dei team in blu cosmo, come il disegno del 28/10 */
-  ({azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
+  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello")||(vista==="team"&&v==="azione"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  document.body.classList.toggle("notte",/^(giornale|azione|team|compra|assistenza)$/.test(vista));
+  document.body.classList.toggle("cosmo-az",/^(azione|team)$/.test(vista)); /* Azione e la chat dei team in blu cosmo, come il disegno del 28/10 */
+  ({azione:vAzione,team:vTeam,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
 }
 
 /* AZIONE · 29/10/2026, SQL 128 (thread «Chat interna dei team in Azione»; disegno azione-chat/bozza-azione, Gab 28/10: «Comunque per me va bene / fai sql e pubblichiamo»;
@@ -715,7 +677,6 @@ var ICO_AZ={
   stampa:'<svg viewBox="0 0 60 60" fill="none" stroke="#669944" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 22V10h24v12"/><path d="M10 22h40v18H10z"/><path d="M18 34h24v16H18z"/></svg>',
   articolo:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M30 6l20 24-20 24-20-24z"/><path d="M10 30h40M30 6l-8 24 8 24 8-24z"/></svg>',
   diretta:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="30" cy="30" r="5"/><path d="M19 19a16 16 0 0 0 0 22M41 19a16 16 0 0 1 0 22M12 12a26 26 0 0 0 0 36M48 12a26 26 0 0 1 0 36"/></svg>',
-  cassa:'<svg viewBox="0 0 60 60" fill="none" stroke="#4488BB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 14v32M14 14v32M20 14v32M26 14v32M34 14v32M40 14v32M46 14v32M52 14v32" stroke-width="2.6"/><path d="M4 30h52" stroke="#D4AF6A"/></svg>',
   persona:'<svg viewBox="0 0 60 60" fill="none" stroke="#E8C77A" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="30" cy="20" r="9"/><path d="M12 52c2-11 9-17 18-17s16 6 18 17"/><path d="M46 10v12M40 16h12"/></svg>',
   foto:'<svg width="26" height="26" viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M8 18h12l4-6h12l4 6h12v30H8z"/><circle cx="30" cy="32" r="9"/></svg>',
   vocale:'<svg viewBox="0 0 60 60" fill="none" stroke="#D4AF6A" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><rect x="22" y="8" width="16" height="28" rx="8"/><path d="M14 30a16 16 0 0 0 32 0M30 46v8M22 54h16"/></svg>',
@@ -759,8 +720,6 @@ function vAzione(){
   if(io.id){
     ruolo.push(carta("Scrivi un articolo",ICO_AZ.articolo,'data-mega="articolo"'));
     if(io.coordina)ruolo.push(carta("Crea diretta",ICO_AZ.diretta,'data-mega="diretta"'));
-    /* 30/10, SQL 136: la cassa dal vivo, per chi ha un ruolo nella logistica o coordina */
-    if(io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";}))ruolo.push(carta("Cassa",ICO_AZ.cassa,'data-vai="cassa"'));
     /* 24 ott 13:27, Gab: «vado in azione, inserisco una persona, ed esce su oggi» (SQL 116, solo il nucleo) */
     if(io.nucleo)ruolo.push(carta("Aggiungi una persona",ICO_AZ.persona,'data-vai="staff"'));
   }
@@ -2263,244 +2222,6 @@ function vLogistica(){
         lc.disabled=true;db.from("merce_lotti").insert(r).then(function(x){lc.disabled=false;if(x&&x.error)return mostra("#ll-ok",errore(x.error),true);vLogistica();},function(){lc.disabled=false;});};
     });
   });
-}
-/* ═══ LA CASSA · SQL 136, 30/10/2026 (thread «Chat interna dei team in Azione») ═══
-   Gab 30/10 05:33: «a me serve un apparecchio che riconosca che è uscito un libro, e che tenga il conto di cosa c è e cosa è stato dato / Poi faccio ricevite fiscali».
-   05:38: le ricevute sono di carta, le scrive chi ha timbro e registro contabile. 11:23: «non useremo sumup»: la carta passa dal POS, qui si segna solo «carta».
-   Ogni vendita ha un id fatto dal telefono: se la rete cade resta in coda e riparte da sola, senza raddoppiare (fm_cassa_vendi).
-   La giacenza scende da sola (righe = compiti «vendita» del 74). Punti: i punti di ritiro del villaggio e il Festival. */
-var CS={punto:null,punti:null,carrello:[],trovati:null,codiceNuovo:null,lotti:null,stream:null,timer:null,giorno:null,esito:"",err:false};
-function csLeggi(k){try{return localStorage.getItem(k);}catch(e){return null;}}
-function csScrivi(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v);}catch(e){}}
-function csCoda(){try{return JSON.parse(csLeggi("fm_cassa_coda")||"[]")||[];}catch(e){return [];}}
-function csCodaSalva(l){csScrivi("fm_cassa_coda",l.length?JSON.stringify(l):null);}
-function csId(){if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16);});}
-function csPuoRicevute(){return io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica"&&(r.ruolo==="contabilita"||r.ruolo==="emporio");});}
-function csPuoLegare(){return io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica"&&(r.ruolo==="emporio"||r.ruolo==="produttori");});}
-function cassaFerma(){
-  if(CS.timer){clearInterval(CS.timer);CS.timer=null;}
-  if(CS.stream){CS.stream.getTracks().forEach(function(t){t.stop();});CS.stream=null;}
-  var f=$("#cs-foglio");if(f)f.remove();
-}
-/* manda le vendite in coda, una alla volta; se manca la rete restano lì */
-var csInVolo=false;
-function csMando(){
-  if(csInVolo||!db)return Promise.resolve();
-  var v=csCoda().filter(function(x){return !x.err;})[0];if(!v)return Promise.resolve();
-  csInVolo=true;
-  return db.rpc("fm_cassa_vendi",{p_id:v.id,p_punto:v.punto,p_pagamento:v.pagamento,p_righe:v.righe}).then(function(r){
-    csInVolo=false;
-    if(r&&r.error){
-      if(/fetch|network|Failed|Load failed|timeout/i.test(r.error.message||""))return;
-      csCodaSalva(csCoda().map(function(x){if(x.id===v.id)x.err=errore(r.error);return x;}));return csMando();
-    }
-    csCodaSalva(csCoda().filter(function(x){return x.id!==v.id;}));return csMando();
-  },function(){csInVolo=false;});
-}
-window.addEventListener("online",function(){csMando().then(function(){if(vista==="cassa"){csDisegna();csGiorno();}});});
-function vCassa(){
-  var c=$("#corpo");
-  if(!io.id){vai("azione");return;}
-  var puo=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
-  c.innerHTML='<div class="giro" style="margin-bottom:4px"><button class="btn" id="cs-indietro">← Azione</button></div>'+
-    '<h2 class="tm-tit" style="margin-top:12px">Cassa</h2>'+
-    (puo?'<div id="cs-corpo"><p class="cs-nota">Un momento…</p></div>':'<p class="cs-nota">La cassa la tiene chi ha un ruolo nella logistica.</p>');
-  $("#cs-indietro").onclick=function(){vai("azione");};
-  if(!puo)return;
-  var pr=CS.punti?Promise.resolve(CS.punti):Promise.all([
-      db.rpc("fm_luoghi_del_villaggio",{p_villaggio:VILLAGGIO}).then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];}),
-      db.from("orme").select("id,titolo").eq("id",FEST_ID).then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];})
-    ]).then(function(v){
-      var l=v[1].map(function(f){return {id:f.id,titolo:f.titolo};}).concat(
-        v[0].filter(function(x){return (x.funzioni||[]).indexOf("punto_ritiro")>=0;}).map(function(x){return {id:x.id,titolo:x.titolo};}));
-      CS.punti=l;return l;});
-  pr.then(function(l){
-    if(vista!=="cassa")return;
-    if(!CS.punto||!l.some(function(x){return x.id===CS.punto;})){var s=csLeggi("fm_cassa_punto");CS.punto=l.some(function(x){return x.id===s;})?s:(l[0]&&l[0].id)||null;}
-    csDisegna();csMando().then(function(){if(vista==="cassa"){csDisegnaCoda();csGiorno();}});
-  });
-}
-function csTotale(){return CS.carrello.reduce(function(t,r){return t+Math.round(r.q*(r.prezzo||0)*100)/100;},0);}
-function csDisegna(){
-  var b=$("#cs-corpo");if(!b)return;
-  if(!CS.punti||!CS.punti.length){b.innerHTML='<p class="cs-nota">Non c\'è ancora un punto dove vendere: serve un luogo segnato come punto di ritiro, o la festa del Festival.</p>';return;}
-  b.innerHTML=
-    (CS.punti.length>1?'<label class="cs-lab" for="cs-punto">Dove sei</label><select class="cs-sel" id="cs-punto">'+CS.punti.map(function(p){return '<option value="'+esc(p.id)+'"'+(p.id===CS.punto?' selected':'')+'>'+esc(p.titolo)+'</option>';}).join("")+'</select>'
-      :'<p class="cs-nota">Sei a: <b>'+esc(CS.punti[0].titolo)+'</b></p>')+
-    '<button type="button" class="cs-leggi" id="cs-leggi">'+ICO_AZ.foto.replace(/#D4AF6A/g,"#0a1430")+'Leggi il codice a barre</button>'+
-    '<div class="cs-riga"><input class="cs-in" id="cs-q" type="search" inputmode="search" autocomplete="off" placeholder="Numero del codice o nome" aria-label="Numero del codice o nome della merce"><button type="button" class="cs-b" id="cs-cerca">Cerca</button></div>'+
-    '<div id="cs-trovati"></div>'+
-    '<div id="cs-vendita"></div>'+
-    '<div id="cs-coda"></div>'+
-    '<div class="cs-riga" style="justify-content:space-between;margin-top:18px"><p class="tm-et" style="margin:0">Le vendite del giorno</p><input type="date" class="cs-in" id="cs-data" style="flex:0 0 auto;width:auto" value="'+esc(CS.giorno||oggiISO())+'" aria-label="Giorno"></div>'+
-    '<div id="cs-giorno"><p class="cs-nota">Un momento…</p></div>';
-  var p=$("#cs-punto");if(p)p.onchange=function(){CS.punto=p.value;csScrivi("fm_cassa_punto",p.value);CS.carrello=[];CS.trovati=null;csDisegna();csGiorno();};
-  $("#cs-leggi").onclick=csCamera;
-  var q=$("#cs-q");
-  $("#cs-cerca").onclick=function(){csCerca(q.value);};
-  q.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();csCerca(q.value);}};
-  $("#cs-data").onchange=function(){CS.giorno=$("#cs-data").value||null;csGiorno();};
-  csCarrello();csDisegnaTrovati();csDisegnaCoda();
-}
-function csCarrello(){
-  var b=$("#cs-vendita");if(!b)return;
-  var tot=csTotale(),vuoto=!CS.carrello.length,manca=CS.carrello.some(function(r){return r.prezzo==null||isNaN(r.prezzo);});
-  b.innerHTML=
-    '<p class="tm-et">La vendita</p>'+
-    (vuoto?'<p class="cs-nota">Leggi un codice o cerca una merce: entra qui.</p>':
-      CS.carrello.map(function(r,i){
-        return '<div class="cs-carta"><b>'+esc(r.merce)+'</b>'+(r.giacenza!=null&&r.giacenza-r.q<0?'<span class="cs-m sotto">Qui ne risultano '+lgNum(r.giacenza)+': l\'arrivo forse non è stato segnato</span>':'')+
-          '<div class="cs-q"><button type="button" data-meno="'+i+'" aria-label="Uno in meno">−</button><span aria-live="polite">'+lgNum(r.q)+'</span><button type="button" data-piu="'+i+'" aria-label="Uno in più">+</button>'+
-          '<label class="cs-m" style="margin:0 0 0 6px">€ l\'uno</label><input type="number" min="0" step="0.01" inputmode="decimal" data-prezzo="'+i+'" value="'+(r.prezzo==null?'':r.prezzo)+'" aria-label="Prezzo per unità in euro" placeholder="€">'+
-          '<button type="button" class="cs-x" data-togli="'+i+'">Togli</button></div></div>';}).join(""))+
-    '<div class="cs-tot"><span>Totale</span><b id="cs-tot">'+lgEuro(tot)+'</b></div>'+
-    (manca?'<p class="cs-nota">Scrivi il prezzo dove manca.</p>':'')+
-    '<div class="cs-paga"><button type="button" id="cs-contanti"'+(vuoto||manca?' disabled':'')+'>Contanti</button><button type="button" id="cs-cartaP"'+(vuoto||manca?' disabled':'')+'>Carta</button></div>'+
-    '<p class="cs-nota">Con la carta: batti il totale sul POS, poi tocca «Carta».</p>'+
-    '<p class="cs-esito'+(CS.err?' err':'')+'" id="cs-esito" aria-live="polite">'+esc(CS.esito)+'</p>';
-  b.querySelectorAll("[data-piu]").forEach(function(x){x.onclick=function(){CS.carrello[+x.getAttribute("data-piu")].q+=1;CS.esito="";csCarrello();};});
-  b.querySelectorAll("[data-meno]").forEach(function(x){x.onclick=function(){var r=CS.carrello[+x.getAttribute("data-meno")];if(r.q>1)r.q-=1;csCarrello();};});
-  b.querySelectorAll("[data-togli]").forEach(function(x){x.onclick=function(){CS.carrello.splice(+x.getAttribute("data-togli"),1);csCarrello();};});
-  b.querySelectorAll("[data-prezzo]").forEach(function(x){x.onchange=function(){var v=parseFloat(String(x.value).replace(",","."));CS.carrello[+x.getAttribute("data-prezzo")].prezzo=v>=0?Math.round(v*100)/100:null;csCarrello();};});
-  $("#cs-contanti").onclick=function(){csVendi("contanti");};
-  $("#cs-cartaP").onclick=function(){csVendi("carta");};
-}
-function csAggiungi(m){
-  var r=CS.carrello.filter(function(x){return x.lotto===m.lotto_id;})[0];
-  if(r)r.q+=1;else CS.carrello.push({lotto:m.lotto_id,merce:m.merce,q:1,prezzo:m.prezzo==null?null:+m.prezzo,listino:m.prezzo==null?null:+m.prezzo,giacenza:m.giacenza==null?null:+m.giacenza});
-  CS.trovati=null;CS.codiceNuovo=null;CS.esito="";CS.err=false;
-  csDisegnaTrovati();csCarrello();
-}
-function csCerca(t){
-  t=String(t||"").trim();if(!t)return;
-  var codice=/^[0-9]{6,32}$/.test(t);
-  var a={p_punto:CS.punto,p_villaggio:VILLAGGIO};if(codice)a.p_codice=t;else a.p_testo=t;
-  CS.esito="";CS.err=false;
-  db.rpc("fm_cassa_cerca",a).then(function(r){
-    if(r&&r.error){CS.trovati=[];CS.esito=errore(r.error);CS.err=true;csDisegnaTrovati();csCarrello();return;}
-    var l=(r&&r.data)||[];
-    if(codice&&l.length===1){csAggiungi(l[0]);return;}
-    CS.trovati=l;CS.codiceNuovo=codice&&!l.length?t:null;
-    csDisegnaTrovati();
-  },function(){});
-}
-function csDisegnaTrovati(){
-  var b=$("#cs-trovati");if(!b)return;
-  if(CS.codiceNuovo){
-    var puo=csPuoLegare();
-    b.innerHTML='<div class="cs-carta"><b>Il codice '+esc(CS.codiceNuovo)+' non è ancora legato a una merce</b>'+
-      (puo?'<label class="cs-lab" for="cs-lotto">A quale merce lo lego?</label><select class="cs-sel" id="cs-lotto"><option value="">Un momento…</option></select>'+
-        '<div class="cs-riga" style="margin-top:10px"><button type="button" class="cs-b oro" id="cs-lega" disabled>Lega il codice</button><button type="button" class="cs-b" id="cs-lascia">Lascia stare</button></div>'
-        :'<span class="cs-m">Cerca la merce per nome. Il codice lo lega chi ha il ruolo Emporio o Produttori.</span>')+'</div>';
-    if(!puo)return;
-    $("#cs-lascia").onclick=function(){CS.codiceNuovo=null;CS.trovati=null;csDisegnaTrovati();};
-    db.from("merce_lotti").select("id,nome,lotto,codice_barre").is("chiuso_il",null).eq("villaggio_id",VILLAGGIO).order("nome").then(function(r){
-      var s=$("#cs-lotto");if(!s)return;
-      var l=((r&&!r.error&&r.data)||[]).filter(function(x){return !x.codice_barre;});
-      s.innerHTML=l.length?l.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.nome)+(x.lotto?' · '+esc(x.lotto):'')+'</option>';}).join(""):'<option value="">Nessuna merce senza codice</option>';
-      var g=$("#cs-lega");g.disabled=!l.length;
-      g.onclick=function(){g.disabled=true;var cod=CS.codiceNuovo;
-        db.from("merce_lotti").update({codice_barre:cod}).eq("id",s.value).then(function(x){
-          if(x&&x.error){g.disabled=false;CS.esito=errore(x.error);CS.err=true;var e=$("#cs-esito");if(e){e.textContent=CS.esito;e.className="cs-esito err";}return;}
-          CS.codiceNuovo=null;csCerca(cod);},function(){g.disabled=false;});};
-    },function(){});
-    return;
-  }
-  if(!CS.trovati){b.innerHTML="";return;}
-  b.innerHTML=CS.trovati.length?CS.trovati.map(function(m,i){
-      return '<button type="button" class="cs-carta" data-scegli="'+i+'"><b>'+esc(m.merce)+'</b>'+
-        '<span class="cs-m">'+(m.prezzo!=null?lgEuro(m.prezzo)+' · ':'senza prezzo · ')+'qui ne risultano '+lgNum(m.giacenza)+' '+esc(m.unita||"")+(m.produttore?' · '+esc(m.produttore):'')+'</span></button>';}).join("")
-    :'<p class="cs-nota">Nessuna merce con questo nome.</p>';
-  b.querySelectorAll("[data-scegli]").forEach(function(x){x.onclick=function(){csAggiungi(CS.trovati[+x.getAttribute("data-scegli")]);};});
-}
-/* la fotocamera legge il codice (BarcodeDetector: Chrome su Android). Dove non c'è, si scrive il numero sotto le barre. */
-function csCamera(){
-  cassaFerma();
-  var f=document.createElement("div");f.id="cs-foglio";document.body.appendChild(f);
-  var ok="BarcodeDetector" in window&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia;
-  f.innerHTML='<div class="tc-velo" id="cs-velo"></div><div class="tc-foglio" role="dialog" aria-modal="true" aria-label="Leggi il codice a barre"><div class="tc-presa"></div>'+
-    '<h2>Leggi il codice</h2>'+
-    (ok?'<p>Inquadra le barre, da vicino e con luce.</p><video class="cs-video" id="cs-video" playsinline muted autoplay></video><p class="cs-esito" id="cs-cam-esito"></p>'
-       :'<p>Questo telefono non legge i codici dall\'app. Scrivi il numero stampato sotto le barre.</p>')+
-    '<div class="cs-riga" style="margin-top:12px"><button type="button" class="cs-b" id="cs-chiudi" style="width:100%">Chiudi</button></div></div>';
-  $("#cs-velo").onclick=cassaFerma;$("#cs-chiudi").onclick=function(){cassaFerma();var q=$("#cs-q");if(q)q.focus();};
-  if(!ok)return;
-  var formati=["ean_13","ean_8","upc_a","upc_e","code_128","code_39"];
-  Promise.resolve(BarcodeDetector.getSupportedFormats?BarcodeDetector.getSupportedFormats():formati).then(function(sup){
-    var usa=formati.filter(function(x){return sup.indexOf(x)>=0;});
-    var det=new BarcodeDetector(usa.length?{formats:usa}:undefined);
-    return navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false}).then(function(st){
-      if(!$("#cs-foglio")){st.getTracks().forEach(function(t){t.stop();});return;}
-      CS.stream=st;var v=$("#cs-video");v.srcObject=st;
-      var occupato=false;
-      CS.timer=setInterval(function(){
-        if(occupato||!v.videoWidth)return;occupato=true;
-        det.detect(v).then(function(l){occupato=false;
-          var c=l&&l[0]&&String(l[0].rawValue||"").trim();
-          if(c){if(navigator.vibrate)navigator.vibrate(60);cassaFerma();var q=$("#cs-q");if(q)q.value=c;csCerca(c);}
-        },function(){occupato=false;});
-      },280);
-    });
-  }).catch(function(){var e=$("#cs-cam-esito");if(e){e.className="cs-esito err";e.textContent="La fotocamera non si apre: controlla il permesso, o scrivi il numero sotto le barre.";}});
-}
-function csVendi(pag){
-  if(!CS.carrello.length||!CS.punto)return;
-  var righe=CS.carrello.map(function(r){var x={lotto:r.lotto,quantita:r.q};if(r.prezzo!==r.listino)x.prezzo=r.prezzo;return x;});
-  var tot=csTotale();
-  var v={id:csId(),punto:CS.punto,pagamento:pag,righe:righe,totale:tot,il:Date.now(),
-         testo:CS.carrello.map(function(r){return lgNum(r.q)+" × "+r.merce;}).join(" · ")};
-  var l=csCoda();l.push(v);csCodaSalva(l);
-  CS.carrello=[];CS.trovati=null;CS.codiceNuovo=null;CS.esito="Un momento…";CS.err=false;csCarrello();csDisegnaTrovati();csDisegnaCoda();
-  csMando().then(function(){
-    var ancora=csCoda().filter(function(x){return x.id===v.id;})[0];
-    CS.err=!!(ancora&&ancora.err);
-    CS.esito=!ancora?"Venduto: "+lgEuro(tot)+(pag==="carta"?" con la carta.":" in contanti."):
-      ancora.err?"La vendita non è passata: "+ancora.err:"Segnata sul telefono: parte da sola appena c'è rete.";
-    if(vista==="cassa"){csCarrello();csDisegnaTrovati();csDisegnaCoda();csGiorno();}
-  });
-}
-function csDisegnaCoda(){
-  var b=$("#cs-coda");if(!b)return;
-  var l=csCoda();
-  if(!l.length){b.innerHTML="";return;}
-  b.innerHTML='<p class="tm-et">In attesa di rete · '+l.length+'</p>'+l.map(function(v){
-    return '<div class="cs-carta"><b>'+lgEuro(v.totale)+' · '+(v.pagamento==="carta"?"carta":"contanti")+'</b><span class="cs-m">'+esc(hhmm(v.il))+' · '+esc(v.testo||"")+'</span>'+
-      (v.err?'<span class="cs-m sotto">Non passata: '+esc(v.err)+'</span><div class="cs-riga" style="margin-top:8px"><button type="button" class="cs-b" data-riprova="'+esc(v.id)+'">Riprova</button><button type="button" class="cs-x" data-scarta="'+esc(v.id)+'">Togli</button></div>':'')+'</div>';}).join("")+
-    '<button type="button" class="cs-b" id="cs-manda" style="width:100%;margin-top:6px">Manda adesso</button>';
-  $("#cs-manda").onclick=function(){csMando().then(function(){csDisegnaCoda();csGiorno();});};
-  b.querySelectorAll("[data-riprova]").forEach(function(x){x.onclick=function(){var id=x.getAttribute("data-riprova");csCodaSalva(csCoda().map(function(v){if(v.id===id)delete v.err;return v;}));csMando().then(function(){csDisegnaCoda();csGiorno();});};});
-  b.querySelectorAll("[data-scarta]").forEach(function(x){x.onclick=function(){if(!confirm("Togliere questa vendita? Non sarà segnata."))return;var id=x.getAttribute("data-scarta");csCodaSalva(csCoda().filter(function(v){return v.id!==id;}));csDisegnaCoda();};});
-}
-/* le vendite del giorno: da qui chi ha timbro e registro scrive le ricevute e segna il numero */
-function csGiorno(){
-  var b=$("#cs-giorno");if(!b||!CS.punto)return;
-  var a={p_punto:CS.punto};if(CS.giorno&&CS.giorno!==oggiISO())a.p_giorno=CS.giorno;
-  var punto=CS.punto;
-  db.rpc("fm_cassa_giorno",a).then(function(r){
-    var b=$("#cs-giorno");if(!b||CS.punto!==punto)return;
-    if(r&&r.error){b.innerHTML='<p class="cs-nota">'+esc(errore(r.error))+'</p>';return;}
-    var l=(r&&r.data)||[],valide=l.filter(function(v){return !v.annullata;});
-    var con=0,car=0,senza=0;valide.forEach(function(v){if(v.pagamento==="carta")car+=+v.totale;else con+=+v.totale;if(!v.ricevuta_numero)senza++;});
-    var ric=csPuoRicevute();
-    b.innerHTML=(l.length?'<div class="cs-somme"><div><b>'+lgEuro(con)+'</b><small>contanti</small></div><div><b>'+lgEuro(car)+'</b><small>carta</small></div></div>'+
-        (senza?'<p class="cs-nota">'+(senza===1?'1 vendita aspetta':senza+' vendite aspettano')+' la ricevuta.</p>':'<p class="cs-nota">Tutte le vendite hanno la ricevuta.</p>'):
-        '<p class="cs-nota">Nessuna vendita in questo giorno.</p>')+
-      l.map(function(v){
-        return '<div class="cs-carta'+(v.annullata?' cs-via':'')+'"><b>'+lgEuro(v.totale)+' · '+(v.pagamento==="carta"?"carta":"contanti")+'</b>'+
-          '<span class="cs-m">'+esc(hhmm(v.ora))+' · '+esc(v.righe||"")+'</span>'+
-          (v.annullata?'<span class="cs-m">Annullata</span>':
-            v.ricevuta_numero?'<span class="cs-m">Ricevuta n. '+esc(v.ricevuta_numero)+'</span>':
-            (ric?'<div class="cs-riga" style="margin-top:8px"><input class="cs-in" data-nric="'+esc(v.vendita_id)+'" inputmode="numeric" maxlength="40" placeholder="Numero della ricevuta" aria-label="Numero della ricevuta"><button type="button" class="cs-b oro" data-ric="'+esc(v.vendita_id)+'">Segna</button></div>':'<span class="cs-m">Senza ricevuta</span>'))+
-          (!v.annullata&&!v.ricevuta_numero&&(v.venduta_da===io.id||io.coordina)?'<div class="cs-riga"><button type="button" class="cs-x" style="margin-left:0" data-annulla="'+esc(v.vendita_id)+'">Annulla la vendita</button></div>':'')+
-          '</div>';}).join("");
-    b.querySelectorAll("[data-ric]").forEach(function(x){x.onclick=function(){
-      var id=x.getAttribute("data-ric"),n=b.querySelector('[data-nric="'+id+'"]').value.trim();if(!n)return;
-      x.disabled=true;db.rpc("fm_cassa_ricevuta",{p_vendita:id,p_numero:n}).then(function(r){if(r&&r.error){x.disabled=false;alert(errore(r.error));return;}csGiorno();},function(){x.disabled=false;});};});
-    b.querySelectorAll("[data-annulla]").forEach(function(x){x.onclick=function(){
-      if(!confirm("Annullare questa vendita? La merce torna nel punto."))return;
-      x.disabled=true;db.rpc("fm_cassa_annulla",{p_vendita:x.getAttribute("data-annulla")}).then(function(r){if(r&&r.error){x.disabled=false;alert(errore(r.error));return;}csGiorno();},function(){x.disabled=false;});};});
-  },function(){});
 }
 /* i ruoli di un vicinato · li dà chi guida il vicinato, chi coordina, il nucleo (SQL 79) */
 function ruoliCerchio(vic,persone){
