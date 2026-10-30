@@ -738,7 +738,7 @@ viste.forEach(v=>{
   </div>
 </div>
 
-<script src="../communitas-aeterna-prova/comune/fm-prenota-festival.js?v=10292300"></script>
+<script src="../communitas-aeterna-prova/comune/fm-prenota-festival.js?v=10301620"></script>
 <script>
 (function(){
   var q=new URLSearchParams(location.search);
@@ -833,10 +833,15 @@ viste.forEach(v=>{
     var due=voce==='pasti'&&pastoScelto()==='entrambi';
     Promise.resolve(F.invia(d)).then(function(r){
       if(!due||!r||!r.ok)return r;
-      var d2=Object.assign({},d,{cosa:'cena'});return Promise.resolve(F.invia(d2)).then(function(r2){return r2&&r2.ok?r:r2});
+      var d2=Object.assign({},d,{cosa:'cena'});return Promise.resolve(F.invia(d2)).then(function(r2){if(r2&&r2.ok){r.id2=r2.id;return r}return r2});
     }).then(function(r){
       invia.disabled=false;
       if(!r||!r.ok){esito.textContent=(r&&r.errore)||'La prenotazione non è andata a buon fine: riprova.';esito.hidden=false;return}
+      // pranzo e cena: due pagamenti Stripe distinti, si aprono uno per volta in una nuova scheda
+      if(due&&F.linkPagamento&&F.linkPagamento('pranzo',r.id,d.email)){
+        esito.textContent='Prenotazione salvata. Paga i due pasti, uno alla volta:';
+        [['pranzo',r.id,'Paga il pranzo · 14 €'],['cena',r.id2,'Paga la cena · 14 €']].forEach(function(x){var a=document.createElement('a');a.className='tasto pieno';a.style.cssText='display:block;margin-top:12px;text-align:center';a.target='_blank';a.rel='noopener';a.href=F.linkPagamento(x[0],x[1],d.email);a.textContent=x[2];esito.appendChild(a)});
+        esito.hidden=false;return}
       if(F.aPagamento&&F.aPagamento(d.cosa,r.id,d.email)){esito.textContent='Prenotazione salvata. Ti porto al pagamento…';esito.hidden=false;return}
       esito.textContent='Prenotato: '+(due?'Pranzo e cena':NOMI[k])+(d.dettaglio?' ('+d.dettaglio+')':'')+', '+d.persone+(d.persone===1?' persona':' persone')+'. Ti arriva una mail di conferma.';esito.hidden=false;
     },function(){invia.disabled=false;esito.textContent='La prenotazione non è andata a buon fine: riprova.';esito.hidden=false});

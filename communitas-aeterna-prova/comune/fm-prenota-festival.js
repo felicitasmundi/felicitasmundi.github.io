@@ -12,8 +12,9 @@
   if (window.FMPrenotaFestival) return;
   var URL = "https://gfnveesogkfvkrdudpfg.supabase.co", KEY = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var EVENTO = "bfff97a1-3431-4939-b15e-304f14087509";
-  var LINK_STRIPE = { workshop: "", pranzo: "", cena: "", laboratori_bambini: "" };
-  var PREZZO = { workshop: "50 €" };
+  /* 30/10/2026 16:13-16:15, Gab: link Stripe veri; «il primo è cena», «secondo pranzo terzo whork» */
+  var LINK_STRIPE = { workshop: "https://buy.stripe.com/9B63cwgjq6cy88C7335EY02", pranzo: "https://buy.stripe.com/fZu5kEffmasOdsW5YZ5EY01", cena: "https://buy.stripe.com/cNi14offmasO1Keaff5EY00", laboratori_bambini: "" };
+  var PREZZO = { workshop: "50 €", pranzo: "14 €", cena: "14 €" };
   var NOMI = { ci_saro: "Ci sarò", pranzo: "Pranzo", cena: "Cena", workshop: "Workshop Tra Coscienza e Tecnologia",
                laboratori_bambini: "Laboratori didattici e creativi per bambini e ragazzi" };
 
@@ -36,9 +37,13 @@
     }).then(function(r){ return r.json().then(function(j){ return r.ok ? j : { ok: false, errore: "Non è stato salvato. Si può riprovare." }; }); })
       .catch(function(){ return { ok: false, errore: "Non è stato salvato. Controlla la connessione e riprova." }; });
   }
+  function linkPagamento(cosa, id, email){
+    var l = LINK_STRIPE[cosa]; if (!l) return "";
+    return l + (l.indexOf("?") < 0 ? "?" : "&") + "client_reference_id=" + encodeURIComponent(id) + "&prefilled_email=" + encodeURIComponent(email);
+  }
   function aPagamento(cosa, id, email){
-    var l = LINK_STRIPE[cosa]; if (!l) return false;
-    location.href = l + (l.indexOf("?") < 0 ? "?" : "&") + "client_reference_id=" + encodeURIComponent(id) + "&prefilled_email=" + encodeURIComponent(email);
+    var l = linkPagamento(cosa, id, email); if (!l) return false;
+    location.href = l;
     return true;
   }
 
@@ -112,6 +117,6 @@
       if (r){ r.checked = true; r.dispatchEvent(new Event("change", { bubbles: true })); }
     });
   }
-  window.FMPrenotaFestival = { invia: invia, aPagamento: aPagamento, LINK_STRIPE: LINK_STRIPE, NOMI: NOMI };
+  window.FMPrenotaFestival = { invia: invia, aPagamento: aPagamento, linkPagamento: linkPagamento, LINK_STRIPE: LINK_STRIPE, NOMI: NOMI };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", avvia); else avvia();
 })();
