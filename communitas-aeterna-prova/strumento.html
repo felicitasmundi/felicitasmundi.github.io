@@ -733,8 +733,6 @@ function testa(){
 function vai(v){if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 /* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");vai(v==="cervello"?"coscienza":v);};});
-/* 31/10 14:15, Gab: «ora coscienza rendilo un tasto non attivo.. cosi intanto lavoriamo su tutto il resto» */
-(function(){var b=document.querySelector('#nav button[data-v="cervello"]');if(b){b.disabled=true;b.setAttribute("aria-disabled","true");b.style.opacity=".35";b.style.cursor="default";b.onclick=function(e){e.preventDefault();};}})();
 /* 31/10, Gab: «coscienza è una pagina che esce fuori» → Coscienza si apre dentro l'app, con la barra in basso che resta */
 function vCoscienza(){
   $("#corpo").innerHTML='<iframe class="cos-in" src="coscienza.html?in=app" title="Coscienza"></iframe>';
