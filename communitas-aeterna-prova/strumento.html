@@ -502,6 +502,16 @@ header.top{position:relative}
 .esp-g.aperto{background:color-mix(in srgb,var(--e) 18%,transparent)}
 .esp-nl{font-style:normal;background:#D4AF6A;color:#1A1405;border-radius:10px;padding:0 7px;font-weight:600;margin-left:4px}
 #esp-team{margin-top:10px}
+/* 31/10 pulizie (Gab «ora ripuliamo»): una sola «Nuova chat», la carta in Espandi; la barra in alto in blu cosmo con le stelle */
+
+/* 31/10 · Coscienza dentro l'app */
+/* 31/10 · carte in blu cosmo (#1a2148) invece del marrone scuro, su tutte le pagine */
+body.notte .corpo{--carta:#1a2148;--carta2:#232b5e;--foglio:#1a2148;--linea:#2f3a72;--oro-chiaro:#2a315e;--att-chiaro:#3a3460;--ok-chiaro:#203f4a;--err-chiaro:#4a2a3a;--blu-chiaro:#22306a}
+.cos-in{display:block;width:100%;height:calc(100dvh - 190px);border:0;border-radius:18px;background:#0a1430}
+#esp-team .tm-nuova{display:none}
+.top{background-color:#1d2f66!important;background-image:radial-gradient(1px 1px at 12% 30%,rgba(245,240,230,.8),transparent 60%),radial-gradient(1px 1px at 37% 70%,rgba(245,240,230,.55),transparent 60%),radial-gradient(1.5px 1.5px at 63% 22%,rgba(212,175,106,.9),transparent 60%),radial-gradient(1px 1px at 81% 58%,rgba(245,240,230,.6),transparent 60%),linear-gradient(180deg,#1d2f66,#1a2a5e)!important}
+.nav{background-color:#0a1430!important;background-image:none!important}
+
 </style>
 </head>
 <body>
@@ -722,15 +732,20 @@ function testa(){
 /* ── disegno ── */
 function vai(v){if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 /* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
-document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");if(v==="cervello"){location.href="coscienza.html";return;}vai(v);};});
+document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");vai(v==="cervello"?"coscienza":v);};});
 /* 31/10 14:15, Gab: «ora coscienza rendilo un tasto non attivo.. cosi intanto lavoriamo su tutto il resto» */
 (function(){var b=document.querySelector('#nav button[data-v="cervello"]');if(b){b.disabled=true;b.setAttribute("aria-disabled","true");b.style.opacity=".35";b.style.cursor="default";b.onclick=function(e){e.preventDefault();};}})();
+/* 31/10, Gab: «coscienza è una pagina che esce fuori» → Coscienza si apre dentro l'app, con la barra in basso che resta */
+function vCoscienza(){
+  $("#corpo").innerHTML='<iframe class="cos-in" src="coscienza.html?in=app" title="Coscienza"></iframe>';
+}
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
-  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||(vista==="cerchio"&&v==="cervello")||((vista==="team"||vista==="cassa")&&v==="azione"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
-  document.body.classList.toggle("notte",/^(giornale|azione|team|cassa|compra|assistenza)$/.test(vista));
-  document.body.classList.toggle("cosmo-az",/^(azione|team|cassa)$/.test(vista)); /* Azione e la chat dei team in blu cosmo, come il disegno del 28/10 */
-  ({azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
+  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||((vista==="cerchio"||vista==="coscienza")&&v==="cervello")||((vista==="team"||vista==="cassa")&&v==="azione"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  /* 31/10, Gab: «mentre vedo espandi blu le altrre pagine sono bianche» → tutte le pagine in blu cosmo, come Espandi */
+  document.body.classList.add("notte");
+  document.body.classList.add("cosmo-az");
+  ({coscienza:vCoscienza,azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
 }
 
 /* AZIONE · 29/10/2026, SQL 128 (thread «Chat interna dei team in Azione»; disegno azione-chat/bozza-azione, Gab 28/10: «Comunque per me va bene / fai sql e pubblichiamo»;
@@ -839,18 +854,18 @@ function vAzione(){
       '<div class="esp-gg">'+gesti[e.k].join("")+'</div>'+
       (e.k==="terra"&&io.id?'<div id="esp-team" hidden><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>':'')+'</section>';}).join("")+
     /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
-    '<div data-fm-installa></div>'+(io.id?'<div data-fm-notifiche></div>':'');
+    '<div data-fm-installa></div>';
   legaVai(c);
   c.querySelectorAll("[data-mega]").forEach(function(b){b.onclick=function(){M.tipo=b.getAttribute("data-mega");M.msg="";vai("megafono");};});
   var bt=c.querySelector("[data-esp-team]");if(bt)bt.onclick=function(){var p=$("#esp-team");p.hidden=!p.hidden;bt.classList.toggle("aperto",!p.hidden);if(!p.hidden)p.scrollIntoView({behavior:"smooth",block:"start"});};
   var bc=c.querySelector("[data-esp-chat]");if(bc)bc.onclick=function(){nuovaChat();};
   espSolidi(c);
-  if(window.fmInstallaAvvia)fmInstallaAvvia();if(io.id&&window.fmNotifiche)fmNotifiche(db);
+  if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();
     leggiTeam().then(function(l){var n=$("#esp-team-nomi");if(!n)return;
       if(!l||!l.length){n.textContent="Ancora nessun team";return;}
       var nl=l.reduce(function(a,t){return a+(+t.non_letti||0);},0);
-      n.innerHTML=esc(l.map(function(t){return t.nome;}).join(" · "))+(nl?' <em class="esp-nl" aria-label="'+nl+' da leggere">'+nl+'</em>':'');});}
+      n.innerHTML=(l.length===1?"1 team":l.length+" team")+(nl?' <em class="esp-nl" aria-label="'+nl+' da leggere">'+nl+'</em>':'');});}
 }
 /* LE CHAT A DUE · SQL 129. Gab 29/10 07:59: «preferisco che uno riceva una richiesta di chat, con un messaggio di presentazione»;
    08:00 niente «blocca» in Felicitas: c'è «Chiudi la conversazione». */
@@ -866,7 +881,7 @@ function mieChat(){
       var ric=l.filter(function(c){return c.stato==="richiesta"&&!c.ho_chiesto;}),
           mie=l.filter(function(c){return c.stato==="richiesta"&&c.ho_chiesto;}),
           ap=l.filter(function(c){return c.stato==="aperta";});
-      box.innerHTML='<p class="tm-et">Le tue chat</p>'+
+      box.innerHTML=(ric.length||ap.length||mie.length?'<p class="tm-et">Le tue chat</p>':'')+
         ric.map(function(c){return '<div class="tm-ric"><b>'+esc(nomi[c.altra_persona]||"Una persona di Felicitas")+'</b><span class="m">vuole parlarti</span>'+
           '<span class="t">'+esc(c.presentazione)+'</span><div class="tc-az" style="margin:0"><button type="button" class="cerv" data-ris="'+esc(c.chat_id)+'" data-si="1">Accetta</button><button type="button" data-ris="'+esc(c.chat_id)+'">No grazie</button></div></div>';}).join("")+
         (ap.length?'<div class="tm-lista">'+ap.map(function(c){var n=nomi[c.altra_persona]||"";
@@ -2806,8 +2821,10 @@ function vDati(){
       '<div class="azioni" style="margin-top:10px"><button class="btn pieno" id="d-salva">Salva</button><span class="m" id="d-esito"></span></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Il mio villaggio e il mio vicinato</b><span class="t" id="d-luoghi">Un momento…</span><div class="fine"><a class="mini" href="cervello.html?c=10182300#ingresso">Come si entra in un vicinato</a></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Avvisi per mail</b><label class="t" style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-avvisi"'+(d.avvisi_mail===false?'':' checked')+'> Ricevo gli avvisi per mail</label><span class="m" id="d-avvisi-esito"></span></div>'+
+      /* 31/10: le notifiche del telefono stanno qui, non più in fondo a Espandi */'<div data-fm-notifiche style="margin-top:10px"></div>'+
       '<div class="card" style="margin-top:10px"><b>Segnala un problema tecnico</b><span class="m">Un pagamento che non si vede, una pagina che non si apre, una cosa che non funziona.</span><textarea id="d-segnala" style="min-height:70px"></textarea><div class="azioni"><button class="btn" id="d-manda">Manda</button><span class="m" id="d-segnala-esito"></span></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Account</b><span class="t">Entri con la tua mail e un codice.</span><div class="fine"><a class="mini" href="privacy.html" target="_blank">Privacy</a><a class="mini" href="privacy.html#condizioni" target="_blank">Condizioni</a><a class="mini" href="privacy.html#cookie" target="_blank">Cookie</a><button class="mini" id="d-esci">Esci</button></div></div>';
+    if(window.fmNotifiche)fmNotifiche(db);
     $("#d-salva").onclick=function(){var b=this,riga={};["nome","cognome","biografia","telefono","lingua"].forEach(function(k){riga[k]=$("#d-"+k).value.trim()||null;});
       if(!riga.nome){$("#d-esito").textContent="Il nome serve.";return;}
       b.disabled=true;db.from("persone").update(riga).eq("id",io.id).then(function(x){b.disabled=false;
@@ -2992,7 +3009,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|azione|compra|assistenza|staff)$/.test(q))vista=q;}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff)$/.test(q))vista=q;}catch(e){}
   /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
   try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;team.tipo="team";vista="team";}}catch(e){}
   /* le notifiche delle chat a due aprono strumento.html?v=azione&chat=<id> (SQL 129): se è ancora una richiesta, si resta in Azione a rispondere */
