@@ -42,8 +42,8 @@
      puntare al posto sbagliato e il salto fallisce in silenzio. Si parte
      dalla cartella della pagina d'accesso, che è quella del guscio. */
   var CASA = location.href.replace(/accesso\.html.*$/, "").replace(/[^/]*$/, "");
-  var SOGLIA = CASA + "strumento.html?v=oggi&c=10182300"; /* 19 ott, Gab: «dentro l app va su oggi» */
-  var ORME   = CASA + "strumento.html?v=oggi&c=10182300"; /* ⭐ 29 settembre, Gab: chi è già dentro arriva nei Vicinati */
+  var SOGLIA = CASA + "strumento.html?v=azione&c=10182300"; /* 31/10, Gab: «non è piu oggi la pagina dove cade l utente all entrata dell app, ma è espandi» (prima 19 ott: «dentro l app va su oggi») */
+  var ORME   = CASA + "strumento.html?v=azione&c=10182300"; /* 31/10 Espandi · ⭐ 29 settembre, Gab: chi è già dentro arriva nei Vicinati */
 
   var F = function () { return window.FMPiatto; };
 
