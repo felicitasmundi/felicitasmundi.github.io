@@ -111,6 +111,25 @@ footer a{text-decoration:underline}
 .ev-ap .tasti{margin-top:18px}
 .ev-ap .gratis{margin-top:14px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:#8ED06B}
 @media (min-width:900px){.ev-ap{flex-direction:row;align-items:stretch}.ev-ap .quadro{flex:1 1 52%;height:auto}.ev-ap .quadro img{-webkit-mask-image:linear-gradient(90deg,#000 72%,transparent);mask-image:linear-gradient(90deg,#000 72%,transparent)}.ev-ap .testi{flex:1 1 48%;justify-content:center;padding:40px 48px}}
+
+/* 31/10/2026, Gab 10:46: «dove c'è scritto entra dovrebbe esserci qualcosa che mostra cosa trovi dentro questo sistema di coscienza»; 10:47 «card a scorrimento che mi dicano cosa si trova nella piattaforma»; 11:09 «mostrami una prova poi aggiungiamo i testi»; 12:32 testi verbatim di Gab («un contesto di spiegazione attraverso un linguaggio morbido che ti mostra il sogno»), divisi in 5 card; 12:35 «in che modo lo racconterebbero» (piattaforma tipo Apple): riscritti da Claude; 12:45 Gab «Pubblica». Stesso schema delle card «Scopri ›» della pagina Festival. */
+.dentro{position:relative;z-index:1;padding:8px 0 10px}
+.dentro .etichetta{font-family:'Cinzel',serif;font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--oro);text-align:center;margin:0;padding:0 20px}
+.fila{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:20px;padding:18px 20px 22px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.fila::-webkit-scrollbar{display:none}
+.fila a{flex:0 0 min(78vw,330px);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:24px;overflow:hidden;background:var(--carta);border:2px solid color-mix(in srgb,var(--c) 60%,transparent);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.fila .foto{height:170px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--c) 26%,var(--carta)) 0%,var(--carta) 70%)}
+.fila .foto i{width:74px;height:74px;border-radius:50%;border:3px solid var(--c);box-shadow:0 0 34px var(--c),inset 0 0 18px color-mix(in srgb,var(--c) 50%,transparent)}
+.fila .tx{padding:16px 18px 20px;display:flex;flex-direction:column;gap:6px;flex:1}
+.fila b{font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:30px;line-height:1.05}
+.fila small{font-size:18px;color:var(--avorio);line-height:1.4}
+.fila .segna{font-size:18px;color:var(--fioco);border:1px dashed var(--riga);border-radius:10px;padding:6px 10px;font-style:italic}
+.fila em{margin-top:auto;padding-top:8px;font-style:normal;font-weight:600;color:var(--oro);font-size:19px}
+.punti-fila{display:flex;justify-content:center;gap:8px}
+.punti-fila i{width:9px;height:9px;border-radius:50%;background:var(--riga)}
+.punti-fila i.on{background:var(--oro)}
+.giu-solo{position:relative;z-index:1;text-align:center;padding:18px 0 0}
+@media (min-width:900px){.fila{padding-left:max(48px,calc((100vw - 1120px)/2 + 48px));scroll-padding-inline:max(48px,calc((100vw - 1120px)/2 + 48px))}}
 </style>
 </head>
 <body>
@@ -143,8 +162,15 @@ footer a{text-decoration:underline}
     </div>
     <!-- 31/10 09:52, Gab: «quando dici entra non si capisce cosa succede schiacciando entra»; 09:59 frase scelta: «per ora questo» -->
     <p class="sotto-entra">Sistema di Coscienza per aziende, gruppi di lavoro e Individui in cammino</p>
-    <a class="giu" href="#cos-e" aria-label="Scorri">⌄</a>
   </section>
+
+  <!-- 31/10/2026: card «cosa trovi dentro» (prova). Titoli e testi: dalle parole di Gab del 31/10 12:32, riscritti su sua richiesta (12:35) e approvati con «Pubblica» (12:45). -->
+  <section class="dentro" aria-label="Cosa trovi dentro">
+    <p class="etichetta">Il sogno</p>
+    <div class="fila" id="fila"><a href="accesso.html?torna=strumento.html" style="--c:#D4AF6A"><div class="foto"><i></i></div><div class="tx"><b>Una comunità che ti somiglia.</b><small>Persone che ti ascoltano, amicizie sane, relazioni che fanno emergere il tuo talento.</small><em>Scopri ›</em></div></a><a href="accesso.html?torna=strumento.html%3Fv%3Dteam" style="--c:#8DBF5E"><div class="foto"><i></i></div><div class="tx"><b>Lavorare insieme, con leggerezza.</b><small>Organizzazione, gestione dei conflitti, benessere delle persone in azienda.</small><em>Scopri ›</em></div></a><a href="cervello-digitale-evoluto.html" style="--c:#9b7ff0"><div class="foto"><i></i></div><div class="tx"><b>Tutto in un unico posto.</b><small>Il Cervello Digitale Evoluto: condiviso, semplice, ordinato.</small><em>Scopri ›</em></div></a><a href="accesso.html?torna=strumento.html%3Fv%3Dazione" style="--c:#E07A5F"><div class="foto"><i></i></div><div class="tx"><b>Qualcuno su cui contare.</b><small>Mutuo aiuto: spiritualità, assistenza terapeutica, dialogo, scambio e dono.</small><em>Scopri ›</em></div></a><a href="accesso.html?torna=strumento.html%3Fv%3Dazione" style="--c:#2BB3C9"><div class="foto"><i></i></div><div class="tx"><b>La spesa che crea comunità.</b><small>Emporio solidale per famiglie e gruppi d&#x27;acquisto, che sostiene chi produce. Alimenti e rimedi naturali anche per aziende, scuole e amministrazioni.</small><em>Scopri ›</em></div></a></div>
+    <div class="punti-fila" id="punti-fila"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+  </section>
+  <div class="giu-solo"><a class="giu" href="#cos-e" aria-label="Scorri">⌄</a></div>
 
   <section class="sch" id="cos-e">
     <h2 class="rivela">Cos'è FelicitasMundi</h2>
@@ -254,6 +280,10 @@ footer a{text-decoration:underline}
       g.fillStyle='rgb('+col+')';g.beginPath();g.arc(b.x,b.y,1.6*r,0,6.28);g.fill();}}
   misura();disegna();addEventListener('resize',function(){misura();disegna();});
 })();
+</script>
+<script>
+(function(){var f=document.getElementById('fila'),p=[].slice.call(document.querySelectorAll('#punti-fila i'));if(!f||!p.length)return;
+f.addEventListener('scroll',function(){var a=f.querySelectorAll('a'),w=a[0].offsetWidth+16,k=Math.round(f.scrollLeft/w);if(f.scrollLeft+f.clientWidth>=f.scrollWidth-4)k=a.length-1;p.forEach(function(x,i){x.classList.toggle('on',i===k);});},{passive:true});})();
 </script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 <script>try{sessionStorage.setItem("fm_origine","home")}catch(e){}</script>
