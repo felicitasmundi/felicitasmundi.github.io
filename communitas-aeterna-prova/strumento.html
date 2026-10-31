@@ -603,8 +603,8 @@ function ytChiedi(orma){try{if(db&&db.functions)db.functions.invoke("youtube-inf
 var VIDEO={cervello:["il-cervello-digitale","Il cervello digitale"],villaggi:["villaggi-e-vicinati","Villaggi e vicinati"]};
 function videoHTML(k){var v=VIDEO[k];return '<div class="vid169 fm-vid"><iframe data-fm-video="video/'+v[0]+'.html" title="'+esc(v[1])+'" allow="fullscreen" allowfullscreen></iframe></div>';}
 /* 21 ott 12:59 e 13:09, Gab: sotto il video del cervello «Attiva il cervello digitale evoluto della tua azienda» e «Organizza una conferenza nel tuo territorio» (SQL 103): arrivano al ruolo Eventi, con «dove». */
-var NOME_R={attivazione_cervello:"Attivazione del cervello digitale evoluto",conferenza:"Conferenza nel tuo territorio"};
-function ricTasti(){return '<div class="vid-tasti"><button class="btn" data-ric="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il cervello digitale evoluto della tua azienda</button><button class="btn" data-ric="conferenza" data-conta="tasto:conferenza">Organizza una conferenza nel tuo territorio</button></div><p class="ric-esito" aria-live="polite"></p>';}
+var NOME_R={attivazione_cervello:"Attivazione del Cervello Digitale Evoluto",conferenza:"Conferenza nel tuo territorio"};
+function ricTasti(){return '<div class="vid-tasti"><button class="btn" data-ric="attivazione_cervello" data-conta="tasto:attivazione_cervello">Attiva il Cervello Digitale Evoluto della tua azienda</button><button class="btn" data-ric="conferenza" data-conta="tasto:conferenza">Organizza una conferenza nel tuo territorio</button></div><p class="ric-esito" aria-live="polite"></p>';}
 document.addEventListener("click",function(e){var b=e.target.closest("[data-ric]");if(!b)return;var cosa=b.getAttribute("data-ric");if(!NOME_R[cosa])return;
   var es=b.parentNode.nextElementSibling;function di(t){if(es&&es.classList.contains("ric-esito"))es.textContent=t||"";}
   if(!io.id){location.href="accesso.html?torna="+encodeURIComponent("strumento.html?v=cervello");return;}
