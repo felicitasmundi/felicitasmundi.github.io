@@ -1078,6 +1078,69 @@ function apriPrat(){leggiTeam().then(function(l){var t=(l||[]).filter(function(x
   var c=document.getElementById("corpo");if(n>40){clearInterval(t);return;}
   if(!c||typeof vista==="undefined"||vista!=="azione"||!c.firstElementChild||document.getElementById("fm-pagato"))return;
   clearInterval(t);c.insertAdjacentHTML("afterbegin",'<div class="card" id="fm-pagato" style="border:1px solid #D4AF6A;background:#1a2148;text-align:center;padding:18px;border-radius:20px;margin-bottom:14px"><b style="font-size:20px;color:#D4AF6A">Pagamento ricevuto</b><span class="t" style="display:block;font-size:18px;color:#F5F0E6">Praticantato · 80 € al mese</span></div>');},250);})();
+
+/* 31/10/2026 · thread «Il Praticantato», Gab 21:07 «esatto era quello che avrei voluto» · SQL 140 lanciato: obiettivi nella chat dei team */
+/* ═══ Obiettivi nella chat dei team · per il Tour (strumento.html online, MD5 b828228e…) · thread «Il Praticantato», 31/10/2026 ═══
+   Gab 31/10 21:07: «esatto era quello che avrei voluto» (tocchi un messaggio → «Fai obiettivo»; nei tre puntini gli obiettivi;
+   nel Praticantato quelli di tutti i team, col nome del team). Serve lo SQL 140 (fm_fai_obiettivo, fm_team_obiettivi).
+   1 · azioniMsg(m): dopo il tasto «Apri argomento»/«Chiudi argomento» aggiungere
+         (team.tipo==="team"?'<button type="button" data-az="obiettivo">Fai obiettivo</button>':'')+
+   2 · legaAzioniMsg: dentro il click dei bottoni, prima di  if(a==="apri"){  aggiungere
+         if(a==="obiettivo"){faiObiettivo(box,m,esito);return;}
+   3 · menuChat: subito dopo ARG_H aggiungere  (duo?'':OB_H)+   e dopo riempiArgomenti(id);  aggiungere  if(!duo)riempiObiettivi(id);
+   4 · CSS: OB_CSS nello <style>.
+   21:14 Gab: «un obiettivo sarà "far girare il modulo produttori per incrementare i prodotti in emporio", rendilo pratico» ·
+   «e mettilo anche in praticantato» → l'obiettivo porta un link: nella scheda «Apri» e «Invia» (come il tasto del modulo produttore);
+   nel Praticantato si vede con gli obiettivi di tutti i team. */
+
+var OB_CSS='.ob-c{padding:12px 0;border-bottom:1px solid rgba(245,240,230,.09)}'+
+'.ob-c b{display:block;font-size:19px;font-weight:500;color:#F5F0E6}'+
+'.ob-c small{display:block;font-size:15px;color:rgba(245,240,230,.68);margin-top:2px}'+
+'.ob-c .ob-team{display:inline-block;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#D4AF6A;margin-bottom:2px}'+
+'.ob-c .fine{display:flex;justify-content:flex-end;margin-top:8px}'+
+'.ob-c button{font:600 16px "DM Sans",system-ui,sans-serif;border-radius:16px;padding:9px 16px;border:1px solid #D4AF6A;background:#D4AF6A;color:#0a1430;cursor:pointer}'+
+'.ob-c button.las,.ob-c a.ob-l,.ob-c button.ob-l{background:transparent;color:#D4AF6A}'+
+'.ob-c .fine{gap:8px;flex-wrap:wrap}.ob-c a.ob-l{font:600 16px "DM Sans",system-ui,sans-serif;border-radius:16px;padding:9px 16px;border:1px solid #D4AF6A;text-decoration:none}'+
+'.ob-f input{min-height:48px}';
+
+var OB_H='<h2 style="margin-top:26px">Obiettivi</h2><p>Tocca «Lo prendo» e l\'obiettivo entra tra le tue cose da fare.</p><div id="mc-ob"><p class="nota">Un momento…</p></div>';
+
+function riempiObiettivi(id){
+  db.rpc("fm_team_obiettivi",{p_team:id}).then(function(r){var e=$("#mc-ob");if(!e)return;
+    var l=(r&&!r.error&&r.data)||[];
+    if(!l.length){e.innerHTML='<p>Ancora nessun obiettivo. Tocca un messaggio e scegli «Fai obiettivo».</p>';return;}
+    var altri=l.some(function(o){return o.team!==l[0].team;})||(team.lista||[]).some(function(t){return t.team_id===id&&t.nome==="Praticantato";});
+    e.innerHTML=l.map(function(o){
+      return '<div class="ob-c">'+(altri?'<span class="ob-team">'+esc(o.team)+'</span>':'')+'<b>'+esc(o.titolo)+'</b><small>'+
+        (o.quanti_servono?o.presi+" su "+o.quanti_servono:(o.presi===1?"1 persona":o.presi?o.presi+" persone":"nessuno l'ha preso"))+
+        (o.entro_il?" · entro il "+esc(new Date(o.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</small>'+
+        '<div class="fine">'+(o.link?'<a class="ob-l" href="'+esc(o.link)+'" target="_blank" rel="noopener">Apri</a><button type="button" class="ob-l" data-ob-inv="'+esc(o.link)+'" data-ob-tit="'+esc(o.titolo)+'">Invia</button>':'')+(o.mio?'<button type="button" class="las" data-ob-las="'+esc(o.id)+'">Lo lascio</button>':'<button type="button" data-ob-pre="'+esc(o.id)+'">Lo prendo</button>')+'</div></div>';}).join("");
+    function dopo(r){if(r&&r.error){$("#mc-esito").textContent=errore(r.error);}cache.obiettivi=null;riempiObiettivi(id);}
+    e.querySelectorAll("[data-ob-pre]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_orma",{p_orma:b.getAttribute("data-ob-pre")}).then(dopo,dopo);};});
+    e.querySelectorAll("[data-ob-inv]").forEach(function(b){b.onclick=function(){var u=b.getAttribute("data-ob-inv"),t=b.getAttribute("data-ob-tit");
+      if(navigator.share){navigator.share({title:t,url:u}).catch(function(){});return;}
+      (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){$("#mc-esito").textContent="Link copiato.";},
+        function(){location.href="https://wa.me/?text="+encodeURIComponent(t+" "+u);});};});
+    e.querySelectorAll("[data-ob-las]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_lascia_orma",{p_orma:b.getAttribute("data-ob-las")}).then(dopo,dopo);};});
+  },function(){var e=$("#mc-ob");if(e)e.innerHTML='<p>Gli obiettivi non si aprono adesso.</p>';});
+}
+
+function faiObiettivo(box,m,esito){
+  box.innerHTML='<div class="ob-f" style="display:flex;flex-wrap:wrap;gap:8px;flex:1 1 100%">'+
+    '<input type="text" id="ob-t" maxlength="120" placeholder="L\'obiettivo" aria-label="L\'obiettivo" style="flex:1 1 100%" value="'+esc((m.testo||"").replace(/https:\/\/\S+/g,"").trim().slice(0,120))+'">'+
+    '<input type="number" id="ob-q" min="1" max="99" inputmode="numeric" placeholder="Quanti servono" aria-label="Quante persone servono" style="flex:1 1 40%">'+
+    '<input type="date" id="ob-e" aria-label="Entro quando" style="flex:1 1 40%">'+
+    '<input type="url" id="ob-l" inputmode="url" placeholder="Link (facoltativo): https://…" aria-label="Link" style="flex:1 1 100%" value="'+esc(((m.testo||"").match(/https:\/\/\S+/)||[""])[0])+'">'+
+    '<button type="button" class="cerv" id="ob-ok">Fai obiettivo</button><button type="button" id="ob-no">Annulla</button></div>';
+  var t=$("#ob-t");t.focus();
+  $("#ob-no").onclick=function(){team.scelto=null;disegnaTeam();};
+  $("#ob-ok").onclick=function(){var v=t.value.trim();if(!v){t.focus();return;}var b=this;b.disabled=true;
+    var q=+$("#ob-q").value||null,en=$("#ob-e").value||null,li=$("#ob-l").value.trim()||null;
+    db.rpc("fm_fai_obiettivo",{p_messaggio:m.id,p_titolo:v,p_quanti:q,p_entro:en,p_link:li}).then(function(r){b.disabled=false;cache.obiettivi=null;esito(r);},
+      function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});};
+}
+
+document.head.insertAdjacentHTML("beforeend","<style>"+OB_CSS+"</style>");
 function vTeam(){
   var c=$("#corpo"),id=team.id;
   if(!io.id||!id){vai("azione");return;}
@@ -1183,6 +1246,7 @@ function azioniMsg(m){
   var chiude=m.argomento&&(m.argomento_da===io.id||io.nucleo);
   return '<div class="tc-az" id="tc-az"><button type="button" data-az="rispondi">Rispondi</button>'+
     (m.argomento?(chiude?'<button type="button" data-az="chiudi">Chiudi argomento</button>':''):'<button type="button" data-az="apri">Apri argomento</button>')+
+    (team.tipo==="team"?'<button type="button" data-az="obiettivo">Fai obiettivo</button>':'')+
     (team.prop[m.id]||team.tipo==="chat"?'':'<button type="button" class="cerv" data-az="cervello">Metti nel Cervello</button>')+
     (m.registro_id||!m.testo||team.tipo==="chat"?'':'<select data-az="registro" aria-label="Segna nel registro"><option value="">Segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+
     '</div>';
@@ -1195,6 +1259,7 @@ function legaAzioniMsg(e){
     if(a==="rispondi"){team.scelto=null;disegnaTeam();var t=$("#tc-testo");if(t){t.focus();t.scrollIntoView({block:"center"});}return;}
     if(a==="cervello"){mettiNelCervello(m);return;}
     if(a==="chiudi"){b.disabled=true;db.rpc("fm_messaggio_argomento",{p_messaggio:m.id,p_titolo:""}).then(esito,function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});return;}
+    if(a==="obiettivo"){faiObiettivo(box,m,esito);return;}
     if(a==="apri"){
       box.innerHTML='<input type="text" id="tc-arg-t" maxlength="80" placeholder="Il nome dell\'argomento" aria-label="Il nome dell\'argomento" style="flex:1 1 100%"><button type="button" class="cerv" id="tc-arg-ok">Apri</button><button type="button" id="tc-arg-no">Annulla</button>';
       var i=$("#tc-arg-t");i.focus();
@@ -1335,14 +1400,14 @@ function mandaAllegato(id,blob,campo,nome){
 /* il tasto «⋯»: le notifiche di questa chat (fm_chat_avvisi) e, nella chat a due, «Chiudi la conversazione» */
 function menuChat(){
   var id=team.id,duo=team.tipo==="chat";
-  var f=foglioTeam(ARG_H+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
+  var f=foglioTeam(ARG_H+(duo?'':OB_H)+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
     [["ogni","A ogni messaggio",""],["ora","Una all'ora","se arrivano più messaggi, una sola notifica"],["mai","Mai","i messaggi li vedi quando apri l'app"]].map(function(x){
       return '<button type="button" data-avv="'+x[0]+'" aria-pressed="false">'+x[1]+(x[2]?'<small>'+x[2]+'</small>':'')+'</button>';}).join("")+'</div>'+
     (duo?'<label>La conversazione</label><button type="button" class="tc-btn" id="mc-chiudi" style="background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5)">Chiudi la conversazione</button>'+
       '<p class="tc-nota">Si chiude per tutti e due. Per riaprirla serve una nuova richiesta, dopo 30 giorni.</p>':'')+
     '<p class="tc-nota" id="mc-esito" aria-live="polite"></p>');
   if(!f)return;
-  riempiArgomenti(id);
+  riempiArgomenti(id);if(!duo)riempiObiettivi(id);
   function segna(v){f.querySelectorAll("[data-avv]").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-avv")===v));});}
   db.rpc("fm_mia_scelta_avvisi",{p_cerchio:id}).then(function(r){if(r&&!r.error)segna(r.data||"ora");},function(){});
   f.querySelectorAll("[data-avv]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-avv");
