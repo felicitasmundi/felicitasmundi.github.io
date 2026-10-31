@@ -1094,8 +1094,8 @@ function vTeam(){
   }
   var duo=team.tipo==="chat";
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
-      '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div><button type="button" class="tc-arg" id="tc-arg"><span class="tc-segno" aria-hidden="true"></span>Argomenti</button>'+
-      '<button type="button" class="tc-menu" id="tc-menu" aria-label="Notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
+      '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div>'+
+      '<button type="button" class="tc-menu" id="tc-menu" aria-label="Argomenti e notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
     (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
     '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
@@ -1103,7 +1103,7 @@ function vTeam(){
       '<textarea id="tc-testo" maxlength="2000" rows="1" placeholder="'+(duo?"Scrivi…":"Scrivi al team…")+'" aria-label="Scrivi"></textarea><button type="button" class="tc-manda" id="tc-manda" aria-label="Manda">↑</button></div>'+
     '<div id="tc-foglio"></div>';
   $("#tc-ind").onclick=function(){vai("azione");};
-  $("#tc-arg").onclick=argomenti;
+  /* 31/10 21:00, Gab: «metti argomenti tra le cose che trovi nei tre puntini, mettilo tra i primi input» → il tasto Argomenti esce dalla testa */
   $("#tc-menu").onclick=menuChat;
   $("#tc-piu").onclick=allega;
   if($("#tc-prat"))tastiPrat();
@@ -1213,7 +1213,10 @@ function foglioTeam(h){
   return f.querySelector(".tc-foglio");
 }
 function argomenti(){
-  var id=team.id,f=foglioTeam('<h2>Argomenti</h2><p>Tocca un argomento: la chat torna al messaggio che l\'ha aperto.</p><div id="tc-ar"><p class="nota">Un momento…</p></div>');if(!f)return;
+  var id=team.id,f=foglioTeam(ARG_H);if(!f)return;riempiArgomenti(id);
+}
+var ARG_H='<h2>Argomenti</h2><p>Tocca un argomento: la chat torna al messaggio che l\'ha aperto.</p><div id="tc-ar"><p class="nota">Un momento…</p></div>';
+function riempiArgomenti(id){
   db.rpc("fm_team_argomenti",{p_team:id}).then(function(r){var e=$("#tc-ar");if(!e)return;
     var l=(r&&!r.error&&r.data)||[];
     if(!l.length){e.innerHTML='<p>Ancora nessun argomento. Tocca un messaggio e scegli «Apri argomento».</p>';return;}
@@ -1332,13 +1335,14 @@ function mandaAllegato(id,blob,campo,nome){
 /* il tasto «⋯»: le notifiche di questa chat (fm_chat_avvisi) e, nella chat a due, «Chiudi la conversazione» */
 function menuChat(){
   var id=team.id,duo=team.tipo==="chat";
-  var f=foglioTeam('<h2>Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
+  var f=foglioTeam(ARG_H+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
     [["ogni","A ogni messaggio",""],["ora","Una all'ora","se arrivano più messaggi, una sola notifica"],["mai","Mai","i messaggi li vedi quando apri l'app"]].map(function(x){
       return '<button type="button" data-avv="'+x[0]+'" aria-pressed="false">'+x[1]+(x[2]?'<small>'+x[2]+'</small>':'')+'</button>';}).join("")+'</div>'+
     (duo?'<label>La conversazione</label><button type="button" class="tc-btn" id="mc-chiudi" style="background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5)">Chiudi la conversazione</button>'+
       '<p class="tc-nota">Si chiude per tutti e due. Per riaprirla serve una nuova richiesta, dopo 30 giorni.</p>':'')+
     '<p class="tc-nota" id="mc-esito" aria-live="polite"></p>');
   if(!f)return;
+  riempiArgomenti(id);
   function segna(v){f.querySelectorAll("[data-avv]").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-avv")===v));});}
   db.rpc("fm_mia_scelta_avvisi",{p_cerchio:id}).then(function(r){if(r&&!r.error)segna(r.data||"ora");},function(){});
   f.querySelectorAll("[data-avv]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-avv");
