@@ -1,0 +1,100 @@
+<title>Modulo produttore</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Pagina Cervello a card, una colonna da telefono; il modulo da firmare su bianco in fondo */
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--tx:#F5F0E6;--tx2:#c9c3d6;--foglio:#ffffff;--inchiostro:#1b1f2e;--riga:#9aa0b4;
+--disp:Cinzel,Georgia,serif;--corpo:"DM Sans",system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:linear-gradient(180deg,var(--c1),var(--c2) 40%,var(--c3));background-color:var(--c3);color:var(--tx);font:18px/1.5 var(--corpo);min-height:100vh}
+.app{max-width:560px;margin:0 auto;padding-block:20px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.sopra{font-size:14px;letter-spacing:.2em;color:var(--oro);text-transform:uppercase;margin:0}
+h1{font-family:var(--disp);font-weight:400;letter-spacing:.08em;font-size:30px;margin:0;text-wrap:balance}
+.intro{color:var(--tx2);margin:0}
+.card{background:var(--carta);border:1px solid rgba(212,175,106,.35);border-radius:18px;padding:18px}
+.card h2{font-family:var(--disp);font-weight:600;font-size:21px;letter-spacing:.04em;color:var(--oro);margin:0 0 8px;text-wrap:balance}
+.card p{margin:0 0 8px}.card p:last-child{margin-bottom:0}
+.card ul{margin:4px 0 8px;padding-left:22px}.card li{margin:3px 0}
+.verifica{display:block;margin-top:10px;padding:10px 12px;border:1px dashed var(--oro);border-radius:10px;color:var(--oro);font-size:16px}
+.segno{background:rgba(212,175,106,.18);color:var(--oro);padding:0 6px;border-radius:6px;white-space:nowrap}
+.foglio{background:var(--foglio);color:var(--inchiostro);border-radius:6px;padding:28px 22px;font:18px/1.6 var(--corpo)}
+.foglio h2{font-family:var(--disp);font-size:20px;letter-spacing:.06em;margin:0 0 4px;color:var(--inchiostro)}
+.foglio .sot{margin:0 0 18px;font-size:15px;color:#4a5068}
+.foglio p{margin:0 0 14px}
+.l{display:inline-block;min-width:9em;border-bottom:1px solid var(--riga);height:1.1em;vertical-align:baseline}
+.l.lunga{min-width:14em}
+.foglio ol{padding-left:22px;margin:0 0 14px}.foglio li{margin:6px 0}
+.campi{display:grid;gap:14px;margin-top:20px}
+.campo{display:flex;flex-direction:column;gap:4px;font-size:15px;color:#4a5068}
+.campo span{border-bottom:1px solid var(--riga);height:30px}
+.nota{color:var(--tx2);font-size:15px;border-top:1px solid rgba(212,175,106,.25);padding-top:12px;margin:6px 0 0}
+</style>
+<div class="app">
+<p class="sopra">Cervello Digitale Evoluto · Terra · Emporio</p>
+<h1>Modulo produttore</h1>
+<p class="intro">Le cose da dare a chi partecipa come produttore, anche con prodotti fatti a mano che seguono l'HACCP base.</p>
+
+<section class="card"><h2>Vendita tramite organizzatore</h2>
+<p>La normativa italiana ed europea non vieta la vendita indiretta (cioè tramite un organizzatore terzo) dei prodotti alimentari artigianali, ma impone che:</p>
+<ul><li>Il produttore sia identificabile e responsabile della conformità del prodotto.</li>
+<li>I prodotti siano tracciabili (sai da chi sono stati prodotti e con quali ingredienti).</li>
+<li>L'organizzatore del festival non venda i prodotti come propri, ma agisca solo come intermediario (es. raccogliendo gli ordini, gestendo la cassa, distribuendo le cassette).</li></ul></section>
+
+<section class="card"><h2>Il produttore</h2>
+<p>Deve essere in regola con la normativa igienico-sanitaria:</p>
+<ul><li>Aver comunicato l'attività alla ASL (come “produttore occasionale”).</li>
+<li>Rispettare le norme di igiene (es. conservazione dei prodotti, tracciabilità degli ingredienti).</li></ul>
+<p>Se supera i limiti, deve aprire partita IVA e seguire le norme HACCP complete.</p>
+<span class="verifica">Limiti di occasionalità: da verificare col commercialista.</span></section>
+
+<section class="card"><h2>L'etichetta di ogni prodotto</h2>
+<ul><li>Nome e indirizzo del produttore.</li>
+<li>Denominazione del prodotto (es. “Marmellata di fichi artigianale”).</li>
+<li>Lista degli ingredienti e allergeni.</li>
+<li>Data di produzione e scadenza.</li>
+<li>Peso netto.</li></ul></section>
+
+<section class="card"><h2>La delega</h2>
+<p>Il produttore autorizza esplicitamente l'organizzatore a vendere i suoi prodotti. La delega autorizza l'organizzatore a:</p>
+<ul><li>Prendere gli ordini.</li><li>Gestire la cassa.</li><li>Distribuire le cassette.</li></ul>
+<p>La delega può essere semplice e informale (es. una mail o un modulo firmato). Il modulo è in fondo a questa pagina.</p></section>
+
+<section class="card"><h2>L'organizzatore</h2>
+<ul><li>Non è un venditore diretto, ma un facilitatore della vendita.</li>
+<li>Non modifica i prodotti (es. aprirli, mischiarli, confezionarli in modo diverso da quello originale).</li>
+<li>Non vende prodotti non conformi: se un prodotto non è etichettato correttamente o non rispetta le norme igieniche, non può essere incluso nelle cassette.</li></ul></section>
+
+<section class="card"><h2>Il registro</h2>
+<p>Per la tracciabilità l'organizzatore tiene un registro con:</p>
+<ul><li>Nome dei produttori.</li><li>Prodotti inclusi in ogni cassetta.</li><li>Prezzo di vendita e quantità.</li></ul>
+<p>Serve in caso di controlli ASL o richieste dei consumatori. Durante il festival si annota quante cassette sono state vendute per ogni produttore e quale ricavo spetta a ciascuno.</p></section>
+
+<section class="card"><h2>Le cassette</h2>
+<p>Ogni cassetta è etichettata con:</p>
+<ul><li>Lista dei prodotti inclusi (con nome del produttore).</li><li>Prezzo totale.</li><li>Data del festival.</li><li>Avvertenze (es. “Prodotti artigianali, conservare in luogo fresco e asciutto”).</li></ul>
+<p>Se la cassetta contiene prodotti deperibili (es. formaggio fresco): “Conservare in frigorifero” (se necessario) e “Da consumarsi entro X giorni dalla data del festival”.</p>
+<p>Evitare di mischiare prodotti deperibili con non deperibili in una stessa cassetta.</p></section>
+
+<section class="card"><h2>I ricavi</h2>
+<p>Ai produttori si comunica come verranno suddivisi i ricavi.</p>
+<p>Entro 30 giorni si versa a ciascuno la sua parte, con una ricevuta di pagamento (anche informale) che specifica prodotti venduti, quantità e importo corrisposto.</p>
+<span class="verifica">Ricevute, fatture e scontrini: da verificare col commercialista.</span></section>
+
+<section class="card"><h2>Se un prodotto non è conforme</h2>
+<p>Se un prodotto non rispetta le norme igieniche (es. scaduto, non etichettato, contaminato) non si include nelle cassette. Se un cliente si lamenta, l'organizzatore rimuove il prodotto e avvisa il produttore. In caso di danno alla salute, la responsabilità ricade sul produttore.</p></section>
+
+<section class="card"><h2>Conservare i documenti</h2>
+<p>Dichiarazioni, registro vendite, ricevute: si tiene tutto per almeno 5 anni, in caso di controlli ASL o fiscali.</p></section>
+
+<section class="foglio" aria-label="Modulo da firmare">
+<h2>Dichiarazione e delega del produttore</h2>
+<p class="sot">Da compilare e firmare prima del festival</p>
+<p>Io sottoscritto <span class="l lunga"></span>, produttore di <span class="l lunga"></span>, dichiaro che i prodotti forniti per il festival <span class="l lunga"></span> del <span class="l"></span> sono conformi alle norme igieniche e di tracciabilità. Autorizzo <span class="l lunga"></span> a venderli in mio nome durante l'evento.</p>
+<p>Dichiaro inoltre:</p>
+<ol><li>Che i prodotti sono conformi alle norme igieniche.</li>
+<li>Che l'organizzatore è autorizzato a venderli in mio nome: prendere gli ordini, gestire la cassa, distribuire le cassette.</li>
+<li>Che i prodotti sono tracciabili: ho prodotto <span class="l"></span> di <span class="l"></span> il <span class="l"></span> con ingredienti <span class="l lunga"></span>.</li></ol>
+<div class="campi"><div class="campo">Luogo e data<span></span></div><div class="campo">Firma del produttore<span></span></div></div>
+</section>
+
+</div>
