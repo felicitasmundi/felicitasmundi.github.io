@@ -73,6 +73,29 @@ p{margin:0 0 12px}
 </style>
 </head>
 <body>
+<canvas id="stelle" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1"></canvas>
+<script>
+(function(){
+  var c=document.getElementById('stelle'),g=c.getContext&&c.getContext('2d'); if(!g) return;
+  /* il cielo: più stelle, alcune più brillanti; ferme, disegnate una volta sola (Gab 31/10: «aggiungere piu stelle», «alcune che siano piu abbaglianti di altre», scelta la versione 2) */
+  var S=[],B=[],W,H,r=Math.min(window.devicePixelRatio||1,2);
+  function misura(){W=c.width=innerWidth*r;H=c.height=innerHeight*r;S=[];B=[];var a=innerWidth*innerHeight,n=Math.round(a/7000),nb=Math.max(3,Math.round(a/64000));
+    for(var i=0;i<n;i++)S.push({x:Math.random()*W,y:Math.random()*H,s:(Math.random()*1.3+.5)*r,a:.45+Math.random()*.55});
+    for(var j=0;j<nb;j++){var lato=j%2?(.82+Math.random()*.16):(.02+Math.random()*.16);B.push({x:lato*W,y:(.04+Math.random()*.92)*H,l:(9+Math.random()*10)*r,o:j%4==3});}}
+  function disegna(){g.clearRect(0,0,W,H);
+    for(var i=0;i<S.length;i++){var s=S[i];g.globalAlpha=s.a;g.fillStyle=i%7?'#F5F0E6':'#D4AF6A';g.beginPath();g.arc(s.x,s.y,s.s,0,6.28);g.fill();}
+    for(var k=0;k<B.length;k++){var b=B[k],col=b.o?'240,215,160':'255,250,240',h=g.createRadialGradient(b.x,b.y,0,b.x,b.y,b.l);
+      h.addColorStop(0,'rgba('+col+',.55)');h.addColorStop(.25,'rgba('+col+',.18)');h.addColorStop(1,'rgba('+col+',0)');
+      g.globalAlpha=1;g.fillStyle=h;g.beginPath();g.arc(b.x,b.y,b.l,0,6.28);g.fill();
+      var lx=g.createLinearGradient(b.x-b.l,0,b.x+b.l,0);lx.addColorStop(0,'rgba('+col+',0)');lx.addColorStop(.5,'rgba('+col+',.9)');lx.addColorStop(1,'rgba('+col+',0)');
+      g.fillStyle=lx;g.fillRect(b.x-b.l,b.y-.5*r,2*b.l,1*r);
+      var ly=g.createLinearGradient(0,b.y-b.l,0,b.y+b.l);ly.addColorStop(0,'rgba('+col+',0)');ly.addColorStop(.5,'rgba('+col+',.9)');ly.addColorStop(1,'rgba('+col+',0)');
+      g.fillStyle=ly;g.fillRect(b.x-.5*r,b.y-b.l,1*r,2*b.l);
+      g.fillStyle='rgb('+col+')';g.beginPath();g.arc(b.x,b.y,1.6*r,0,6.28);g.fill();}}
+  misura();disegna();addEventListener('resize',function(){misura();disegna();});
+})();
+</script>
+
 <header class="testa">
   <a class="torna" id="torna" href="accoglienza.html#cervello">‹ Torna alla home</a>
   <div class="titolo">Cervello FelicitasMundi</div>
