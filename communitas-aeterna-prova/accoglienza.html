@@ -19,7 +19,7 @@ for(var i=0;i<localStorage.length;i++){if(/^sb-.*-auth-token$/.test(localStorage
 <link rel="apple-touch-icon" href="icona-felicitas-ios-180.png?v=1024">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500;600&display=swap">
-<style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&display=swap"><style>
 :root{--cosmo1:#1d2f66;--cosmo2:#122050;--cosmo3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#C9CCE0;--riga:rgba(245,240,230,.16)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -34,7 +34,7 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clam
 h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px;line-height:1.1;margin:0}
 .sch p{margin:0;font-size:21px}
 .riga-oro{width:72px;height:3px;border-radius:2px;background:var(--oro)}
-.testa{min-height:92svh;justify-content:center;align-items:center;text-align:center;padding-top:40px}
+.testa{min-height:auto;justify-content:center;align-items:center;text-align:center;padding-top:40px}
 .nexus{width:190px;height:190px;border-radius:50%;background:#fff;border:5px solid var(--oro);box-shadow:0 0 0 10px rgba(212,175,106,.14),0 0 90px rgba(212,175,106,.35);overflow:hidden;display:flex;align-items:center;justify-content:center;}
 .nexus img{width:86%;height:86%;object-fit:contain;display:block}
 @keyframes respira{50%{box-shadow:0 0 0 16px rgba(212,175,106,.08),0 0 130px rgba(212,175,106,.5)}}
@@ -93,11 +93,41 @@ footer a{text-decoration:underline}
 .rivela{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
 .rivela.vivo{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rivela{opacity:1;transform:none;transition:none}.nexus,.giu{animation:none}}
+
+.ev-ap{min-height:100svh;display:flex;flex-direction:column;position:relative;z-index:1}
+.ev-ap .quadro{position:relative;height:36svh;min-height:230px;overflow:hidden}
+.ev-ap .quadro img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent);mask-image:linear-gradient(180deg,#000 70%,transparent)}
+.ev-ap .testi{padding:6px 20px 28px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.ev-ap .occhio{margin:4px 0 8px}
+.arcobaleno{background:linear-gradient(90deg,#f7efe0 0%,#F5D27A 22%,#2BB3C9 42%,#F39A3A 60%,#E0498A 78%,#8ED06B 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ev-ap .titolo{margin:0;font-family:'Josefin Sans',sans-serif;font-weight:400;font-size:clamp(52px,14vw,120px);line-height:.95;letter-spacing:0}
+.ev-ap .festival{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:clamp(24px,6.4vw,42px);letter-spacing:.6em;margin-right:-.6em;margin-top:4px}
+.ev-ap .motto{margin-top:10px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(28px,7.4vw,40px);line-height:1.1}
+.ev-ap .motto b{display:block;font-family:'Josefin Sans',sans-serif;color:var(--oro);letter-spacing:.14em;font-size:1.05em}
+.ev-ap .quando{margin-top:14px;width:100%;max-width:560px;padding:12px 0;border-top:3px solid var(--oro);border-bottom:3px solid var(--oro)}
+.ev-ap .quando b{display:block;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:clamp(26px,7vw,38px);color:#F5D27A}
+.ev-ap .quando span{font-size:20px;color:var(--fioco)}
+.ev-ap .tasti{margin-top:18px}
+.ev-ap .gratis{margin-top:14px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:20px;letter-spacing:.16em;text-transform:uppercase;color:#8ED06B}
+@media (min-width:900px){.ev-ap{flex-direction:row;align-items:stretch}.ev-ap .quadro{flex:1 1 52%;height:auto}.ev-ap .quadro img{-webkit-mask-image:linear-gradient(90deg,#000 72%,transparent);mask-image:linear-gradient(90deg,#000 72%,transparent)}.ev-ap .testi{flex:1 1 48%;justify-content:center;padding:40px 48px}}
 </style>
 </head>
 <body>
 <canvas id="stelle" aria-hidden="true"></canvas>
 <main>
+  <section class="ev-ap">
+    <div class="quadro"><img src="/felicitas-festival-21-novembre-baratili/img/donna-cervello.jpg" alt=""></div>
+    <div class="testi">
+      <p class="occhio">Il prossimo evento</p>
+      <div class="titolo arcobaleno">FELICITAS</div>
+      <div class="festival">FESTIVAL</div>
+      <div class="motto"><b>TRAME</b>la forza di essere connessi</div>
+      <div class="quando"><b>Sabato 21 novembre 2026 · dalle 10</b><span>Centro Sociale e Centro Polifunzionale · Baratili San Pietro, Oristano</span></div>
+      <div class="tasti"><a class="tasto" href="/felicitas-festival-21-novembre-baratili/" data-conta="tasto:festival_accoglienza">Scopri il programma ›</a></div>
+      <div class="gratis">Ingresso gratuito</div>
+    </div>
+  </section>
+
 
   <section class="sch testa">
     <div class="nexus"><img src="casa/nexus-centrato.jpg" alt="Il Nexus" width="480" height="480"></div>
@@ -110,19 +140,10 @@ footer a{text-decoration:underline}
       <a class="tasto" href="#vicinati">Scopri i Vicinati del cibo</a>
       <a class="tasto vuoto" href="accesso.html?torna=strumento.html" data-conta="tasto:entra_accoglienza">Entra ›</a>
     </div>
-    <a class="giu" href="#festival" aria-label="Scorri">⌄</a>
+    <a class="giu" href="#cos-e" aria-label="Scorri">⌄</a>
   </section>
 
-  <!-- 27/10 21:16, Gab: «far in modo che nella pagina felicitasmundi.com si arrivi facilmente all evento in programma» -->
-  <section class="sch" id="festival">
-    <p class="occhio">Il prossimo evento</p>
-    <a class="evento rivela" href="/felicitas-festival-21-novembre-baratili/#programma" data-conta="tasto:festival_accoglienza">
-      <img src="casa/festival-anteprima-og-2810.jpg" alt="Felicitas Festival · sabato 21 novembre 2026 · dalle 10 · Centro Sociale e Centro Polifunzionale · Baratili San Pietro, Oristano" width="1200" height="630">
-      <span class="ev-t"><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10</span><span>Baratili San Pietro, Oristano</span><span>Ingresso gratuito</span><em>Scopri il programma ›</em></span>
-    </a>
-  </section>
-
-  <section class="sch">
+  <section class="sch" id="cos-e">
     <h2 class="rivela">Cos'è FelicitasMundi</h2>
     <div class="riga-oro"></div>
     <div class="rivela" style="display:flex;flex-direction:column;gap:16px"><p>FelicitasMundi è una piattaforma digitale e un ecosistema territoriale che mette in relazione persone, produttori, operatori e organizzazioni.</p><p>È strutturata come una rete di villaggi diffusi, comunità territoriali articolate in vicinati. Il primo villaggio è la Sardegna.</p><p>Opera attraverso tre funzioni integrate: tecnologica, logistica e comunitaria.</p><p>Ottimizza tempi e risorse, consentendo a gruppi ridotti di gestire attività complesse, per restituire tempo al talento, alla creatività e alla vita comunitaria.</p><p>Il suo approccio è allineato alle filosofie spirituali e agli studi sulla coscienza tramandati dalla conoscenza indo-vedica, in dialogo con le domande aperte dalla fisica quantistica.</p></div>
