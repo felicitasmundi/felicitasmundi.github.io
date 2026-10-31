@@ -30,12 +30,17 @@ h1{font-family:var(--disp);font-weight:400;letter-spacing:.08em;font-size:30px;m
 .campo{display:flex;flex-direction:column;gap:4px;font-size:15px;color:#4a5068}
 .campo span{border-bottom:1px solid var(--riga);height:30px}
 .nota{color:var(--tx2);font-size:15px;border-top:1px solid rgba(212,175,106,.25);padding-top:12px;margin:6px 0 0}
+.invia{align-self:flex-start;background:var(--oro);color:#1A1405;border:0;border-radius:999px;padding:12px 26px;font:600 18px var(--corpo);cursor:pointer}
+.invia:focus-visible{outline:3px solid var(--tx);outline-offset:3px}
+.fatto{color:var(--oro);font-size:16px;margin:0}
 </style>
 </head><body>
 <div class="app">
 <p class="sopra">Cervello Digitale Evoluto · Terra · Emporio</p>
 <h1>Modulo produttore</h1>
 <p class="intro">Le cose da dare a chi partecipa come produttore, anche con prodotti fatti a mano che seguono l'HACCP base.</p>
+<button class="invia" id="invia" type="button">Invia</button>
+<p class="fatto" id="fatto" hidden>Link copiato</p>
 
 <section class="card"><h2>Vendita tramite organizzatore</h2>
 <p>La normativa italiana ed europea non vieta la vendita indiretta (cioè tramite un organizzatore terzo) dei prodotti alimentari artigianali, ma impone che:</p>
@@ -101,4 +106,13 @@ h1{font-family:var(--disp);font-weight:400;letter-spacing:.08em;font-size:30px;m
 </section>
 
 </div>
+<script>
+document.getElementById("invia").onclick=function(){
+ var u="https://app.felicitasmundi.com/communitas-aeterna-prova/modulo-produttore.html",t="Modulo produttore";
+ if(navigator.share){navigator.share({title:t,url:u}).catch(function(){});return;}
+ var f=document.getElementById("fatto");
+ if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){f.hidden=false;},function(){location.href="https://wa.me/?text="+encodeURIComponent(t+" "+u);});}
+ else{location.href="https://wa.me/?text="+encodeURIComponent(t+" "+u);}
+};
+</script>
 </body></html>
