@@ -482,6 +482,26 @@ body.notte .corpo input[type=text],body.notte .corpo input[type=number],body.not
 .invita-scelta .alto-b{font-size:15px;padding:8px 14px;text-decoration:none;background:rgba(245,240,230,.08);color:#F5F0E6;border-color:rgba(245,240,230,.25)}
 .alto-b.piani i{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-style:normal;font-size:11px}
 @media (min-width:700px){.alto-b.piani span{display:none}.alto-b.piani{padding:4px}}
+
+/* 31/10 · Espandi e il cerchio in alto (thread «Rifare Azione per il nucleo e lo staff») */
+.io-cerchio{width:44px;height:44px;border-radius:50%;border:1.5px solid #D4AF6A;background:#1a2148;color:#D4AF6A;font:600 19px "Cinzel",Georgia,serif;cursor:pointer;display:grid;place-items:center}
+header.top{position:relative}
+.io-menu{position:absolute;right:12px;top:calc(100% + 6px);z-index:20;min-width:230px;background:#1a2148;border:1px solid rgba(212,175,106,.45);border-radius:16px;padding:8px;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.io-menu[hidden]{display:none}
+.io-menu button,.io-menu a{display:block;width:100%;text-align:left;background:none;border:0;color:#F5F0E6;font:500 18px "DM Sans",system-ui,sans-serif;padding:12px;border-radius:10px;cursor:pointer;text-decoration:none}
+.io-menu button:hover,.io-menu a:hover{background:rgba(212,175,106,.12)}
+.io-ruoli{margin:0 0 4px;padding:8px 12px 12px;color:#c9c3d6;font-size:15px;border-bottom:1px solid rgba(212,175,106,.2)}
+.esp-tit{font-family:"Cinzel",Georgia,serif;font-weight:400;letter-spacing:.1em;font-size:30px;margin:14px 0 18px;color:#F5F0E6}
+.esp-el{background:#1a2148;border-radius:18px;padding:16px;margin:0 0 14px;border:1px solid color-mix(in srgb,var(--e) 45%,transparent);color:#F5F0E6}
+.esp-testa{display:flex;gap:14px;align-items:center}.esp-testa canvas{width:64px;height:64px;flex:none}
+.esp-nm{margin:0;font-size:13px;letter-spacing:.2em;color:var(--e)}.esp-el h2{margin:0;font:600 22px "DM Sans",system-ui,sans-serif;color:#F5F0E6}.esp-d{margin:2px 0 0;color:#c9c3d6;font-size:16px}
+.esp-gg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.esp-g{display:block;text-align:left;background:rgba(255,255,255,.04);border:1px solid color-mix(in srgb,var(--e) 55%,transparent);color:#F5F0E6;border-radius:12px;padding:12px;font:inherit;cursor:pointer;position:relative;text-decoration:none}
+.esp-g b{display:block;font:600 17px "DM Sans",system-ui,sans-serif}.esp-g small{display:block;color:#c9c3d6;font-size:14px;margin-top:2px}
+.esp-g.r{border-style:dashed;padding-top:22px}.esp-g i{position:absolute;top:6px;right:8px;font-style:normal;font-size:11px;letter-spacing:.1em;color:var(--e);text-transform:uppercase}
+.esp-g.aperto{background:color-mix(in srgb,var(--e) 18%,transparent)}
+.esp-nl{font-style:normal;background:#D4AF6A;color:#1A1405;border-radius:10px;padding:0 7px;font-weight:600;margin-left:4px}
+#esp-team{margin-top:10px}
 </style>
 </head>
 <body>
@@ -490,7 +510,7 @@ body.notte .corpo input[type=text],body.notte .corpo input[type=number],body.not
 <nav class="nav" id="nav" aria-label="Parti dell'app">
   <button data-v="giornale"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><g transform="translate(0.599 17.067) scale(0.01431)"><path d="M587 -708Q583 -658 581.5 -611.5Q580 -565 580 -540Q580 -519 581.0 -500.0Q582 -481 583 -468H560Q543 -551 513.0 -598.5Q483 -646 447.5 -665.5Q412 -685 376 -685H363Q337 -685 324.0 -680.5Q311 -676 306.5 -663.0Q302 -650 302 -622V-116Q302 -76 310.5 -55.5Q319 -35 343.0 -29.0Q367 -23 413 -23V0Q379 -1 324.0 -2.0Q269 -3 207 -3Q161 -3 115.0 -2.0Q69 -1 28 0V-20Q59 -22 74.0 -28.0Q89 -34 94.0 -52.0Q99 -70 99 -106V-602Q99 -639 94.0 -656.5Q89 -674 73.5 -680.5Q58 -687 28 -688V-708Q72 -707 121.5 -706.5Q171 -706 219.5 -705.5Q268 -705 309.5 -705.0Q351 -705 378 -705Q424 -705 482.5 -705.5Q541 -706 587 -708ZM442 -366Q442 -366 442.0 -356.0Q442 -346 442 -346H272Q272 -346 272.0 -356.0Q272 -366 272 -366ZM471 -498Q467 -441 467.5 -411.0Q468 -381 468 -356Q468 -331 469.0 -301.0Q470 -271 474 -214H451Q445 -251 426.5 -281.0Q408 -311 379.0 -328.5Q350 -346 312 -346V-366Q340 -366 363.0 -378.0Q386 -390 403.5 -410.0Q421 -430 432.5 -453.0Q444 -476 448 -498Z M1565 -708V-688Q1535 -687 1519.5 -680.5Q1504 -674 1499.0 -656.5Q1494 -639 1494 -602V-106Q1494 -70 1499.5 -52.0Q1505 -34 1520.0 -28.0Q1535 -22 1565 -20V0Q1534 -2 1486.0 -2.5Q1438 -3 1388 -3Q1334 -3 1286.5 -2.5Q1239 -2 1210 0V-20Q1244 -22 1261.5 -28.0Q1279 -34 1285.0 -52.0Q1291 -70 1291 -106V-641L1301 -643L1050 -1H1034L752 -643V-196Q752 -129 757.5 -93.5Q763 -58 784.5 -42.5Q806 -27 853 -20V0Q833 -2 801.0 -2.5Q769 -3 741 -3Q719 -3 696.0 -2.5Q673 -2 658 0V-20Q689 -27 704.0 -41.5Q719 -56 724.0 -88.0Q729 -120 729 -176V-602Q729 -639 724.0 -656.5Q719 -674 703.5 -680.5Q688 -687 658 -688V-708Q673 -707 696.0 -706.0Q719 -705 741 -705Q799 -705 852.0 -706.0Q905 -707 948 -708L1146 -262L1116 -229L1301 -705Q1321 -705 1344.0 -705.0Q1367 -705 1388 -705Q1438 -705 1486.0 -706.0Q1534 -707 1565 -708Z"/></g></svg></span>Giornale</button>
   <button data-v="oggi"><span class="ic">☼</span>Oggi</button>
-  <button data-v="azione" class="console" aria-label="Azione"><span class="ic">✦</span>Azione</button>
+  <button data-v="azione" class="console" aria-label="Espandi"><span class="ic">✦</span>Espandi</button>
   <button data-v="obiettivi"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity=".45"/><path d="M12 12V7.3M12 12l4.1 2.4M12 12l-4.1 2.4"/><circle cx="12" cy="5.2" r="2.1"/><circle cx="17.9" cy="15.4" r="2.1"/><circle cx="6.1" cy="15.4" r="2.1"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span>Obiettivi</button>
   <button data-v="cervello"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3.2C8.6 2.4 6.3 3.4 5.6 5.4 3.7 5.9 2.8 7.8 3.4 9.6 2.2 11 2.4 13.3 3.8 14.4 3.4 16.6 4.8 18.6 7 18.8 7.8 20.6 9.6 21.4 11 20.8Z"/><path d="M13 3.2C15.4 2.4 17.7 3.4 18.4 5.4 20.3 5.9 21.2 7.8 20.6 9.6 21.8 11 21.6 13.3 20.2 14.4 20.6 16.6 19.2 18.6 17 18.8 16.2 20.6 14.4 21.4 13 20.8Z"/><path d="M5.6 5.4C7 6 8 7.2 8 8.6M3.6 11.8C5.4 11.4 7.4 12 8.4 13.4M7 18.8C7.2 17 8.4 15.8 9.8 15.6" opacity=".75"/><path d="M18.4 5.4C17 6 16 7.2 16 8.6M20.4 11.8C18.6 11.4 16.6 12 15.6 13.4M17 18.8C16.8 17 15.6 15.8 14.2 15.6" opacity=".75"/></svg></span>Coscienza</button>
 </nav>
@@ -665,20 +685,27 @@ function chiSono(){
   }).catch(function(){});
 }
 function testa(){
-  var c=[];
-  if(!io.id)c.push('<a class="mini oro" href="'+ENTRA+'">Entra</a>');
-  else{
-    if(io.nucleo)c.push('<span class="chip">Nucleo</span>');
-    io.ruoli.forEach(function(r){c.push('<span class="chip f-'+esc(r.funzione)+'">'+esc(nomeRuolo(r.funzione,r.ruolo))+'</span>');});
-    if(!io.nucleo&&!io.ruoli.length)c.push('<span class="chip">'+esc(io.grado==="ospite"?"Ospite":io.grado.replace("_"," "))+'</span>');
-    c.push('<button class="mini" id="esci">Esci</button>');
+  /* 30/10/2026 19:45, Gab: «non posso avere la barra in alto con 7 pulsanti / è inguardabile» → in alto il logo e un solo cerchio;
+     dentro il cerchio: i ruoli, Invita, Piani, I miei dati, Esci (thread «Rifare Azione per il nucleo e lo staff»). */
+  var ru=[];
+  if(io.id){
+    if(io.nucleo)ru.push("Nucleo");
+    io.ruoli.forEach(function(r){ru.push(nomeRuolo(r.funzione,r.ruolo));});
+    if(!io.nucleo&&!io.ruoli.length)ru.push(io.grado==="ospite"?"Ospite":io.grado.replace("_"," "));
   }
-  $("#testa").innerHTML=c.join("");
-  $("#alto").innerHTML='<button class="alto-b invita" data-invita="1">Invita ›</button><button class="alto-b piani" data-piani="1" title="Piani" aria-label="Piani"><i>P</i><span>Piani</span></button>'+(io.id?'<button class="alto-b" data-alto="dati"><span class="ic-alto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.1"/><path d="M12 6.8V14.6M12 14.6L8.6 21.2M12 14.6L15.4 21.2"/><path d="M12 9.2L17.2 7.6"/><path d="M17.2 9.4V1.6M15.6 7.4H18.8" /><path d="M12 9.6L9 10.6"/><path d="M4.6 8.6C6.4 8 8.4 8 9.6 8.6V12.6C9.6 14.6 8 15.8 7.1 16.4 6.2 15.8 4.6 14.6 4.6 12.6Z" fill="currentColor" fill-opacity=".18"/></svg></span>I miei dati</button>':'');
-  document.querySelectorAll("[data-alto]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-alto"));};});
-  /* 23 ott, Gab: un solo loghetto al posto di Cartelle; sul telefono «deve dire cosa apre, può essere piano», sul computer «Piani» al passaggio del mouse. Apre «Come funziona». */
+  $("#testa").innerHTML=io.id?'':'<a class="mini oro" href="'+ENTRA+'">Entra</a>';
+  $("#alto").innerHTML='<button type="button" class="io-cerchio" id="io-cerchio" aria-haspopup="true" aria-expanded="false" aria-label="Il tuo menu">'+esc(io.id?iniziale(io.nome):"✦")+'</button>'+
+    '<div class="io-menu" id="io-menu" hidden>'+(ru.length?'<p class="io-ruoli">'+ru.map(esc).join(" · ")+'</p>':'')+
+    '<button type="button" data-invita="1">Invita</button><button type="button" data-piani="1">Piani</button>'+
+    (io.id?'<button type="button" data-alto="dati">I miei dati</button><button type="button" id="esci">Esci</button>':'<a href="'+ENTRA+'">Entra</a>')+'</div>';
+  var cer=$("#io-cerchio"),men=$("#io-menu");
+  function chiudiMenu(){men.hidden=true;cer.setAttribute("aria-expanded","false");}
+  cer.onclick=function(ev){ev.stopPropagation();men.hidden=!men.hidden;cer.setAttribute("aria-expanded",men.hidden?"false":"true");};
+  document.addEventListener("click",function(ev){if(!men.contains(ev.target))chiudiMenu();});
+  document.querySelectorAll("[data-alto]").forEach(function(b){b.onclick=function(){chiudiMenu();vai(b.getAttribute("data-alto"));};});
   /* 23 ott 17:59, Gab: «aggiungi il tasto invita in alto» · come l'Invita del Festival: WhatsApp, Telegram, Mail, copia il link dell'app. Testo: le parole di Gab in Oggi. */
   var ib=document.querySelector("[data-invita]");if(ib)ib.onclick=function(){
+    chiudiMenu();
     var v=$("#invita-scelta");if(v){v.remove();return;}
     var url=location.origin+location.pathname,msg="FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna.";
     document.querySelector("header.top").insertAdjacentHTML("afterend",'<div class="invita-scelta" id="invita-scelta">'+
@@ -751,30 +778,77 @@ function giornoTm(t){
   return d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",timeZone:"Europe/Rome"});
 }
 function iniziale(n){return (String(n||"").trim().charAt(0)||"·").toUpperCase();}
+/* ESPANDI · 31/10/2026 (thread «Rifare Azione per il nucleo e lo staff»). Gab 30/10 21:18: «e se fosse espandi […] Espandi. Come potrebbe essere integrato?»;
+   21:20 «Manda» (bozza espandi/espandi-bozza.html); 31/10 09:28: «azione non ci sarà piu una volta che metti espandi».
+   La voce del menu si chiama Espandi (la vista resta "azione"). Cinque elementi come in Coscienza, ognuno con la riga del glossario
+   e i gesti che fa davvero; i gesti di ruolo (tratteggiati) li vede solo chi ha il ruolo. */
+var ESP_EL=[
+  {k:"terra",s:"cubo",c:"#C9A15A",st:"Vicinati",el:"TERRA",d:"i luoghi e le persone vicine a te, e quello di cui c'è bisogno"},
+  {k:"acqua",s:"icosaedro",c:"#6FA8D6",st:"Emporio",el:"ACQUA",d:"quello che si compra, si scambia e si dona, e chi lo porta"},
+  {k:"fuoco",s:"tetraedro",c:"#E07A55",st:"Assistenza",el:"FUOCO",d:"chi risponde a un bisogno: spiritualità, trattamenti, consulenze, mutuo aiuto"},
+  {k:"aria",s:"ottaedro",c:"#8DBF5E",st:"Edizione",el:"ARIA",d:"le opere, la radio, e quello che si stampa e si distribuisce"},
+  {k:"etere",s:"dodecaedro",c:"#B08AE0",st:"Scuola",el:"ETERE",d:"le lezioni, le formazioni, e la ricerca. Qui vive il wiki"}
+];
+var ESP_PHI=(1+Math.sqrt(5))/2,espGiro=null;
+function espSolido(n){var v=[],b=1/ESP_PHI,p=ESP_PHI;
+  function d3(a,c){return Math.hypot(a[0]-c[0],a[1]-c[1],a[2]-c[2]);}
+  function cubo(){[-1,1].forEach(function(x){[-1,1].forEach(function(y){[-1,1].forEach(function(z){v.push([x,y,z]);});});});}
+  if(n==="cubo")cubo();
+  else if(n==="tetraedro")v=[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]];
+  else if(n==="ottaedro")v=[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]];
+  else if(n==="icosaedro"){[-1,1].forEach(function(a){[-1,1].forEach(function(t){v.push([0,a,t*p]);v.push([a,t*p,0]);v.push([t*p,0,a]);});});}
+  else {cubo();[-1,1].forEach(function(a){[-1,1].forEach(function(t){v.push([0,a*b,t*p]);v.push([a*b,t*p,0]);v.push([t*p,0,a*b]);});});}
+  var m=1e9,i,j;for(i=0;i<v.length;i++)for(j=i+1;j<v.length;j++)m=Math.min(m,d3(v[i],v[j]));
+  var e=[];for(i=0;i<v.length;i++)for(j=i+1;j<v.length;j++)if(Math.abs(d3(v[i],v[j])-m)<1e-6)e.push([i,j]);
+  var r=0;v.forEach(function(q){r=Math.max(r,Math.hypot(q[0],q[1],q[2]));});
+  return {v:v.map(function(q){return q.map(function(c){return c/r;});}),e:e};}
+function espSolidi(c){
+  if(espGiro)cancelAnimationFrame(espGiro);
+  var tele=[].slice.call(c.querySelectorAll("canvas[data-s]")).map(function(cv,i){var r=window.devicePixelRatio||1,w=cv.clientWidth||64;cv.width=w*r;cv.height=w*r;
+    return {cv:cv,x:cv.getContext("2d"),s:espSolido(cv.getAttribute("data-s")),col:cv.getAttribute("data-c"),w:w*r,f:i*0.7};});
+  var fermo=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function giro(t){
+    if(vista!=="azione"||!tele.length||!tele[0].cv.isConnected){espGiro=null;return;}
+    tele.forEach(function(o){var x=o.x,w=o.w,A=t*0.00035+o.f,B=t*0.00022+o.f*0.5,ca=Math.cos(A),sa=Math.sin(A),cb=Math.cos(B),sb=Math.sin(B);
+      x.clearRect(0,0,w,w);
+      var P=o.s.v.map(function(q){var X=q[0]*ca-q[2]*sa,Z=q[0]*sa+q[2]*ca,Y=q[1]*cb-Z*sb;Z=q[1]*sb+Z*cb;var k=w*0.36*(1+Z*0.12);return [w/2+X*k,w/2+Y*k,Z];});
+      x.lineWidth=Math.max(1,w/90);x.strokeStyle=o.col;x.shadowColor=o.col;x.shadowBlur=w/14;
+      o.s.e.forEach(function(e){var a=P[e[0]],b=P[e[1]];x.globalAlpha=0.45+0.55*((a[2]+b[2])/2+1)/2;x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();});
+      x.globalAlpha=1;});
+    if(!fermo)espGiro=requestAnimationFrame(giro);}
+  espGiro=requestAnimationFrame(giro);
+}
 function vAzione(){
   var c=$("#corpo");
-  function carta(t,ico,attr){var a=attr.indexOf("href=")===0;return '<'+(a?'a ':'button type="button" ')+attr+'>'+ico+'<b>'+esc(t)+'</b></'+(a?'a':'button')+'>';}
-  var tutti=[carta("Acquista in Emporio",ICO_AZ.emporio,'href="stanze-bozza.html?s=emporio&amp;c=10182300"'),carta("Mutuo aiuto",ICO_AZ.mutuo,'href="stanze-bozza.html?s=mutuo&amp;c=10182300"'),carta("Stampa",ICO_AZ.stampa,'href="stampa-bozza.html?c=10182300"')];
-  var ruolo=[];
-  if(io.id){
-    ruolo.push(carta("Scrivi un articolo",ICO_AZ.articolo,'data-mega="articolo"'));
-    if(io.coordina)ruolo.push(carta("Crea diretta",ICO_AZ.diretta,'data-mega="diretta"'));
-    /* 30/10, SQL 136: la cassa dal vivo, per chi ha un ruolo nella logistica o coordina */
-    if(io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";}))ruolo.push(carta("Cassa",ICO_AZ.cassa,'data-vai="cassa"'));
-    /* 24 ott 13:27, Gab: «vado in azione, inserisco una persona, ed esce su oggi» (SQL 116, solo il nucleo) */
-    if(io.nucleo)ruolo.push(carta("Aggiungi una persona",ICO_AZ.persona,'data-vai="staff"'));
-  }
-  c.innerHTML='<p class="tm-et" style="margin-top:6px">Azione</p>'+
-    (io.id?'<h2 class="tm-tit">I tuoi team</h2><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div>':
-      '<div class="az-griglia" style="margin-top:10px"><a href="'+ENTRA+'" class="q-az largo" style="--e:#d6b56c"><i></i><b>Entra</b></a></div>')+
-    '<p class="tm-et">Per tutti</p><div class="tm-g">'+tutti.join("")+'</div>'+
-    (ruolo.length?'<p class="tm-et">Per chi ha il ruolo</p><div class="tm-g ruolo">'+ruolo.join("")+'</div>':'')+
+  function g(t,attr,ruolo,sotto){var a=attr.indexOf("href=")===0;
+    return '<'+(a?'a ':'button type="button" ')+'class="esp-g'+(ruolo?' r':'')+'" '+attr+'><b>'+esc(t)+'</b>'+(sotto?'<small>'+sotto+'</small>':'')+(ruolo?'<i>ruolo</i>':'')+'</'+(a?'a':'button')+'>';}
+  var log=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
+  var gesti={
+    terra:io.id?[g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>'),g("Nuova chat",'data-esp-chat="1"')].concat(io.nucleo?[g("Aggiungi una persona",'data-vai="staff"',true)]:[])
+              :[g("Entra",'href="'+ENTRA+'"')],
+    acqua:[g("Acquista in Emporio",'href="stanze-bozza.html?s=emporio&amp;c=10182300"')].concat(io.id&&log?[g("Cassa",'data-vai="cassa"',true)]:[]),
+    fuoco:[g("Mutuo aiuto",'href="stanze-bozza.html?s=mutuo&amp;c=10182300"')],
+    aria:[g("Stampa",'href="stampa-bozza.html?c=10182300"')].concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]),
+    etere:[g("Praticantato",'data-vai="obiettivi"'),g("Il Cervello Digitale Evoluto",'href="cervello-digitale-evoluto.html"')]
+  };
+  c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+ESP_EL.map(function(e){
+    return '<section class="esp-el" style="--e:'+e.c+'"><div class="esp-testa"><canvas data-s="'+e.s+'" data-c="'+e.c+'" aria-hidden="true"></canvas>'+
+      '<div><p class="esp-nm">'+e.el+'</p><h2>'+esc(e.st)+'</h2><p class="esp-d">'+esc(e.d)+'</p></div></div>'+
+      '<div class="esp-gg">'+gesti[e.k].join("")+'</div>'+
+      (e.k==="terra"&&io.id?'<div id="esp-team" hidden><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>':'')+'</section>';}).join("")+
     /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
     '<div data-fm-installa></div>'+(io.id?'<div data-fm-notifiche></div>':'');
   legaVai(c);
   c.querySelectorAll("[data-mega]").forEach(function(b){b.onclick=function(){M.tipo=b.getAttribute("data-mega");M.msg="";vai("megafono");};});
+  var bt=c.querySelector("[data-esp-team]");if(bt)bt.onclick=function(){var p=$("#esp-team");p.hidden=!p.hidden;bt.classList.toggle("aperto",!p.hidden);if(!p.hidden)p.scrollIntoView({behavior:"smooth",block:"start"});};
+  var bc=c.querySelector("[data-esp-chat]");if(bc)bc.onclick=function(){nuovaChat();};
+  espSolidi(c);
   if(window.fmInstallaAvvia)fmInstallaAvvia();if(io.id&&window.fmNotifiche)fmNotifiche(db);
-  if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();}
+  if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();
+    leggiTeam().then(function(l){var n=$("#esp-team-nomi");if(!n)return;
+      if(!l||!l.length){n.textContent="Ancora nessun team";return;}
+      var nl=l.reduce(function(a,t){return a+(+t.non_letti||0);},0);
+      n.innerHTML=esc(l.map(function(t){return t.nome;}).join(" · "))+(nl?' <em class="esp-nl" aria-label="'+nl+' da leggere">'+nl+'</em>':'');});}
 }
 /* LE CHAT A DUE · SQL 129. Gab 29/10 07:59: «preferisco che uno riceva una richiesta di chat, con un messaggio di presentazione»;
    08:00 niente «blocca» in Felicitas: c'è «Chiudi la conversazione». */
