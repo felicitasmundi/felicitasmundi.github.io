@@ -769,7 +769,7 @@ function disegna(){
   /* 31/10, Gab: «mentre vedo espandi blu le altrre pagine sono bianche» → tutte le pagine in blu cosmo, come Espandi */
   document.body.classList.add("notte");
   document.body.classList.add("cosmo-az");
-  ({coscienza:vCoscienza,azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina})[vista]();
+  ({coscienza:vCoscienza,azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina,createam:vCreaTeam})[vista]();
 }
 
 /* AZIONE · 29/10/2026, SQL 128 (thread «Chat interna dei team in Azione»; disegno azione-chat/bozza-azione, Gab 28/10: «Comunque per me va bene / fai sql e pubblichiamo»;
@@ -865,7 +865,7 @@ function vAzione(){
     return '<'+(a?'a ':'button type="button" ')+'class="esp-g'+(ruolo?' r':'')+'" '+attr+'><b>'+esc(t)+'</b>'+(sotto?'<small>'+sotto+'</small>':'')+(ruolo?'<i>ruolo</i>':'')+'</'+(a?'a':'button')+'>';}
   var log=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
   var gesti={
-    terra:io.id?[g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>'),g("Nuova chat",'data-esp-chat="1"')].concat(io.nucleo?[g("Aggiungi una persona",'data-vai="staff"',true)]:[])
+    terra:io.id?[g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>'),g("Nuova chat",'data-esp-chat="1"')].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
               :[g("Entra",'href="'+ENTRA+'"')],
     acqua:[g("Acquista in Emporio",'href="stanze-bozza.html?s=emporio&amp;c=10182300"')].concat(io.id&&log?[g("Cassa",'data-vai="cassa"',true)]:[]),
     fuoco:[g("Mutuo aiuto",'href="stanze-bozza.html?s=mutuo&amp;c=10182300"')],
@@ -3094,13 +3094,57 @@ function vCartelle(){
 }
 
 
-/* la pagina di Azione «Aggiungi una persona»: solo il nucleo */
-function vStaffPagina(){
+/* 1 nov 12:29, Gab: «bisogna trovare il metodo perchè poi il nucleo possa confermare il ruolo che magari viene proposto dall operatore» (SQL 144) */
+function ruoliDaConfermare(box){
+  if(!box||!io.nucleo)return;
+  db.rpc("fm_ruoli_da_confermare").then(function(r){
+    if(!document.body.contains(box))return;
+    var l=(r&&!r.error&&r.data)||[];
+    box.innerHTML=l.length?'<p class="et" style="margin-top:14px">Ruoli da confermare</p><div class="card modulo">'+l.map(function(x){
+      return '<div class="persona"><div><b>'+esc(x.nome||"—")+'</b><small>'+esc((FUNZIONI[x.funzione]||x.funzione)+' · '+nomeRuolo(x.funzione,x.ruolo))+(x.team?' · '+esc(x.team):'')+(x.proposto_da?' · da '+esc(x.proposto_da):'')+'</small></div>'+
+        '<span class="rg-az"><button class="mini oro" data-rc="'+esc(x.id)+'" data-si="1">Conferma</button><button class="mini" data-rc="'+esc(x.id)+'" data-si="0">No</button></span></div>';}).join("")+'</div>':'';
+    box.querySelectorAll("[data-rc]").forEach(function(b){b.onclick=function(){b.disabled=true;
+      db.rpc("fm_ruolo_decidi",{p_id:b.getAttribute("data-rc"),p_si:b.getAttribute("data-si")==="1"}).then(function(){ruoliDaConfermare(box);if($("#o-ruoli"))vRuoli();},function(){b.disabled=false;});};});
+  },function(){});
+}
+/* 1 nov 12:19, Gab: «crea team ora riguarda nucleo e va messo in espandi»; 12:10: il link del team da mandare per far entrare le persone (SQL 144) */
+function vCreaTeam(){
   var c=$("#corpo");
   if(!io.nucleo){vista="azione";vAzione();return;}
+  c.innerHTML='<h2 class="az-tit">Crea team</h2><div class="card modulo"><label>Nome del team<input type="text" id="ct-nome" maxlength="80" autocomplete="off"></label>'+
+    '<div class="azioni"><button class="btn pieno" id="ct-crea">Crea</button></div><div class="toast" id="ct-ok" hidden></div></div>'+
+    '<p class="et" style="margin-top:14px">I team e il loro link d\'invito</p><div class="card modulo" id="ct-lista"><p class="nota">Un momento…</p></div>'+
+    '<p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
+  legaVai(c);
+  function link(k){return new URL("accesso.html?staff="+encodeURIComponent(k)+"&torna=strumento.html",location.href).href;}
+  function lista(){
+    Promise.all([db.from("squadre").select("id,nome").order("nome"),db.from("inviti_link").select("squadra_id,codice,entrati").is("spento_il",null)]).then(function(v){
+      var e=$("#ct-lista");if(!e)return;
+      if(v[0].error){e.innerHTML='<p class="nota">'+esc(errore(v[0].error))+'</p>';return;}
+      var ln={};((v[1]&&!v[1].error&&v[1].data)||[]).forEach(function(x){ln[x.squadra_id]=x;});
+      e.innerHTML=(v[0].data||[]).map(function(t){var x=ln[t.id];
+        return '<div class="persona"><div><b>'+esc(t.nome)+'</b><small>'+(x?'link acceso · '+(x.entrati===1?'1 entrato':x.entrati+' entrati'):'nessun link')+'</small></div><span class="rg-az">'+
+          (x?'<a class="mini oro" href="https://wa.me/?text='+encodeURIComponent(link(x.codice))+'" target="_blank" rel="noopener noreferrer">WhatsApp</a><button class="mini" data-ct-copia="'+esc(link(x.codice))+'">Copia</button><button class="mini" data-ct-spegni="'+esc(t.id)+'">Spegni</button>'
+            :'<button class="mini oro" data-ct-link="'+esc(t.id)+'">Link d\'invito</button>')+'</span></div>';}).join("")||'<p class="nota">Ancora nessun team.</p>';
+      e.querySelectorAll("[data-ct-copia]").forEach(function(b){b.onclick=function(){var u=b.getAttribute("data-ct-copia");(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){b.textContent="Copiato";},function(){prompt("Copia il link",u);});};});
+      e.querySelectorAll("[data-ct-link]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_link_team",{p_squadra:b.getAttribute("data-ct-link")}).then(function(r){if(r&&r.error){b.disabled=false;mostra("#ct-ok",/fm_link_team|function/i.test(r.error.message||"")?"Si apre con l'SQL 144.":errore(r.error),true);return;}lista();},function(){b.disabled=false;});};});
+      e.querySelectorAll("[data-ct-spegni]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_link_spegni",{p_squadra:b.getAttribute("data-ct-spegni")}).then(function(){lista();},function(){b.disabled=false;});};});
+    },function(){});
+  }
+  lista();
+  $("#ct-crea").onclick=function(){var n=val("ct-nome");if(!n)return mostra("#ct-ok","Scrivi il nome del team.",true);var b=this;b.disabled=true;
+    db.rpc("fm_team_crea",{p_nome:n}).then(function(r){b.disabled=false;
+      if(r&&r.error)return mostra("#ct-ok",/fm_team_crea|function/i.test(r.error.message||"")?"Si apre con l'SQL 144.":errore(r.error),true);
+      $("#ct-nome").value="";mostra("#ct-ok","Team creato: "+n+".");lista();},function(){b.disabled=false;});};
+}
+/* la pagina di Azione «Aggiungi una persona»: il nucleo e chi ha un ruolo (SQL 144) */
+function vStaffPagina(){
+  var c=$("#corpo");
+  /* 1 nov 12:19-12:29, Gab: «lo devono poter usare anche le persone che hanno un ruolo/operatore» · «sono io però a riconoscere il ruolo» (SQL 144) */
+  if(!io.nucleo&&!(io.ruoli||[]).length){vista="azione";vAzione();return;}
   /* 25 ott 15:22, Gab: «Che differenza c è tra il dare ruolo qua su azione? Secondo me qua su oggi nn ci fa nulla» · «Vai» → Persone e ruoli esce da Oggi e sta qui */
-  c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2><div id="st-box"></div><div id="o-ruoli"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
-  legaVai(c);vStaff($("#st-box"));vRuoli();
+  c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2>'+(io.nucleo?'<div id="st-conferma"></div>':'')+'<div id="st-box"></div><div id="o-ruoli"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
+  legaVai(c);if(io.nucleo)ruoliDaConfermare($("#st-conferma"));vStaff($("#st-box"));if(io.nucleo||io.coordina)vRuoli();
 }
 /* 25 ott 19:09, Gab: «manca la possibilità di fare piu ruoli, sennò siamo rigidi» → i ruoli si scelgono con le spunte, anche più di uno (SQL 124) */
 function ruoliSceltaHTML(id){
@@ -3110,7 +3154,9 @@ function ruoliSceltaHTML(id){
 }
 function ruoliScelti(id){return [].slice.call(document.querySelectorAll("#"+id+" input:checked")).map(function(i){return i.value.split(":");});}
 function ruoliTesto(x){
-  return [[x.funzione,x.ruolo]].concat((x.altri_ruoli||[]).map(function(a){return [a.funzione,a.ruolo];})).map(function(a){return (FUNZIONI[a[0]]||a[0])+' · '+nomeRuolo(a[0],a[1]);}).join(", ");
+  var l=[[x.funzione,x.ruolo]].concat((x.altri_ruoli||[]).map(function(a){return [a.funzione,a.ruolo];})).filter(function(a){return a[0]&&a[1];});
+  if(!l.length)return "senza ruolo";
+  return (x.da_confermare?"proposto: ":"")+[[x.funzione,x.ruolo]].concat((x.altri_ruoli||[]).map(function(a){return [a.funzione,a.ruolo];})).map(function(a){return (FUNZIONI[a[0]]||a[0])+' · '+nomeRuolo(a[0],a[1]);}).join(", ");
 }
 /* in Oggi: «Hai aggiunto …» per le persone aggiunte oggi, e chi è entrato oggi dal link */
 function vOggiStaff(){
@@ -3129,17 +3175,22 @@ function vOggiStaff(){
    22 ott 21:54: un link d'invito per persona, col ruolo già dato. Il link vale una volta e solo con la mail scritta qui. */
 function vStaff(box){
   var w=document.createElement("div");box.appendChild(w);
-  w.innerHTML='<p class="et" style="margin-top:14px">Staff del Festival</p><div class="card modulo">'+
+  w.innerHTML='<div class="card modulo" style="margin-top:14px">'+
     '<div id="st-lista"><p class="nota">Un momento…</p></div>'+
     '<label>Nome e cognome<input type="text" id="st-nome" autocomplete="off"></label>'+
     '<label>Numero di telefono<input type="tel" id="st-tel" autocomplete="off" inputmode="tel" placeholder="+39 …"></label>'+
     '<label>Mail (se ce l\'hai: allora il link vale solo con quella)<input type="email" id="st-mail" autocomplete="off" inputmode="email"></label>'+
     '<label>Villaggio<input type="text" id="st-vill" autocomplete="off"></label>'+
+    '<label>Team<select id="st-team"><option value="">'+(io.nucleo?'Nessun team':'Scegli il team')+'</option></select></label>'+
+    (io.nucleo?'':'<p class="nota" style="margin:6px 0 0">Il ruolo che scegli resta proposto: lo conferma il nucleo.</p>')+
     ruoliSceltaHTML("st-rr")+
     '<div class="azioni"><button class="btn pieno" id="st-crea">Crea il link</button></div><div class="toast" id="st-ok" hidden></div></div>';
   function link(c){return new URL("accesso.html?staff="+encodeURIComponent(c)+"&torna=strumento.html",location.href).href;}
+  (io.nucleo?db.from("squadre").select("id,nome").order("nome").then(function(r){return (r&&!r.error&&r.data)||[];}):
+    db.rpc("fm_miei_team").then(function(r){return ((r&&!r.error&&r.data)||[]).map(function(t){return {id:t.team_id,nome:t.nome};});})).then(function(l){
+    var e=$("#st-team");if(!e)return;e.insertAdjacentHTML("beforeend",l.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.nome)+'</option>';}).join(""));},function(){});
   function lista(){
-    db.from("inviti_staff").select("id,codice,nome,telefono,villaggio,funzione,ruolo,altri_ruoli,usato_il,annullato_il,creato_il").is("annullato_il",null).order("creato_il",{ascending:false}).limit(200).then(function(r){
+    db.from("inviti_staff").select("id,codice,nome,telefono,villaggio,funzione,ruolo,altri_ruoli,da_confermare,usato_il,annullato_il,creato_il").is("annullato_il",null).order("creato_il",{ascending:false}).limit(200).then(function(r){
       var e=$("#st-lista");if(!e)return;
       if(r.error){e.innerHTML='<p class="nota">'+(/inviti_staff|relation|schema cache/i.test(r.error.message||"")?"Si apre con l'SQL 116.":esc(errore(r.error)))+'</p>';return;}
       var d=r.data||[];
@@ -3157,13 +3208,14 @@ function vStaff(box){
     if(!tel&&!m)return mostra("#st-ok","Scrivi il numero.",true);
     if(tel&&!/^\+?[0-9 ]{6,20}$/.test(tel))return mostra("#st-ok","Il numero ha solo cifre, con + davanti se serve.",true);
     if(m&&m.indexOf("@")<1)return mostra("#st-ok","Questa mail non sembra giusta.",true);
-    var sc=ruoliScelti("st-rr");if(!sc.length)return mostra("#st-ok","Scegli almeno un ruolo.",true);
+    var sc=ruoliScelti("st-rr"),team=val("st-team");
+    if(!io.nucleo&&!team)return mostra("#st-ok","Scegli il team.",true);
     var b=this;b.disabled=true;
-    db.rpc("fm_staff_invita",{p_nome:n,p_mail:m,p_villaggio:val("st-vill"),p_funzione:sc[0][0],p_ruolo:sc[0][1],p_telefono:tel||null,
-      p_altri:sc.slice(1).map(function(a){return {funzione:a[0],ruolo:a[1]};})}).then(function(r){
+    db.rpc("fm_staff_invita",{p_nome:n,p_mail:m,p_villaggio:val("st-vill"),p_funzione:sc.length?sc[0][0]:null,p_ruolo:sc.length?sc[0][1]:null,p_telefono:tel||null,
+      p_altri:sc.slice(1).map(function(a){return {funzione:a[0],ruolo:a[1]};}),p_squadra:team||null}).then(function(r){
       b.disabled=false;
-      if(r.error)return mostra("#st-ok",/fm_staff_invita|function|p_telefono|p_altri/i.test(r.error.message||"")?"Si apre con l'SQL 124.":errore(r.error),true);
-      ["st-nome","st-tel","st-mail","st-vill"].forEach(function(k){$("#"+k).value="";});
+      if(r.error)return mostra("#st-ok",/fm_staff_invita|function|p_telefono|p_altri|p_squadra/i.test(r.error.message||"")?"Si apre con l'SQL 144.":errore(r.error),true);
+      ["st-nome","st-tel","st-mail","st-vill","st-team"].forEach(function(k){$("#"+k).value="";});
       document.querySelectorAll("#st-rr input:checked").forEach(function(i){i.checked=false;});
       mostra("#st-ok","Link creato per "+n+": mandalo da qui sopra.");lista();
     },function(){b.disabled=false;});
