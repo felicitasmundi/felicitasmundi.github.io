@@ -3618,6 +3618,7 @@ function vStaff(box){
     ruoliSceltaHTML("st-rr")+
     '<div class="azioni"><button class="btn pieno" id="st-crea">Crea il link</button></div><div class="toast" id="st-ok" hidden></div></div>';
   function link(c){return new URL("accesso.html?staff="+encodeURIComponent(c)+"&torna=strumento.html",location.href).href;}
+  function waNum(t){var d=String(t||"").replace(/[^0-9]/g,"");if(!d)return "";if(/^0039/.test(d))d=d.slice(2);if(/^39[0-9]{9,10}$/.test(d))return d;if(/^3/.test(d))return "39"+d;return d;}
   (io.nucleo?db.from("squadre").select("id,nome").order("nome").then(function(r){return (r&&!r.error&&r.data)||[];}):
     db.rpc("fm_miei_team").then(function(r){return ((r&&!r.error&&r.data)||[]).map(function(t){return {id:t.team_id,nome:t.nome};});})).then(function(l){
     var e=$("#st-team");if(!e)return;e.insertAdjacentHTML("beforeend",l.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.nome)+'</option>';}).join(""));if(staffTeamPre){e.value=staffTeamPre;staffTeamPre=null;}},function(){});
@@ -3628,7 +3629,7 @@ function vStaff(box){
       var d=r.data||[];
       e.innerHTML=d.length?d.map(function(x){var u=link(x.codice);
         return '<div class="persona"><div><b>'+esc(x.nome)+'</b><small>'+esc(ruoliTesto(x))+(x.villaggio?' · '+esc(x.villaggio):'')+' · '+(x.usato_il?'entrato':'non ancora entrato')+'</small></div>'+
-          (x.usato_il?'':'<span class="rg-az"><a class="mini oro" href="https://wa.me/'+(x.telefono?esc(String(x.telefono).replace(/[^0-9]/g,"").replace(/^(?=3)/,"39")):'')+'?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a><button class="mini" data-st-copia="'+esc(u)+'">Copia</button><button class="mini" data-st-annulla="'+esc(x.id)+'">Annulla</button></span>')+'</div>';}).join(""):'<p class="nota">Ancora nessun invito.</p>';
+          (x.usato_il?'':'<span class="rg-az"><a class="mini oro" href="https://wa.me/'+waNum(x.telefono)+'?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a><button class="mini" data-st-copia="'+esc(u)+'">Copia</button><button class="mini" data-st-annulla="'+esc(x.id)+'">Annulla</button></span>')+'</div>';}).join(""):'<p class="nota">Ancora nessun invito.</p>';
       e.querySelectorAll("[data-st-copia]").forEach(function(b){b.onclick=function(){var u=b.getAttribute("data-st-copia");(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){b.textContent="Copiato";},function(){prompt("Copia il link",u);});};});
       e.querySelectorAll("[data-st-annulla]").forEach(function(b){b.onclick=function(){b.disabled=true;db.from("inviti_staff").update({annullato_il:new Date().toISOString()}).eq("id",b.getAttribute("data-st-annulla")).then(function(x){if(x.error){mostra("#st-ok",errore(x.error),true);b.disabled=false;return;}lista();});};});
     },function(){});
@@ -3653,7 +3654,7 @@ function vStaff(box){
       db.from("inviti_staff").select("usato_il").eq("codice",r.data||"").limit(1).then(function(q){
         var gia=q&&!q.error&&q.data&&q.data[0]&&q.data[0].usato_il;if(!ok)return;ok.hidden=false;ok.classList.remove("err");
         ok.innerHTML=gia?esc(n)+' era già dentro con questa mail: ha già il ruolo'+(team?' e il team':'')+'. Niente da mandare.'
-          :'Link creato per '+esc(n)+'. <a class="mini oro" href="https://wa.me/'+(tel?esc(String(tel).replace(/[^0-9]/g,"").replace(/^(?=3)/,"39")):'')+'?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a> <button type="button" class="mini" id="st-copia-nuovo">Copia il link</button>';
+          :'Link creato per '+esc(n)+'. <a class="mini oro" href="https://wa.me/'+waNum(tel)+'?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a> <button type="button" class="mini" id="st-copia-nuovo">Copia il link</button>';
         var cb=$("#st-copia-nuovo");if(cb)cb.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){cb.textContent="Copiato";},function(){prompt("Copia il link",u);});};
       },function(){if(ok){ok.hidden=false;ok.textContent="Link creato per "+n+": lo trovi qui sopra, nella riga col suo nome.";}});
     },function(){b.disabled=false;});
