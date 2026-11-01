@@ -3425,11 +3425,11 @@ function vCreaTeam(){
       $("#ct-nome").value="";mostra("#ct-ok","Team creato: "+n+".");lista();},function(){b.disabled=false;});};
 }
 /* la pagina di Azione «Aggiungi una persona»: il nucleo e chi ha un ruolo (SQL 144) */
-/* ═══ Plancia · «Chi vede cosa» · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
+/* ═══ Admin panel («plancia» nel codice) · «Chi vede cosa» · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
    Gab 1/11 14:00: «il pannello delle aturizzazioni admin, in modo che io possa definire in autonomia chi vede cosa direttamente usando l app»
    · 14:26 «pannello admin con ruoli e accessi gestiti da me.. è ciò che mesi fa chiamavamo plancia» · 14:29 «si fai il pannello chi vede cosa ecc».
    Serve lo SQL 150 (fm_capitoli_plancia, fm_capitolo_imposta, fm_capitolo_nuovo, fm_approvazioni_in_attesa, tavola costi, fm_costi_mese).
-   Solo nucleo. Si apre da Espandi › Terra › Aggiungi una persona › «Plancia · chi vede cosa». Tre parti: Chi vede cosa (i capitoli del
+   Solo nucleo. Si apre da Espandi › Terra › Aggiungi una persona › «Admin panel · chi vede cosa». Tre parti: Chi vede cosa (i capitoli del
    Cervello: livello, team in più, responsabile, sezione; capitolo nuovo), Approvazioni in attesa, Costi. Persone e ruoli resta dov'è. */
 var PL_CSS='.pl-sez{margin-top:16px}.pl-cap{display:flex;flex-direction:column;gap:6px}'+
 '.pl-c{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;border:1px solid var(--linea);border-radius:12px;padding:12px 14px;background:var(--foglio);cursor:pointer;font:inherit;color:inherit;width:100%}'+
@@ -3452,7 +3452,7 @@ function plQuando(t){if(!t)return "";var d=new Date(t);return d.toLocaleDateStri
 function vPlancia(){
   var c=$("#corpo");
   if(!io.nucleo){vista="azione";vAzione();return;}
-  c.innerHTML='<h2 class="az-tit">Plancia</h2><p class="nota" style="text-align:center">Chi vede cosa, cosa aspetta un sì, cosa costa. Solo per il nucleo.</p>'+
+  c.innerHTML='<h2 class="az-tit">Admin panel</h2><p class="nota" style="text-align:center">Chi vede cosa, cosa aspetta un sì, cosa costa. Solo per il nucleo.</p>'+
     '<div class="pl-sez"><p class="et">Chi vede cosa · i capitoli del Cervello</p><div id="pl-cap" class="pl-cap"><p class="nota">Un momento…</p></div><div id="pl-nuovo"></div></div>'+
     '<div class="pl-sez"><p class="et">Approvazioni in attesa</p><div id="pl-app" class="card modulo"><p class="nota">Un momento…</p></div></div>'+
     '<div class="pl-sez"><p class="et">Costi</p><div id="pl-costi" class="card modulo"><p class="nota">Un momento…</p></div></div>'+
@@ -3571,7 +3571,7 @@ function vStaffPagina(){
   /* 1 nov 12:19-12:29, Gab: «lo devono poter usare anche le persone che hanno un ruolo/operatore» · «sono io però a riconoscere il ruolo» (SQL 144) */
   if(!io.nucleo&&!(io.ruoli||[]).length){vista="azione";vAzione();return;}
   /* 25 ott 15:22, Gab: «Che differenza c è tra il dare ruolo qua su azione? Secondo me qua su oggi nn ci fa nulla» · «Vai» → Persone e ruoli esce da Oggi e sta qui */
-  c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2>'+(io.nucleo?'<p style="text-align:center;margin:0 0 12px"><button class="btn pieno" data-vai="plancia">Plancia · chi vede cosa</button></p><div id="st-conferma"></div>':'')+'<div id="st-box"></div><div id="o-ruoli"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
+  c.innerHTML='<h2 class="az-tit">Aggiungi una persona</h2>'+(io.nucleo?'<p style="text-align:center;margin:0 0 12px"><button class="btn pieno" data-vai="plancia">Admin panel · chi vede cosa</button></p><div id="st-conferma"></div>':'')+'<div id="st-box"></div><div id="o-ruoli"></div><p style="margin-top:14px"><button class="mini" data-vai="azione">‹ Azione</button></p>';
   legaVai(c);if(io.nucleo)ruoliDaConfermare($("#st-conferma"));vStaff($("#st-box"));if(io.nucleo||io.coordina)vRuoli();
 }
 /* 25 ott 19:09, Gab: «manca la possibilità di fare piu ruoli, sennò siamo rigidi» → i ruoli si scelgono con le spunte, anche più di uno (SQL 124) */
