@@ -5,7 +5,7 @@
    Serve: supabase-js e Stripe.js caricati prima; la chiave pubblicabile (pk_…) è pubblica. */
 (function () {
   "use strict";
-  var PK = "pk_test_51UNBS0GhYmQedeGgpnrfiYlouqLbGbZ8jhT1cWCQX9RBsZVqf7AAPlAodkI66aXUnTzFNRDoW9kwsYQlXDawwl1l00LIvTffnB";
+  var PK = "pk_live_51UNBTXK6IODJpdmBLJClOeSp7UrcDSxQ8RrQrF4LFKDsd9EO9ai99mSfKCsQYvhbovv3GCGlPz1kLWJsvXyW8zo700cqv894bH";
   var URL = "https://gfnveesogkfvkrdudpfg.supabase.co", ANON = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
   var db = null, stripe = null, elements = null, corrente = null;
   function client() { if (!db && window.supabase) { try { db = supabase.createClient(URL, ANON, { auth: { flowType: "implicit" } }); } catch (e) {} } return db; }

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#122050">
+<title>Emporio · FelicitasMundi</title>
+<!--
+  31 ottobre 2026 · thread «Rifare Emporio, Stampa e Mutuo aiuto».
+  Gab 10:45: «emporio facesse vedere i prodotti consigliati dal praticantato, poi facesse vedere per distanza dall utente.. e che mi mostrasse i vari scaffali».
+  Gab 11:12: «è piu vicino (se è legato ad un vicinato) e lontano qualune altra cosa».
+  Gab 11:15: «mostramelo anche con scaffali senza prodotti, inserendo il tasto invita produttore» · 11:16 «e impostiamo il testo invito».
+  Gab 13:52: «ok sviluppalo» (bozza azione-chat/emporio-bozza/emporio-bozza-2.html).
+  Dati: tavola prodotti (pubblici, con prezzo). Consigliati = prodotti.praticantato; vicino = prodotti.vicinato_id fra i vicinati di chi è entrato.
+  Acquista = prodotti.link_pagamento (SQL 138); senza link: «Presto in vendita».
+  Testo dell'invito: dalla pagina «Partecipa coi tuoi prodotti» (partecipa-prodotti.html).
+  1 novembre 2026 · Gab: «stampa è l articolo piuu completo che abbiamo, quindi crea un contesto molto bello e chiaro su emporio, come prima voce»;
+  «oggi togli il kit, metti solo i prodotti e struttura il modello elaborato in stampa per cui tu schiacci il prodotto e puoi scegliere materiale quantità ecc e confermare il pagamento»;
+  «le famiglie non possono essere solo in una fila»; «prima sviluppa bene la pagina e rendila concreta, dentro emporio».
+  Testi della Stampa verbatim da stampa-bozza.html; il configuratore e il pagamento sono quelli di sempre (comune/fm-stampa.js + comune/fm-cassa.js).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--testo:#F5F0E6;--tenue:rgba(245,240,230,.74);--acqua:#4488BB;--riga:rgba(212,175,106,.35)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:linear-gradient(180deg,var(--c1) 0%,var(--c2) 45%,var(--c3) 100%) fixed;color:var(--testo);font:400 18px/1.45 'DM Sans',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
+ radial-gradient(1.2px 1.2px at 8% 12%,#fff8 50%,transparent),radial-gradient(1px 1px at 22% 30%,#fff6 50%,transparent),radial-gradient(1.4px 1.4px at 35% 8%,#fff9 50%,transparent),
+ radial-gradient(1px 1px at 48% 22%,#fff5 50%,transparent),radial-gradient(1.3px 1.3px at 63% 14%,#fff8 50%,transparent),radial-gradient(1px 1px at 77% 35%,#fff6 50%,transparent),
+ radial-gradient(1.5px 1.5px at 90% 9%,#fffa 50%,transparent),radial-gradient(1px 1px at 12% 55%,#fff5 50%,transparent),radial-gradient(1.2px 1.2px at 30% 70%,#fff7 50%,transparent),
+ radial-gradient(1px 1px at 55% 62%,#fff5 50%,transparent),radial-gradient(1.3px 1.3px at 70% 80%,#fff7 50%,transparent),radial-gradient(1px 1px at 86% 58%,#fff6 50%,transparent),
+ radial-gradient(1.2px 1.2px at 5% 88%,#fff6 50%,transparent),radial-gradient(1px 1px at 42% 92%,#fff5 50%,transparent),radial-gradient(1.4px 1.4px at 95% 85%,#fff8 50%,transparent),
+ radial-gradient(1px 1px at 18% 42%,#fff4 50%,transparent),radial-gradient(1.1px 1.1px at 60% 45%,#fff6 50%,transparent),radial-gradient(1px 1px at 82% 22%,#fff5 50%,transparent),
+ radial-gradient(1px 1px at 3% 33%,#fff5 50%,transparent),radial-gradient(1.2px 1.2px at 52% 4%,#fff7 50%,transparent),radial-gradient(1px 1px at 67% 97%,#fff5 50%,transparent)}
+a{color:var(--oro)}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--oro);outline-offset:2px}
+.pagina{max-width:560px;margin:0 auto;padding:16px 16px calc(110px + env(safe-area-inset-bottom,0px));position:relative;z-index:1}
+.alto{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.indietro{background:transparent;color:var(--testo);border:1px solid rgba(212,175,106,.5);border-radius:12px;padding:10px 14px;font:500 17px 'DM Sans',sans-serif;text-decoration:none}
+.marchio{font-family:'Cinzel',serif;letter-spacing:.08em;color:var(--oro);font-size:16px}
+.et{font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--oro);margin:0}
+.et.acqua{color:var(--acqua);margin-top:14px}
+h1{font-family:'Cinzel',serif;font-weight:500;font-size:34px;margin:2px 0 4px}
+.sotto{color:var(--tenue);margin:0 0 12px}
+.nota{font-size:17px;color:var(--tenue);margin:6px 0 10px}
+.hero{border-radius:22px;overflow:hidden;background:var(--carta);border:1px solid rgba(212,175,106,.45);margin:10px 0 4px}
+.hero img{width:100%;height:240px;object-fit:cover;display:block;background:#122050}
+.hero .dentro{padding:14px 16px 16px}
+.hero small{font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--oro)}
+.hero h2{font-family:'Cinzel',serif;font-weight:500;font-size:27px;margin:4px 0 2px}
+.hero .chi{color:var(--tenue);font-size:17px}
+.hero .giu{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px}
+.prezzo{font-family:'Cinzel',serif;color:var(--oro);font-size:24px}
+.hero .prezzo{font-size:28px}
+.testa{display:flex;justify-content:space-between;align-items:baseline;margin:28px 0 10px;gap:10px}
+.testa a,.testa button{color:var(--oro);font-size:17px;text-decoration:none;background:none;border:0;padding:6px 0;white-space:nowrap}
+.fila{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 8px;scrollbar-width:none}
+.fila::-webkit-scrollbar{display:none}
+.prod{flex:0 0 46%;max-width:230px;scroll-snap-align:start;background:var(--carta);border:1px solid var(--riga);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.prod img{width:100%;height:180px;object-fit:cover;display:block;background:#122050}
+.prod img.libro{object-fit:contain;background:#0a1430}
+.prod .dentro{padding:12px 12px 14px;display:flex;flex-direction:column;gap:3px;flex:1}
+.prod b{font-size:18px;font-weight:600;line-height:1.25}
+.prod .chi{font-size:16px;color:var(--tenue)}
+.prod .prezzo{margin-top:auto;padding-top:6px}
+.compra{min-height:52px;border-radius:14px;border:0;background:var(--oro);color:#0a1430;font:600 18px 'DM Sans',sans-serif;padding:0 22px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.compra.presto{background:transparent;color:var(--tenue);border:1px solid var(--riga);cursor:default}
+.prod .compra{margin-top:8px;width:100%;padding:0 8px;min-height:48px;font-size:17px}
+.invita{flex:0 0 72%;max-width:330px;scroll-snap-align:start;border:1px dashed rgba(212,175,106,.55);border-radius:18px;background:rgba(26,33,72,.75);padding:18px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.invita.corta{flex:0 0 46%;max-width:230px}
+.invita b{font-size:19px;font-weight:600;line-height:1.3}
+.invita p{font-size:17px;color:var(--tenue);margin:0}
+.inv{min-height:52px;border-radius:14px;border:1px solid var(--oro);background:transparent;color:var(--testo);font:600 18px 'DM Sans',sans-serif;width:100%;margin-top:6px}
+.scelte{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.chip{border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:10px 18px;font:500 17px 'DM Sans',sans-serif;background:transparent;color:var(--testo);min-height:46px}
+.chip[aria-pressed="true"]{background:var(--oro);color:#0a1430;border-color:var(--oro)}
+.vuoto{font-size:17px;color:var(--tenue)}
+.velo{position:fixed;inset:0;background:rgba(10,20,48,.72);z-index:20}
+.foglio{position:fixed;left:0;right:0;bottom:0;max-height:88vh;overflow-y:auto;background:#122050;border-top:2px solid var(--oro);border-radius:22px 22px 0 0;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));z-index:21;max-width:560px;margin:0 auto}
+.presa{width:48px;height:5px;border-radius:3px;background:rgba(212,175,106,.45);margin:0 auto 12px}
+.foglio h3{font-family:'Cinzel',serif;font-weight:500;font-size:23px;margin:0 0 8px}
+.foglio .msg{background:var(--carta);border-radius:14px;padding:14px;font-size:18px;line-height:1.5;white-space:pre-wrap}
+.foglio .tasti{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.foglio .chiudi{width:100%;margin-top:10px;min-height:48px;background:transparent;color:var(--testo);border:1px solid var(--riga);border-radius:14px;font:500 17px 'DM Sans',sans-serif}
+.esito{font-size:17px;color:#E8C77A;margin:8px 0 0;min-height:1px}
+.barra{position:fixed;left:0;right:0;bottom:0;background:#0f1a44;border-top:1px solid rgba(212,175,106,.3);display:flex;justify-content:space-around;padding:8px 4px calc(10px + env(safe-area-inset-bottom,0px));z-index:10}
+.barra a{font-size:13px;color:var(--tenue);text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;min-width:56px}
+.barra a[aria-current]{color:var(--oro)}
+.barra i{font-style:normal;font-size:20px;line-height:22px;height:22px}
+/* Stampa, la prima voce dell'Emporio */
+.fm-occ{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--oro)}
+.stampa{background:var(--carta);border:1px solid var(--riga);border-radius:22px;padding:18px 16px;margin:18px 0 8px}
+.stampa h2{font-family:'Cinzel',serif;font-weight:500;font-size:24px;line-height:1.2;margin:6px 0 8px;text-wrap:balance}
+.stampa .intro{color:var(--tenue);margin:0 0 14px}
+.fam{display:grid;grid-auto-flow:column;grid-template-rows:auto auto;grid-auto-columns:62%;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px 6px;scrollbar-width:none}
+.fam::-webkit-scrollbar{display:none}
+.fam button{scroll-snap-align:start}
+.fam button{background:#122050;border:1px solid rgba(212,175,106,.25);border-radius:16px;overflow:hidden;padding:0;text-align:left;color:var(--testo);display:flex;flex-direction:column}
+.fam img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.fam .t{padding:10px 10px 12px}
+.fam b{display:block;font-weight:600;font-size:18px;line-height:1.2}
+.fam span{display:block;font-size:15px;line-height:1.35;color:var(--tenue);margin-top:4px}
+.carta-scelta{margin-top:16px;border-top:1px solid var(--riga);padding-top:14px}
+.carta-scelta p{margin:6px 0 0;color:var(--tenue)}
+.pannello{position:fixed;inset:0;z-index:30;overflow-y:auto;background:linear-gradient(180deg,var(--c1) 0%,var(--c2) 45%,var(--c3) 100%)}
+.pannello .pagina{padding-top:calc(16px + env(safe-area-inset-top,0px))}
+.pannello h2{font-family:'Cinzel',serif;font-weight:500;font-size:28px;margin:6px 0 4px}
+.pannello .sot{color:var(--tenue);margin:0 0 14px}
+#pan-box a.fms-indietro[href="stampa-bozza.html"]{display:none}
+</style>
+</head>
+<body>
+<div class="pagina">
+  <div class="alto"><a class="indietro" href="strumento.html?v=azione">← Espandi</a><span class="marchio">FelicitasMundi</span></div>
+  <p class="et acqua">Acqua · Emporio</p>
+  <h1>Emporio</h1>
+  <p class="sotto">quello che si compra, si scambia e si dona, e chi lo porta</p>
+  <p class="esito" id="pagato" hidden>Pagamento ricevuto.</p>
+  <section class="stampa" aria-labelledby="st-tit">
+    <p class="et">Stampa</p>
+    <h2 id="st-tit">2000 prodotti ed espositori fieristici</h2>
+    <p class="intro">Oltre alla stampa proponiamo supporti per l'esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</p>
+    <div class="fam">
+      <button type="button" data-fam="carta" data-nome="Carta stampata" data-sot="volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi"><img src="stampa/volantino.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Carta stampata</b><span>volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi</span></span></button>
+      <button type="button" data-fam="libri" data-nome="Libri e cataloghi" data-sot="libri, riviste, cataloghi, fascicoli"><img src="stampa/rivista.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Libri e cataloghi</b><span>libri, riviste, cataloghi, fascicoli</span></span></button>
+      <button type="button" data-fam="agende" data-nome="Agende e calendari" data-sot="agende, calendari, quaderni e taccuini"><img src="stampa/agenda.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Agende e calendari</b><span>agende, calendari, quaderni e taccuini</span></span></button>
+      <button type="button" data-fam="fiere" data-nome="Esposizione e fiere" data-sot="totem, roll-up, striscioni, stand, insegne, pellicole per vetrine"><img src="stampa/rollup.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Esposizione e fiere</b><span>totem, roll-up, striscioni, stand, insegne, pellicole per vetrine</span></span></button>
+      <button type="button" data-fam="confezioni" data-nome="Confezioni e imballaggi" data-sot="shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo"><img src="stampa/scatola.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Confezioni e imballaggi</b><span>shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo</span></span></button>
+      <button type="button" data-fam="gadget" data-nome="Gadget e regali" data-sot="penne, cordini, portabadge, borse, borracce"><img src="stampa/penne.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Gadget e regali</b><span>penne, cordini, portabadge, borse, borracce</span></span></button>
+      <button type="button" data-fam="abiti" data-nome="Abbigliamento" data-sot="magliette, felpe, tessuti personalizzati"><img src="stampa/tshirt.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Abbigliamento</b><span>magliette, felpe, tessuti personalizzati</span></span></button>
+      <button type="button" data-fam="foto" data-nome="Album fotografico" data-sot="fotolibri, foto da parete, calendari fotografici"><img src="stampa/rivista.jpg?v=10132030" alt="" loading="lazy"><span class="t"><b>Album fotografico</b><span>fotolibri, foto da parete, calendari fotografici</span></span></button>
+    </div>
+    <div class="carta-scelta">
+      <p class="et">La carta che scegliamo</p>
+      <p>Cerchiamo materiali naturali: volantini in carta riciclata o naturale, riciclabili al 100%. Manifesti su cartoncino con oltre il 90% di fibre di legno riciclate. Bicchieri, tovaglioli e confezioni per alimenti biodegradabili, che si smaltiscono nell'organico.</p>
+      <p>E dove si può, la stampa a impatto climatico zero: un piccolo sovrapprezzo che va in progetti di protezione del clima certificati.</p>
+    </div>
+  </section>
+  <div id="corpo"><p class="nota">Un momento…</p></div>
+</div>
+<div class="pannello" id="pannello" hidden>
+  <div class="pagina">
+    <div class="alto"><button type="button" class="indietro" id="pan-chiudi">← Emporio</button><span class="marchio">FelicitasMundi</span></div>
+    <p class="et">Stampa</p>
+    <h2 id="pan-tit"></h2>
+    <p class="sot" id="pan-sot"></p>
+    <div id="pan-box"></div>
+  </div>
+</div>
+<nav class="barra" aria-label="Parti dell'app">
+  <a href="strumento.html?v=giornale"><i>❡</i>Giornale</a>
+  <a href="strumento.html?v=oggi"><i>☼</i>Oggi</a>
+  <a href="strumento.html?v=azione" aria-current="page"><i>✦</i>Espandi</a>
+  <a href="strumento.html?v=obiettivi"><i>☐</i>Obiettivi</a>
+  <a href="strumento.html?v=cervello"><i>✺</i>Coscienza</a>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+var URL_SB="https://gfnveesogkfvkrdudpfg.supabase.co",KEY="sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
+var FOTO_BASE="../communitas-aeterna/";
+var PARTECIPA="https://app.felicitasmundi.com/communitas-aeterna-prova/partecipa-prodotti.html";
+/* gli scaffali dell'Emporio (stessi nomi della pagina di prima) */
+var SCAFFALI=["alimenti","rimedi","cosmesi","oggettistica","abbigliamento","arredo","oggetti sacri","libri e stampati","strumenti di coscienza","digitale"];
+var db=null;try{db=window.supabase.createClient(URL_SB,KEY,{auth:{flowType:"implicit"}});}catch(e){}
+var $=function(s){return document.querySelector(s);};
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function euro(n){return (+n||0).toLocaleString("it-IT",{style:"currency",currency:"EUR"});}
+function maiuscola(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1);}
+function foto(p){if(!p.foto)return "";return /^https?:\/\//.test(p.foto)?p.foto:FOTO_BASE+p.foto;}
+var stato={prodotti:[],vicinati:[],dentro:false,nome:"",vicino:true};
+
+function tastoCompra(p){
+  return p.link_pagamento?'<a class="compra" href="'+esc(p.link_pagamento)+'" target="_blank" rel="noopener">Acquista</a>'
+                         :'<span class="compra presto">Presto in vendita</span>';
+}
+function carta(p){
+  var f=foto(p);
+  return '<div class="prod">'+(f?'<img src="'+esc(f)+'" alt="" loading="lazy"'+(p.scaffale==="libri e stampati"?' class="libro"':'')+'>':'')+
+    '<div class="dentro"><b>'+esc(p.nome)+'</b>'+(p.autore?'<span class="chi">'+esc(p.autore)+'</span>':'')+
+    '<span class="prezzo">'+euro(p.prezzo)+'</span>'+tastoCompra(p)+'</div></div>';
+}
+function cartaInvita(titolo,frase,corta){
+  return '<div class="invita'+(corta?' corta':'')+'"><b>'+esc(titolo)+'</b>'+(frase?'<p>'+esc(frase)+'</p>':'')+'<button type="button" class="inv" data-invita>Invita un produttore</button></div>';
+}
+function disegna(){
+  var l=stato.prodotti,h="";
+  /* in cima: i consigliati dal Praticantato */
+  var cons=l.filter(function(p){return p.praticantato;});
+  if(cons.length){
+    var p=cons[0],f=foto(p);
+    h+='<div class="hero">'+(f?'<img src="'+esc(f)+'" alt="">':'')+'<div class="dentro"><small>Consigliato dal Praticantato</small><h2>'+esc(p.nome)+'</h2>'+
+       (p.autore?'<span class="chi">'+esc(p.autore)+'</span>':'')+'<div class="giu"><span class="prezzo">'+euro(p.prezzo)+'</span>'+tastoCompra(p)+'</div></div></div>';
+    if(cons.length>1)h+='<div class="testa"><p class="et">Consigliati dal Praticantato</p></div><div class="fila">'+cons.slice(1).map(carta).join("")+'</div>';
+  }
+  /* vicino a te: del tuo vicinato · da più lontano: tutto il resto */
+  var mieiV=stato.vicinati,vic=l.filter(function(p){return p.vicinato_id&&mieiV.indexOf(p.vicinato_id)>=0;}),lon=l.filter(function(p){return vic.indexOf(p)<0;});
+  var quali=stato.vicino?vic:lon;
+  h+='<div class="testa"><p class="et">Vicino a te</p></div>'+
+     '<div class="scelte" role="group" aria-label="Vicino o lontano"><button type="button" class="chip" data-vic="1" aria-pressed="'+stato.vicino+'">Dal tuo vicinato</button><button type="button" class="chip" data-vic="0" aria-pressed="'+(!stato.vicino)+'">Da più lontano</button></div>'+
+     '<div class="fila">'+quali.map(carta).join("")+
+       (stato.vicino?(!stato.dentro?'<div class="invita"><b>Entra per vedere i prodotti del tuo vicinato</b><a class="compra" style="margin-top:6px" href="accesso.html?torna=emporio.html">Entra</a></div>'
+          :cartaInvita(vic.length?"Conosci chi produce vicino a te?":"Nel tuo vicinato non c'è ancora un prodotto",vic.length?"":"Conosci chi produce vicino a te?",!!vic.length)):'')+
+     '</div>';
+  /* gli scaffali: prima quelli con la merce, poi quelli che aspettano il primo produttore */
+  var pieni=[],vuoti=[];
+  SCAFFALI.forEach(function(s){var dentro=l.filter(function(p){return p.scaffale===s;});(dentro.length?pieni:vuoti).push([s,dentro]);});
+  l.forEach(function(p){if(p.scaffale&&SCAFFALI.indexOf(p.scaffale)<0&&!pieni.some(function(x){return x[0]===p.scaffale;}))pieni.push([p.scaffale,l.filter(function(q){return q.scaffale===p.scaffale;})]);});
+  pieni.forEach(function(x){
+    h+='<div class="testa"><p class="et">'+esc(x[0])+'</p></div><div class="fila">'+x[1].map(carta).join("")+cartaInvita("Porti anche tu qualcosa qui?","",true)+'</div>';
+  });
+  vuoti.forEach(function(x){
+    h+='<div class="testa"><p class="et">'+esc(x[0])+'</p></div><div class="fila">'+cartaInvita("Questo scaffale aspetta il primo produttore","",false)+'</div>';
+  });
+  $("#corpo").innerHTML=h;
+  document.querySelectorAll("[data-vic]").forEach(function(b){b.onclick=function(){stato.vicino=b.getAttribute("data-vic")==="1";disegna();};});
+  document.querySelectorAll("[data-invita]").forEach(function(b){b.onclick=invita;});
+}
+/* l'invito: testo dalla pagina «Partecipa coi tuoi prodotti», da mandare con WhatsApp o da copiare */
+function testoInvito(){
+  return "Ti invito a portare i tuoi prodotti nell'Emporio di FelicitasMundi. Con la dichiarazione d'intenti un'azienda propone il proprio prodotto alla rete: le persone e i vicinati lo vedono nell'app, lo prenotano, lo ritirano.\n\nPartecipa come produttore: "+PARTECIPA+(stato.nome?"\n\n"+stato.nome:"");
+}
+function chiudiFoglio(){var f=$("#foglio");if(f)f.remove();}
+function invita(){
+  chiudiFoglio();
+  var t=testoInvito(),f=document.createElement("div");f.id="foglio";
+  f.innerHTML='<div class="velo" data-chiudi></div><div class="foglio" role="dialog" aria-modal="true" aria-labelledby="inv-tit"><div class="presa"></div>'+
+    '<h3 id="inv-tit">Invita un produttore</h3><div class="msg">'+esc(t)+'</div>'+
+    '<div class="tasti"><a class="compra" href="https://wa.me/?text='+encodeURIComponent(t)+'" target="_blank" rel="noopener">WhatsApp</a><button type="button" class="inv" style="margin:0" id="inv-copia">Copia</button></div>'+
+    '<p class="esito" id="inv-esito" aria-live="polite"></p><button type="button" class="chiudi" data-chiudi>Chiudi</button></div>';
+  document.body.appendChild(f);
+  f.querySelectorAll("[data-chiudi]").forEach(function(x){x.onclick=chiudiFoglio;});
+  $("#inv-copia").onclick=function(){
+    var ok=function(){$("#inv-esito").textContent="Copiato: incollalo dove vuoi.";};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,function(){$("#inv-esito").textContent="Tieni premuto sul testo per copiarlo.";});
+    else $("#inv-esito").textContent="Tieni premuto sul testo per copiarlo.";
+  };
+}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")chiudiFoglio();});
+/* Stampa: tocchi la famiglia → il configuratore di sempre (Flyeralarm) dentro l'Emporio → «Ordina e paga» con la cassa di sempre */
+try{if(/[?&]pagato=/.test(location.search))$("#pagato").hidden=false;}catch(e){}
+var caricati={};
+function carica(src){return new Promise(function(ok,no){if(caricati[src])return ok();var e=document.createElement("script");e.src=src;e.onload=function(){caricati[src]=1;ok();};e.onerror=no;document.body.appendChild(e);});}
+function apriFamiglia(b,daStoria){
+  $("#pan-tit").textContent=b.getAttribute("data-nome");$("#pan-sot").textContent=b.getAttribute("data-sot");
+  $("#pan-box").innerHTML='<div id="fm-stampa" data-famiglia="'+esc(b.getAttribute("data-fam"))+'" data-nome="'+esc(b.getAttribute("data-nome"))+'"></div>';
+  var p=$("#pannello");p.hidden=false;p.scrollTop=0;document.body.style.overflow="hidden";
+  if(!daStoria)try{history.pushState({fam:b.getAttribute("data-fam")},"","#"+b.getAttribute("data-fam"));}catch(e){}
+  carica("https://js.stripe.com/v3/").catch(function(){}).then(function(){return carica("comune/fm-cassa.js?v=10132250");}).then(function(){
+    var e=document.createElement("script");e.src="comune/fm-stampa.js?v=10132250";document.body.appendChild(e);
+  }).catch(function(){$("#pan-box").innerHTML='<p class="nota">La stampa non si è caricata: controlla la connessione e riprova.</p>';});
+}
+function chiudiFamiglia(){var p=$("#pannello");if(p.hidden)return;p.hidden=true;$("#pan-box").innerHTML="";document.body.style.overflow="";}
+document.querySelectorAll("[data-fam]").forEach(function(b){b.onclick=function(){apriFamiglia(b);};});
+$("#pan-chiudi").onclick=function(){if(location.hash)history.back();else chiudiFamiglia();};
+window.addEventListener("popstate",function(){var k=location.hash.slice(1),b=k&&document.querySelector('[data-fam="'+k+'"]');if(b)apriFamiglia(b,true);else chiudiFamiglia();});
+(function(){var k=location.hash.slice(1),b=k&&document.querySelector('[data-fam="'+k+'"]');if(b)apriFamiglia(b,true);})();
+
+
+function leggiProdotti(conLink){
+  var campi="id,nome,autore,prezzo,foto,scaffale,praticantato,vicinato_id,creato_il"+(conLink?",link_pagamento":"");
+  return db.from("prodotti").select(campi).eq("stato","pubblico").eq("si_compra",true).not("prezzo","is",null).order("creato_il",{ascending:false});
+}
+if(!db){$("#corpo").innerHTML='<p class="nota">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</p>';return;}
+db.auth.getSession().then(function(r){
+  var u=r&&r.data&&r.data.session&&r.data.session.user;stato.dentro=!!u;
+  var passi=[
+    leggiProdotti(true).then(function(x){if(x&&x.error)return leggiProdotti(false);return x;}),
+    u?db.rpc("fm_miei_vicinati").then(function(x){return x;},function(){return null;}):Promise.resolve(null),
+    u?db.from("persone_pubbliche").select("nome").eq("id",u.id).then(function(x){return x;},function(){return null;}):Promise.resolve(null)
+  ];
+  return Promise.all(passi);
+}).then(function(v){
+  var x=v[0];
+  if(!x||x.error){$("#corpo").innerHTML='<p class="nota">I prodotti non si caricano. Ricarica la pagina.</p>';return;}
+  stato.prodotti=(x.data||[]).map(function(p){p.scaffale=String(p.scaffale||"").trim().toLowerCase();return p;});
+  var vv=v[1]&&!v[1].error&&v[1].data||[];stato.vicinati=vv.map(function(y){return typeof y==="string"?y:(y.fm_miei_vicinati||y.id||y.vicinato_id);}).filter(Boolean);
+  var n=v[2]&&!v[2].error&&v[2].data&&v[2].data[0];stato.nome=n&&n.nome||"";
+  if(!stato.dentro)stato.vicino=false;
+  disegna();
+},function(){$("#corpo").innerHTML='<p class="nota">I prodotti non si caricano. Ricarica la pagina.</p>';});
+})();
+</script>
+</body>
+</html>
