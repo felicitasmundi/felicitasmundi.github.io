@@ -1363,7 +1363,7 @@ function disegnaTeam(){
   team.msg.forEach(function(m){
     var g=giornoRoma(m.scritto_il);if(g!==giorno){giorno=g;h.push('<div class="tc-giorno">'+esc(giornoTm(m.scritto_il))+'</div>');}
     var mio=m.scritto_da===io.id,p=team.prop[m.id];
-    h.push('<div class="tc-m'+(mio?' mio':'')+(m.argomento?' apre':'')+(team.scelto===m.id?' scelto':'')+'" data-m="'+esc(m.id)+'" role="button" tabindex="0" aria-expanded="'+(team.scelto===m.id)+'">'+
+    h.push((team.scelto===m.id?'<div class="tc-riga'+(mio?' mio':'')+'">':'')+'<div class="tc-m'+(mio?' mio':'')+(m.argomento?' apre':'')+(team.scelto===m.id?' scelto':'')+'" data-m="'+esc(m.id)+'" role="button" tabindex="0" aria-expanded="'+(team.scelto===m.id)+'">'+
       (m.argomento?'<div class="arg"><span class="tc-segno" aria-hidden="true"></span>'+esc(m.argomento)+'</div>':'')+
       (mio?'':'<div class="chi">'+esc(nomi[m.scritto_da]||"")+'</div>')+
       (m.foto?(team.url[m.foto]?'<img src="'+esc(team.url[m.foto])+'" alt="Foto" loading="lazy">':'<div class="t" style="opacity:.7">Foto</div>'):'')+
@@ -1373,7 +1373,7 @@ function disegnaTeam(){
       (m.testo?testoLink(m.testo,"t","div"):'')+
       (m.registro_id?'<span class="pill-o">→ nel registro</span>':'')+
       (p?'<span class="pill-o">'+(p==="approvata"?"nel Cervello":"nel Cervello · in attesa")+'</span>':'')+
-      '<div class="ora">'+esc(hhmm(m.scritto_il))+(m.modificato_il?' · modificato':'')+'</div></div>');
+      '<div class="ora">'+esc(hhmm(m.scritto_il))+(m.modificato_il?' · modificato':'')+'</div></div>'+(team.scelto===m.id?latoMsg(m)+'</div>':''));
     if(team.scelto===m.id)h.push(azioniMsg(m));
   });
   e.innerHTML=h.length?h.join(""):'<p class="nota" style="text-align:center;padding:20px 0">Ancora nessun messaggio. Scrivi il primo.</p>';
@@ -1489,13 +1489,36 @@ function modificaMsg(box,m){
 }
 document.head.insertAdjacentHTML("beforeend","<style>"+MOD_CSS+"</style>");
 
+/* ═══ Tasti a lato della bolla · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
+   Gab 1/11 14:03: «puoi mettere i tasti rispondi, apri argomento, fai obiettivo, di lato al quadrante della chat, mettendo dei loghetti?»
+   · 14:04 «va bene per design». Toccando un messaggio, Rispondi, Apri/Chiudi argomento e Fai obiettivo stanno in una colonna
+   a lato della bolla (a destra per i messaggi degli altri, a sinistra per i propri), icona con la parola sotto.
+   Metti nel Cervello, Segna nel registro, Modifica, Fissa in alto, Elimina, Fai uscire restano nella riga sotto. */
+var LATO_CSS='.tc-riga{display:flex;align-items:flex-start;gap:6px;margin:0 0 10px}.tc-riga.mio{flex-direction:row-reverse}'+
+'.tc-riga .tc-m{margin:0;flex:1;min-width:0}'+
+'.tc-lato{flex:none;width:64px;display:flex;flex-direction:column;gap:6px}'+
+'.tc-lato button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:58px;padding:6px 2px;border-radius:14px;border:1px solid rgba(212,175,106,.5);background:#1a2148;color:#D4AF6A;font:600 12px "DM Sans",system-ui,sans-serif;line-height:1.1;text-align:center;cursor:pointer}'+
+'.tc-lato button svg{width:24px;height:24px;flex:none}.tc-lato button .tc-segno{width:14px;height:14px;border-radius:8px 8px 2px 8px;margin:5px 0}'+
+'#tc-az:empty{display:none}';
+var ICO_LATO={
+  rispondi:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>',
+  argomento:'<span class="tc-segno" aria-hidden="true"></span>',
+  obiettivo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>'
+};
+function latoMsg(m){
+  var chiude=m.argomento&&(m.argomento_da===io.id||io.nucleo);
+  function b(az,ico,parola){return '<button type="button" data-az="'+az+'">'+ico+'<span>'+parola+'</span></button>';}
+  return '<div class="tc-lato">'+b("rispondi",ICO_LATO.rispondi,"Rispondi")+
+    (m.argomento?(chiude?b("chiudi",ICO_LATO.argomento,"Chiudi argomento"):''):b("apri",ICO_LATO.argomento,"Apri argomento"))+
+    (team.tipo==="team"?b("obiettivo",ICO_LATO.obiettivo,"Fai obiettivo"):'')+'</div>';
+}
+document.head.insertAdjacentHTML("beforeend","<style>"+LATO_CSS+"</style>");
+
 document.head.insertAdjacentHTML("beforeend","<style>"+FISS_CSS+"</style>");
 /* toccando un messaggio: Rispondi · Apri argomento · Metti nel Cervello (disegno 4), e «segna nel registro» che c'era già dal 92 */
 function azioniMsg(m){
   var chiude=m.argomento&&(m.argomento_da===io.id||io.nucleo);
-  return '<div class="tc-az" id="tc-az"><button type="button" data-az="rispondi">Rispondi</button>'+
-    (m.argomento?(chiude?'<button type="button" data-az="chiudi">Chiudi argomento</button>':''):'<button type="button" data-az="apri">Apri argomento</button>')+
-    (team.tipo==="team"?'<button type="button" data-az="obiettivo">Fai obiettivo</button>':'')+
+  return '<div class="tc-az" id="tc-az">'+
     (team.prop[m.id]||team.tipo==="chat"?'':'<button type="button" class="cerv" data-az="cervello">Metti nel Cervello</button>')+
     (m.registro_id||!m.testo||team.tipo==="chat"?'':'<select data-az="registro" aria-label="Segna nel registro"><option value="">Segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+azioniRuolo(m)+
     '</div>';
@@ -1505,7 +1528,7 @@ function legaAzioniMsg(e){
   var m=team.msg.filter(function(x){return x.id===team.scelto;})[0];if(!m)return;
   legaAzioniRuolo(box,m);
   function esito(r){if(r&&!r.error&&r.data==="ok"){team.scelto=null;ricaricaTeam(false);return;}$("#tc-err").textContent=(r&&r.data)||errore(r&&r.error);}
-  box.querySelectorAll("button[data-az]").forEach(function(b){b.onclick=function(){var a=b.getAttribute("data-az");
+  e.querySelectorAll("#tc-az button[data-az], .tc-lato button[data-az]").forEach(function(b){b.onclick=function(){var a=b.getAttribute("data-az");
     if(a==="rispondi"){team.scelto=null;disegnaTeam();var t=$("#tc-testo");if(t){t.focus();t.scrollIntoView({block:"center"});}return;}
     if(a==="cervello"){mettiNelCervello(m);return;}
     if(a==="chiudi"){b.disabled=true;db.rpc("fm_messaggio_argomento",{p_messaggio:m.id,p_titolo:""}).then(esito,function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});return;}
