@@ -1247,7 +1247,7 @@ function vTeam(){
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
       '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div>'+
       '<button type="button" class="tc-menu" id="tc-menu" aria-label="Argomenti e notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
-    (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
+    (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-fiss"></div><div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
     '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
       '<input type="file" id="tc-doc" accept=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf" hidden>'+
@@ -1268,14 +1268,14 @@ function vTeam(){
   dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length||$("#tc-prat"))return;
     e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
   team.msg=[];team.prop={};
-  ricaricaTeam(true);
+  ricaricaTeam(true);team.guido=false;guidoChat(id);
   /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
   try{if(db.channel){team.sub=db.channel("team-"+id).on("postgres_changes",{event:"*",schema:"public",table:"gruppo_messaggi",filter:"cerchio_id=eq."+id},function(){ricaricaTeam(false);}).subscribe();}}catch(e){}
   team.timer=setInterval(function(){ricaricaTeam(false);},20000);
 }
 function ricaricaTeam(giu){
   var id=team.id;if(vista!=="team"||!id){teamFerma();return;}
-  var q=db.from("gruppo_messaggi").select("id,testo,foto,audio,file,file_nome,lat,lon,scritto_da,scritto_il,registro_id,argomento,argomento_da").eq("cerchio_id",id);
+  var q=db.from("gruppo_messaggi").select("id,testo,foto,audio,file,file_nome,lat,lon,scritto_da,scritto_il,registro_id,argomento,argomento_da,fissato_il").eq("cerchio_id",id);
   if(team.dal)q=q.gte("scritto_il",team.dal);
   q.order("scritto_il",{ascending:false}).limit(team.dal?500:80).then(function(r){
     if(vista!=="team"||team.id!==id)return;
@@ -1304,6 +1304,7 @@ function segnaLetto(id){
 }
 function disegnaTeam(){
   var e=$("#tc-msg");if(!e)return;
+  disegnaFissati();
   var giorno="",h=[];
   team.msg.forEach(function(m){
     var g=giornoRoma(m.scritto_il);if(g!==giorno){giorno=g;h.push('<div class="tc-giorno">'+esc(giornoTm(m.scritto_il))+'</div>');}
@@ -1329,6 +1330,62 @@ function disegnaTeam(){
   });
   legaAzioniMsg(e);
 }
+/* ═══ Chat dei team: Elimina · Fissa in alto · Fai uscire · per Company brain (strumento.html online) · thread «Il Praticantato», 1/11/2026 ═══
+   Serve lo SQL 146 (fm_chat_guido, fm_elimina_messaggio, fm_fissa_messaggio, fm_fai_uscire, colonna fissato_il).
+   Gab 31/10: ospite e karma yoga eliminano solo i propri; chi ha un ruolo (ed è nel team) e il nucleo eliminano anche quelli
+   degli altri, fissano in alto (max 3) e fanno uscire dalla chat. 1/11 13:09 «s».
+   Innesti (si cercano per testo, non per riga):
+   1 · leggi dei messaggi: nel select di gruppo_messaggi aggiungere ",fissato_il".
+   2 · vTeam: subito prima di  '<div id="tc-dir"></div>'  aggiungere  '<div id="tc-fiss"></div>'+
+       e dopo  ricaricaTeam(true);  aggiungere  team.guido=false;guidoChat(id);
+   3 · disegnaTeam: come prima riga dopo  var e=$("#tc-msg");if(!e)return;  aggiungere  disegnaFissati();
+   4 · azioniMsg(m): prima di  '</div>';  finale aggiungere  +azioniRuolo(m)
+   5 · legaAzioniMsg(e): dopo  var m=team.msg.filter(...)[0];if(!m)return;  aggiungere  legaAzioniRuolo(box,m);
+   6 · CSS: FISS_CSS nello <style>. */
+
+var FISS_CSS='#tc-fiss:empty{display:none}#tc-fiss{margin:10px 0 0;display:grid;gap:6px}'+
+'.tc-fs{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;padding:10px 14px;border-radius:14px;background:#1a2148;border:1px solid rgba(212,175,106,.45);color:#F5F0E6;font:400 16px "DM Sans",system-ui,sans-serif;cursor:pointer}'+
+'.tc-fs .pin{flex:none;color:#D4AF6A;font-size:16px;line-height:1.4}'+
+'.tc-fs .tx{flex:1;min-width:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}'+
+'.tc-fs a.ap{flex:none;color:#0a1430;background:#D4AF6A;border-radius:12px;padding:4px 10px;font-weight:600;text-decoration:none;align-self:center}'+
+'.tc-az .el{border-color:#E07A5F;color:#E07A5F}';
+
+function conLink(t){return esc(t).replace(/https:\/\/[^\s<]+/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener">'+u+'</a>';});}
+
+function guidoChat(id){
+  if(team.tipo!=="team")return;
+  db.rpc("fm_chat_guido",{p_cerchio:id}).then(function(r){if(team.id!==id)return;team.guido=!!(r&&!r.error&&r.data);if(team.scelto)disegnaTeam();},function(){});
+}
+
+function disegnaFissati(){
+  var f=$("#tc-fiss");if(!f)return;
+  var l=team.msg.filter(function(m){return m.fissato_il;}).sort(function(a,b){return a.fissato_il<b.fissato_il?-1:1;});
+  f.innerHTML=l.map(function(m){var u=((m.testo||"").match(/https:\/\/[^\s<]+/)||[""])[0],t=(m.testo||"").replace(/https:\/\/[^\s<]+/g,"").replace(/[\s·]+$/,"").trim();
+    return '<div class="tc-fs" role="button" tabindex="0" data-fs="'+esc(m.id)+'"><span class="pin" aria-hidden="true">📌</span><span class="tx">'+
+    (t?esc(t):u?"Link":(m.foto?"Foto":m.audio?"Vocale":m.file?esc(m.file_nome||"File"):"Posizione"))+'</span>'+
+    (u?'<a class="ap" href="'+esc(u)+'"'+(u.indexOf(location.origin+"/")===0?'':' target="_blank" rel="noopener"')+'>Apri ›</a>':'')+'</div>';}).join("");
+  f.querySelectorAll("[data-fs]").forEach(function(b){b.onclick=function(ev){if(ev.target.closest("a"))return;
+    var d=document.querySelector('[data-m="'+b.getAttribute("data-fs")+'"]');if(d)d.scrollIntoView({behavior:"smooth",block:"center"});};});
+}
+
+function azioniRuolo(m){
+  var mio=m.scritto_da===io.id,g=team.tipo==="team"&&team.guido,base=(team.lista||[]).some(function(t){return t.team_id===team.id&&t.nome==="Praticantato";});
+  return (g?(m.fissato_il?'<button type="button" data-az="sfissa">Togli da in alto</button>':'<button type="button" data-az="fissa">Fissa in alto</button>'):'')+
+    (mio||g?'<button type="button" class="el" data-az="elimina">Elimina</button>':'')+
+    (g&&!mio&&!base&&m.scritto_da?'<button type="button" data-az="esci">Fai uscire '+esc(nomi[m.scritto_da]||"")+'</button>':'');
+}
+
+function legaAzioniRuolo(box,m){
+  function esito(r){if(r&&!r.error&&r.data==="ok"){team.scelto=null;ricaricaTeam(false);return;}$("#tc-err").textContent=(r&&r.data)||errore(r&&r.error);}
+  function chiedi(b,testo,fai){b.onclick=function(){if(b.getAttribute("data-sicuro")!=="1"){b.setAttribute("data-sicuro","1");b.textContent=testo;return;}
+    b.disabled=true;fai().then(esito,function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});};}
+  function su(az,fai){var b=box.querySelector('[data-az="'+az+'"]');if(b)fai(b);}
+  su("fissa",function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_fissa_messaggio",{p_messaggio:m.id,p_si:true}).then(esito,function(){b.disabled=false;});};});
+  su("sfissa",function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_fissa_messaggio",{p_messaggio:m.id,p_si:false}).then(esito,function(){b.disabled=false;});};});
+  su("elimina",function(b){chiedi(b,"Tocca ancora: sparisce per tutti",function(){return db.rpc("fm_elimina_messaggio",{p_messaggio:m.id});});});
+  su("esci",function(b){chiedi(b,"Tocca ancora per farla uscire",function(){return db.rpc("fm_fai_uscire",{p_squadra:team.id,p_persona:m.scritto_da});});});
+}
+document.head.insertAdjacentHTML("beforeend","<style>"+FISS_CSS+"</style>");
 /* toccando un messaggio: Rispondi · Apri argomento · Metti nel Cervello (disegno 4), e «segna nel registro» che c'era già dal 92 */
 function azioniMsg(m){
   var chiude=m.argomento&&(m.argomento_da===io.id||io.nucleo);
@@ -1336,12 +1393,13 @@ function azioniMsg(m){
     (m.argomento?(chiude?'<button type="button" data-az="chiudi">Chiudi argomento</button>':''):'<button type="button" data-az="apri">Apri argomento</button>')+
     (team.tipo==="team"?'<button type="button" data-az="obiettivo">Fai obiettivo</button>':'')+
     (team.prop[m.id]||team.tipo==="chat"?'':'<button type="button" class="cerv" data-az="cervello">Metti nel Cervello</button>')+
-    (m.registro_id||!m.testo||team.tipo==="chat"?'':'<select data-az="registro" aria-label="Segna nel registro"><option value="">Segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+
+    (m.registro_id||!m.testo||team.tipo==="chat"?'':'<select data-az="registro" aria-label="Segna nel registro"><option value="">Segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+azioniRuolo(m)+
     '</div>';
 }
 function legaAzioniMsg(e){
   var box=e.querySelector("#tc-az");if(!box)return;
   var m=team.msg.filter(function(x){return x.id===team.scelto;})[0];if(!m)return;
+  legaAzioniRuolo(box,m);
   function esito(r){if(r&&!r.error&&r.data==="ok"){team.scelto=null;ricaricaTeam(false);return;}$("#tc-err").textContent=(r&&r.data)||errore(r&&r.error);}
   box.querySelectorAll("button[data-az]").forEach(function(b){b.onclick=function(){var a=b.getAttribute("data-az");
     if(a==="rispondi"){team.scelto=null;disegnaTeam();var t=$("#tc-testo");if(t){t.focus();t.scrollIntoView({block:"center"});}return;}
@@ -2181,7 +2239,16 @@ function voce(x,firme){
 var cerchio=null,cerchiCache=null;
 /* 1 nov, Gab: «non è un discorso di team ma di ruoli, questo non lo leggono gli ospiti gli altri si» · «è un nome di un capitolo nel cervello».
    Capitoli del Cervello con livello «non_ospiti» (SQL 142): li legge chi è entrato e non è ospite; solo lettura. Senza lo SQL 142 non compare nulla. */
+function capDaLink(){
+  var q=new URLSearchParams(location.search),id=q.get("cap");if(!id||!io.id)return;
+  try{q.delete("cap");history.replaceState(null,"",location.pathname+"?"+q.toString());}catch(e){}
+  db.from("cervello_capitoli").select("id,titolo,squadra_id").eq("id",id).maybeSingle().then(function(r){
+    if(!r||r.error||!r.data||vista!=="cervello")return;
+    if(r.data.squadra_id){team.id=r.data.squadra_id;team.tipo="team";}
+    leggiCapLivello(r.data,!!r.data.squadra_id);},function(){});
+}
 function capLivello(){
+  capDaLink();
   var box=$("#ce-livello");if(!box||!io.id)return;
   db.from("cervello_capitoli").select("id,titolo").eq("livello","non_ospiti").order("ordine").order("aperto_il").then(function(r){
     if(!document.body.contains(box)||!r||r.error||!(r.data||[]).length)return;
@@ -2191,12 +2258,17 @@ function capLivello(){
       var id=b.getAttribute("data-cap-l"),k=r.data.filter(function(x){return x.id===id;})[0];leggiCapLivello(k);};});
   },function(){});
 }
-function leggiCapLivello(k){
+function leggiCapLivello(k,daTeam){
   var c=$("#corpo");window.scrollTo(0,0);
-  c.innerHTML='<div style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div>'+
+  var lk=new URL("strumento.html?v=cervello&cap="+encodeURIComponent(k.id),location.href).href;
+  c.innerHTML='<div style="margin-bottom:4px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="ce-indietro">'+(daTeam?'← Torna al team':'← Torna al Cervello')+'</button><button class="btn pieno" id="cl-invia">Invia</button></div><p class="nota" id="cl-fatto" hidden>Link copiato.</p>'+
     '<p class="et">Cervello</p><h1 style="font-family:var(--display);font-weight:400;font-size:28px;letter-spacing:.05em;margin:4px 2px 12px">'+esc(k.titolo)+'</h1>'+
     '<div id="cl-righe" style="display:flex;flex-direction:column;gap:12px"><p class="nota">Un momento…</p></div>';
-  $("#ce-indietro").onclick=function(){vai("cervello");};
+  $("#ce-indietro").onclick=function(){vai(daTeam?"team":"cervello");};
+  /* 1 nov, Gab: il link da mandare a chi è nel team; lo apre solo chi può leggere il capitolo */
+  $("#cl-invia").onclick=function(){
+    if(navigator.share){navigator.share({title:k.titolo,url:lk}).catch(function(){});return;}
+    (navigator.clipboard?navigator.clipboard.writeText(lk):Promise.reject()).then(function(){$("#cl-fatto").hidden=false;},function(){prompt("Copia il link",lk);});};
   db.from("cervello_righe").select("testo,scritta_il").eq("capitolo_id",k.id).order("scritta_il").then(function(q){
     var box=$("#cl-righe");if(!box)return;
     if(!q||q.error){box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';return;}
