@@ -2091,9 +2091,38 @@ function voce(x,firme){
    Schema da «Attiva il tuo cervello» (sezione 8): in cima il libro, sotto i cerchi; toccando un cerchio si entra.
    Dati: SQL 79 (fm_cerchi, fm_cerchio_persone, ruoli.vicinato_id). Senza il 79 si vede solo il libro. */
 var cerchio=null,cerchiCache=null;
+/* 1 nov, Gab: «non è un discorso di team ma di ruoli, questo non lo leggono gli ospiti gli altri si» · «è un nome di un capitolo nel cervello».
+   Capitoli del Cervello con livello «non_ospiti» (SQL 142): li legge chi è entrato e non è ospite; solo lettura. Senza lo SQL 142 non compare nulla. */
+function capLivello(){
+  var box=$("#ce-livello");if(!box||!io.id)return;
+  db.from("cervello_capitoli").select("id,titolo").eq("livello","non_ospiti").order("ordine").order("aperto_il").then(function(r){
+    if(!document.body.contains(box)||!r||r.error||!(r.data||[]).length)return;
+    box.innerHTML='<div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">'+r.data.map(function(k){
+      return '<button class="cerchio-b" data-cap-l="'+k.id+'"><span><b>'+esc(k.titolo)+'</b></span><span>›</span></button>';}).join("")+'</div>';
+    box.querySelectorAll("[data-cap-l]").forEach(function(b){b.onclick=function(){
+      var id=b.getAttribute("data-cap-l"),k=r.data.filter(function(x){return x.id===id;})[0];leggiCapLivello(k);};});
+  },function(){});
+}
+function leggiCapLivello(k){
+  var c=$("#corpo");window.scrollTo(0,0);
+  c.innerHTML='<div style="margin-bottom:4px"><button class="btn" id="ce-indietro">← Torna al Cervello</button></div>'+
+    '<p class="et">Cervello</p><h1 style="font-family:var(--display);font-weight:400;font-size:28px;letter-spacing:.05em;margin:4px 2px 12px">'+esc(k.titolo)+'</h1>'+
+    '<div id="cl-righe" style="display:flex;flex-direction:column;gap:12px"><p class="nota">Un momento…</p></div>';
+  $("#ce-indietro").onclick=function(){vai("cervello");};
+  db.from("cervello_righe").select("testo,scritta_il").eq("capitolo_id",k.id).order("scritta_il").then(function(q){
+    var box=$("#cl-righe");if(!box)return;
+    if(!q||q.error){box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';return;}
+    box.innerHTML=(q.data||[]).map(function(g){
+      var p=String(g.testo||"").split(/\n\s*\n/),h=p.shift();
+      return '<section class="card" style="padding:18px;border-color:var(--oro);border-radius:18px">'+
+        '<h2 style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--oro);margin:0 0 8px">'+esc(h)+'</h2>'+
+        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+'</section>';}).join("");
+  },function(){var box=$("#cl-righe");if(box)box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';});
+}
 function vCervello(){
   var c=$("#corpo");
   /* 23 ott, Gab: «Schiacci coscienza e si apre il tasto che ti porta nel cervello digitale Felicitas»; le Cartelle vanno dentro Coscienza */
+  setTimeout(capLivello,0);
   setTimeout(function(){if(vista!=="cervello"||$("#cos-cima"))return;c.insertAdjacentHTML("afterbegin",'<div id="cos-cima" class="cos-cima"><a class="evid" href="coscienza.html"><small>Coscienza</small><b>La mappa della Coscienza ›</b></a>'+(io.id?'<button class="alto-b" data-vai="cartelle">\u25a4 Cartelle</button>':'')+'</div>');legaVai($("#cos-cima"));},0);
   /* 19 ott 20:16-20:20, Gab: cosa puoi fare, con e senza AI. «10 euro al mese […]» · «ok 10 o karma yoga».
      19 ott 21:07-21:08, Gab (thread «Attiva il tuo cervello»): il percorso «20 euro a settimana», «o paghi 80 euro al mese o fai il karma yoga» · «per l integrazione sono 26». I 10 € non includono più la base del praticantato.
@@ -2124,7 +2153,7 @@ function vCervello(){
     (io.id?
       '<div id="ce-onda"></div>'+
       '<p class="et" style="margin-top:10px">I tuoi gruppi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'+
-      '<div id="ce-voci"></div>'+
+      '<div id="ce-voci"></div>'+'<div id="ce-livello"></div>'+
       '<p class="et" style="margin-top:14px">Il cervello digitale</p>'+
       '<button class="cerchio-b" data-cerchio="io"><span><b>Il percorso del talento</b><small>i capitoli di '+esc(io.nome||"chi entra")+' · li legge solo chi li scrive</small></span><span>›</span></button>'+
       /* 20 ott 12:00, Gab: «i prodotti e le stanze vanno resi visibili in cervello» */
