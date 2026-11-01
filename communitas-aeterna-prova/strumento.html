@@ -587,6 +587,7 @@ var nomi={};
 
 function errore(e){
   var m=String((e&&e.message)||e||"");
+  if(/karma yoga/i.test(m))return "Per prendere un obiettivo si passa dal karma yoga: apri «Come funziona» nel Praticantato.";
   if(/non è aperto adesso/i.test(m))return "Questo tipo si apre con il praticantato: per ora scegli Dono · scambio.";
   if(/row-level security|permission denied|not allowed/i.test(m))return "Con questo accesso non si può: lo fa chi ne ha il permesso.";
   if(/too large|payload|25/i.test(m)&&/file|size|large/i.test(m))return "Il file supera i 25 MB.";
@@ -1065,8 +1066,10 @@ function comeFunzionaPrat(){
     '<div class="pr-passo"><span class="pr-n">1</span><div><b>La lezione del lunedì alle 19</b><span>In diretta qui, nella chat del team: quando parte, il tasto «In diretta» in alto si accende.</span></div></div>'+
     '<div class="pr-passo"><span class="pr-n">2</span><div><b>Karma yoga</b><span>Per chi fa karma yoga la lezione è compresa. «inizia il karma yoga e poi segue lo studentato»</span></div></div>'+
     '<div class="pr-passo"><span class="pr-n">3</span><div><b>Il praticantato · 80 € al mese</b><span>«il praticantato che unisce sia l\'aspetto introspettivo che l\'utilizzo dell\'applicazione»</span></div></div>'+
-    (LINK_PRAT?'<a class="pr-paga" href="'+LINK_PRAT+'">Inizia il praticantato · 80 € al mese</a>':'')
+    (LINK_PRAT?'<a class="pr-paga" href="'+LINK_PRAT+'">Inizia il praticantato · 80 € al mese</a>':'')+
+    '<div id="pr-karma"></div>'
   );
+  karmaPrat();
 }
 
 document.head.insertAdjacentHTML("beforeend","<style>"+PRAT_CSS+"</style>");
@@ -1101,28 +1104,113 @@ var OB_CSS='.ob-c{padding:12px 0;border-bottom:1px solid rgba(245,240,230,.09)}'
 '.ob-c button{font:600 16px "DM Sans",system-ui,sans-serif;border-radius:16px;padding:9px 16px;border:1px solid #D4AF6A;background:#D4AF6A;color:#0a1430;cursor:pointer}'+
 '.ob-c button.las,.ob-c a.ob-l,.ob-c button.ob-l{background:transparent;color:#D4AF6A}'+
 '.ob-c .fine{gap:8px;flex-wrap:wrap}.ob-c a.ob-l{font:600 16px "DM Sans",system-ui,sans-serif;border-radius:16px;padding:9px 16px;border:1px solid #D4AF6A;text-decoration:none}'+
+'.ob-tap{display:block;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid rgba(245,240,230,.09);color:inherit;cursor:pointer;font:inherit}'+
+'.ob-riga{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}'+
+'.ob-st{border-radius:999px;padding:2px 10px;font:600 14px "DM Sans",system-ui,sans-serif;color:#0a1430;white-space:nowrap}'+
+'.s-fare{background:#C9C2B2}.s-corso{background:#8FB8E8}.s-attesa{background:#E8B86A}.s-fatto{background:#9CCB9A}'+
+'.ob-prog{display:block;height:8px;border-radius:999px;background:#222b5a;overflow:hidden;margin:8px 0 4px}.ob-prog span{display:block;height:100%;background:#D4AF6A;border-radius:999px}'+
+'.ob-tasti{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}'+
+'.ob-tasti button,.ob-tasti a,.ob-f button,.ob-avviso button{font:600 16px "DM Sans",system-ui,sans-serif;border-radius:16px;padding:9px 16px;border:1px solid #D4AF6A;background:#D4AF6A;color:#0a1430;cursor:pointer;text-decoration:none}'+
+'.ob-tasti .ob-l{background:transparent;color:#D4AF6A}'+
+'.ob-avviso{border:2px solid #D4AF6A;border-radius:16px;padding:14px;margin-top:12px}.ob-avviso p{margin:6px 0 10px}'+
+'.ob-passi{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}'+
+'.ob-passo{display:grid;grid-template-columns:30px 1fr;gap:10px;font-size:18px}.ob-passo small{display:block;font-size:15px;color:rgba(245,240,230,.68)}'+
+'.ob-pal{width:26px;height:26px;border-radius:50%;border:2px solid #C9C2B2;display:grid;place-items:center;font-size:14px;font-weight:600}'+
+'.ob-passo.fatto .ob-pal{background:#9CCB9A;border-color:#9CCB9A;color:#0a1430}.ob-passo.attesa .ob-pal{border-color:#E8B86A;color:#E8B86A}.ob-passo.corso .ob-pal{border-color:#8FB8E8;color:#8FB8E8}'+
+'.ob-ok{display:flex;align-items:center;gap:8px;font-size:16px}'+
+'.ob-storia{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:16px}.ob-storia li{display:grid;grid-template-columns:64px 1fr;gap:8px;color:rgba(245,240,230,.68)}.ob-storia b{color:#F5F0E6;font-weight:600}'+
 '.ob-f input{min-height:48px}';
 
 var OB_H='<h2 style="margin-top:26px">Obiettivi</h2><p>Tocca «Lo prendo» e l\'obiettivo entra tra le tue cose da fare.</p><div id="mc-ob"><p class="nota">Un momento…</p></div>';
 
+/* 1/11 Gab (thread «Capire il Company brain con i team»): «si disegna avanzamento» · «uno per prendere obiettivo deve passare dal karma yoga,
+   quanto meno da una pagina dove ci sia la base» · «procedi». SQL 143: passi con l'ok, storia, karma yoga. */
+function obStato(o){
+  if(o.stadio==="sviluppato")return ["s-fatto","Fatto"];
+  if(o.da_approvare>0)return ["s-attesa","Da approvare"];
+  if(o.stadio==="in_avanzamento"||o.passi_fatti>0||o.presi>0)return ["s-corso","In corso"];
+  return ["s-fare","Da fare"];
+}
+function obData(d){return new Date(d+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"});}
 function riempiObiettivi(id){
   db.rpc("fm_team_obiettivi",{p_team:id}).then(function(r){var e=$("#mc-ob");if(!e)return;
     var l=(r&&!r.error&&r.data)||[];
     if(!l.length){e.innerHTML='<p>Ancora nessun obiettivo. Tocca un messaggio e scegli «Fai obiettivo».</p>';return;}
     var altri=l.some(function(o){return o.team!==l[0].team;})||(team.lista||[]).some(function(t){return t.team_id===id&&t.nome==="Praticantato";});
-    e.innerHTML=l.map(function(o){
-      return '<div class="ob-c">'+(altri?'<span class="ob-team">'+esc(o.team)+'</span>':'')+'<b>'+esc(o.titolo)+'</b><small>'+
-        (o.quanti_servono?o.presi+" su "+o.quanti_servono:(o.presi===1?"1 persona":o.presi?o.presi+" persone":"nessuno l'ha preso"))+
-        (o.entro_il?" · entro il "+esc(new Date(o.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</small>'+
-        '<div class="fine">'+(o.link?'<a class="ob-l" href="'+esc(o.link)+'" target="_blank" rel="noopener">Apri</a><button type="button" class="ob-l" data-ob-inv="'+esc(o.link)+'" data-ob-tit="'+esc(o.titolo)+'">Invia</button>':'')+(o.mio?'<button type="button" class="las" data-ob-las="'+esc(o.id)+'">Lo lascio</button>':'<button type="button" data-ob-pre="'+esc(o.id)+'">Lo prendo</button>')+'</div></div>';}).join("");
-    function dopo(r){if(r&&r.error){$("#mc-esito").textContent=errore(r.error);}cache.obiettivi=null;riempiObiettivi(id);}
-    e.querySelectorAll("[data-ob-pre]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_orma",{p_orma:b.getAttribute("data-ob-pre")}).then(dopo,dopo);};});
-    e.querySelectorAll("[data-ob-inv]").forEach(function(b){b.onclick=function(){var u=b.getAttribute("data-ob-inv"),t=b.getAttribute("data-ob-tit");
-      if(navigator.share){navigator.share({title:t,url:u}).catch(function(){});return;}
-      (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){$("#mc-esito").textContent="Link copiato.";},
-        function(){location.href="https://wa.me/?text="+encodeURIComponent(t+" "+u);});};});
-    e.querySelectorAll("[data-ob-las]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_lascia_orma",{p_orma:b.getAttribute("data-ob-las")}).then(dopo,dopo);};});
+    e.innerHTML=l.map(function(o){var st=obStato(o),p=o.passi||0,f=o.passi_fatti||0;
+      return '<button type="button" class="ob-c ob-tap" data-ob-apri="'+esc(o.id)+'">'+
+        '<span class="ob-riga">'+(altri?'<span class="ob-team">'+esc(o.team)+'</span>':'<span></span>')+'<span class="ob-st '+st[0]+'">'+st[1]+'</span></span>'+
+        '<b>'+esc(o.titolo)+'</b>'+
+        '<span class="ob-prog" aria-hidden="true"><span style="width:'+(p?Math.round(f*100/p):0)+'%"></span></span>'+
+        '<small>'+(p?f+" di "+p+" passi":"passi da scrivere")+' · '+
+        (o.quanti_servono?o.presi+" di "+o.quanti_servono+" persone":(o.presi===1?"1 persona":o.presi?o.presi+" persone":"nessuno l'ha preso"))+
+        (o.entro_il?" · entro il "+esc(obData(o.entro_il)):"")+'</small></button>';}).join("");
+    e.querySelectorAll("[data-ob-apri]").forEach(function(b){b.onclick=function(){
+      var o=l.filter(function(x){return x.id===b.getAttribute("data-ob-apri");})[0];if(o)apriObiettivo(o,id);};});
   },function(){var e=$("#mc-ob");if(e)e.innerHTML='<p>Gli obiettivi non si aprono adesso.</p>';});
+}
+function apriObiettivo(o,teamId){
+  var f=foglioTeam('<div id="ob-sc"><p class="nota">Un momento…</p></div>');if(!f)return;
+  Promise.all([db.rpc("fm_team_obiettivi",{p_team:teamId}),db.rpc("fm_obiettivo_passi",{p_orma:o.id}),db.rpc("fm_obiettivo_storia",{p_orma:o.id}),db.rpc("fm_karma_mio")]).then(function(rr){
+    var e=$("#ob-sc");if(!e)return;
+    o=((rr[0]&&rr[0].data)||[]).filter(function(x){return x.id===o.id;})[0]||o;
+    var passi=(rr[1]&&rr[1].data)||[],storia=(rr[2]&&rr[2].data)||[],karma=(rr[3]&&rr[3].data)||"";
+    var st=obStato(o),p=o.passi||0,fa=o.passi_fatti||0,lavoro=o.mio||(passi[0]&&passi[0].posso_lavorare);
+    var h='<span class="ob-riga"><span class="ob-team">'+esc(o.team)+'</span><span class="ob-st '+st[0]+'">'+st[1]+'</span></span>'+
+      '<h2 style="margin-top:6px">'+esc(o.titolo)+'</h2>'+
+      '<span class="ob-prog" aria-hidden="true"><span style="width:'+(p?Math.round(fa*100/p):0)+'%"></span></span>'+
+      '<p class="tc-nota">'+(p?fa+" di "+p+" passi":"passi da scrivere")+' · '+(o.quanti_servono?o.presi+" di "+o.quanti_servono+" persone":(o.presi===1?"1 persona":o.presi?o.presi+" persone":"nessuno l'ha preso"))+(o.entro_il?" · entro il "+esc(obData(o.entro_il)):"")+'</p>'+
+      '<div class="ob-tasti">'+(o.link?'<a class="ob-l" href="'+esc(o.link)+'" target="_blank" rel="noopener">Apri</a><button type="button" class="ob-l" id="ob-inv">Invia</button>':'')+
+        (o.mio?'<button type="button" class="ob-l" id="ob-las">Lo lascio</button>':'<button type="button" id="ob-pre">Lo prendo</button>')+'</div>'+
+      '<div id="ob-karma"></div>'+
+      '<h2 style="margin-top:22px">I passi</h2>'+
+      (passi.length?'<ol class="ob-passi">'+passi.map(function(x,i){
+        var cl=x.stato==="fatto"?"fatto":x.stato==="da_approvare"?"attesa":x.stato==="preso"?"corso":"";
+        var sotto=x.stato==="fatto"?"fatto da "+(x.chi||"una persona"):x.stato==="da_approvare"?"aspetta l'ok"+(x.chi?" · "+x.chi:""):x.stato==="preso"?"lo sta facendo "+(x.chi||"una persona"):(x.serve_ok?"chiede l'ok alla fine":"da fare");
+        var t='';
+        if(x.stato==="da_approvare"&&x.posso_approvare)t='<button type="button" data-pc="approvo" data-r="'+esc(x.id)+'">Approva</button><button type="button" class="ob-l" data-pc="rimando" data-r="'+esc(x.id)+'">Rimanda indietro</button>';
+        else if((x.stato==="aperto"||x.stato==="preso")&&x.posso_lavorare)t=(x.stato==="aperto"?'<button type="button" class="ob-l" data-pc="prendo" data-r="'+esc(x.id)+'">Lo faccio io</button>':'')+'<button type="button" data-pc="fatto" data-r="'+esc(x.id)+'">Fatto</button>'+(x.serve_ok?'':'<button type="button" class="ob-l" data-pc="chiedo_ok" data-r="'+esc(x.id)+'">Chiedi l\'ok</button>');
+        return '<li class="ob-passo '+cl+'"><span class="ob-pal">'+(x.stato==="fatto"?"✓":x.stato==="da_approvare"?"!":(i+1))+'</span><div>'+esc(x.testo)+
+          '<small>'+esc(sotto)+(x.scritto_da_praticante?' · scritto da un praticante':'')+'</small>'+(t?'<span class="ob-tasti">'+t+'</span>':'')+'</div></li>';}).join("")+'</ol>':'<p>Ancora nessun passo.</p>')+
+      (lavoro?'<div class="ob-f" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"><input type="text" id="ob-np" maxlength="600" placeholder="Un passo" aria-label="Un passo" style="flex:1 1 100%">'+
+        '<label class="ob-ok"><input type="checkbox" id="ob-nok"> chiede l\'ok alla fine</label><button type="button" id="ob-agg">Aggiungi un passo</button></div>':'')+
+      (storia.length?'<h2 style="margin-top:22px">La storia</h2><ul class="ob-storia">'+storia.map(function(s){
+        return '<li><span>'+esc(new Date(s.quando).toLocaleDateString("it-IT",{day:"numeric",month:"short"}))+'</span><span><b>'+esc(s.chi)+'</b> '+esc(s.cosa)+'</span></li>';}).join("")+'</ul>':'')+
+      '<p class="tc-nota" id="ob-esito" aria-live="polite"></p>';
+    e.innerHTML=h;
+    function rifai(){cache.obiettivi=null;apriObiettivo(o,teamId);riempiObiettivi(teamId);}
+    function esito(r){if(r&&r.error){$("#ob-esito").textContent=errore(r.error);return false;}if(r&&typeof r.data==="string"&&r.data!=="ok"){$("#ob-esito").textContent=r.data;return false;}return true;}
+    function karmaBox(){var k=$("#ob-karma");if(!k)return;
+      k.innerHTML='<div class="ob-avviso"><b>Per prendere un obiettivo si passa dal karma yoga.</b>'+
+        (karma==="chiesto"?'<p>Hai chiesto di entrare: aspetta «Accolto» dal nucleo.</p>':'<p>Leggi la base nel «Come funziona» del Praticantato, poi chiedi di entrare.</p><button type="button" id="ob-base">Leggi la base</button>')+'</div>';
+      var bb=$("#ob-base");if(bb)bb.onclick=function(){comeFunzionaPrat();};}
+    var pre=$("#ob-pre");if(pre)pre.onclick=function(){
+      pre.disabled=true;db.rpc("fm_prendi_orma",{p_orma:o.id}).then(function(r){pre.disabled=false;
+        if(r&&r.error&&/karma yoga/i.test(r.error.message||"")){karmaBox();return;}if(esito(r))rifai();},function(x){pre.disabled=false;$("#ob-esito").textContent=errore(x);});};
+    var las=$("#ob-las");if(las)las.onclick=function(){las.disabled=true;db.rpc("fm_lascia_orma",{p_orma:o.id}).then(function(r){if(esito(r))rifai();});};
+    var inv=$("#ob-inv");if(inv)inv.onclick=function(){var u=o.link,t=o.titolo;
+      if(navigator.share){navigator.share({title:t,url:u}).catch(function(){});return;}
+      (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){$("#ob-esito").textContent="Link copiato.";},
+        function(){location.href="https://wa.me/?text="+encodeURIComponent(t+" "+u);});};
+    e.querySelectorAll("[data-pc]").forEach(function(b){b.onclick=function(){b.disabled=true;
+      db.rpc("fm_passo_cambia",{p_riga:b.getAttribute("data-r"),p_cosa:b.getAttribute("data-pc")}).then(function(r){b.disabled=false;if(esito(r))rifai();},function(x){b.disabled=false;$("#ob-esito").textContent=errore(x);});};});
+    var agg=$("#ob-agg");if(agg)agg.onclick=function(){var v=$("#ob-np").value.trim();if(!v){$("#ob-np").focus();return;}agg.disabled=true;
+      db.rpc("fm_passo_aggiungi",{p_orma:o.id,p_testo:v,p_serve_ok:$("#ob-nok").checked}).then(function(r){agg.disabled=false;if(esito(r))rifai();},function(x){agg.disabled=false;$("#ob-esito").textContent=errore(x);});};
+  },function(){var e=$("#ob-sc");if(e)e.innerHTML='<p>L\'obiettivo non si apre adesso.</p>';});
+}
+/* karma yoga in fondo al «Come funziona»: chiedo di entrare · il nucleo accoglie */
+function karmaPrat(){
+  var k=$("#pr-karma");if(!k)return;
+  Promise.all([db.rpc("fm_karma_mio"),db.rpc("fm_karma_richieste")]).then(function(rr){var k=$("#pr-karma");if(!k)return;
+    var mio=(rr[0]&&rr[0].data)||"",ri=(rr[1]&&!rr[1].error&&rr[1].data)||[];
+    var h=mio==="puoi"?'':mio==="chiesto"?'<p class="tc-nota">Hai chiesto di entrare nel karma yoga: aspetta «Accolto» dal nucleo.</p>':
+      '<button type="button" class="pr-paga" id="pr-chiedo" style="border:0;cursor:pointer">Chiedo di entrare nel karma yoga</button>';
+    if(ri.length)h+='<h2 style="margin-top:22px">Chiedono di entrare nel karma yoga</h2>'+ri.map(function(x){
+      return '<div class="ob-c"><b>'+esc(x.nome)+'</b><small>'+esc(new Date(x.chiesto_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</small><div class="fine"><button type="button" data-acc="'+esc(x.persona_id)+'">Accolto</button></div></div>';}).join("");
+    k.innerHTML=h;
+    var c=$("#pr-chiedo");if(c)c.onclick=function(){c.disabled=true;db.rpc("fm_karma_chiedo").then(function(){karmaPrat();},function(){c.disabled=false;});};
+    k.querySelectorAll("[data-acc]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_karma_accolgo",{p_persona:b.getAttribute("data-acc")}).then(function(){karmaPrat();},function(){b.disabled=false;});};});
+  },function(){});
 }
 
 function faiObiettivo(box,m,esito){
