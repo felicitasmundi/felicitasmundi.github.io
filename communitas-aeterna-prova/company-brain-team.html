@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Company brain e team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: una colonna di card su blu cosmo; frasi del video in alto, sintesi separata in fondo */
+:root{
+  --cosmo-1:#1d2f66; --cosmo-2:#122050; --cosmo-3:#0a1430;
+  --carta:#1a2148; --oro:#D4AF6A; --testo:#F5F0E6; --tenue:#C9C2B2;
+  --f-titolo:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --f-corpo:"Source Sans 3", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color-scheme:dark;
+}
+html{background:var(--cosmo-3)}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100%;
+  background:linear-gradient(180deg,var(--cosmo-1) 0%,var(--cosmo-2) 45%,var(--cosmo-3) 100%);
+  background-color:var(--cosmo-3);
+  color:var(--testo);font-family:var(--f-corpo);font-size:24px;line-height:1.5;
+}
+.pagina{max-width:760px;margin:0 auto;padding-block:40px 64px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex;flex-direction:column;gap:22px}
+.occhiello{font-size:19px;letter-spacing:.08em;text-transform:uppercase;color:var(--oro);margin:0}
+h1{font-family:var(--f-titolo);font-weight:600;font-size:46px;line-height:1.1;margin:4px 0 0;text-wrap:balance}
+h2{font-family:var(--f-titolo);font-weight:600;font-size:34px;line-height:1.15;margin:18px 0 0;color:var(--oro);text-wrap:balance}
+h3{font-family:var(--f-titolo);font-weight:600;font-size:30px;line-height:1.2;margin:0;text-wrap:balance}
+p{margin:0}
+.fonte{font-size:20px;color:var(--tenue)}
+.tasto{display:inline-block;align-self:flex-start;border:2px solid var(--oro);color:var(--oro);
+  text-decoration:none;border-radius:999px;padding:12px 26px;font-weight:600;font-size:22px}
+.invia{align-self:flex-start;background:var(--oro);color:#1A1405;border:0;border-radius:999px;padding:12px 26px;font:600 22px var(--corpo);cursor:pointer}
+.invia:focus-visible{outline:3px solid var(--testo);outline-offset:3px}
+.tasto:focus-visible{outline:3px solid var(--testo);outline-offset:3px}
+.card{background:var(--carta);border-radius:18px;padding:24px 22px;display:flex;flex-direction:column;gap:12px}
+.num{font-size:19px;letter-spacing:.08em;text-transform:uppercase;color:var(--oro)}
+blockquote{margin:0;font-size:24px}
+.nota{font-size:20px;color:var(--tenue)}
+.sintesi{border:2px solid var(--oro);background:transparent}
+.etichetta{font-size:19px;letter-spacing:.08em;text-transform:uppercase;color:var(--oro)}
+ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:10px}
+@media (max-width:480px){h1{font-size:38px}h2{font-size:30px}h3{font-size:27px}}
+</style>
+</head><body>
+
+<main class="pagina">
+  <p class="occhiello">Cervello Digitale Evoluto · Approfondimento</p>
+  <h1>Il company brain e i team</h1>
+  <p>Dal video di Giovanni Beggiato.</p>
+  <a class="tasto" href="https://www.youtube.com/watch?v=52JxxCEGepg&amp;t=916s" target="_blank" rel="noopener">Apri il video su YouTube</a>
+  <button class="invia" id="invia" type="button">Invia</button>
+  <p class="nota" id="fatto" hidden>Link copiato.</p>
+  <p class="nota">Le frasi tra «» sono la trascrizione automatica del video: i refusi sono del trascrittore.</p>
+
+  <h2>Perché serve quando si lavora in tanti</h2>
+  <div class="card">
+    <blockquote>«Con questi un agente può così svolgere un'attività per una persona, ma in un un'azienda il lavoro deve poter passare anche ad altri colleghi che hanno bisogno delle fonti validate, dei materiali approvati e di tutto il resto del contesto. Serve quindi a questo punto un sistema che tenga insieme la conoscenza, agenti e lavoro condiviso rispettando gli accessi autorizzati o le varie regole che abbiamo all'interno della nostra azienda. Ed è proprio questo che noi chiamiamo company brain.»</blockquote>
+  </div>
+  <div class="card">
+    <blockquote>«Avere un'agente però collegato a dei file non stabilisce automaticamente quale sia il file valido, quale documento si possa utilizzare, chi possa modificarlo oppure comunque un collega debba riprendere il lavoro che qualcun altro ha interrotto.»</blockquote>
+  </div>
+
+  <h2>I sette componenti</h2>
+
+  <div class="card">
+    <span class="num">Primo</span>
+    <h3>Il contesto operativo</h3>
+    <blockquote>«Il primo componente è il contesto operativo, che comprende le istruzioni sullo ruolo della gente, l'obiettivo da raggiungere e le regole da seguire.»</blockquote>
+  </div>
+
+  <div class="card">
+    <span class="num">Secondo</span>
+    <h3>La Knowledge Base</h3>
+    <blockquote>«Il secondo componente è la Knowledge Base, cioè la raccolta organizzata di documenti, procedure e informazioni aziendali con le rispettive fonti, che fornisce i materiali aggiornati da usare seguendo quelle istruzioni. Qui, per esempio, devono essere riconoscibili un listino valido e chi è la persona che deve tenerlo aggiornato.»</blockquote>
+  </div>
+
+  <div class="card">
+    <span class="num">Terzo</span>
+    <h3>Gli agenti e i tools</h3>
+    <blockquote>«Il terzo componente comprende invece gli agenti e i tools che usano quelle informazioni per svolgere le attività. Per ciascuno agente vengono definiti il lavoro da eseguire, le applicazioni che può usare e i passaggi in cui deve fermarsi per chiedere l'aprovazione di una persona.»</blockquote>
+  </div>
+
+  <div class="card">
+    <span class="num">Quarto</span>
+    <h3>Il workspace</h3>
+    <blockquote>«Il quarto componente è il workspace, ossia lo spazio condiviso in cui vengono prodotti e modificati vari documenti, le presentazioni e i materiali, perché il risultato deve restare disponibile anche agli altri colleghi senza doverlo necessariamente cercare nella conversazione di chi ha iniziato il lavoro magari 5 giorni fa.»</blockquote>
+  </div>
+
+  <div class="card">
+    <span class="num">Quinto</span>
+    <h3>L'activity log</h3>
+    <blockquote>«Quinto componente è l'activity log, cioè il registro delle attività che permette di ricostruire come si è arrivati ad un certo risultato, quali passaggi sono stati completati e quali approvazioni sono ancora in attesa»</blockquote>
+  </div>
+
+  <div class="card">
+    <span class="num">Sesto</span>
+    <h3>L'admin panel</h3>
+    <blockquote>«Il sesto componente un po' sottovalutato è l'admin panel, ossia il pannello da cui vengono gestiti utenti, accessi costi, controlli, persone e molto altro, perché con più persone e agenti serve anche un modo per amministrare e fare in modo che ciascuno possa operare solamente sul cosiddetto materiale autorizzato.»</blockquote>
+  </div>
+
+  <div class="card">
+    <span class="num">Settimo</span>
+    <h3>Le integrazioni e le custom app</h3>
+    <blockquote>«Il settimo e ultimo componente comprende le integrazioni e le custom app, perché l'azienda usa anche altri software e può avere esigenze che la piattaforma da sola può non coprire.»</blockquote>
+  </div>
+
+  <h2>Il passaggio da un collega all'altro</h2>
+  <div class="card">
+    <blockquote>«Per vedere quindi come questi componenti lavorano insieme, ipotizziamo che un collega prepari una proposta commerciale con il suo agente e debba passarla ad un altro collega. La gente recupera il listino valido e gli appunti della chiamata. Prepara a bozza e la sottopone alla provazione della persona incaricata. Quando il secondo collega riprende il lavoro, trova la versione approvata, le fonti e i controlli già implementati senza dover ricostruire la conversazione di chi la fatta iniziare.»</blockquote>
+  </div>
+
+  <h2>Chi decide cosa diventa conoscenza valida</h2>
+  <div class="card">
+    <blockquote>«queste esigenze rimangono anche quando è una gente che deve proporre gli aggiornamenti perché qualcuno deve stabilire ad un certo punto quali informazioni possono diventare conoscenza aziendale valida e chi no»</blockquote>
+  </div>
+
+  <h2>Dove spendere tempo ed energia</h2>
+  <div class="card">
+    <blockquote>«il servizio oggi di installare company brain non consiste solo nel aiutare questa transizione diciamo tecnologica ma consiste nel capire i processi del cliente, organizzare le fonti e configurare i collegamenti, accessi e controlli mantenendoli nel tempo. Una funzione già integrata può quindi ridurre lo sviluppo necessario, ma il processo aziendale deve comunque essere definito e verificato e lì è l'unico punto in cui io spenderei oggi tempo ed energia.»</blockquote>
+  </div>
+
+</main>
+<script>
+document.getElementById("invia").onclick=function(){
+ var u="https://app.felicitasmundi.com/communitas-aeterna-prova/company-brain-team.html",t="Il company brain e i team";
+ if(navigator.share){navigator.share({title:t,url:u}).catch(function(){});return;}
+ var f=document.getElementById("fatto");
+ if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){f.hidden=false;},function(){location.href="https://wa.me/?text="+encodeURIComponent(t+" "+u);});}
+ else{location.href="https://wa.me/?text="+encodeURIComponent(t+" "+u);}
+};
+</script>
+</body></html>
