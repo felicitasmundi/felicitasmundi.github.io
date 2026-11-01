@@ -610,12 +610,66 @@ function leggiNomi(ids){
 /* YouTube e link */
 function ytId(u){var m=String(u||"").match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);return m?m[1]:null;}
 function primoLink(t){return (String(t||"").match(/https:\/\/[^\s<>"]+/)||[])[0]||null;}
+/* ═══ Anteprima dei link · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
+   Gab 1/11 13:14-13:15: «trova modo di far vedere anteprima link (quindi un immagine di riferimento con descrizione e titolo link»
+   · «questo deve valere per ogni link in ogni chat, deve sempre vedersi qualcosa di piu d un url incollato».
+   Ogni link diventa una scheda: subito il nome del sito; poi titolo, descrizione e immagine dalla tavola link_anteprime (SQL 147),
+   e quelli mai letti li chiede alla funzione «link-info». Un osservatore riempie le schede ovunque compaiano. */
+var LK_CSS='.lk{display:flex;flex-direction:column;margin:8px 0 2px;border:1px solid rgba(212,175,106,.45);border-radius:14px;overflow:hidden;text-decoration:none;color:#F5F0E6;background:#1a2148;max-width:420px}'+
+'.lk-img{display:block;aspect-ratio:1.91/1;max-width:100%;background:#122050;overflow:hidden}.lk-img img{width:100%;height:100%;object-fit:cover;display:block}'+
+'.lk-c{display:flex;flex-direction:column;gap:3px;padding:10px 12px}'+
+'.lk-sito{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#D4AF6A}'+
+'.lk-tit{font-size:17px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}'+
+'.lk-des{font-size:15px;line-height:1.35;color:rgba(245,240,230,.75);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}';
+document.head.insertAdjacentHTML("beforeend","<style>"+LK_CSS+"</style>");
+function lkSito(u){try{return new URL(u).hostname.replace(/^www\./,"");}catch(_){return "";}}
+function anteprimaLink(u){
+  if(!u||!/^https:\/\//.test(u))return "";
+  var s=lkSito(u),r=u.replace(/^https:\/\/(www\.)?/,"").replace(/\/$/,"");
+  return '<a class="lk" data-lk="'+esc(u)+'" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+
+    '<span class="lk-img" hidden><img alt="" loading="lazy"></span>'+
+    '<span class="lk-c"><span class="lk-sito">'+esc(s)+'</span><span class="lk-tit">'+esc(r.length>70?r.slice(0,70)+"…":r)+'</span><span class="lk-des" hidden></span></span></a>';
+}
+/* il testo di un messaggio: il link esce dal testo e diventa la scheda */
+function testoLink(t,cls,tag){
+  t=String(t||"");var u=primoLink(t),resto=u?t.replace(u,"").replace(/[ \t]+/g," ").trim():t;tag=tag||"div";
+  return (resto?'<'+tag+' class="'+(cls||"t")+'">'+esc(resto)+'</'+tag+'>':'')+(u?anteprimaLink(u):'');
+}
+var lkCache={},lkInVolo={};
+function lkMetti(a,x){
+  if(!x)return;a.setAttribute("data-lk-ok","1");
+  if(x.titolo){a.querySelector(".lk-tit").textContent=x.titolo;}
+  if(x.sito){a.querySelector(".lk-sito").textContent=x.sito;}
+  if(x.descrizione){var d=a.querySelector(".lk-des");d.textContent=x.descrizione;d.hidden=false;}
+  if(x.immagine){var b=a.querySelector(".lk-img"),im=b.querySelector("img");im.onerror=function(){b.hidden=true;};im.src=x.immagine;b.hidden=false;}
+}
+function lkRiempi(){
+  if(typeof db==="undefined"||!db)return;
+  var el=[].slice.call(document.querySelectorAll("a.lk[data-lk]:not([data-lk-ok])"));if(!el.length)return;
+  var serve=[];
+  el.forEach(function(a){var u=a.getAttribute("data-lk");if(lkCache[u])lkMetti(a,lkCache[u]);else if(!lkInVolo[u]&&serve.indexOf(u)<0)serve.push(u);});
+  if(!serve.length)return;
+  serve=serve.slice(0,30);serve.forEach(function(u){lkInVolo[u]=1;});
+  function metti(l){(l||[]).forEach(function(x){lkCache[x.url]=x;});
+    document.querySelectorAll("a.lk[data-lk]:not([data-lk-ok])").forEach(function(a){var x=lkCache[a.getAttribute("data-lk")];if(x)lkMetti(a,x);});}
+  db.from("link_anteprime").select("url,titolo,descrizione,immagine,sito").in("url",serve).then(function(r){
+    var l=(r&&!r.error&&r.data)||[];metti(l);
+    var mancano=serve.filter(function(u){return !lkCache[u];});
+    for(var i=0;i<mancano.length;i+=10)(function(g){
+      db.functions.invoke("link-info",{body:{urls:g}}).then(function(r){metti(r&&r.data&&r.data.anteprime);},function(){});
+    })(mancano.slice(i,i+10));
+  },function(){});
+}
+var lkTimer=null;
+new MutationObserver(function(){if(lkTimer)return;lkTimer=setTimeout(function(){lkTimer=null;lkRiempi();},250);})
+  .observe(document.body||document.documentElement,{childList:true,subtree:true});
+
 function linkHTML(u){
   if(!u||!/^https:\/\//.test(u))return "";
   var y=ytId(u);
   /* 21 ott 09:14, Gab: «se mettiamo un video di YouTube, almeno prendiamo il titolo, l'anteprima della foto». L'anteprima viene dal video; titolo e canale dall'SQL 98 (funzione youtube-info). Il lettore si apre al tocco. */
   if(y)return '<button type="button" class="video yt" data-yt="'+y+'" aria-label="Guarda il video"><img src="https://i.ytimg.com/vi/'+y+'/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="yt-play" aria-hidden="true">▶</span></button><p class="yt-tit" data-yt-link="'+esc(u)+'" hidden></p>';
-  return '<a class="lnk" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(u.replace(/^https:\/\//,"").slice(0,60))+' ›</a>';
+  return anteprimaLink(u);
 }
 
 document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("button.yt[data-yt]");if(!b)return;
@@ -1316,7 +1370,7 @@ function disegnaTeam(){
       (m.audio?(team.url[m.audio]?'<audio controls preload="none" src="'+esc(team.url[m.audio])+'"></audio>':'<div class="t" style="opacity:.7">Vocale</div>'):'')+
       (m.file?'<a class="tc-file"'+(team.url[m.file]?' href="'+esc(team.url[m.file])+'" target="_blank" rel="noopener"':'')+'>'+ICO_AZ.file.replace('<svg ','<svg width="26" height="26" ')+'<span>'+esc(m.file_nome||"File")+'</span></a>':'')+
       (m.lat!=null&&m.lon!=null?mappaHTML(m.lat,m.lon):'')+
-      (m.testo?'<div class="t">'+esc(m.testo)+'</div>':'')+
+      (m.testo?testoLink(m.testo,"t","div"):'')+
       (m.registro_id?'<span class="pill-o">→ nel registro</span>':'')+
       (p?'<span class="pill-o">'+(p==="approvata"?"nel Cervello":"nel Cervello · in attesa")+'</span>':'')+
       '<div class="ora">'+esc(hhmm(m.scritto_il))+'</div></div>');
@@ -1988,7 +2042,7 @@ function vSpazio(box,id,x){
     function disegnaMsg(l){
       leggiNomi(l.map(function(m){return m.scritto_da;})).then(function(){
         var e=$("#sp-msg");if(!e)return;var giu=e.scrollHeight-e.scrollTop-e.clientHeight<40;
-        e.innerHTML=l.length?l.map(function(m){return '<div class="sp-m'+(m.scritto_da===io.id?" mio":"")+'"><span class="m">'+esc(nomi[m.scritto_da]||"")+' · '+esc(hhmm(m.scritto_il))+'</span><span class="t">'+esc(m.testo)+'</span>'+
+        e.innerHTML=l.length?l.map(function(m){return '<div class="sp-m'+(m.scritto_da===io.id?" mio":"")+'"><span class="m">'+esc(nomi[m.scritto_da]||"")+' · '+esc(hhmm(m.scritto_il))+'</span>'+testoLink(m.testo,"t","span")+
           (m.registro_id?'<span class="m sp-segnato">→ nel registro</span>':'<select class="sp-segna" data-segna="'+esc(m.id)+'" aria-label="Segna nel registro"><option value="">segna nel registro…</option><option value="da_fare">da fare</option><option value="decisione">decisione</option><option value="chiamata">chiamata</option><option value="incontro">incontro</option><option value="idea">idea</option></select>')+'</div>';}).join(""):'<p class="nota" style="text-align:center;padding:10px 0">Ancora nessun messaggio.</p>';
         if(giu||!e.dataset.visto){e.scrollTop=e.scrollHeight;e.dataset.visto="1";}
         e.querySelectorAll("[data-segna]").forEach(function(s){s.onchange=function(){if(!s.value)return;s.disabled=true;
