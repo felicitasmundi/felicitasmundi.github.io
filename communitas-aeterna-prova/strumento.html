@@ -1553,6 +1553,9 @@ function foglioTeam(h){
 function argomenti(){
   var id=team.id,f=foglioTeam(ARG_H);if(!f)return;riempiArgomenti(id);
 }
+/* 1/11 22:39, Gab: «voglio trovarmi nel team e avere gia un tasto da qualche parte, anche nel menu a destra» → nel foglio ⋯ del team: Aggiungi una persona, col team già scelto */
+var staffTeamPre=null;
+var PERS_H='<h2 style="margin-top:26px">Persone</h2><p>Aggiungi una persona a questo team, col suo ruolo: le arriva un link.</p><button type="button" class="tc-btn" id="mc-aggiungi">Aggiungi una persona</button>';
 var ARG_H='<h2>Argomenti</h2><p>Tocca un argomento: la chat torna al messaggio che l\'ha aperto.</p><div id="tc-ar"><p class="nota">Un momento…</p></div>';
 function riempiArgomenti(id){
   db.rpc("fm_team_argomenti",{p_team:id}).then(function(r){var e=$("#tc-ar");if(!e)return;
@@ -1673,7 +1676,7 @@ function mandaAllegato(id,blob,campo,nome){
 /* il tasto «⋯»: le notifiche di questa chat (fm_chat_avvisi) e, nella chat a due, «Chiudi la conversazione» */
 function menuChat(){
   var id=team.id,duo=team.tipo==="chat";
-  var f=foglioTeam(ARG_H+(duo?'':OB_H)+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
+  var f=foglioTeam(ARG_H+(duo?'':OB_H)+(duo||!(io.nucleo||(io.ruoli||[]).length)?'':PERS_H)+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
     [["ogni","A ogni messaggio",""],["ora","Una all'ora","se arrivano più messaggi, una sola notifica"],["mai","Mai","i messaggi li vedi quando apri l'app"]].map(function(x){
       return '<button type="button" data-avv="'+x[0]+'" aria-pressed="false">'+x[1]+(x[2]?'<small>'+x[2]+'</small>':'')+'</button>';}).join("")+'</div>'+
     (duo?'<label>La conversazione</label><button type="button" class="tc-btn" id="mc-chiudi" style="background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5)">Chiudi la conversazione</button>'+
@@ -1681,6 +1684,7 @@ function menuChat(){
     '<p class="tc-nota" id="mc-esito" aria-live="polite"></p>');
   if(!f)return;
   riempiArgomenti(id);if(!duo)riempiObiettivi(id);
+  var ab=$("#mc-aggiungi");if(ab)ab.onclick=function(){staffTeamPre=id;var fg=$("#tc-foglio");if(fg)fg.innerHTML="";vai("staff");};
   function segna(v){f.querySelectorAll("[data-avv]").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-avv")===v));});}
   db.rpc("fm_mia_scelta_avvisi",{p_cerchio:id}).then(function(r){if(r&&!r.error)segna(r.data||"ora");},function(){});
   f.querySelectorAll("[data-avv]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-avv");
@@ -3616,7 +3620,7 @@ function vStaff(box){
   function link(c){return new URL("accesso.html?staff="+encodeURIComponent(c)+"&torna=strumento.html",location.href).href;}
   (io.nucleo?db.from("squadre").select("id,nome").order("nome").then(function(r){return (r&&!r.error&&r.data)||[];}):
     db.rpc("fm_miei_team").then(function(r){return ((r&&!r.error&&r.data)||[]).map(function(t){return {id:t.team_id,nome:t.nome};});})).then(function(l){
-    var e=$("#st-team");if(!e)return;e.insertAdjacentHTML("beforeend",l.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.nome)+'</option>';}).join(""));},function(){});
+    var e=$("#st-team");if(!e)return;e.insertAdjacentHTML("beforeend",l.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.nome)+'</option>';}).join(""));if(staffTeamPre){e.value=staffTeamPre;staffTeamPre=null;}},function(){});
   function lista(){
     db.from("inviti_staff").select("id,codice,nome,telefono,villaggio,funzione,ruolo,altri_ruoli,da_confermare,usato_il,annullato_il,creato_il").is("annullato_il",null).order("creato_il",{ascending:false}).limit(200).then(function(r){
       var e=$("#st-lista");if(!e)return;
@@ -3645,7 +3649,13 @@ function vStaff(box){
       if(r.error)return mostra("#st-ok",/fm_staff_invita|function|p_telefono|p_altri|p_squadra/i.test(r.error.message||"")?"Si apre con l'SQL 144.":errore(r.error),true);
       ["st-nome","st-tel","st-mail","st-vill","st-team"].forEach(function(k){$("#"+k).value="";});
       document.querySelectorAll("#st-rr input:checked").forEach(function(i){i.checked=false;});
-      mostra("#st-ok","Link creato per "+n+": mandalo da qui sopra.");lista();
+      lista();var u=link(r.data||""),ok=$("#st-ok");
+      db.from("inviti_staff").select("usato_il").eq("codice",r.data||"").limit(1).then(function(q){
+        var gia=q&&!q.error&&q.data&&q.data[0]&&q.data[0].usato_il;if(!ok)return;ok.hidden=false;ok.classList.remove("err");
+        ok.innerHTML=gia?esc(n)+' era già dentro con questa mail: ha già il ruolo'+(team?' e il team':'')+'. Niente da mandare.'
+          :'Link creato per '+esc(n)+'. <a class="mini oro" href="https://wa.me/'+(tel?esc(String(tel).replace(/[^0-9]/g,"").replace(/^(?=3)/,"39")):'')+'?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a> <button type="button" class="mini" id="st-copia-nuovo">Copia il link</button>';
+        var cb=$("#st-copia-nuovo");if(cb)cb.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){cb.textContent="Copiato";},function(){prompt("Copia il link",u);});};
+      },function(){if(ok){ok.hidden=false;ok.textContent="Link creato per "+n+": lo trovi qui sopra, nella riga col suo nome.";}});
     },function(){b.disabled=false;});
   };
 }
