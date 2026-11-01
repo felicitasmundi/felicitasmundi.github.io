@@ -1329,7 +1329,7 @@ function vTeam(){
 }
 function ricaricaTeam(giu){
   var id=team.id;if(vista!=="team"||!id){teamFerma();return;}
-  var q=db.from("gruppo_messaggi").select("id,testo,foto,audio,file,file_nome,lat,lon,scritto_da,scritto_il,registro_id,argomento,argomento_da,fissato_il").eq("cerchio_id",id);
+  var q=db.from("gruppo_messaggi").select("id,testo,foto,audio,file,file_nome,lat,lon,scritto_da,scritto_il,registro_id,argomento,argomento_da,fissato_il,modificato_il").eq("cerchio_id",id);
   if(team.dal)q=q.gte("scritto_il",team.dal);
   q.order("scritto_il",{ascending:false}).limit(team.dal?500:80).then(function(r){
     if(vista!=="team"||team.id!==id)return;
@@ -1373,7 +1373,7 @@ function disegnaTeam(){
       (m.testo?testoLink(m.testo,"t","div"):'')+
       (m.registro_id?'<span class="pill-o">→ nel registro</span>':'')+
       (p?'<span class="pill-o">'+(p==="approvata"?"nel Cervello":"nel Cervello · in attesa")+'</span>':'')+
-      '<div class="ora">'+esc(hhmm(m.scritto_il))+'</div></div>');
+      '<div class="ora">'+esc(hhmm(m.scritto_il))+(m.modificato_il?' · modificato':'')+'</div></div>');
     if(team.scelto===m.id)h.push(azioniMsg(m));
   });
   e.innerHTML=h.length?h.join(""):'<p class="nota" style="text-align:center;padding:20px 0">Ancora nessun messaggio. Scrivi il primo.</p>';
@@ -1424,7 +1424,7 @@ function disegnaFissati(){
 
 function azioniRuolo(m){
   var mio=m.scritto_da===io.id,g=team.tipo==="team"&&team.guido,base=(team.lista||[]).some(function(t){return t.team_id===team.id&&t.nome==="Praticantato";});
-  return (g?(m.fissato_il?'<button type="button" data-az="sfissa">Togli da in alto</button>':'<button type="button" data-az="fissa">Fissa in alto</button>'):'')+
+  return (mio?'<button type="button" data-az="modifica">Modifica</button>':'')+(g?(m.fissato_il?'<button type="button" data-az="sfissa">Togli da in alto</button>':'<button type="button" data-az="fissa">Fissa in alto</button>'):'')+
     (mio||g?'<button type="button" class="el" data-az="elimina">Elimina</button>':'')+
     (g&&!mio&&!base&&m.scritto_da?'<button type="button" data-az="esci">Fai uscire '+esc(nomi[m.scritto_da]||"")+'</button>':'');
 }
@@ -1438,7 +1438,57 @@ function legaAzioniRuolo(box,m){
   su("sfissa",function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_fissa_messaggio",{p_messaggio:m.id,p_si:false}).then(esito,function(){b.disabled=false;});};});
   su("elimina",function(b){chiedi(b,"Tocca ancora: sparisce per tutti",function(){return db.rpc("fm_elimina_messaggio",{p_messaggio:m.id});});});
   su("esci",function(b){chiedi(b,"Tocca ancora per farla uscire",function(){return db.rpc("fm_fai_uscire",{p_squadra:team.id,p_persona:m.scritto_da});});});
+  su("modifica",function(b){b.onclick=function(){modificaMsg(box,m);};});
 }
+/* ═══ Modifica del proprio messaggio · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
+   Gab 1/11 13:35: «aggiungi anche la possibilità di modificare il post, in modo che io possa aggiungere anche altro testo
+   o allegati, al link appena condiviso». Serve lo SQL 149 (fm_modifica_messaggio, colonna modificato_il).
+   Solo chi ha scritto il messaggio vede «Modifica»: cambia il testo, aggiunge una foto e/o un file se non ci sono già.
+   Prima si salva la riga (il percorso dell'allegato deve esistere perché lo spazio «chat» accetti il caricamento), poi si
+   carica; se il caricamento fallisce l'allegato si toglie e il testo salvato resta. Accanto all'ora compare «modificato». */
+var MOD_CSS='#md-t{flex:1 1 100%;min-height:72px;border-radius:14px;border:1px solid rgba(212,175,106,.45);background:#122050;color:#F5F0E6;font:400 17px "DM Sans",system-ui,sans-serif;padding:10px 12px;resize:vertical}'+
+'.md-al{flex:1 1 100%;display:flex;gap:10px;align-items:center;flex-wrap:wrap}'+
+'.md-lab{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:12px;border:1px solid rgba(212,175,106,.45);color:#D4AF6A;cursor:pointer;font-size:16px}.md-lab svg{width:22px;height:22px}'+
+'.md-nome{font-size:15px;opacity:.8;overflow-wrap:anywhere}.md-err{flex:1 1 100%;margin:0;font-size:15px;color:#E07A5F}.md-err:empty{display:none}';
+var MD_ACCETTA=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf";
+function modificaMsg(box,m){
+  box.innerHTML='<textarea id="md-t" maxlength="2000" aria-label="Il testo del messaggio"></textarea>'+
+    '<div class="md-al">'+
+    (m.foto?'':'<label for="md-foto" class="md-lab">'+ICO_AZ.foto.replace(' width="26" height="26"','')+'Aggiungi foto</label><input type="file" id="md-foto" accept="image/*" hidden>')+
+    (m.file?'':'<label for="md-file" class="md-lab">'+ICO_AZ.file+'Aggiungi file</label><input type="file" id="md-file" accept="'+MD_ACCETTA+'" hidden>')+
+    '<span id="md-nome" class="md-nome"></span></div>'+
+    '<button type="button" class="cerv" id="md-ok">Salva</button><button type="button" id="md-no">Annulla</button><p class="md-err" id="md-err" aria-live="polite"></p>';
+  var t=$("#md-t");t.value=m.testo||"";t.focus();
+  var foto=null,file=null;
+  function nomi_(){var l=[];if(foto)l.push("Foto: "+(foto.name||""));if(file)l.push(file.name||"File");$("#md-nome").textContent=l.join(" · ");}
+  if($("#md-foto"))$("#md-foto").onchange=function(e){foto=(e.target.files&&e.target.files[0])||null;nomi_();};
+  if($("#md-file"))$("#md-file").onchange=function(e){file=(e.target.files&&e.target.files[0])||null;nomi_();};
+  $("#md-no").onclick=function(){team.scelto=null;disegnaTeam();};
+  $("#md-ok").onclick=function(){
+    var b=this,e=$("#md-err"),testo=t.value.trim();
+    if(!testo&&!m.foto&&!m.audio&&!m.file&&m.lat==null&&!foto&&!file){e.textContent="Scrivi qualcosa, o elimina il messaggio.";t.focus();return;}
+    if(file&&file.size>26214400){e.textContent="Il file supera i 25 MB.";return;}
+    b.disabled=true;e.textContent="Salvo…";
+    var args={p_messaggio:m.id,p_testo:testo},pf=null,pd=null,blobF=null;
+    function percorso(est){est=String(est||"bin").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,6)||"bin";return team.id+"/"+io.id+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+"."+est;}
+    (foto?riduciFoto(foto):Promise.resolve(null)).then(function(bl){
+      if(bl){if(bl.size>10485760)throw {msg:"La foto supera i 10 MB."};blobF=bl;pf=percorso(bl.type==="image/jpeg"?"jpg":(bl.type.split("/")[1]||"jpg"));args.p_foto=pf;}
+      if(file){pd=percorso(String(file.name||"").split(".").pop());args.p_file=pd;args.p_file_nome=String(file.name||"File").slice(0,200);}
+      return db.rpc("fm_modifica_messaggio",args);
+    }).then(function(r){
+      if(r&&r.error)throw {msg:errore(r.error)};
+      if(r.data!=="ok")throw {msg:r.data};
+      var su=[];
+      if(blobF)su.push(db.storage.from("chat").upload(pf,blobF,{contentType:blobF.type||"image/jpeg",upsert:false}).then(function(u){
+        if(u&&u.error)return db.rpc("fm_modifica_messaggio",{p_messaggio:m.id,p_togli:"foto"}).then(function(){throw {msg:"La foto non è stata caricata. Il testo è salvato: riprova la foto."};});}));
+      if(file)su.push(db.storage.from("chat").upload(pd,file,{contentType:file.type||"application/octet-stream",upsert:false}).then(function(u){
+        if(u&&u.error)return db.rpc("fm_modifica_messaggio",{p_messaggio:m.id,p_togli:"file"}).then(function(){throw {msg:"Il file non è stato caricato. Il testo è salvato: riprova il file."};});}));
+      return Promise.all(su);
+    }).then(function(){team.scelto=null;ricaricaTeam(false);},function(x){b.disabled=false;e.textContent=(x&&x.msg)||errore(x);ricaricaTeam(false);});
+  };
+}
+document.head.insertAdjacentHTML("beforeend","<style>"+MOD_CSS+"</style>");
+
 document.head.insertAdjacentHTML("beforeend","<style>"+FISS_CSS+"</style>");
 /* toccando un messaggio: Rispondi · Apri argomento · Metti nel Cervello (disegno 4), e «segna nel registro» che c'era già dal 92 */
 function azioniMsg(m){
