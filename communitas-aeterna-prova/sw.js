@@ -4,7 +4,7 @@ self.addEventListener('activate', function(e){ e.waitUntil(self.clients.claim())
 self.addEventListener('push', function(e){
   var d = {}; try { d = e.data ? e.data.json() : {}; } catch(x){ d = { titolo: 'FelicitasMundi', testo: e.data ? e.data.text() : '' }; }
   e.waitUntil(self.registration.showNotification(d.titolo || 'FelicitasMundi', {
-    body: d.testo || '', icon: 'icona-felicitas-192.png?v=1024', badge: 'favicon-felicitas-48.png?v=1024',
+    body: d.testo || '', icon: 'icona-felicitas-192.png?v=1102', badge: 'favicon-felicitas-48.png?v=1024',
     data: { indirizzo: d.indirizzo || 'strumento.html' }
   }));
 });

@@ -51,7 +51,7 @@
     /* 24/10 13:21, Gab: «riconoscendo il terminale […] in modo da non farlo vedere ad uno che ha android» → il tasto si vede solo su iPhone e iPad */
     if(giaApp || !iphone) return;
     box.classList.add('fi-box');
-    box.innerHTML = '<button class="fi-tasto" type="button" data-conta="tasto:installa_app"><img src="icona-felicitas-192.png?v=1024" alt="">Metti l\'app sullo schermo</button><div class="fi-guida" hidden></div>';
+    box.innerHTML = '<button class="fi-tasto" type="button" data-conta="tasto:installa_app"><img src="icona-felicitas-192.png?v=1102" alt="">Metti l\'app sullo schermo</button><div class="fi-guida" hidden></div>';
     var g = box.querySelector('.fi-guida');
     box.querySelector('.fi-tasto').onclick = function(){
       if(invito){ var e = invito; invito = null; e.prompt(); e.userChoice.then(function(r){ if(r && r.outcome === 'accepted') box.innerHTML = '<p class="fi-ok">L\'app è sul tuo schermo.</p>'; }); return; }
