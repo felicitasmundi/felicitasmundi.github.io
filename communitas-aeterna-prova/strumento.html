@@ -256,6 +256,28 @@ body.notte .corpo .foglio-g{border:0;border-radius:26px}
 body.notte .corpo .testata{border-bottom-color:var(--linea)}body.notte .corpo .testata h4{display:none}
 body.notte .corpo .sez{border-bottom-color:var(--linea)}
 .g4-apre{padding:14px 6px 4px}
+/* 3 nov · testata da quotidiano, dal modello giornale/testata (Gab 3/11 «ook» · «l importante è dargli quell inquadratura da quotidiano ufficile») */
+.gz{padding:6px 6px 4px;color:var(--inchiostro)}
+.gz-riga{display:flex;justify-content:space-between;gap:10px;padding:6px 0 10px;font-family:var(--sans);font-size:13px;color:var(--tenue);border-bottom:1px solid var(--oro)}
+.gz-riga span{white-space:nowrap}.gz-riga span:first-child::first-letter{text-transform:uppercase}
+.gz-occ0{margin:14px 0 0;text-align:center;font-family:var(--sans);font-size:13px;letter-spacing:.42em;text-transform:uppercase;color:var(--oro)}
+.gz-nome{margin:2px 0 12px;text-align:center;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:clamp(40px,11vw,62px);line-height:1;letter-spacing:-.015em;color:var(--oro)}
+.gz-doppio{border-top:3px solid var(--oro);border-bottom:1px solid var(--oro);height:3px}
+.gz-quanti{margin:0;padding:8px 0;text-align:center;font-family:var(--sans);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--tenue);border-bottom:1px solid var(--oro)}
+.gz-occ{margin:0 0 8px;font-family:var(--sans);font-size:14px;font-weight:600;color:rgb(var(--el,212,175,106))}
+.gz-occ i{display:inline-block;width:9px;height:9px;border-radius:50%;background:rgb(var(--el,212,175,106));margin-right:7px}
+.gz-lastra{margin:18px 0 0;padding:20px 20px 14px;border-radius:24px;min-width:0;background:linear-gradient(160deg,rgba(var(--el,212,175,106),.30),rgba(var(--el,212,175,106),.12));-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(var(--el,212,175,106),.55);box-shadow:inset 0 1px 0 rgba(255,250,235,.25),0 18px 40px rgba(4,10,35,.45)}
+.gz-lastra h2{margin:0 0 12px;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:clamp(28px,7.5vw,36px);line-height:1.12;color:var(--inchiostro)}
+.gz-lastra h3{margin:0 0 12px;font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:25px;line-height:1.12;color:var(--inchiostro)}
+.gz p.gz-t{margin:0 0 12px;font-family:Georgia,"Times New Roman",serif;font-size:19px;line-height:1.55;color:var(--inchiostro);overflow-wrap:anywhere}
+.gz-col .gz p.gz-t,.gz-col p.gz-t{font-size:18px}
+.gz p.gz-t strong{color:var(--inchiostro)}
+.gz-col{display:grid;grid-template-columns:1fr;gap:0 18px;align-items:start}
+@media (min-width:700px){.gz-col{grid-template-columns:1fr 1fr}}
+.gz-img{display:block;width:100%;height:auto;border-radius:14px;margin:0 0 12px}
+.gz-regola{margin:24px 0 18px;padding:14px 16px;border-radius:24px;border:1px solid var(--oro);text-align:center}
+.gz-regola p{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:19px;color:var(--inchiostro)}
+.gz-regola .gz-occ{margin:0 0 4px;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--oro)}
 .g4-data{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--tenue)}
 .g4-apre h1{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1;margin:8px 0 12px}
 .g4-apre .grande{font-size:22px;line-height:1.25;font-weight:500;margin:0}
@@ -2212,8 +2234,11 @@ function g4Testa(g){
   var giorni=Math.max(0,Math.ceil((new Date("2026-11-21T00:00:00").getTime()-new Date().setHours(0,0,0,0))/864e5));
   var ico=function(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true">'+d+'</svg>';};
   var s1=function(x){return ' g4-sale';};
-  return '<div class="g4-apre"><div class="g4-data">'+esc(g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}))+' · '+esc(L.nome)+'</div><h1>Giornale<br>Felicitas</h1><p class="grande" id="g4-mosse" hidden></p></div>'+
-    '<div id="g4-radio"></div><div id="g4-art" style="display:flex;flex-direction:column;gap:10px"></div>'+
+  return '<div class="gz"><div class="gz-riga"><span>'+esc(g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}))+'</span><span>Edizione delle 9</span></div>'+
+      '<p class="gz-occ0">Giornale</p><p class="gz-nome">FelicitasMundi</p><div class="gz-doppio"></div><p class="gz-quanti" id="gz-quanti" hidden></p>'+
+      '<div id="g4-art"></div><div class="gz-regola"><p class="gz-occ">Una regola sul nome</p><p>«È sempre scritto FelicitasMundi.»</p></div><div class="gz-doppio"></div></div>'+
+    '<div class="g4-apre"><p class="grande" id="g4-mosse" hidden></p></div>'+
+    '<div id="g4-radio"></div>'+
     (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="/felicitas-festival-21-novembre-baratili/?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
       '<div class="g4-occ">In evidenza</div><h2>Felicitas Festival</h2>'+
       '<p>TRAME · la forza di essere connessi<br>Sabato 21 novembre 2026 · dalle 10:00<br>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</p>'+
@@ -2247,11 +2272,40 @@ function g4Sale(){
   var o=new IntersectionObserver(function(v){v.forEach(function(x){if(x.isIntersecting){x.target.classList.add("visto");o.unobserve(x.target);}});},{rootMargin:"0px 0px -8% 0px"});
   el.forEach(function(e){o.observe(e);});
 }
+/* un articolo = una lastra di vetro del colore del suo elemento (SQL 163, orme.elemento; vuoto o prima del 163 = oro), come la mail delle 9 */
+var GZ_EL={terra:"201,161,90",acqua:"111,168,214",fuoco:"224,122,85",aria:"141,191,94",etere:"176,138,224"};
+function gzArticolo(x,firme,apre){
+  var o=x.o,link=o.link||primoLink(o.contenuto),testo=String(o.contenuto||"");if(!o.link&&link)testo=testo.replace(link,"").trim();
+  var par=testo.split(/\n\s*\n/).map(function(p){return p.trim();}).filter(Boolean);
+  if(par.length<2)par=testo.split(/\n/).map(function(p){return p.trim();}).filter(Boolean);
+  var el=GZ_EL[o.elemento]?o.elemento:"";
+  var occ=(el?el.charAt(0).toUpperCase()+el.slice(1)+" · ":"")+(o.orma_madre_id===FEST_ID?"Felicitas Festival · ":"")+(o.visibilita==="pubblico"?"🌐 Per tutti":"🏡 Solo per i vicinati");
+  var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="gz-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
+  var t=par.map(function(p){return '<p class="gz-t">'+esc(p).replace(/«([^«»]{1,800})»/g,"<strong>«$1»</strong>")+'</p>';}).join("");
+  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';
+}
+/* elemento e Festival si leggono a parte: se lo SQL 163 non c'è ancora, restano oro */
+function gzDettagli(tutti,firme){
+  var ids=tutti.map(function(x){return x.o.id;});if(!db||!ids.length||tutti.gzLetti)return;tutti.gzLetti=1;
+  db.from("orme").select("id,elemento,orma_madre_id").in("id",ids).then(function(r){
+    if(r&&!r.error)return r.data||[];
+    return db.from("orme").select("id,orma_madre_id").in("id",ids).then(function(x){return x&&!x.error?(x.data||[]):[];});
+  }).then(function(d){var m={};(d||[]).forEach(function(z){m[z.id]=z;});var cambia=0;
+    tutti.forEach(function(x){var z=m[x.o.id];if(z){if(z.elemento&&!x.o.elemento){x.o.elemento=z.elemento;cambia=1;}if(z.orma_madre_id&&!x.o.orma_madre_id){x.o.orma_madre_id=z.orma_madre_id;cambia=1;}}});
+    if(cambia&&vista==="giornale"){gzMetti(tutti,firme);g4Lavora();}
+  },function(){});
+}
+function gzMetti(tutti,firme){
+  var A=$("#g4-art");if(!A)return;
+  A.innerHTML=tutti.length?gzArticolo(tutti[0],firme,true)+(tutti.length>1?'<div class="gz-col">'+tutti.slice(1).map(function(x){return gzArticolo(x,firme,false);}).join("")+'</div>':""):"";
+  A.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(A);
+}
 function g4Articoli(arti,firme){
   var pub=arti.filter(function(x){return x.o.visibilita==="pubblico";}),dentro=arti.filter(function(x){return x.o.visibilita!=="pubblico";});
-  var A=$("#g4-art");if(A)A.innerHTML=pub.map(function(x){return '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Articolo</div>'+voce(x,firme)+'</div></div>';}).join("");
-  var V=$("#g4-vil");if(V)V.innerHTML=io.id&&dentro.length?'<div class="g4-t g4-vil g4-sale"><div class="in"><div class="g4-occ">Solo per i villaggi</div>'+
-    dentro.map(function(x){return '<details class="g4-gg"><summary><span>'+esc(x.o.titolo||"Articolo")+'</span><span>›</span></summary>'+voce(x,firme)+'</details>';}).join("")+'</div></div>':"";
+  var tutti=pub.concat(io.id?dentro:[]),A=$("#g4-art"),Q=$("#gz-quanti");
+  if(Q){Q.textContent=tutti.length===1?"1 articolo in questo numero":tutti.length+" articoli in questo numero";Q.hidden=!tutti.length;}
+  gzMetti(tutti,firme);gzDettagli(tutti,firme);
+  var V=$("#g4-vil");if(V)V.innerHTML="";
   [A,V].forEach(function(c){if(!c)return;
     c.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(c);});
   g4Sale();  g4Lavora();
@@ -2369,7 +2423,7 @@ function vGiornale(){
       }).join("");
       var gc=$("#g-corpo");
       gc.innerHTML=sez?sez+'<p class="finito">Hai visto tutto per '+(giorno===0?"oggi":"questo giorno")+'.</p>':
-        '<p class="nota" style="padding:14px 0;text-align:center">'+(giorno>0?"Ancora niente in programma per questo giorno.":"Questo giorno non ha ancora niente. Si riempie dal megafono: ogni cosa cade nella fascia dell'ora in cui arriva.")+'</p>';
+        '<p class="nota" style="padding:14px 0;text-align:center">'+(giorno>0?"Ancora niente in programma per questo giorno.":"Questo giorno non ha ancora niente.")+'</p>';
       gc.querySelectorAll("[data-apri]").forEach(function(b){b.onclick=function(){apriF[b.getAttribute("data-apri")]=!apriF[b.getAttribute("data-apri")];vGiornale();};});
       gc.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});
       legaVis(gc);
