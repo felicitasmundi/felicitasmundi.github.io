@@ -31,6 +31,9 @@
   function dice(t) { var a = $("tit"); if (!a) return; a.textContent = t || segno.titolo || "la diretta del villaggio"; a.classList.toggle("esito", !!t); }
 
   /* avvia(): all'apertura della pagina, e quando torna dalla cache del navigatore — il segno può essere nato dopo */
+  /* 3 nov, Gab: un utente una volta sola. In questo telefono la sala resta aperta in una pagina sola, l'ultima entrata */
+  var UNO_ID = Math.random().toString(36).slice(2), uno = null;
+  try { uno = new BroadcastChannel('fm-sala-uno'); uno.onmessage = function (ev) { var m = ev.data || {}; if (m.t === 'entro' && m.id !== UNO_ID && stanza) { lasciando = true; try { stanza.disconnect(); } catch (e) { } stanza = null; if (pill) { pill.remove(); pill = null; } } }; } catch (e) { }
   window.FM_DIRETTA = { ferma: function () { lasciando = true; if (stanza) { try { stanza.disconnect(); } catch (e) { } } stanza = null; if (pill) { pill.remove(); pill = null; } },   /* la cornice: la sala si apre dentro, la striscia si fa da parte senza spegnere il segno */
     avvia: function () { var g = leggi(); if (!g) return; if (pill && stanza) return; segno = g; if (!pill) costruisci(); lasciando = false; tentativi = 0; mostraPausa(); entra(); } };
 
@@ -149,6 +152,7 @@
           if (tentativi++ < 3) { dice("Rientro…"); setTimeout(entra, 2500); } else dice("La sala non risponde.");
         });
         return sala.connect(d.dove, d.gettone).then(function () {
+          try { if (uno) uno.postMessage({ t: 'entro', id: UNO_ID }); } catch (e) { }
           tentativi = 0; dice(""); lettore(); mostraPausa();
           return sala.startAudio().then(function () { if ($("suono")) $("suono").hidden = true; }).catch(function () { if ($("suono")) $("suono").hidden = false; });
         }).then(function () {
