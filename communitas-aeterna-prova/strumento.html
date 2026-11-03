@@ -1586,6 +1586,7 @@ function persH(){return '<button type="button" class="tc-btn" id="mc-apri" style
   '<input type="tel" class="tc-campo" id="mc-tel" autocomplete="off" inputmode="tel" placeholder="Numero di telefono" aria-label="Numero di telefono" style="margin-top:8px">'+
   '<button type="button" class="tc-btn" id="mc-aggiungi" style="margin-top:12px">Aggiungi</button></div>'+
   '<button type="button" class="tc-btn" id="mc-link" style="margin-top:12px;background:transparent;color:#D4AF6A;border:1px solid #D4AF6A">Invia link invito</button>'+
+  '<button type="button" class="tc-btn" id="mc-part" style="margin-top:12px;background:transparent;color:#D4AF6A;border:1px solid #D4AF6A">Partecipanti</button><div id="mc-part-l"></div>'+
   '<p id="mc-pe-esito" aria-live="polite" style="margin:10px 0 0"></p>';}
 var ARG_H='<h2>Argomenti</h2><p>Tocca un argomento: la chat torna al messaggio che l\'ha aperto.</p><div id="tc-ar"><p class="nota">Un momento…</p></div>';
 function riempiArgomenti(id){
@@ -1716,7 +1717,25 @@ function menuChat(){
     '<p class="tc-nota" id="mc-esito" aria-live="polite"></p>');
   if(!f)return;
   riempiArgomenti(id);if(!duo)riempiObiettivi(id);
-  function peLink(c){return new URL("accesso.html?staff="+encodeURIComponent(c)+"&torna="+encodeURIComponent("strumento.html?v=azione&team="+id),location.href).href;}
+  /* 3/11 17:35-17:36, Gab: «una finestra che quando fai invita team, prepara un messaggio presettato con scritta "sei stato invitato al team…"» · «con l aimmagine della piuma» · «un link che apre ad una pagina di soglia» → il link porta a communitas-aeterna/invito-team.html (piuma, i tre passi), il messaggio è già scritto e si corregge */
+  function peNomeTeam(){var t=(team.lista||[]).filter(function(x){return x.team_id===id;})[0];return t?t.nome:"";}
+  function peLink(c){return new URL("../communitas-aeterna/invito-team.html?c="+encodeURIComponent(c)+"&t="+encodeURIComponent(peNomeTeam())+"&s="+encodeURIComponent(id),location.href).href;}
+  function peFinestra(u,tel,nota){
+    var es=$("#mc-pe-esito"),msg="Sei stato invitato al team "+peNomeTeam()+"\n"+u;
+    es.innerHTML=(nota?'<span>'+esc(nota)+'</span>':'')+'<textarea class="tc-campo" id="mc-msg" rows="4" aria-label="Messaggio" style="margin-top:8px;resize:vertical"></textarea>'+
+      '<span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">'+(navigator.share?'<button type="button" class="mini oro" id="mc-cond">Condividi con la piuma</button>':'')+
+      '<button type="button" class="mini oro" id="mc-wa">WhatsApp</button><button type="button" class="mini" id="mc-copia">Copia</button></span>';
+    $("#mc-msg").value=msg;
+    function testo(){return $("#mc-msg").value;}
+    $("#mc-wa").onclick=function(){window.open("https://wa.me/"+peWa(tel)+"?text="+encodeURIComponent(testo()),"_blank","noopener");};
+    var cb=$("#mc-copia");cb.onclick=function(){var v=testo();(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(function(){cb.textContent="Copiato";},function(){prompt("Copia il messaggio",v);});};
+    var sh=$("#mc-cond");if(sh)sh.onclick=function(){var v=testo();
+      fetch("icona-felicitas-512.png?v=1102").then(function(r){return r.blob();}).then(function(b){
+        var f=new File([b],"felicitasmundi.png",{type:"image/png"});
+        if(navigator.canShare&&navigator.canShare({files:[f]}))return navigator.share({files:[f],text:v});
+        return navigator.share({text:v});
+      }).catch(function(){});};
+  }
   function peWa(t){var d=String(t||"").replace(/[^0-9]/g,"");if(!d)return "";if(/^0039/.test(d))d=d.slice(2);if(/^39[0-9]{9,10}$/.test(d))return d;if(/^3/.test(d))return "39"+d;return d;}
   var ap=$("#mc-apri");if(ap)ap.onclick=function(){var mo=$("#mc-modulo");mo.hidden=!mo.hidden;if(!mo.hidden)$("#mc-nome").focus();};
   var ab=$("#mc-aggiungi");if(ab)ab.onclick=function(){
@@ -1733,17 +1752,25 @@ function menuChat(){
         var gia=q&&!q.error&&q.data&&q.data[0]&&q.data[0].usato_il;
         ["mc-nome","mc-mail","mc-tel"].forEach(function(k){$("#"+k).value="";});
         if(gia){es.textContent=n+" era già iscritto: ora è nel team.";return;}
-        es.innerHTML='Link creato per '+esc(n)+'. <a class="mini oro" href="https://wa.me/'+peWa(tel)+'?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a> <button type="button" class="mini" id="mc-copia">Copia il link</button>';
-        var cb=$("#mc-copia");if(cb)cb.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){cb.textContent="Copiato";},function(){prompt("Copia il link",u);});};
+        peFinestra(u,tel,'');
       },function(){ab.disabled=false;es.textContent="Fatto.";});
     },function(x){ab.disabled=false;es.textContent=errore(x);});};
+  /* 3/11 20:07-20:09, Gab: «ho inserito un account nel team giornale ma non è visibile» · «e non si vede» → l'elenco di chi è nel team (SQL 157) */
+  var pb=$("#mc-part");if(pb)pb.onclick=function(){
+    var l=$("#mc-part-l");if(l.innerHTML){l.innerHTML="";return;}
+    l.innerHTML='<p style="margin:10px 0 0">Un momento…</p>';
+    db.rpc("fm_team_partecipanti",{p_squadra:id}).then(function(r){
+      if(r&&r.error){l.innerHTML='<p style="margin:10px 0 0">'+esc(/fm_team_partecipanti|function/i.test(r.error.message||"")?"Si apre con l'SQL 157.":errore(r.error))+'</p>';return;}
+      var d=(r&&r.data)||[];
+      l.innerHTML=d.length?'<div style="margin-top:10px;border:1px solid rgba(212,175,106,.35);border-radius:14px;overflow:hidden">'+d.map(function(x,i){
+        return '<div style="padding:12px 14px;background:#1a2148;'+(i?'border-top:1px solid rgba(212,175,106,.2);':'')+'font-size:18px">'+esc(x.nome)+(x.responsabile?' <span style="color:#D4AF6A;font-size:15px">· responsabile</span>':'')+'</div>';}).join("")+'</div>'+
+        '<p style="margin:6px 0 0;color:#cfc8b8;font-size:16px">'+d.length+(d.length===1?' persona':' persone')+'</p>':'<p style="margin:10px 0 0">Ancora nessuno.</p>';
+    },function(x){l.innerHTML='<p style="margin:10px 0 0">'+esc(errore(x))+'</p>';});};
   var lb=$("#mc-link");if(lb)lb.onclick=function(){
     var es=$("#mc-pe-esito");lb.disabled=true;
     db.rpc("fm_link_team",{p_squadra:id}).then(function(r){lb.disabled=false;
       if(r&&r.error){es.textContent=errore(r.error);return;}
-      var u=peLink(r.data);
-      es.innerHTML='Link del team: vale per chiunque lo riceva. <a class="mini oro" href="https://wa.me/?text='+encodeURIComponent(u)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a> <button type="button" class="mini" id="mc-copia-t">Copia il link</button>';
-      var cb=$("#mc-copia-t");if(cb)cb.onclick=function(){(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){cb.textContent="Copiato";},function(){prompt("Copia il link",u);});};
+      peFinestra(peLink(r.data),'','Vale per chiunque lo riceva.');
     },function(x){lb.disabled=false;es.textContent=errore(x);});};
   function segna(v){f.querySelectorAll("[data-avv]").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-avv")===v));});}
   db.rpc("fm_mia_scelta_avvisi",{p_cerchio:id}).then(function(r){if(r&&!r.error)segna(r.data||"ora");},function(){});

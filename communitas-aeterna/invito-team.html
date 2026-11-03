@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- 3/11/2026 17:36, Gab: «ma non puoi creare un link che apre ad una pagina di soglia?» · 17:35 «sei stato invitato al team, acconsenti condizioni, metti codice per entrare, scarica l app» · «con l aimmagine della piuma» · «sei stato invitato al team x / poi a seconda del format cambia nome».
+     Indirizzo: invito-team.html?c=CODICE&t=NOME DEL TEAM&s=ID DEL TEAM (lo prepara strumento.html, ⋯ della chat del team). -->
+<title>FelicitasMundi</title>
+<meta property="og:title" content="FelicitasMundi">
+<meta property="og:description" content="Sei stato invitato al team">
+<meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna-prova/icona-felicitas-512.png?v=1102">
+<meta property="og:image:width" content="512"><meta property="og:image:height" content="512">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#122050">
+<link rel="icon" href="../communitas-aeterna-prova/icona-felicitas-192.png?v=1102">
+<link rel="apple-touch-icon" href="../communitas-aeterna-prova/icona-felicitas-ios-180.png?v=1102">
+<link rel="stylesheet" href="../communitas-aeterna-prova/comune/caratteri.css">
+<style>
+:root{--cosmo1:#1d2f66;--cosmo2:#122050;--cosmo3:#0a1430;--foglio:#1a2148;--oro:#D4AF6A;--testo:#F5F0E6;--testo2:#cfc8b8;--linea:rgba(212,175,106,.35);color-scheme:dark}
+body{margin:0;min-height:100vh;background:var(--cosmo3) linear-gradient(180deg,var(--cosmo1) 0,var(--cosmo2) 45%,var(--cosmo3) 100%) fixed;color:var(--testo);
+  font-family:'DM Sans',system-ui,sans-serif;font-size:20px;line-height:1.45;padding:28px max(16px,env(safe-area-inset-left,0px)) 48px max(16px,env(safe-area-inset-right,0px))}
+.w{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.piuma{width:132px;height:132px;border-radius:30px;display:block;margin:0 auto}
+h1{font-family:'Cinzel',Georgia,serif;font-weight:500;font-size:28px;line-height:1.3;letter-spacing:.04em;text-align:center;margin:4px 0 6px;text-wrap:balance}
+h1 b{display:block;color:var(--oro);font-weight:600;margin-top:4px}
+.passo{background:var(--foglio);border:1px solid var(--linea);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.passo .n{font-family:'Cinzel',Georgia,serif;color:var(--oro);font-size:18px;letter-spacing:.06em}
+.passo p{margin:0}
+.tasto{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:28px;background:var(--oro);color:#0a1430;font-weight:600;font-size:19px;text-decoration:none}
+.tasto.vuoto{background:transparent;color:var(--oro);border:1px solid var(--oro)}
+.err{text-align:center;color:var(--testo2)}
+</style></head>
+<body><main class="w">
+<img class="piuma" src="../communitas-aeterna-prova/icona-felicitas-512.png?v=1102" alt="" width="132" height="132">
+<h1>Sei stato invitato al team<b id="team"></b></h1>
+<div id="passi">
+  <div class="passo"><span class="n">1</span><p>Acconsenti condizioni</p><a class="tasto" id="entra" href="#">Entra</a></div>
+  <div class="passo" style="margin-top:14px"><span class="n">2</span><p>Metti codice per entrare</p></div>
+  <div class="passo" style="margin-top:14px"><span class="n">3</span><p>Scarica l'app</p><a class="tasto vuoto" href="felicitas-app.html?torna=invito-team.html">Scarica l'app</a></div>
+</div>
+<p class="err" id="err" hidden>Questo link non è completo: chiedi a chi te l'ha mandato di rimandarlo.</p>
+</main>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search),c=q.get("c")||"",t=(q.get("t")||"").slice(0,80),s=q.get("s")||"";
+  if(!/^[0-9a-z]{6,64}$/i.test(c)){document.getElementById("passi").hidden=true;document.getElementById("err").hidden=false;return;}
+  document.getElementById("team").textContent=t;
+  var torna="strumento.html"+(/^[0-9a-f-]{36}$/i.test(s)?"?v=azione&team="+s:"");
+  document.getElementById("entra").href="../communitas-aeterna-prova/accesso.html?staff="+encodeURIComponent(c)+"&torna="+encodeURIComponent(torna);
+})();
+</script>
+</body></html>
