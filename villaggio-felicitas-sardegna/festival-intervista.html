@@ -246,6 +246,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   <button id="b-mano" disabled><i>✋</i>la mano</button>
   <button id="b-rec" class="rec" disabled><i>●</i>registra</button>
   <button id="b-file" disabled><i>⎘</i>un file</button>
+  <button id="b-invita" type="button" data-conta="condivisione:Invito Felicitas Festival Intervista"><i>✉</i>Invita</button>
   <button id="b-esci" class="esc" type="button"><i>↩</i>Esci</button>
 </div></div>
 
@@ -421,6 +422,10 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   function fuori(t){ giorno.inizio=''; scriviGiorno(); if(rec&&rec.state==='recording') ferma(); lasciando=true; if(stanza){ try{ stanza.disconnect(); }catch(e){} } stanza=null; lasciando=false; $('suono').hidden=true; $('pausa').hidden=true; try{ if(navigator.mediaSession) navigator.mediaSession.playbackState='none'; }catch(e){} if(actx){ try{ actx.close(); }catch(e){} actx=null; analizza=null; } clearInterval(orologio2); $('suoni').innerHTML=''; $('onda').classList.add('fuori'); $('live-t').textContent='LA DIRETTA DEL VILLAGGIO'; document.body.classList.add('soglia'); document.body.classList.remove('coordina'); $('live').style.color='var(--grigio)'; var i=$('live').querySelector('i'); i.style.background='var(--grigio)'; i.style.animation='none'; $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; $('chiudi').hidden=true; if(entrato===false) $('ospite-dati').hidden=false; ['b-mic','b-mano','b-rec','b-file'].forEach(function(k){ $(k).disabled=true; $(k).classList.remove('on'); }); document.querySelector('.griglia').innerHTML=''; document.getElementById('app').classList.remove('coordina'); dice(t||''); }
   $('esci').onclick=function(){ cancellaSegno(); fuori(''); };
   $('b-esci').onclick=function(){ $('esci').onclick(); };
+  /* 3 nov 13:52, Gab: «Inseriscimi all'interno il tasto invita, in modo che anche gli altri qui là dentro possano invitare» */
+  $('b-invita').onclick=function(){ var u='https://app.felicitasmundi.com/villaggio-felicitas-sardegna/festival-intervista.html', t='Felicitas Festival Intervista, la diretta audio: entri dal link, senza account.';
+    if(navigator.share){ (SALVA_VERO||navigator.share.bind(navigator))({title:'Felicitas Festival Intervista', text:t, url:u}).catch(function(){}); return; }
+    try{ navigator.clipboard.writeText(u).then(function(){ dice('Link copiato: incollalo dove vuoi.'); },function(){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); }); }catch(e){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); } };
   /* 15 ott 09:23, Gab: «se finisce la chiacchierata, non devo solo leggere esci, devo leggere chiudi la diretta» — la chiude per tutti (sala-regia · chiudi_diretta) */
   $('chiudi').onclick=function(){ if(!stanza||!io.coordina) return; if(!confirm('Chiudi la diretta per tutti?')) return;
     if(rec&&rec.state==='recording') ferma();   /* la registrazione si ferma e resta qui sotto, da scaricare o pubblicare */
