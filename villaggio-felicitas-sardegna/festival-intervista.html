@@ -1,11 +1,22 @@
 <!doctype html>
+<!-- ═══ REGOLE FISSE DELLA SALA · Gab 3/11/2026 15:32: «le cose che ora aggiusti come diretta, deve rimanere fissata
+     in qualche parte della strutturazione del codice, non deve mai piu essere mutata fino a nuovo ordine».
+     Non cambiare queste regole senza un nuovo ordine di Gab:
+     1. Si entra solo con l'accesso («d ora in poi per entraere devi loggarti» · «se sei ospite, lo sei nel database»).
+     2. Una persona è una sola in sala: il nome in sala è l'account (sala-gettone), chi rientra butta fuori la copia vecchia.
+     3. Si entra muti. Il tasto dice «Muto» col microfono sbarrato; toccato diventa «Parli» e cambia colore.
+     4. In basso cinque tasti: Impostazioni · Muto · Chat · Registra (solo chi coordina) · Lascia.
+     5. Nessun tasto «Tocca per sentire»: l'audio si sblocca con «Entra» o col primo tocco sulla pagina.
+     6. Invita, alza la mano e manda un file stanno in Impostazioni.
+     7. Ascoltando si gira per le altre stanze e i team: «l audio è in tutto il sistema» (striscia fm-diretta.js).
+     ═══ -->
 <html lang="it">
 <head>
 <meta charset="utf-8">
 <base href="/communitas-aeterna-prova/">
-<!-- 3 nov 2026 13:50, Gab: rinominarlo adesso. Copia della sala (diretta-bozza.html) con indirizzo pulito; parte sulla puntata «Felicitas Festival Intervista». -->
+<!-- 3 nov 2026 13:50, Gab: rinominarlo adesso. COPIA della sala (diretta-bozza.html) con indirizzo pulito; parte sulla puntata «Felicitas Festival Intervista». Si rigenera da diretta-bozza.html: non correggerla a mano. -->
 <meta property="og:title" content="Felicitas Festival Intervista, la diretta audio">
-<meta property="og:description" content="Entri dal link, senza account: scrivi come ti chiami e da dove parli.">
+<meta property="og:description" content="La diretta audio di FelicitasMundi: entri con il tuo accesso.">
 <meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna/inviti/felicitas.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -165,9 +176,6 @@ body.soglia .onda .tasti{margin-top:20px!important}
 body.soglia #entra{padding:15px;font-size:16px}
 body.soglia .esito{text-align:center}
 body.soglia .lingue,body.soglia .pannello,body.soglia .plancia,body.soglia .regia-box{display:none!important}
-/* 3 nov: «Invita» si vede anche prima di entrare, sotto «Entra» */
-#b-invita2{display:none;margin:14px auto 0;background:none;border:1px solid rgba(212,175,106,.5);color:var(--oro);border-radius:980px;padding:10px 22px;font:inherit;font-size:14px;letter-spacing:.04em}
-body.soglia #b-invita2{display:block;flex:0 0 100%}
 body.soglia .app{padding-bottom:110px!important}
 #esci{display:none!important}
 body.ospite #torna,body.ospite .menu-app,body.ospite .ft-torna{display:none!important}
@@ -178,6 +186,30 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
 .plancia button{font-size:11px!important}
 .plancia button i{width:50px!important;height:50px!important;font-size:19px!important}
 .plancia button.esc i{color:var(--manca);border-color:rgba(180,87,74,.5)}
+
+/* ═══ 3/11 · i tasti nuovi della sala (regole fisse 3-6) ═══ */
+#suono{display:none!important}
+#ospite-dati{display:none!important}
+.plancia button .ic svg{width:22px;height:22px;display:block}
+.plancia button .ic{position:relative}
+.plancia #b-mic .ic{background:#3a3f55;border-color:#5b6078;color:#e9e4d8}
+.plancia #b-mic.on .ic{background:#2f9e6b;border-color:#2f9e6b;color:#fff;box-shadow:0 0 0 5px rgba(47,158,107,.25)}
+.plancia #b-mic[disabled]{opacity:.6}
+.plancia #b-esci .ic{background:#a8433a;border-color:#a8433a;color:#fff}
+.plancia #b-rec.on .ic{background:#ff4d4d;color:#fff;border-color:#ff4d4d}
+.plancia button .nuovi{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#ff4d4d;color:#fff;font:600 11px/18px system-ui,sans-serif;text-align:center}
+.plancia button{min-width:58px}
+#imp{position:fixed;left:0;right:0;bottom:0;z-index:40;max-height:78vh;overflow:auto;background:var(--notte,#0f1226);border-top:1px solid rgba(212,175,106,.35);border-radius:20px 20px 0 0;padding:18px max(18px,env(safe-area-inset-left,0px)) calc(22px + env(safe-area-inset-bottom,0px));color:var(--avorio);box-shadow:0 -12px 40px rgba(0,0,0,.5)}
+#imp h3{margin:0 0 4px;font:500 19px 'Cormorant Garamond',Georgia,serif;color:var(--oro)}
+#imp .riga{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid rgba(212,175,106,.15);font-size:14.5px}
+#imp .riga small{display:block;color:var(--grigio);font-size:12.5px;margin-top:3px;line-height:1.4}
+#imp .bt{border:1px solid rgba(212,175,106,.5);color:var(--oro);border-radius:999px;padding:8px 14px;font:inherit;font-size:13.5px;white-space:nowrap;background:none}
+#imp .bt.rosso{border-color:rgba(255,107,107,.5);color:#ff8a8a}
+#imp .livello{height:8px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:8px}
+#imp .livello i{display:block;height:100%;width:0;background:#2f9e6b;transition:width .08s}
+#imp .chiudi-imp{float:right;font-size:22px;color:var(--grigio);background:none;border:0;line-height:1}
+#imp .solo-coordina{display:none} body.coordina #imp .solo-coordina{display:flex}
+#accedi{flex:1;justify-content:center}
 </style>
 </head>
 <body class="soglia">
@@ -196,7 +228,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     <div class="chi-parla"><div class="c" id="cp-c" style="display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--oro)">·</div><div><b id="cp-nome">nessuno sta parlando</b><small id="cp-sot">entra per sentire</small></div><span class="reg" id="reg-segno" style="display:none"><i></i>REC</span></div>
     <div class="sot" id="reg-stato" style="display:none;margin-top:8px;color:#ff8a8a;position:relative"></div>
     <div id="ospite-dati" hidden style="display:flex;gap:8px;margin-top:12px;position:relative"><label>come ti chiami<input class="campo" id="osp-nome" maxlength="40" autocomplete="off" style="min-width:0;font:inherit;color:var(--avorio);outline:none"></label><label>da dove parli<input class="campo" id="osp-da" maxlength="40" autocomplete="off" style="min-width:0;font:inherit;color:var(--avorio);outline:none"></label></div>
-    <div class="tasti" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;position:relative"><button class="fm-tasto pieno" id="entra" style="flex:1;justify-content:center" data-s="entra nella diretta">Entra</button><button id="b-invita2" type="button" data-conta="condivisione:Invito Felicitas Festival Intervista">✉ Invita altre persone</button><button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla diretta">Esci</button><button class="fm-tasto secondario" id="chiudi" hidden data-s="chiudi la diretta per tutti" style="color:var(--manca);border-color:rgba(180,87,74,.5)">Chiudi la diretta</button><button class="fm-tasto pieno" id="suono" hidden data-s="tocca per sentire" style="flex:1;justify-content:center">🔊 Tocca per sentire</button></div>
+    <div class="tasti" style="display:flex;gap:8px;margin-top:12px;position:relative"><button class="fm-tasto pieno" id="entra" style="flex:1;justify-content:center" data-s="entra nella diretta">Entra</button><button class="fm-tasto secondario" id="esci" hidden data-s="esci dalla diretta">Esci</button><button class="fm-tasto secondario" id="chiudi" hidden data-s="chiudi la diretta per tutti" style="color:var(--manca);border-color:rgba(180,87,74,.5)">Chiudi la diretta</button><button class="fm-tasto pieno" id="suono" hidden data-s="tocca per sentire" style="flex:1;justify-content:center">🔊 Tocca per sentire</button></div>
     <div class="esito" id="esito" style="font-size:12.5px;color:var(--grigio);margin-top:8px;min-height:16px;position:relative"></div>
   </div>
 
@@ -245,13 +277,26 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
 </nav>
 
 <div class="plancia"><div class="in">
-  <button id="b-mic" disabled><i>🎙</i>microfono</button>
-  <button id="b-mano" disabled><i>✋</i>la mano</button>
-  <button id="b-rec" class="rec" disabled><i>●</i>registra</button>
-  <button id="b-file" disabled><i>⎘</i>un file</button>
-  <button id="b-invita" type="button" data-conta="condivisione:Invito Felicitas Festival Intervista"><i>✉</i>Invita</button>
-  <button id="b-esci" class="esc" type="button"><i>↩</i>Esci</button>
+  <button id="b-imp" type="button"><i class="ic">⚙</i>Impostazioni</button>
+  <button id="b-mic" disabled><i class="ic" id="mic-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9v2a3 3 0 0 0 5.1 2.1"/><path d="M15 9.3V5a3 3 0 0 0-5.9-.7"/><path d="M19 10v1a7 7 0 0 1-1.1 3.7"/><path d="M5 10v1a7 7 0 0 0 11.9 5"/><path d="M12 18v4"/><path d="M3 3l18 18"/></svg></i><span id="mic-t">Muto</span></button>
+  <button id="b-chat" type="button"><i class="ic">💬<b class="nuovi" id="chat-n" hidden>0</b></i>Chat</button>
+  <button id="b-rec" class="rec" disabled><i class="ic">●</i><span id="rec-t">Registra</span></button>
+  <button id="b-esci" class="esc" type="button"><i class="ic">✕</i>Lascia</button>
 </div></div>
+
+<!-- ═══ Impostazioni (3/11, «ok per le tue proopste di impostazione») ═══ -->
+<div id="imp" hidden>
+  <button class="chiudi-imp" id="imp-chiudi" type="button" aria-label="chiudi">×</button>
+  <h3>Impostazioni</h3>
+  <div class="riga"><div>Il microfono<small id="imp-perm">controllo…</small></div><button class="bt" id="imp-come" type="button" hidden>Come darlo</button></div>
+  <div class="riga" style="display:block"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><div>Prova il microfono<small>Parla: la barra si muove se il telefono ti sente.</small></div><button class="bt" id="imp-prova" type="button">Prova</button></div><div class="livello"><i id="imp-livello"></i></div></div>
+  <div class="riga"><div>Il tuo nome in sala<small id="imp-nome">—</small></div></div>
+  <div class="riga"><div>Invita<small>Manda il link di questa diretta.</small></div><button class="bt" id="imp-invita" type="button" data-conta="condivisione:Invito diretta">Invita</button></div>
+  <div class="riga"><div>Alza la mano<small>Chi coordina vede che vuoi parlare.</small></div><button class="bt" id="b-mano" type="button" disabled>✋ Alza la mano</button></div>
+  <div class="riga"><div>Manda un file<small>Lo vedono tutti nella sala.</small></div><button class="bt" id="b-file" type="button" disabled>Scegli il file</button></div>
+  <div class="riga solo-coordina"><div>Silenzia tutti<small>Chiude i microfoni aperti. Ognuno può riaprire il suo.</small></div><button class="bt" id="imp-silenzia" type="button">Silenzia</button></div>
+  <div class="riga solo-coordina"><div>Chiudi la diretta<small>La chiude per tutti.</small></div><button class="bt rosso" id="imp-chiudi-dir" type="button">Chiudi per tutti</button></div>
+</div>
 
 <script>var SALVA_VERO=navigator.share?navigator.share.bind(navigator):null;</script>
 <script src="comune/fm-riga.js?v=10132105"></script>
@@ -324,7 +369,9 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   /* l'ospite (senza account) dice come si chiama e da dove parla: resta solo nel gettone della sala e, per comodità, in questo apparecchio */
   var OSP='fm_ospite', entrato=null;
   function ospiteDati(){ var n=$('osp-nome').value.trim().slice(0,40), d=$('osp-da').value.trim().slice(0,40); try{ localStorage.setItem(OSP, JSON.stringify({nome:n, da:d})); }catch(e){} return {nome:n, da:d}; }
-  db.auth.getSession().then(function(r){ entrato=!!(r.data&&r.data.session); if(!entrato){ document.body.classList.add('ospite'); $('ospite-dati').hidden=false; try{ var o=JSON.parse(localStorage.getItem(OSP)||'null'); if(o){ $('osp-nome').value=o.nome||''; $('osp-da').value=o.da||''; } }catch(e){} } }).catch(function(){});
+  /* regola fissa 1 (3/11): si entra solo con l'accesso */
+  function vaiAccesso(){ location.href='/communitas-aeterna-prova/accesso.html?torna='+encodeURIComponent(location.pathname+location.search); }
+  db.auth.getSession().then(function(r){ entrato=!!(r.data&&r.data.session); if(!entrato){ $('entra').textContent='Accedi per entrare'; $('entra').setAttribute('data-s','accedi per entrare'); dice('Per entrare nella diretta serve il tuo accesso.'); } }).catch(function(){});
 
   function dice(t,m){ var e=$('esito'); e.style.color=m?'var(--manca)':'var(--grigio)'; e.textContent=t||''; }
   function meta(p){ try{ return JSON.parse(p.metadata||'{}'); }catch(e){ return {}; } }
@@ -390,16 +437,17 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
       file_riga(f.name,via,io.nome||'te'); return stanza.localParticipant.publishData(enc.encode(JSON.stringify({t:'file',n:io.nome||'',nome:f.name,via:via})),{reliable:true}); })
     .catch(function(e){ $('file-esito').textContent='Non caricato: '+(e&&e.message?e.message:'—')+(io.coordina?'':' (il deposito scrive chi coordina)'); });
   });
-  $('b-file').onclick=function(){ document.querySelectorAll('.lingue button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-p')==='file')}); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo',p.id==='p-file'); }); $('file-in').click(); };
+  $('b-file').onclick=function(){ $('imp').hidden=true; document.querySelectorAll('.lingue button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-p')==='file')}); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo',p.id==='p-file'); }); $('file-in').click(); };
 
   /* entrare */
+  function sblocca(){ try{ var C=window.AudioContext||window.webkitAudioContext; if(C){ var c=new C(), o=c.createOscillator(), g=c.createGain(); g.gain.value=0; o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+0.05); setTimeout(function(){ try{ c.close(); }catch(e){} },300); } var a=new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA='); a.play().catch(function(){}); }catch(e){} }
   function entra(){
     try{ if(window.top!==window&&window.top.FM_CORNICE&&window.top.FM_DIRETTA) window.top.FM_DIRETTA.ferma(); }catch(e){}   /* 19 ott: nella cornice la striscia si fa da parte, la sala entra qui */
     if(typeof LivekitClient==='undefined'){ dice('Un momento…'); var lk=document.createElement('script'); lk.src='https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js'; lk.onload=entra; lk.onerror=function(){ dice('La sala non si è caricata. Ricarica la pagina.',true); }; document.head.appendChild(lk); return; }
     /* 15 ott 09:15, Gab: «un utente non registrato per entrare deve scrivere per forza nome e dove si trova» */
-    if(entrato===false){ var od=ospiteDati(); if(!od.nome||!od.da){ dice('Scrivi come ti chiami e da dove parli.',true); (!od.nome?$('osp-nome'):$('osp-da')).focus(); return; } }
+    if(entrato===false){ vaiAccesso(); return; }
     dice('Un momento…'); $('entra').disabled=true;
-    db.functions.invoke('sala-gettone',{body: entrato ? {} : ospiteDati()}).then(function(r){
+    db.functions.invoke('sala-gettone',{body:{}}).then(function(r){
       if(r.error) throw r.error; var d=r.data||{}; if(!d.gettone) throw new Error(d.errore||'nessun gettone'); io=d;
       stanza=new LivekitClient.Room({adaptiveStream:true});
       var E=LivekitClient.RoomEvent;
@@ -408,28 +456,47 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
       ['ParticipantConnected','ParticipantDisconnected','TrackPublished','TrackUnpublished','TrackMuted','TrackUnmuted','ActiveSpeakersChanged','ParticipantMetadataChanged','ParticipantPermissionsChanged'].forEach(function(q){ if(E[q]) stanza.on(E[q],tessere); });
       stanza.on(E.ParticipantPermissionsChanged,function(){ var ok=!!(stanza.localParticipant.permissions&&stanza.localParticipant.permissions.canPublish); $('b-mic').disabled=!ok; if(ok!==parlaPrima){ parlaPrima=ok; if(ok) chat_sys('✋ hai la parola'); else chat_sys('✋ la parola è tolta'); } });
       stanza.on(E.DataReceived,function(payload,p){ try{ var m=JSON.parse(dec.decode(payload)); if(m.t==='chat') chat_riga(m.n||(p&&p.name)||'?',m.m,false); if(m.t==='file') file_riga(m.nome,m.via,m.n||(p&&p.name)||'?'); if(m.t==='mano'&&p){ mani[p.identity]=Date.now(); tessere(); } }catch(e){} });
-      stanza.on(E.AudioPlaybackStatusChanged,function(){ $('suono').hidden=stanza.canPlaybackAudio; });
-      stanza.on(E.Disconnected,function(perche){ if(lasciando) return; cancellaSegno(); var R=LivekitClient.DisconnectReason||{}; fuori(perche===R.ROOM_DELETED?'La diretta è chiusa.':'Sei fuori dalla sala.'); });
-      return stanza.connect(d.dove,d.gettone).then(function(){ return stanza.startAudio().then(function(){ $('suono').hidden=true; }).catch(function(){ $('suono').hidden=false; }); }).then(function(){ segna();
+      stanza.on(E.AudioPlaybackStatusChanged,function(){ if(!stanza.canPlaybackAudio) dice('Tocca lo schermo per sentire la diretta.'); else if(/Tocca lo schermo/.test($('esito').textContent)) dice(''); });
+      stanza.on(E.Disconnected,function(perche){ if(lasciando) return; cancellaSegno(); var R=LivekitClient.DisconnectReason||{}; fuori(perche===R.ROOM_DELETED?'La diretta è chiusa.':(perche===R.DUPLICATE_IDENTITY?'Sei entrato da un\'altra pagina o da un altro telefono: qui sei uscito.':'Sei fuori dalla sala.')); });
+      return stanza.connect(d.dove,d.gettone).then(function(){ return stanza.startAudio().catch(function(){}); }).then(function(){ segna();
         $('onda').classList.remove('fuori'); $('pausa').hidden=false; pausaSala(false); lettore(); $('live-t').textContent='IN ONDA'; document.body.classList.remove('soglia'); $('live').style.color='#ff6b6b'; var i=$('live').querySelector('i'); i.style.background='#ff4d4d'; i.style.animation='';
         $('entra').hidden=true; $('esci').hidden=false; $('ospite-dati').hidden=true; var puo=!!d.parla||!!(stanza.localParticipant.permissions&&stanza.localParticipant.permissions.canPublish); parlaPrima=puo; $('b-mic').disabled=!puo; $('b-mano').disabled=!d.entrato; $('b-rec').disabled=!d.coordina; $('b-file').disabled=!d.entrato;
         if(d.coordina){ document.getElementById('app').classList.add('coordina'); document.body.classList.add('coordina'); $('chiudi').hidden=false; }
-        dice(!puo?'Per ora ascolti: chi coordina ti dà la parola.':(d.entrato?'':'Senza account: senti e parli. Premi «microfono» per parlare.')); t1=inizioSala(); giorno.inizio='iniziata alle '+new Date(t1).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}); scriviGiorno(); $('tempo').title='da quando è iniziata la diretta';
+        dice(!puo?'Sei in ascolto: chi coordina ti dà la parola.':'Sei entrato muto. Tocca «Muto» quando vuoi parlare.'); $('imp-nome').textContent=(d.nome||'—')+(d.comune?' · '+d.comune:''); t1=inizioSala(); giorno.inizio='iniziata alle '+new Date(t1).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}); scriviGiorno(); $('tempo').title='da quando è iniziata la diretta';
         orologio2=setInterval(function(){ var s=Math.max(0,Math.floor((Date.now()-t1)/1000)), h=Math.floor(s/3600); $('tempo').textContent=(h?h+':':'')+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
         tessere();
-        /* se il segno dice che il microfono era aperto, lo riapro (tornando dalle altre pagine) */
-        try{ var sg=JSON.parse(localStorage.getItem(CH)||'null'); if(sg&&sg.mic&&puo) $('b-mic').click(); }catch(e){}
+        /* regola fissa 3 (3/11): si entra muti, anche tornando dalle altre pagine */
+        segna(false);
       });
     }).catch(function(e){ $('entra').disabled=false; dice('La sala non si apre: '+(e&&e.message?e.message:'—'),true); });
   }
   function fuori(t){ giorno.inizio=''; scriviGiorno(); if(rec&&rec.state==='recording') ferma(); lasciando=true; if(stanza){ try{ stanza.disconnect(); }catch(e){} } stanza=null; lasciando=false; $('suono').hidden=true; $('pausa').hidden=true; try{ if(navigator.mediaSession) navigator.mediaSession.playbackState='none'; }catch(e){} if(actx){ try{ actx.close(); }catch(e){} actx=null; analizza=null; } clearInterval(orologio2); $('suoni').innerHTML=''; $('onda').classList.add('fuori'); $('live-t').textContent='LA DIRETTA DEL VILLAGGIO'; document.body.classList.add('soglia'); document.body.classList.remove('coordina'); $('live').style.color='var(--grigio)'; var i=$('live').querySelector('i'); i.style.background='var(--grigio)'; i.style.animation='none'; $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; $('chiudi').hidden=true; if(entrato===false) $('ospite-dati').hidden=false; ['b-mic','b-mano','b-rec','b-file'].forEach(function(k){ $(k).disabled=true; $(k).classList.remove('on'); }); document.querySelector('.griglia').innerHTML=''; document.getElementById('app').classList.remove('coordina'); dice(t||''); }
   $('esci').onclick=function(){ cancellaSegno(); fuori(''); };
   $('b-esci').onclick=function(){ $('esci').onclick(); };
-  $('b-invita2').onclick=function(){ $('b-invita').onclick(); };
-  /* 3 nov 13:52, Gab: «Inseriscimi all'interno il tasto invita, in modo che anche gli altri qui là dentro possano invitare» */
-  $('b-invita').onclick=function(){ var u='https://app.felicitasmundi.com/villaggio-felicitas-sardegna/festival-intervista.html', t='Felicitas Festival Intervista, la diretta audio: entri dal link, senza account.';
-    if(navigator.share){ (SALVA_VERO||navigator.share.bind(navigator))({title:'Felicitas Festival Intervista', text:t, url:u}).catch(function(){}); return; }
-    try{ navigator.clipboard.writeText(u).then(function(){ dice('Link copiato: incollalo dove vuoi.'); },function(){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); }); }catch(e){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); } };
+  /* Muto / Parli / In ascolto: il tasto dice sempre com'è il tuo microfono (regola fissa 3) */
+  var MIC_SI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v4"/></svg>', MIC_NO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9v2a3 3 0 0 0 5.1 2.1"/><path d="M15 9.3V5a3 3 0 0 0-5.9-.7"/><path d="M19 10v1a7 7 0 0 1-1.1 3.7"/><path d="M5 10v1a7 7 0 0 0 11.9 5"/><path d="M12 18v4"/><path d="M3 3l18 18"/></svg>';
+  function micUI(){ var b=$('b-mic'), on=b.classList.contains('on'); $('mic-ic').innerHTML=on?MIC_SI:MIC_NO; $('mic-t').textContent=b.disabled?(stanza?'In ascolto':'Muto'):(on?'Parli':'Muto'); }
+  try{ new MutationObserver(micUI).observe($('b-mic'),{attributes:true,attributeFilter:['class','disabled']}); }catch(e){} micUI();
+  /* Chat: apre la chat sotto, col numerino dei messaggi nuovi */
+  var nuovi=0; function chatVista(){ var r=$('p-chat').getBoundingClientRect(); return $('p-chat').classList.contains('vivo')&&r.top<innerHeight&&r.bottom>0; }
+  var chatRigaPrima=chat_riga; chat_riga=function(n,t,io_){ chatRigaPrima(n,t,io_); if(!io_&&!chatVista()){ nuovi++; $('chat-n').textContent=nuovi; $('chat-n').hidden=false; } };
+  $('b-chat').onclick=function(){ document.querySelectorAll('.lingue button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-p')==='chat')}); document.querySelectorAll('.pannello').forEach(function(p){ p.classList.toggle('vivo',p.id==='p-chat'); }); $('p-chat').scrollIntoView({behavior:'smooth',block:'center'}); nuovi=0; $('chat-n').hidden=true; setTimeout(function(){ try{ $('chat-campo').focus(); }catch(e){} },400); };
+  addEventListener('scroll',function(){ if(nuovi&&chatVista()){ nuovi=0; $('chat-n').hidden=true; } },{passive:true});
+  /* Impostazioni */
+  var COME=/iPhone|iPad/i.test(navigator.userAgent)?'Su iPhone: tocca «aA» nella barra in alto › Impostazioni sito web › Microfono › Consenti. Poi ricarica la pagina.':'Tocca il lucchetto accanto all\'indirizzo › Autorizzazioni › Microfono › Consenti. Poi ricarica la pagina.';
+  function permesso(){ var el=$('imp-perm'); $('imp-come').hidden=true; try{ navigator.permissions.query({name:'microphone'}).then(function(r){ var t={granted:'Dato: il telefono ti sente.',denied:'Negato: il telefono non ti fa parlare.',prompt:'Te lo chiederà il telefono la prima volta che tocchi «Muto».'}[r.state]||'—'; el.textContent=t; $('imp-come').hidden=r.state!=='denied'; }).catch(function(){ el.textContent='Te lo chiede il telefono la prima volta che tocchi «Muto».'; }); }catch(e){ el.textContent='Te lo chiede il telefono la prima volta che tocchi «Muto».'; } }
+  function apriImp(){ permesso(); $('imp').hidden=false; } 
+  $('b-imp').onclick=apriImp; $('imp-chiudi').onclick=function(){ $('imp').hidden=true; };
+  $('imp-come').onclick=function(){ $('imp-perm').textContent=COME; $('imp-come').hidden=true; };
+  $('imp-prova').onclick=function(){ var b=$('imp-prova'); if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ $('imp-perm').textContent='Questo navigatore non dà il microfono.'; return; } b.disabled=true; b.textContent='Parla…';
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){ var C=window.AudioContext||window.webkitAudioContext, c=new C(), an=c.createAnalyser(), dati=new Uint8Array(256); an.fftSize=512; c.createMediaStreamSource(st).connect(an); var fine=Date.now()+6000;
+      (function giro(){ an.getByteTimeDomainData(dati); var m=0; for(var i=0;i<dati.length;i++){ m=Math.max(m,Math.abs(dati[i]-128)); } $('imp-livello').style.width=Math.min(100,m*1.6)+'%'; if(Date.now()<fine&&!$('imp').hidden) requestAnimationFrame(giro); else { st.getTracks().forEach(function(t){t.stop();}); c.close(); $('imp-livello').style.width='0'; b.disabled=false; b.textContent='Prova'; permesso(); } })(); })
+    .catch(function(){ b.disabled=false; b.textContent='Prova'; $('imp-perm').textContent='Negato: il telefono non ti fa parlare.'; $('imp-come').hidden=false; }); };
+  $('imp-invita').onclick=function(){ var u=location.origin+location.pathname+location.search, t=(PUNTATA&&PUNTATA.titolo?PUNTATA.titolo:'La diretta del villaggio')+': entra con il tuo accesso.';
+    if(navigator.share){ (SALVA_VERO||navigator.share.bind(navigator))({title:t, text:t, url:u}).catch(function(){}); return; }
+    try{ navigator.clipboard.writeText(u).then(function(){ $('imp-perm').textContent='Link copiato: incollalo dove vuoi.'; },function(){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); }); }catch(e){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); } };
+  $('imp-silenzia').onclick=function(){ $('silenzia').onclick(); $('imp').hidden=true; };
+  $('imp-chiudi-dir').onclick=function(){ $('imp').hidden=true; $('chiudi').onclick(); };
   /* 15 ott 09:23, Gab: «se finisce la chiacchierata, non devo solo leggere esci, devo leggere chiudi la diretta» — la chiude per tutti (sala-regia · chiudi_diretta) */
   $('chiudi').onclick=function(){ if(!stanza||!io.coordina) return; if(!confirm('Chiudi la diretta per tutti?')) return;
     if(rec&&rec.state==='recording') ferma();   /* la registrazione si ferma e resta qui sotto, da scaricare o pubblicare */
@@ -439,12 +506,12 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   $('pausa').onclick=function(){ pausaSala(!inPausa); };
   /* 15 ott, Gab: «un altro operatore … lo sentivamo, mentre l'operatore no» — il navigatore blocca l'audio finché non si tocca la pagina:
      ogni tocco, ovunque, sblocca la sala (non serve trovare il 🔊) */
-  document.addEventListener('pointerdown',function(){ if(stanza&&!stanza.canPlaybackAudio) stanza.startAudio().then(function(){ $('suono').hidden=true; }).catch(function(){}); if(actx&&actx.state==='suspended') actx.resume().catch(function(){}); },true);
+  document.addEventListener('pointerdown',function(){ if(stanza&&!stanza.canPlaybackAudio) stanza.startAudio().then(function(){ if(/Tocca lo schermo/.test($('esito').textContent)) dice(''); }).catch(function(){}); if(actx&&actx.state==='suspended') actx.resume().catch(function(){}); },true);
   $('suono').onclick=function(){ if(stanza) stanza.startAudio().then(function(){ $('suono').hidden=true; if(actx&&actx.state==='suspended') actx.resume(); }).catch(function(){}); };
 
   /* il consenso prima di entrare: parole di Gab, 12 ottobre */
   /* 22:30, Gab: «togli quel testo prima di ogni diretta, mettilo semplicemente su privacy, uno quando entra da accesso accetta» → privacy.html sez. 6a, patto 2026-10-12 */
-  $('entra').onclick=entra;
+  $('entra').onclick=function(){ sblocca(); entra(); };
 
   /* 15 ott 09:17, Gab: «quando inizia la diretta, si legge da quando è iniziata, e che ti mostri data, luna e santo»
      la luna: lo stesso conto di fm-orma-mia.js · il santo: tavola «santi» (SQL 67 · fm_santo, anche per gli ospiti) */
@@ -464,8 +531,8 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   /* microfono · mano */
   $('b-mic').onclick=function(){ if(!stanza) return; var acceso=stanza.localParticipant.isMicrophoneEnabled; dice(acceso?'Chiudo…':'Apro…');
     stanza.localParticipant.setMicrophoneEnabled(!acceso).then(function(){ $('b-mic').classList.toggle('on',!acceso); dice(''); segna(!acceso); if(!acceso){ var pub=null; stanza.localParticipant.audioTrackPublications.forEach(function(p){pub=p;}); if(pub&&pub.track){ mescola(pub.track); ascolta(pub.track); } } tessere(); })
-    .catch(function(e){ dice('Il microfono non si apre: '+(e&&e.message?e.message:'—'),true); }); };
-  $('b-mano').onclick=function(){ if(!stanza||!io.entrato) return; $('b-mano').classList.add('on'); stanza.localParticipant.publishData(enc.encode(JSON.stringify({t:'mano',n:io.nome||''})),{reliable:true}).then(function(){ mani[stanza.localParticipant.identity]=Date.now(); tessere(); setTimeout(function(){ $('b-mano').classList.remove('on'); },60000); }).catch(function(){}); };
+    .catch(function(e){ if(e&&/NotAllowed|Permission|denied/i.test((e.name||'')+' '+(e.message||''))){ dice('Il telefono non ci dà il microfono: tocca qui per sapere come darlo.',true); $('esito').onclick=function(){ apriImp(); }; } else dice('Il microfono non si apre: '+(e&&e.message?e.message:'—'),true); }); };
+  $('b-mano').onclick=function(){ if(!stanza||!io.entrato) return; $('imp').hidden=true; $('b-mano').classList.add('on'); stanza.localParticipant.publishData(enc.encode(JSON.stringify({t:'mano',n:io.nome||''})),{reliable:true}).then(function(){ mani[stanza.localParticipant.identity]=Date.now(); tessere(); setTimeout(function(){ $('b-mano').classList.remove('on'); },60000); }).catch(function(){}); };
 
   /* la registrazione (il computer di chi coordina) */
   function mescola(track){ if(!ctx||!track||!track.mediaStreamTrack) return; try{ var n=ctx.createMediaStreamSource(new MediaStream([track.mediaStreamTrack])); n.connect(dest); sorgenti.push(n); }catch(e){} }
@@ -509,7 +576,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
       tap.connect(proc); proc.connect(muto); muto.connect(ctx.destination);
       clearInterval(pezziT); pezziT=setInterval(function(){ if(!ora.length) return; var b=new Blob(ora,{type:'audio/mpeg'}); ora=[]; regPezzo(b, Date.now()-t0); },PEZZO_MS);
       rec={state:'recording', stop:function(){ rec.state='inactive'; clearInterval(pezziT); try{ tap.disconnect(); proc.disconnect(); muto.disconnect(); }catch(e){} var out=enc.flush(); if(out&&out.length){ var b=new Int8Array(out); mp3.push(b); ora.push(b); } if(ora.length){ regPezzo(new Blob(ora,{type:'audio/mpeg'}), Date.now()-t0); ora=[]; } finito(new Blob(mp3,{type:'audio/mpeg'}),'audio/mpeg','.mp3'); }};
-      t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i>■</i>ferma 00:00'; chat_sys('● la registrazione è partita: si salva da sola ogni 30 secondi');
+      t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i class="ic">■</i><span id="rec-t">In registrazione 00:00</span>'; chat_sys('● la registrazione è partita: si salva da sola ogni 30 secondi');
       avviaOrologio(); return;
     }
     var tipo=['audio/webm;codecs=opus','audio/mp4','audio/webm'].filter(function(t){ return window.MediaRecorder&&MediaRecorder.isTypeSupported(t); })[0];
@@ -518,9 +585,9 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     pezzi=[]; rec=new MediaRecorder(dest.stream,{mimeType:tipo,audioBitsPerSecond:64000}); regNuova(est,tipo.split(';')[0]);
     rec.ondataavailable=function(e){ if(e.data&&e.data.size){ pezzi.push(e.data); regPezzo(e.data, Date.now()-t0); if(reg&&reg.byte>=TETTO-64*1024&&rec.state==='recording'){ ferma(); chat_sys('■ arrivata a 25 MB: la registrazione si è fermata'); } } };
     rec.onstop=function(){ finito(new Blob(pezzi,{type:tipo}), tipo, est); };
-    rec.start(PEZZO_MS); t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i>■</i>ferma 00:00'; chat_sys('● la registrazione è partita: si salva da sola ogni 30 secondi');
+    rec.start(PEZZO_MS); t0=Date.now(); $('reg-segno').style.display=''; $('b-rec').classList.add('on'); $('b-rec').innerHTML='<i class="ic">■</i><span id="rec-t">In registrazione 00:00</span>'; chat_sys('● la registrazione è partita: si salva da sola ogni 30 secondi');
     avviaOrologio(); }
-  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); clearInterval(pezziT); $('reg-segno').style.display='none'; $('reg-segno').innerHTML='<i></i>REC'; $('b-rec').classList.remove('on'); $('b-rec').innerHTML='<i>●</i>registra'; chat_sys('■ la registrazione è ferma: il file è qui sotto'); }
+  function ferma(){ if(rec&&rec.state!=='inactive') rec.stop(); clearInterval(orologio); clearInterval(pezziT); $('reg-segno').style.display='none'; $('reg-segno').innerHTML='<i></i>REC'; $('b-rec').classList.remove('on'); $('b-rec').innerHTML='<i class="ic">●</i><span id="rec-t">Registra</span>'; chat_sys('■ la registrazione è ferma: il file è qui sotto'); }
   $('b-rec').onclick=function(){ if($('b-rec').disabled) return; if(rec&&rec.state==='recording') ferma(); else registra(); };
 
   /* la Diretta in Bacheca (SQL 55) */
