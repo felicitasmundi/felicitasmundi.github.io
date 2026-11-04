@@ -944,9 +944,9 @@ function vAzione(){
   var gesti={
     terra:io.id?[g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>'),g("Nuova chat",'data-esp-chat="1"')].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
               :[g("Entra",'href="'+ENTRA+'"')],
-    acqua:[g("Acquista in Emporio",'href="stanze-bozza.html?s=emporio&amp;c=10182300"')].concat(io.id&&log?[g("Cassa",'data-vai="cassa"',true)]:[]),
+    acqua:[g("Acquista in Emporio",'href="emporio.html?c=10182300"')].concat(io.id&&log?[g("Cassa",'data-vai="cassa"',true)]:[]),
     fuoco:[g("Mutuo aiuto",'href="stanze-bozza.html?s=mutuo&amp;c=10182300"')],
-    aria:[g("Stampa",'href="stampa-bozza.html?c=10182300"')].concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]),
+    aria:[g("Stampa",'href="emporio.html?c=10182300"')].concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]),
     etere:[(io.id?g("Praticantato",'data-esp-prat="1"'):g("Praticantato",'data-vai="obiettivi"')),g("Il Cervello Digitale Evoluto",'href="cervello-digitale-evoluto.html"')]
   };
   c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+ESP_EL.map(function(e){
@@ -1877,7 +1877,7 @@ function legaPaniere(c){var box=c.querySelector("#o-paniere");if(!box)return;var
     sotto.querySelector("#o-pan-ok").onclick=function(){var d=sotto.querySelector("#o-pan-dove");
       sotto.innerHTML='<span class="t">Ci sei. Ritiro: '+esc(d.options[d.selectedIndex].text)+'.</span>';};};
 }
-var STANZE_O=[["Emporio","stanze-bozza.html?s=emporio&c=10182300","#4488BB","emporio"],["Stampa","stampa-bozza.html?c=10182300","#669944","stampa"],["Assistenza comunitaria integrata","stanze-bozza.html?s=mutuo&c=10182300","#CC6644","assistenza"],["Scuola","stanze-bozza.html?s=scuola&c=10182300","#9966CC","scuola"]];
+var STANZE_O=[["Emporio","emporio.html?c=10182300","#4488BB","emporio"],["Stampa","emporio.html?c=10182300","#669944","stampa"],["Assistenza comunitaria integrata","stanze-bozza.html?s=mutuo&c=10182300","#CC6644","assistenza"],["Scuola","stanze-bozza.html?s=scuola&c=10182300","#9966CC","scuola"]];
 /* Le file di «Di cosa hai bisogno?»: solo cose vere. Emporio: gli ultimi prodotti pubblici del database; se non ce ne sono, i prodotti con foto già nell'Emporio.
    Stampa: il kit fiera e le categorie con foto della pagina Stampa. Assistenza e Scuola: i servizi attivi del database. Una fila vuota non si vede. */
 var EMP_FISSI=[["La Bhagavad-gītā Così com’è","A.C. Bhaktivedānta Swāmī Prabhupāda","APP.FELICITASMUNDI/piatti/bhagavad-gita.jpg"],["Anima vagabonda","Parabhakti dāsa","APP.FELICITASMUNDI/piatti/anima-vagabonda.jpg"]];
@@ -2585,7 +2585,7 @@ function vCervello(){
   db.from("prodotti").select("id,nome,autore,prezzo,si_compra").eq("stato","pubblico").order("creato_il",{ascending:false}).limit(6).then(function(r){
     var e=$("#ce-prodotti"),l=(r&&!r.error&&r.data)||[];if(!e||!l.length)return;
     e.innerHTML='<div class="card"><p class="et">Gli ultimi prodotti nell\'Emporio</p>'+l.map(function(x){return '<div class="persona"><div><b>'+esc(x.nome||"")+'</b><small>'+esc(x.si_compra===false?"richiedi al responsabile":(x.prezzo?x.prezzo+" €":(x.autore||"")))+'</small></div></div>';}).join("")+
-      '<div class="fine"><a class="mini" href="stanze-bozza.html?s=emporio&c=10182300">Tutto l\'Emporio ›</a></div></div>';},function(){});
+      '<div class="fine"><a class="mini" href="emporio.html?c=10182300">Tutto l\'Emporio ›</a></div></div>';},function(){});
   if(io.nucleo)$("#az-vai").onclick=function(){var b=this,n=$("#az-nome").value.trim();if(n.length<2){$("#az-esito").textContent="Il nome serve.";return;}
     b.disabled=true;db.rpc("fm_azienda_apri",{p_nome:n,p_territorio:$("#az-terr").value.trim(),p_mail_referente:$("#az-ref").value.trim()}).then(function(r){b.disabled=false;
       if(r&&r.error){$("#az-esito").textContent=errore(r.error);return;}
