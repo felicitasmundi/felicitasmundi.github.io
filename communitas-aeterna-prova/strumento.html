@@ -612,7 +612,7 @@ var FUNZIONI={tecnologica:"Tecnologia",logistica:"Logistica",comunitaria:"Comuni
    Settimanale 19 ott: «Alla tecnologia va aggiunta anche la voce sicurezza» · «economia sia da mettere nell'aspetto comunità» · 23:34: «contabilità mettila in logistica» (SQL 85) */
 /* 22 ott, Gab: «queste voci sulle 3 tipologie sono da inserire nel cervello … per organizzare le risorse umane» · «eventi e festival è giusto stiano in logistica» (SQL 108) */
 var RUOLI={tecnologica:[["attivazione","Installazione e attivazione del Cervello Digitale Evoluto"],["sicurezza","Sicurezza e dati"],["edizione","Edizione e programmazione"],["formazione_app","Formazione all'uso dell'app"],["sviluppo_piattaforma","Sviluppo piattaforma"]],
-  logistica:[["produttori","Produttori"],["magazzino","Punti di ritiro e magazzino"],["trasporto","Trasporto"],["progettazione","Progettazione e sviluppo"],["emporio","Emporio e ordini"],["contabilita","Contabilità"],["eventi","Eventi e Festival"],["cibo","Cibo"]],
+  logistica:[["produttori","Produttori"],["magazzino","Punti di ritiro e magazzino"],["trasporto","Trasporto"],["progettazione","Progettazione e sviluppo"],["emporio","Emporio e ordini"],["contabilita","Contabilità"],["eventi","Eventi e Festival"],["cucina","Cucina"]],
   comunitaria:[["villaggio","Coordinatore di villaggio"],["vicinati","Coordinatori di vicinato"],["formazioni","Formazione e scuola"],["economia","Economia"],["assistenza","Assistenza comunitaria integrata"]]};
 function nomeRuolo(f,r){var x=(RUOLI[f]||[]).filter(function(y){return y[0]===r;})[0];return x?x[1]:r;}
 var VIS={solo_me:"solo io",vicinato:"il vicinato",pubblico:"tutti"};
@@ -2306,7 +2306,7 @@ function vRegistroOggi(){
     leggiObiettivi(),
     reg.cosaFa?Promise.resolve(reg.cosaFa):db.from("ruoli_cosa_fa").select("funzione,ruolo,cosa_fa").then(function(r){reg.cosaFa=(r&&!r.error&&r.data)||[];return reg.cosaFa;},function(){return [];}),
     /* SQL 92: i totali delle prenotazioni del Festival, per chi ha il ruolo Cibo o Formazione e per chi coordina */
-    (io.coordina||regMioRuolo("cibo")||regMioRuolo("formazioni"))?db.rpc("fm_prenotazioni_conta").then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];}):Promise.resolve([])
+    (io.coordina||regMioRuolo("cucina")||regMioRuolo("formazioni"))?db.rpc("fm_prenotazioni_conta").then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];}):Promise.resolve([])
   ]).then(function(v){
     if(vista!=="oggi"||!$("#o-reg"))return;
     var righe=v[1];
