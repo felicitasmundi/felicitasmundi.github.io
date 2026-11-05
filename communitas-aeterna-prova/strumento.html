@@ -3643,10 +3643,33 @@ function vObiettivi(){
      Come funziona: la frase già approvata della bacheca (bacheca-bozza.html). Lo stato: quanti da fare, in corso, fatti; ogni obiettivo con quanti l'hanno preso su quanti servono. */
   c.innerHTML='<p class="et">Obiettivi</p><h3>Quello di cui il villaggio ha bisogno</h3>'+
     '<div class="card"><span class="t">Quello di cui il villaggio ha bisogno, per chi può fare. Si tocca «lo prendo» e la cosa entra tra le tue cose da fare.</span><span class="m">Chi l\'ha preso tocca lo stato per spostarlo avanti: da fare, in corso, fatto.</span></div>'+
-    '<div class="stato-ob" id="ob-stato"></div>'+(io.id?'<div class="card"><span class="m">Quello che hai preso e il lavoro della tua area sono in Oggi.</span><div class="fine"><button class="mini" data-vai="oggi">Oggi ›</button></div></div>':'')+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
+    '<div class="stato-ob" id="ob-stato"></div>'+(io.id&&(io.nucleo||io.coordina||(io.ruoli||[]).length)?'<div class="card" id="cr-ob"><button class="btn pieno" id="cr-apri" style="align-self:flex-start">Crea un obiettivo</button><div id="cr-form" hidden>'+
+      '<label class="m" for="cr-tit">Cosa c\'è da fare</label><input type="text" id="cr-tit" maxlength="200">'+
+      '<label class="m" for="cr-desc" style="margin-top:6px">Più dettagli (facoltativo)</label><textarea id="cr-desc" style="min-height:70px"></textarea>'+
+      '<label class="m" for="cr-team" style="margin-top:6px">Per quale team (facoltativo)</label><select id="cr-team"><option value="">Per tutto il villaggio</option></select>'+
+      '<label class="m" for="cr-quanti" style="margin-top:6px">Quante persone servono (facoltativo)</label><input type="number" id="cr-quanti" min="1" max="999" inputmode="numeric">'+
+      '<label class="m" for="cr-entro" style="margin-top:6px">Entro il (facoltativo)</label><input type="date" id="cr-entro">'+
+      '<label class="m" for="cr-link" style="margin-top:6px">Un link (facoltativo)</label><input type="url" id="cr-link">'+
+      '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="cr-ok">Crea</button><button class="btn" id="cr-annulla">Annulla</button><span class="m" id="cr-esito" role="status"></span></div></div></div>':'')+(io.id?'<div class="card"><span class="m">Quello che hai preso e il lavoro della tua area sono in Oggi.</span><div class="fine"><button class="mini" data-vai="oggi">Oggi ›</button></div></div>':'')+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
   invitoPrat=false;
   /* 5 nov 15:47, Gab conferma: il banco dei compiti si fonde nella bacheca di Oggi */
   legaVai(c);
+  /* 5 nov, Gab: «allora crea sql nuova, è importante dare autonomia a chi ha un ruolo e lavora in questo» (SQL 173 fm_crea_obiettivo) */
+  if($("#cr-ob"))(function(){
+    var f=$("#cr-form"),ap=$("#cr-apri"),es=$("#cr-esito");
+    ap.onclick=function(){f.hidden=false;ap.hidden=true;$("#cr-tit").focus();
+      leggiTeam().then(function(l){var s=$("#cr-team");if(!s||!l||s.options.length>1)return;l.forEach(function(t){var o=document.createElement("option");o.value=t.team_id;o.textContent=t.nome;s.appendChild(o);});});};
+    $("#cr-tit").oninput=function(){es.textContent="";};
+    $("#cr-annulla").onclick=function(){f.hidden=true;ap.hidden=false;es.textContent="";};
+    $("#cr-ok").onclick=function(){var b=this,t=$("#cr-tit").value.trim();
+      if(!t){es.textContent="Scrivi cosa c'è da fare.";return;}
+      var q=parseInt($("#cr-quanti").value,10);
+      b.disabled=true;es.textContent="Un momento…";
+      db.rpc("fm_crea_obiettivo",{p_titolo:t,p_descrizione:$("#cr-desc").value.trim()||null,p_team:$("#cr-team").value||null,p_quanti:q>0?q:null,p_entro:$("#cr-entro").value||null,p_link:$("#cr-link").value.trim()||null}).then(function(r){
+        b.disabled=false;
+        if(r&&!r.error&&r.data==="ok"){cache.obiettivi=null;vObiettivi();var n=$("#cr-esito");if(n){n.textContent="";}var ap2=$("#cr-apri");if(ap2)ap2.insertAdjacentHTML("afterend",'<span class="m">Obiettivo creato. È tra quelli Da fare.</span>');return;}
+        es.textContent=(r&&r.data)||errore(r&&r.error);},function(x){b.disabled=false;es.textContent=errore(x);});};
+  })();
   leggiObiettivi().then(function(lista){
     if(!io.id||!lista.length)return lista;
     return db.rpc("fm_obiettivi_avanzamento",{p_obiettivi:lista.map(function(o){return o.id;})}).then(function(r){cache.avanz={};((r&&!r.error&&r.data)||[]).forEach(function(x){cache.avanz[x.obiettivo_id]=x;});return lista;},function(){return lista;});
