@@ -150,6 +150,17 @@ textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:f
 .tre-pill-r{background:transparent;border:1px solid #E07A55;color:#E07A55}
 .tre-tab{overflow-x:auto}.tre-tab table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.tre-tab th,.tre-tab td{padding:6px 4px;text-align:right;border-bottom:1px solid var(--linea)}.tre-tab th:first-child,.tre-tab td:first-child{text-align:left}
 .tre-label{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.tre-fila{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 10px;margin:0 0 6px;-webkit-overflow-scrolling:touch}
+.tre-fila>*{scroll-snap-align:start;flex:0 0 auto}
+.tre-num{width:140px;border:1px solid var(--linea);border-radius:14px;background:var(--foglio);padding:12px;display:flex;flex-direction:column;gap:2px;text-align:left;font:inherit;color:inherit}
+.tre-num b{font:700 26px var(--sans);line-height:1.1;font-variant-numeric:tabular-nums}.tre-num span{font-size:15px;line-height:1.25;color:var(--tenue)}
+.tre-num.r{border-color:#E07A55}.tre-num.r b{color:#E07A55}button.tre-num{cursor:pointer}
+.tre-card{width:250px;border:1px solid var(--linea);border-top:4px solid var(--tc,var(--linea));border-radius:14px;background:var(--foglio);padding:12px;display:flex;flex-direction:column;gap:6px}
+.tre-card .mini{align-self:flex-start}.tre-vuota{width:160px}
+.tre-chip{align-self:flex-start;font-size:14px;border-radius:999px;padding:1px 10px;border:1px solid var(--tc);color:var(--tc)}
+.tre-colt{margin:4px 2px 6px;font-weight:600}.tre-colt i{font-style:normal;font-weight:400;border:1px solid var(--linea);border-radius:999px;padding:0 9px;margin-left:4px}
+@media(min-width:900px){.tre-bacheca{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.tre-bacheca .tre-fila{flex-direction:column;overflow:visible}.tre-bacheca .tre-card{width:auto}}
+
 .bc-r{display:flex;flex-direction:column;gap:2px;margin-top:8px;padding:8px 10px;border-radius:10px;border:1px solid var(--linea)}
 .lg-conta div{border:1px solid var(--linea);border-radius:10px;background:var(--foglio);padding:8px 6px;text-align:center;min-width:0}
 .lg-conta b{display:block;font:700 22px var(--sans);line-height:1.1;font-variant-numeric:tabular-nums}
@@ -2052,42 +2063,40 @@ function treOggi(){
     var box=$("#o-tre");if(!box||vista!=="oggi")return;
     if(v[3]===null&&v[1]===null){box.innerHTML=io.nucleo?'<p class="nota" style="margin:0 2px 10px">I tre piani di Oggi si aprono con l\'SQL 168.</p>':'';return;}
     var area=v[1]||[],stanze=v[2]||[],mie=(v[3]||[]).filter(function(x){return x.fonte!=="logistica";}),n=v[0],h="";
-    /* piano 3 */
+    /* 5 nov 14:54, Gab: «sarebbe molto piu bello avere delle card che scorrono» · 15:06 «è il nuove senza soggetto che mi crea disagio […] questi sono obiettivi» · 15:08 «per me è ok» → bacheca a colonne, card che scorrono di lato */
+    function num(v,t,r){return '<div class="tre-num'+(r&&v?' r':'')+'"><b>'+(+v||0)+'</b><span>'+t+'</span></div>';}
+    function etich(x){return x.fonte==="assistenza"?"Mutuo aiuto":x.fonte==="logistica"?"logistica":/^Festival · /.test(x.titolo||"")?"prenotazione":"obiettivo";}
+    function cardA(x,col){return '<div class="tre-card" style="--tc:'+col+'"><span class="tre-chip">'+(x.ferma?'in ritardo · '+(+x.da_giorni)+(x.da_giorni==1?' giorno':' giorni'):esc(etich(x)))+'</span><span class="t">'+esc(x.titolo)+'</span>'+
+      '<span class="m">'+esc(nomeArea(x.ruolo))+(x.chi?' · '+esc(x.chi):'')+(x.entro_il?' · entro il '+esc(dataBreve(x.entro_il)):'')+'</span>'+
+      (x.fonte!=="logistica"?'<button class="mini" data-tre-ass="'+esc(x.fonte+"|"+x.id+"|"+x.ruolo)+'">'+(x.stato==="aperta"?'Assegna':'Riassegna')+'</button><div class="tre-scegli" id="tre-s-'+esc(x.id)+'"></div>':'')+'</div>';}
+    /* piano 3 · nucleo */
     if(n){
-      h+='<p class="et">I numeri di oggi</p><div class="lg-conta tre-n">'+
-        '<div><b>'+(+n.entrate_ieri)+'</b><small>entrate ieri</small></div>'+
-        '<div><b>'+(n.aperte+n.prese)+'</b><small>in lavorazione'+(n.aperte?' · '+n.aperte+' senza nessuno':'')+'</small></div>'+
-        '<div><b>'+(+n.chiuse_ieri)+'</b><small>chiuse ieri</small></div>'+
-        '<button type="button" class="tre-ferme'+(n.ferme?' on':'')+'" id="tre-ferme" aria-expanded="false"><b>'+(+n.ferme)+'</b><small>ferme da più di '+(+n.soglia_giorni)+' giorni</small></button></div>'+
-        '<div id="tre-ferme-l" hidden></div>';
-      if((n.per_area||[]).length)h+='<div class="card tre-tab"><table><thead><tr><th>Area</th><th>Aperte</th><th>Prese</th><th>Ferme</th></tr></thead><tbody>'+
-        n.per_area.map(function(a){return '<tr><td>'+esc(nomeArea(a.area))+'</td><td>'+(+a.aperte)+'</td><td>'+(+a.prese)+'</td><td'+(a.ferme?' class="tre-rosso"':'')+'>'+(+a.ferme)+'</td></tr>';}).join("")+'</tbody></table></div>';
-      if((n.stanze||[]).length){var rs={t:0,l:0,o:0,b:0};n.stanze.forEach(function(s){rs.t+=+s.totale;rs.l+=+s.libere;rs.o+=+s.occupate;rs.b+=+s.bloccate;});
-        /* 5 nov 14:03, Gab: «narbolia dovrebbe essere una stanza legata alle risorse […] non è una struttura centrale dell ecosistema» → un totale unico; i luoghi solo dentro «La mia area» */
-        h+='<div class="card"><b>Risorse · stanze</b><span class="m">'+rs.t+' in tutto · '+rs.l+(rs.l==1?' libera':' libere')+' · '+rs.o+(rs.o==1?' occupata':' occupate')+(rs.b?' · '+rs.b+(rs.b==1?' bloccata':' bloccate'):'')+'</span></div>';}
+      var rs={t:0,l:0};(n.stanze||[]).forEach(function(s){rs.t+=+s.totale;rs.l+=+s.libere;});
+      h+='<p class="et">Gli obiettivi di oggi</p><div class="tre-fila">'+
+        num(n.entrate_oggi,n.entrate_oggi==1?'obiettivo nuovo oggi':'obiettivi nuovi oggi')+num(n.aperte,n.aperte==1?'obiettivo non assegnato':'obiettivi non assegnati')+num(n.prese,n.prese==1?'obiettivo in corso':'obiettivi in corso')+
+        '<button type="button" class="tre-num'+(n.ferme?' r':'')+'" id="tre-ferme" aria-expanded="false"><b>'+(+n.ferme)+'</b><span>'+(n.ferme==1?'obiettivo in ritardo':'obiettivi in ritardo')+'</span></button>'+
+        num(n.chiuse_oggi,n.chiuse_oggi==1?'obiettivo chiuso oggi':'obiettivi chiusi oggi')+(rs.t?num(rs.t,'stanze · '+rs.l+(rs.l==1?' libera':' libere')):'')+'</div><div id="tre-ferme-l" hidden></div>';
     }
-    /* piano 2 */
+    /* piano 2 · chi ha un ruolo */
     if(area.length||stanze.length){
-      var ferme=area.filter(function(x){return x.ferma;}).length,senza=area.filter(function(x){return x.stato==="aperta";}).length;
-      h+='<p class="et" style="margin-top:8px">La mia area</p>'+
-        (area.length?'<span class="m" style="display:block;margin:0 2px 6px">'+area.length+(area.length==1?' aperta · ':' aperte · ')+senza+' senza nessuno · '+ferme+(ferme==1?' ferma':' ferme')+'</span>':'')+
-        area.slice(0,30).map(function(x){
-          return '<div class="card"><div class="riga-m"><span class="t">'+esc(x.titolo)+'</span>'+
-            (x.ferma?'<span class="pill tre-pill-r">ferma da '+(+x.da_giorni)+' giorni</span>':x.stato==="aperta"?'<span class="pill s-in_coda">senza nessuno</span>':'<span class="pill s-in_avanzamento">presa</span>')+'</div>'+
-            '<span class="m">'+esc(nomeArea(x.ruolo))+(x.chi?' · '+esc(x.chi):'')+(x.entro_il?' · entro il '+esc(dataBreve(x.entro_il)):'')+'</span>'+
-            (x.fonte!=="logistica"?'<div class="fine"><button class="mini" data-tre-ass="'+esc(x.fonte+"|"+x.id+"|"+x.ruolo)+'">'+(x.stato==="aperta"?'Assegna':'Riassegna')+'</button></div><div class="tre-scegli" id="tre-s-'+esc(x.id)+'"></div>':'')+'</div>';}).join("")+
-        stanze.map(function(s){
-          return '<div class="card"><div class="riga-m"><span class="t">'+esc(s.nome)+(s.luogo?' · '+esc(s.luogo):'')+'</span><span class="pill '+(s.stato==="libera"?'s-sviluppato':s.stato==="occupata"?'s-in_avanzamento':'tre-pill-r')+'">'+esc(s.stato)+'</span></div>'+
-            '<span class="m">'+(+s.posti)+' posti · '+esc(nomeArea(s.ruolo))+(s.responsabile?' · '+esc(s.responsabile):'')+(s.bloccata_perche?' · '+esc(s.bloccata_perche):'')+'</span>'+
-            (s.stato!=="occupata"?'<div class="fine"><button class="mini" data-tre-stanza="'+esc(s.id)+'" data-blocca="'+(s.stato==="libera"?1:0)+'">'+(s.stato==="libera"?'Blocca':'Sblocca')+'</button></div>':'')+'</div>';}).join("");
+      var cols=[["Da fare · non assegnati",area.filter(function(x){return !x.ferma&&x.stato==="aperta";}),"#6FA8D6"],
+                ["In corso",area.filter(function(x){return !x.ferma&&x.stato==="presa";}),"#D4AF6A"],
+                ["In ritardo",area.filter(function(x){return x.ferma;}),"#E07A55"]];
+      h+='<p class="et" style="margin-top:8px">Gli obiettivi della mia area</p><div class="tre-bacheca">'+cols.map(function(c){
+        return '<div class="tre-col"><p class="tre-colt">'+c[0]+' <i>'+c[1].length+'</i></p><div class="tre-fila">'+
+          (c[1].length?c[1].slice(0,30).map(function(x){return cardA(x,c[2]);}).join(""):'<div class="tre-card tre-vuota"><span class="m">Niente qui.</span></div>')+'</div></div>';}).join("")+'</div>';
+      if(stanze.length)h+='<p class="tre-colt" style="margin-top:6px">Stanze <i>'+stanze.length+'</i></p><div class="tre-fila">'+stanze.map(function(s){
+        var col=s.stato==="libera"?"#8DBF5E":s.stato==="occupata"?"#D4AF6A":"#E07A55";
+        return '<div class="tre-card" style="--tc:'+col+'"><span class="tre-chip">'+esc(s.stato)+'</span><span class="t">'+esc(s.nome)+'</span><span class="m">'+(s.luogo?esc(s.luogo)+' · ':'')+(+s.posti)+' posti'+(s.bloccata_perche?' · '+esc(s.bloccata_perche):'')+'</span>'+
+          (s.stato!=="occupata"?'<button class="mini" data-tre-stanza="'+esc(s.id)+'" data-blocca="'+(s.stato==="libera"?1:0)+'">'+(s.stato==="libera"?'Blocca':'Sblocca')+'</button>':'')+'</div>';}).join("")+'</div>';
     }
-    /* piano 1 */
-    h+='<p class="et" style="margin-top:8px">Le mie cose da fare'+(mie.length?' · '+mie.length:'')+'</p>'+
-      (mie.length?mie.map(function(x){
-        return '<div class="card"><div class="riga-m"><span class="t">'+esc(x.titolo)+'</span>'+(x.ferma?'<span class="pill tre-pill-r">ferma da '+(+x.da_giorni)+' giorni</span>':'')+'</div>'+
+    /* piano 1 · tutti */
+    h+='<p class="et" style="margin-top:8px">I miei obiettivi'+(mie.length?' · '+mie.length:'')+'</p>'+
+      (mie.length?'<div class="tre-fila">'+mie.map(function(x){
+        return '<div class="tre-card" style="--tc:'+(x.ferma?'#E07A55':'#8DBF5E')+'"><span class="tre-chip">'+(x.ferma?'in ritardo · '+(+x.da_giorni)+(x.da_giorni==1?' giorno':' giorni'):esc(etich(x)))+'</span><span class="t">'+esc(x.titolo)+'</span>'+
           '<span class="m">'+esc(nomeArea(x.ruolo||""))+(x.entro_il?' · entro il '+esc(dataBreve(x.entro_il)):'')+'</span>'+
-          '<div class="fine">'+(x.fonte==="registro"?'<button class="mini oro" data-tre-fatto="'+esc(x.id)+'">Fatto</button>':'<button class="mini" data-vai="azione">Rispondi nel Mutuo aiuto</button>')+'</div></div>';}).join(""):
-        '<div class="card"><span class="m">Niente di preso, per ora. In Obiettivi c\'è quello di cui il villaggio ha bisogno.</span></div>');
+          (x.fonte==="registro"?'<button class="mini oro" data-tre-fatto="'+esc(x.id)+'">Fatto</button>':'<button class="mini" data-vai="azione">Rispondi nel Mutuo aiuto</button>')+'</div>';}).join("")+'</div>':
+        '<div class="card"><span class="m">Nessun obiettivo preso, per ora. In Obiettivi c\'è quello di cui il villaggio ha bisogno.</span></div>');
     box.innerHTML=h;legaVai(box);
     function dopo(x){if(x&&x.error)alert(errore(x.error));treOggi();}
     var fb=$("#tre-ferme");if(fb)fb.onclick=function(){var l=$("#tre-ferme-l");if(!l)return;
