@@ -141,6 +141,16 @@ textarea:focus,select:focus,button:focus-visible,input:focus-visible,label.btn:f
 .due-col{display:grid;grid-template-columns:1fr;gap:10px}@media (min-width:640px){.due-col{grid-template-columns:1fr 1fr}}
 /* la logistica nel villaggio (20 ott) */
 .lg-conta{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 10px}
+.tre-n{grid-template-columns:repeat(2,minmax(0,1fr))}
+.lg-conta.tre-n small{display:block;font-size:15px;line-height:1.25;color:var(--tenue)}
+.tre-ferme{border:1px solid var(--linea);border-radius:10px;background:var(--foglio);padding:8px 6px;text-align:center;min-width:0;font:inherit;color:inherit;cursor:pointer}
+.tre-ferme small{display:block;font-size:15px;line-height:1.25;color:var(--tenue)}
+.tre-ferme b{display:block;font:700 22px var(--sans);line-height:1.1;font-variant-numeric:tabular-nums}
+.tre-ferme.on{border-color:#E07A55}.tre-ferme.on b,.tre-rosso{color:#E07A55}
+.tre-pill-r{background:transparent;border:1px solid #E07A55;color:#E07A55}
+.tre-tab{overflow-x:auto}.tre-tab table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.tre-tab th,.tre-tab td{padding:6px 4px;text-align:right;border-bottom:1px solid var(--linea)}.tre-tab th:first-child,.tre-tab td:first-child{text-align:left}
+.tre-label{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.bc-r{display:flex;flex-direction:column;gap:2px;margin-top:8px;padding:8px 10px;border-radius:10px;border:1px solid var(--linea)}
 .lg-conta div{border:1px solid var(--linea);border-radius:10px;background:var(--foglio);padding:8px 6px;text-align:center;min-width:0}
 .lg-conta b{display:block;font:700 22px var(--sans);line-height:1.1;font-variant-numeric:tabular-nums}
 .lg-conta small{display:block;font-size:11px;color:var(--tenue)}
@@ -2025,6 +2035,78 @@ function fileOggi(){
   },function(){metti("assistenza","");metti("scuola","");});
 }
 /* I compiti presi da chi entra, con a che punto sono (Gab 18:05). Una riga per compito; il quadro intero sta in Obiettivi. */
+/* GESTIONALE A TRE PIANI (SQL 168). 5 nov 2026, Gab: «applica subito il dirsorso dei tre piani» · 11:40 «io come nucleo, che chi ha ruoli responsabili e poi gli operativi, dovrebbero tutti usare lo strumento che mostra cosa c e da fare oggi e l avanzamento» · 11:41 «ok» (Oggi = i tre piani, Obiettivi = dove si creano e si prendono).
+   In cima a Oggi, per chi è entrato: piano 3 «I numeri di oggi» (nucleo) · piano 2 «La mia area» (chi ha un ruolo, il nucleo) · piano 1 «Le mie cose da fare» (tutti). */
+var tre={aperta:{}};
+function nomeArea(r){for(var f in RUOLI){var x=RUOLI[f].filter(function(y){return y[0]===r;})[0];if(x)return x[1];}return r==="senza area"?"Senza area":r;}
+function dataBreve(d){return d?new Date(d+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"}):"";}
+function treOggi(){
+  var box=$("#o-tre");if(!box||!io.id)return;
+  var guido=io.nucleo||io.coordina||(io.ruoli||[]).length>0;
+  Promise.all([
+    io.nucleo?db.rpc("fm_gestionale_oggi").then(function(r){return r&&!r.error?r.data:null;},function(){return null;}):Promise.resolve(null),
+    guido?db.rpc("fm_la_mia_area").then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}):Promise.resolve([]),
+    guido?db.rpc("fm_gestionale_stanze").then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];}):Promise.resolve([]),
+    db.rpc("fm_mie_cose").then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;})
+  ]).then(function(v){
+    var box=$("#o-tre");if(!box||vista!=="oggi")return;
+    if(v[3]===null&&v[1]===null){box.innerHTML=io.nucleo?'<p class="nota" style="margin:0 2px 10px">I tre piani di Oggi si aprono con l\'SQL 168.</p>':'';return;}
+    var area=v[1]||[],stanze=v[2]||[],mie=(v[3]||[]).filter(function(x){return x.fonte!=="logistica";}),n=v[0],h="";
+    /* piano 3 */
+    if(n){
+      h+='<p class="et">I numeri di oggi</p><div class="lg-conta tre-n">'+
+        '<div><b>'+(+n.entrate_ieri)+'</b><small>entrate ieri</small></div>'+
+        '<div><b>'+(n.aperte+n.prese)+'</b><small>in lavorazione'+(n.aperte?' · '+n.aperte+' senza nessuno':'')+'</small></div>'+
+        '<div><b>'+(+n.chiuse_ieri)+'</b><small>chiuse ieri</small></div>'+
+        '<button type="button" class="tre-ferme'+(n.ferme?' on':'')+'" id="tre-ferme" aria-expanded="false"><b>'+(+n.ferme)+'</b><small>ferme da più di '+(+n.soglia_giorni)+' giorni</small></button></div>'+
+        '<div id="tre-ferme-l" hidden></div>';
+      if((n.per_area||[]).length)h+='<div class="card tre-tab"><table><thead><tr><th>Area</th><th>Aperte</th><th>Prese</th><th>Ferme</th></tr></thead><tbody>'+
+        n.per_area.map(function(a){return '<tr><td>'+esc(nomeArea(a.area))+'</td><td>'+(+a.aperte)+'</td><td>'+(+a.prese)+'</td><td'+(a.ferme?' class="tre-rosso"':'')+'>'+(+a.ferme)+'</td></tr>';}).join("")+'</tbody></table></div>';
+      if((n.stanze||[]).length)h+=n.stanze.map(function(s){return '<div class="card"><b>Stanze · '+esc(s.luogo)+'</b><span class="m">'+(+s.totale)+' in tutto · '+(+s.libere)+(s.libere==1?' libera · ':' libere · ')+(+s.occupate)+(s.occupate==1?' occupata':' occupate')+(s.bloccate?' · '+s.bloccate+(s.bloccate==1?' bloccata':' bloccate'):'')+'</span></div>';}).join("");
+    }
+    /* piano 2 */
+    if(area.length||stanze.length){
+      var ferme=area.filter(function(x){return x.ferma;}).length,senza=area.filter(function(x){return x.stato==="aperta";}).length;
+      h+='<p class="et" style="margin-top:8px">La mia area</p>'+
+        (area.length?'<span class="m" style="display:block;margin:0 2px 6px">'+area.length+(area.length==1?' aperta · ':' aperte · ')+senza+' senza nessuno · '+ferme+(ferme==1?' ferma':' ferme')+'</span>':'')+
+        area.slice(0,30).map(function(x){
+          return '<div class="card"><div class="riga-m"><span class="t">'+esc(x.titolo)+'</span>'+
+            (x.ferma?'<span class="pill tre-pill-r">ferma da '+(+x.da_giorni)+' giorni</span>':x.stato==="aperta"?'<span class="pill s-in_coda">senza nessuno</span>':'<span class="pill s-in_avanzamento">presa</span>')+'</div>'+
+            '<span class="m">'+esc(nomeArea(x.ruolo))+(x.chi?' · '+esc(x.chi):'')+(x.entro_il?' · entro il '+esc(dataBreve(x.entro_il)):'')+'</span>'+
+            (x.fonte!=="logistica"?'<div class="fine"><button class="mini" data-tre-ass="'+esc(x.fonte+"|"+x.id+"|"+x.ruolo)+'">'+(x.stato==="aperta"?'Assegna':'Riassegna')+'</button></div><div class="tre-scegli" id="tre-s-'+esc(x.id)+'"></div>':'')+'</div>';}).join("")+
+        stanze.map(function(s){
+          return '<div class="card"><div class="riga-m"><span class="t">'+esc(s.nome)+(s.luogo?' · '+esc(s.luogo):'')+'</span><span class="pill '+(s.stato==="libera"?'s-sviluppato':s.stato==="occupata"?'s-in_avanzamento':'tre-pill-r')+'">'+esc(s.stato)+'</span></div>'+
+            '<span class="m">'+(+s.posti)+' posti · '+esc(nomeArea(s.ruolo))+(s.responsabile?' · '+esc(s.responsabile):'')+(s.bloccata_perche?' · '+esc(s.bloccata_perche):'')+'</span>'+
+            (s.stato!=="occupata"?'<div class="fine"><button class="mini" data-tre-stanza="'+esc(s.id)+'" data-blocca="'+(s.stato==="libera"?1:0)+'">'+(s.stato==="libera"?'Blocca':'Sblocca')+'</button></div>':'')+'</div>';}).join("");
+    }
+    /* piano 1 */
+    h+='<p class="et" style="margin-top:8px">Le mie cose da fare'+(mie.length?' · '+mie.length:'')+'</p>'+
+      (mie.length?mie.map(function(x){
+        return '<div class="card"><div class="riga-m"><span class="t">'+esc(x.titolo)+'</span>'+(x.ferma?'<span class="pill tre-pill-r">ferma da '+(+x.da_giorni)+' giorni</span>':'')+'</div>'+
+          '<span class="m">'+esc(nomeArea(x.ruolo||""))+(x.entro_il?' · entro il '+esc(dataBreve(x.entro_il)):'')+'</span>'+
+          '<div class="fine">'+(x.fonte==="registro"?'<button class="mini oro" data-tre-fatto="'+esc(x.id)+'">Fatto</button>':'<button class="mini" data-vai="azione">Rispondi nel Mutuo aiuto</button>')+'</div></div>';}).join(""):
+        '<div class="card"><span class="m">Niente di preso, per ora. In Obiettivi c\'è quello di cui il villaggio ha bisogno.</span></div>');
+    box.innerHTML=h;legaVai(box);
+    function dopo(x){if(x&&x.error)alert(errore(x.error));treOggi();}
+    var fb=$("#tre-ferme");if(fb)fb.onclick=function(){var l=$("#tre-ferme-l");if(!l)return;
+      if(!l.hidden){l.hidden=true;fb.setAttribute("aria-expanded","false");return;}
+      l.hidden=false;fb.setAttribute("aria-expanded","true");l.innerHTML='<p class="nota">Un momento…</p>';
+      db.rpc("fm_gestionale_ferme").then(function(r){var d=(r&&!r.error&&r.data)||[];
+        l.innerHTML=d.length?d.map(function(x){return '<div class="card tre-ferma"><span class="t">'+esc(x.titolo)+'</span><span class="m">'+esc(nomeArea(x.ruolo||""))+' · '+(x.chi?'presa da '+esc(x.chi):'senza nessuno')+' · ferma da '+(+x.da_giorni)+' giorni</span></div>';}).join(""):'<p class="nota">Niente di fermo.</p>';},
+        function(){l.innerHTML='<p class="nota">Non si è aperta. Si può riprovare.</p>';});};
+    box.querySelectorAll("[data-tre-fatto]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_registro_fatto",{p_riga:b.getAttribute("data-tre-fatto")}).then(dopo,dopo);};});
+    box.querySelectorAll("[data-tre-stanza]").forEach(function(b){b.onclick=function(){b.disabled=true;var id=b.getAttribute("data-tre-stanza");
+      (b.getAttribute("data-blocca")==="1"?db.rpc("fm_stanza_blocca",{p_stanza:id,p_perche:null}):db.rpc("fm_stanza_sblocca",{p_stanza:id})).then(dopo,dopo);};});
+    box.querySelectorAll("[data-tre-ass]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-tre-ass").split("|"),s=$("#tre-s-"+p[1]);if(!s)return;
+      if(s.innerHTML){s.innerHTML="";return;}s.innerHTML='<p class="nota">Un momento…</p>';
+      db.rpc("fm_area_persone",{p_ruolo:p[2]}).then(function(r){var l=(r&&!r.error&&r.data)||[];
+        s.innerHTML='<label class="tre-label">A chi<select id="tre-sel-'+esc(p[1])+'"><option value="'+esc(io.id)+'">A me</option>'+l.filter(function(x){return x.id!==io.id;}).map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.nome)+'</option>';}).join("")+'<option value="">Nessuno (torna libera)</option></select></label>'+
+          '<div class="fine"><button class="mini oro" id="tre-ok-'+esc(p[1])+'">Assegna</button></div>';
+        $("#tre-ok-"+p[1]).onclick=function(){var v=$("#tre-sel-"+p[1]).value||null;this.disabled=true;
+          db.rpc(p[0]==="assistenza"?"fm_assistenza_assegna":"fm_registro_assegna",p[0]==="assistenza"?{p_richiesta:p[1],p_persona:v}:{p_riga:p[1],p_persona:v}).then(dopo,dopo);};
+      },function(){s.innerHTML='<p class="nota">Non si è aperto. Si può riprovare.</p>';});};});
+  });
+}
 function mieiOggi(){
   leggiObiettivi().then(function(){var e=$("#o-miei");if(!e||vista!=="oggi")return;
     var m=(cache.obiettivi||[]).filter(function(o){return o.stadio!=="sviluppato"&&dentroO(o).some(function(p){return p.persona_id===io.id;});});
@@ -2044,7 +2126,7 @@ function vOggi(){
      20 ott 01:44, Gab: «puoi mettere la copertina dell evento nel festival in evidenza in oggi?» */
   var fest=Date.now()<new Date("2026-11-22T00:00:00").getTime();
   /* 23 ott, Gab: «La lezione è lunedì alle 19» · in cima a Oggi la prima lezione del praticantato (non ancora nel database) */
-  c.innerHTML='<p class="et">Praticantato</p><div class="card lezione-1"><b>La prima lezione</b><span class="t">lunedì alle 19 · con Gabriele Dettori</span></div>'+(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
+  c.innerHTML=(io.id?'<div id="o-tre"></div>':'')+'<p class="et">Praticantato</p><div class="card lezione-1"><b>La prima lezione</b><span class="t">lunedì alle 19 · con Gabriele Dettori</span></div>'+(io.id?'':'<div class="evid"><small>FelicitasMundi</small><p>FelicitasMundi è una rete di villaggi diffusi. Il primo è la Sardegna. Il villaggio diffuso è composto da tanti vicinati. Ogni vicinato rappresenta e porta nel villaggio la sua anima, la sua indipendenza, i suoi talenti, i suoi prodotti, le sue peculiarità e anche i suoi bisogni.</p><a class="vai" href="'+ENTRA+'">Entra</a> <a class="vai" style="background:transparent;color:var(--cosmo-oro);border:1px solid var(--cosmo-oro)" href="come-funziona-bozza.html?c=10182300">Come funziona</a></div>')+
     (fest?'<a class="evid" href="/felicitas-festival-21-novembre-baratili/?c=10182300"><img class="copertina" src="casa/festival-trame.jpg?v=4" alt="Felicitas Festival · TRAME: la forza di essere connessi"><small>In evidenza</small><b>Felicitas Festival</b><span>Sabato 21 novembre 2026 · dalle 10:00 · Baratili San Pietro</span><p>TRAME · la forza di essere connessi</p><span class="vai">Il programma</span></a>':'')+
     '<details class="card vid-come" id="o-come"><summary>Come funziona</summary><p class="et">Villaggi e vicinati</p>'+videoHTML("villaggi")+'<p class="et">Il cervello digitale</p>'+videoHTML("cervello")+'</details>'+
     '<p class="et">Oggi · Felicitas</p>'+
@@ -2062,6 +2144,7 @@ function vOggi(){
     e.innerHTML=h?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p><div class="appunt">'+h+'</div>':'';});
   fileOggi();vOggiStaff();
   if(io.id)vRegistroOggi();
+  if(io.id)treOggi();
   if(io.id)mieiOggi();
   if(io.id)logisticaOggi();
 }
@@ -2230,10 +2313,10 @@ function vBanco(box,cerchioId){
         var t=x.fonte==="logistica"?{id:x.id,stato:x.stato,preso_da:x.preso_da,scritto_da:x.scritto_da}:x;
         var tasti=x.fonte==="logistica"?
           (x.stato==="aperto"?'<div class="fine"><button class="mini oro" data-bclog="prendo|'+esc(x.id)+'">Lo prendo</button></div>':x.stato==="preso"&&(x.preso_da===io.id||io.coordina)?'<div class="fine"><button class="mini oro" data-bclog="fatto|'+esc(x.id)+'">Fatto</button></div>':''):regTasti(t);
-        return '<div class="card"><span class="t">'+esc(x.titolo+regQuanti(x.quanti))+'</span><div class="rg-meta">'+
+        return '<div class="card"><span class="t">'+esc(x.titolo+(/ person[ae]$/.test(x.titolo||"")?"":regQuanti(x.quanti)))+'</span><div class="rg-meta">'+
           (x.fonte==="logistica"?(x.ruolo?'':'<span class="chip f-logistica">logistica</span>'):'<span class="pill s-in_coda">'+esc(REG_TIPO[x.tipo]||x.tipo)+'</span>')+
           (x.ruolo?'<span class="chip f-'+esc(x.funzione||"")+'">'+esc(regNomeRuolo(x.ruolo))+'</span>':'')+(x.voce?'<span class="chip">'+esc(x.voce)+'</span>':'')+'</div>'+
-          '<span class="m">'+(x.preso_da?esc(nomi[x.preso_da]||"preso"):"nessuno ancora")+(x.entro_il?" · entro il "+esc(new Date(x.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span>'+tasti+'</div>';}
+          '<span class="m">'+(x.preso_da?esc(nomi[x.preso_da]||"preso"):"nessuno ancora")+(x.entro_il?" · entro il "+esc(new Date(x.entro_il+"T12:00").toLocaleDateString("it-IT",{day:"numeric",month:"long"})):"")+'</span>'+tasti+(x.fonte==='registro'&&x.tipo==='richiesta'&&(io.nucleo||io.coordina||regMioRuolo(x.ruolo))?'<div class="fine"><button class="mini oro" data-bcrisp="'+esc(x.id)+'">Rispondi</button></div><div class="bc-risp" id="bcr-'+esc(x.id)+'"></div>':'')+'</div>';}
       box.innerHTML='<p class="et">Il banco dei compiti</p>'+
         '<div class="lg-conta" style="grid-template-columns:repeat(3,1fr)">'+col.map(function(c){return '<div><b>'+q.filter(function(x){return x.stato===c[0];}).length+'</b><small>'+c[1].split(" ·")[0].toLowerCase()+'</small></div>';}).join("")+'</div>'+
         '<div class="lg-filtri">'+[["tutti","Tutti"],["miei","I miei"]].concat(Object.keys(ruoli).map(function(k){return [k,regNomeRuolo(k).split(" · ").pop()];})).map(function(c){return '<button class="chip'+(f===c[0]?" on":"")+'" data-bcf="'+esc(c[0])+'">'+esc(c[1])+'</button>';}).join("")+'</div>'+
@@ -2243,6 +2326,19 @@ function vBanco(box,cerchioId){
       box.querySelectorAll("[data-bcf]").forEach(function(b){b.onclick=function(){banco.filtro=b.getAttribute("data-bcf");di();};});
       box.querySelectorAll("[data-bclog]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-bclog").split("|"),a={p_compito:p[1]};b.disabled=true;
         db.rpc("fm_compito_"+p[0],a).then(function(x){if(x&&x.error)alert(errore(x.error));di();},function(){di();});};});
+      /* SQL 171 · 5 nov, Gab: «se rispondo li arriva la mail al client» · le risposte del cliente arrivano a mentecreativa@ */
+      box.querySelectorAll("[data-bcrisp]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-bcrisp"),w=$("#bcr-"+id);if(!w)return;
+        if(w.innerHTML){w.innerHTML="";return;}w.innerHTML='<p class="nota">Un momento…</p>';
+        db.rpc("fm_prenotazione_risposte",{p_riga:id}).then(function(r){var l=(r&&!r.error&&r.data)||[];
+          w.innerHTML=l.map(function(x){return '<div class="bc-r"><span class="m">'+esc(x.chi||"")+' · '+esc(new Date(x.scritto_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+' · '+(x.via==="mail"?"per mail":"nell'app")+'</span><span class="t" style="white-space:pre-wrap">'+esc(x.testo)+'</span></div>';}).join("")+
+            '<label class="tre-label">La tua risposta<textarea id="bcr-t-'+esc(id)+'" rows="4" maxlength="2000"></textarea></label>'+
+            '<div class="fine"><button class="mini oro" id="bcr-b-'+esc(id)+'">Invia</button></div><p class="nota" id="bcr-x-'+esc(id)+'"></p>';
+          $("#bcr-b-"+id).onclick=function(){var t=$("#bcr-t-"+id).value.trim(),x=$("#bcr-x-"+id),bb=this;if(!t){x.textContent="Scrivi la risposta.";return;}bb.disabled=true;
+            db.rpc("fm_prenotazione_rispondi",{p_riga:id,p_testo:t}).then(function(r){var v=r&&!r.error?r.data:null;
+              if(v&&String(v).indexOf("ok:")===0){x.textContent=v==="ok:mail"?"Mandata per mail.":"Arrivata nell'app.";setTimeout(di,1200);return;}
+              bb.disabled=false;x.textContent=v||(r&&r.error?errore(r.error):"Non è partita. Si può riprovare.");},
+              function(){bb.disabled=false;x.textContent="Non è partita. Si può riprovare.";});};
+        },function(){w.innerHTML='<p class="nota">Non si è aperto. Si può riprovare.</p>';});};});
       regLega(box,di);
     });
   },function(){box.innerHTML="";});
