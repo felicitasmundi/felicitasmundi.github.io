@@ -2062,7 +2062,9 @@ function treOggi(){
         '<div id="tre-ferme-l" hidden></div>';
       if((n.per_area||[]).length)h+='<div class="card tre-tab"><table><thead><tr><th>Area</th><th>Aperte</th><th>Prese</th><th>Ferme</th></tr></thead><tbody>'+
         n.per_area.map(function(a){return '<tr><td>'+esc(nomeArea(a.area))+'</td><td>'+(+a.aperte)+'</td><td>'+(+a.prese)+'</td><td'+(a.ferme?' class="tre-rosso"':'')+'>'+(+a.ferme)+'</td></tr>';}).join("")+'</tbody></table></div>';
-      if((n.stanze||[]).length)h+=n.stanze.map(function(s){return '<div class="card"><b>Stanze · '+esc(s.luogo)+'</b><span class="m">'+(+s.totale)+' in tutto · '+(+s.libere)+(s.libere==1?' libera · ':' libere · ')+(+s.occupate)+(s.occupate==1?' occupata':' occupate')+(s.bloccate?' · '+s.bloccate+(s.bloccate==1?' bloccata':' bloccate'):'')+'</span></div>';}).join("");
+      if((n.stanze||[]).length){var rs={t:0,l:0,o:0,b:0};n.stanze.forEach(function(s){rs.t+=+s.totale;rs.l+=+s.libere;rs.o+=+s.occupate;rs.b+=+s.bloccate;});
+        /* 5 nov 14:03, Gab: «narbolia dovrebbe essere una stanza legata alle risorse […] non è una struttura centrale dell ecosistema» → un totale unico; i luoghi solo dentro «La mia area» */
+        h+='<div class="card"><b>Risorse · stanze</b><span class="m">'+rs.t+' in tutto · '+rs.l+(rs.l==1?' libera':' libere')+' · '+rs.o+(rs.o==1?' occupata':' occupate')+(rs.b?' · '+rs.b+(rs.b==1?' bloccata':' bloccate'):'')+'</span></div>';}
     }
     /* piano 2 */
     if(area.length||stanze.length){
