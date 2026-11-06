@@ -407,6 +407,7 @@ html:has(body.cosmo-az),body.notte.cosmo-az{background:linear-gradient(180deg,#1
 .tm-g svg{width:38px;height:38px;flex:none}
 .tm-g b{font-size:17px;line-height:1.15;font-weight:500}
 .tm-prop{background:#1a2148;border:1px solid rgba(212,175,106,.3);border-radius:16px;padding:12px 14px;margin:0 0 10px;color:#F5F0E6}
+.tm-prop .ag-card{background:#122050;border:1px solid rgba(212,175,106,.45);border-radius:14px;padding:12px 14px;margin:8px 0}.tm-prop .ag-card b{display:block;color:#D4AF6A;font-size:18px;margin:0 0 4px}.tm-prop .ag-card p{margin:0;font-size:18px;line-height:1.5;white-space:pre-line}.tm-prop .ag-nota{font-size:16px;opacity:.85;margin:6px 0}.tm-prop button[disabled]{opacity:.45}
 .tm-prop .m{font-size:15px;color:#D4AF6A}.tm-prop img{display:block;max-width:100%;max-height:260px;border-radius:12px;margin:8px 0}
 .tc-testa{display:flex;align-items:center;gap:12px;padding:4px 0 12px;border-bottom:1px solid rgba(212,175,106,.3)}
 .tc-ind{border:0;background:transparent;color:#D4AF6A;font-size:36px;line-height:1;padding:0 4px 4px 0;cursor:pointer}
@@ -1068,12 +1069,16 @@ function mieiTeam(){
     });
   });
 }
-/* le proposte «Metti nel Cervello» in attesa: le decide il nucleo (fm_proposta_decidi) */
+/* le proposte «Metti nel Cervello» in attesa: le decide il nucleo o chi ha un ruolo nel team (fm_proposta_decidi, SQL 165).
+   6/11/2026 · agente AI (SQL 156/165): se l'agente ha impaginato (agente_stato «pronta») si vedono le sue card e il capitolo proposto;
+   «Pubblica» e «Scarta». Gab 4/11: «se uno condivide la foto di un testo, deve esserci scritto subito "contenuto su cervello"». */
 function daApprovare(){
   var box=$("#tm-attesa");if(!box)return;
-  db.from("cervello_proposte").select("id,squadra_id,capitolo_id,capitolo_nuovo,testo,foto,autore_id,proposta_il").eq("stato","in_attesa").order("proposta_il").limit(30).then(function(r){
+  var CAMPI="id,squadra_id,capitolo_id,capitolo_nuovo,testo,foto,autore_id,proposta_il";
+  db.from("cervello_proposte").select(CAMPI+",agente_stato,agente_capitolo_id,agente_capitolo_nuovo,agente_card,agente_nota").eq("stato","in_attesa").order("proposta_il").limit(30).then(function(r){
+    if(r&&r.error)return db.from("cervello_proposte").select(CAMPI).eq("stato","in_attesa").order("proposta_il").limit(30);return r;}).then(function(r){
     var l=(r&&!r.error&&r.data)||[];if(!l.length||!box.isConnected){box.innerHTML="";return;}
-    var caps=l.map(function(p){return p.capitolo_id;}).filter(Boolean);
+    var caps=l.map(function(p){return p.capitolo_id;}).concat(l.map(function(p){return p.agente_capitolo_id;})).filter(Boolean);
     Promise.all([
       caps.length?db.from("cervello_capitoli").select("id,titolo").in("id",caps).then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];}):Promise.resolve([]),
       fotoUrl(l.map(function(p){return p.foto;})),
@@ -1082,9 +1087,14 @@ function daApprovare(){
       var tit={};v[0].forEach(function(x){tit[x.id]=x.titolo;});
       var nt={};(team.lista||[]).forEach(function(t){nt[t.team_id]=t.nome;});
       box.innerHTML='<p class="tm-et">Da mettere nel Cervello</p>'+l.map(function(p){
-        return '<div class="tm-prop"><span class="m">'+esc([nt[p.squadra_id],p.capitolo_id?tit[p.capitolo_id]:p.capitolo_nuovo+" · capitolo nuovo",nomi[p.autore_id]].filter(Boolean).join(" · "))+'</span>'+
-          (p.testo?'<div class="tc-citato">'+esc(p.testo)+'</div>':'')+(p.foto&&team.url[p.foto]?'<img src="'+esc(team.url[p.foto])+'" alt="">':'')+
-          '<div class="tc-az"><button type="button" class="cerv" data-decidi="'+esc(p.id)+'" data-si="1">Sì, nel Cervello</button><button type="button" data-decidi="'+esc(p.id)+'">No</button></div></div>';}).join("")+'<p class="az-esito" id="tm-att-esito" aria-live="polite"></p>';
+        var pronta=p.agente_stato==="pronta"&&Array.isArray(p.agente_card)&&p.agente_card.length,lavora=p.agente_stato==="da_fare"||p.agente_stato==="in_corso";
+        var cap=pronta&&(p.agente_capitolo_id||p.agente_capitolo_nuovo)?(p.agente_capitolo_id?tit[p.agente_capitolo_id]:p.agente_capitolo_nuovo+" · capitolo nuovo"):(p.capitolo_id?tit[p.capitolo_id]:(p.capitolo_nuovo?p.capitolo_nuovo+" · capitolo nuovo":""));
+        return '<div class="tm-prop"><span class="m">'+esc([nt[p.squadra_id],cap,nomi[p.autore_id]].filter(Boolean).join(" · "))+'</span>'+
+          (pronta?p.agente_card.map(function(c){return '<div class="ag-card">'+(c&&c.titolo?'<b>'+esc(c.titolo)+'</b>':'')+'<p>'+esc((c&&c.testo)||"")+'</p></div>';}).join(""):(p.testo?'<div class="tc-citato">'+esc(p.testo)+'</div>':''))+
+          (p.foto&&team.url[p.foto]?'<img src="'+esc(team.url[p.foto])+'" alt="">':'')+
+          (lavora?'<p class="ag-nota">L\'agente la sta impaginando.</p>':'')+
+          ((p.agente_stato==="errore"||pronta)&&p.agente_nota?'<p class="ag-nota">'+esc(p.agente_nota)+'</p>':'')+
+          '<div class="tc-az"><button type="button" class="cerv" data-decidi="'+esc(p.id)+'" data-si="1"'+(lavora?' disabled':'')+'>Pubblica</button><button type="button" data-decidi="'+esc(p.id)+'">Scarta</button></div></div>';}).join("")+'<p class="az-esito" id="tm-att-esito" aria-live="polite"></p>';
       box.querySelectorAll("[data-decidi]").forEach(function(b){b.onclick=function(){b.disabled=true;
         db.rpc("fm_proposta_decidi",{p_proposta:b.getAttribute("data-decidi"),p_si:b.hasAttribute("data-si")}).then(function(x){
           if(x&&!x.error&&x.data==="ok"){daApprovare();return;}b.disabled=false;$("#tm-att-esito").textContent=(x&&x.data)||errore(x&&x.error);},
@@ -1415,7 +1425,7 @@ function disegnaTeam(){
       (m.lat!=null&&m.lon!=null?mappaHTML(m.lat,m.lon):'')+
       (m.testo?testoLink(m.testo,"t","div"):'')+
       (m.registro_id?'<span class="pill-o">→ nel registro</span>':'')+
-      (p?'<span class="pill-o">'+(p==="approvata"?"nel Cervello":"nel Cervello · in attesa")+'</span>':'')+
+      (p?'<span class="pill-o">'+(p==="approvata"?"nel Cervello":"contenuto su cervello")+'</span>':'')+
       '<div class="ora">'+esc(hhmm(m.scritto_il))+(m.modificato_il?' · modificato':'')+'</div></div>'+(team.scelto===m.id?latoMsg(m)+'</div>':''));
     if(team.scelto===m.id)h.push(azioniMsg(m));
   });
