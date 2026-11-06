@@ -3913,7 +3913,8 @@ function vPersone(){
 function peCarica(){
   Promise.all([
     db.rpc("fm_persone_lavoro").then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
-    db.from("squadre").select("id,nome").order("nome").then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];})
+    db.from("squadre").select("id,nome").order("nome").then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];}),
+    tutteLePersone?Promise.resolve(tutteLePersone):db.from("persone_pubbliche").select("id,nome").order("nome").limit(1000).then(function(r){tutteLePersone=(r&&!r.error&&r.data)||[];tutteLePersone.forEach(function(p){nomi[p.id]=p.nome||"";});return tutteLePersone;},function(){return [];})
   ]).then(function(v){
     if(vista!=="persone")return;
     if(v[0]===null){$("#pe-lista").innerHTML='<p class="nota">L\'elenco si apre con l\'SQL 182.</p>';return;}
@@ -3923,10 +3924,14 @@ function peCarica(){
 function peLista(){
   var box=$("#pe-lista");if(!box)return;
   var n=String(pers.cerca||"").trim().toLowerCase();
+  /* 6 nov 18:19, Gab: «io vedo che c e riccardo ma non è riportato in persone» → la ricerca trova anche chi è entrato senza ruolo né team */
+  var dentro={};pers.lista.forEach(function(p){dentro[p.persona_id]=1;});
+  if(pers.nuova&&!dentro[pers.nuova.persona_id]){pers.lista.unshift(pers.nuova);dentro[pers.nuova.persona_id]=1;}
   var ll=pers.lista.filter(function(p){return !n||String(p.nome||"").toLowerCase().indexOf(n)>=0;});
-  var senza=pers.lista.filter(function(p){return p.senza_ruolo;}).length;
+  var altri=n?(tutteLePersone||[]).filter(function(p){return !dentro[p.id]&&String(p.nome||"").toLowerCase().indexOf(n)>=0;}).slice(0,20):[];
+  var conta=pers.lista.filter(function(p){return p!==pers.nuova;}),senza=conta.filter(function(p){return p.senza_ruolo&&(p.team||[]).length;}).length;
   var ch='display:inline-block;margin:4px 6px 0 0;padding:2px 8px;border-radius:10px;font-size:13px;border:1px solid rgba(212,175,106,.45)';
-  box.innerHTML='<p class="et">'+pers.lista.length+(pers.lista.length==1?' persona':' persone')+(senza?' · '+senza+' in un team senza ruolo':'')+'</p>'+
+  box.innerHTML='<p class="et">'+conta.length+(conta.length==1?' persona':' persone')+(senza?' · '+senza+' in un team senza ruolo':'')+'</p>'+
     (ll.length?ll.map(function(p){
       var ap=pers.aperta===p.persona_id;
       return '<div class="card modulo" style="margin-bottom:10px"><button type="button" class="pe-p" data-pe="'+esc(p.persona_id)+'" aria-expanded="'+ap+'" style="all:unset;cursor:pointer;display:block;width:100%">'+
@@ -3934,7 +3939,11 @@ function peLista(){
         '<div>'+(p.ruoli||[]).map(function(x){return '<span style="'+ch+'">'+esc(FUNZIONI[x.funzione]||x.funzione)+' · '+esc(nomeRuolo(x.funzione,x.ruolo))+'</span>';}).join("")+'</div>'+
         '<div>'+(p.team||[]).map(function(t){return '<span style="'+ch+';border-style:dashed">Team '+esc(t.nome)+(t.responsabile?' · responsabile':'')+'</span>';}).join("")+'</div></button>'+
         (ap?peScheda(p):'')+'</div>';
-    }).join(""):'<p class="nota">Nessuno con questo nome.</p>');
+    }).join(""):(altri.length?'':'<p class="nota">Nessuno con questo nome.</p>'))+
+    (altri.length?'<p class="et" style="margin-top:12px">Entrati, senza ruolo né team</p>'+altri.map(function(p){return '<div class="persona"><div><b>'+esc(p.nome||"senza nome")+'</b></div><button class="mini oro" data-pe-nuova="'+esc(p.id)+'">Apri la scheda</button></div>';}).join(""):
+      (n?'':'<p class="nota" style="margin-top:12px">Chi è entrato ma non ha ancora ruolo né team: scrivi il nome in «Cerca».</p>'));
+  box.querySelectorAll("[data-pe-nuova]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-pe-nuova");
+    pers.nuova={persona_id:id,nome:nomi[id]||"senza nome",ruoli:[],team:[],senza_ruolo:true};pers.aperta=id;peLista();};});
   box.querySelectorAll("[data-pe]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-pe");pers.aperta=pers.aperta===id?null:id;peLista();};});
   var p=pers.lista.filter(function(x){return x.persona_id===pers.aperta;})[0];if(p)peLega(box,p);
 }
