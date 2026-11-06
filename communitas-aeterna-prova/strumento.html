@@ -494,6 +494,7 @@ button.cs-carta{cursor:pointer}
 .tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
 /* SQL 129 · 29/10: audio, file, posizione, chat a due, notifiche a scelta */
 .tc-piu{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);background:transparent;color:#D4AF6A;font-size:30px;line-height:1;cursor:pointer}
+.corr{margin-top:10px}.corr-b{background:transparent;border:1px solid #D4AF6A;color:#D4AF6A;border-radius:14px;padding:8px 14px;font:600 16px "DM Sans",system-ui,sans-serif;cursor:pointer}.corr-b.pieno{background:#D4AF6A;color:#0a1430}.corr-b[disabled]{opacity:.45}.corr-si{display:inline-block;font-size:16px;color:#D4AF6A}.corr-l{display:block;font-size:16px;color:rgba(245,240,230,.8);margin:0 0 6px}.corr-t{width:100%;box-sizing:border-box;font-size:18px;padding:10px 12px;border-radius:12px;border:1px solid rgba(245,240,230,.25);background:#0a1430;color:#F5F0E6}.corr-az{display:flex;gap:10px;margin-top:8px}.corr-e{font-size:16px;margin:6px 0 0;color:#F5F0E6}
 .tc-cerv-info{border:1px solid #D4AF6A;border-radius:16px;background:#1a2148;color:#F5F0E6;font-size:18px;line-height:1.5;padding:12px 14px;margin:0 0 14px}
 .tc-menu{flex:0 0 auto;border:1px solid rgba(212,175,106,.5);border-radius:20px;background:transparent;color:#D4AF6A;font-size:22px;line-height:1;padding:6px 12px;cursor:pointer}
 .tc-allega{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -1110,7 +1111,7 @@ function daApprovare(){
         return '<div class="tm-prop"><span class="m">'+esc([nt[p.squadra_id],cap,nomi[p.autore_id]].filter(Boolean).join(" · "))+'</span>'+
           (pronta?p.agente_card.map(function(c){return '<div class="ag-card">'+(c&&c.titolo?'<b>'+esc(c.titolo)+'</b>':'')+'<p>'+esc((c&&c.testo)||"")+'</p></div>';}).join(""):(p.testo?'<div class="tc-citato">'+esc(p.testo)+'</div>':''))+
           (p.foto&&team.url[p.foto]?'<img src="'+esc(team.url[p.foto])+'" alt="">':'')+
-          (lavora?'<p class="ag-nota">L\'agente la sta impaginando.</p>':'')+
+          (lavora?'<p class="ag-nota">L\'agente la sta lavorando.</p>':'')+
           ((p.agente_stato==="errore"||pronta)&&p.agente_nota?'<p class="ag-nota">'+esc(p.agente_nota)+'</p>':'')+
           '<div class="tc-az"><button type="button" class="cerv" data-decidi="'+esc(p.id)+'" data-si="1"'+(lavora?' disabled':'')+'>Pubblica</button><button type="button" data-decidi="'+esc(p.id)+'">Scarta</button></div></div>';}).join("")+'<p class="az-esito" id="tm-att-esito" aria-live="polite"></p>';
       box.querySelectorAll("[data-decidi]").forEach(function(b){b.onclick=function(){b.disabled=true;
@@ -1664,7 +1665,7 @@ function mettiNelCervello(m){
     '<div id="tc-cap-nuovo" hidden><label for="tc-cap-t">Titolo del capitolo nuovo</label><input type="text" id="tc-cap-t" maxlength="200"></div>'+
     '<label>Foto (se c\'è)</label>'+(m.foto&&team.url[m.foto]?'<img src="'+esc(team.url[m.foto])+'" alt="" style="max-width:100%;max-height:220px;border-radius:12px">':'<div class="tc-campo">'+(m.foto?"la foto del messaggio":"nessuna foto")+'</div>')+
     (m.audio||m.file||m.lat!=null?'<label>Va anche nel Cervello</label><div class="tc-campo">'+esc([m.audio?"il vocale":"",m.file?(m.file_nome||"il file"):"",m.lat!=null?"la posizione":""].filter(Boolean).join(" · "))+'</div>':'')+
-    '<button type="button" class="tc-btn" id="tc-cerv-ok">Manda al Cervello</button><p class="tc-nota" id="tc-cerv-esito" aria-live="polite">Resta «in attesa» finché non viene approvata.</p>');
+    '<button type="button" class="tc-btn" id="tc-cerv-ok">Manda al Cervello</button><p class="tc-nota" id="tc-cerv-esito" aria-live="polite">Entra nel Cervello da sola: l\'agente le dà solo il titolo, le parole restano le tue.</p>');
   if(!f)return;
   var s=$("#tc-cap"),nb=$("#tc-cap-nuovo");
   db.from("cervello_capitoli").select("id,titolo").eq("squadra_id",id).order("ordine").then(function(r){
@@ -1678,7 +1679,7 @@ function mettiNelCervello(m){
     if(nuovo&&!tt){e.textContent="Scrivi il titolo del capitolo nuovo.";return;}
     b.disabled=true;e.textContent="Un momento…";
     db.rpc("fm_metti_nel_cervello",{p_messaggio:m.id,p_capitolo:nuovo?null:s.value,p_capitolo_nuovo:nuovo?tt:null}).then(function(r){
-      if(r&&!r.error&&r.data==="ok"){e.textContent="Mandato. Resta «in attesa» finché il nucleo non lo approva.";team.scelto=null;
+      if(r&&!r.error&&r.data==="ok"){e.textContent="Mandato. Entra nel Cervello appena l'agente gli dà il titolo.";team.scelto=null;
         setTimeout(function(){var x=$("#tc-foglio");if(x)x.innerHTML="";ricaricaTeam(false);},1600);return;}
       b.disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){b.disabled=false;e.textContent=errore(x);});};
 }
@@ -2786,6 +2787,23 @@ function capLivello(){
       var id=b.getAttribute("data-cap-l"),k=r.data.filter(function(x){return x.id===id;})[0];leggiCapLivello(k);};});
   },function(){});
 }
+/* 6/11/2026 · Gab: «possiamo però avere un tasto da mettere nel cervello per indicare le cose che sono state inserite e che potrebbero necessitare di una correzione, di un editing» · «Corregge va al team di riferimento, come obiettivo». SQL 181 fm_cervello_da_correggere */
+function corrTasto(g){
+  if(!g||!g.id||!io.id||!(io.nucleo||io.grado!=="ospite")||!("da_correggere" in g))return '';
+  return '<div class="corr" data-corr-box="'+esc(g.id)+'">'+(g.da_correggere?'<span class="corr-si">Segnalata da correggere · è tra gli obiettivi del team</span>':'<button type="button" class="corr-b" data-corr="'+esc(g.id)+'">Da correggere</button>')+'</div>';
+}
+function corrLega(box){
+  box.querySelectorAll("[data-corr]").forEach(function(b){b.onclick=function(){
+    var id=b.getAttribute("data-corr"),w=box.querySelector('[data-corr-box="'+id+'"]');
+    w.innerHTML='<label class="corr-l">Cosa va corretto? (se vuoi)</label><input type="text" maxlength="300" class="corr-t"><div class="corr-az"><button type="button" class="corr-b pieno">Segnala</button><button type="button" class="corr-b">Annulla</button></div><p class="corr-e" aria-live="polite"></p>';
+    var t=w.querySelector("input"),bs=w.querySelectorAll("button"),e=w.querySelector(".corr-e");t.focus();
+    bs[1].onclick=function(){w.innerHTML='<button type="button" class="corr-b" data-corr="'+esc(id)+'">Da correggere</button>';corrLega(box);};
+    bs[0].onclick=function(){bs[0].disabled=true;e.textContent="Un momento…";
+      db.rpc("fm_cervello_da_correggere",{p_riga:id,p_motivo:t.value.trim()||null}).then(function(r){
+        if(r&&!r.error&&r.data==="ok"){w.innerHTML='<span class="corr-si">Segnalata da correggere · è tra gli obiettivi del team</span>';return;}
+        bs[0].disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){bs[0].disabled=false;e.textContent=errore(x);});};
+  };});
+}
 function leggiCapLivello(k,daTeam){
   var c=$("#corpo");window.scrollTo(0,0);
   var lk=new URL("strumento.html?v=cervello&cap="+encodeURIComponent(k.id),location.href).href;
@@ -2797,14 +2815,16 @@ function leggiCapLivello(k,daTeam){
   $("#cl-invia").onclick=function(){
     if(navigator.share){navigator.share({title:k.titolo,url:lk}).catch(function(){});return;}
     (navigator.clipboard?navigator.clipboard.writeText(lk):Promise.reject()).then(function(){$("#cl-fatto").hidden=false;},function(){prompt("Copia il link",lk);});};
-  db.from("cervello_righe").select("testo,scritta_il").eq("capitolo_id",k.id).order("scritta_il").then(function(q){
+  db.from("cervello_righe").select("id,testo,scritta_il,da_correggere").eq("capitolo_id",k.id).order("scritta_il").then(function(q){
+    if(q&&q.error)return db.from("cervello_righe").select("id,testo,scritta_il").eq("capitolo_id",k.id).order("scritta_il");return q;}).then(function(q){
     var box=$("#cl-righe");if(!box)return;
     if(!q||q.error){box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';return;}
     box.innerHTML=(q.data||[]).map(function(g){
       var p=String(g.testo||"").split(/\n\s*\n/),h=p.shift();
       return '<section class="card" style="padding:18px;border-color:var(--oro);border-radius:18px">'+
         '<h2 style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--oro);margin:0 0 8px">'+esc(h)+'</h2>'+
-        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+'</section>';}).join("");
+        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+corrTasto(g)+'</section>';}).join("");
+    corrLega(box);
   },function(){var box=$("#cl-righe");if(box)box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';});
 }
 function vCervello(){
@@ -2929,7 +2949,8 @@ function libro(box,chi){
       var r=v[0];if(!document.body.contains(box))return;
       if(!r||r.error){box.innerHTML='<div class="vuoto">Il cervello si apre con l\'SQL 81.</div>';return;}
       var caps=r.data||[],ids=caps.map(function(k){return k.id;});
-      (ids.length?db.from("cervello_righe").select("id,capitolo_id,testo,scritta_da,scritta_il").in("capitolo_id",ids).order("scritta_il"):Promise.resolve({data:[]})).then(function(q){
+      (ids.length?db.from("cervello_righe").select("id,capitolo_id,testo,scritta_da,scritta_il,da_correggere").in("capitolo_id",ids).order("scritta_il").then(function(q){
+        if(q&&q.error)return db.from("cervello_righe").select("id,capitolo_id,testo,scritta_da,scritta_il").in("capitolo_id",ids).order("scritta_il");return q;}):Promise.resolve({data:[]})).then(function(q){
         var righe=(q&&q.data)||[],rid=righe.map(function(g){return g.id;});
         if(chi.campo==="persona_id"||!rid.length){if(document.body.contains(box))disegnaL(caps,righe,[],{});return;}
         /* commenti e audio sotto ogni riga (SQL 83); se l'83 non c'è, il libro si vede lo stesso, senza commenti */
@@ -2958,7 +2979,7 @@ function libro(box,chi){
         return '<section class="lb-passo" id="cap-'+k.id+'">'+LB_CERCHI+'<div class="lb-corpo"><p class="lb-occ">Capitolo '+(i+1)+'</p><h2>'+esc(k.titolo)+'</h2>'+
           '<div class="lb-righe">'+(per[k.id]||[]).map(function(g){
             return '<div class="lb-riga"><p>'+esc(g.testo)+'</p><small>'+esc(new Date(g.scritta_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+
-              (sq&&nomiL[g.scritta_da]?' · '+esc(nomiL[g.scritta_da]):'')+(g.scritta_da===io.id?' · <button class="lb-togli" data-togli="'+g.id+'">togli</button>':'')+'</small>'+commenti(g)+'</div>';}).join("")+'</div>'+
+              (sq&&nomiL[g.scritta_da]?' · '+esc(nomiL[g.scritta_da]):'')+(g.scritta_da===io.id?' · <button class="lb-togli" data-togli="'+g.id+'">togli</button>':'')+'</small>'+(sq?corrTasto(g):'')+commenti(g)+'</div>';}).join("")+'</div>'+
           '<div class="lb-nuova" data-box="'+k.id+'"><button class="mini oro" data-riga="'+k.id+'">+ Aggiungi una riga</button></div></div></section>';}).join("")+
       '<section class="lb-passo lb-apri">'+LB_CERCHI+'<div class="lb-corpo"><p class="lb-occ">'+(caps.length?'Capitolo '+(caps.length+1):'Il primo capitolo')+'</p>'+
         '<div class="modulo"><label for="lb-tit">Titolo del capitolo</label><input type="text" id="lb-tit" maxlength="200">'+
@@ -2975,6 +2996,7 @@ function libro(box,chi){
     box.querySelectorAll("[data-togli-c]").forEach(function(b){b.onclick=function(){b.disabled=true;
       db.from("cervello_commenti").delete().eq("id",b.getAttribute("data-togli-c")).then(function(){carica();},function(){b.disabled=false;});};});
     box.querySelectorAll("[data-commenta]").forEach(function(b){b.onclick=function(){commentaBox(b.getAttribute("data-commenta"));};});
+    corrLega(box);
     box.querySelectorAll("[data-togli]").forEach(function(b){b.onclick=function(){b.disabled=true;
       db.from("cervello_righe").delete().eq("id",b.getAttribute("data-togli")).then(function(){carica();},function(){b.disabled=false;});};});
     $("#lb-apri").onclick=function(){var b=this,t=$("#lb-tit").value.trim();if(!t){$("#lb-esito").textContent="Il titolo serve.";return;}b.disabled=true;
