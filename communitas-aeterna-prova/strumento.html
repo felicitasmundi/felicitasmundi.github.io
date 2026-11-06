@@ -494,6 +494,7 @@ button.cs-carta{cursor:pointer}
 .tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
 /* SQL 129 · 29/10: audio, file, posizione, chat a due, notifiche a scelta */
 .tc-piu{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);background:transparent;color:#D4AF6A;font-size:30px;line-height:1;cursor:pointer}
+.tc-cerv-info{border:1px solid #D4AF6A;border-radius:16px;background:#1a2148;color:#F5F0E6;font-size:18px;line-height:1.5;padding:12px 14px;margin:0 0 14px}
 .tc-menu{flex:0 0 auto;border:1px solid rgba(212,175,106,.5);border-radius:20px;background:transparent;color:#D4AF6A;font-size:22px;line-height:1;padding:6px 12px;cursor:pointer}
 .tc-allega{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .tc-allega button,.tc-allega label{display:flex;flex-direction:column;align-items:center;gap:6px;background:#1a2148;border:1px solid rgba(212,175,106,.4);border-radius:16px;padding:16px 6px;color:#F5F0E6;font:500 18px 'DM Sans',system-ui,sans-serif;cursor:pointer;margin:0;letter-spacing:0;text-transform:none}
@@ -1741,7 +1742,9 @@ function mandaAllegato(id,blob,campo,nome){
 function menuChat(){
   var id=team.id,duo=team.tipo==="chat";
   var pe=!duo&&(io.nucleo||(io.ruoli||[]).length);
-  var f=foglioTeam((pe?persH()+ARG_H.replace('<h2>','<h2 style="margin-top:26px">'):ARG_H)+(duo?'':OB_H)+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
+  /* 6/11 Gab 10:54 «ok»: la riga fissa sul Cervello in cima alle info di ogni team (non nella chat a due; non per Mutuo aiuto, che non va all'agente: SQL 165) */
+  var cerv=duo||(typeof ass!=="undefined"&&ass.team===id)?'':'<div class="tc-cerv-info">Foto, file e testi di almeno 300 caratteri condivisi qui entrano da soli nel Cervello: sul messaggio compare «contenuto su cervello». Per un testo più corto, tocca il messaggio e scegli «Metti nel Cervello».</div>';
+  var f=foglioTeam(cerv+(pe?persH()+ARG_H.replace('<h2>','<h2 style="margin-top:26px">'):ARG_H)+(duo?'':OB_H)+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
     [["ogni","A ogni messaggio",""],["ora","Una all'ora","se arrivano più messaggi, una sola notifica"],["mai","Mai","i messaggi li vedi quando apri l'app"]].map(function(x){
       return '<button type="button" data-avv="'+x[0]+'" aria-pressed="false">'+x[1]+(x[2]?'<small>'+x[2]+'</small>':'')+'</button>';}).join("")+'</div>'+
     (duo?'<label>La conversazione</label><button type="button" class="tc-btn" id="mc-chiudi" style="background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5)">Chiudi la conversazione</button>'+
