@@ -1,1 +1,309 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>FelicitasMundi</title><link rel="canonical" href="https://app.felicitasmundi.com/communitas-aeterna-prova/strumento.html"><meta http-equiv="refresh" content="0;url=/communitas-aeterna-prova/strumento.html?v=azione"><script>location.replace("/communitas-aeterna-prova/strumento.html?v=azione");</script></head><body style="background:#122050;color:#F5F0E6;font:18px system-ui,sans-serif;padding:24px"><a href="/communitas-aeterna-prova/strumento.html?v=azione" style="color:#D4AF6A">FelicitasMundi</a></body></html>
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La casa · bozza</title>
+<!-- ⭐ 4 ottobre 2026, 22:16, Gab (con l'immagine di clickup.com): «non mi piace come hai disegnato l'aspetto gestionale …
+     bisogna dargli veramente con chiarezza il quantitativo delle cose che gli si dà … cosa si arriva ad avere come percorso
+     introspettivo, cosa significa pubblicare da gruppo a vetrina, il fatto di fare insieme una logistica legata
+     all'alimentazione, rimedi ed educazione … loro hanno bisogno di dire tutto quello che si fa con AI agent, noi possiamo
+     fare dei quadranti dicendo tutto quello che possiamo fare col valore espresso dai talenti delle persone, mettendo una
+     breve visione dei talenti principali, del percorso … raccontare meglio il praticantato, cosa accade partendo dai 26 euro,
+     e quali sono le cose che si possono fare col karma yoga … tutto questo mi deve generare entusiasmo».
+     22:25, Gab: «troppi quadranti … 108 talenti e 5 civiltà è incoerente, domani diventano 150 … parliamo di villaggi, di festival»: niente numeri, sei porte. Barra e Megafono sono quelli veri dell'app. -->
+<link rel="stylesheet" href="../../comune/caratteri.css">
+<style>
+:root{--oro:#D4AF6A;--oro-ch:#E3C58A;--ivory:#F5F0E6;--tenue:rgba(245,240,230,.6);--linea:rgba(212,175,106,.22);
+  --terra:#AA8844;--acqua:#4488BB;--fuoco:#CC6644;--aria:#669944;--etere:#9966CC}
+*{box-sizing:border-box}
+html,body{margin:0;color:var(--ivory);font-family:'DM Sans',system-ui,sans-serif;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,175,106,.12),transparent 45%),radial-gradient(ellipse at 15% 70%,rgba(60,44,110,.3),transparent 60%),#070b18}
+html.in-app,html.in-app body{overflow:visible;overflow-x:clip}
+.seg{display:inline-block;background:rgba(212,175,106,.12);border:1px dashed rgba(212,175,106,.6);border-radius:.4rem;padding:0 .35em;color:var(--oro-ch)}
+.w{max-width:64rem;margin:0 auto;padding:2.2rem 1.2rem 3rem}
+[data-r]{cursor:pointer}
+
+/* l'apertura */
+.apri{text-align:center;padding:1.6rem 0 2.4rem}
+.apri .eti{font-family:Cinzel,serif;font-size:.74rem;letter-spacing:.3em;color:var(--oro)}
+.apri h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2.2rem,5.4vw,3.6rem);line-height:1.08;margin:.7rem 0 .8rem}
+.apri .sottotitolo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.45rem;color:rgba(245,240,230,.9);margin:-.2rem auto 1rem}
+.apri p{color:var(--tenue);font-size:1.08rem;max-width:36rem;margin:0 auto;line-height:1.5}
+.passi{display:flex;justify-content:center;flex-wrap:wrap;gap:.4rem .2rem;margin-top:1.4rem;font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:rgba(245,240,230,.82)}
+.passi span::after{content:"→";color:var(--oro);margin:0 .5rem}
+.passi span:last-child::after{content:""}
+
+/* le tre fasi, come un cammino */
+.fase{position:relative;padding-left:3.4rem;margin:0 0 3rem}
+.fase.senza{padding-left:0;margin-top:4.4rem}
+.fase.senza::before{display:none}
+.fase::before{content:"";position:absolute;left:1.15rem;top:2.6rem;bottom:-3rem;width:2px;background:linear-gradient(var(--oro),rgba(212,175,106,.08))}
+.fase:last-of-type::before{display:none}
+.num{position:absolute;left:0;top:0;width:2.4rem;height:2.4rem;border-radius:50%;display:grid;place-items:center;font-family:Cinzel,serif;color:#0A0C1A;background:var(--oro);box-shadow:0 0 1.2rem rgba(212,175,106,.45)}
+.fase .eti{font-family:Cinzel,serif;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--oro)}
+.fase h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1.8rem,3.6vw,2.5rem);line-height:1.12;margin:.35rem 0 .5rem}
+.fase .riga{color:var(--tenue);font-size:1.02rem;line-height:1.5;max-width:44rem;margin:0 0 1.2rem}
+
+.due{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:.8rem}
+.carta{border:1px solid rgba(212,175,106,.4);border-radius:1rem;padding:1.1rem 1.2rem;background:rgba(8,11,26,.55)}
+.carta b{display:block;font-family:Cinzel,serif;font-weight:400;font-size:1.02rem;letter-spacing:.06em}
+.carta .p{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--oro);margin:.15rem 0 .55rem}
+.carta ul{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.35rem;font-size:.94rem;line-height:1.45;color:rgba(245,240,230,.82)}
+.cit{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.25rem;line-height:1.4;color:rgba(245,240,230,.9);border-left:2px solid var(--oro);padding:.2rem 0 .2rem 1rem;margin:1rem 0 0}
+
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.2rem 0 1rem}
+.chip{border:1px solid var(--linea);border-radius:999px;padding:.35rem .85rem;font-size:.88rem;color:rgba(245,240,230,.85);background:rgba(245,240,230,.03)}
+.chip.oro{border-color:rgba(212,175,106,.55);color:var(--oro)}
+
+/* le strisce che scorrono di lato, come un negozio */
+.stanza{margin:1.6rem 0 0}
+.testa{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.7rem}
+.testa h3{margin:0;font-family:Cinzel,serif;font-weight:500;font-size:1.25rem;letter-spacing:.06em}
+.testa h3 i{font-style:normal;display:inline-block;width:.55rem;height:.55rem;border-radius:50%;background:var(--c);margin-right:.55rem;vertical-align:middle;box-shadow:0 0 .5rem var(--c)}
+.testa small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--tenue);margin-top:.15rem}
+.testa a{font-size:.92rem}
+.striscia{display:flex;gap:.8rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.2rem .1rem .9rem;scrollbar-width:thin;scrollbar-color:rgba(212,175,106,.35) transparent}
+.pr{flex:0 0 11.5rem;scroll-snap-align:start;color:var(--ivory)}
+.pr .f{width:100%;aspect-ratio:3/4;border-radius:.8rem;border:1px solid var(--linea);background:#11152b center/cover no-repeat;position:relative;display:grid;place-items:center;overflow:hidden}
+.pr .f.cont{background-size:70%}
+.pr .f em{font-style:normal;font-family:Cinzel,serif;font-size:2rem;color:var(--c,var(--oro));opacity:.8}
+.pr .tag{position:absolute;left:.5rem;top:.5rem;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .55rem;border-radius:999px;background:rgba(7,11,24,.85);border:1px solid rgba(212,175,106,.55);color:var(--oro)}
+.pr b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.12rem;line-height:1.2;margin-top:.5rem}
+.pr small{display:block;color:var(--tenue);font-size:.8rem;margin-top:.15rem;line-height:1.35}
+.pr .pz{color:var(--oro-ch);font-size:.92rem;margin-top:.2rem}
+.pr.largo{flex-basis:15rem}
+.pr.largo .f{aspect-ratio:4/3}
+
+.entra{display:flex;flex-direction:column;align-items:center;gap:.8rem;text-align:center;padding:1.4rem 0 0}
+.pill{display:inline-flex;align-items:center;min-height:2.8rem;padding:0 1.6rem;border-radius:999px;background:var(--oro);color:#0A0C1A;font-family:Cinzel,serif;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase}
+.sotto-mega{color:var(--tenue);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem}
+
+@media (max-width:40rem){ .fase{padding-left:2.9rem} .num{width:2.1rem;height:2.1rem} .fase::before{left:1rem} .pr{flex-basis:9.5rem} .pr.largo{flex-basis:12.5rem} }
+
+/* ── 19:09, Gab: «come lo farebbe la Apple?» — il prodotto in funzione, dentro un telefono ── */
+.link2{display:flex;justify-content:center;gap:1.8rem;flex-wrap:wrap;font-size:1.1rem;margin:.4rem 0 2rem}
+.link2 a,.link2 span{color:var(--oro)}
+.tel{width:15.5rem;margin:0 auto;border-radius:2.4rem;padding:.55rem;background:linear-gradient(145deg,#2a2d3c,#0c0e18);box-shadow:0 1.5rem 3rem rgba(0,0,0,.55),0 0 0 1px rgba(212,175,106,.25)}
+.tel.grande{width:18rem}
+.schermo{border-radius:1.9rem;overflow:hidden;aspect-ratio:9/18.5;background:radial-gradient(ellipse at 50% 0%,rgba(212,175,106,.14),transparent 55%),#060a16;padding:1.4rem .8rem .8rem;display:flex;flex-direction:column;gap:.35rem;text-align:left;position:relative}
+.schermo .sb b{display:block;font-family:Cinzel,serif;font-weight:400;font-size:1rem;letter-spacing:.06em}
+.schermo .sb small{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.8rem;color:rgba(245,240,230,.6)}
+.schermo .g{font-family:Cinzel,serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(212,175,106,.85);margin-top:.5rem}
+.schermo .o{display:flex;align-items:center;gap:.4rem;padding:.45rem 0;border-bottom:1px solid rgba(212,175,106,.14)}
+.schermo .pt{width:.42rem;height:.42rem;border-radius:50%;flex:none;background:var(--c,#4488BB);box-shadow:0 0 .4rem var(--c,#4488BB)}
+.schermo .tx{flex:1;min-width:0}
+.schermo .tx b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:.86rem;line-height:1.15;color:var(--ivory)}
+.schermo .sm{display:block;font-size:.62rem;color:rgba(245,240,230,.5)}
+.schermo .bar{display:block;height:2px;border-radius:9px;background:rgba(245,240,230,.1);margin-top:.3rem;overflow:hidden}
+.schermo .bar i{display:block;height:100%;width:0;background:var(--oro);transition:width .8s}
+.schermo .st{flex:none;font-size:.56rem;padding:.18rem .45rem;border-radius:999px;border:1px solid rgba(245,240,230,.25);color:rgba(245,240,230,.7);transition:all .4s}
+.schermo .st.av{border-color:rgba(212,175,106,.6);color:var(--oro);background:rgba(212,175,106,.12)}
+.schermo .st.sv{border-color:rgba(111,155,106,.6);color:#9ac296;background:rgba(111,155,106,.12)}
+.schermo .vv{display:flex}
+.schermo .vv span{width:1.15rem;height:1.15rem;border-radius:50%;display:grid;place-items:center;font-size:.55rem;border:1px solid rgba(212,175,106,.55);background:rgba(212,175,106,.12);transition:all .4s}
+.schermo .vv span+span{margin-left:-.3rem}
+.schermo .fatto .tx b{opacity:.55;text-decoration:line-through}
+.schermo .vet{margin-top:auto;border:1px solid rgba(212,175,106,.4);border-radius:.8rem;padding:.5rem;background:rgba(8,11,26,.8);opacity:0;transform:translateY(1rem);transition:all .6s}
+.schermo .vet.su{opacity:1;transform:none}
+.schermo .vet small{font-family:Cinzel,serif;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:#4488BB}
+.schermo .vet div{display:flex;gap:.5rem;align-items:center;margin-top:.3rem}
+.schermo .vet img{width:2.2rem;height:2.9rem;object-fit:cover;border-radius:.3rem}
+.schermo .vet b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:.85rem}
+.schermo .card{display:flex;flex-direction:column;gap:.5rem;margin-top:.6rem}
+.schermo .card img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:.7rem}
+.schermo .card b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1rem}
+.schermo .tg{display:inline-block;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(212,175,106,.55);color:var(--oro);border-radius:999px;padding:.1rem .4rem}
+.schermo .pz2{display:block;color:#E3C58A;font-size:.8rem;margin-top:.15rem}
+.schermo .btn{display:inline-block;margin-top:.35rem;font-family:Cinzel,serif;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;background:var(--oro);color:#0A0C1A;border-radius:999px;padding:.35rem .8rem}
+.scene{display:flex;flex-direction:column;gap:3.6rem;margin:3rem 0 4rem}
+.scena{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:2rem}
+.scena.giu .tel{order:2}
+.tx2 .eti{font-family:Cinzel,serif;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--oro)}
+.tx2 h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin:.4rem 0 0}
+@media (max-width:40rem){ .scena,.scena.giu{grid-template-columns:1fr;text-align:center} .scena.giu .tel{order:0} .tel.grande{width:15rem} }
+
+/* ── la griglia di tutto quello che si fa (come clickup.com) ── */
+.titolone{text-align:center;margin:3.4rem 0 .6rem;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2.3rem,5.6vw,4rem);line-height:1.04}
+.titolone em{font-style:normal;background:linear-gradient(180deg,#f3e3bd,#c99a4b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sottotitolone{text-align:center;color:var(--tenue);font-size:1.12rem;margin:0 auto 2rem;max-width:40rem;line-height:1.5}
+.griglia{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid rgba(212,175,106,.12);border-left:1px solid rgba(212,175,106,.12)}
+.cella{border-right:1px solid rgba(212,175,106,.12);border-bottom:1px solid rgba(212,175,106,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;min-height:8.2rem;padding:.9rem .5rem;text-align:center;color:rgba(245,240,230,.85);font-size:.95rem;line-height:1.25}
+.cella svg{width:1.9rem;height:1.9rem;stroke:var(--c,var(--oro));fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cella:hover{background:rgba(212,175,106,.05)}
+.cella.grande{grid-column:span 2;grid-row:span 2;gap:1rem;background:radial-gradient(ellipse at 50% 30%,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%)}
+.cella.grande b{font-family:Cinzel,serif;font-weight:500;font-size:1.7rem;letter-spacing:.04em;color:var(--ivory)}
+.cella.grande small{color:var(--tenue);font-size:.92rem;max-width:18rem}
+.cella.grande .mini{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center}
+.cella.grande .mini span{font-size:.72rem;border:1px solid rgba(212,175,106,.35);border-radius:999px;padding:.2rem .6rem;color:rgba(245,240,230,.8)}
+.cella.grande svg{width:3rem;height:3rem}
+
+/* ── i blocchi che raccontano ── */
+.blocco2{margin:4.4rem 0 0}
+.blocco2 .eti{font-family:Cinzel,serif;font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--oro);text-align:center}
+.blocco2 h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2rem,4.4vw,3rem);line-height:1.08;text-align:center;margin:.4rem 0 .5rem}
+.blocco2 .riga{text-align:center;color:var(--tenue);font-size:1.05rem;max-width:42rem;margin:0 auto 1.8rem;line-height:1.5}
+.numero{font-family:'Cormorant Garamond',serif;font-size:1.15em;background:linear-gradient(180deg,#f3e3bd,#c99a4b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fam{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.fa{border:1px solid var(--linea);border-radius:1.1rem;padding:1.2rem 1.2rem 1rem;background:rgba(245,240,230,.025)}
+.fa .n{font-family:'Cormorant Garamond',serif;font-size:2.6rem;line-height:1;color:var(--c)}
+.fa b{display:block;font-family:Cinzel,serif;font-weight:400;letter-spacing:.06em;margin:.2rem 0 .6rem}
+.fa .t{display:flex;flex-wrap:wrap;gap:.3rem}
+.fa .t span{font-size:.74rem;border:1px solid rgba(245,240,230,.14);border-radius:999px;padding:.18rem .55rem;color:rgba(245,240,230,.75)}
+.tappe4{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;counter-reset:t}
+.tappa4{border:1px solid var(--linea);border-radius:1.1rem;padding:1.3rem 1.1rem;background:linear-gradient(180deg,rgba(212,175,106,.08),transparent);counter-increment:t}
+.tappa4::before{content:counter(t);display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:var(--oro);color:#0A0C1A;font-family:Cinzel,serif;margin-bottom:.8rem}
+.tappa4 b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.3rem;line-height:1.2}
+.tappa4 small{display:block;color:var(--tenue);font-size:.88rem;margin-top:.4rem;line-height:1.4}
+.freccia{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.freccia > div{padding:1.2rem 1rem;text-align:center;position:relative}
+.freccia > div::after{content:"→";position:absolute;right:-.4rem;top:1.6rem;color:var(--oro);font-size:1.3rem}
+.freccia > div:last-child::after{content:""}
+.freccia i{font-style:normal;display:inline-grid;place-items:center;width:3.2rem;height:3.2rem;border-radius:50%;border:1px solid rgba(212,175,106,.5);color:var(--oro);font-size:1.3rem;margin-bottom:.6rem}
+.freccia b{display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.25rem}
+.freccia small{display:block;color:var(--tenue);font-size:.86rem;margin-top:.3rem;line-height:1.4}
+.tre-col{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.col3{border:1px solid rgba(212,175,106,.4);border-radius:1.2rem;padding:1.4rem;background:rgba(8,11,26,.55);display:flex;flex-direction:column;gap:.6rem}
+.col3.oro{border-color:var(--oro);box-shadow:0 0 0 1px rgba(212,175,106,.3) inset}
+.col3 .eti2{font-family:Cinzel,serif;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
+.col3 .p{font-family:'Cormorant Garamond',serif;font-size:2.3rem;line-height:1;color:var(--oro-ch)}
+.col3 .p small{font-size:1rem;color:var(--tenue)}
+.col3 ul{list-style:none;margin:.3rem 0 0;padding:0;display:flex;flex-direction:column;gap:.5rem;font-size:.95rem;line-height:1.4;color:rgba(245,240,230,.85)}
+.col3 li{display:grid;grid-template-columns:1.2rem 1fr}
+.col3 li::before{content:"✦";color:var(--oro);font-size:.8rem}
+.logi{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.lg{border-radius:1.2rem;padding:1.5rem 1.3rem;border:1px solid var(--linea);background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--c) 20%,transparent),transparent 70%)}
+.lg b{display:block;font-family:Cinzel,serif;font-weight:500;font-size:1.25rem;letter-spacing:.05em}
+.lg small{display:block;color:var(--tenue);font-size:.9rem;line-height:1.45;margin-top:.4rem}
+@media (max-width:60rem){ .griglia{grid-template-columns:repeat(3,1fr)} .fam,.tre-col,.logi{grid-template-columns:1fr 1fr} .tappe4{grid-template-columns:1fr 1fr} }
+@media (max-width:40rem){ .griglia{grid-template-columns:repeat(2,1fr)} .fam,.tre-col,.logi,.tappe4{grid-template-columns:1fr} .freccia{grid-template-columns:1fr} .freccia > div::after{content:"↓";right:auto;left:50%;top:auto;bottom:-.6rem} }
+
+/* ── 22:25, Gab: «troppi quadranti … parliamo di villaggi, parliamo di festival» ── */
+.vf{display:grid;grid-template-columns:1.4fr 1fr;gap:.9rem;margin-top:1rem}
+.vfc{min-height:22rem;border-radius:1.5rem;border:1px solid var(--linea);background-size:cover;background-position:center 35%;display:flex;flex-direction:column;justify-content:flex-end;gap:.3rem;padding:1.6rem;color:var(--ivory)}
+.vfc .eti{font-family:Cinzel,serif;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--oro)}
+.vfc b{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(1.6rem,3.4vw,2.3rem);line-height:1.1}
+.vfc small{color:rgba(245,240,230,.75);font-size:.98rem}
+.vfc .vai{color:var(--oro);margin-top:.4rem}
+.porte6{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:1rem}
+.p6{border:1px solid var(--linea);border-radius:1.2rem;padding:1.4rem 1.3rem;background:radial-gradient(ellipse at 0% 0%,color-mix(in srgb,var(--c) 22%,transparent),transparent 65%),rgba(245,240,230,.02);color:var(--ivory)}
+.p6 b{display:block;font-family:Cinzel,serif;font-weight:500;font-size:1.25rem;letter-spacing:.05em}
+.p6 small{display:block;color:var(--tenue);font-size:.92rem;margin-top:.3rem}
+.p6:hover{border-color:color-mix(in srgb,var(--c) 70%,transparent)}
+@media (max-width:40rem){ .vf{grid-template-columns:1fr} .vfc{min-height:17rem} .porte6{grid-template-columns:1fr 1fr} }
+</style>
+</head>
+<body>
+<div class="w">
+
+ <section class="apri">
+  <div class="eti">COSCIENZA · TECNOLOGIA · COMUNITÀ</div>
+  <h1>FelicitasMundi — Comunità Eterna</h1>
+  <p class="sottotitolo">uno strumento pratico per tenere traccia di ciò che si fa insieme</p>
+  <div class="link2"><span data-r="soglia">Entra ›</span><a href="#porte">Scopri ›</a></div>
+ </section>
+
+ <!-- ① villaggi e festival: la prima cosa che si vede -->
+ <section class="vf">
+  <div class="vfc grande" data-r="evento&amp;e=1d8ba038-2393-49fb-9493-3511c9e3ded6" style="background-image:linear-gradient(to top,rgba(7,11,24,.95) 20%,rgba(7,11,24,.1) 70%),url(../../articoli/2026/incontro-11-ottobre.jpg?v=25)">
+   <span class="eti">Villaggi Felicitas</span><b>25 ottobre · Baratili, Oristano</b><small>il primo incontro tra i vicinati della Sardegna</small><span class="vai">ci sarò ›</span>
+  </div>
+  <div class="vfc" data-r="vicinati" style="background-image:linear-gradient(to top,rgba(7,11,24,.95) 25%,rgba(7,11,24,.2) 75%),url(../../inviti/felicitas.jpg)">
+   <span class="eti">Felicitas Festival</span><b>21 novembre · Oristano</b><small>il festival dei villaggi</small><span class="vai">scopri ›</span>
+  </div>
+ </section>
+
+ <!-- ② sei porte, non di più -->
+ <section class="porte6" id="porte">
+  <div class="p6" data-r="vicinati" style="--c:var(--terra)"><b>Villaggi</b><small>comprare insieme, i punti di ritiro, i festival</small></div>
+  <div class="p6" data-r="anthakarana" style="--c:var(--oro)"><b>Antaḥkaraṇa</b><small>una guida al ritorno a sé</small></div>
+  <div class="p6" data-r="orme" style="--c:#7aa7c7"><b>La mia orma</b><small>gli obiettivi tuoi e del gruppo, fino alla vetrina</small></div>
+  <div class="p6" data-r="emporio" style="--c:var(--acqua)"><b>Emporio</b><small>prodotti vicini e lontani</small></div>
+  <div class="p6" data-r="assistenza" style="--c:var(--fuoco)"><b>Assistenza</b><small>da vicino o da lontano</small></div>
+  <div class="p6" data-r="scuola" style="--c:var(--etere)"><b>Scuola</b><small>le lezioni e le formazioni</small></div>
+ </section>
+
+ <!-- ③ i prodotti e i servizi -->
+ <section class="fase senza">
+  
+  
+  
+  
+
+  <div class="stanza" style="--c:var(--acqua)">
+   <div class="testa"><div><h3><i></i>Emporio</h3><small>prodotti vicini e lontani, e quelli del percorso</small></div><a data-r="emporio">tutto l'Emporio ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="pagina&amp;n=anima-vagabonda"><div class="f" style="background-image:url(anima-vagabonda.jpg)"><span class="tag">nel percorso</span></div><b>Anima Vagabonda</b><small>Parabhakti dāsa · Villa Vrindavana - Firenze</small><div class="pz">18,00 €</div></div>
+    <div class="pr" data-r="emporio"><div class="f" style="background-image:url(bhagavad-gita.jpg)"><span class="tag">nel percorso</span></div><b>Bhagavad-gītā Così com'è</b><small>A.C. Bhaktivedānta Swāmī Prabhupāda · Villaggio Hare Krishna - Bergamo</small></div>
+    <div class="pr" data-r="emporio"><div class="f cont" style="background-image:url(nexus-cerchio.webp)"><span class="tag">nel percorso</span></div><b>Nexus</b><small>Strumenti di Coscienza · San Lazzaro di Savena</small></div>
+   </div>
+  </div>
+
+  <div class="stanza" style="--c:var(--fuoco)">
+   <div class="testa"><div><h3><i></i>Assistenza</h3><small>spiritualità, trattamenti, consulenze, mutuo aiuto</small></div><a data-r="assistenza">tutta l'Assistenza ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Bhakti Yoga</b><small>7 livelli · USCI · ISKCON Italia</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Bhakti Vriksa</b><small>6 livelli · un percorso di gruppo · USCI</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Gita Manjari</b><small>19 incontri settimanali · USCI</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Tulasi Manjari</b><small>8 incontri settimanali · USCI</small></div>
+    <div class="pr" data-r="assistenza"><div class="f"><em>△</em></div><b>Power Series</b><small>10 incontri online settimanali · USCI</small></div>
+   </div>
+  </div>
+
+  <div class="stanza" style="--c:var(--etere)">
+   <div class="testa"><div><h3><i></i>Scuola</h3><small>le lezioni, le formazioni, e la ricerca che le accompagna</small></div><a data-r="scuola">tutta la Scuola ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Astrologia</b><small>Ferrara</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Simbologia</b><small>Ferrara</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Agricoltura naturale</b><small>Livorno</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Cristalloterapia</b><small>Livorno</small></div>
+    <div class="pr" data-r="scuola"><div class="f"><em>○</em></div><b>Reiki</b><small>Giulianova</small></div>
+   </div>
+  </div>
+
+  <div class="stanza" style="--c:var(--aria)">
+   <div class="testa"><div><h3><i></i>Edizione</h3><small>stampa e forniture per le fiere</small></div><a data-r="edizione">tutta l'Edizione ›</a></div>
+   <div class="striscia">
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Carta stampata</b><small>volantini, manifesti, biglietti, adesivi</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Libri e cataloghi</b><small>libri, riviste, cataloghi</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Esposizione e fiere</b><small>totem, roll-up, striscioni, stand</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Gadget e regali</b><small>penne, borse, borracce</small></div>
+    <div class="pr" data-r="edizione"><div class="f cont" style="background-image:url(nexus-fermo.webp);background-size:45%;background-color:#14305a"></div><b>Confezioni</b><small>shopper, imballaggi</small></div>
+   </div>
+  </div>
+ </section>
+
+
+ <!-- ⑥ cosa ricevi -->
+ <section class="blocco2">
+  <div class="eti">Come si partecipa</div>
+  <h2>Da 26 € al mese, o col karma yoga</h2>
+  <div class="tre-col">
+   <div class="col3 oro"><span class="eti2">Base</span><div class="p">26 € <small>al mese</small></div>
+    <ul><li>tutti gli strumenti: la mia orma, Megafono, chat, villaggio, eventi, pubblicare nelle stanze, radio</li><li>Antaḥkaraṇa primo livello: il cammino e il percorso dei talenti</li></ul></div>
+   <div class="col3"><span class="eti2">Praticantato</span><div class="p">20 € <small>a settimana</small></div>
+    <ul><li>gli esercizi</li><li>le video chiamate</li><li>i contenuti esclusivi</li></ul></div>
+   <div class="col3"><span class="eti2">Karma yoga</span><div class="p" style="font-size:1.7rem">il servizio</div>
+    <ul><li>l'accesso all'ospitalità</li><li>i contatti di persone che ti risuonano, vicino a te</li><li>mettere a disposizione un punto di ritiro, portare i pacchi, fare da referente di una zona</li></ul></div>
+  </div>
+ </section>
+
+ <div class="entra">
+  <span class="pill" data-r="soglia">entra</span>
+  <span class="sotto-mega">oppure scrivi qui sotto un obiettivo, un evento o una richiesta ↓</span>
+ </div>
+</div>
+
+<script>
+  function vaiA(r){
+    if (r.indexOf("&") >= 0) { try { window.parent.location.href = "index.html?p=" + r; } catch (e) { location.href = "../../index.html?p=" + r; } return; }
+    try { window.parent.vai(r); } catch (e) { location.href = "../../index.html?p=" + r; }
+  }
+  document.addEventListener("click", function (e) {
+    var r = e.target.closest && e.target.closest("[data-r]");
+    if (r) { e.preventDefault(); vaiA(r.getAttribute("data-r").replace(/&amp;/g, "&")); }
+  });
+  if (window.parent !== window) document.documentElement.classList.add("in-app");
+</script>
+</body>
+</html>
