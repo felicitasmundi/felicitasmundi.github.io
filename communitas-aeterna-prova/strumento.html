@@ -545,6 +545,10 @@ header.top{position:relative}
 .esp-g b{display:block;font:600 17px "DM Sans",system-ui,sans-serif}.esp-g small{display:block;color:#c9c3d6;font-size:14px;margin-top:2px}
 .esp-g.r{border-style:dashed;padding-top:22px}.esp-g i{position:absolute;top:6px;right:8px;font-style:normal;font-size:11px;letter-spacing:.1em;color:var(--e);text-transform:uppercase}
 .esp-g.aperto{background:color-mix(in srgb,var(--e) 18%,transparent)}
+.esp-v{display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;background:none;border:0;border-top:1px solid rgba(245,240,230,.09);padding:12px 0;color:#F5F0E6;font:inherit;text-align:left;cursor:pointer}
+.esp-el h2+.esp-v,.esp-d+.esp-v{border-top:0;margin-top:6px}
+.esp-v b{display:block;font:500 18px "DM Sans",system-ui,sans-serif}.esp-v small{display:block;color:#c9c3d6;font-size:15px;margin-top:2px}
+.esp-v em{flex:none;font-style:normal;border:1px solid #D4AF6A;color:#D4AF6A;border-radius:16px;padding:6px 14px;font-weight:600;font-size:16px}
 .esp-nl{font-style:normal;background:#D4AF6A;color:#1A1405;border-radius:10px;padding:0 7px;font-weight:600;margin-left:4px}
 #esp-team{margin-top:10px}
 /* 31/10 pulizie (Gab «ora ripuliamo»): una sola «Nuova chat», la carta in Espandi; la barra in alto in blu cosmo con le stelle */
@@ -959,32 +963,45 @@ function espSolidi(c){
     if(!fermo)espGiro=requestAnimationFrame(giro);}
   espGiro=requestAnimationFrame(giro);
 }
+/* ESPANDI PER FASE · 6/11/2026 (thread «Rifare Azione per il nucleo e lo staff»). Gab 6/11 12:14: «l aspetto elementi deve essere piu visibile
+   nel cervello, mentre espandi è un aspetto pratico che deve avere però il riferimengto a seconda della fase in cui ci si trova».
+   Ospite: tre blocchi (Vicinati del cibo · Assistenza comunitaria integrata · Cervello Digitale Evoluto). Ruoli e nucleo: prima i loro team.
+   Gab 12:15: «c'è una differenza tra ciò che si comunica e il modo in cui i dati vengono archiviati»: ogni scelta apre una richiesta d'assistenza
+   con la voce già scritta; il team che la riceve lo decide la tavola dei motivi nel database. */
+var ESP_BLOCCHI=[
+  {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Emporio (ordini)","emporio"],["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto"]]},
+  {tit:"Assistenza comunitaria integrata",voci:[["Praticantato","prat"],["Spiritualità"],["Percorsi"],["Trattamenti"],["Consulenze"]]},
+  {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["26 al mese","","per integrarsi al cervello felicitas"],["da 1500","","per attivare il sistema autonomo della propria azienda, che possa poi interagire col cervello felicitas"]],link:"cervello-digitale-evoluto.html"}
+];
 function vAzione(){
   var c=$("#corpo");
   function g(t,attr,ruolo,sotto){var a=attr.indexOf("href=")===0;
     return '<'+(a?'a ':'button type="button" ')+'class="esp-g'+(ruolo?' r':'')+'" '+attr+'><b>'+esc(t)+'</b>'+(sotto?'<small>'+sotto+'</small>':'')+(ruolo?'<i>ruolo</i>':'')+'</'+(a?'a':'button')+'>';}
+  var ruolo=!!(io.id&&(io.nucleo||(io.ruoli||[]).length));
   var log=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
-  var gesti={
-    terra:io.id?[g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>'),g("Nuova chat",'data-esp-chat="1"')].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
-              :[g("Entra",'href="'+ENTRA+'"')],
-    acqua:[g("Acquista in Emporio",'href="emporio.html?c=10182300"')].concat(io.id&&log?[g("Cassa",'data-vai="cassa"',true)]:[]),
-    fuoco:[g("Mutuo aiuto",'data-vai="assistenza"')],
-    aria:[g("Stampa",'href="emporio.html?c=10182300"')].concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]),
-    etere:[(io.id?g("Praticantato",'data-esp-prat="1"'):g("Praticantato",'data-vai="obiettivi"')),g("Il Cervello Digitale Evoluto",'href="cervello-digitale-evoluto.html"')]
-  };
-  c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+ESP_EL.map(function(e){
-    return '<section class="esp-el" style="--e:'+e.c+'"><div class="esp-testa"><canvas data-s="'+e.s+'" data-c="'+e.c+'" aria-hidden="true"></canvas>'+
-      '<div><p class="esp-nm">'+e.el+'</p><h2>'+esc(e.st)+'</h2><p class="esp-d">'+esc(e.d)+'</p></div></div>'+
-      '<div class="esp-gg">'+gesti[e.k].join("")+'</div>'+
-      (e.k==="terra"&&io.id?'<div id="esp-team" hidden><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>':'')+'</section>';}).join("")+
+  var gr=[].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
+    .concat(log?[g("Cassa",'data-vai="cassa"',true)]:[]).concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]);
+  var team=io.id?'<section class="esp-el" style="--e:#D4AF6A"><p class="esp-nm">'+(ruolo?'I TUOI TEAM':'LE TUE CHAT')+'</p>'+
+      '<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+g("Nuova chat",'data-esp-chat="1"')+'</div>'+
+      '<div id="esp-team"'+(ruolo?'':' hidden')+'><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>'+
+      (ruolo?'<p class="esp-d" style="margin-top:12px">I tuoi obiettivi e le scadenze sono in Oggi.</p>':'')+
+      (gr.length?'<div class="esp-gg" style="margin-top:12px">'+gr.join("")+'</div>':'')+'</section>':'';
+  var blocchi=ESP_BLOCCHI.map(function(k,i){
+    return '<section class="esp-el esp-b" style="--e:#D4AF6A">'+(k.sopra?'<p class="esp-nm">'+esc(k.sopra)+'</p>':'')+'<h2>'+esc(k.tit)+'</h2>'+(k.d?'<p class="esp-d">'+esc(k.d)+'</p>':'')+
+      k.voci.map(function(v,j){return '<button type="button" class="esp-v" data-esp-v="'+i+'.'+j+'"><span><b>'+esc(v[0])+'</b>'+(v[2]?'<small>'+esc(v[2])+'</small>':'')+'</span><em>Scegli</em></button>';}).join("")+
+      (k.link?'<p class="esp-d" style="margin-top:10px"><a href="'+k.link+'" style="color:#D4AF6A">Il Cervello Digitale Evoluto ›</a></p>':'')+'</section>';}).join("");
+  c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+(io.id?'':'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>')+
+    (ruolo?team+'<p class="esp-nm" style="margin:22px 0 10px;color:#D4AF6A">DI COSA HAI BISOGNO?</p>'+blocchi:blocchi+team)+
     /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
     '<div data-fm-installa></div>';
   legaVai(c);
   c.querySelectorAll("[data-mega]").forEach(function(b){b.onclick=function(){M.tipo=b.getAttribute("data-mega");M.msg="";vai("megafono");};});
-  var bt=c.querySelector("[data-esp-team]");if(bt)bt.onclick=function(){var p=$("#esp-team");p.hidden=!p.hidden;bt.classList.toggle("aperto",!p.hidden);if(!p.hidden)p.scrollIntoView({behavior:"smooth",block:"start"});};
-  var bp=c.querySelector("[data-esp-prat]");if(bp)bp.onclick=apriPrat;
+  var bt=c.querySelector("[data-esp-team]");if(bt){if(ruolo)bt.classList.add("aperto");bt.onclick=function(){var p=$("#esp-team");p.hidden=!p.hidden;bt.classList.toggle("aperto",!p.hidden);if(!p.hidden)p.scrollIntoView({behavior:"smooth",block:"start"});};}
   var bc=c.querySelector("[data-esp-chat]");if(bc)bc.onclick=function(){nuovaChat();};
-  espSolidi(c);
+  c.querySelectorAll("[data-esp-v]").forEach(function(b){b.onclick=function(){var ij=b.getAttribute("data-esp-v").split("."),k=ESP_BLOCCHI[+ij[0]],v=k.voci[+ij[1]];
+    if(v[1]==="emporio"){location.href="emporio.html?c=10182300";return;}
+    if(v[1]==="prat"&&io.id){apriPrat();return;}
+    vai("assistenza");var t=$("#ass-t");if(t){t.value=k.tit+" · "+v[0]+"\n\n";try{t.focus();t.setSelectionRange(t.value.length,t.value.length);}catch(e){}}};});
   if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();
     leggiTeam().then(function(l){var n=$("#esp-team-nomi");if(!n)return;
