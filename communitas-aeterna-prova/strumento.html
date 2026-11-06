@@ -874,7 +874,7 @@ function disegna(){
   /* 31/10, Gab: «mentre vedo espandi blu le altrre pagine sono bianche» → tutte le pagine in blu cosmo, come Espandi */
   document.body.classList.add("notte");
   document.body.classList.add("cosmo-az");
-  ({coscienza:vCoscienza,azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina,createam:vCreaTeam,plancia:vPlancia})[vista]();
+  ({coscienza:vCoscienza,azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina,createam:vCreaTeam,plancia:vPlancia,persone:vPersone})[vista]();
 }
 
 /* AZIONE · 29/10/2026, SQL 128 (thread «Chat interna dei team in Azione»; disegno azione-chat/bozza-azione, Gab 28/10: «Comunque per me va bene / fai sql e pubblichiamo»;
@@ -2126,7 +2126,7 @@ function treOggi(){
         num(n.entrate_oggi,n.entrate_oggi==1?'obiettivo nuovo oggi':'obiettivi nuovi oggi')+num(n.aperte,n.aperte==1?'obiettivo non assegnato':'obiettivi non assegnati')+num(n.prese,n.prese==1?'obiettivo in corso':'obiettivi in corso')+
         '<button type="button" class="tre-num'+(n.ferme?' r':'')+'" id="tre-ferme" aria-expanded="false"><b>'+(+n.ferme)+'</b><span>'+(n.ferme==1?'obiettivo in ritardo':'obiettivi in ritardo')+'</span></button>'+
         num(n.chiuse_oggi,n.chiuse_oggi==1?'obiettivo chiuso oggi':'obiettivi chiusi oggi')+(rs.t?num(rs.t,'stanze · '+rs.l+(rs.l==1?' libera':' libere')):'')+'</div><div id="tre-ferme-l" hidden></div>'+
-        '<div class="card tre-rt"><b>Ruoli e team</b><span class="m">Le persone, i ruoli, i team e chi vede cosa.</span><div class="fine"><button class="mini oro" data-vai="staff">Aggiungi una persona</button><button class="mini" data-vai="createam">Crea un team</button><button class="mini" data-vai="plancia">Chi vede cosa</button></div></div>';
+        '<div class="card tre-rt"><b>Ruoli e team</b><span class="m">Le persone, i ruoli, i team e chi vede cosa.</span><div class="fine"><button class="mini oro" data-vai="persone">Persone</button><button class="mini oro" data-vai="staff">Aggiungi una persona</button><button class="mini" data-vai="createam">Crea un team</button><button class="mini" data-vai="plancia">Chi vede cosa</button></div></div>';
     }
     /* piano 2 · chi ha un ruolo */
     if(area.length||stanze.length){
@@ -3896,10 +3896,79 @@ function plChi(k){
   return (PL_LIVELLI[k.livello]||k.livello||"")+(k.anche_team?" · anche il team "+k.anche_team:"");
 }
 function plQuando(t){if(!t)return "";var d=new Date(t);return d.toLocaleDateString("it-IT",{day:"numeric",month:"short"})+" "+d.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});}
+/* PERSONE · 6 nov, Gab: «a me servirebbe che nel admin panel possa vedere tutti quelli che lavorano in felicitas, chiunque abbia un ruolo,
+   ed io toccando su un tasto potrei aggiungere ruoli, o toglierlo, o inserirlo in un team o dargli accesso ad altre aree» (SQL 182) */
+var pers={lista:[],team:[],aperta:null,cerca:""};
+function vPersone(){
+  var c=$("#corpo");
+  if(!io.nucleo){vista="azione";vAzione();return;}
+  c.innerHTML='<h2 class="az-tit">Persone</h2><p class="nota" style="text-align:center">Chi ha un ruolo o è in un team. Tocca una persona per i suoi ruoli, i suoi team e cosa vede. Solo per il nucleo.</p>'+
+    '<label style="display:block;margin:10px 0">Cerca<input type="search" id="pe-cerca" autocomplete="off" placeholder="Nome"></label>'+
+    '<div id="pe-lista"><p class="nota">Un momento…</p></div>'+
+    '<p style="margin-top:16px"><button class="mini" data-vai="plancia">‹ Admin panel</button> <button class="mini" data-vai="oggi">‹ Oggi</button></p>';
+  legaVai(c);
+  var q=$("#pe-cerca");q.value=pers.cerca;q.oninput=function(){pers.cerca=q.value;peLista();};
+  peCarica();
+}
+function peCarica(){
+  Promise.all([
+    db.rpc("fm_persone_lavoro").then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;}),
+    db.from("squadre").select("id,nome").order("nome").then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];})
+  ]).then(function(v){
+    if(vista!=="persone")return;
+    if(v[0]===null){$("#pe-lista").innerHTML='<p class="nota">L\'elenco si apre con l\'SQL 182.</p>';return;}
+    pers.lista=v[0];pers.team=v[1].filter(function(t){return t.nome!=="Praticantato";});peLista();
+  });
+}
+function peLista(){
+  var box=$("#pe-lista");if(!box)return;
+  var n=String(pers.cerca||"").trim().toLowerCase();
+  var ll=pers.lista.filter(function(p){return !n||String(p.nome||"").toLowerCase().indexOf(n)>=0;});
+  var senza=pers.lista.filter(function(p){return p.senza_ruolo;}).length;
+  var ch='display:inline-block;margin:4px 6px 0 0;padding:2px 8px;border-radius:10px;font-size:13px;border:1px solid rgba(212,175,106,.45)';
+  box.innerHTML='<p class="et">'+pers.lista.length+(pers.lista.length==1?' persona':' persone')+(senza?' · '+senza+' in un team senza ruolo':'')+'</p>'+
+    (ll.length?ll.map(function(p){
+      var ap=pers.aperta===p.persona_id;
+      return '<div class="card modulo" style="margin-bottom:10px"><button type="button" class="pe-p" data-pe="'+esc(p.persona_id)+'" aria-expanded="'+ap+'" style="all:unset;cursor:pointer;display:block;width:100%">'+
+        '<b style="font-size:18px">'+esc(p.nome)+'</b>'+(p.senza_ruolo?' <span style="'+ch+';border-color:#E07A55;color:#E07A55">senza ruolo</span>':'')+
+        '<div>'+(p.ruoli||[]).map(function(x){return '<span style="'+ch+'">'+esc(FUNZIONI[x.funzione]||x.funzione)+' · '+esc(nomeRuolo(x.funzione,x.ruolo))+'</span>';}).join("")+'</div>'+
+        '<div>'+(p.team||[]).map(function(t){return '<span style="'+ch+';border-style:dashed">Team '+esc(t.nome)+(t.responsabile?' · responsabile':'')+'</span>';}).join("")+'</div></button>'+
+        (ap?peScheda(p):'')+'</div>';
+    }).join(""):'<p class="nota">Nessuno con questo nome.</p>');
+  box.querySelectorAll("[data-pe]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-pe");pers.aperta=pers.aperta===id?null:id;peLista();};});
+  var p=pers.lista.filter(function(x){return x.persona_id===pers.aperta;})[0];if(p)peLega(box,p);
+}
+function peScheda(p){
+  var tf=Object.keys(FUNZIONI)[0];
+  var fuori=pers.team.filter(function(t){return !(p.team||[]).some(function(x){return x.squadra_id===t.id;});});
+  return '<div style="margin-top:12px;border-top:1px solid rgba(212,175,106,.3);padding-top:10px">'+
+    '<p class="et">Ruoli</p>'+((p.ruoli||[]).length?(p.ruoli||[]).map(function(x){return '<div class="persona"><div><b>'+esc(nomeRuolo(x.funzione,x.ruolo))+'</b><small>'+esc(FUNZIONI[x.funzione]||x.funzione)+'</small></div><button class="mini" data-pe-rt="'+esc(x.funzione+"|"+x.ruolo)+'">Togli</button></div>';}).join(""):'<p class="nota">Nessun ruolo.</p>')+
+    '<div class="due"><label>Funzione<select id="pe-f">'+Object.keys(FUNZIONI).map(function(f){return '<option value="'+f+'">'+FUNZIONI[f]+'</option>';}).join("")+'</select></label>'+
+    '<label>Ruolo<select id="pe-r">'+RUOLI[tf].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("")+'</select></label></div>'+
+    '<div class="azioni"><button class="btn pieno" id="pe-dai">Dai il ruolo</button></div>'+
+    '<p class="et" style="margin-top:12px">Team</p>'+((p.team||[]).length?(p.team||[]).map(function(t){return '<div class="persona"><div><b>'+esc(t.nome)+'</b>'+(t.responsabile?'<small>responsabile</small>':'')+'</div><button class="mini" data-pe-tt="'+esc(t.squadra_id)+'">Togli</button></div>';}).join(""):'<p class="nota">In nessun team.</p>')+
+    (fuori.length?'<label>Metti nel team<select id="pe-t">'+fuori.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.nome)+'</option>';}).join("")+'</select></label><div class="azioni"><button class="btn pieno" id="pe-metti">Metti nel team</button></div>':'')+
+    '<p class="et" style="margin-top:12px">Cosa vede</p><p class="nota">Chi ha un ruolo legge i capitoli del Cervello per chi ha un ruolo. I capitoli si scelgono in <button class="mini" data-vai="plancia">Chi vede cosa</button>. Le altre aree: [da definire].</p>'+
+    '<div class="toast" id="pe-ok" hidden></div></div>';
+}
+function peLega(box,p){
+  legaVai(box);
+  var f=$("#pe-f");if(f)f.onchange=function(){$("#pe-r").innerHTML=RUOLI[f.value].map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");};
+  function fatto(r,b){if(b)b.disabled=false;if(r&&r.error)return mostra("#pe-ok",errore(r.error),true);if(r&&r.data&&r.data!=="ok")return mostra("#pe-ok",r.data,true);peCarica();}
+  var d=$("#pe-dai");if(d)d.onclick=function(){d.disabled=true;db.rpc("fm_persona_ruolo",{p_persona:p.persona_id,p_funzione:$("#pe-f").value,p_ruolo:$("#pe-r").value,p_dai:true}).then(function(r){fatto(r,d);},function(){d.disabled=false;});};
+  box.querySelectorAll("[data-pe-rt]").forEach(function(b){b.onclick=function(){
+    var a=b.getAttribute("data-pe-rt").split("|");if(!confirm("Togliere il ruolo «"+nomeRuolo(a[0],a[1])+"» a "+p.nome+"?"))return;
+    b.disabled=true;db.rpc("fm_persona_ruolo",{p_persona:p.persona_id,p_funzione:a[0],p_ruolo:a[1],p_dai:false}).then(function(r){fatto(r,b);},function(){b.disabled=false;});};});
+  var m=$("#pe-metti");if(m)m.onclick=function(){m.disabled=true;db.rpc("fm_persona_team",{p_persona:p.persona_id,p_squadra:$("#pe-t").value,p_dentro:true}).then(function(r){fatto(r,m);},function(){m.disabled=false;});};
+  box.querySelectorAll("[data-pe-tt]").forEach(function(b){b.onclick=function(){
+    if(!confirm("Togliere "+p.nome+" da questo team?"))return;
+    b.disabled=true;db.rpc("fm_persona_team",{p_persona:p.persona_id,p_squadra:b.getAttribute("data-pe-tt"),p_dentro:false}).then(function(r){fatto(r,b);},function(){b.disabled=false;});};});
+}
 function vPlancia(){
   var c=$("#corpo");
   if(!io.nucleo){vista="azione";vAzione();return;}
   c.innerHTML='<h2 class="az-tit">Admin panel</h2><p class="nota" style="text-align:center">Chi vede cosa, cosa aspetta un sì, cosa costa. Solo per il nucleo.</p>'+
+    '<div class="pl-sez"><p class="et">Persone</p><p><button class="btn pieno" data-vai="persone">Chi ha un ruolo o è in un team</button></p></div>'+
     '<div class="pl-sez"><p class="et">Chi vede cosa · i capitoli del Cervello</p><div id="pl-cap" class="pl-cap"><p class="nota">Un momento…</p></div><div id="pl-nuovo"></div></div>'+
     '<div class="pl-sez"><p class="et">Approvazioni in attesa</p><div id="pl-app" class="card modulo"><p class="nota">Un momento…</p></div></div>'+
     '<div class="pl-sez"><p class="et">Costi</p><div id="pl-costi" class="card modulo"><p class="nota">Un momento…</p></div></div>'+
@@ -4144,7 +4213,7 @@ function vRuoli(){
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff)$/.test(q))vista=q;}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff|persone)$/.test(q))vista=q;}catch(e){}
   /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
   try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;team.tipo="team";vista="team";}}catch(e){}
   /* le notifiche delle chat a due aprono strumento.html?v=azione&chat=<id> (SQL 129): se è ancora una richiesta, si resta in Azione a rispondere */
