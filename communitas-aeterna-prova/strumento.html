@@ -2697,7 +2697,7 @@ function g4Testa(g){
       '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
       '<a class="g4-tasto" href="/felicitas-festival-21-novembre-baratili/?c=10182300">Il programma</a></div></div>':'')+
     '<div id="g4-palb" hidden><div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
-    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div></div>'+
+    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div><div id="g4-pal-lista"></div></div>'+
     '<div class="g4-t g4-sale"><div class="in" id="g4-date"><div class="g4-occ">Le date</div>'+g4Date([])+'</div></div>'+
     '<div id="g4-vil"></div>';
 }
@@ -2821,15 +2821,34 @@ function g4Riempi(da,a,questo){
           db.rpc("fm_compito_do_una_mano",{p_compito:b.getAttribute("data-mano")}).then(function(x){if(x&&x.error){alert(errore(x.error));b.disabled=false;return;}b.textContent="✓";},function(){b.disabled=false;});};});}
     });
   },function(){});
+  /* 7/11 · palinsesto: si vede se almeno una card ha contenuti; toccando una card si aprono i suoi contenuti (orme.voce) */
+  if(db)db.from("orme").select("voce").in("voce",VOCI_G4.map(function(v){return v[0];})).limit(1000).then(function(r){
+    if(!ok()||!r||r.error)return;var n={};(r.data||[]).forEach(function(x){n[x.voce]=(n[x.voce]||0)+1;});
+    var PB=$("#g4-palb");if(!PB)return;PB.hidden=!(r.data||[]).length;
+    PB.querySelectorAll("[data-voce]").forEach(function(t){var k=t.getAttribute("data-voce");if(!n[k])return;t.style.cursor="pointer";t.setAttribute("role","button");t.tabIndex=0;
+      t.onclick=function(){g4Voce(k,t);};});
+  },function(){});
   /* palinsesto e «dall'ultima volta» (SQL 77): l'ultima visita si legge una volta sola a ogni apertura dell'app */
   var entro=g4Entro!==undefined?Promise.resolve(g4Entro):io.id?db.rpc("fm_giornale_entro").then(function(x){g4Entro=x&&!x.error?(x.data||null):null;return g4Entro;},function(){g4Entro=null;return null;}):Promise.resolve(null);
   entro.then(function(dal){return db.rpc("fm_giornale_voci_mosse",{p_dal:dal}).then(function(x){
     if(!ok()||!x||x.error||!x.data)return;var tot=0,m={};x.data.forEach(function(v){m[v.voce]=+v.nuove||0;tot+=m[v.voce];});
     document.querySelectorAll("#g4-pal [data-voce]").forEach(function(t){var n=m[t.getAttribute("data-voce")]||0;
       t.classList.toggle("ferma",!n);t.insertAdjacentHTML(n?"afterbegin":"beforeend",n?'<span class="g4-bollo">'+n+(n===1?" novità":" novità")+'</span>':'<p>niente di nuovo</p>');});
-    var PB=$("#g4-palb");if(PB)PB.hidden=!tot;
     var M=$("#g4-mosse");if(io.id&&dal&&tot&&M){M.innerHTML="Dall'ultima volta che sei entrato "+(tot===1?"si è mossa <b>1 cosa</b>.":"si sono mosse <b>"+tot+" cose</b>.");M.hidden=false;}
   });},function(){});
+}
+function g4Voce(k,t){
+  var L=$("#g4-pal-lista");if(!L)return;
+  if(L.getAttribute("data-voce")===k){L.removeAttribute("data-voce");L.innerHTML="";return;}
+  L.setAttribute("data-voce",k);var nome=(VOCI_G4.filter(function(v){return v[0]===k;})[0]||[k,k])[1];
+  L.innerHTML='<div class="g4-t g4-sale" style="margin-top:10px"><div class="in"><div class="g4-occ">'+esc(nome)+'</div><p class="nota">Un momento…</p></div></div>';
+  db.from("orme").select("id,titolo,contenuto,link,momento").eq("voce",k).order("momento",{ascending:false}).limit(30).then(function(r){
+    if(L.getAttribute("data-voce")!==k)return;var l=(r&&!r.error&&r.data)||[];
+    L.querySelector(".in").innerHTML='<div class="g4-occ">'+esc(nome)+'</div>'+l.map(function(o){
+      return '<div class="g4-vo" style="margin:12px 0 0">'+(o.titolo?'<h3 style="margin:0 0 4px">'+esc(o.titolo)+'</h3>':'')+linkHTML(o.link)+
+        (o.contenuto&&o.contenuto!==o.link?'<p style="margin:6px 0 0">'+esc(o.contenuto).replace(/\n/g,"<br>")+'</p>':'')+'</div>';}).join("");
+    L.scrollIntoView({behavior:"smooth",block:"start"});
+  },function(){});
 }
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
