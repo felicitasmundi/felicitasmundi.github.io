@@ -2850,6 +2850,21 @@ function g4Voce(k,t){
     L.scrollIntoView({behavior:"smooth",block:"start"});
   },function(){});
 }
+/* 7/11 · il video di oggi in cima al Giornale, finché il nucleo non lo cambia (SQL 199) */
+function g4VideoOggi(){
+  var B=$("#g4-oggi");if(!B||!db)return;
+  db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1).then(function(r){
+    var B=$("#g4-oggi");if(!B||!r||r.error)return;var u=r.data&&r.data[0]&&r.data[0].link,y=ytId(u);
+    B.innerHTML=(y?'<div class="video" style="margin:0 0 14px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
+      (io.nucleo?'<div id="g4-oggi-c" style="margin:0 0 14px"><button type="button" class="mini" id="g4-oggi-b">Cambia video</button></div>':'');
+    var b=$("#g4-oggi-b");if(!b)return;
+    b.onclick=function(){var w=$("#g4-oggi-c");
+      w.innerHTML='<input type="url" id="g4-oggi-t" placeholder="https://www.youtube.com/…" style="width:100%;box-sizing:border-box;font-size:18px;padding:10px 12px;border-radius:12px"><div style="display:flex;gap:10px;margin-top:8px"><button type="button" class="btn" id="g4-oggi-s">Metti in cima</button><button type="button" class="mini" id="g4-oggi-x">Annulla</button></div><p class="nota" id="g4-oggi-e" aria-live="polite"></p>';
+      $("#g4-oggi-t").focus();$("#g4-oggi-x").onclick=g4VideoOggi;
+      $("#g4-oggi-s").onclick=function(){var s=this,t=$("#g4-oggi-t").value.trim(),e=$("#g4-oggi-e");if(!t)return;s.disabled=true;e.textContent="Un momento…";
+        db.rpc("fm_giornale_cambia_video",{p_link:t}).then(function(x){if(x&&x.error){s.disabled=false;e.textContent=errore(x.error);return;}g4VideoOggi();},function(x){s.disabled=false;e.textContent=errore(x);});};};
+  },function(){});
+}
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
 var apriF={},apriA={};
@@ -2858,7 +2873,7 @@ function vGiornale(){
   var da=g.getTime(),a=da+864e5;
   var nome=giorno===0?"Oggi":giorno===-1?"Ieri":giorno===1?"Domani":"";
   var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  c.innerHTML=g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
+  c.innerHTML='<div id="g4-oggi"></div>'+g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
     (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
     '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>'+
     '<div class="g4-vid" style="margin-top:18px">'+videoHTML("villaggi")+videoHTML("cervello")+'</div>';
@@ -2894,6 +2909,7 @@ function vGiornale(){
     });
   });
   g4Riempi(da,a,questo);
+  g4VideoOggi();
 }
 function mediaHTML(o,firme){
   return (o.orma_file||[]).map(function(f){var u=firme[f.indirizzo];if(!u)return "";
