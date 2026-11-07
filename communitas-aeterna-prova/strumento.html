@@ -399,6 +399,7 @@ html:has(body.cosmo-az),body.notte.cosmo-az{background:linear-gradient(180deg,#1
 .tm-pr b{font-family:'Cinzel',Georgia,serif;font-size:22px;color:#D4AF6A;font-weight:500;letter-spacing:.04em}
 .tm-pr .tm-def{display:block;font-size:18px;line-height:1.45;color:#F5F0E6;margin:8px 0 10px}
 .tm-pr .tm-ul{white-space:normal}
+.tm-pr .tm-entra{display:inline-block;margin-top:12px;padding:8px 16px;border-radius:20px;background:#D4AF6A;color:#0a1430;font:600 17px 'DM Sans',system-ui,sans-serif}
 .tm-de{display:block;font-size:16px;color:rgba(245,240,230,.82);margin:2px 0 2px;white-space:normal}
 .tm-scrivi{background:transparent;border:1px dashed rgba(212,175,106,.6);color:#D4AF6A;border-radius:10px;font:500 15px 'DM Sans',system-ui,sans-serif;padding:4px 10px;margin:2px 0 4px;cursor:pointer}
 .tm-ul{display:block;font-size:17px;color:rgba(245,240,230,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1110,7 +1111,8 @@ function mieiTeam(){
       else{
         var pr=l.filter(function(t){return t.quadrante==="praticantato";}),fm=l.filter(function(t){return t.quadrante==="felicitasmundi";}),sp=l.filter(function(t){return t.quadrante!=="praticantato"&&t.quadrante!=="felicitasmundi";});
         box.innerHTML=pr.map(function(t){return '<button type="button" class="tm-pr" data-team="'+esc(t.team_id)+'"><b>'+esc(t.nome)+'</b>'+(t.descrizione?'<span class="tm-def">'+esc(t.descrizione)+'</span>':'')+
-            '<span class="tm-ul">'+esc(ulT(t))+(t.non_letti?' · <em aria-label="'+t.non_letti+' da leggere">'+t.non_letti+'</em>':'')+'</span></button>';}).join("")+
+            '<span class="tm-def" style="font-size:17px;color:#cfc8b8">Ognuno è invitato ad accedere: ci sono contenuti gratuiti, mentre gli incontri settimanali sono a pagamento o si accede col karma yoga.</span>'+
+            '<span class="tm-ul">'+esc(ulT(t))+(t.non_letti?' · <em aria-label="'+t.non_letti+' da leggere">'+t.non_letti+'</em>':'')+'</span><span class="tm-entra">Entra nel Praticantato ›</span></button>';}).join("")+
           (fm.length?'<p class="tm-et">Team FelicitasMundi</p><div class="tm-lista">'+fm.map(riga).join("")+'</div>':'')+
           (sp.length?'<p class="tm-et">Team specifici</p><div class="tm-lista">'+sp.map(riga).join("")+'</div>':'');
       }
