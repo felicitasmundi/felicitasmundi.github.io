@@ -1643,13 +1643,19 @@ function argomenti(){
 var staffTeamPre=null;
 /* 2-3/11, Gab: «io non riesco ad aggiungere nessuno da dentro i team» · 3/11 10:24 «nel riquadro vedi i 3 puntini a destra, li dovrebbe esserci sia scritto aggiungi persone e invia link invito (solo per nucleo e ruoli)»
    → in cima al foglio ⋯: «Aggiungi persone» (fm_staff_invita col team già dato, SQL 144: mail già iscritta = entra subito; altrimenti link personale) e «Invia link invito» (fm_link_team). Senza ruolo: entra nel team, il ruolo si dà dopo. */
+/* 7/11 Gab: «chi li inserisce deve scrivere in che ruolo.. chi non ha ruolo va in default in karma yoga» → un ruolo dei 17 oppure «Karma yoga» (SQL 197) */
+function peRuoliOpz(){return '<option value="">Scegli il ruolo</option><option value="karma|">Karma yoga</option>'+
+    Object.keys(RUOLI).map(function(f){return '<optgroup label="'+esc(FUNZIONI[f]||f)+'">'+RUOLI[f].map(function(x){return '<option value="'+f+'|'+x[0]+'">'+esc(x[1])+'</option>';}).join("")+'</optgroup>';}).join("");}
 function persH(){return '<button type="button" class="tc-btn" id="mc-apri" style="margin-top:6px">Aggiungi persone</button>'+
   '<div id="mc-modulo" hidden>'+
   '<input type="text" class="tc-campo" id="mc-nome" autocomplete="off" placeholder="Nome e cognome" aria-label="Nome e cognome" style="margin-top:12px">'+
   '<input type="email" class="tc-campo" id="mc-mail" autocomplete="off" inputmode="email" placeholder="Mail" aria-label="Mail" style="margin-top:8px">'+
   '<input type="tel" class="tc-campo" id="mc-tel" autocomplete="off" inputmode="tel" placeholder="Numero di telefono" aria-label="Numero di telefono" style="margin-top:8px">'+
+  '<select class="tc-campo" id="mc-ruolo" aria-label="Ruolo" style="margin-top:8px">'+peRuoliOpz()+'</select>'+
   '<button type="button" class="tc-btn" id="mc-aggiungi" style="margin-top:12px">Aggiungi</button></div>'+
   '<button type="button" class="tc-btn" id="mc-link" style="margin-top:12px;background:transparent;color:#D4AF6A;border:1px solid #D4AF6A">Invia link invito</button>'+
+  '<div id="mc-link-m" hidden><select class="tc-campo" id="mc-lruolo" aria-label="Ruolo di chi entra dal link" style="margin-top:8px">'+peRuoliOpz()+'</select>'+
+  '<button type="button" class="tc-btn" id="mc-link-crea" style="margin-top:8px">Crea il link</button></div>'+
   '<button type="button" class="tc-btn" id="mc-part" style="margin-top:12px;background:transparent;color:#D4AF6A;border:1px solid #D4AF6A">Partecipanti</button><div id="mc-part-l"></div>'+
   '<p id="mc-pe-esito" aria-live="polite" style="margin:10px 0 0"></p>';}
 var ARG_H='<h2>Argomenti</h2><p>Tocca un argomento: la chat torna al messaggio che l\'ha aperto.</p><div id="tc-ar"><p class="nota">Un momento…</p></div>';
@@ -1785,6 +1791,8 @@ function menuChat(){
   riempiArgomenti(id);if(!duo)riempiObiettivi(id);
   /* 3/11 17:35-17:36, Gab: «una finestra che quando fai invita team, prepara un messaggio presettato con scritta "sei stato invitato al team…"» · «con l aimmagine della piuma» · «un link che apre ad una pagina di soglia» → il link porta a communitas-aeterna/invito-team.html (piuma, i tre passi), il messaggio è già scritto e si corregge */
   function peNomeTeam(){var t=(team.lista||[]).filter(function(x){return x.team_id===id;})[0];return t?t.nome:"";}
+  /* 7/11 Gab: l'invito personale porta alla pagina con il ruolo, le spunte e «Scarica l'app» (SQL 186); il link del team resta invito-team */
+  function peLinkP(c){return new URL("../communitas-aeterna/invito-ruolo.html?c="+encodeURIComponent(c),location.href).href;}
   function peLink(c){return new URL("../communitas-aeterna/invito-team.html?c="+encodeURIComponent(c)+"&t="+encodeURIComponent(peNomeTeam())+"&s="+encodeURIComponent(id),location.href).href;}
   function peFinestra(u,tel,nota){
     var es=$("#mc-pe-esito"),msg="Sei stato invitato al team "+peNomeTeam()+"\n"+u;
@@ -1805,19 +1813,20 @@ function menuChat(){
   function peWa(t){var d=String(t||"").replace(/[^0-9]/g,"");if(!d)return "";if(/^0039/.test(d))d=d.slice(2);if(/^39[0-9]{9,10}$/.test(d))return d;if(/^3/.test(d))return "39"+d;return d;}
   var ap=$("#mc-apri");if(ap)ap.onclick=function(){var mo=$("#mc-modulo");mo.hidden=!mo.hidden;if(!mo.hidden)$("#mc-nome").focus();};
   var ab=$("#mc-aggiungi");if(ab)ab.onclick=function(){
-    var es=$("#mc-pe-esito"),n=val("mc-nome"),m=val("mc-mail"),tel=val("mc-tel");
+    var es=$("#mc-pe-esito"),n=val("mc-nome"),m=val("mc-mail"),tel=val("mc-tel"),ru=($("#mc-ruolo").value||"").split("|"),kar=ru[0]==="karma";
     if(!n){es.textContent="Scrivi il nome.";return;}
+    if(!kar&&!ru[1]){es.textContent="Scegli il ruolo.";return;}
     if(!m&&!tel){es.textContent="Scrivi la mail o il numero.";return;}
     if(m&&m.indexOf("@")<1){es.textContent="Questa mail non sembra giusta.";return;}
     if(tel&&!/^\+?[0-9 ]{6,20}$/.test(tel)){es.textContent="Il numero ha solo cifre, con + davanti se serve.";return;}
     ab.disabled=true;es.textContent="Un momento…";
-    db.rpc("fm_staff_invita",{p_nome:n,p_mail:m,p_villaggio:null,p_funzione:null,p_ruolo:null,p_telefono:tel||null,p_altri:[],p_squadra:id}).then(function(r){
+    db.rpc("fm_staff_invita",{p_nome:n,p_mail:m,p_villaggio:null,p_funzione:kar?null:ru[0],p_ruolo:kar?null:ru[1],p_telefono:tel||null,p_altri:[],p_squadra:id,p_karma:kar}).then(function(r){
       if(r&&r.error){ab.disabled=false;es.textContent=errore(r.error);return;}
-      var c=r.data||"",u=peLink(c);
+      var c=r.data||"",u=peLinkP(c);
       db.from("inviti_staff").select("usato_il").eq("codice",c).limit(1).then(function(q){ab.disabled=false;
         var gia=q&&!q.error&&q.data&&q.data[0]&&q.data[0].usato_il;
-        ["mc-nome","mc-mail","mc-tel"].forEach(function(k){$("#"+k).value="";});
-        if(gia){es.textContent=n+" era già iscritto: ora è nel team.";return;}
+        ["mc-nome","mc-mail","mc-tel","mc-ruolo"].forEach(function(k){$("#"+k).value="";});
+        if(gia){es.textContent=n+" era già iscritto: ora è nel team "+(kar?"in karma yoga":"con il ruolo "+nomeRuolo(ru[0],ru[1]))+".";return;}
         peFinestra(u,tel,'');
       },function(){ab.disabled=false;es.textContent="Fatto.";});
     },function(x){ab.disabled=false;es.textContent=errore(x);});};
@@ -1832,12 +1841,16 @@ function menuChat(){
         return '<div style="padding:12px 14px;background:#1a2148;'+(i?'border-top:1px solid rgba(212,175,106,.2);':'')+'font-size:18px">'+esc(x.nome)+(x.responsabile?' <span style="color:#D4AF6A;font-size:15px">· responsabile</span>':'')+'</div>';}).join("")+'</div>'+
         '<p style="margin:6px 0 0;color:#cfc8b8;font-size:16px">'+d.length+(d.length===1?' persona':' persone')+'</p>':'<p style="margin:10px 0 0">Ancora nessuno.</p>';
     },function(x){l.innerHTML='<p style="margin:10px 0 0">'+esc(errore(x))+'</p>';});};
-  var lb=$("#mc-link");if(lb)lb.onclick=function(){
-    var es=$("#mc-pe-esito");lb.disabled=true;
-    db.rpc("fm_link_team",{p_squadra:id}).then(function(r){lb.disabled=false;
-      if(r&&r.error){es.textContent=errore(r.error);return;}
-      peFinestra(peLink(r.data),'','Vale per chiunque lo riceva.');
-    },function(x){lb.disabled=false;es.textContent=errore(x);});};
+  /* 7/11 Gab: «invita link invito va reso possibile solo da nucleo e ruoli, e chi li inserisce deve scrivere in che ruolo» (SQL 197) */
+  var lb=$("#mc-link");if(lb)lb.onclick=function(){var lm=$("#mc-link-m");lm.hidden=!lm.hidden;};
+  var lc=$("#mc-link-crea");if(lc)lc.onclick=function(){
+    var es=$("#mc-pe-esito"),ru=($("#mc-lruolo").value||"").split("|"),kar=ru[0]==="karma";
+    if(!kar&&!ru[1]){es.textContent="Scegli il ruolo di chi entra dal link.";return;}
+    lc.disabled=true;es.textContent="Un momento…";
+    db.rpc("fm_link_team",{p_squadra:id,p_funzione:kar?null:ru[0],p_ruolo:kar?null:ru[1],p_karma:kar}).then(function(r){lc.disabled=false;
+      if(r&&r.error){es.textContent=/fm_link_team|function/i.test(r.error.message||"")?"Si apre con l'SQL 197.":errore(r.error);return;}
+      peFinestra(peLinkP(r.data),'','Vale per chiunque lo riceva, con il ruolo '+(kar?'Karma yoga':nomeRuolo(ru[0],ru[1]))+'.');
+    },function(x){lc.disabled=false;es.textContent=errore(x);});};
   function segna(v){f.querySelectorAll("[data-avv]").forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-avv")===v));});}
   db.rpc("fm_mia_scelta_avvisi",{p_cerchio:id}).then(function(r){if(r&&!r.error)segna(r.data||"ora");},function(){});
   f.querySelectorAll("[data-avv]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-avv");
@@ -4270,7 +4283,8 @@ function vStaff(box){
     (io.nucleo?'':'<p class="nota" style="margin:6px 0 0">Il ruolo che scegli resta proposto: lo conferma il nucleo.</p>')+
     ruoliSceltaHTML("st-rr")+
     '<div class="azioni"><button class="btn pieno" id="st-crea">Crea il link</button></div><div class="toast" id="st-ok" hidden></div></div>';
-  function link(c){return new URL("accesso.html?staff="+encodeURIComponent(c)+"&torna=strumento.html",location.href).href;}
+  /* 7/11, Gab: «posso mandare un link a Riccardo e a tutti gli altri … col ruolo che si sta dando» → l'invito personale apre communitas-aeterna/invito-ruolo.html (ruolo con «cosa fa», spunte, Scarica l'app; SQL 186) */
+  function link(c){return new URL("../communitas-aeterna/invito-ruolo.html?c="+encodeURIComponent(c),location.href).href;}
   function waNum(t){var d=String(t||"").replace(/[^0-9]/g,"");if(!d)return "";if(/^0039/.test(d))d=d.slice(2);if(/^39[0-9]{9,10}$/.test(d))return d;if(/^3/.test(d))return "39"+d;return d;}
   (io.nucleo?db.from("squadre").select("id,nome").order("nome").then(function(r){return (r&&!r.error&&r.data)||[];}):
     db.rpc("fm_miei_team").then(function(r){return ((r&&!r.error&&r.data)||[]).map(function(t){return {id:t.team_id,nome:t.nome};});})).then(function(l){
