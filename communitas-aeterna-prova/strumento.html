@@ -2274,14 +2274,42 @@ function agendaOggi(){
     box.innerHTML='<p class="et" style="margin:4px 0 6px">Prossimi 7 giorni</p>'+
       (tl.length>1?'<div class="ag-filtri">'+[["","Tutti"]].concat(tl.map(function(t){return [t.team_id,t.nome];})).map(function(t){
         return '<button type="button" data-ag-f="'+esc(t[0])+'" aria-pressed="'+(ag.filtro===t[0])+'">'+esc(t[1])+'</button>';}).join("")+'</div>':'')+
-      '<div id="ag-lista"></div>'+(tl.length?'<div class="fine" style="margin:0 0 12px"><button class="mini oro" id="ag-fissa">Fissa un incontro</button></div>':'');
+      '<div id="ag-lista"></div><div class="fine" style="margin:0 0 12px">'+(tl.length?'<button class="mini oro" id="ag-fissa">Fissa un incontro</button>':'')+'<button class="mini" id="ag-cal">Aggiungi al calendario</button></div>';
     function disegna(){var e=$("#ag-lista");if(!e)return;
       e.innerHTML=agElenco(ag.filtro?ag.dati.filter(function(x){return x.cerchio_id===ag.filtro;}):ag.dati);agLegaAnnulla(e,agendaOggi);}
     disegna();
     box.querySelectorAll("[data-ag-f]").forEach(function(b){b.onclick=function(){ag.filtro=b.getAttribute("data-ag-f");
       box.querySelectorAll("[data-ag-f]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});disegna();};});
     var bf=$("#ag-fissa");if(bf)bf.onclick=function(){agFissa(ag.filtro||null,agendaOggi);};
+    var bc=$("#ag-cal");if(bc)bc.onclick=agCalendario;
   });
+}
+/* 7 nov 09:52, Gab: «in che modo posso vederlo nel calendario del mio telefono?» (modello del 7/11, punto 5: link personale, solo in lettura). SQL 195 + funzione agenda-calendario. */
+function agCalendario(){
+  var w=document.createElement("div");w.className="ag-foglio-w";document.body.appendChild(w);
+  function chiudi(){w.remove();}
+  w.innerHTML='<div class="tc-velo" data-ag-chiudi></div><div class="tc-foglio" role="dialog" aria-modal="true" aria-labelledby="ag-ch"><div class="tc-presa"></div>'+
+    '<h2 id="ag-ch">L\'agenda nel calendario del telefono</h2><p>Il link è solo tuo: il calendario del telefono lo rilegge da solo e mostra gli incontri dei tuoi team, le lezioni, le dirette e gli eventi. Non va condiviso.</p>'+
+    '<div id="ag-cal-box"><p class="tc-nota">Un momento…</p></div></div>';
+  w.querySelector("[data-ag-chiudi]").onclick=chiudi;
+  function mostra(cod){
+    var box=w.querySelector("#ag-cal-box");if(!box)return;
+    if(!cod){box.innerHTML='<p class="tc-nota">Il link non si apre adesso. Si può riprovare.</p>';return;}
+    var u=URL_SB+"/functions/v1/agenda-calendario?c="+cod,wc=u.replace(/^https:/,"webcal:");
+    box.innerHTML='<label for="ag-cal-u">Il tuo link</label><input type="text" id="ag-cal-u" readonly>'+
+      '<button type="button" class="tc-btn" id="ag-cal-copia">Copia il link</button>'+
+      '<a class="tc-btn" style="display:flex;align-items:center;justify-content:center;text-decoration:none;background:transparent;color:#D4AF6A;border:1px solid #D4AF6A" href="'+esc(wc)+'">Apri nel calendario (iPhone)</a>'+
+      '<label>Su Android</label><p>Apri Google Calendar dal browser, su calendar.google.com. A sinistra: Altri calendari › + › Da URL, incolla il link e conferma. Gli incontri compaiono anche nel calendario del telefono; quelli nuovi possono arrivare con qualche ora di ritardo, perché Google rilegge il link ogni tanto.</p>'+
+      '<label>Se il link finisce in mani sbagliate</label><button type="button" class="tc-btn" id="ag-cal-nuovo" style="background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.5)">Cambia il link</button>'+
+      '<p class="tc-nota" id="ag-cal-esito" aria-live="polite"></p>';
+    box.querySelector("#ag-cal-u").value=u;
+    box.querySelector("#ag-cal-copia").onclick=function(){var b=this;
+      (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){b.textContent="Copiato";},function(){var i=box.querySelector("#ag-cal-u");i.focus();i.select();$("#ag-cal-esito").textContent="Tieni premuto sul link e scegli Copia.";});};
+    box.querySelector("#ag-cal-nuovo").onclick=function(){
+      if(!confirm("Cambiare il link? Il vecchio smette di funzionare e va aggiunto di nuovo nel calendario."))return;this.disabled=true;
+      db.rpc("fm_agenda_link_nuovo").then(function(r){mostra(r&&!r.error?r.data:null);},function(){mostra(null);});};
+  }
+  db.rpc("fm_agenda_link").then(function(r){mostra(r&&!r.error?r.data:null);},function(){mostra(null);});
 }
 function agendaTeam(id){
   if(team.tipo==="chat"||!$("#tc-agenda"))return;
