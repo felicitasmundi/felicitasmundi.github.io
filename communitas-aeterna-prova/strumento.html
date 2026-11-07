@@ -2903,11 +2903,13 @@ function vGiornale(){
     '<div class="g4-vid" style="margin-top:18px">'+videoHTML("villaggi")+videoHTML("cervello")+'</div>';
   c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
   var questo=giorno;
-  Promise.all([ormeDelGiorno(da,a),lezioni()]).then(function(v){
+  var artRpc=db?db.rpc("fm_giornale_articoli",{p_da:new Date(da).toISOString(),p_a:new Date(a).toISOString()}).then(function(r){return r&&!r.error&&Array.isArray(r.data)?r.data:null;},function(){return null;}):Promise.resolve(null);
+  Promise.all([ormeDelGiorno(da,a),lezioni(),artRpc]).then(function(v){
     if(vista!=="giornale"||giorno!==questo)return;
     var voci=v[0].map(function(o){return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
     v[1].forEach(function(l){var t=new Date(l.inizio_il).getTime();if(t>=da&&t<a)voci.push({l:l,t:t});});
     var arti=voci.filter(function(x){return x.o&&x.o.tipo==="articolo";});voci=voci.filter(function(x){return !(x.o&&x.o.tipo==="articolo");});
+    if(v[2])arti=v[2].filter(function(o){return o.tipo==="articolo";}).map(function(o){o.orma_file=o.orma_file||[];return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
     var files=[];voci.concat(arti).forEach(function(x){if(x.o)(x.o.orma_file||[]).forEach(function(f){if(/image|audio/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic|m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||""))files.push(f);});});
     return Promise.all([leggiNomi(voci.concat(arti).filter(function(x){return x.o;}).map(function(x){return x.o.persona_id;})),firmaURL(files)]).then(function(w){
       if(vista!=="giornale"||giorno!==questo)return;
