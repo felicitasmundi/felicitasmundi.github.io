@@ -2693,19 +2693,11 @@ function g4Testa(g){
     (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="/felicitas-festival-21-novembre-baratili/?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
       '<div class="g4-occ">In evidenza</div><h2>Felicitas Festival</h2>'+
       '<p>TRAME · la forza di essere connessi<br>Sabato 21 novembre 2026 · dalle 10:00<br>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</p>'+
-      videoHTML("villaggi")+videoHTML("cervello")+
       '<div class="g4-num"><div><b>'+giorni+'</b><small>giorni</small></div><div id="g4-fatti" hidden><b></b><small>compiti fatti</small></div><div id="g4-servono" hidden><b></b><small>cose che servono</small></div></div>'+
       '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
       '<a class="g4-tasto" href="/felicitas-festival-21-novembre-baratili/?c=10182300">Il programma</a></div></div>':'')+
-    '<div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
-    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div>'+
-    '<div class="g4-mos"><div class="g4-titolo g4-sale"><div class="g4-occ">Le tre linee · per i team</div><h3>Logistica, tecnologia e comunità</h3></div>'+
-      '<a class="g4-cat g4-c1 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>')+'<div><h3>Logistica</h3><p>Produttori · Punti di ritiro e magazzino · Trasporto · Progettazione e sviluppo · Emporio e ordini · Contabilità · Eventi e Festival</p></div></a>'+
-      '<a class="g4-cat g4-c5 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')+'<div><h3>Tecnologia</h3><p>Installazione e attivazione del Cervello Digitale Evoluto · Sicurezza e dati · Formazione all&#39;uso dell&#39;app · Sviluppo piattaforma</p></div></a>'+
-      '<a class="g4-cat g4-c2 g4-sale" style="grid-column:1/-1;min-height:120px" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="7" cy="9" r="2.5"/><circle cx="17" cy="9" r="2.5"/><circle cx="12" cy="6" r="2.5"/><path d="M3 20c.6-3 2.4-5 4-5M21 20c-.6-3-2.4-5-4-5M8 20c.6-3 2.2-5 4-5s3.4 2 4 5"/>')+'<div><h3>Comunità</h3><p>Coordinatore di villaggio · Coordinatori di vicinato · Formazione e scuola · Economia · Assistenza comunitaria integrata · Edizione e programmazione</p></div></a>'+
-      '</div>'+
-    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Il percorso</div><h2>Praticantato Antaḥkaraṇa</h2>'+
-      '<div class="g4-prezzi"><div><b>Gratis</b><small>leggere il cervello Felicitas</small></div><div><b>80 €</b><small>al mese il percorso, oppure il karma yoga</small></div></div></div></div>'+
+    '<div id="g4-palb" hidden><div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
+    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div></div>'+
     '<div class="g4-t g4-sale"><div class="in" id="g4-date"><div class="g4-occ">Le date</div>'+g4Date([])+'</div></div>'+
     '<div id="g4-vil"></div>';
 }
@@ -2835,6 +2827,7 @@ function g4Riempi(da,a,questo){
     if(!ok()||!x||x.error||!x.data)return;var tot=0,m={};x.data.forEach(function(v){m[v.voce]=+v.nuove||0;tot+=m[v.voce];});
     document.querySelectorAll("#g4-pal [data-voce]").forEach(function(t){var n=m[t.getAttribute("data-voce")]||0;
       t.classList.toggle("ferma",!n);t.insertAdjacentHTML(n?"afterbegin":"beforeend",n?'<span class="g4-bollo">'+n+(n===1?" novità":" novità")+'</span>':'<p>niente di nuovo</p>');});
+    var PB=$("#g4-palb");if(PB)PB.hidden=!tot;
     var M=$("#g4-mosse");if(io.id&&dal&&tot&&M){M.innerHTML="Dall'ultima volta che sei entrato "+(tot===1?"si è mossa <b>1 cosa</b>.":"si sono mosse <b>"+tot+" cose</b>.");M.hidden=false;}
   });},function(){});
 }
@@ -2848,7 +2841,8 @@ function vGiornale(){
   var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
   c.innerHTML=g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
     (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
-    '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>';
+    '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>'+
+    '<div class="g4-vid" style="margin-top:18px">'+videoHTML("villaggi")+videoHTML("cervello")+'</div>';
   c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
   var questo=giorno;
   Promise.all([ormeDelGiorno(da,a),lezioni()]).then(function(v){
