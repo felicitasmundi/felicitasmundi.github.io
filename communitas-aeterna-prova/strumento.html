@@ -296,9 +296,6 @@ body.notte .corpo .sez{border-bottom-color:var(--linea)}
 .gz-col{display:grid;grid-template-columns:1fr;gap:0 18px;align-items:start}
 @media (min-width:700px){.gz-col{grid-template-columns:1fr 1fr}}
 .gz-img{display:block;width:100%;height:auto;border-radius:14px;margin:0 0 12px}
-.gz-regola{margin:24px 0 18px;padding:14px 16px;border-radius:24px;border:1px solid var(--oro);text-align:center}
-.gz-regola p{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:19px;color:var(--inchiostro)}
-.gz-regola .gz-occ{margin:0 0 4px;font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--oro)}
 .g4-data{font-family:var(--display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--tenue)}
 .g4-apre h1{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1;margin:8px 0 12px}
 .g4-apre .grande{font-size:22px;line-height:1.25;font-weight:500;margin:0}
@@ -476,6 +473,21 @@ button.cs-carta{cursor:pointer}
 .cs-via .cs-m:first-of-type,.cs-via b{text-decoration:line-through;opacity:.6}
 .cs-sel{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}
 .cs-lab{display:block;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#D4AF6A;margin:14px 0 6px}
+.ag-filtri{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;-webkit-overflow-scrolling:touch}
+.ag-filtri button{flex:0 0 auto;border:1px solid var(--linea);background:transparent;color:var(--inchiostro);border-radius:16px;padding:6px 12px;font:inherit;font-size:15px;cursor:pointer}
+.ag-filtri button[aria-pressed=true]{background:var(--oro);border-color:var(--oro);color:#0a1430}
+.ag-g{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--oro);margin:10px 2px 6px}
+.ag-r{display:flex;align-items:flex-start;gap:12px;background:var(--foglio);border:1px solid var(--linea);border-left:4px solid var(--tc,var(--oro));border-radius:12px;padding:10px 12px;margin:0 0 8px}
+.ag-ora{flex:0 0 auto;min-width:3.6em;font-weight:600;font-size:17px;font-variant-numeric:tabular-nums}
+.ag-mezzo{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ag-mezzo b{font-size:18px;font-weight:500;overflow-wrap:anywhere}
+.ag-mezzo small{font-size:15px;color:var(--tenue)}
+.ag-mezzo a{font-size:15px;color:var(--oro);text-decoration:none}
+.ag-vuoto{font-size:16px;color:var(--tenue);margin:4px 2px 10px}
+.ag-team{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#1a2148;border:1px solid rgba(212,175,106,.4);border-radius:14px;padding:10px 12px;margin:0 0 10px;color:#F5F0E6;font-size:17px}
+.ag-team span{flex:1;min-width:0}
+.ag-foglio-w input[type=date],.ag-foglio-w input[type=time]{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:inherit;font-size:18px;color-scheme:dark}
+.ag-due{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tc-velo{position:fixed;inset:0;background:rgba(10,20,48,.72);z-index:20}
 .tc-foglio{position:fixed;left:0;right:0;bottom:0;max-height:85vh;overflow-y:auto;background:#122050;border-top:2px solid #D4AF6A;border-radius:22px 22px 0 0;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));z-index:21;color:#F5F0E6;max-width:720px;margin:0 auto;box-sizing:border-box}
 .tc-presa{width:48px;height:5px;border-radius:3px;background:rgba(212,175,106,.45);margin:0 auto 12px}
@@ -981,7 +993,7 @@ function vAzione(){
   var ruolo=!!(io.id&&(io.nucleo||(io.ruoli||[]).length));
   var log=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
   var gr=[].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
-    .concat(log?[g("Cassa",'data-vai="cassa"',true)]:[]).concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]);
+    .concat(log?[g("Cassa",'data-vai="cassa"',true)]:[]).concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]).concat(io.id?[g("Fissa un incontro",'data-esp-fissa="1"',false)]:[]);
   var team=io.id?'<section class="esp-el" style="--e:#D4AF6A"><p class="esp-nm">'+(ruolo?'I TUOI TEAM':'LE TUE CHAT')+'</p>'+
       '<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+g("Nuova chat",'data-esp-chat="1"')+'</div>'+
       '<div id="esp-team"'+(ruolo?'':' hidden')+'><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>'+
@@ -999,6 +1011,7 @@ function vAzione(){
   c.querySelectorAll("[data-mega]").forEach(function(b){b.onclick=function(){M.tipo=b.getAttribute("data-mega");M.msg="";vai("megafono");};});
   var bt=c.querySelector("[data-esp-team]");if(bt){if(ruolo)bt.classList.add("aperto");bt.onclick=function(){var p=$("#esp-team");p.hidden=!p.hidden;bt.classList.toggle("aperto",!p.hidden);if(!p.hidden)p.scrollIntoView({behavior:"smooth",block:"start"});};}
   var bc=c.querySelector("[data-esp-chat]");if(bc)bc.onclick=function(){nuovaChat();};
+  var bfi=c.querySelector("[data-esp-fissa]");if(bfi)bfi.onclick=function(){agFissa(null,null);};
   c.querySelectorAll("[data-esp-v]").forEach(function(b){b.onclick=function(){var ij=b.getAttribute("data-esp-v").split("."),k=ESP_BLOCCHI[+ij[0]],v=k.voci[+ij[1]];
     if(v[1]==="emporio"){location.href="emporio.html?c=10182300";return;}
     if(v[1]==="prat"&&io.id){apriPrat();return;}
@@ -1373,7 +1386,7 @@ function vTeam(){
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
       '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div>'+
       '<button type="button" class="tc-menu" id="tc-menu" aria-label="Argomenti e notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
-    (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-ass"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
+    (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
     '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
       '<input type="file" id="tc-doc" accept=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf" hidden>'+
@@ -1394,7 +1407,7 @@ function vTeam(){
   dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length||$("#tc-prat"))return;
     e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
   team.msg=[];team.prop={};
-  ricaricaTeam(true);team.guido=false;guidoChat(id);ass.rispondo=null;ass.stat=false;assTeam(id);
+  ricaricaTeam(true);team.guido=false;guidoChat(id);agendaTeam(id);ass.rispondo=null;ass.stat=false;assTeam(id);
   /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
   try{if(db.channel){team.sub=db.channel("team-"+id).on("postgres_changes",{event:"*",schema:"public",table:"gruppo_messaggi",filter:"cerchio_id=eq."+id},function(){ricaricaTeam(false);}).subscribe();}}catch(e){}
   team.timer=setInterval(function(){ricaricaTeam(false);},20000);
@@ -2191,7 +2204,7 @@ function vOggi(){
   var c=$("#corpo"),l=luna(),d=new Date();
   /* 5 nov 15:15, Gab: «a me oggi sembra confusionario» · 15:47 «ok tutto / oggi e obiettivo confermo» → per chi è entrato Oggi è solo il lavoro (i tre piani).
      Festival, Come funziona, Di cosa hai bisogno passano a Espandi (thread Espandi). L'ospite trova Oggi come prima. */
-  if(io.id){c.innerHTML='<div id="o-tre"><p class="nota">Un momento…</p></div>';treOggi();return;}
+  if(io.id){c.innerHTML='<div id="o-agenda"></div><div id="o-tre"><p class="nota">Un momento…</p></div>';agendaOggi();treOggi();return;}
   var prima=false;try{prima=!localStorage.getItem("fm-come-visto");localStorage.setItem("fm-come-visto","1");}catch(e){}
   setTimeout(function(){var d=$("#o-come");if(d&&prima)d.open=true;},0);
   var g0=new Date();g0.setHours(0,0,0,0);var da=g0.getTime(),a=da+864e5;
@@ -2220,6 +2233,97 @@ function vOggi(){
   if(io.id)treOggi();
   if(io.id)mieiOggi();
   if(io.id)logisticaOggi();
+}
+/* ═══ L'AGENDA CONDIVISA · SQL 190 ═══
+   7 nov 07:45, Gab: «Ok su agenda e a questa visione di svoluppo sviluppo / Procedi in questo»: un solo elenco di eventi,
+   «prossimi 7 giorni» in Oggi con filtro per team, «Fissa un incontro» nella chat del team e in Espandi. Senza l'SQL 190 non compare niente. */
+var AG_FONTE={incontro:["incontro","#D4AF6A"],diretta:["diretta","#E07A55"],lezione:["lezione","#B08AE0"],evento:["evento","#8DBF5E"],scadenza:["scadenza","#6FA8D6"]};
+var ag={filtro:"",dati:null};
+function agLeggi(){return db.rpc("fm_agenda",{p_giorni:7}).then(function(r){return r&&!r.error?(r.data||[]):null;},function(){return null;});}
+function agTeam(){return team.lista?Promise.resolve(team.lista):leggiTeam().then(function(l){return l||[];});}
+function agGiorno(g){var o=new Date();o.setHours(12,0,0,0);var d=new Date(g+"T12:00"),n=Math.round((d-o)/864e5);
+  return n===0?"Oggi":n===1?"Domani":d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long"});}
+function agNomeTeam(id){var t=(team.lista||[]).filter(function(x){return x.team_id===id;})[0];return t?t.nome:"";}
+function agRiga(x){
+  var f=AG_FONTE[x.fonte]||[x.fonte,"#D4AF6A"],tn=x.cerchio_id?agNomeTeam(x.cerchio_id):"";
+  var link=x.fonte==="diretta"?"diretta-bozza.html?puntata="+encodeURIComponent(x.id):(x.link&&/^https:/.test(x.link)?x.link:"");
+  var annullo=x.fonte==="incontro"&&(x.mio||io.nucleo);
+  return '<div class="ag-r" style="--tc:'+f[1]+'"><span class="ag-ora">'+(x.inizio_il?esc(hhmm(x.inizio_il)):'entro')+'</span>'+
+    '<span class="ag-mezzo"><b>'+esc(x.titolo||"")+'</b><small>'+esc([f[0],tn,x.luogo].filter(Boolean).join(" · "))+'</small>'+
+    (x.dettaglio&&x.fonte!=="diretta"?'<small>'+esc(x.dettaglio)+'</small>':'')+
+    (link?'<a href="'+esc(link)+'"'+(/^https:/.test(link)?' target="_blank" rel="noopener noreferrer"':'')+'>'+(x.fonte==="diretta"?'entra ›':'apri il link ›')+'</a>':'')+'</span>'+
+    (annullo?'<button class="mini" data-ag-annulla="'+esc(x.id)+'">Annulla</button>':'')+'</div>';
+}
+function agElenco(l){
+  var h="",g=null;
+  l.forEach(function(x){if(x.giorno!==g){g=x.giorno;h+='<p class="ag-g">'+esc(agGiorno(g))+'</p>';}h+=agRiga(x);});
+  return h||'<p class="ag-vuoto">Niente in agenda nei prossimi 7 giorni.</p>';
+}
+function agLegaAnnulla(box,dopo){
+  box.querySelectorAll("[data-ag-annulla]").forEach(function(b){b.onclick=function(){
+    if(!confirm("Annullare questo incontro? Nella chat del team arriva l'avviso."))return;b.disabled=true;
+    db.rpc("fm_agenda_annulla",{p_incontro:b.getAttribute("data-ag-annulla")}).then(function(r){if(r&&!r.error&&r.data!=="ok")alert(r.data);if(r&&r.error)alert(errore(r.error));dopo();},function(e){alert(errore(e));dopo();});};});
+}
+function agendaOggi(){
+  if(!io.id||!$("#o-agenda"))return;
+  Promise.all([agLeggi(),agTeam()]).then(function(v){
+    var box=$("#o-agenda");if(!box||vista!=="oggi")return;
+    if(v[0]===null){box.innerHTML="";return;}
+    ag.dati=v[0];var tl=v[1]||[];
+    if(ag.filtro&&!tl.some(function(t){return t.team_id===ag.filtro;}))ag.filtro="";
+    box.innerHTML='<p class="et" style="margin:4px 0 6px">Prossimi 7 giorni</p>'+
+      (tl.length>1?'<div class="ag-filtri">'+[["","Tutti"]].concat(tl.map(function(t){return [t.team_id,t.nome];})).map(function(t){
+        return '<button type="button" data-ag-f="'+esc(t[0])+'" aria-pressed="'+(ag.filtro===t[0])+'">'+esc(t[1])+'</button>';}).join("")+'</div>':'')+
+      '<div id="ag-lista"></div>'+(tl.length?'<div class="fine" style="margin:0 0 12px"><button class="mini oro" id="ag-fissa">Fissa un incontro</button></div>':'');
+    function disegna(){var e=$("#ag-lista");if(!e)return;
+      e.innerHTML=agElenco(ag.filtro?ag.dati.filter(function(x){return x.cerchio_id===ag.filtro;}):ag.dati);agLegaAnnulla(e,agendaOggi);}
+    disegna();
+    box.querySelectorAll("[data-ag-f]").forEach(function(b){b.onclick=function(){ag.filtro=b.getAttribute("data-ag-f");
+      box.querySelectorAll("[data-ag-f]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});disegna();};});
+    var bf=$("#ag-fissa");if(bf)bf.onclick=function(){agFissa(ag.filtro||null,agendaOggi);};
+  });
+}
+function agendaTeam(id){
+  if(team.tipo==="chat"||!$("#tc-agenda"))return;
+  agLeggi().then(function(l){
+    var e=$("#tc-agenda");if(!e||vista!=="team"||team.id!==id)return;
+    if(l===null){e.innerHTML="";return;}
+    var m=l.filter(function(x){return x.fonte==="incontro"&&x.cerchio_id===id;})[0];
+    e.innerHTML='<div class="ag-team"><span>'+(m?'<b>Prossimo incontro</b> · '+esc(m.titolo)+' · '+esc(agGiorno(m.giorno).toLowerCase())+' alle '+esc(hhmm(m.inizio_il))+(m.luogo?' · '+esc(m.luogo):''):'Nessun incontro fissato nei prossimi 7 giorni.')+'</span>'+
+      '<button class="mini oro" id="tc-ag-fissa">Fissa un incontro</button></div>';
+    $("#tc-ag-fissa").onclick=function(){agFissa(id,function(){agendaTeam(id);ricaricaTeam(true);});};
+  });
+}
+function agFissa(cerchio,dopo){
+  agTeam().then(function(tl){
+    tl=(tl||[]).filter(function(t){return !cerchio||t.team_id===cerchio;});
+    var w=document.createElement("div");w.className="ag-foglio-w";document.body.appendChild(w);
+    function chiudi(){w.remove();}
+    var dom=new Date(Date.now()+864e5),dd=dom.getFullYear()+"-"+String(dom.getMonth()+1).padStart(2,"0")+"-"+String(dom.getDate()).padStart(2,"0");
+    w.innerHTML='<div class="tc-velo" data-ag-chiudi></div><div class="tc-foglio" role="dialog" aria-modal="true" aria-labelledby="ag-h"><div class="tc-presa"></div>'+
+      '<h2 id="ag-h">Fissa un incontro</h2><p>L\'avviso arriva nella chat del team, e l\'incontro compare nell\'agenda di Oggi.</p>'+
+      (tl.length?'<label for="ag-tm">Team</label><select id="ag-tm">'+tl.map(function(t){return '<option value="'+esc(t.team_id)+'">'+esc(t.nome)+'</option>';}).join("")+'</select>'+
+      '<label for="ag-t">Di cosa si parla</label><input type="text" id="ag-t" maxlength="120" autocomplete="off">'+
+      '<div class="ag-due"><div><label for="ag-g">Giorno</label><input type="date" id="ag-g" value="'+dd+'"></div><div><label for="ag-o">Ora</label><input type="time" id="ag-o"></div></div>'+
+      '<label for="ag-d">Quanto dura</label><select id="ag-d"><option value="30">mezz\'ora</option><option value="60" selected>un\'ora</option><option value="90">un\'ora e mezza</option><option value="120">due ore</option><option value="240">mezza giornata</option></select>'+
+      '<label for="ag-l">Dove</label><input type="text" id="ag-l" maxlength="200" placeholder="Posto o stanza, niente indirizzi di casa" autocomplete="off">'+
+      '<label for="ag-k">Link, se è online</label><input type="text" id="ag-k" maxlength="300" placeholder="https://" autocomplete="off" inputmode="url">'+
+      '<button type="button" class="tc-btn" id="ag-ok">Fissa l\'incontro</button>':'<p>Per fissare un incontro serve essere in un team.</p>')+
+      '<p class="tc-nota" id="ag-esito" aria-live="polite"></p></div>';
+    w.querySelector("[data-ag-chiudi]").onclick=chiudi;
+    var ok=w.querySelector("#ag-ok");if(!ok)return;
+    ok.onclick=function(){
+      var g=$("#ag-g").value,o=$("#ag-o").value,es=$("#ag-esito");
+      if(!$("#ag-t").value.trim()){es.textContent="Scrivi di cosa si parla.";return;}
+      if(!g||!o){es.textContent="Scegli il giorno e l'ora.";return;}
+      var t=new Date(g+"T"+o);if(isNaN(t)){es.textContent="Il giorno o l'ora non si leggono.";return;}
+      ok.disabled=true;es.textContent="";
+      db.rpc("fm_agenda_fissa",{p_cerchio:$("#ag-tm").value,p_titolo:$("#ag-t").value,p_inizio:t.toISOString(),p_durata:+$("#ag-d").value,
+        p_luogo:$("#ag-l").value||null,p_link:$("#ag-k").value||null}).then(function(r){ok.disabled=false;
+        if(r&&!r.error&&r.data==="ok"){chiudi();if(dopo)dopo();return;}
+        es.textContent=(r&&r.data)||errore(r&&r.error);},function(e){ok.disabled=false;es.textContent=errore(e);});
+    };
+  });
 }
 /* 18 ott 23:05, Gab: «alla fine le task sono legate al sistema logistico» (thread «Gestionale della logistica», SQL 74).
    I compiti del mio ruolo logistico, in Oggi. Finché il 74 non c'è, o se non ho compiti, non compare niente. */
@@ -2542,7 +2646,7 @@ function g4Testa(g){
   var s1=function(x){return ' g4-sale';};
   return '<div class="gz"><div class="gz-riga"><span>'+esc(g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"}))+'</span><span>Edizione delle 9</span></div>'+
       '<p class="gz-occ0">Giornale</p><p class="gz-nome">FelicitasMundi</p><div class="gz-doppio"></div><p class="gz-quanti" id="gz-quanti" hidden></p>'+
-      '<div id="g4-art"></div><div class="gz-regola"><p class="gz-occ">Una regola sul nome</p><p>«È sempre scritto FelicitasMundi.»</p></div><div class="gz-doppio"></div></div>'+
+      '<div id="g4-art"></div><div class="gz-doppio"></div></div>'+
     '<div class="g4-apre"><p class="grande" id="g4-mosse" hidden></p></div>'+
     '<div id="g4-radio"></div>'+
     (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="/felicitas-festival-21-novembre-baratili/?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
