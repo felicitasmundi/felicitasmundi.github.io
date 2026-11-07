@@ -513,6 +513,7 @@ button.cs-carta{cursor:pointer}
 .tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
 /* SQL 129 · 29/10: audio, file, posizione, chat a due, notifiche a scelta */
 .tc-piu{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);background:transparent;color:#D4AF6A;font-size:30px;line-height:1;cursor:pointer}
+.ver-l{margin-top:10px}.ver-v{border-top:1px solid rgba(212,175,106,.25);padding:10px 0 4px}.ver-v small{display:block;font-size:15px;color:#D4AF6A}.ver-v p{margin:6px 0 8px;font-size:17px;line-height:1.5;white-space:normal}
 .corr{margin-top:10px}.corr-b{background:transparent;border:1px solid #D4AF6A;color:#D4AF6A;border-radius:14px;padding:8px 14px;font:600 16px "DM Sans",system-ui,sans-serif;cursor:pointer}.corr-b.pieno{background:#D4AF6A;color:#0a1430}.corr-b[disabled]{opacity:.45}.corr-si{display:inline-block;font-size:16px;color:#D4AF6A}.corr-l{display:block;font-size:16px;color:rgba(245,240,230,.8);margin:0 0 6px}.corr-t{width:100%;box-sizing:border-box;font-size:18px;padding:10px 12px;border-radius:12px;border:1px solid rgba(245,240,230,.25);background:#0a1430;color:#F5F0E6}.corr-az{display:flex;gap:10px;margin-top:8px}.corr-e{font-size:16px;margin:6px 0 0;color:#F5F0E6}
 .tc-cerv-info{border:1px solid #D4AF6A;border-radius:16px;background:#1a2148;color:#F5F0E6;font-size:18px;line-height:1.5;padding:12px 14px;margin:0 0 14px}
 .tc-menu{flex:0 0 auto;border:1px solid rgba(212,175,106,.5);border-radius:20px;background:transparent;color:#D4AF6A;font-size:22px;line-height:1;padding:6px 12px;cursor:pointer}
@@ -3001,6 +3002,39 @@ function corrLega(box){
         bs[0].disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){bs[0].disabled=false;e.textContent=errore(x);});};
   };});
 }
+/* 7/11/2026 · storico versioni delle card (SQL 209): fm_card_versioni, fm_card_ripristina, fm_card_cancellate. Senza le funzioni il tasto non c'è. */
+var VER_AZ={modifica:"Modificata",cancellata:"Cancellata",ripristino:"Ripristinata"};
+function verQuando(t){return new Date(t).toLocaleString("it-IT",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});}
+function verRiga(v,idk,tasto){
+  return '<div class="ver-v"><small>'+esc(VER_AZ[v.azione]||v.azione||"")+' · '+esc(verQuando(v[idk]))+(v.chi_nome?' · '+esc(v.chi_nome):'')+'</small>'+
+    '<p>'+esc(v.testo||"").replace(/\n/g,"<br>")+'</p>'+(tasto?'<button type="button" class="corr-b" data-ripristina="'+esc(v[tasto])+'">Ripristina</button>':'')+'</div>';
+}
+function verRipristina(w,k,daTeam){
+  w.querySelectorAll("[data-ripristina]").forEach(function(b){b.onclick=function(){b.disabled=true;
+    db.rpc("fm_card_ripristina",{p_versione:b.getAttribute("data-ripristina")}).then(function(r){
+      if(r&&!r.error&&r.data==="ok"){leggiCapLivello(k,daTeam);return;}
+      b.disabled=false;b.insertAdjacentHTML("afterend",'<p class="corr-e">'+esc((r&&!r.error&&r.data)||errore(r&&r.error))+'</p>');},
+      function(x){b.disabled=false;alert(errore(x));});};});
+}
+function verLega(box,k,daTeam){
+  if(!io.id||!db)return;
+  db.rpc("fm_card_cancellate",{p_capitolo:k.id}).then(function(r){
+    if(!r||r.error||!$("#cl-righe"))return;
+    box.querySelectorAll("[data-ver-box]").forEach(function(w){var id=w.getAttribute("data-ver-box");
+      w.innerHTML='<button type="button" class="corr-b" data-ver="'+esc(id)+'" style="margin-top:10px">Versioni</button>';
+      w.querySelector("[data-ver]").onclick=function(){
+        if(w.querySelector(".ver-l")){w.querySelector(".ver-l").remove();return;}
+        w.insertAdjacentHTML("beforeend",'<div class="ver-l"><p class="nota">Un momento…</p></div>');var L=w.querySelector(".ver-l");
+        db.rpc("fm_card_versioni",{p_riga:id}).then(function(q){
+          var l=(q&&!q.error&&q.data)||[];
+          L.innerHTML=l.length?l.map(function(v){return verRiga(v,"salvata_il",v.azione==="cancellata"?null:"id");}).join(""):'<p class="nota">Nessuna versione precedente.</p>';
+          verRipristina(L,k,daTeam);},function(){L.innerHTML='<p class="nota">Le versioni non si leggono adesso.</p>';});};});
+    var c=r.data||[];if(!c.length)return;
+    box.insertAdjacentHTML("beforeend",'<section class="card ver-canc" style="padding:18px;border-radius:18px"><h2 style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--oro);margin:0 0 8px">Card cancellate</h2>'+
+      c.map(function(v){v.azione=v.azione||"cancellata";return verRiga(v,"cancellata_il","versione_id");}).join("")+'</section>');
+    verRipristina(box.querySelector(".ver-canc"),k,daTeam);
+  },function(){});
+}
 function leggiCapLivello(k,daTeam){
   var c=$("#corpo");window.scrollTo(0,0);
   var lk=new URL("strumento.html?v=cervello&cap="+encodeURIComponent(k.id),location.href).href;
@@ -3020,8 +3054,8 @@ function leggiCapLivello(k,daTeam){
       var p=String(g.testo||"").split(/\n\s*\n/),h=p.shift();
       return '<section class="card" style="padding:18px;border-color:var(--oro);border-radius:18px">'+
         '<h2 style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--oro);margin:0 0 8px">'+esc(h)+'</h2>'+
-        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+corrTasto(g)+'</section>';}).join("");
-    corrLega(box);
+        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+corrTasto(g)+'<div data-ver-box="'+esc(g.id)+'"></div></section>';}).join("");
+    corrLega(box);verLega(box,k,daTeam);
   },function(){var box=$("#cl-righe");if(box)box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';});
 }
 function vCervello(){
