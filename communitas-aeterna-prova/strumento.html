@@ -2828,7 +2828,7 @@ function g4Riempi(da,a,questo){
       $("#g4-radio").innerHTML='<div class="g4-t g4-radio g4-sale"><div class="in"><div class="g4-occ">Radio Felicitas · '+esc(new Date(o.inizio_il||o.momento).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</div>'+
         (o.titolo?'<h2>'+esc(o.titolo)+'</h2>':'')+(o.contenuto?'<p>'+esc(String(o.contenuto).slice(0,600))+'</p>':'')+onda+
         (u?'<audio controls preload="none" src="'+esc(u)+'"></audio>':'')+
-        '<a class="g4-tasto" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'&c=10182300">▶ Ascolta</a></div></div>';g4Sale();});
+        '<a class="g4-tasto" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'&c=10182300">▶ Ascolta</a>'+visCanc(o)+'</div></div>';legaVis($("#g4-radio"));g4Sale();});
   },function(){});
   /* il Festival: cosa serve, dagli articoli pubblici del Festival (SQL 76) */
   if($("#g4-serve"))db.from("orme").select("id").eq("tipo","articolo").eq("visibilita","pubblico").eq("orma_madre_id",FEST_ID).limit(5).then(function(r){
@@ -2942,12 +2942,21 @@ function mediaHTML(o,firme){
     if(/image/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic)$/i.test(f.nome||""))return '<img class="foto" src="'+esc(u)+'" alt="'+esc(f.nome||"foto")+'" loading="lazy">';
     return '<audio controls preload="none" src="'+esc(u)+'"></audio>';}).join("");
 }
+function visGio(o){return o.tipo==="articolo"||o.tipo==="diretta";}
+function visPuo(o){return !!io.id&&(o.persona_id===io.id||(io.nucleo&&visGio(o)));}
+function visCanc(o){return visPuo(o)&&visGio(o)?'<button type="button" class="mini" data-canc="'+esc(o.id)+'" style="margin-top:8px">Cancella</button>':'';}
 function visHTML(o){
-  if(!io.id||o.persona_id!==io.id)return o.visibilita&&o.visibilita!=="pubblico"?'<span class="etv">'+esc(VIS[o.visibilita]||o.visibilita)+'</span>':"";
-  return '<span class="vis" style="margin-top:4px">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button data-vis="'+esc(o.id)+'|'+v+'" aria-pressed="'+(o.visibilita===v)+'">'+VIS[v]+'</button>';}).join("")+'</span>';
+  if(!visPuo(o))return o.visibilita&&o.visibilita!=="pubblico"?'<span class="etv">'+esc(VIS[o.visibilita]||o.visibilita)+'</span>':"";
+  return '<span class="vis" style="margin-top:4px">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button data-vis="'+esc(o.id)+'|'+v+'|'+esc(o.tipo||"")+'" aria-pressed="'+(o.visibilita===v)+'">'+VIS[v]+'</button>';}).join("")+'</span>'+visCanc(o);
 }
 function legaVis(c){c.querySelectorAll("[data-vis]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-vis").split("|");b.disabled=true;
-  db.from("orme").update({visibilita:p[1]}).eq("id",p[0]).then(function(r){if(r.error){alert(errore(r.error));b.disabled=false;return;}cache.obiettivi=null;disegna();});};});}
+  function diretto(){return db.from("orme").update({visibilita:p[1]}).eq("id",p[0]);}
+  /* articoli e dirette: SQL 211 (l'update diretto non cambia nulla per chi non è l'autore); senza la funzione, come prima */
+  var q=(p[2]==="articolo"||p[2]==="diretta")?db.rpc("fm_giornale_visibilita",{p_articolo:p[0],p_vis:p[1]}).then(function(r){
+    if(r&&r.error&&(r.error.code==="PGRST202"||/fm_giornale_visibilita/.test(r.error.message||"")))return diretto();return r;}):diretto();
+  q.then(function(r){if(r&&r.error){alert(errore(r.error));b.disabled=false;return;}cache.obiettivi=null;disegna();},function(x){b.disabled=false;alert(errore(x));});};});
+  c.querySelectorAll("[data-canc]").forEach(function(b){b.onclick=function(){if(!confirm("Cancellare? Non si torna indietro."))return;b.disabled=true;
+    db.rpc("fm_giornale_elimina",{p_id:b.getAttribute("data-canc")}).then(function(r){if(r&&r.error){alert(errore(r.error));b.disabled=false;return;}disegna();},function(x){b.disabled=false;alert(errore(x));});};});}
 function voce(x,firme){
   if(x.l){var l=x.l;return '<div class="onda"><b>Lezione · ore '+hhmm(l.inizio_il)+'</b><p>'+esc(l.titolo)+'</p>'+(l.sottotitolo?'<span>'+esc(l.sottotitolo)+'</span>':'')+(l.luogo?'<span>'+esc(l.luogo)+'</span>':'')+(l.link?linkHTML(l.link):'')+'</div>';}
   var o=x.o,chi=nomi[o.persona_id]||"",link=o.link||primoLink(o.contenuto),testo=String(o.contenuto||"");
