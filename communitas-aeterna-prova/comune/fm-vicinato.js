@@ -23,13 +23,22 @@
   var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
 
   var db = null;
+  /* 8/11/2026 limite d'attesa su tutto il sito (Gab: «esatto in ogni contesto»): fm-attesa.js sta nella stessa cartella comune/ */
+  var QUI = ((document.currentScript && document.currentScript.src) || "").replace(/[^\/?#]*([?#].*)?$/, "");
+  function attesa(){
+    if(!QUI || (window.supabase && window.supabase.__fmAttesa)) return Promise.resolve();
+    return new Promise(function(ok){
+      var a = document.createElement('script'); a.src = QUI + "fm-attesa.js?v=11082140";
+      a.onload = function(){ ok(); }; a.onerror = function(){ ok(); }; document.head.appendChild(a);
+    });
+  }
   function client(){
     if(db) return Promise.resolve(db);
     function crea(){ db = window.supabase.createClient(URL_SB, CHIAVE, {auth:{flowType:"implicit"}}); return db; }
-    if(window.supabase && window.supabase.createClient) return Promise.resolve(crea());
+    if(window.supabase && window.supabase.createClient) return attesa().then(crea);
     return new Promise(function(ok, no){
       var s = document.createElement('script'); s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
-      s.onload = function(){ ok(crea()); }; s.onerror = no; document.head.appendChild(s);
+      s.onload = function(){ attesa().then(function(){ ok(crea()); }); }; s.onerror = no; document.head.appendChild(s);
     });
   }
   function sessione(){ return client().then(function(c){ return c.auth.getSession(); }).then(function(r){ return r.data && r.data.session; }).catch(function(){ return null; }); }
