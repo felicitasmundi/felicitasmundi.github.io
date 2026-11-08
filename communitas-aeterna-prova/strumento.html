@@ -2716,19 +2716,11 @@ function g4Testa(g){
     (fest?'<div class="g4-t g4-prog'+s1()+'"><a href="/felicitas-festival-21-novembre-baratili/?c=10182300"><img src="casa/festival-trame-banda.jpg" alt="Felicitas Festival, TRAME, la forza di essere connessi, 21 novembre 2026, Baratili San Pietro"></a><div class="in">'+
       '<div class="g4-occ">In evidenza</div><h2>Felicitas Festival</h2>'+
       '<p>TRAME · la forza di essere connessi<br>Sabato 21 novembre 2026 · dalle 10:00<br>Centro Sociale + Centro polifunzionale, ex Cantina Madau · Baratili San Pietro (OR)</p>'+
-      videoHTML("villaggi")+videoHTML("cervello")+
       '<div class="g4-num"><div><b>'+giorni+'</b><small>giorni</small></div><div id="g4-fatti" hidden><b></b><small>compiti fatti</small></div><div id="g4-servono" hidden><b></b><small>cose che servono</small></div></div>'+
       '<div class="g4-serve" id="g4-serve" hidden><div class="g4-occ">Cosa serve</div></div>'+
       '<a class="g4-tasto" href="/felicitas-festival-21-novembre-baratili/?c=10182300">Il programma</a></div></div>':'')+
-    '<div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
-    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div>'+
-    '<div class="g4-mos"><div class="g4-titolo g4-sale"><div class="g4-occ">Le tre linee · per i team</div><h3>Logistica, tecnologia e comunità</h3></div>'+
-      '<a class="g4-cat g4-c1 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>')+'<div><h3>Logistica</h3><p>Produttori · Punti di ritiro e magazzino · Trasporto · Progettazione e sviluppo · Emporio e ordini · Contabilità · Eventi e Festival</p></div></a>'+
-      '<a class="g4-cat g4-c5 g4-sale" href="cervello.html?c=10182300#tre-funzioni">'+ico('<rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>')+'<div><h3>Tecnologia</h3><p>Installazione e attivazione del Cervello Digitale Evoluto · Sicurezza e dati · Formazione all&#39;uso dell&#39;app · Sviluppo piattaforma</p></div></a>'+
-      '<a class="g4-cat g4-c2 g4-sale" style="grid-column:1/-1;min-height:120px" href="cervello.html?c=10182300#tre-funzioni">'+ico('<circle cx="7" cy="9" r="2.5"/><circle cx="17" cy="9" r="2.5"/><circle cx="12" cy="6" r="2.5"/><path d="M3 20c.6-3 2.4-5 4-5M21 20c-.6-3-2.4-5-4-5M8 20c.6-3 2.2-5 4-5s3.4 2 4 5"/>')+'<div><h3>Comunità</h3><p>Coordinatore di villaggio · Coordinatori di vicinato · Formazione e scuola · Economia · Assistenza comunitaria integrata · Edizione e programmazione</p></div></a>'+
-      '</div>'+
-    '<div class="g4-t g4-sale"><div class="in"><div class="g4-occ">Il percorso</div><h2>Praticantato Antaḥkaraṇa</h2>'+
-      '<div class="g4-prezzi"><div><b>Gratis</b><small>leggere il cervello Felicitas</small></div><div><b>80 €</b><small>al mese il percorso, oppure il karma yoga</small></div></div></div></div>'+
+    '<div id="g4-palb" hidden><div class="g4-sale" style="padding:6px 6px 0"><div class="g4-occ">Il palinsesto</div></div>'+
+    '<div class="g4-pal" id="g4-pal">'+VOCI_G4.map(function(v){return '<div class="g4-p g4-c'+v[2]+' g4-sale" data-voce="'+v[0]+'"><h4>'+esc(v[1])+'</h4></div>';}).join("")+'</div><div id="g4-pal-lista"></div></div>'+
     '<div class="g4-t g4-sale"><div class="in" id="g4-date"><div class="g4-occ">Le date</div>'+g4Date([])+'</div></div>'+
     '<div id="g4-vil"></div>';
 }
@@ -2852,6 +2844,13 @@ function g4Riempi(da,a,questo){
           db.rpc("fm_compito_do_una_mano",{p_compito:b.getAttribute("data-mano")}).then(function(x){if(x&&x.error){alert(errore(x.error));b.disabled=false;return;}b.textContent="✓";},function(){b.disabled=false;});};});}
     });
   },function(){});
+  /* 7/11 · palinsesto: si vede se almeno una card ha contenuti; toccando una card si aprono i suoi contenuti (orme.voce) */
+  if(db)db.from("orme").select("voce").in("voce",VOCI_G4.map(function(v){return v[0];})).limit(1000).then(function(r){
+    if(!ok()||!r||r.error)return;var n={};(r.data||[]).forEach(function(x){n[x.voce]=(n[x.voce]||0)+1;});
+    var PB=$("#g4-palb");if(!PB)return;PB.hidden=!(r.data||[]).length;
+    PB.querySelectorAll("[data-voce]").forEach(function(t){var k=t.getAttribute("data-voce");if(!n[k])return;t.style.cursor="pointer";t.setAttribute("role","button");t.tabIndex=0;
+      t.onclick=function(){g4Voce(k,t);};});
+  },function(){});
   /* palinsesto e «dall'ultima volta» (SQL 77): l'ultima visita si legge una volta sola a ogni apertura dell'app */
   var entro=g4Entro!==undefined?Promise.resolve(g4Entro):io.id?db.rpc("fm_giornale_entro").then(function(x){g4Entro=x&&!x.error?(x.data||null):null;return g4Entro;},function(){g4Entro=null;return null;}):Promise.resolve(null);
   entro.then(function(dal){return db.rpc("fm_giornale_voci_mosse",{p_dal:dal}).then(function(x){
@@ -2861,6 +2860,34 @@ function g4Riempi(da,a,questo){
     var M=$("#g4-mosse");if(io.id&&dal&&tot&&M){M.innerHTML="Dall'ultima volta che sei entrato "+(tot===1?"si è mossa <b>1 cosa</b>.":"si sono mosse <b>"+tot+" cose</b>.");M.hidden=false;}
   });},function(){});
 }
+function g4Voce(k,t){
+  var L=$("#g4-pal-lista");if(!L)return;
+  if(L.getAttribute("data-voce")===k){L.removeAttribute("data-voce");L.innerHTML="";return;}
+  L.setAttribute("data-voce",k);var nome=(VOCI_G4.filter(function(v){return v[0]===k;})[0]||[k,k])[1];
+  L.innerHTML='<div class="g4-t" style="margin-top:10px"><div class="in"><div class="g4-occ">'+esc(nome)+'</div><p class="nota">Un momento…</p></div></div>';
+  db.from("orme").select("id,titolo,contenuto,link,momento").eq("voce",k).order("momento",{ascending:false}).limit(30).then(function(r){
+    if(L.getAttribute("data-voce")!==k)return;var l=(r&&!r.error&&r.data)||[];
+    L.querySelector(".in").innerHTML='<div class="g4-occ">'+esc(nome)+'</div>'+l.map(function(o){
+      return '<div class="g4-vo" style="margin:12px 0 0">'+(o.titolo?'<h3 style="margin:0 0 4px">'+esc(o.titolo)+'</h3>':'')+linkHTML(o.link)+
+        (o.contenuto&&o.contenuto!==o.link?'<p style="margin:6px 0 0">'+esc(o.contenuto).replace(/\n/g,"<br>")+'</p>':'')+'</div>';}).join("");
+    L.scrollIntoView({behavior:"smooth",block:"start"});
+  },function(){});
+}
+/* 7/11 · il video di oggi in cima al Giornale, finché il nucleo non lo cambia (SQL 199) */
+function g4VideoOggi(){
+  var B=$("#g4-oggi");if(!B||!db)return;
+  db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1).then(function(r){
+    var B=$("#g4-oggi");if(!B||!r||r.error)return;var u=r.data&&r.data[0]&&r.data[0].link,y=ytId(u);
+    B.innerHTML=(y?'<div class="video" style="margin:0 0 14px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
+      (io.nucleo?'<div id="g4-oggi-c" style="margin:0 0 14px"><button type="button" class="mini" id="g4-oggi-b">Cambia video</button></div>':'');
+    var b=$("#g4-oggi-b");if(!b)return;
+    b.onclick=function(){var w=$("#g4-oggi-c");
+      w.innerHTML='<input type="url" id="g4-oggi-t" placeholder="https://www.youtube.com/…" style="width:100%;box-sizing:border-box;font-size:18px;padding:10px 12px;border-radius:12px"><div style="display:flex;gap:10px;margin-top:8px"><button type="button" class="btn" id="g4-oggi-s">Metti in cima</button><button type="button" class="mini" id="g4-oggi-x">Annulla</button></div><p class="nota" id="g4-oggi-e" aria-live="polite"></p>';
+      $("#g4-oggi-t").focus();$("#g4-oggi-x").onclick=g4VideoOggi;
+      $("#g4-oggi-s").onclick=function(){var s=this,t=$("#g4-oggi-t").value.trim(),e=$("#g4-oggi-e");if(!t)return;s.disabled=true;e.textContent="Un momento…";
+        db.rpc("fm_giornale_cambia_video",{p_link:t}).then(function(x){if(x&&x.error){s.disabled=false;e.textContent=errore(x.error);return;}g4VideoOggi();},function(x){s.disabled=false;e.textContent=errore(x);});};};
+  },function(){});
+}
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
 var apriF={},apriA={};
@@ -2869,16 +2896,19 @@ function vGiornale(){
   var da=g.getTime(),a=da+864e5;
   var nome=giorno===0?"Oggi":giorno===-1?"Ieri":giorno===1?"Domani":"";
   var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  c.innerHTML=g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
+  c.innerHTML='<div id="g4-oggi"></div>'+g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
     (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
-    '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>';
+    '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>'+
+    '<div class="g4-vid" style="margin-top:18px">'+videoHTML("villaggi")+videoHTML("cervello")+'</div>';
   c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
   var questo=giorno;
-  Promise.all([ormeDelGiorno(da,a),lezioni()]).then(function(v){
+  var artRpc=db?db.rpc("fm_giornale_articoli",{p_da:new Date(da).toISOString(),p_a:new Date(a).toISOString()}).then(function(r){return r&&!r.error&&Array.isArray(r.data)?r.data:null;},function(){return null;}):Promise.resolve(null);
+  Promise.all([ormeDelGiorno(da,a),lezioni(),artRpc]).then(function(v){
     if(vista!=="giornale"||giorno!==questo)return;
     var voci=v[0].map(function(o){return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
     v[1].forEach(function(l){var t=new Date(l.inizio_il).getTime();if(t>=da&&t<a)voci.push({l:l,t:t});});
     var arti=voci.filter(function(x){return x.o&&x.o.tipo==="articolo";});voci=voci.filter(function(x){return !(x.o&&x.o.tipo==="articolo");});
+    if(v[2])arti=v[2].filter(function(o){return o.tipo==="articolo";}).map(function(o){o.orma_file=o.orma_file||[];return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
     var files=[];voci.concat(arti).forEach(function(x){if(x.o)(x.o.orma_file||[]).forEach(function(f){if(/image|audio/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic|m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||""))files.push(f);});});
     return Promise.all([leggiNomi(voci.concat(arti).filter(function(x){return x.o;}).map(function(x){return x.o.persona_id;})),firmaURL(files)]).then(function(w){
       if(vista!=="giornale"||giorno!==questo)return;
@@ -2904,6 +2934,7 @@ function vGiornale(){
     });
   });
   g4Riempi(da,a,questo);
+  g4VideoOggi();
 }
 function mediaHTML(o,firme){
   return (o.orma_file||[]).map(function(f){var u=firme[f.indirizzo];if(!u)return "";
