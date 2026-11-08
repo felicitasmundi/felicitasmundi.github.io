@@ -114,5 +114,14 @@
   });
 })();
 </script>
+<script id="fm-apk">
+/* 8/11/2026, Gab: dentro l'apk «Scarica» non faceva niente. Dentro l'apk il link va al file su GitHub: l'apk lo apre nel browser del telefono, che lo scarica. */
+(function(){
+  var a=document.getElementById("scarica"); if(!a||!window.FelicitasApp) return;
+  var v=(a.getAttribute("href").split("?")[1]||"");
+  a.href="https://raw.githubusercontent.com/felicitasmundi/felicitasmundi.github.io/main/communitas-aeterna/felicitas.apk"+(v?"?"+v:"");
+  a.removeAttribute("download");
+})();
+</script>
 </body>
 </html>
