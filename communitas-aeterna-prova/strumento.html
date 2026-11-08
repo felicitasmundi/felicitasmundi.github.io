@@ -2865,7 +2865,7 @@ function g4Voce(k,t){
   var L=$("#g4-pal-lista");if(!L)return;
   if(L.getAttribute("data-voce")===k){L.removeAttribute("data-voce");L.innerHTML="";return;}
   L.setAttribute("data-voce",k);var nome=(VOCI_G4.filter(function(v){return v[0]===k;})[0]||[k,k])[1];
-  L.innerHTML='<div class="g4-t g4-sale" style="margin-top:10px"><div class="in"><div class="g4-occ">'+esc(nome)+'</div><p class="nota">Un momento…</p></div></div>';
+  L.innerHTML='<div class="g4-t" style="margin-top:10px"><div class="in"><div class="g4-occ">'+esc(nome)+'</div><p class="nota">Un momento…</p></div></div>';
   db.from("orme").select("id,titolo,contenuto,link,momento").eq("voce",k).order("momento",{ascending:false}).limit(30).then(function(r){
     if(L.getAttribute("data-voce")!==k)return;var l=(r&&!r.error&&r.data)||[];
     L.querySelector(".in").innerHTML='<div class="g4-occ">'+esc(nome)+'</div>'+l.map(function(o){
