@@ -2874,20 +2874,53 @@ function g4Voce(k,t){
     L.scrollIntoView({behavior:"smooth",block:"start"});
   },function(){});
 }
-/* 7/11 · il video di oggi in cima al Giornale, finché il nucleo non lo cambia (SQL 199) */
+/* 7/11 · il video di oggi in cima al Giornale (SQL 199) · 8/11 Gab 09:14 «il metti video, mi dovrebbe permettere anche di inserire un file audio e un testo descrittivo.. l inserimento dovrebbe mandare autonomamente su una voce dell indice collegara» · 09:16 «potrei scegliere io la voce dell indice» · «il video in alto, potrebbe essere sostituito dalle dirette pubbliche, e poi al termine della diretta torna il video» (SQL 212) */
+var g4CimaT=null;
 function g4VideoOggi(){
-  var B=$("#g4-oggi");if(!B||!db)return;
-  db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1).then(function(r){
-    var B=$("#g4-oggi");if(!B||!r||r.error)return;var u=r.data&&r.data[0]&&r.data[0].link,y=ytId(u);
-    B.innerHTML=(y?'<div class="video" style="margin:0 0 14px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
-      (io.nucleo?'<div id="g4-oggi-c" style="margin:0 0 14px"><button type="button" class="mini" id="g4-oggi-b">Cambia video</button></div>':'');
-    var b=$("#g4-oggi-b");if(!b)return;
-    b.onclick=function(){var w=$("#g4-oggi-c");
-      w.innerHTML='<input type="url" id="g4-oggi-t" placeholder="https://www.youtube.com/…" style="width:100%;box-sizing:border-box;font-size:18px;padding:10px 12px;border-radius:12px"><div style="display:flex;gap:10px;margin-top:8px"><button type="button" class="btn" id="g4-oggi-s">Metti in cima</button><button type="button" class="mini" id="g4-oggi-x">Annulla</button></div><p class="nota" id="g4-oggi-e" aria-live="polite"></p>';
-      $("#g4-oggi-t").focus();$("#g4-oggi-x").onclick=g4VideoOggi;
-      $("#g4-oggi-s").onclick=function(){var s=this,t=$("#g4-oggi-t").value.trim(),e=$("#g4-oggi-e");if(!t)return;s.disabled=true;e.textContent="Un momento…";
-        db.rpc("fm_giornale_cambia_video",{p_link:t}).then(function(x){if(x&&x.error){s.disabled=false;e.textContent=errore(x.error);return;}g4VideoOggi();},function(x){s.disabled=false;e.textContent=errore(x);});};};
+  var B=$("#g4-oggi");if(!B||!db)return;clearTimeout(g4CimaT);
+  var vid=db.from("giornale_video").select("link,audio,testo,capitolo_id").order("messo_il",{ascending:false}).limit(1).then(function(r){
+    if(r&&r.error)return db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1);return r;});
+  var dir=db.rpc("fm_dirette_in_onda").then(function(r){var ora=Date.now();return ((r&&!r.error&&r.data)||[]).filter(function(d){return d.inizio_il&&new Date(d.inizio_il).getTime()<=ora;})[0]||null;},function(){return null;});
+  Promise.all([vid,dir]).then(function(v){
+    var B=$("#g4-oggi");if(!B||$("#g4-cima-f"))return;var r=v[0],d=v[1];
+    var x=(r&&!r.error&&r.data&&r.data[0])||{},y=ytId(x.link);
+    var tasto=io.nucleo?'<div id="g4-oggi-c" style="margin:0 0 14px"><button type="button" class="mini" id="g4-oggi-b">Metti in cima</button></div>':'';
+    if(d){B.innerHTML='<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'" style="display:flex;gap:10px;align-items:center;margin:0 0 14px;padding:16px;border:1px solid var(--oro,#D4AF6A);border-radius:18px;text-decoration:none;color:inherit"><span style="color:#ff6b6b;font-weight:600">● in onda</span><span>'+esc(d.titolo||"")+'</span><b style="margin-left:auto">Entra ›</b></a>'+tasto;}
+    else{B.innerHTML=(y?'<div class="video" style="margin:0 0 10px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
+      '<div id="g4-oggi-a"></div>'+(x.testo?'<p id="g4-oggi-t" style="margin:0 0 6px;font-size:18px;line-height:1.55">'+esc(x.testo).replace(/\n/g,"<br>")+'</p>':'')+'<p class="nota" id="g4-oggi-v" style="margin:0 0 14px" hidden></p>'+tasto;
+      if(x.audio&&io.id)db.storage.from("chat").createSignedUrl(x.audio,3600).then(function(u){var A=$("#g4-oggi-a");if(A&&u&&u.data&&u.data.signedUrl)A.innerHTML='<audio controls preload="none" src="'+esc(u.data.signedUrl)+'" style="width:100%;margin:0 0 10px"></audio>';},function(){});
+      if(x.capitolo_id)db.from("cervello_capitoli").select("titolo").eq("id",x.capitolo_id).maybeSingle().then(function(c){var V=$("#g4-oggi-v");if(V&&c&&c.data&&c.data.titolo){V.textContent=c.data.titolo;V.hidden=false;}},function(){});}
+    var b=$("#g4-oggi-b");if(b)b.onclick=g4CimaForm;
+    g4CimaT=setTimeout(function(){if(vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();},60000);
   },function(){});
+}
+function g4CimaForm(){
+  var w=$("#g4-oggi-c");if(!w)return;clearTimeout(g4CimaT);
+  w.innerHTML='<div id="g4-cima-f" style="display:flex;flex-direction:column;gap:8px">'+
+    '<label for="g4-cima-l">Link YouTube</label><input type="url" id="g4-cima-l" placeholder="https://www.youtube.com/…" style="font-size:18px;padding:10px 12px;border-radius:12px">'+
+    '<label for="g4-cima-au">oppure un file audio</label><input type="file" id="g4-cima-au" accept="audio/*">'+
+    '<label for="g4-cima-t">Testo che lo descrive</label><textarea id="g4-cima-t" rows="4" maxlength="4000" style="font-size:18px;padding:10px 12px;border-radius:12px"></textarea>'+
+    '<label for="g4-cima-v">Voce dell\'indice</label><select id="g4-cima-v" style="font-size:18px;padding:10px 12px;border-radius:12px"><option value="">Un momento…</option></select>'+
+    '<div style="display:flex;gap:10px"><button type="button" class="btn" id="g4-cima-s">Metti in cima</button><button type="button" class="mini" id="g4-cima-x">Annulla</button></div><p class="nota" id="g4-cima-e" aria-live="polite"></p></div>';
+  db.rpc("fm_cervello_indice").then(function(r){var S=$("#g4-cima-v");if(!S)return;var l=(r&&!r.error&&r.data)||[],per={},ord=[];
+    l.forEach(function(c){var k=c.sezione_nome||"Altre voci";if(!per[k]){per[k]=[];ord.push([k,c.sezione_ordine||99]);}per[k].push(c);});
+    ord.sort(function(a,b){return a[1]-b[1];});
+    S.innerHTML='<option value="">scegli la voce…</option>'+ord.map(function(o){return '<optgroup label="'+esc(o[0])+'">'+per[o[0]].map(function(c){return '<option value="'+esc(c.id)+'">'+Array((c.profondita||0)+1).join("— ")+esc(c.titolo)+'</option>';}).join("")+'</optgroup>';}).join("");
+  },function(){});
+  $("#g4-cima-x").onclick=function(){var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();};
+  $("#g4-cima-s").onclick=function(){var s=this,e=$("#g4-cima-e"),link=$("#g4-cima-l").value.trim(),fl=$("#g4-cima-au").files[0],t=$("#g4-cima-t").value.trim(),cap=$("#g4-cima-v").value;
+    if(!link&&!fl){e.textContent="Metti un link YouTube o scegli un file audio.";return;}
+    if(!t){e.textContent="Scrivi il testo che lo descrive.";return;}
+    if(!cap){e.textContent="Scegli la voce dell'indice.";return;}
+    s.disabled=true;e.textContent="Un momento…";
+    var su=Promise.resolve(null);
+    if(fl){var ext=(String(fl.name).split(".").pop()||"").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,5)||"m4a";
+      var id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
+      var path="giornale/"+id+"."+ext;
+      su=db.storage.from("chat").upload(path,fl,{contentType:fl.type||"audio/mpeg",upsert:false}).then(function(u){if(u&&u.error)throw u.error;return path;});}
+    su.then(function(path){return db.rpc("fm_giornale_metti_in_cima",{p_link:link||null,p_audio:path,p_testo:t,p_capitolo:cap});})
+      .then(function(r){if(r&&r.error){s.disabled=false;e.textContent=errore(r.error);return;}var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();},
+        function(x){s.disabled=false;e.textContent=errore(x);});};
 }
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
