@@ -1001,7 +1001,9 @@ function vAzione(){
   var ruolo=!!(io.id&&(io.nucleo||(io.ruoli||[]).length));
   var log=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
   var gr=[].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
-    .concat(log?[g("Cassa",'data-vai="cassa"',true)]:[]).concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]).concat(io.id?[g("Fissa un incontro",'data-esp-fissa="1"',false)]:[]);
+    .concat(log?[g("Cassa",'data-vai="cassa"',true)]:[]).concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]).concat(io.id?[g("Fissa un incontro",'data-esp-fissa="1"',false)]:[])
+    /* 8/11 Gab: «Produttore è karma yoga» · «No I prodotti li metterei in espandi» (SQL 216) */
+    .concat(io.id?[g("I miei prodotti",'data-esp-prod="1" style="display:none"',false)]:[]);
   var team=io.id?'<section class="esp-el" style="--e:#D4AF6A"><p class="esp-nm">'+(ruolo?'I TUOI TEAM':'LE TUE CHAT')+'</p>'+
       '<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+g("Nuova chat",'data-esp-chat="1"')+'</div>'+
       '<div id="esp-team"'+(ruolo?'':' hidden')+'><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>'+
@@ -1020,13 +1022,15 @@ function vAzione(){
   var bt=c.querySelector("[data-esp-team]");if(bt){if(ruolo)bt.classList.add("aperto");bt.onclick=function(){var p=$("#esp-team");p.hidden=!p.hidden;bt.classList.toggle("aperto",!p.hidden);if(!p.hidden)p.scrollIntoView({behavior:"smooth",block:"start"});};}
   var bc=c.querySelector("[data-esp-chat]");if(bc)bc.onclick=function(){nuovaChat();};
   var bfi=c.querySelector("[data-esp-fissa]");if(bfi)bfi.onclick=function(){agFissa(null,null);};
+  var bpr=c.querySelector("[data-esp-prod]");if(bpr)bpr.onclick=function(){mieiProdotti();};
   c.querySelectorAll("[data-esp-v]").forEach(function(b){b.onclick=function(){var ij=b.getAttribute("data-esp-v").split("."),k=ESP_BLOCCHI[+ij[0]],v=k.voci[+ij[1]];
     if(v[1]==="emporio"){location.href="emporio.html?c=10182300";return;}
     if(v[1]==="prat"&&io.id){apriPrat();return;}
     vai("assistenza");var t=$("#ass-t");if(t){t.value=k.tit+" · "+v[0]+"\n\n";try{t.focus();t.setSelectionRange(t.value.length,t.value.length);}catch(e){}}};});
   if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();
-    leggiTeam().then(function(l){var n=$("#esp-team-nomi");if(!n)return;
+    leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Felicitas Festival";}))bp.style.display="";
+      var n=$("#esp-team-nomi");if(!n)return;
       if(!l||!l.length){n.textContent="Ancora nessun team";return;}
       var nl=l.reduce(function(a,t){return a+(+t.non_letti||0);},0);
       n.innerHTML=(l.length===1?"1 team":l.length+" team")+(nl?' <em class="esp-nl" aria-label="'+nl+' da leggere">'+nl+'</em>':'');});}
@@ -1065,6 +1069,42 @@ function mieChat(){
       $("#tm-nuova").onclick=nuovaChat;
     });
   });
+}
+/* I MIEI PRODOTTI · SQL 216 (8/11/2026). Gab 16:43: «potranno mettere quali sono i prodotti a disposizione, la quantità, tutto quanto».
+   Elenco da fm_miei_prodotti (ognuno vede solo i suoi); quantità con fm_mia_quantita; «Aggiungi un prodotto» apre la voce «Produttori»
+   del team Felicitas Festival, dove la card diventa prodotto con «Rendi visibile a tutti» (SQL 184). */
+var PROD_STATI={pubblico:"nell'Emporio",proposto:"proposto",nel_team:"nel team",da_controllare:"da controllare",in_controllo:"in controllo",da_confermare:"da confermare",respinta:"respinta"};
+function mieiProdotti(){
+  var f=document.createElement("div");f.id="tc-foglio";document.body.appendChild(f);
+  function chiudi(){f.remove();}
+  f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+
+    '<h2>I miei prodotti</h2><div id="mp-lista"><p>Un momento…</p></div>'+
+    '<button type="button" class="tc-btn" id="mp-nuovo">Aggiungi un prodotto</button><p class="tc-nota" id="mp-esito" aria-live="polite"></p></div>';
+  f.querySelector("[data-chiudi-f]").onclick=chiudi;
+  var fest=(team.lista||[]).filter(function(t){return t.nome==="Felicitas Festival";})[0];
+  $("#mp-nuovo").onclick=function(){var e=$("#mp-esito");if(!fest){e.textContent="Non sei nel team Felicitas Festival.";return;}
+    db.from("cervello_capitoli").select("id").eq("squadra_id",fest.team_id).eq("titolo","Produttori").maybeSingle().then(function(r){
+      if(r&&!r.error&&r.data){location.href="strumento.html?v=cervello&cap="+encodeURIComponent(r.data.id);return;}
+      e.textContent=r&&r.error?errore(r.error):"La voce «Produttori» non c'è ancora.";},function(){e.textContent="Riprova tra poco.";});};
+  function disegna(){
+    db.rpc("fm_miei_prodotti").then(function(r){var box=$("#mp-lista");if(!box)return;
+      if(!r||r.error){box.innerHTML='<p>'+esc(errore(r&&r.error))+'</p>';return;}
+      var l=r.data||[];
+      if(!l.length){box.innerHTML='<p>Ancora nessun prodotto</p>';return;}
+      box.innerHTML=l.map(function(p){var st=esc(PROD_STATI[p.stato]||p.stato||"");
+        if(p.tipo==="card")return '<div class="tm-ric"><b>'+esc(p.nome)+'</b><span class="m">'+st+'</span></div>';
+        return '<div class="tm-ric"><b>'+esc(p.nome)+'</b><span class="m">'+st+(p.prezzo!=null?' · '+esc(String(p.prezzo))+' €':'')+'</span>'+
+          '<div class="ag-due" style="margin-top:8px"><input type="number" min="0" step="1" inputmode="numeric" data-mp-q="'+esc(p.id)+'" value="'+(p.quantita!=null?esc(String(p.quantita)):'')+'" aria-label="Quantità">'+
+          '<select data-mp-u="'+esc(p.id)+'" aria-label="Unità">'+["kg","g","l","pz","conf"].map(function(u){return '<option'+(p.unita===u?' selected':'')+'>'+u+'</option>';}).join("")+'</select></div>'+
+          '<div class="tc-az" style="margin:8px 0 0"><button type="button" class="cerv" data-mp-salva="'+esc(p.id)+'">Salva</button>'+
+          '</div></div>';}).join("");
+      box.querySelectorAll("[data-mp-salva]").forEach(function(b){b.onclick=function(){var id=b.getAttribute("data-mp-salva"),
+          q=box.querySelector('[data-mp-q="'+id+'"]'),u=box.querySelector('[data-mp-u="'+id+'"]'),e=$("#mp-esito");
+        b.disabled=true;db.rpc("fm_mia_quantita",{p_prodotto:id,p_quantita:q.value===""?null:parseInt(q.value,10),p_unita:u.value}).then(function(x){b.disabled=false;
+          e.textContent=x&&!x.error?(x.data==="ok"?"Salvato.":x.data):errore(x&&x.error);},function(){b.disabled=false;e.textContent="Riprova tra poco.";});};});
+    },function(){var box=$("#mp-lista");if(box)box.innerHTML='<p>Riprova tra poco.</p>';});
+  }
+  disegna();
 }
 /* nuova chat: si sceglie fra le persone dei propri team (fm_cerchio_persone, SQL 79) e si scrive una presentazione */
 function nuovaChat(){
