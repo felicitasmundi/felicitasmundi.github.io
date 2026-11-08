@@ -51,3 +51,10 @@
 .lc-sfoglia{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:8px}
 .lc-sfoglia button{font-family:var(--libro);font-style:italic;font-size:20px;color:var(--oro);padding:10px 0}
 .lc-apre{font-style:italic;font-size:22px;line-height:1.45;color:var(--testo);margin:16px auto 18px;max-width:520px}
+.lc-avviso{display:inline-block;margin:0 auto 16px;padding:10px 16px;border:1px solid var(--oro);border-radius:999px;font-family:var(--libro);font-size:19px;line-height:1.35;color:var(--oro);background:rgba(212,175,106,.08);max-width:520px}
+.lc-piena .lc-tit{color:var(--testo);font-weight:600}
+.lc-piena>.lc-riga .lc-punti{border-bottom-color:var(--oro)}
+.lc-vuota>.lc-riga{cursor:default}
+.lc-vuota>.lc-riga .lc-tit{color:rgba(245,240,230,.42)}
+.lc-vuota>.lc-riga .lc-el{opacity:.35;box-shadow:none}
+.lc-vuota>.lc-riga .lc-punti{border-bottom-color:rgba(212,175,106,.18)}
