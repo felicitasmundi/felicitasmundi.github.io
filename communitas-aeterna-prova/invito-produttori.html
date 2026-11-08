@@ -61,8 +61,8 @@ footer a{color:var(--piano)}
 </header>
 <main>
   <div class="tasti">
-    <a class="tasto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/modulo-produttore.html">L'accordo del produttore ›</a>
-    <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/felicitas-app.html">Scarica l'app · entri come produttore ›</a>
+    <a class="tasto" data-apk href="https://app.felicitasmundi.com/communitas-aeterna-prova/felicitas.apk?v=20261004" download="felicitas.apk">Scarica l'app ›</a>
+    <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/accesso.html?torna=strumento.html">Entri come produttore ›</a>
   </div>
   <ul class="indice"><li><a href="#senso">Il senso</a></li><li><a href="#felicitasmundi">Cos'è FelicitasMundi</a></li><li><a href="#vicinati">I Vicinati del Cibo</a></li><li><a href="#festival">Il Felicitas Festival</a></li><li><a href="#partecipa">Partecipa</a></li></ul>
 
@@ -104,12 +104,13 @@ footer a{color:var(--piano)}
   <p class="et">Partecipa</p>
   <h2>Partecipa coi tuoi prodotti</h2>
   <div class="tasti">
-    <a class="tasto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/modulo-produttore.html">L'accordo del produttore ›</a>
-    <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/felicitas-app.html">Scarica l'app · entri come produttore ›</a>
+    <a class="tasto" data-apk href="https://app.felicitasmundi.com/communitas-aeterna-prova/felicitas.apk?v=20261004" download="felicitas.apk">Scarica l'app ›</a>
+    <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/accesso.html?torna=strumento.html">Entri come produttore ›</a>
   </div>
 </section>
 
 <footer>© 2026 Felicitas Omnia S.r.l.s. · P.IVA 03075740906 · <a href="https://app.felicitasmundi.com/communitas-aeterna-prova/privacy.html">Privacy</a></footer>
 </main>
+<script>if(/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1))document.querySelectorAll("[data-apk]").forEach(function(a){a.remove();});</script>
 </body>
 </html>
