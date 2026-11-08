@@ -9,7 +9,10 @@
 (function(){
 var COL={terra:"#C9A15A",acqua:"#6FA8D6",fuoco:"#E07A55",aria:"#8DBF5E",etere:"#B08AE0"};
 /* Gab 8/11 21:30: «da definire nella parte iniziale che il nostro lavoro è prevalentemente quello di guidare lo sviluppo del cervello digitale evoluto, realizzato con l'intento in comune di partecipare a FelicitasMundi» (sue parole, nomi con le maiuscole delle sue regole) */
-var APERTURA='<p class="lc-apre">Il nostro lavoro è prevalentemente quello di guidare lo sviluppo del Cervello Digitale Evoluto, realizzato con l\'intento in comune di partecipare a FelicitasMundi.</p>';
+/* 8/11 22:01 Gab sceglie la frase 1 tra le sue, «ma non tuo cervello» (tolto «tuo») */
+var APERTURA='<p class="lc-apre">Il cervello digitale è connesso alla realtà di FelicitasMundi. È un cervello digitale comunitario, funziona come internet, ma dentro il mondo di FelicitasMundi. Il cervello è connesso alle realtà coinvolte e le informazioni si parlano tra loro.</p>';
+/* 8/11 21:52-21:57 Gab: «manca un tasto per indicare che l indice sarà visibile pubblicamente, nel corso dell autunno.. per ora sono visibili solo alcune pagine» · «lo si fa vedere solo con accesso» */
+var AVVISO='<p class="lc-avviso">L\'indice sarà visibile pubblicamente nel corso dell\'autunno. Per ora sono visibili solo alcune pagine.</p>';
 var ROMANI=["","I","II","III","IV","V","VI","VII","VIII","IX","X"];
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 function nuovo(r){return r.ultima&&(Date.now()-new Date(r.ultima).getTime())<7*864e5;}
@@ -19,33 +22,34 @@ window.libroCervello=function(box,fonte){
   box.classList.add("lc");
   box.innerHTML='<div class="lc-indice"><p class="lc-vuoto">Un momento…</p></div><div class="lc-pagina" hidden></div>';
   var ind=box.querySelector(".lc-indice"),pag=box.querySelector(".lc-pagina");
-  var righe=[],figli={},cacheCarte={};
+  var righe=[],figli={},cacheCarte={},pienoDi={};
 
   fonte.indice().then(function(r){righe=(r||[]).slice().sort(function(a,b){return a.ordine-b.ordine;});
-    righe.forEach(function(x){var p=x.padre_id||"_"+x.sezione;(figli[p]=figli[p]||[]).push(x);});disegnaIndice();},
+    righe.forEach(function(x){var p=x.padre_id||"_"+x.sezione;(figli[p]=figli[p]||[]).push(x);});pienoDi={};righe.forEach(function(x){if(+x.card>0){var r=x;while(r){pienoDi[r.id]=1;var pid=r.padre_id;r=pid?righe.filter(function(y){return y.id===pid;})[0]:null;}}});disegnaIndice();},
     function(){ind.innerHTML='<p class="lc-vuoto">L\'indice non si legge adesso.</p>';});
 
   function disegnaIndice(){
     var sez=[],vis={};righe.forEach(function(r){if(!vis[r.sezione]){vis[r.sezione]=1;sez.push(r);}});
     sez.sort(function(a,b){return a.sezione_ordine-b.sezione_ordine;});
-    ind.innerHTML='<header class="lc-front"><p class="lc-orn">❦</p><h1>Cervello</h1>'+APERTURA+'<p class="lc-sotto">Indice</p><div class="lc-filetto"></div></header>'+
+    ind.innerHTML='<header class="lc-front"><p class="lc-orn">❦</p><h1>Cervello</h1>'+APERTURA+(fonte.avviso?AVVISO:'')+'<p class="lc-sotto">Indice</p><div class="lc-filetto"></div></header>'+
       sez.map(function(s){
         return '<section class="lc-parte"><h2><span class="lc-num">'+ROMANI[s.sezione_ordine]+'</span>'+esc(s.sezione_nome)+'</h2>'+
           (figli["_"+s.sezione]||[]).filter(function(v){return !v.padre_id;}).map(voceH).join("")+(fonte.extra?(fonte.extra(s)||""):"")+'</section>';
       }).join("")+'<p class="lc-orn lc-fine">❦</p>';
     legaVoci(ind);
   }
+  /* 8/11 Gab: «rendi riconoscibili le pagine con contenuti all interno»: voce piena = ha card (o le ha una sua sottovoce); vuota = sbiadita, senza freccia, non si apre */
   function voceH(v){
-    var el=COL[v.elemento];
-    return '<div class="lc-voce'+(v.profondita?' lc-sotto-v':'')+'" data-voce="'+esc(v.id)+'">'+
-      '<button class="lc-riga" aria-expanded="false"><span class="lc-tit">'+(el?'<i class="lc-el" style="background:'+el+'"></i>':'')+esc(v.titolo)+
-      (nuovo(v)?'<i class="lc-nuovo" title="novità"></i>':'')+'</span><span class="lc-punti"></span><span class="lc-freccia">›</span></button>'+
+    var el=COL[v.elemento],pieno=!!pienoDi[v.id];
+    return '<div class="lc-voce'+(v.profondita?' lc-sotto-v':'')+(pieno?' lc-piena':' lc-vuota')+'" data-voce="'+esc(v.id)+'">'+
+      '<button class="lc-riga" aria-expanded="false"'+(pieno?'':' disabled')+'><span class="lc-tit">'+(el?'<i class="lc-el" style="background:'+el+'"></i>':'')+esc(v.titolo)+
+      (nuovo(v)?'<i class="lc-nuovo" title="novità"></i>':'')+'</span><span class="lc-punti"></span><span class="lc-freccia">'+(pieno?'›':'')+'</span></button>'+
       '<div class="lc-dentro" hidden></div></div>';
   }
   function legaVoci(c){
     c.querySelectorAll(".lc-voce").forEach(function(d){if(d._legata)return;d._legata=1;
       var b=d.querySelector(".lc-riga"),dentro=d.querySelector(".lc-dentro");
-      b.onclick=function(){var aperta=b.getAttribute("aria-expanded")==="true";
+      if(b.disabled)return;b.onclick=function(){var aperta=b.getAttribute("aria-expanded")==="true";
         b.setAttribute("aria-expanded",aperta?"false":"true");dentro.hidden=aperta;
         if(!aperta&&!dentro._pieno){dentro._pieno=1;riempi(d.getAttribute("data-voce"),dentro);}};});
   }
