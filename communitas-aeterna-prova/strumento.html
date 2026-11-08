@@ -1573,6 +1573,7 @@ function disegnaFissati(){
 function azioniRuolo(m){
   var mio=m.scritto_da===io.id,g=team.tipo==="team"&&team.guido,base=(team.lista||[]).some(function(t){return t.team_id===team.id&&t.nome==="Praticantato";});
   return (mio?'<button type="button" data-az="modifica">Modifica</button>':'')+(g?(m.fissato_il?'<button type="button" data-az="sfissa">Togli da in alto</button>':'<button type="button" data-az="fissa">Fissa in alto</button>'):'')+
+    (g&&String(m.testo||"").trim()?'<button type="button" data-az="giornale">Pubblica nel Giornale</button>':'')+
     (mio||g?'<button type="button" class="el" data-az="elimina">Elimina</button>':'')+
     (g&&!mio&&!base&&m.scritto_da?'<button type="button" data-az="esci">Fai uscire '+esc(nomi[m.scritto_da]||"")+'</button>':'');
 }
@@ -1587,7 +1588,23 @@ function legaAzioniRuolo(box,m){
   su("elimina",function(b){chiedi(b,"Tocca ancora: sparisce per tutti",function(){return db.rpc("fm_elimina_messaggio",{p_messaggio:m.id});});});
   su("esci",function(b){chiedi(b,"Tocca ancora per farla uscire",function(){return db.rpc("fm_fai_uscire",{p_squadra:team.id,p_persona:m.scritto_da});});});
   su("modifica",function(b){b.onclick=function(){modificaMsg(box,m);};});
+  /* 8/11 · SQL 214 · Gab 09:58 «ok pubblica nel giornale tasto»: il messaggio diventa un articolo del Giornale, per i vicinati o per tutti */
+  su("giornale",function(b){b.onclick=function(){
+    var w=document.createElement("span");w.className="tc-gio";
+    w.innerHTML='<b>Nel Giornale, per chi?</b><button type="button" data-gv="vicinato">Vicinati</button><button type="button" data-gv="pubblico">Tutti</button><button type="button" data-gv="">Annulla</button>';
+    b.replaceWith(w);
+    w.querySelectorAll("[data-gv]").forEach(function(x){x.onclick=function(){var v=x.getAttribute("data-gv");
+      if(!v){team.scelto=null;disegnaTeam();return;}
+      w.querySelectorAll("button").forEach(function(y){y.disabled=true;});$("#tc-err").textContent="Un momento…";
+      db.rpc("fm_giornale_dal_messaggio",{p_messaggio:m.id,p_vis:v}).then(function(q){
+        if(q&&q.error){w.querySelectorAll("button").forEach(function(y){y.disabled=false;});$("#tc-err").textContent=(q.error.message&&!/PGRST|function|schema/i.test(q.error.message))?q.error.message:errore(q.error);return;}
+        w.innerHTML='<b>È nel Giornale di oggi · '+(v==="pubblico"?"per tutti":"per i vicinati")+'</b>';$("#tc-err").textContent="";
+      },function(x2){w.querySelectorAll("button").forEach(function(y){y.disabled=false;});$("#tc-err").textContent=errore(x2);});};});
+  };});
 }
+var GIO_CSS='.tc-gio{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center}.tc-gio b{color:#D4AF6A;font-weight:600}'+
+'.g4-cerv{display:inline-block;margin:8px 8px 0 0;padding:6px 12px;border-radius:12px;border:1px solid rgba(212,175,106,.55);color:#D4AF6A;text-decoration:none;font-weight:600}';
+document.head.insertAdjacentHTML("beforeend","<style>"+GIO_CSS+"</style>");
 /* ═══ Modifica del proprio messaggio · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
    Gab 1/11 13:35: «aggiungi anche la possibilità di modificare il post, in modo che io possa aggiungere anche altro testo
    o allegati, al link appena condiviso». Serve lo SQL 149 (fm_modifica_messaggio, colonna modificato_il).
@@ -2788,7 +2805,7 @@ function gzArticolo(x,firme,apre){
   var occ=(el?el.charAt(0).toUpperCase()+el.slice(1)+" · ":"")+(o.orma_madre_id===FEST_ID?"Felicitas Festival · ":"")+(o.visibilita==="pubblico"?"🌐 Per tutti":"🏡 Solo per i vicinati");
   var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="gz-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
   var t=par.map(function(p){return '<p class="gz-t">'+esc(p).replace(/«([^«»]{1,800})»/g,"<strong>«$1»</strong>")+'</p>';}).join("");
-  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';
+  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+apriCerv(o)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';
 }
 /* elemento e Festival si leggono a parte: se lo SQL 163 non c'è ancora, restano oro */
 function gzDettagli(tutti,firme){
@@ -2806,11 +2823,13 @@ function gzMetti(tutti,firme){
   A.innerHTML=tutti.length?gzArticolo(tutti[0],firme,true)+(tutti.length>1?'<div class="gz-col">'+tutti.slice(1).map(function(x){return gzArticolo(x,firme,false);}).join("")+'</div>':""):"";
   A.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(A);
 }
+var g4TeamLetti=0;
 function g4Articoli(arti,firme){
   var pub=arti.filter(function(x){return x.o.visibilita==="pubblico";}),dentro=arti.filter(function(x){return x.o.visibilita!=="pubblico";});
   var tutti=pub.concat(io.id?dentro:[]),A=$("#g4-art"),Q=$("#gz-quanti");
   if(Q){Q.textContent=tutti.length===1?"1 articolo in questo numero":tutti.length+" articoli in questo numero";Q.hidden=!tutti.length;}
   gzMetti(tutti,firme);gzDettagli(tutti,firme);
+  if(io.id&&db&&!team.lista&&!g4TeamLetti&&tutti.some(function(x){return x.o.squadra_id;})){g4TeamLetti=1;leggiTeam().then(function(l){if(l&&vista==="giornale"){gzMetti(tutti,firme);g4Lavora();}});}
   var V=$("#g4-vil");if(V)V.innerHTML="";
   [A,V].forEach(function(c){if(!c)return;
     c.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(c);});
@@ -2867,7 +2886,7 @@ function g4Riempi(da,a,questo){
       $("#g4-radio").innerHTML='<div class="g4-t g4-radio g4-sale"><div class="in"><div class="g4-occ">Radio Felicitas · '+esc(new Date(o.inizio_il||o.momento).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</div>'+
         (o.titolo?'<h2>'+esc(o.titolo)+'</h2>':'')+(o.contenuto?'<p>'+esc(String(o.contenuto).slice(0,600))+'</p>':'')+onda+
         (u?'<audio controls preload="none" src="'+esc(u)+'"></audio>':'')+
-        '<a class="g4-tasto" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'&c=10182300">▶ Ascolta</a></div></div>';g4Sale();});
+        '<a class="g4-tasto" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'&c=10182300">▶ Ascolta</a>'+visCanc(o)+'</div></div>';legaVis($("#g4-radio"));g4Sale();});
   },function(){});
   /* il Festival: cosa serve, dagli articoli pubblici del Festival (SQL 76) */
   if($("#g4-serve"))db.from("orme").select("id").eq("tipo","articolo").eq("visibilita","pubblico").eq("orma_madre_id",FEST_ID).limit(5).then(function(r){
@@ -2913,20 +2932,100 @@ function g4Voce(k,t){
     L.scrollIntoView({behavior:"smooth",block:"start"});
   },function(){});
 }
-/* 7/11 · il video di oggi in cima al Giornale, finché il nucleo non lo cambia (SQL 199) */
+/* 7/11 · il video di oggi in cima al Giornale (SQL 199) · 8/11 Gab 09:14 «il metti video, mi dovrebbe permettere anche di inserire un file audio e un testo descrittivo.. l inserimento dovrebbe mandare autonomamente su una voce dell indice collegara» · 09:16 «potrei scegliere io la voce dell indice» · «il video in alto, potrebbe essere sostituito dalle dirette pubbliche, e poi al termine della diretta torna il video» (SQL 212) */
+var g4CimaT=null;
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();});
 function g4VideoOggi(){
-  var B=$("#g4-oggi");if(!B||!db)return;
-  db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1).then(function(r){
-    var B=$("#g4-oggi");if(!B||!r||r.error)return;var u=r.data&&r.data[0]&&r.data[0].link,y=ytId(u);
-    B.innerHTML=(y?'<div class="video" style="margin:0 0 14px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
-      (io.nucleo?'<div id="g4-oggi-c" style="margin:0 0 14px"><button type="button" class="mini" id="g4-oggi-b">Cambia video</button></div>':'');
-    var b=$("#g4-oggi-b");if(!b)return;
-    b.onclick=function(){var w=$("#g4-oggi-c");
-      w.innerHTML='<input type="url" id="g4-oggi-t" placeholder="https://www.youtube.com/…" style="width:100%;box-sizing:border-box;font-size:18px;padding:10px 12px;border-radius:12px"><div style="display:flex;gap:10px;margin-top:8px"><button type="button" class="btn" id="g4-oggi-s">Metti in cima</button><button type="button" class="mini" id="g4-oggi-x">Annulla</button></div><p class="nota" id="g4-oggi-e" aria-live="polite"></p>';
-      $("#g4-oggi-t").focus();$("#g4-oggi-x").onclick=g4VideoOggi;
-      $("#g4-oggi-s").onclick=function(){var s=this,t=$("#g4-oggi-t").value.trim(),e=$("#g4-oggi-e");if(!t)return;s.disabled=true;e.textContent="Un momento…";
-        db.rpc("fm_giornale_cambia_video",{p_link:t}).then(function(x){if(x&&x.error){s.disabled=false;e.textContent=errore(x.error);return;}g4VideoOggi();},function(x){s.disabled=false;e.textContent=errore(x);});};};
+  var B=$("#g4-oggi");if(!B||!db)return;clearTimeout(g4CimaT);
+  var vid=db.from("giornale_video").select("id,link,audio,testo,capitolo_id,riga_id,link_titolo,link_canale,titolo_corretto").order("messo_il",{ascending:false}).limit(1).then(function(r){
+    if(r&&r.error)return db.from("giornale_video").select("link,audio,testo,capitolo_id,riga_id").order("messo_il",{ascending:false}).limit(1);return r;}).then(function(r){
+    if(r&&r.error)return db.from("giornale_video").select("link,audio,testo,capitolo_id").order("messo_il",{ascending:false}).limit(1);return r;}).then(function(r){
+    if(r&&r.error)return db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1);return r;});
+  var dir=db.rpc("fm_dirette_in_onda").then(function(r){var ora=Date.now();return ((r&&!r.error&&r.data)||[]).filter(function(d){return d.inizio_il&&new Date(d.inizio_il).getTime()<=ora;})[0]||null;},function(){return null;});
+  /* SQL 220: dirette YouTube seguite (le aggiorna il db ogni 5 minuti) */
+  var ytd=db.from("giornale_dirette_youtube").select("video,titolo,in_onda").eq("in_onda",true).limit(1).then(function(r){return (r&&!r.error&&r.data&&r.data[0]&&ytId("https://youtu.be/"+r.data[0].video))?r.data[0]:null;},function(){return null;});
+  Promise.all([vid,dir,ytd]).then(function(v){
+    var B=$("#g4-oggi");if(!B||$("#g4-cima-f"))return;var r=v[0],d=v[1],yl=v[2];
+    var x=(r&&!r.error&&r.data&&r.data[0])||{},y=ytId(x.link);
+    var tasto=io.nucleo?'<div id="g4-oggi-c" style="margin:0 0 14px"><button type="button" class="mini" id="g4-oggi-b">Metti in cima</button> <button type="button" class="mini" id="g4-oggi-dc">Dal Cervello</button></div>':'';
+    if(d){B.innerHTML='<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'" style="display:flex;gap:10px;align-items:center;margin:0 0 14px;padding:16px;border:1px solid var(--oro,#D4AF6A);border-radius:18px;text-decoration:none;color:inherit"><span style="color:#ff6b6b;font-weight:600">● in onda</span><span>'+esc(d.titolo||"")+'</span><b style="margin-left:auto">Entra ›</b></a>'+tasto;}
+    else if(yl){B.innerHTML='<p style="margin:0 0 8px"><span style="color:#ff6b6b;font-weight:600">● in onda</span>'+(yl.titolo?' · '+esc(yl.titolo):'')+'</p>'+
+      '<div class="video" style="margin:0 0 14px"><iframe src="https://www.youtube-nocookie.com/embed/'+ytId("https://youtu.be/"+yl.video)+'" title="'+esc(yl.titolo||"diretta")+'" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>'+tasto;}
+    else{var tit=x.link_titolo||"";
+      B.innerHTML=(y?'<div class="video" style="margin:0 0 10px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
+      (y&&(tit||io.nucleo)&&x.id?'<div id="g4-oggi-yt" style="margin:0 0 10px">'+(tit?'<p style="margin:0;font-size:18px"><b>'+esc(tit)+'</b>'+(x.link_canale?' · '+esc(x.link_canale):'')+'</p>':'')+
+        (io.nucleo?'<button type="button" class="mini" id="g4-oggi-ct" style="margin-top:6px">Correggi titolo</button>':'')+'</div>':'')+
+      '<div id="g4-oggi-f"></div><div id="g4-oggi-a"></div>'+(x.testo?'<p id="g4-oggi-t" style="margin:0 0 6px;font-size:18px;line-height:1.55">'+esc(x.testo).replace(/\n/g,"<br>")+'</p>':'')+'<p class="nota" id="g4-oggi-v" style="margin:0 0 14px" hidden></p>'+tasto;
+      if(x.audio&&io.id)db.storage.from("chat").createSignedUrl(x.audio,3600).then(function(u){var A=$("#g4-oggi-a");if(A&&u&&u.data&&u.data.signedUrl)A.innerHTML='<audio controls preload="none" src="'+esc(u.data.signedUrl)+'" style="width:100%;margin:0 0 10px"></audio>';},function(){});
+      if(x.riga_id&&io.id)db.from("cervello_righe").select("foto").eq("id",x.riga_id).maybeSingle().then(function(q){var ft=q&&q.data&&q.data.foto;if(!ft)return;
+        return db.storage.from("chat").createSignedUrl(ft,3600).then(function(u){var Fo=$("#g4-oggi-f");if(Fo&&u&&u.data&&u.data.signedUrl)Fo.innerHTML='<img class="foto" src="'+esc(u.data.signedUrl)+'" alt="" style="margin:0 0 10px">';});}).catch(function(){});
+      if(x.capitolo_id)db.from("cervello_capitoli").select("titolo").eq("id",x.capitolo_id).maybeSingle().then(function(c){var V=$("#g4-oggi-v");if(V&&c&&c.data&&c.data.titolo){V.textContent=c.data.titolo;V.hidden=false;}},function(){});}
+    var ct=$("#g4-oggi-ct");if(ct)ct.onclick=function(){clearTimeout(g4CimaT);var W=$("#g4-oggi-yt");
+      W.innerHTML='<div id="g4-cima-f" style="display:flex;flex-direction:column;gap:8px"><label for="g4-ct-t">Titolo</label><input type="text" id="g4-ct-t" maxlength="300" style="font-size:18px;padding:10px 12px;border-radius:12px">'+
+        '<div style="display:flex;gap:10px"><button type="button" class="btn" id="g4-ct-s">Salva</button><button type="button" class="mini" id="g4-ct-x">Annulla</button></div><p class="nota" id="g4-ct-e" aria-live="polite"></p></div>';
+      $("#g4-ct-t").value=x.link_titolo||"";$("#g4-ct-t").focus();
+      $("#g4-ct-x").onclick=function(){var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();};
+      $("#g4-ct-s").onclick=function(){var s2=this,e=$("#g4-ct-e");s2.disabled=true;e.textContent="Un momento…";
+        db.rpc("fm_giornale_video_titolo",{p_id:x.id,p_titolo:$("#g4-ct-t").value.trim()}).then(function(q){if(q&&q.error){s2.disabled=false;e.textContent=(q.error.message&&!/PGRST|function|schema/i.test(q.error.message))?q.error.message:errore(q.error);return;}
+          var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();},function(z){s2.disabled=false;e.textContent=errore(z);});};};
+    var b=$("#g4-oggi-b");if(b)b.onclick=g4CimaForm;
+    var bc=$("#g4-oggi-dc");if(bc)bc.onclick=g4DalCervello;
+    g4CimaT=setTimeout(function(){if(vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();},60000);
   },function(){});
+}
+/* 8/11 · Dal Cervello al Giornale (SQL 213): una card scelta va in cima o tra gli articoli di oggi, per i vicinati o per tutti */
+function g4DalCervello(){
+  var w=$("#g4-oggi-c");if(!w)return;clearTimeout(g4CimaT);
+  var sel='font-size:18px;padding:10px 12px;border-radius:12px';
+  w.innerHTML='<div id="g4-cima-f" style="display:flex;flex-direction:column;gap:8px">'+
+    '<label for="g4-dc-v">Voce dell\'indice</label><select id="g4-dc-v" style="'+sel+'"><option value="">Un momento…</option></select>'+
+    '<div id="g4-dc-c" style="display:flex;flex-direction:column;gap:6px"></div>'+
+    '<fieldset style="border:0;padding:0;margin:0;display:flex;gap:14px;flex-wrap:wrap"><legend style="margin-bottom:4px">Dove</legend><label><input type="radio" name="g4-dc-d" value="cima" checked> In cima</label><label><input type="radio" name="g4-dc-d" value="articolo"> Tra gli articoli di oggi</label></fieldset>'+
+    '<fieldset style="border:0;padding:0;margin:0;display:flex;gap:14px;flex-wrap:wrap"><legend style="margin-bottom:4px">Per chi</legend><label><input type="radio" name="g4-dc-p" value="vicinato" checked> Vicinati</label><label><input type="radio" name="g4-dc-p" value="pubblico"> Tutti</label></fieldset>'+
+    '<div style="display:flex;gap:10px"><button type="button" class="btn" id="g4-dc-s">Porta nel Giornale</button><button type="button" class="mini" id="g4-dc-x">Annulla</button></div><p class="nota" id="g4-dc-e" aria-live="polite"></p></div>';
+  db.rpc("fm_cervello_indice").then(function(r){var S=$("#g4-dc-v");if(!S)return;var l=(r&&!r.error&&r.data)||[],per={},ord=[];
+    l.forEach(function(c){var k=c.sezione_nome||"Altre voci";if(!per[k]){per[k]=[];ord.push([k,c.sezione_ordine||99]);}per[k].push(c);});
+    ord.sort(function(a,b){return a[1]-b[1];});
+    S.innerHTML='<option value="">scegli la voce…</option>'+ord.map(function(o){return '<optgroup label="'+esc(o[0])+'">'+per[o[0]].map(function(c){return '<option value="'+esc(c.id)+'">'+Array((c.profondita||0)+1).join("— ")+esc(c.titolo)+'</option>';}).join("")+'</optgroup>';}).join("");
+  },function(){});
+  $("#g4-dc-v").onchange=function(){var C=$("#g4-dc-c"),cap=this.value;C.innerHTML=cap?'<p class="nota">Un momento…</p>':'';if(!cap)return;
+    db.from("cervello_righe").select("id,testo").eq("capitolo_id",cap).order("scritta_il").then(function(q){if($("#g4-dc-v").value!==cap)return;var l=(q&&!q.error&&q.data)||[];
+      C.innerHTML=l.length?'<p style="margin:0">Card</p>'+l.map(function(g){var t=String(g.testo||"").trim(),h=t.split("\n")[0],rest=t.slice(h.length).trim();
+        return '<label style="display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid rgba(212,175,106,.35);border-radius:12px"><input type="radio" name="g4-dc-r" value="'+esc(g.id)+'" style="margin-top:5px"><span><b>'+esc(h.slice(0,120))+'</b>'+(rest?'<br><small>'+esc(rest.slice(0,160))+(rest.length>160?"…":"")+'</small>':'')+'</span></label>';}).join(""):'<p class="nota">Questa voce non ha ancora card.</p>';},function(){C.innerHTML='<p class="nota">Le card non si leggono adesso.</p>';});};
+  $("#g4-dc-x").onclick=function(){var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();};
+  $("#g4-dc-s").onclick=function(){var s=this,e=$("#g4-dc-e"),rg=document.querySelector('input[name="g4-dc-r"]:checked'),dv=document.querySelector('input[name="g4-dc-d"]:checked'),pv=document.querySelector('input[name="g4-dc-p"]:checked');
+    if(!rg){e.textContent="Scegli una card.";return;}
+    s.disabled=true;e.textContent="Un momento…";
+    db.rpc("fm_giornale_dal_cervello",{p_riga:rg.value,p_dove:dv.value,p_vis:pv.value}).then(function(r){if(r&&r.error){s.disabled=false;e.textContent=errore(r.error);return;}
+      var f=$("#g4-cima-f");if(f)f.remove();vGiornale();},function(x){s.disabled=false;e.textContent=errore(x);});};
+}
+function g4CimaForm(){
+  var w=$("#g4-oggi-c");if(!w)return;clearTimeout(g4CimaT);
+  w.innerHTML='<div id="g4-cima-f" style="display:flex;flex-direction:column;gap:8px">'+
+    '<label for="g4-cima-l">Link YouTube</label><input type="url" id="g4-cima-l" placeholder="https://www.youtube.com/…" style="font-size:18px;padding:10px 12px;border-radius:12px">'+
+    '<label for="g4-cima-au">oppure un file audio</label><input type="file" id="g4-cima-au" accept="audio/*">'+
+    '<label for="g4-cima-t">Testo che lo descrive</label><textarea id="g4-cima-t" rows="4" maxlength="4000" style="font-size:18px;padding:10px 12px;border-radius:12px"></textarea>'+
+    '<label for="g4-cima-v">Voce dell\'indice</label><select id="g4-cima-v" style="font-size:18px;padding:10px 12px;border-radius:12px"><option value="">Un momento…</option></select>'+
+    '<div style="display:flex;gap:10px"><button type="button" class="btn" id="g4-cima-s">Metti in cima</button><button type="button" class="mini" id="g4-cima-x">Annulla</button></div><p class="nota" id="g4-cima-e" aria-live="polite"></p></div>';
+  db.rpc("fm_cervello_indice").then(function(r){var S=$("#g4-cima-v");if(!S)return;var l=(r&&!r.error&&r.data)||[],per={},ord=[];
+    l.forEach(function(c){var k=c.sezione_nome||"Altre voci";if(!per[k]){per[k]=[];ord.push([k,c.sezione_ordine||99]);}per[k].push(c);});
+    ord.sort(function(a,b){return a[1]-b[1];});
+    S.innerHTML='<option value="">scegli la voce…</option>'+ord.map(function(o){return '<optgroup label="'+esc(o[0])+'">'+per[o[0]].map(function(c){return '<option value="'+esc(c.id)+'">'+Array((c.profondita||0)+1).join("— ")+esc(c.titolo)+'</option>';}).join("")+'</optgroup>';}).join("");
+  },function(){});
+  $("#g4-cima-x").onclick=function(){var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();};
+  $("#g4-cima-s").onclick=function(){var s=this,e=$("#g4-cima-e"),link=$("#g4-cima-l").value.trim(),fl=$("#g4-cima-au").files[0],t=$("#g4-cima-t").value.trim(),cap=$("#g4-cima-v").value;
+    if(!link&&!fl){e.textContent="Metti un link YouTube o scegli un file audio.";return;}
+    if(!t){e.textContent="Scrivi il testo che lo descrive.";return;}
+    if(!cap){e.textContent="Scegli la voce dell'indice.";return;}
+    s.disabled=true;e.textContent="Un momento…";
+    var su=Promise.resolve(null);
+    if(fl){var ext=(String(fl.name).split(".").pop()||"").toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,5)||"m4a";
+      var id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
+      var path="giornale/"+id+"."+ext;
+      su=db.storage.from("chat").upload(path,fl,{contentType:fl.type||"audio/mpeg",upsert:false}).then(function(u){if(u&&u.error)throw u.error;return path;});}
+    su.then(function(path){return db.rpc("fm_giornale_metti_in_cima",{p_link:link||null,p_audio:path,p_testo:t,p_capitolo:cap});})
+      .then(function(r){if(r&&r.error){s.disabled=false;e.textContent=errore(r.error);return;}var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();},
+        function(x){s.disabled=false;e.textContent=errore(x);});};
 }
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
@@ -2981,12 +3080,23 @@ function mediaHTML(o,firme){
     if(/image/.test(f.tipo||"")||/\.(jpe?g|png|webp|gif|heic)$/i.test(f.nome||""))return '<img class="foto" src="'+esc(u)+'" alt="'+esc(f.nome||"foto")+'" loading="lazy">';
     return '<audio controls preload="none" src="'+esc(u)+'"></audio>';}).join("");
 }
+function visGio(o){return o.tipo==="articolo"||o.tipo==="diretta";}
+function visTeam(o){return !!o.squadra_id&&visGio(o)&&(team.lista||[]).some(function(t){return t.team_id===o.squadra_id;});}
+function visPuo(o){return !!io.id&&(o.persona_id===io.id||(io.nucleo&&visGio(o))||visTeam(o));}
+function visCanc(o){return visPuo(o)&&visGio(o)?'<button type="button" class="mini" data-canc="'+esc(o.id)+'" style="margin-top:8px">Cancella</button>':'';}
+function apriCerv(o){return io.id&&o.da_riga&&o.capitolo_id&&o.tipo==="articolo"?'<a class="g4-cerv" href="strumento.html?v=cervello&cap='+encodeURIComponent(o.capitolo_id)+'">Apri nel Cervello ›</a>':'';}
 function visHTML(o){
-  if(!io.id||o.persona_id!==io.id)return o.visibilita&&o.visibilita!=="pubblico"?'<span class="etv">'+esc(VIS[o.visibilita]||o.visibilita)+'</span>':"";
-  return '<span class="vis" style="margin-top:4px">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button data-vis="'+esc(o.id)+'|'+v+'" aria-pressed="'+(o.visibilita===v)+'">'+VIS[v]+'</button>';}).join("")+'</span>';
+  if(!visPuo(o))return o.visibilita&&o.visibilita!=="pubblico"?'<span class="etv">'+esc(VIS[o.visibilita]||o.visibilita)+'</span>':"";
+  return '<span class="vis" style="margin-top:4px">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button data-vis="'+esc(o.id)+'|'+v+'|'+esc(o.tipo||"")+'" aria-pressed="'+(o.visibilita===v)+'">'+VIS[v]+'</button>';}).join("")+'</span>'+visCanc(o);
 }
 function legaVis(c){c.querySelectorAll("[data-vis]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-vis").split("|");b.disabled=true;
-  db.from("orme").update({visibilita:p[1]}).eq("id",p[0]).then(function(r){if(r.error){alert(errore(r.error));b.disabled=false;return;}cache.obiettivi=null;disegna();});};});}
+  function diretto(){return db.from("orme").update({visibilita:p[1]}).eq("id",p[0]);}
+  /* articoli e dirette: SQL 211 (l'update diretto non cambia nulla per chi non è l'autore); senza la funzione, come prima */
+  var q=(p[2]==="articolo"||p[2]==="diretta")?db.rpc("fm_giornale_visibilita",{p_articolo:p[0],p_vis:p[1]}).then(function(r){
+    if(r&&r.error&&(r.error.code==="PGRST202"||/fm_giornale_visibilita/.test(r.error.message||"")))return diretto();return r;}):diretto();
+  q.then(function(r){if(r&&r.error){alert(errore(r.error));b.disabled=false;return;}cache.obiettivi=null;disegna();},function(x){b.disabled=false;alert(errore(x));});};});
+  c.querySelectorAll("[data-canc]").forEach(function(b){b.onclick=function(){if(!confirm("Cancellare? Non si torna indietro."))return;b.disabled=true;
+    db.rpc("fm_giornale_elimina",{p_id:b.getAttribute("data-canc")}).then(function(r){if(r&&r.error){alert(errore(r.error));b.disabled=false;return;}disegna();},function(x){b.disabled=false;alert(errore(x));});};});}
 function voce(x,firme){
   if(x.l){var l=x.l;return '<div class="onda"><b>Lezione · ore '+hhmm(l.inizio_il)+'</b><p>'+esc(l.titolo)+'</p>'+(l.sottotitolo?'<span>'+esc(l.sottotitolo)+'</span>':'')+(l.luogo?'<span>'+esc(l.luogo)+'</span>':'')+(l.link?linkHTML(l.link):'')+'</div>';}
   var o=x.o,chi=nomi[o.persona_id]||"",link=o.link||primoLink(o.contenuto),testo=String(o.contenuto||"");
@@ -2996,7 +3106,7 @@ function voce(x,firme){
   if(o.tipo==="articolo"){var lungo=testo.length>320,tutto=apriA[o.id];
     var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="art-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
     return '<article class="art">'+imm+(o.titolo?'<h5>'+esc(o.titolo)+'</h5>':'')+'<p class="firma">'+firma+'</p>'+linkHTML(link)+mediaHTML(o,firme)+
-      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';}
+      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+apriCerv(o)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';}
   return '<div class="breve">'+(o.titolo?'<p><b>'+esc(o.titolo)+'</b></p>':'')+linkHTML(link)+mediaHTML(o,firme)+(testo?'<p>'+esc(testo)+'</p>':'')+'<span>'+firma+'</span>'+visHTML(o)+'</div>';
 }
 
