@@ -12,7 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="comune/fm-video.js?v=10221330"></script>
 <script src="comune/fm-installa.js?v=11020740"></script>
-<script src="comune/fm-notifiche.js?v=10251000"></script>
+<script src="comune/fm-notifiche.js?v=11081800"></script>
 <style>
 :root{
   --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
@@ -899,7 +899,7 @@ function disegna(){
 
 /* AZIONE · 29/10/2026, SQL 128 (thread «Chat interna dei team in Azione»; disegno azione-chat/bozza-azione, Gab 28/10: «Comunque per me va bene / fai sql e pubblichiamo»;
    29/10 07:52: «voglio che rendi operative le info chat, oggi attivo il team festival»).
-   Sopra i team dove sei (fm_miei_team: il team base «Praticantato» per primo), sotto le azioni: per tutti Emporio, Mutuo aiuto, Stampa;
+   Sopra i team dove sei (fm_miei_team: il team base «Praticantato» per primo), sotto le azioni: per tutti Emporio, Assistenza comunitaria integrata, Stampa;
    per chi ha il ruolo Scrivi un articolo e Crea diretta, che aprono i moduli del Megafono. Festival e Prenota non stanno in Azione (Gab 28/10).
    Senza l'SQL 128 l'elenco dei team non compare. */
 var ICO_AZ={
@@ -1843,7 +1843,7 @@ function mandaAllegato(id,blob,campo,nome){
 function menuChat(){
   var id=team.id,duo=team.tipo==="chat";
   var pe=!duo&&(io.nucleo||(io.ruoli||[]).length);
-  /* 6/11 Gab 10:54 «ok»: la riga fissa sul Cervello in cima alle info di ogni team (non nella chat a due; non per Mutuo aiuto, che non va all'agente: SQL 165) */
+  /* 6/11 Gab 10:54 «ok»: la riga fissa sul Cervello in cima alle info di ogni team (non nella chat a due; non per Assistenza comunitaria integrata, che non va all'agente: SQL 165) */
   var cerv=duo||(typeof ass!=="undefined"&&ass.team===id)?'':'<div class="tc-cerv-info">Foto, file e testi di almeno 300 caratteri condivisi qui entrano da soli nel Cervello: sul messaggio compare «contenuto su cervello». Per un testo più corto, tocca il messaggio e scegli «Metti nel Cervello».</div>';
   var f=foglioTeam(cerv+(pe?persH()+ARG_H.replace('<h2>','<h2 style="margin-top:26px">'):ARG_H)+(duo?'':OB_H)+'<h2 style="margin-top:26px">Notifiche di questa chat</h2><p>Il suono e la vibrazione li decide il telefono: qui scegli quante notifiche ricevere.</p><div class="tc-scelte" id="mc-sc">'+
     [["ogni","A ogni messaggio",""],["ora","Una all'ora","se arrivano più messaggi, una sola notifica"],["mai","Mai","i messaggi li vedi quando apri l'app"]].map(function(x){
@@ -1978,7 +1978,7 @@ function vCompra(){
     function(){var p=$("#az-p").value.trim();if(!p)return "Scrivi cosa vuoi comprare.";
       return {p_prodotto:p,p_quanti:Math.max(1,parseInt($("#az-q").value,10)||1),p_ritiro:$("#az-r").value,p_note:$("#az-n").value};});
 }
-/* ═══ ASSISTENZA · team Mutuo aiuto · SQL 166 · thread «Aprire un canale di assistenza nell'app», 5/11/2026 ═══
+/* ═══ ASSISTENZA · team Assistenza comunitaria integrata · SQL 166 · thread «Aprire un canale di assistenza nell'app», 5/11/2026 ═══
    Gab 4/11: «per scrivere su assistenza fai comunque loggin» · «un gruppo interno di assistenza /mutuo aiuto che riceva il messaggio
    in chat e che poi rispondendo lì gli arriva in automatico» · «non scrivere i motivi come obblico, ma come possibilità» ·
    «il team può avere i messaggi fissati come richieste d assistenza a cui rispondere , ma mano che qualcuno risponde ,qieste vengono archiviate».
@@ -1994,13 +1994,13 @@ function vAssistenza(){
   var fuori=!io.id;
   ass.motivo=null;
   c.innerHTML='<h2 class="az-tit">Assistenza</h2><div class="az-filo"></div>'+
-    '<p class="ass-int">Ti risponde il team Mutuo aiuto.</p>'+
+    '<p class="ass-int">Ti risponde il team Assistenza comunitaria integrata.</p>'+
     '<p class="az-l" id="ass-ml">Di cosa vuoi sapere? <span class="ass-fac">(facoltativo)</span></p>'+
     '<div class="ass-chips" role="group" aria-labelledby="ass-ml">'+ASS_MOTIVI.map(function(a){return '<button type="button" class="ass-chip" data-mot="'+a[0]+'" aria-pressed="false">'+esc(a[1])+'</button>';}).join("")+'</div>'+
     '<label class="az-l" for="ass-t">Il tuo messaggio</label><textarea id="ass-t" maxlength="2000" style="min-height:160px"></textarea>'+
     (fuori?'<label class="az-l" for="ass-mail">La tua mail</label><input type="email" id="ass-mail" maxlength="254" autocomplete="email" inputmode="email">'+
       '<p class="ass-nota">Dopo «Invia» entri in Felicitas con questa mail: il messaggio parte quando sei dentro.</p>':'')+
-    '<p style="margin-top:18px"><button class="btn pieno az-invia" type="button" id="ass-invia">Invia al Mutuo aiuto</button></p><p class="az-esito" id="ass-esito" aria-live="polite"></p>'+
+    '<p style="margin-top:18px"><button class="btn pieno az-invia" type="button" id="ass-invia">Invia all’Assistenza comunitaria integrata</button></p><p class="az-esito" id="ass-esito" aria-live="polite"></p>'+
     (fuori?'':'<h3 class="ass-h">Le mie richieste</h3><div id="ass-mie"><p class="nota">Un momento…</p></div>')+
     '<p><button class="mini" data-vai="azione">‹ Espandi</button></p>';
   legaVai(c);
@@ -2023,7 +2023,7 @@ function vAssistenza(){
   if(fuori)return;
   /* appena entrati: i messaggi scritti prima di entrare (SQL 167) partono adesso */
   db.rpc("fm_assistenza_porta").then(function(r){var n=(r&&!r.error&&+r.data)||0;
-    if(n&&$("#ass-esito"))$("#ass-esito").textContent=n===1?"Il tuo messaggio è arrivato al Mutuo aiuto.":"I tuoi "+n+" messaggi sono arrivati al Mutuo aiuto.";assMie();},function(){assMie();});
+    if(n&&$("#ass-esito"))$("#ass-esito").textContent=n===1?"Il tuo messaggio è arrivato all’Assistenza comunitaria integrata.":"I tuoi "+n+" messaggi sono arrivati all’Assistenza comunitaria integrata.";assMie();},function(){assMie();});
 }
 function assMie(){
   var box=$("#ass-mie");if(!box)return;
@@ -2034,7 +2034,7 @@ function assMie(){
     box.innerHTML=l.map(function(x){var ap=ass.aperta===x.richiesta_id;
       return '<div class="ass-r'+(ap?' ap':'')+'"><button type="button" class="ass-rt" data-ric="'+esc(x.richiesta_id)+'" aria-expanded="'+ap+'">'+
         '<span class="ass-rc"><b>'+esc(assMotivo(x.motivo))+'</b><span class="ass-st '+(x.stato==="aperta"?"att":"ok")+'">'+(x.stato==="aperta"?"in attesa":"risposta")+'</span></span>'+
-        '<span class="ass-ru">'+(x.ultimo_dal_team?"Mutuo aiuto: ":"")+esc(x.ultimo_testo||"")+'</span><small>'+esc(assQuando(x.ultima_il))+'</small></button>'+
+        '<span class="ass-ru">'+(x.ultimo_dal_team?"Assistenza comunitaria integrata: ":"")+esc(x.ultimo_testo||"")+'</span><small>'+esc(assQuando(x.ultima_il))+'</small></button>'+
         (ap?'<div class="ass-conv" id="ass-conv"><p class="nota">Un momento…</p></div>':'')+'</div>';}).join("");
     box.querySelectorAll("[data-ric]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-ric");ass.aperta=ass.aperta===i?null:i;assMie();};});
     if(ass.aperta&&$("#ass-conv"))assConv(ass.aperta);
@@ -2043,7 +2043,7 @@ function assMie(){
 function assConv(id){
   db.rpc("fm_assistenza_conversazione",{p_richiesta:id}).then(function(r){var e=$("#ass-conv");if(!e||ass.aperta!==id)return;
     var l=(r&&!r.error&&r.data)||[];
-    e.innerHTML=l.map(function(m){return '<div class="ass-f '+(m.dal_team?"team":"mio")+'">'+testoLink(m.testo,"t","div")+'<small>'+(m.dal_team?esc(m.chi||"Mutuo aiuto")+" · ":"")+esc(assQuando(m.scritto_il))+'</small></div>';}).join("")+
+    e.innerHTML=l.map(function(m){return '<div class="ass-f '+(m.dal_team?"team":"mio")+'">'+testoLink(m.testo,"t","div")+'<small>'+(m.dal_team?esc(m.chi||"Assistenza comunitaria integrata")+" · ":"")+esc(assQuando(m.scritto_il))+'</small></div>';}).join("")+
       '<label class="az-l" for="ass-ancora">Scrivi ancora</label><textarea id="ass-ancora" maxlength="2000" style="min-height:100px"></textarea>'+
       '<p><button class="btn pieno" type="button" id="ass-ancora-b">Invia</button></p><p class="az-esito" id="ass-ancora-e" aria-live="polite"></p>';
     $("#ass-ancora-b").onclick=function(){var b=this,t=$("#ass-ancora").value.trim(),x=$("#ass-ancora-e");if(!t){x.textContent="Scrivi il messaggio.";return;}
@@ -2053,7 +2053,7 @@ function assConv(id){
         function(){b.disabled=false;x.textContent="Non è partito. Si può riprovare.";});};
   },function(){});
 }
-/* nella chat del team Mutuo aiuto: le richieste aperte in cima, con «Rispondi» (la risposta arriva a chi ha scritto e la richiesta va in archivio) */
+/* nella chat del team Assistenza comunitaria integrata: le richieste aperte in cima, con «Rispondi» (la risposta arriva a chi ha scritto e la richiesta va in archivio) */
 function assTeam(id){
   if(!$("#tc-ass"))return;
   (ass.team?Promise.resolve(ass.team):db.rpc("fm_team_mutuo_aiuto").then(function(r){ass.team=(r&&!r.error&&r.data)||"-";return ass.team;},function(){return "-";}))
@@ -2205,7 +2205,7 @@ function treOggi(){
     var area=v[1]||[],stanze=v[2]||[],mie=(v[3]||[]),n=v[0],h="";
     /* 5 nov 14:54, Gab: «sarebbe molto piu bello avere delle card che scorrono» · 15:06 «è il nuove senza soggetto che mi crea disagio […] questi sono obiettivi» · 15:08 «per me è ok» → bacheca a colonne, card che scorrono di lato */
     function num(v,t,r){return '<div class="tre-num'+(r&&v?' r':'')+'"><b>'+(+v||0)+'</b><span>'+t+'</span></div>';}
-    function etich(x){return x.fonte==="assistenza"?"Mutuo aiuto":x.fonte==="logistica"?"logistica":tre.tipi[x.id]==="richiesta"?"prenotazione":"obiettivo";}
+    function etich(x){return x.fonte==="assistenza"?"Assistenza comunitaria integrata":x.fonte==="logistica"?"logistica":tre.tipi[x.id]==="richiesta"?"prenotazione":"obiettivo";}
     function cardA(x,col){return '<div class="tre-card" style="--tc:'+col+'"><span class="tre-chip">'+(x.ferma?'in ritardo · '+(+x.da_giorni)+(x.da_giorni==1?' giorno':' giorni'):esc(etich(x)))+'</span><span class="t">'+esc(x.titolo)+'</span>'+
       '<span class="m">'+esc(nomeArea(x.ruolo))+(x.chi?' · '+esc(x.chi):'')+(x.entro_il?' · entro il '+esc(dataBreve(x.entro_il)):'')+'</span>'+
       (x.fonte!=="logistica"?'<div class="tre-tasti"><button class="mini" data-tre-ass="'+esc(x.fonte+"|"+x.id+"|"+x.ruolo)+'">'+(x.stato==="aperta"?'Assegna':'Riassegna')+'</button>'+(tre.tipi[x.id]==="richiesta"?'<button class="mini oro" data-bcrisp="'+esc(x.id)+'">Rispondi</button>':'')+'</div><div class="tre-scegli" id="tre-s-'+esc(x.id)+'"></div>'+(tre.tipi[x.id]==="richiesta"?'<div class="bc-risp" id="bcr-'+esc(x.id)+'"></div>':''):(x.stato==="aperta"?'<button class="mini oro" data-tre-cprendo="'+esc(x.id)+'">Lo prendo</button>':''))+'</div>';}
@@ -2236,7 +2236,7 @@ function treOggi(){
       (mie.length?'<div class="tre-fila">'+mie.map(function(x){
         return '<div class="tre-card" style="--tc:'+(x.ferma?'#E07A55':'#8DBF5E')+'"><span class="tre-chip">'+(x.ferma?'in ritardo · '+(+x.da_giorni)+(x.da_giorni==1?' giorno':' giorni'):esc(etich(x)))+'</span><span class="t">'+esc(x.titolo)+'</span>'+
           '<span class="m">'+esc(nomeArea(x.ruolo||""))+(x.entro_il?' · entro il '+esc(dataBreve(x.entro_il)):'')+'</span>'+
-          (x.fonte==="registro"?'<button class="mini oro" data-tre-fatto="'+esc(x.id)+'">Fatto</button>':x.fonte==="logistica"?'<button class="mini oro" data-tre-cfatto="'+esc(x.id)+'">Fatto</button>':'<button class="mini" data-vai="azione">Rispondi nel Mutuo aiuto</button>')+'</div>';}).join("")+'</div>':
+          (x.fonte==="registro"?'<button class="mini oro" data-tre-fatto="'+esc(x.id)+'">Fatto</button>':x.fonte==="logistica"?'<button class="mini oro" data-tre-cfatto="'+esc(x.id)+'">Fatto</button>':'<button class="mini" data-vai="azione">Rispondi nell’Assistenza comunitaria integrata</button>')+'</div>';}).join("")+'</div>':
         '<div class="card"><span class="m">Nessun obiettivo preso, per ora. In Obiettivi c\'è quello di cui il villaggio ha bisogno.</span></div>');
     var presi=(cache.obiettivi||[]).filter(function(o){return o.stadio!=="sviluppato"&&dentroO(o).some(function(p){return p.persona_id===io.id;});});
     if(presi.length)h+='<p class="tre-colt">Obiettivi del villaggio che hai preso <i>'+presi.length+'</i></p><div class="tre-fila">'+presi.map(function(o){var st=o.stadio||"in_coda";
