@@ -575,6 +575,11 @@ header.top{position:relative}
 .esp-v em{flex:none;font-style:normal;border:1px solid #D4AF6A;color:#D4AF6A;border-radius:16px;padding:6px 14px;font-weight:600;font-size:16px}
 .esp-nl{font-style:normal;background:#D4AF6A;color:#1A1405;border-radius:10px;padding:0 7px;font-weight:600;margin-left:4px}
 #esp-team{margin-top:10px}
+.esp-fam{display:grid;grid-auto-flow:column;grid-template-rows:auto auto;grid-auto-columns:62%;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;margin:14px -16px 0;padding:0 16px 6px;scrollbar-width:none}
+.esp-fam::-webkit-scrollbar{display:none}
+.esp-fam a{scroll-snap-align:start;background:#122050;border:1px solid color-mix(in srgb,var(--e) 45%,transparent);border-radius:16px;overflow:hidden;color:#F5F0E6;text-decoration:none;display:flex;flex-direction:column}
+.esp-fam img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.esp-fam span{padding:10px 10px 12px}.esp-fam b{display:block;font:600 18px "DM Sans",system-ui,sans-serif;line-height:1.2}.esp-fam small{display:block;font-size:15px;line-height:1.35;color:#c9c3d6;margin-top:4px}
 /* 31/10 pulizie (Gab «ora ripuliamo»): una sola «Nuova chat», la carta in Espandi; la barra in alto in blu cosmo con le stelle */
 
 /* 31/10 · Coscienza dentro l'app */
@@ -1058,10 +1063,15 @@ function espSolidi(c){
    Gab 12:15: «c'è una differenza tra ciò che si comunica e il modo in cui i dati vengono archiviati»: ogni scelta apre una richiesta d'assistenza
    con la voce già scritta; il team che la riceve lo decide la tavola dei motivi nel database. */
 var ESP_BLOCCHI=[
-  {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Emporio (ordini)","emporio"],["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto"]]},
+  {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto"]]},
   {tit:"Assistenza comunitaria integrata",voci:[["Praticantato","prat"],["Spiritualità"],["Percorsi"],["Trattamenti"],["Consulenze"]]},
   {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["26 al mese","","per integrarsi al cervello felicitas"],["da 1500","","per attivare il sistema autonomo della propria azienda, che possa poi interagire col cervello felicitas"]],link:"cervello-digitale-evoluto.html"}
 ];
+var ESP_STAMPA=[["carta","Carta stampata","volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi","volantino.jpg"],
+  ["libri","Libri e cataloghi","libri, riviste, cataloghi, fascicoli","rivista.jpg"],["agende","Agende e calendari","agende, calendari, quaderni e taccuini","agenda.jpg"],
+  ["fiere","Esposizione e fiere","totem, roll-up, striscioni, stand, insegne, pellicole per vetrine","rollup.jpg"],["confezioni","Confezioni e imballaggi","shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo","scatola.jpg"],
+  ["gadget","Gadget e regali","penne, cordini, portabadge, borse, borracce","penne.jpg"],["abiti","Abbigliamento","magliette, felpe, tessuti personalizzati","tshirt.jpg"],
+  ["foto","Album fotografico","fotolibri, foto da parete, calendari fotografici","rivista.jpg"]];
 function vAzione(){
   var c=$("#corpo");
   function g(t,attr,ruolo,sotto){var a=attr.indexOf("href=")===0;
@@ -1081,12 +1091,17 @@ function vAzione(){
   var iscr=!!(io.id&&(io.nucleo||(io.ruoli||[]).some(function(r){return r.ruolo==="eventi";})));
   var iscrH=iscr?'<section class="esp-el" id="esp-iscr-s" style="--e:#8DBF5E"><p class="esp-nm">FELICITAS FESTIVAL</p><h2>Iscritti Felicitas Festival</h2>'+
       '<div id="esp-iscr"><p class="esp-d">Un momento…</p></div><div id="esp-iscr-l"></div></section>':'';
+  /* l'Emporio: oggi i prodotti sono la Stampa; ogni famiglia apre il configuratore della pagina Emporio (emporio.html#famiglia) */
+  var empH='<section class="esp-el esp-emp" style="--e:#6FA8D6"><p class="esp-nm">EMPORIO</p><h2>2000 prodotti ed espositori fieristici</h2>'+
+      '<p class="esp-d">Oltre alla stampa proponiamo supporti per l\'esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</p>'+
+      '<div class="esp-fam">'+ESP_STAMPA.map(function(f){return '<a href="emporio.html?c=10182300#'+f[0]+'"><img src="stampa/'+f[3]+'?v=10132030" alt="" loading="lazy"><span><b>'+esc(f[1])+'</b><small>'+esc(f[2])+'</small></span></a>';}).join("")+'</div>'+
+      '<p class="esp-d" style="margin-top:10px"><a href="emporio.html?c=10182300" style="color:#6FA8D6">Tutto l\'Emporio ›</a></p></section>';
   var blocchi=ESP_BLOCCHI.map(function(k,i){
     return '<section class="esp-el esp-b" style="--e:#D4AF6A">'+(k.sopra?'<p class="esp-nm">'+esc(k.sopra)+'</p>':'')+'<h2>'+esc(k.tit)+'</h2>'+(k.d?'<p class="esp-d">'+esc(k.d)+'</p>':'')+
       k.voci.map(function(v,j){return '<button type="button" class="esp-v" data-esp-v="'+i+'.'+j+'"><span><b>'+esc(v[0])+'</b>'+(v[2]?'<small>'+esc(v[2])+'</small>':'')+'</span><em>Scegli</em></button>';}).join("")+
       (k.link?'<p class="esp-d" style="margin-top:10px"><a href="'+k.link+'" style="color:#D4AF6A">Il Cervello Digitale Evoluto ›</a></p>':'')+'</section>';}).join("");
   c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+(io.id?'':'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>')+
-    (ruolo?team+iscrH+'<p class="esp-nm" style="margin:22px 0 10px;color:#D4AF6A">DI COSA HAI BISOGNO?</p>'+blocchi:blocchi+team+iscrH)+
+    (ruolo?team+iscrH+empH+'<p class="esp-nm" style="margin:22px 0 10px;color:#D4AF6A">DI COSA HAI BISOGNO?</p>'+blocchi:empH+blocchi+team+iscrH)+
     /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
     '<div data-fm-installa></div>';
   legaVai(c);
