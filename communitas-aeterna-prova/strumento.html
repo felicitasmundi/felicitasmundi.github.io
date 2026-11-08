@@ -798,6 +798,55 @@ function lezioni(){
   if(cache.lezioni||!db)return Promise.resolve(cache.lezioni||[]);
   return db.rpc("fm_lezioni_prossime",{p_giorni:15}).then(function(r){cache.lezioni=(r&&!r.error&&r.data)||[];return cache.lezioni;},function(){return [];});
 }
+/* 8/11 · dirette del team (SQL 221): fm_dirette_del_team, fm_attiva_diretta, fm_cancella_diretta. Senza le funzioni il riquadro non compare. */
+var DT_CSS='#tc-dt:empty{display:none}#tc-dt{margin:10px 0 0;display:grid;gap:8px}'+
+'.dt-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-radius:14px;background:#1a2148;border:1px solid rgba(212,175,106,.45);color:#F5F0E6;font-size:17px}'+
+'.dt-r .dt-t{flex:1;min-width:0;overflow-wrap:anywhere}.dt-r small{display:block;opacity:.75;font-size:15px}.dt-on{color:#ff6b6b;font-weight:600}'+
+'.dt-r a{color:#0a1430;background:#D4AF6A;border-radius:12px;padding:6px 12px;font-weight:600;text-decoration:none}'+
+'.dt-b{justify-self:start;padding:8px 14px;border-radius:12px;border:1px solid rgba(212,175,106,.6);background:none;color:#D4AF6A;font:600 16px "DM Sans",system-ui,sans-serif;cursor:pointer}'+
+'.dt-f{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;background:#1a2148;border:1px solid rgba(212,175,106,.45);color:#F5F0E6;font-size:17px}'+
+'.dt-f input[type=text],.dt-f input[type=datetime-local]{font-size:17px;padding:10px 12px;border-radius:12px;border:1px solid rgba(212,175,106,.45);background:#122050;color:#F5F0E6}'+
+'.dt-f fieldset{border:0;padding:0;margin:0;display:flex;gap:14px;flex-wrap:wrap}.dt-f .dt-e{margin:0;color:#E07A5F;font-size:15px}.dt-f .dt-e:empty{display:none}';
+document.head.insertAdjacentHTML("beforeend","<style>"+DT_CSS+"</style>");
+function diretteTeam(id){
+  var box=$("#tc-dt");if(!box||!db)return;
+  db.rpc("fm_dirette_del_team",{p_team:id}).then(function(r){
+    var box=$("#tc-dt");if(!box||vista!=="team"||team.id!==id)return;
+    if(!r||r.error){box.innerHTML="";return;}
+    var l=r.data||[];
+    box.innerHTML=l.map(function(d){var q=d.inizio_il?new Date(d.inizio_il).toLocaleString("it-IT",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+      return '<div class="dt-r"><span class="dt-t">'+(d.in_onda?'<span class="dt-on">● in onda</span> · ':'')+'<b>'+esc(d.titolo||"")+'</b>'+(d.sottotitolo?'<small>'+esc(d.sottotitolo)+'</small>':'')+(!d.in_onda&&q?'<small>'+esc(q)+'</small>':'')+'</span>'+
+        '<a href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'">Entra ›</a>'+(d.mia&&!d.in_onda?'<button type="button" class="dt-b" data-dt-canc="'+esc(d.id)+'">Cancella</button>':'')+'</div>';}).join("")+
+      '<button type="button" class="dt-b" id="dt-attiva">Attiva diretta</button>';
+    box.querySelectorAll("[data-dt-canc]").forEach(function(b){b.onclick=function(){if(!confirm("Cancellare la diretta?"))return;b.disabled=true;
+      db.rpc("fm_cancella_diretta",{p_id:b.getAttribute("data-dt-canc")}).then(function(x){if(x&&x.error){b.disabled=false;$("#tc-err").textContent=dtErr(x.error);return;}cache.dirette=null;diretteTeam(id);},function(z){b.disabled=false;$("#tc-err").textContent=errore(z);});};});
+    $("#dt-attiva").onclick=function(){diretteForm(id);};
+  },function(){var box=$("#tc-dt");if(box)box.innerHTML="";});
+}
+function dtErr(e){var m=String((e&&e.message)||"");return m&&!/PGRST|function|schema|JWT/i.test(m)?m:errore(e);}
+function diretteForm(id){
+  var b=$("#dt-attiva");if(!b)return;
+  var f=document.createElement("div");f.className="dt-f";
+  f.innerHTML='<label for="dt-tit">Titolo</label><input type="text" id="dt-tit" maxlength="140">'+
+    '<label for="dt-sot">Sottotitolo</label><input type="text" id="dt-sot" maxlength="200">'+
+    '<fieldset><label><input type="radio" name="dt-q" value="ora" checked> Adesso</label><label><input type="radio" name="dt-q" value="poi"> Programma</label></fieldset>'+
+    '<input type="datetime-local" id="dt-quando" hidden aria-label="Data e ora">'+
+    '<fieldset><label><input type="radio" name="dt-v" value="team" checked> Solo il team</label><label><input type="radio" name="dt-v" value="pubblica"> Pubblica</label></fieldset>'+
+    '<div style="display:flex;gap:10px"><button type="button" class="dt-b" id="dt-ok">Attiva diretta</button><button type="button" class="dt-b" id="dt-no">Annulla</button></div><p class="dt-e" id="dt-e" aria-live="polite"></p>';
+  b.replaceWith(f);$("#dt-tit").focus();
+  f.querySelectorAll('input[name="dt-q"]').forEach(function(x){x.onchange=function(){$("#dt-quando").hidden=f.querySelector('input[name="dt-q"]:checked').value!=="poi";};});
+  $("#dt-no").onclick=function(){diretteTeam(id);};
+  $("#dt-ok").onclick=function(){var s=this,e=$("#dt-e"),t=$("#dt-tit").value.trim(),poi=f.querySelector('input[name="dt-q"]:checked').value==="poi",q=$("#dt-quando").value,pub=f.querySelector('input[name="dt-v"]:checked').value==="pubblica";
+    if(!t){e.textContent="Scrivi il titolo.";return;}
+    if(poi&&!q){e.textContent="Scegli data e ora.";return;}
+    if(poi&&new Date(q).getTime()<Date.now()){e.textContent="Scegli un momento che deve ancora venire.";return;}
+    s.disabled=true;e.textContent="";
+    db.rpc("fm_attiva_diretta",{p_titolo:t,p_sottotitolo:$("#dt-sot").value.trim()||null,p_inizio:poi?new Date(q).toISOString():null,p_team:pub?null:id}).then(function(x){
+      if(x&&x.error){s.disabled=false;e.textContent=dtErr(x.error);return;}
+      cache.dirette=null;
+      if(!poi&&x&&x.data){location.href="diretta-bozza.html?puntata="+encodeURIComponent(x.data);return;}
+      diretteTeam(id);},function(z){s.disabled=false;e.textContent=errore(z);});};
+}
 function dirette(){
   if(cache.dirette||!db)return Promise.resolve(cache.dirette||[]);
   return db.rpc("fm_dirette_in_onda").then(function(r){cache.dirette=(r&&!r.error&&r.data)||[];return cache.dirette;},function(){return [];});
@@ -1520,7 +1569,7 @@ function vTeam(){
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
       '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div>'+
       '<button type="button" class="tc-menu" id="tc-menu" aria-label="Argomenti e notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
-    (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
+    (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div id="tc-dt"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
     '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
       '<input type="file" id="tc-doc" accept=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf" hidden>'+
@@ -1540,6 +1589,7 @@ function vTeam(){
   $("#tc-doc").onchange=function(e){var f=e.target.files&&e.target.files[0];e.target.value="";if(f)mandaAllegato(id,f,"file",f.name);};
   dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length||$("#tc-prat"))return;
     e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
+  if(!duo)diretteTeam(id);
   team.msg=[];team.prop={};
   ricaricaTeam(true);team.guido=false;guidoChat(id);agendaTeam(id);ass.rispondo=null;ass.stat=false;assTeam(id);
   /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
