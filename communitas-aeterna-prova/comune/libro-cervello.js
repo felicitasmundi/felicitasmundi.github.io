@@ -31,7 +31,7 @@ window.libroCervello=function(box,fonte){
     ind.innerHTML='<header class="lc-front"><p class="lc-orn">❦</p><h1>Cervello</h1>'+APERTURA+'<p class="lc-sotto">Indice</p><div class="lc-filetto"></div></header>'+
       sez.map(function(s){
         return '<section class="lc-parte"><h2><span class="lc-num">'+ROMANI[s.sezione_ordine]+'</span>'+esc(s.sezione_nome)+'</h2>'+
-          (figli["_"+s.sezione]||[]).filter(function(v){return !v.padre_id;}).map(voceH).join("")+'</section>';
+          (figli["_"+s.sezione]||[]).filter(function(v){return !v.padre_id;}).map(voceH).join("")+(fonte.extra?(fonte.extra(s)||""):"")+'</section>';
       }).join("")+'<p class="lc-orn lc-fine">❦</p>';
     legaVoci(ind);
   }

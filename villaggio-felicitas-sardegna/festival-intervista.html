@@ -13,13 +13,13 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <base href="/communitas-aeterna-prova/">
 <!-- 3 nov 2026 13:50, Gab: rinominarlo adesso. COPIA della sala (diretta-bozza.html) con indirizzo pulito; parte sulla puntata «Felicitas Festival Intervista». Si rigenera da diretta-bozza.html: non correggerla a mano. -->
 <meta property="og:title" content="Felicitas Festival Intervista, la diretta audio">
 <meta property="og:description" content="La diretta audio di FelicitasMundi: entri con il tuo accesso.">
 <meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna/inviti/felicitas.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Felicitas Festival Intervista</title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="comune/caratteri.css">
@@ -409,11 +409,13 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     else { $('cp-c').textContent='·'; $('cp-nome').textContent='nessuno sta parlando'; $('cp-sot').textContent=String(stanza.numParticipants||1)+' in sala'; }
   }
 
+  /* 8 nov (SQL 221): una sala per ogni diretta — l'id della diretta viaggia verso sala-gettone e sala-regia; le puntate col nome restano nella sala unica */
+  function dirCorpo(c){ if(/^[0-9a-f-]{36}$/i.test(CHIAVE_PUNTATA)) c.diretta=CHIAVE_PUNTATA; return c; }
   /* la regia: passa dal server */
   function regia(az, chi, b, si){
     if(!io.coordina) return; if(b) b.disabled=true;
     var corpo={azione:az, chi:chi}; if(az==='parola'){ corpo.si=!!si; }
-    db.functions.invoke('sala-regia',{body:corpo}).then(function(r){
+    db.functions.invoke('sala-regia',{body:dirCorpo(corpo)}).then(function(r){
       if(r.error) throw r.error; var d=r.data||{}; if(d.errore) throw new Error(d.errore);
       chat_sys(az==='muta'?'microfono chiuso':az==='fuori'?'una persona è stata mandata fuori':az==='parola'?(d.si?'data la parola':'tolta la parola'):'tutti i microfoni chiusi');
       setTimeout(tessere,600);
@@ -447,7 +449,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     /* 15 ott 09:15, Gab: «un utente non registrato per entrare deve scrivere per forza nome e dove si trova» */
     if(entrato===false){ vaiAccesso(); return; }
     dice('Un momento…'); $('entra').disabled=true;
-    db.functions.invoke('sala-gettone',{body:{}}).then(function(r){
+    db.functions.invoke('sala-gettone',{body:dirCorpo({})}).then(function(r){
       if(r.error) throw r.error; var d=r.data||{}; if(!d.gettone) throw new Error(d.errore||'nessun gettone'); io=d;
       stanza=new LivekitClient.Room({adaptiveStream:true});
       var E=LivekitClient.RoomEvent;
@@ -468,7 +470,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
         /* regola fissa 3 (3/11): si entra muti, anche tornando dalle altre pagine */
         segna(false);
       });
-    }).catch(function(e){ $('entra').disabled=false; dice('La sala non si apre: '+(e&&e.message?e.message:'—'),true); });
+    }).catch(function(e){ $('entra').disabled=false; var t=e&&e.message?e.message:'—'; dice(/^Questa diretta/.test(t)?t+'.':'La sala non si apre: '+t,true); });
   }
   function fuori(t){ giorno.inizio=''; scriviGiorno(); if(rec&&rec.state==='recording') ferma(); lasciando=true; if(stanza){ try{ stanza.disconnect(); }catch(e){} } stanza=null; lasciando=false; $('suono').hidden=true; $('pausa').hidden=true; try{ if(navigator.mediaSession) navigator.mediaSession.playbackState='none'; }catch(e){} if(actx){ try{ actx.close(); }catch(e){} actx=null; analizza=null; } clearInterval(orologio2); $('suoni').innerHTML=''; $('onda').classList.add('fuori'); $('live-t').textContent='LA DIRETTA DEL VILLAGGIO'; document.body.classList.add('soglia'); document.body.classList.remove('coordina'); $('live').style.color='var(--grigio)'; var i=$('live').querySelector('i'); i.style.background='var(--grigio)'; i.style.animation='none'; $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; $('chiudi').hidden=true; if(entrato===false) $('ospite-dati').hidden=false; ['b-mic','b-mano','b-rec','b-file'].forEach(function(k){ $(k).disabled=true; $(k).classList.remove('on'); }); document.querySelector('.griglia').innerHTML=''; document.getElementById('app').classList.remove('coordina'); dice(t||''); }
   $('esci').onclick=function(){ cancellaSegno(); fuori(''); };
@@ -501,7 +503,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   $('chiudi').onclick=function(){ if(!stanza||!io.coordina) return; if(!confirm('Chiudi la diretta per tutti?')) return;
     if(rec&&rec.state==='recording') ferma();   /* la registrazione si ferma e resta qui sotto, da scaricare o pubblicare */
     $('chiudi').disabled=true; dice('Chiudo la diretta…');
-    db.functions.invoke('sala-regia',{body:{azione:'chiudi_diretta'}}).then(function(r){ if(r.error) throw r.error; var d=r.data||{}; if(d.errore) throw new Error(d.errore); })
+    db.functions.invoke('sala-regia',{body:dirCorpo({azione:'chiudi_diretta'})}).then(function(r){ if(r.error) throw r.error; var d=r.data||{}; if(d.errore) throw new Error(d.errore); })
       .catch(function(e){ dice('Non chiusa: '+(e&&e.message?e.message:'—'),true); }).finally(function(){ $('chiudi').disabled=false; }); };
   $('pausa').onclick=function(){ pausaSala(!inPausa); };
   /* 15 ott, Gab: «un altro operatore … lo sentivamo, mentre l'operatore no» — il navigatore blocca l'audio finché non si tocca la pagina:
