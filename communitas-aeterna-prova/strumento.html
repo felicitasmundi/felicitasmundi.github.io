@@ -513,7 +513,6 @@ button.cs-carta{cursor:pointer}
 .tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
 /* SQL 129 · 29/10: audio, file, posizione, chat a due, notifiche a scelta */
 .tc-piu{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);background:transparent;color:#D4AF6A;font-size:30px;line-height:1;cursor:pointer}
-.ver-l{margin-top:10px}.ver-v{border-top:1px solid rgba(212,175,106,.25);padding:10px 0 4px}.ver-v small{display:block;font-size:15px;color:#D4AF6A}.ver-v p{margin:6px 0 8px;font-size:17px;line-height:1.5;white-space:normal}
 .corr{margin-top:10px}.corr-b{background:transparent;border:1px solid #D4AF6A;color:#D4AF6A;border-radius:14px;padding:8px 14px;font:600 16px "DM Sans",system-ui,sans-serif;cursor:pointer}.corr-b.pieno{background:#D4AF6A;color:#0a1430}.corr-b[disabled]{opacity:.45}.corr-si{display:inline-block;font-size:16px;color:#D4AF6A}.corr-l{display:block;font-size:16px;color:rgba(245,240,230,.8);margin:0 0 6px}.corr-t{width:100%;box-sizing:border-box;font-size:18px;padding:10px 12px;border-radius:12px;border:1px solid rgba(245,240,230,.25);background:#0a1430;color:#F5F0E6}.corr-az{display:flex;gap:10px;margin-top:8px}.corr-e{font-size:16px;margin:6px 0 0;color:#F5F0E6}
 .tc-cerv-info{border:1px solid #D4AF6A;border-radius:16px;background:#1a2148;color:#F5F0E6;font-size:18px;line-height:1.5;padding:12px 14px;margin:0 0 14px}
 .tc-menu{flex:0 0 auto;border:1px solid rgba(212,175,106,.5);border-radius:20px;background:transparent;color:#D4AF6A;font-size:22px;line-height:1;padding:6px 12px;cursor:pointer}
@@ -1574,6 +1573,7 @@ function disegnaFissati(){
 function azioniRuolo(m){
   var mio=m.scritto_da===io.id,g=team.tipo==="team"&&team.guido,base=(team.lista||[]).some(function(t){return t.team_id===team.id&&t.nome==="Praticantato";});
   return (mio?'<button type="button" data-az="modifica">Modifica</button>':'')+(g?(m.fissato_il?'<button type="button" data-az="sfissa">Togli da in alto</button>':'<button type="button" data-az="fissa">Fissa in alto</button>'):'')+
+    (g&&String(m.testo||"").trim()?'<button type="button" data-az="giornale">Pubblica nel Giornale</button>':'')+
     (mio||g?'<button type="button" class="el" data-az="elimina">Elimina</button>':'')+
     (g&&!mio&&!base&&m.scritto_da?'<button type="button" data-az="esci">Fai uscire '+esc(nomi[m.scritto_da]||"")+'</button>':'');
 }
@@ -1588,7 +1588,23 @@ function legaAzioniRuolo(box,m){
   su("elimina",function(b){chiedi(b,"Tocca ancora: sparisce per tutti",function(){return db.rpc("fm_elimina_messaggio",{p_messaggio:m.id});});});
   su("esci",function(b){chiedi(b,"Tocca ancora per farla uscire",function(){return db.rpc("fm_fai_uscire",{p_squadra:team.id,p_persona:m.scritto_da});});});
   su("modifica",function(b){b.onclick=function(){modificaMsg(box,m);};});
+  /* 8/11 · SQL 214 · Gab 09:58 «ok pubblica nel giornale tasto»: il messaggio diventa un articolo del Giornale, per i vicinati o per tutti */
+  su("giornale",function(b){b.onclick=function(){
+    var w=document.createElement("span");w.className="tc-gio";
+    w.innerHTML='<b>Nel Giornale, per chi?</b><button type="button" data-gv="vicinato">Vicinati</button><button type="button" data-gv="pubblico">Tutti</button><button type="button" data-gv="">Annulla</button>';
+    b.replaceWith(w);
+    w.querySelectorAll("[data-gv]").forEach(function(x){x.onclick=function(){var v=x.getAttribute("data-gv");
+      if(!v){team.scelto=null;disegnaTeam();return;}
+      w.querySelectorAll("button").forEach(function(y){y.disabled=true;});$("#tc-err").textContent="Un momento…";
+      db.rpc("fm_giornale_dal_messaggio",{p_messaggio:m.id,p_vis:v}).then(function(q){
+        if(q&&q.error){w.querySelectorAll("button").forEach(function(y){y.disabled=false;});$("#tc-err").textContent=(q.error.message&&!/PGRST|function|schema/i.test(q.error.message))?q.error.message:errore(q.error);return;}
+        w.innerHTML='<b>È nel Giornale di oggi · '+(v==="pubblico"?"per tutti":"per i vicinati")+'</b>';$("#tc-err").textContent="";
+      },function(x2){w.querySelectorAll("button").forEach(function(y){y.disabled=false;});$("#tc-err").textContent=errore(x2);});};});
+  };});
 }
+var GIO_CSS='.tc-gio{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center}.tc-gio b{color:#D4AF6A;font-weight:600}'+
+'.g4-cerv{display:inline-block;margin:8px 8px 0 0;padding:6px 12px;border-radius:12px;border:1px solid rgba(212,175,106,.55);color:#D4AF6A;text-decoration:none;font-weight:600}';
+document.head.insertAdjacentHTML("beforeend","<style>"+GIO_CSS+"</style>");
 /* ═══ Modifica del proprio messaggio · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
    Gab 1/11 13:35: «aggiungi anche la possibilità di modificare il post, in modo che io possa aggiungere anche altro testo
    o allegati, al link appena condiviso». Serve lo SQL 149 (fm_modifica_messaggio, colonna modificato_il).
@@ -2789,7 +2805,7 @@ function gzArticolo(x,firme,apre){
   var occ=(el?el.charAt(0).toUpperCase()+el.slice(1)+" · ":"")+(o.orma_madre_id===FEST_ID?"Felicitas Festival · ":"")+(o.visibilita==="pubblico"?"🌐 Per tutti":"🏡 Solo per i vicinati");
   var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="gz-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
   var t=par.map(function(p){return '<p class="gz-t">'+esc(p).replace(/«([^«»]{1,800})»/g,"<strong>«$1»</strong>")+'</p>';}).join("");
-  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';
+  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+apriCerv(o)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';
 }
 /* elemento e Festival si leggono a parte: se lo SQL 163 non c'è ancora, restano oro */
 function gzDettagli(tutti,firme){
@@ -2807,11 +2823,13 @@ function gzMetti(tutti,firme){
   A.innerHTML=tutti.length?gzArticolo(tutti[0],firme,true)+(tutti.length>1?'<div class="gz-col">'+tutti.slice(1).map(function(x){return gzArticolo(x,firme,false);}).join("")+'</div>':""):"";
   A.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(A);
 }
+var g4TeamLetti=0;
 function g4Articoli(arti,firme){
   var pub=arti.filter(function(x){return x.o.visibilita==="pubblico";}),dentro=arti.filter(function(x){return x.o.visibilita!=="pubblico";});
   var tutti=pub.concat(io.id?dentro:[]),A=$("#g4-art"),Q=$("#gz-quanti");
   if(Q){Q.textContent=tutti.length===1?"1 articolo in questo numero":tutti.length+" articoli in questo numero";Q.hidden=!tutti.length;}
   gzMetti(tutti,firme);gzDettagli(tutti,firme);
+  if(io.id&&db&&!team.lista&&!g4TeamLetti&&tutti.some(function(x){return x.o.squadra_id;})){g4TeamLetti=1;leggiTeam().then(function(l){if(l&&vista==="giornale"){gzMetti(tutti,firme);g4Lavora();}});}
   var V=$("#g4-vil");if(V)V.innerHTML="";
   [A,V].forEach(function(c){if(!c)return;
     c.querySelectorAll("[data-art]").forEach(function(b){b.onclick=function(){apriA[b.getAttribute("data-art")]=!apriA[b.getAttribute("data-art")];vGiornale();};});legaVis(c);});
@@ -2916,23 +2934,40 @@ function g4Voce(k,t){
 }
 /* 7/11 · il video di oggi in cima al Giornale (SQL 199) · 8/11 Gab 09:14 «il metti video, mi dovrebbe permettere anche di inserire un file audio e un testo descrittivo.. l inserimento dovrebbe mandare autonomamente su una voce dell indice collegara» · 09:16 «potrei scegliere io la voce dell indice» · «il video in alto, potrebbe essere sostituito dalle dirette pubbliche, e poi al termine della diretta torna il video» (SQL 212) */
 var g4CimaT=null;
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();});
 function g4VideoOggi(){
   var B=$("#g4-oggi");if(!B||!db)return;clearTimeout(g4CimaT);
-  var vid=db.from("giornale_video").select("link,audio,testo,capitolo_id,riga_id").order("messo_il",{ascending:false}).limit(1).then(function(r){
+  var vid=db.from("giornale_video").select("id,link,audio,testo,capitolo_id,riga_id,link_titolo,link_canale,titolo_corretto").order("messo_il",{ascending:false}).limit(1).then(function(r){
+    if(r&&r.error)return db.from("giornale_video").select("link,audio,testo,capitolo_id,riga_id").order("messo_il",{ascending:false}).limit(1);return r;}).then(function(r){
     if(r&&r.error)return db.from("giornale_video").select("link,audio,testo,capitolo_id").order("messo_il",{ascending:false}).limit(1);return r;}).then(function(r){
     if(r&&r.error)return db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1);return r;});
   var dir=db.rpc("fm_dirette_in_onda").then(function(r){var ora=Date.now();return ((r&&!r.error&&r.data)||[]).filter(function(d){return d.inizio_il&&new Date(d.inizio_il).getTime()<=ora;})[0]||null;},function(){return null;});
-  Promise.all([vid,dir]).then(function(v){
-    var B=$("#g4-oggi");if(!B||$("#g4-cima-f"))return;var r=v[0],d=v[1];
+  /* SQL 220: dirette YouTube seguite (le aggiorna il db ogni 5 minuti) */
+  var ytd=db.from("giornale_dirette_youtube").select("video,titolo,in_onda").eq("in_onda",true).limit(1).then(function(r){return (r&&!r.error&&r.data&&r.data[0]&&ytId("https://youtu.be/"+r.data[0].video))?r.data[0]:null;},function(){return null;});
+  Promise.all([vid,dir,ytd]).then(function(v){
+    var B=$("#g4-oggi");if(!B||$("#g4-cima-f"))return;var r=v[0],d=v[1],yl=v[2];
     var x=(r&&!r.error&&r.data&&r.data[0])||{},y=ytId(x.link);
     var tasto=io.nucleo?'<div id="g4-oggi-c" style="margin:0 0 14px"><button type="button" class="mini" id="g4-oggi-b">Metti in cima</button> <button type="button" class="mini" id="g4-oggi-dc">Dal Cervello</button></div>':'';
     if(d){B.innerHTML='<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'" style="display:flex;gap:10px;align-items:center;margin:0 0 14px;padding:16px;border:1px solid var(--oro,#D4AF6A);border-radius:18px;text-decoration:none;color:inherit"><span style="color:#ff6b6b;font-weight:600">● in onda</span><span>'+esc(d.titolo||"")+'</span><b style="margin-left:auto">Entra ›</b></a>'+tasto;}
-    else{B.innerHTML=(y?'<div class="video" style="margin:0 0 10px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
+    else if(yl){B.innerHTML='<p style="margin:0 0 8px"><span style="color:#ff6b6b;font-weight:600">● in onda</span>'+(yl.titolo?' · '+esc(yl.titolo):'')+'</p>'+
+      '<div class="video" style="margin:0 0 14px"><iframe src="https://www.youtube-nocookie.com/embed/'+ytId("https://youtu.be/"+yl.video)+'" title="'+esc(yl.titolo||"diretta")+'" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>'+tasto;}
+    else{var tit=x.link_titolo||"";
+      B.innerHTML=(y?'<div class="video" style="margin:0 0 10px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
+      (y&&(tit||io.nucleo)&&x.id?'<div id="g4-oggi-yt" style="margin:0 0 10px">'+(tit?'<p style="margin:0;font-size:18px"><b>'+esc(tit)+'</b>'+(x.link_canale?' · '+esc(x.link_canale):'')+'</p>':'')+
+        (io.nucleo?'<button type="button" class="mini" id="g4-oggi-ct" style="margin-top:6px">Correggi titolo</button>':'')+'</div>':'')+
       '<div id="g4-oggi-f"></div><div id="g4-oggi-a"></div>'+(x.testo?'<p id="g4-oggi-t" style="margin:0 0 6px;font-size:18px;line-height:1.55">'+esc(x.testo).replace(/\n/g,"<br>")+'</p>':'')+'<p class="nota" id="g4-oggi-v" style="margin:0 0 14px" hidden></p>'+tasto;
       if(x.audio&&io.id)db.storage.from("chat").createSignedUrl(x.audio,3600).then(function(u){var A=$("#g4-oggi-a");if(A&&u&&u.data&&u.data.signedUrl)A.innerHTML='<audio controls preload="none" src="'+esc(u.data.signedUrl)+'" style="width:100%;margin:0 0 10px"></audio>';},function(){});
       if(x.riga_id&&io.id)db.from("cervello_righe").select("foto").eq("id",x.riga_id).maybeSingle().then(function(q){var ft=q&&q.data&&q.data.foto;if(!ft)return;
         return db.storage.from("chat").createSignedUrl(ft,3600).then(function(u){var Fo=$("#g4-oggi-f");if(Fo&&u&&u.data&&u.data.signedUrl)Fo.innerHTML='<img class="foto" src="'+esc(u.data.signedUrl)+'" alt="" style="margin:0 0 10px">';});}).catch(function(){});
       if(x.capitolo_id)db.from("cervello_capitoli").select("titolo").eq("id",x.capitolo_id).maybeSingle().then(function(c){var V=$("#g4-oggi-v");if(V&&c&&c.data&&c.data.titolo){V.textContent=c.data.titolo;V.hidden=false;}},function(){});}
+    var ct=$("#g4-oggi-ct");if(ct)ct.onclick=function(){clearTimeout(g4CimaT);var W=$("#g4-oggi-yt");
+      W.innerHTML='<div id="g4-cima-f" style="display:flex;flex-direction:column;gap:8px"><label for="g4-ct-t">Titolo</label><input type="text" id="g4-ct-t" maxlength="300" style="font-size:18px;padding:10px 12px;border-radius:12px">'+
+        '<div style="display:flex;gap:10px"><button type="button" class="btn" id="g4-ct-s">Salva</button><button type="button" class="mini" id="g4-ct-x">Annulla</button></div><p class="nota" id="g4-ct-e" aria-live="polite"></p></div>';
+      $("#g4-ct-t").value=x.link_titolo||"";$("#g4-ct-t").focus();
+      $("#g4-ct-x").onclick=function(){var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();};
+      $("#g4-ct-s").onclick=function(){var s2=this,e=$("#g4-ct-e");s2.disabled=true;e.textContent="Un momento…";
+        db.rpc("fm_giornale_video_titolo",{p_id:x.id,p_titolo:$("#g4-ct-t").value.trim()}).then(function(q){if(q&&q.error){s2.disabled=false;e.textContent=(q.error.message&&!/PGRST|function|schema/i.test(q.error.message))?q.error.message:errore(q.error);return;}
+          var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();},function(z){s2.disabled=false;e.textContent=errore(z);});};};
     var b=$("#g4-oggi-b");if(b)b.onclick=g4CimaForm;
     var bc=$("#g4-oggi-dc");if(bc)bc.onclick=g4DalCervello;
     g4CimaT=setTimeout(function(){if(vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();},60000);
@@ -3046,8 +3081,10 @@ function mediaHTML(o,firme){
     return '<audio controls preload="none" src="'+esc(u)+'"></audio>';}).join("");
 }
 function visGio(o){return o.tipo==="articolo"||o.tipo==="diretta";}
-function visPuo(o){return !!io.id&&(o.persona_id===io.id||(io.nucleo&&visGio(o)));}
+function visTeam(o){return !!o.squadra_id&&visGio(o)&&(team.lista||[]).some(function(t){return t.team_id===o.squadra_id;});}
+function visPuo(o){return !!io.id&&(o.persona_id===io.id||(io.nucleo&&visGio(o))||visTeam(o));}
 function visCanc(o){return visPuo(o)&&visGio(o)?'<button type="button" class="mini" data-canc="'+esc(o.id)+'" style="margin-top:8px">Cancella</button>':'';}
+function apriCerv(o){return io.id&&o.da_riga&&o.capitolo_id&&o.tipo==="articolo"?'<a class="g4-cerv" href="strumento.html?v=cervello&cap='+encodeURIComponent(o.capitolo_id)+'">Apri nel Cervello ›</a>':'';}
 function visHTML(o){
   if(!visPuo(o))return o.visibilita&&o.visibilita!=="pubblico"?'<span class="etv">'+esc(VIS[o.visibilita]||o.visibilita)+'</span>':"";
   return '<span class="vis" style="margin-top:4px">'+["solo_me","vicinato","pubblico"].map(function(v){return '<button data-vis="'+esc(o.id)+'|'+v+'|'+esc(o.tipo||"")+'" aria-pressed="'+(o.visibilita===v)+'">'+VIS[v]+'</button>';}).join("")+'</span>'+visCanc(o);
@@ -3069,7 +3106,7 @@ function voce(x,firme){
   if(o.tipo==="articolo"){var lungo=testo.length>320,tutto=apriA[o.id];
     var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="art-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
     return '<article class="art">'+imm+(o.titolo?'<h5>'+esc(o.titolo)+'</h5>':'')+'<p class="firma">'+firma+'</p>'+linkHTML(link)+mediaHTML(o,firme)+
-      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';}
+      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+apriCerv(o)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';}
   return '<div class="breve">'+(o.titolo?'<p><b>'+esc(o.titolo)+'</b></p>':'')+linkHTML(link)+mediaHTML(o,firme)+(testo?'<p>'+esc(testo)+'</p>':'')+'<span>'+firma+'</span>'+visHTML(o)+'</div>';
 }
 
@@ -3116,39 +3153,6 @@ function corrLega(box){
         bs[0].disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){bs[0].disabled=false;e.textContent=errore(x);});};
   };});
 }
-/* 7/11/2026 · storico versioni delle card (SQL 209): fm_card_versioni, fm_card_ripristina, fm_card_cancellate. Senza le funzioni il tasto non c'è. */
-var VER_AZ={modifica:"Modificata",cancellata:"Cancellata",ripristino:"Ripristinata"};
-function verQuando(t){return new Date(t).toLocaleString("it-IT",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});}
-function verRiga(v,idk,tasto){
-  return '<div class="ver-v"><small>'+esc(VER_AZ[v.azione]||v.azione||"")+' · '+esc(verQuando(v[idk]))+(v.chi_nome?' · '+esc(v.chi_nome):'')+'</small>'+
-    '<p>'+esc(v.testo||"").replace(/\n/g,"<br>")+'</p>'+(tasto?'<button type="button" class="corr-b" data-ripristina="'+esc(v[tasto])+'">Ripristina</button>':'')+'</div>';
-}
-function verRipristina(w,k,daTeam){
-  w.querySelectorAll("[data-ripristina]").forEach(function(b){b.onclick=function(){b.disabled=true;
-    db.rpc("fm_card_ripristina",{p_versione:b.getAttribute("data-ripristina")}).then(function(r){
-      if(r&&!r.error&&r.data==="ok"){leggiCapLivello(k,daTeam);return;}
-      b.disabled=false;b.insertAdjacentHTML("afterend",'<p class="corr-e">'+esc((r&&!r.error&&r.data)||errore(r&&r.error))+'</p>');},
-      function(x){b.disabled=false;alert(errore(x));});};});
-}
-function verLega(box,k,daTeam){
-  if(!io.id||!db)return;
-  db.rpc("fm_card_cancellate",{p_capitolo:k.id}).then(function(r){
-    if(!r||r.error||!$("#cl-righe"))return;
-    box.querySelectorAll("[data-ver-box]").forEach(function(w){var id=w.getAttribute("data-ver-box");
-      w.innerHTML='<button type="button" class="corr-b" data-ver="'+esc(id)+'" style="margin-top:10px">Versioni</button>';
-      w.querySelector("[data-ver]").onclick=function(){
-        if(w.querySelector(".ver-l")){w.querySelector(".ver-l").remove();return;}
-        w.insertAdjacentHTML("beforeend",'<div class="ver-l"><p class="nota">Un momento…</p></div>');var L=w.querySelector(".ver-l");
-        db.rpc("fm_card_versioni",{p_riga:id}).then(function(q){
-          var l=(q&&!q.error&&q.data)||[];
-          L.innerHTML=l.length?l.map(function(v){return verRiga(v,"salvata_il",v.azione==="cancellata"?null:"id");}).join(""):'<p class="nota">Nessuna versione precedente.</p>';
-          verRipristina(L,k,daTeam);},function(){L.innerHTML='<p class="nota">Le versioni non si leggono adesso.</p>';});};});
-    var c=r.data||[];if(!c.length)return;
-    box.insertAdjacentHTML("beforeend",'<section class="card ver-canc" style="padding:18px;border-radius:18px"><h2 style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--oro);margin:0 0 8px">Card cancellate</h2>'+
-      c.map(function(v){v.azione=v.azione||"cancellata";return verRiga(v,"cancellata_il","versione_id");}).join("")+'</section>');
-    verRipristina(box.querySelector(".ver-canc"),k,daTeam);
-  },function(){});
-}
 function leggiCapLivello(k,daTeam){
   var c=$("#corpo");window.scrollTo(0,0);
   var lk=new URL("strumento.html?v=cervello&cap="+encodeURIComponent(k.id),location.href).href;
@@ -3168,8 +3172,8 @@ function leggiCapLivello(k,daTeam){
       var p=String(g.testo||"").split(/\n\s*\n/),h=p.shift();
       return '<section class="card" style="padding:18px;border-color:var(--oro);border-radius:18px">'+
         '<h2 style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--oro);margin:0 0 8px">'+esc(h)+'</h2>'+
-        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+corrTasto(g)+'<div data-ver-box="'+esc(g.id)+'"></div></section>';}).join("");
-    corrLega(box);verLega(box,k,daTeam);
+        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+corrTasto(g)+'</section>';}).join("");
+    corrLega(box);
   },function(){var box=$("#cl-righe");if(box)box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';});
 }
 function vCervello(){
