@@ -1022,7 +1022,7 @@ function vAzione(){
     /* 8/11 Gab: «Produttore è karma yoga» · «No I prodotti li metterei in espandi» (SQL 216) */
     .concat(io.id?[g("I miei prodotti",'data-esp-prod="1" style="display:none"',false)]:[]);
   var team=io.id?'<section class="esp-el" style="--e:#D4AF6A"><p class="esp-nm">'+(ruolo?'I TUOI TEAM':'LE TUE CHAT')+'</p>'+
-      '<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+g("Nuova chat",'data-esp-chat="1"')+'</div>'+
+      '<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+(ruolo?g("Nuova chat",'data-esp-chat="1"'):'')+'</div>'+
       '<div id="esp-team"'+(ruolo?'':' hidden')+'><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>'+
       (ruolo?'<p class="esp-d" style="margin-top:12px">I tuoi obiettivi e le scadenze sono in Oggi.</p>':'')+
       (gr.length?'<div class="esp-gg" style="margin-top:12px">'+gr.join("")+'</div>':'')+'</section>':'';
@@ -1076,14 +1076,14 @@ function mieChat(){
             '<span class="tm-dx">'+(c.ultimo_il?esc(quandoTm(c.ultimo_il)):'')+(c.non_letti?'<br><em aria-label="'+c.non_letti+' da leggere">'+c.non_letti+'</em>':'')+'</span></button>';}).join("")+'</div>':'')+
         mie.map(function(c){return '<div class="tm-ric"><b>'+esc(nomi[c.altra_persona]||"")+'</b><span class="m">la tua richiesta aspetta una risposta</span>'+
           '<div class="tc-az" style="margin:8px 0 0"><button type="button" data-ritira="'+esc(c.chat_id)+'">Ritira la richiesta</button></div></div>';}).join("")+
-        '<button type="button" class="tm-nuova" id="tm-nuova">Nuova chat</button><p class="az-esito" id="tm-chat-esito" aria-live="polite"></p>';
+        ((io.id&&(io.nucleo||(io.ruoli||[]).length))?'<button type="button" class="tm-nuova" id="tm-nuova">Nuova chat</button>':'')+'<p class="az-esito" id="tm-chat-esito" aria-live="polite"></p>';
       box.querySelectorAll("[data-chat]").forEach(function(b){b.onclick=function(){team.id=b.getAttribute("data-chat");team.tipo="chat";vai("team");};});
       box.querySelectorAll("[data-ris]").forEach(function(b){b.onclick=function(){b.disabled=true;
         db.rpc("fm_chat_rispondi",{p_chat:b.getAttribute("data-ris"),p_si:b.hasAttribute("data-si")}).then(function(r){
           if(r&&!r.error&&r.data==="ok"){mieChat();numerini();return;}b.disabled=false;$("#tm-chat-esito").textContent=(r&&r.data)||errore(r&&r.error);},function(){b.disabled=false;});};});
       box.querySelectorAll("[data-ritira]").forEach(function(b){b.onclick=function(){b.disabled=true;
         db.rpc("fm_chat_chiudi",{p_chat:b.getAttribute("data-ritira")}).then(function(){mieChat();},function(){b.disabled=false;});};});
-      $("#tm-nuova").onclick=nuovaChat;
+      if($("#tm-nuova"))$("#tm-nuova").onclick=nuovaChat;
     });
   });
 }
@@ -1123,29 +1123,31 @@ function mieiProdotti(){
   }
   disegna();
 }
-/* nuova chat: si sceglie fra le persone dei propri team (fm_cerchio_persone, SQL 79) e si scrive una presentazione */
+/* nuova chat · 8 nov, Gab: «quella lista è impensabile […] io preferirei che in tutti i casi si crea qualcosa creando un link che poi va all invitato»
+   → niente elenco «Con chi»: due righe di presentazione, «Crea il link», lo si manda; chi lo apre entra e si trova in chat (SQL 223) */
 function nuovaChat(){
   var box=$("#tm-chat");if(!box)return;
   var f=document.createElement("div");f.id="tc-foglio";document.body.appendChild(f);
   function chiudi(){f.remove();}
   f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+
-    '<h2>Nuova chat</h2><p>La persona riceve la tua richiesta con la presentazione, e sceglie se accettare.</p>'+
-    '<label for="nc-chi">Con chi</label><select id="nc-chi"><option value="">Un momento…</option></select>'+
+    '<h2>Nuova chat</h2><p>Scrivi due righe per presentarti e crea il link. Mandalo alla persona con cui vuoi parlare: quando lo apre, vi trovate in chat.</p>'+
     '<label for="nc-pres">Presentati in due righe</label><textarea id="nc-pres" maxlength="1000"></textarea>'+
-    '<button type="button" class="tc-btn" id="nc-ok">Manda la richiesta</button><p class="tc-nota" id="nc-esito" aria-live="polite"></p></div>';
+    '<button type="button" class="tc-btn" id="nc-ok">Crea il link</button><div id="nc-link"></div><p class="tc-nota" id="nc-esito" aria-live="polite"></p></div>';
   f.querySelector("[data-chiudi-f]").onclick=chiudi;
-  var ids=(team.lista||[]).map(function(t){return t.team_id;});
-  Promise.all(ids.map(function(id){return db.rpc("fm_cerchio_persone",{p_vicinato:id}).then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];});})).then(function(v){
-    var p={};v.forEach(function(l){l.forEach(function(x){if(x.persona_id&&x.persona_id!==io.id&&x.nome)p[x.persona_id]=x.nome;});});
-    var k=Object.keys(p).sort(function(a,b){return p[a].localeCompare(p[b],"it");});
-    $("#nc-chi").innerHTML=k.length?'<option value="">Scegli una persona</option>'+k.map(function(id){return '<option value="'+esc(id)+'">'+esc(p[id])+'</option>';}).join(""):'<option value="">Nei tuoi team non c\'è ancora nessuno</option>';
-  });
-  $("#nc-ok").onclick=function(){var b=this,e=$("#nc-esito"),chi=$("#nc-chi").value,t=$("#nc-pres").value.trim();
-    if(!chi){e.textContent="Scegli con chi.";return;}if(!t){e.textContent="Scrivi due righe per presentarti.";return;}
+  $("#nc-ok").onclick=function(){var b=this,e=$("#nc-esito"),t=$("#nc-pres").value.trim();
+    if(!t){e.textContent="Scrivi due righe per presentarti.";return;}
     b.disabled=true;e.textContent="Un momento…";
-    db.rpc("fm_chat_richiedi",{p_persona:chi,p_presentazione:t}).then(function(r){
-      if(r&&!r.error&&r.data==="ok"){e.textContent="Richiesta mandata.";setTimeout(function(){chiudi();mieChat();},1200);return;}
-      b.disabled=false;e.textContent=(r&&r.data)||errore(r&&r.error);},function(x){b.disabled=false;e.textContent=errore(x);});};
+    db.rpc("fm_chat_link",{p_presentazione:t}).then(function(r){
+      if(!r||r.error||!r.data){b.disabled=false;e.textContent=errore(r&&r.error);return;}
+      var u=new URL("strumento.html?chatlink="+encodeURIComponent(r.data),location.href).href;
+      var msg=t+"\n"+u;
+      e.textContent="Il link vale 7 giorni, per una persona.";b.hidden=true;
+      $("#nc-link").innerHTML='<p style="word-break:break-all;font-size:14px;margin:10px 0">'+esc(u)+'</p>'+
+        '<a class="tc-btn" style="display:flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;margin-bottom:8px;padding-top:0;padding-bottom:0" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(msg)+'">Manda con WhatsApp</a>'+
+        '<button type="button" class="tc-btn" id="nc-copia">Copia il link</button>';
+      $("#nc-copia").onclick=function(){var c=this;function ok(){c.textContent="Copiato";}
+        try{navigator.clipboard.writeText(u).then(ok,function(){prompt("Copia il link:",u);});}catch(x){prompt("Copia il link:",u);}};
+    },function(x){b.disabled=false;e.textContent=errore(x);});};
 }
 function leggiTeam(){
   return db.rpc("fm_miei_team").then(function(r){if(!r||r.error||!r.data)return null;team.lista=r.data;return r.data;},function(){return null;});
@@ -4645,6 +4647,14 @@ chiSono().then(function(){
   try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff|persone)$/.test(q))vista=q;}catch(e){}
   /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
   try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;team.tipo="team";vista="team";}}catch(e){}
+  /* 8 nov · il link di una chat a due (SQL 223): chi lo apre entra, e si trova in chat con chi l'ha creato */
+  try{var lk=new URLSearchParams(location.search).get("chatlink");if(lk&&/^[0-9a-f]{16,64}$/i.test(lk)){
+    if(!io.id){location.href="accesso.html?torna="+encodeURIComponent("strumento.html?chatlink="+lk);return;}
+    db.rpc("fm_chat_link_entra",{p_codice:lk}).then(function(x){var id=x&&!x.error?String(x.data||""):"";
+      try{history.replaceState(null,"","strumento.html");}catch(e){}
+      if(/^[0-9a-f-]{36}$/i.test(id)){team.id=id;team.tipo="chat";vista="team";}else{vista="azione";alert(id||errore(x&&x.error));}
+      disegna();},function(){disegna();});
+    return;}}catch(e){}
   /* le notifiche delle chat a due aprono strumento.html?v=azione&chat=<id> (SQL 129): se è ancora una richiesta, si resta in Azione a rispondere */
   try{var cq=new URLSearchParams(location.search).get("chat");if(io.id&&cq&&/^[0-9a-f-]{36}$/i.test(cq)){team.id=cq;team.tipo="chat";vista="team";}}catch(e){}
   disegna();
