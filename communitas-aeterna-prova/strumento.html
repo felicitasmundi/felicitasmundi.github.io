@@ -2805,7 +2805,7 @@ function gzArticolo(x,firme,apre){
   var occ=(el?el.charAt(0).toUpperCase()+el.slice(1)+" · ":"")+(o.orma_madre_id===FEST_ID?"Felicitas Festival · ":"")+(o.visibilita==="pubblico"?"🌐 Per tutti":"🏡 Solo per i vicinati");
   var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="gz-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
   var t=par.map(function(p){return '<p class="gz-t">'+esc(p).replace(/«([^«»]{1,800})»/g,"<strong>«$1»</strong>")+'</p>';}).join("");
-  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+apriCerv(o)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';
+  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+apriCerv(o)+visHTML(o)+'</article>';
 }
 /* elemento e Festival si leggono a parte: se lo SQL 163 non c'è ancora, restano oro */
 function gzDettagli(tutti,firme){
@@ -2839,7 +2839,7 @@ function g4Articoli(arti,firme){
    20 ott 23:51, Gab: «quando potrò vedere anche il riferimento dei team sotto gli articoli con le task e lo sviluppo?» · 23:52 «ok94».
    Sotto ogni articolo le righe del registro legate, coi permessi di chi guarda. Lega una riga chi l'ha scritta, il nucleo o chi coordina.
    Senza l'SQL 94, o per chi non è entrato, il riquadro non compare. */
-function g4Lavora(){
+function g4Lavora(){return; /* 8/11 Gab: tolto dal Giornale */
   var box=[].slice.call(document.querySelectorAll("[data-lavora]"));if(!io.id||!db||!box.length)return;
   var ids=box.map(function(e){return e.getAttribute("data-lavora");});
   var puoi=io.nucleo||io.coordina;
@@ -3106,7 +3106,7 @@ function voce(x,firme){
   if(o.tipo==="articolo"){var lungo=testo.length>320,tutto=apriA[o.id];
     var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="art-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
     return '<article class="art">'+imm+(o.titolo?'<h5>'+esc(o.titolo)+'</h5>':'')+'<p class="firma">'+firma+'</p>'+linkHTML(link)+mediaHTML(o,firme)+
-      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+apriCerv(o)+visHTML(o)+'<div class="g4-lavora" data-lavora="'+esc(o.id)+'" hidden></div></article>';}
+      (testo?'<p class="testo">'+esc(lungo&&!tutto?testo.slice(0,320)+"…":testo)+'</p>':'')+(lungo?'<button class="leggi" data-art="'+esc(o.id)+'">'+(tutto?"Chiudi":"Leggi tutto")+'</button>':'')+apriCerv(o)+visHTML(o)+'</article>';}
   return '<div class="breve">'+(o.titolo?'<p><b>'+esc(o.titolo)+'</b></p>':'')+linkHTML(link)+mediaHTML(o,firme)+(testo?'<p>'+esc(testo)+'</p>':'')+'<span>'+firma+'</span>'+visHTML(o)+'</div>';
 }
 
