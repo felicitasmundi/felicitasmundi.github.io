@@ -129,6 +129,7 @@
     dice("Rientro…");
     var tok = accesso(), corpo = {};
     if (!tok) { try { corpo = JSON.parse(localStorage.getItem("fm_ospite") || "{}") || {}; } catch (e) { } }   /* l'ospite: come si chiama, da dove parla (solo nel gettone) */
+    if (segno && /^[0-9a-f-]{36}$/i.test(segno.puntata || "")) corpo.diretta = segno.puntata;   /* 8 nov: una sala per ogni diretta (SQL 221) */
     fetch(FM_URL + "/functions/v1/sala-gettone", { method: "POST", headers: { apikey: FM_CHIAVE, Authorization: "Bearer " + (tok || FM_CHIAVE), "Content-Type": "application/json" }, body: JSON.stringify(corpo) })
       .then(function (r) { return r.json(); }).then(function (d) {
         if (!d || !d.gettone) throw new Error((d && d.errore) || "nessun gettone");
