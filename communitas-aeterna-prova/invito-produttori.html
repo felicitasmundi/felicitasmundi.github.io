@@ -6,57 +6,75 @@
 <title>FelicitasMundi · Invito ai produttori</title>
 <meta property="og:title" content="FelicitasMundi · Felicitas Festival">
 <meta property="og:description" content="I Vicinati del Cibo · invito ai produttori">
+<meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna-prova/invito-produttori-copertina.jpg">
 <meta name="theme-color" content="#122050">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--testo:#F5F0E6;--seg:#E07A55}
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--testo:#F5F0E6;--piano:rgba(245,240,230,.78)}
 *{box-sizing:border-box}
-html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-body{margin:0;background:linear-gradient(180deg,var(--c1),var(--c2) 40%,var(--c3));background-color:var(--c3);color:var(--testo);font-family:'DM Sans',sans-serif;font-size:24px;line-height:1.5}
-main{max-width:860px;margin:0 auto;padding:40px 16px 60px}
-.alto{text-align:center;padding:24px 0 8px}
-.marchio{font-family:Cinzel,serif;color:var(--oro);letter-spacing:.12em;font-size:24px}
-h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:46px;line-height:1.15;margin:16px 0 8px}
-.data{color:var(--oro);font-size:24px}
-section{background:var(--carta);border:1px solid rgba(212,175,106,.35);border-radius:18px;padding:28px 24px;margin:28px 0;break-inside:auto}
-.num{font-family:Cinzel,serif;color:var(--oro);font-size:24px;letter-spacing:.08em}
-h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:36px;line-height:1.2;margin:6px 0 16px}
-h3{font-family:'DM Sans',sans-serif;font-weight:600;color:var(--oro);font-size:24px;margin:22px 0 6px}
-p{margin:0 0 14px}
-ul{margin:0 0 14px;padding-left:28px}
-li{margin:4px 0}
-.seg{display:inline-block;border:2px dashed var(--seg);color:var(--seg);border-radius:10px;padding:6px 12px;font-size:24px;margin:6px 0 12px}
-blockquote{margin:12px 0;padding:12px 18px;border-left:3px solid var(--oro);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:28px}
-.tasti{display:flex;flex-direction:column;gap:14px;margin-top:10px}
-.tasto{display:block;text-align:center;text-decoration:none;font-weight:600;font-size:24px;padding:16px 20px;border-radius:14px;background:var(--oro);color:var(--c3)}
+html{scroll-behavior:smooth;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:linear-gradient(180deg,var(--c1) 0,var(--c2) 45%,var(--c3));background-color:var(--c3);color:var(--testo);font-family:'DM Sans',sans-serif;font-size:24px;line-height:1.55}
+.cop{position:relative;min-height:88vh;display:flex;flex-direction:column;justify-content:flex-end;text-align:center;padding:0 16px 40px;overflow:hidden}
+.cop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.cop::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(29,47,102,.35) 0,rgba(29,47,102,.35) 35%,rgba(29,47,102,.94) 72%,var(--c1) 100%)}
+.cop>div{position:relative;z-index:1;max-width:760px;margin:0 auto}
+.marchio{font-family:Cinzel,serif;color:var(--oro);letter-spacing:.16em;font-size:24px}
+h1{text-shadow:0 2px 14px rgba(10,20,48,.9);font-family:'Cormorant Garamond',serif;font-weight:600;font-size:52px;line-height:1.08;margin:10px 0 14px}
+h1 em{display:block;font-style:normal;color:var(--oro)}
+.quando{font-size:24px;color:var(--testo)}
+.dove{font-size:24px;color:var(--piano)}
+main{max-width:760px;margin:0 auto;padding:0 16px 56px}
+.tasti{display:flex;flex-direction:column;gap:14px;margin:28px 0}
+.tasto{display:block;text-align:center;text-decoration:none;font-weight:600;font-size:24px;padding:18px 20px;border-radius:999px;background:var(--oro);color:var(--c3)}
 .tasto.vuoto{background:transparent;color:var(--oro);border:2px solid var(--oro)}
-.firma{text-align:center;color:var(--oro);font-family:'Cormorant Garamond',serif;font-size:28px;margin:36px 0 10px}
-footer{text-align:center;font-size:18px;opacity:.75}
-footer a{color:var(--testo)}
+.indice{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 12px;padding:0;list-style:none}
+.indice a{display:inline-block;font-size:20px;color:var(--testo);text-decoration:none;padding:8px 16px;border-radius:999px;background:rgba(212,175,106,.12);border:1px solid rgba(212,175,106,.35)}
+section{padding:44px 0 8px;scroll-margin-top:8px}
+section+section{border-top:1px solid rgba(212,175,106,.22)}
+.et{font-family:Cinzel,serif;color:var(--oro);font-size:20px;letter-spacing:.14em;margin:0 0 6px}
+h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:40px;line-height:1.15;margin:0 0 18px}
+p{margin:0 0 16px}
+.carte{display:grid;gap:16px;margin-top:8px}
+.carta{background:var(--carta);border-radius:20px;padding:22px 22px 8px;border-left:4px solid var(--e);scroll-margin-top:8px}
+.carta h3{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;line-height:1.2;margin:0 0 10px;color:var(--e)}
+blockquote{margin:22px 0;padding:6px 0 6px 20px;border-left:3px solid var(--oro);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1.35;color:var(--testo)}
+.link{color:var(--oro);text-decoration:none;font-weight:600}
+.firma{text-align:center;color:var(--oro);font-family:'Cormorant Garamond',serif;font-size:28px;margin:44px 0 10px}
+footer{margin-top:44px;text-align:center;font-size:18px;color:var(--piano)}
+footer a{color:var(--piano)}
+@media (min-width:720px){h1{font-size:68px}.carte{grid-template-columns:1fr 1fr}}
 @page{size:A4;margin:0}
-@media print{body{background:var(--c3)} main{padding-top:0} section{break-inside:auto;-webkit-box-decoration-break:clone;box-decoration-break:clone} h2,h3{break-after:avoid} li,p{break-inside:avoid}}
+@media print{.cop{min-height:auto;padding-top:420px}section{break-inside:auto}.carta{break-inside:avoid}}
 </style>
 </head>
 <body>
+<header class="cop">
+  <img src="invito-produttori-copertina.jpg" alt="">
+  <div>
+    <div class="marchio">FelicitasMundi</div>
+    <h1>Felicitas Festival<em>I Vicinati del Cibo</em></h1>
+    <div class="quando">21 novembre 2026 · Baratili San Pietro (OR)</div>
+    <div class="dove">Centro Sociale e Centro Polifunzionale «ex cantina Madau» · Via Roma 91</div>
+  </div>
+</header>
 <main>
+  <div class="tasti">
+    <a class="tasto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/modulo-produttore.html">L'accordo del produttore ›</a>
+    <a class="tasto vuoto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/felicitas-app.html">Scarica l'app · entri come produttore ›</a>
+  </div>
+  <ul class="indice"><li><a href="#senso">Il senso</a></li><li><a href="#felicitasmundi">Cos'è FelicitasMundi</a></li><li><a href="#vicinati">I Vicinati del Cibo</a></li><li><a href="#festival">Il Felicitas Festival</a></li><li><a href="#partecipa">Partecipa</a></li></ul>
 
-<div class="alto">
-  <div class="marchio">FelicitasMundi</div>
-  <h1>Felicitas Festival<br>I Vicinati del Cibo</h1>
-  <div class="data">21 novembre 2026 · Baratili San Pietro (OR)</div>
-  <div class="data">Centro Sociale e Centro Polifunzionale «ex cantina Madau» · Via Roma 91</div>
-</div>
-
-<section>
-  <h2>Il senso</h2>
+<section id="senso">
+    <h2>Il senso</h2>
   <p>Siamo in una società in cui i costanti stimoli del mondo esterno, la fretta, la competitività cronica, ci portano a spostare l'attenzione da ciò che siamo nel profondo, dalla relazione sana con la mente, le emozioni, il corpo, e da una comunicazione empatica con l'altro: perdiamo il senso di interdipendenza, il senso di unità anche come popolo.</p>
   <p>Da 5 anni, attraverso tour, incontri, feste e attivandoci nei gruppi territoriali, portiamo avanti un messaggio di comunione, condivisione e sviluppo, principalmente nel senso di appartenenza alla comunità: una comunità eterna, la comunità spirituale.</p>
   <p>Da lì abbiamo sviluppato FelicitasMundi: un contesto di coscienza che utilizza la tecnologia e attraverso questa si espande la persona, il gruppo, l'azienda.</p>
 </section>
 
-<section>
+<section id="felicitasmundi">
+  <p class="et">FelicitasMundi</p>
   <h2>Cos'è FelicitasMundi</h2>
   <p>FelicitasMundi è una piattaforma digitale e un ecosistema territoriale che mette in relazione persone, produttori, operatori e organizzazioni.</p>
   <p>È strutturata come una rete di villaggi diffusi, comunità territoriali articolate in vicinati.</p>
@@ -64,36 +82,26 @@ footer a{color:var(--testo)}
   <p>Ottimizza tempi e risorse, consentendo a gruppi ridotti di gestire attività complesse, per restituire tempo al talento, alla creatività e alla vita comunitaria.</p>
 </section>
 
-<section>
+<section id="vicinati">
+  <p class="et">Il progetto</p>
   <h2>I Vicinati del Cibo</h2>
-  <h3>Il vicinato</h3>
-  <p>Ogni vicinato porta nel villaggio la propria identità, autonomia, competenze, produzioni, specificità e bisogni.</p>
+  <div class="carte"><div class="carta" id="vicinato" style="--e:#8DBF5E"><h3>Il vicinato</h3><p>Ogni vicinato porta nel villaggio la propria identità, autonomia, competenze, produzioni, specificità e bisogni.</p>
   <p>Vi convivono aziende agricole e orti, luoghi di cultura e di spiritualità, spazi di convivialità e attività di produzione artigianale.</p>
-  <p>Il vicinato è un'area di circa 20 km di raggio attorno al punto di ritiro: una distanza che rende il punto facilmente raggiungibile, sostenibile dal punto di vista economico e tale da contenere le emissioni di CO₂. Nel vicinato possono costituirsi gruppi d'acquisto in cui un solo referente si occupa degli acquisti per l'intero nucleo cittadino in cui risiede.</p>
-  <h3>Con i produttori</h3>
-  <p>Il progetto sostiene i produttori sia con investimenti diretti nella produzione, sia con strumenti tecnologici innovativi, che favoriscono la visibilità dei prodotti, dei processi di lavorazione e della storia del produttore e facilitano la vendita individuale e ai gruppi d'acquisto. Contribuisce inoltre all'individuazione di magazzini e punti di ritiro e allo sviluppo di servizi di distribuzione di prodotti alimentari e rimedi naturali.</p>
-  <p>In una prima fase la consegna avviene esclusivamente presso i punti di ritiro. In una fase successiva è prevista l'estensione della distribuzione alle aziende e a domicilio.</p>
-  <h3>Oltre la grande distribuzione</h3>
-  <p>Il progetto integra modelli di produzione che superano quello della grande distribuzione. La grande distribuzione genera movimento economico, utili e valore che si concentrano in larga parte al di fuori dell'isola e che, di conseguenza, non sostengono il fabbisogno economico e la sostenibilità della Sardegna e dei sardi.</p>
-  <h3>Ordinare e ritirare</h3>
-  <p>Persone e gruppi d'acquisto ordinano tramite l'applicazione, scegliendo il prodotto e il punto di ritiro; la quantità richiesta viene riservata. Il ritiro avviene nel fine settimana o, in base alla disponibilità delle famiglie coinvolte, durante la settimana.</p>
-  <p>I prodotti possono essere proposti anche in cassette destinate a famiglie e aziende, raggiungendo i privati interessati a prodotti naturali, biologici e a chilometro zero.</p>
-  <h3>La vita nel punto di ritiro</h3>
-  <p>I punti di ritiro diventano spazi di comunità che ospitano incontri di aggregazione, attività culturali, laboratori di autoproduzione e progetti dedicati ai giovani. Vi si svolgono inoltre attività terapeutiche, corsi, percorsi formativi e servizio mensa.</p>
-  <h3>La rete e il Cervello Digitale Evoluto</h3>
-  <p>I vicinati sono interconnessi ai villaggi e i villaggi alla piattaforma, allineata alla Coscienza Cosmica.</p>
-  <p>Il Cervello Digitale Evoluto è il sistema gestionale della rete: organizza i documenti in archivi condivisi, collega i gruppi di lavoro ad agende, posta e attività coordinate e automatizzate, e rende visibili e acquistabili prodotti e servizi.</p>
+  <p>Il vicinato è un'area di circa 20 km di raggio attorno al punto di ritiro: una distanza che rende il punto facilmente raggiungibile, sostenibile dal punto di vista economico e tale da contenere le emissioni di CO₂. Nel vicinato possono costituirsi gruppi d'acquisto in cui un solo referente si occupa degli acquisti per l'intero nucleo cittadino in cui risiede.</p></div><div class="carta" id="produttori" style="--e:#C9A15A"><h3>Con i produttori</h3><p>Il progetto sostiene i produttori sia con investimenti diretti nella produzione, sia con strumenti tecnologici innovativi, che favoriscono la visibilità dei prodotti, dei processi di lavorazione e della storia del produttore e facilitano la vendita individuale e ai gruppi d'acquisto. Contribuisce inoltre all'individuazione di magazzini e punti di ritiro e allo sviluppo di servizi di distribuzione di prodotti alimentari e rimedi naturali.</p>
+  <p>In una prima fase la consegna avviene esclusivamente presso i punti di ritiro. In una fase successiva è prevista l'estensione della distribuzione alle aziende e a domicilio.</p></div><div class="carta" id="gdo" style="--e:#E07A55"><h3>Oltre la grande distribuzione</h3><p>Il progetto integra modelli di produzione che superano quello della grande distribuzione. La grande distribuzione genera movimento economico, utili e valore che si concentrano in larga parte al di fuori dell'isola e che, di conseguenza, non sostengono il fabbisogno economico e la sostenibilità della Sardegna e dei sardi.</p></div><div class="carta" id="ordinare" style="--e:#6FA8D6"><h3>Ordinare e ritirare</h3><p>Persone e gruppi d'acquisto ordinano tramite l'applicazione, scegliendo il prodotto e il punto di ritiro; la quantità richiesta viene riservata. Il ritiro avviene nel fine settimana o, in base alla disponibilità delle famiglie coinvolte, durante la settimana.</p>
+  <p>I prodotti possono essere proposti anche in cassette destinate a famiglie e aziende, raggiungendo i privati interessati a prodotti naturali, biologici e a chilometro zero.</p></div><div class="carta" id="punto" style="--e:#B08AE0"><h3>La vita nel punto di ritiro</h3><p>I punti di ritiro diventano spazi di comunità che ospitano incontri di aggregazione, attività culturali, laboratori di autoproduzione e progetti dedicati ai giovani. Vi si svolgono inoltre attività terapeutiche, corsi, percorsi formativi e servizio mensa.</p></div><div class="carta" id="rete" style="--e:#D4AF6A"><h3>La rete e il Cervello Digitale Evoluto</h3><p>I vicinati sono interconnessi ai villaggi e i villaggi alla piattaforma, allineata alla Coscienza Cosmica.</p>
+  <p>Il Cervello Digitale Evoluto è il sistema gestionale della rete: organizza i documenti in archivi condivisi, collega i gruppi di lavoro ad agende, posta e attività coordinate e automatizzate, e rende visibili e acquistabili prodotti e servizi.</p></div></div>
 </section>
 
-<section>
-  <h2>Il Felicitas Festival</h2>
-  <p>Un posto abbastanza centrale, che darà la possibilità sia di conoscere i progetti logistici, comunitari, tecnologici, di avere un punto shop con i prodotti locali selezionati, avere un'area per i bambini di educazione dove ci saranno laboratori continui durante tutta la giornata, dedicati alla tematica della trama, della connessione che dà forza all'umanità.</p>
-  <p>E poi da lì sarà possibile subito prenotare da parte di tutti i vicinati una sorta di tour che servirà per sviluppare questi punti di ritiro, la rete di distribuzione e sviluppare ogni anno, ciclicamente, ogni stagione, un festival di Felicitas in ogni territorio.</p>
+<section id="festival">
+  <p class="et">21 novembre 2026</p>
+  <h2>Il Felicitas Festival</h2><p>Un posto abbastanza centrale, che darà la possibilità sia di conoscere i progetti logistici, comunitari, tecnologici, di avere un punto shop con i prodotti locali selezionati, avere un'area per i bambini di educazione dove ci saranno laboratori continui durante tutta la giornata, dedicati alla tematica della trama, della connessione che dà forza all'umanità.</p><p>E poi da lì sarà possibile subito prenotare da parte di tutti i vicinati una sorta di tour che servirà per sviluppare questi punti di ritiro, la rete di distribuzione e sviluppare ogni anno, ciclicamente, ogni stagione, un festival di Felicitas in ogni territorio.</p>
   <blockquote>accompagnarci verso la diminuzione dell'uso della carne, soprattutto proveniente da allevamenti intensivi, e gradatamente andare verso un'alimentazione che integra gli aspetti individuali legati al corpo, all'energia che lo attraversa e ciò di cui realmente ha bisogno</blockquote>
-  <div class="tasti"><a class="tasto vuoto" href="https://app.felicitasmundi.com/felicitas-festival-21-novembre-baratili/">Il Felicitas Festival del 21 novembre ›</a></div>
+  <p><a class="link" href="https://app.felicitasmundi.com/felicitas-festival-21-novembre-baratili/">Il Felicitas Festival del 21 novembre ›</a></p>
 </section>
 
-<section>
+<section id="partecipa">
+  <p class="et">Partecipa</p>
   <h2>Partecipa coi tuoi prodotti</h2>
   <div class="tasti">
     <a class="tasto" href="https://app.felicitasmundi.com/communitas-aeterna-prova/modulo-produttore.html">L'accordo del produttore ›</a>
@@ -101,7 +109,6 @@ footer a{color:var(--testo)}
   </div>
 </section>
 
-<div class="firma">Gabriele Dettori · fondatore FelicitasMundi</div>
 <footer>© 2026 Felicitas Omnia S.r.l.s. · P.IVA 03075740906 · <a href="https://app.felicitasmundi.com/communitas-aeterna-prova/privacy.html">Privacy</a></footer>
 </main>
 </body>
