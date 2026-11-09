@@ -15,7 +15,7 @@
 <script src="comune/fm-installa.js?v=11020740"></script>
 <script src="comune/fm-notifiche.js?v=11081800"></script>
 <link rel="stylesheet" href="comune/libro-cervello.css?v=11082225">
-<script src="comune/libro-cervello.js?v=11091800"></script>
+<script src="comune/libro-cervello.js?v=11092100"></script>
 <script src="comune/indice-link.js?v=11091800"></script>
 <style>
 :root{
@@ -961,6 +961,21 @@ function vCoscienza(){
     extra:function(sz){return /base filosofica/i.test(sz.sezione_nome||"")?'<div class="lc-mappa"><a class="lc-riga" data-mappa="1" href="coscienza.html?in=app" style="color:inherit;text-decoration:none"><span class="lc-tit">La mappa della Coscienza</span><span class="lc-punti"></span><span class="lc-freccia">›</span></a></div>':"";},
     collegamenti:function(v){var t=String(v.titolo||"").toLowerCase();return (window.FM_INDICE_LINK||[]).filter(function(k){return k.voce&&t.indexOf(k.voce)>=0;});},
     apri:function(k){c.innerHTML='<div style="max-width:680px;margin:0 auto;padding:10px 16px 0"><button class="btn" id="lc-link-torna">‹ Indice</button></div><iframe class="cos-in" src="'+esc(k.url)+'" title="'+esc(k.titolo)+'"></iframe>';$("#lc-link-torna").onclick=vCoscienza;window.scrollTo(0,0);},
+    versioni:function(w,id,ricarica){if(!io.id||!db||!w)return; /* 9/11 Gab «si»: «Versioni» anche nel libro (SQL 209) */
+      w.innerHTML='<button type="button" class="corr-b" style="margin-top:14px">Versioni</button>';
+      w.querySelector("button").onclick=function(){
+        if(w.querySelector(".ver-l")){w.querySelector(".ver-l").remove();return;}
+        w.insertAdjacentHTML("beforeend",'<div class="ver-l"><p class="nota">Un momento…</p></div>');var L=w.querySelector(".ver-l");
+        db.rpc("fm_card_versioni",{p_riga:id}).then(function(q){
+          if(!q||q.error){L.innerHTML='<p class="nota">Le versioni non si leggono adesso.</p>';return;}
+          var l=q.data||[];
+          L.innerHTML=l.length?l.map(function(v){return verRiga(v,"salvata_il",v.azione==="cancellata"?null:"id");}).join(""):'<p class="nota">Nessuna versione precedente.</p>';
+          L.querySelectorAll("[data-ripristina]").forEach(function(b){b.onclick=function(){b.disabled=true;
+            db.rpc("fm_card_ripristina",{p_versione:b.getAttribute("data-ripristina")}).then(function(r){
+              if(r&&!r.error&&r.data==="ok"){ricarica();return;}
+              b.disabled=false;b.insertAdjacentHTML("afterend",'<p class="corr-e">'+esc((r&&!r.error&&r.data)||errore(r&&r.error))+'</p>');},
+              function(x){b.disabled=false;alert(errore(x));});};});
+        },function(){L.innerHTML='<p class="nota">Le versioni non si leggono adesso.</p>';});};},
     pagina:function(id){return db.from("cervello_righe").select("testo").eq("id",id).maybeSingle().then(function(q){return {testo:(q&&q.data&&q.data.testo)||"",media:[],uscite:[]};});}
   });
 }

@@ -87,11 +87,13 @@ window.libroCervello=function(box,fonte){
           '<p class="lc-via">'+esc(via(capId).join(" › "))+'</p>'+
           '<h1 class="lc-ptit">'+esc(tit)+'</h1><div class="lc-filetto"></div>'+
           '<div class="lc-testo">'+par.map(function(x,j){return '<p'+(j===0?' class="lc-capo"':'')+'>'+esc(x)+'</p>';}).join("")+'</div>'+
-          ((p.media||[]).map(mediaH).join(""))+
+          ((p.media||[]).map(mediaH).join(""))+(fonte.versioni?'<div class="lc-ver"></div>':'')+
           ((p.uscite||[]).length?'<div class="lc-uscite"><p class="lc-et">Dove è uscita</p>'+p.uscite.map(function(u,j){return '<button class="lc-usc" data-u="'+j+'">'+esc(u.dove)+' ›</button>';}).join("")+'</div>':'')+
           '<nav class="lc-sfoglia">'+(i>0?'<button data-s="'+(i-1)+'">‹ pagina prima</button>':'<span></span>')+
           '<span class="lc-orn">❦</span>'+(i<l.length-1?'<button data-s="'+(i+1)+'">pagina dopo ›</button>':'<span></span>')+'</nav>';
         pag.querySelector(".lc-torna").onclick=chiudiPagina;
+        /* 9/11 Gab «si»: il tasto «Versioni» anche nelle pagine del libro */
+        if(fonte.versioni)fonte.versioni(pag.querySelector(".lc-ver"),k.id,function(){delete cacheCarte[capId];apriPagina(capId,i);});
         pag.querySelectorAll("[data-s]").forEach(function(b){b.onclick=function(){apriPagina(capId,+b.getAttribute("data-s"));};});
         pag.querySelectorAll("[data-u]").forEach(function(b){b.onclick=function(){var u=p.uscite[+b.getAttribute("data-u")];if(fonte.vai)fonte.vai(u.url);else location.href=u.url;};});
       },function(){pag.innerHTML='<button class="lc-torna">‹ Indice</button><p class="lc-vuoto">La pagina non si legge adesso.</p>';pag.querySelector(".lc-torna").onclick=chiudiPagina;});
