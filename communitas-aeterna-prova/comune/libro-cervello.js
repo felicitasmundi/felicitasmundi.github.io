@@ -25,7 +25,7 @@ window.libroCervello=function(box,fonte){
   var righe=[],figli={},cacheCarte={},pienoDi={};
 
   fonte.indice().then(function(r){righe=(r||[]).slice().sort(function(a,b){return a.ordine-b.ordine;});
-    righe.forEach(function(x){var p=x.padre_id||"_"+x.sezione;(figli[p]=figli[p]||[]).push(x);});pienoDi={};righe.forEach(function(x){if(+x.card>0){var r=x;while(r){pienoDi[r.id]=1;var pid=r.padre_id;r=pid?righe.filter(function(y){return y.id===pid;})[0]:null;}}});disegnaIndice();},
+    righe.forEach(function(x){var p=x.padre_id||"_"+x.sezione;(figli[p]=figli[p]||[]).push(x);});pienoDi={};righe.forEach(function(x){if(+x.card>0||coll(x).length){var r=x;while(r){pienoDi[r.id]=1;var pid=r.padre_id;r=pid?righe.filter(function(y){return y.id===pid;})[0]:null;}}});disegnaIndice();},
     function(){ind.innerHTML='<p class="lc-vuoto">L\'indice non si legge adesso.</p>';});
 
   function disegnaIndice(){
@@ -55,8 +55,9 @@ window.libroCervello=function(box,fonte){
   }
   function riempi(id,dentro){
     var v=righe.filter(function(r){return r.id===id;})[0]||{},sub=figli[id]||[];
-    dentro.innerHTML=(v.descrizione?'<p class="lc-desc">'+esc(v.descrizione)+'</p>':'')+sub.map(voceH).join("")+'<div class="lc-carte"><p class="lc-vuoto">Un momento…</p></div>';
+    dentro.innerHTML=(v.descrizione?'<p class="lc-desc">'+esc(v.descrizione)+'</p>':'')+collH(v)+sub.map(voceH).join("")+'<div class="lc-carte"><p class="lc-vuoto">Un momento…</p></div>';
     legaVoci(dentro);
+    dentro.querySelectorAll("[data-link]").forEach(function(a){a.onclick=function(ev){var k=coll(v)[+a.getAttribute("data-link")];if(!k||!fonte.apri)return;ev.preventDefault();fonte.apri(k);};});
     var box=dentro.querySelector(".lc-carte");
     carte(id).then(function(l){
       if(!l.length){box.innerHTML=sub.length?'':'';return;}
@@ -66,6 +67,9 @@ window.libroCervello=function(box,fonte){
       box.querySelectorAll("[data-carta]").forEach(function(b){b.onclick=function(){apriPagina(id,+b.getAttribute("data-i"));};});
     },function(){box.innerHTML='<p class="lc-vuoto">Le pagine non si leggono adesso.</p>';});
   }
+  /* 9/11 Gab: «qualunque link faccio creare … vanno sempre messi nell indice… riconoscendone la voce adeguata» → fonte.collegamenti(voce) dà le pagine della voce */
+  function coll(v){return (fonte.collegamenti&&fonte.collegamenti(v))||[];}
+  function collH(v){return coll(v).map(function(k,i){return '<div class="lc-mappa"><a class="lc-riga" data-link="'+i+'" href="'+esc(k.url)+'" style="color:inherit;text-decoration:none"><span class="lc-tit">'+esc(k.titolo)+'</span><span class="lc-punti"></span><span class="lc-freccia">›</span></a></div>';}).join("");}
   function carte(id){if(!cacheCarte[id])cacheCarte[id]=fonte.carte(id).then(function(l){return l||[];});return cacheCarte[id];}
   function via(id){var out=[],r=righe.filter(function(x){return x.id===id;})[0];if(!r)return out;out.unshift(r.titolo);
     while(r&&r.padre_id){r=righe.filter(function(x){return x.id===r.padre_id;})[0];if(r)out.unshift(r.titolo);}
