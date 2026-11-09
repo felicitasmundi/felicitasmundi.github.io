@@ -1584,12 +1584,12 @@ function vTeam(){
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
       '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div>'+
       '<button type="button" class="tc-menu" id="tc-menu" aria-label="Argomenti e notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
-    (t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div id="tc-dt"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
+    '<div id="tc-stanze"></div><div id="tc-chatparte">'+(t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div id="tc-dt"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
     '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
       '<input type="file" id="tc-doc" accept=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf" hidden>'+
       '<textarea id="tc-testo" maxlength="2000" rows="1" placeholder="'+(duo?"Scrivi…":"Scrivi al team…")+'" aria-label="Scrivi"></textarea><button type="button" class="tc-manda" id="tc-manda" aria-label="Manda">↑</button></div>'+
-    '<div id="tc-foglio"></div>';
+    '</div><div id="tc-foglio"></div>';
   $("#tc-ind").onclick=function(){vai("azione");};
   /* 31/10 21:00, Gab: «metti argomenti tra le cose che trovi nei tre puntini, mettilo tra i primi input» → il tasto Argomenti esce dalla testa */
   $("#tc-menu").onclick=menuChat;
@@ -1604,7 +1604,7 @@ function vTeam(){
   $("#tc-doc").onchange=function(e){var f=e.target.files&&e.target.files[0];e.target.value="";if(f)mandaAllegato(id,f,"file",f.name);};
   dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length||$("#tc-prat"))return;
     e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
-  if(!duo)diretteTeam(id);
+  if(!duo)diretteTeam(id);team.evento=null;team.stanzeSu=false;if(!duo)stanzeTeam(id);
   team.msg=[];team.prop={};
   ricaricaTeam(true);team.guido=false;guidoChat(id);agendaTeam(id);ass.rispondo=null;ass.stat=false;assTeam(id);
   /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
@@ -1629,9 +1629,9 @@ function ricaricaTeam(giu){
       team.prop={};v[0].forEach(function(p){team.prop[p.messaggio_id]=p.stato;});
       var basso=window.innerHeight+window.scrollY>=document.body.scrollHeight-120;
       team.msg=l;if(!document.getElementById("md-t")&&!document.getElementById("tc-arg-t"))disegnaTeam();
-      if(giu||(nuovi&&basso)){window.scrollTo(0,document.body.scrollHeight);
+      if((giu||(nuovi&&basso))&&!team.stanzeSu){window.scrollTo(0,document.body.scrollHeight);
         /* le foto arrivano dopo: quando si caricano, si torna in fondo */
-        [].forEach.call(document.querySelectorAll("#tc-msg img"),function(im){if(!im.complete)im.addEventListener("load",function(){if(!team.scelto)window.scrollTo(0,document.body.scrollHeight);},{once:true});});}
+        [].forEach.call(document.querySelectorAll("#tc-msg img"),function(im){if(!im.complete)im.addEventListener("load",function(){if(!team.scelto&&!team.stanzeSu)window.scrollTo(0,document.body.scrollHeight);},{once:true});});}
       if(nuovi||giu)segnaLetto(id);if(nuovi)assAperte();
     });
   },function(){});
@@ -1789,6 +1789,166 @@ function modificaMsg(box,m){
   };
 }
 document.head.insertAdjacentHTML("beforeend","<style>"+MOD_CSS+"</style>");
+/* ═══ STANZE DELL'EVENTO in testa al team · SQL 225 (fm_evento_pagina, fm_passo_lascio, fm_evento_archivia) · thread «Mettere ordine a ruoli e team», 9/11/2026 ═══
+   Gab 9/11 11:13 «creiamo un contesto visivo che faccia vedere le cose da fare per ogni stanza e permett di prendere gli obiettivi e segnare l avanzamento»
+   · 11:16 «questo poi sarà la pagina concreta in primo piano nel team, prima della chat» · 11:20 «dopo il 21 quella parte della planimetria
+   non ci sarà piu e sarà archiviata» · 11:21 «si». Ogni fase è un obiettivo del team (stanza + evento); le attività sono i suoi passi.
+   La planimetria è la stessa della pagina del Festival. */
+var ST_PIANTE=(function(){
+  var R=function(a,b,c,d){return [[a,b],[c,b],[c,d],[a,d]];};
+  var P1=function(x,y){return [170.6+0.62*x,652.5+0.62*y];};
+  var R1=function(a,b,c,d){return [P1(a,b),P1(c,b),P1(c,d),P1(a,d)];};
+  return {"festival-21-11":[
+   {titolo:"Piano terra e cortile",
+    neutre:[R(380,1100,850,1150),R(380,1150,545,1222),R(710,1105,765,1165),R(765,1105,850,1170),R(245,1100,335,1280),R(245,1280,340,1365),R(335,1150,380,1365),R(245,885,400,1095),R(130,720,275,880),R(130,885,245,1020)],
+    aree:[{nome:"Ingresso",col:"#C99A5B",pol:R(550,1150,715,1365)},
+          {nome:"Scambio semi tra vicinati",col:"#E0498A",pol:R(380,1235,545,1365)},
+          {nome:"Emporio",col:"#8ED06B",pol:R(720,1170,915,1365)},
+          {nome:"Sala Agorà",col:"#F39A3A",pol:R(385,940,845,1095)},
+          {nome:"Cortile",col:"#F2C94C",aperto:1,pol:[[140,285],[560,285],[790,920],[400,920],[400,885],[275,885],[275,715],[140,715]]}],
+    ingresso:[632,1395]},
+   {titolo:"Primo piano",
+    neutre:[R1(345,700,640,975),R1(345,795,465,890),R1(465,795,585,890),R1(120,890,320,975),R1(810,775,1025,870)],
+    aree:[{nome:"Sala mensa \"Krishna Prema\"",col:"#2BB3C9",pol:R1(120,375,380,890)},
+          {nome:"Area trattamenti",col:"#B48CFF",pol:R1(380,495,570,700)},
+          {nome:"Artigiani ed esposizioni artistiche",col:"#FF8A3D",pol:R1(570,495,840,870)},
+          {nome:"Area Educazione",col:"#6FD3A0",pol:R1(840,485,1025,775)}]},
+   {titolo:"Sala polifunzionale",
+    neutre:[R(140,195,240,265),R(240,180,280,265)],
+    aree:[{nome:"Sala polifunzionale",col:"#F5D27A",num:[300,150],pol:[[140,95],[385,95],[385,265],[280,265],[280,195],[140,195]]}]}
+  ]};
+})();
+var ST_CSS='#tc-stanze:empty{display:none}.st-via{display:none!important}'+
+'.st-schede{display:flex;gap:8px;margin:12px 0 4px}.st-schede button{flex:1;font:600 18px "DM Sans",system-ui,sans-serif;color:#F5F0E6;background:transparent;border:1px solid rgba(212,175,106,.45);border-radius:22px;padding:9px 12px;cursor:pointer}'+
+'.st-schede button[aria-pressed="true"]{background:#D4AF6A;border-color:#D4AF6A;color:#0a1430}'+
+'.st-pag{display:flex;flex-direction:column;gap:16px;margin-top:10px;color:#F5F0E6}'+
+'.st-ev{background:#1a2148;border:1px solid rgba(212,175,106,.3);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px}'+
+'.st-ev h2{margin:0;font-size:24px;color:#F5F0E6}.st-ev .d{color:#c9cbe3;font-size:17px}'+
+'.st-barra{height:10px;border-radius:6px;background:rgba(245,240,230,.12);overflow:hidden}.st-barra span{display:block;height:100%;background:#D4AF6A;border-radius:6px}'+
+'.st-n{font-size:17px;color:#c9cbe3;font-variant-numeric:tabular-nums}'+
+'.st-piani{display:flex;gap:8px;flex-wrap:wrap}.st-piani button{font:500 17px "DM Sans",system-ui,sans-serif;color:#F5F0E6;background:transparent;border:1px solid rgba(212,175,106,.3);border-radius:22px;padding:8px 14px;cursor:pointer}'+
+'.st-piani button[aria-pressed="true"]{background:#D4AF6A;color:#0a1430;border-color:#D4AF6A;font-weight:700}'+
+'.st-mappa{background:#1a2148;border:1px solid rgba(212,175,106,.3);border-radius:20px;padding:12px}.st-mappa svg{width:100%;height:auto;display:block;max-height:52svh}.st-mappa .ar{cursor:pointer}'+
+'.st-elenco{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}'+
+'.st-elenco button{width:100%;display:grid;grid-template-columns:38px 1fr auto;gap:12px;align-items:center;text-align:left;font:inherit;color:#F5F0E6;background:transparent;border:1px solid transparent;border-radius:14px;padding:7px;cursor:pointer}'+
+'.st-elenco button[aria-pressed="true"]{border-color:#D4AF6A;background:rgba(212,175,106,.08)}'+
+'.st-num{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:19px;color:#0a1430;background:var(--c)}'+
+'.st-elenco b{display:block;font-size:19px;line-height:1.2}.st-elenco small{display:block;font-size:16px;color:#c9cbe3}.st-conta{font-size:16px;color:#c9cbe3;white-space:nowrap;font-variant-numeric:tabular-nums}'+
+'.st-testa{display:flex;align-items:center;gap:12px}.st-testa h2{margin:0;font-size:24px;color:#D4AF6A}'+
+'.st-fase{background:#1a2148;border:1px solid rgba(212,175,106,.3);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}'+
+'.st-ft{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.st-ft h3{margin:0;font-size:21px;line-height:1.2}'+
+'.st-st{font-size:15px;font-weight:700;border-radius:12px;padding:3px 10px;white-space:nowrap;color:#0a1430;background:#c9cbe3}.st-st.corso{background:#6FA8D6}.st-st.fatto{background:#8ED06B}.st-st.attesa{background:#E0A955}'+
+'.st-att{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}'+
+'.st-att li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;border-top:1px solid rgba(212,175,106,.3);padding-top:10px}'+
+'.st-pal{width:30px;height:30px;border-radius:50%;border:2px solid #c9cbe3;display:grid;place-items:center;font-size:15px;font-weight:700;color:#c9cbe3}'+
+'.st-att li.corso .st-pal{border-color:#6FA8D6;color:#6FA8D6}.st-att li.attesa .st-pal{border-color:#E0A955;color:#E0A955}.st-att li.fatto .st-pal{border-color:#8ED06B;background:#8ED06B;color:#0a1430}'+
+'.st-att li.fatto .tx{text-decoration:line-through;text-decoration-color:rgba(245,240,230,.4);color:#c9cbe3}'+
+'.st-att .tx{font-size:18px;overflow-wrap:anywhere}.st-att .chi{display:block;font-size:16px;color:#c9cbe3}'+
+'.st-tasti{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.st-tasti button{font:500 16px "DM Sans",system-ui,sans-serif;border-radius:20px;padding:7px 14px;cursor:pointer;border:1px solid #D4AF6A;background:transparent;color:#F5F0E6}'+
+'.st-tasti button.pieno{background:#D4AF6A;color:#0a1430;font-weight:700}'+
+'.st-apri{align-self:flex-start;font:500 16px "DM Sans",system-ui,sans-serif;color:#D4AF6A;background:none;border:0;padding:4px 0;cursor:pointer}'+
+'.st-nota{font-size:16px;color:#c9cbe3;margin:0}.st-err{font-size:16px;color:#E07A5F;margin:0;min-height:1em}';
+document.head.insertAdjacentHTML("beforeend","<style>"+ST_CSS+"</style>");
+
+function stanzeTeam(id){
+  if(team.tipo!=="team")return;
+  db.rpc("fm_evento_pagina",{p_team:id}).then(function(r){
+    if(vista!=="team"||team.id!==id)return;
+    var ev=(r&&!r.error&&r.data)||null,box=$("#tc-stanze");if(!box)return;
+    if(!ev||!ST_PIANTE[ev.planimetria]){var era=team.stanzeSu;team.evento=null;team.stanzeSu=false;box.innerHTML="";
+      var cp=$("#tc-chatparte");if(cp)cp.classList.remove("st-via");if(era)window.scrollTo(0,document.body.scrollHeight);return;}
+    if(!team.evento||team.evento.id!==ev.id){team.stanzeSu=true;team.stPiano=null;team.stScelta=null;}
+    team.evento=ev;disegnaStanze(id);
+  },function(){});
+}
+function stFasi(ev,nome){return (ev.fasi||[]).filter(function(f){return f.stanza===nome;});}
+function stConta(fasi){var n=0,d=0,c=0;fasi.forEach(function(f){(f.passi||[]).forEach(function(x){n++;if(x.stato==="fatto")d++;else if(x.stato==="preso"||x.stato==="da_approvare")c++;});});return {n:n,d:d,c:c};}
+function disegnaStanze(id){
+  var box=$("#tc-stanze"),ev=team.evento;if(!box||!ev)return;
+  var viste=ST_PIANTE[ev.planimetria],su=team.stanzeSu;
+  if(team.stPiano==null){team.stPiano=0;team.stScelta={v:0,a:0};
+    viste.some(function(v,vi){return v.aree.some(function(a,ai){if(stFasi(ev,a.nome).length){team.stPiano=vi;team.stScelta={v:vi,a:ai};return true;}});});}
+  var cp=$("#tc-chatparte");if(cp)cp.classList.toggle("st-via",su);
+  var h='<div class="st-schede" role="group" aria-label="Stanze o chat"><button type="button" data-st="1" aria-pressed="'+su+'">Stanze</button><button type="button" data-st="0" aria-pressed="'+(!su)+'">Chat</button></div>';
+  if(su){
+    var tot=stConta(ev.fasi||[]),pv=viste[team.stPiano],sc=team.stScelta;
+    h+='<div class="st-pag"><section class="st-ev"><h2>'+esc(ev.nome)+'</h2>'+(ev.il?'<span class="d">'+esc(obData(ev.il))+'</span>':'')+
+      '<div class="st-barra" aria-hidden="true"><span style="width:'+(tot.n?Math.round(tot.d*100/tot.n):0)+'%"></span></div>'+
+      '<span class="st-n">'+tot.d+' di '+tot.n+' attività fatte'+(tot.c?' · '+tot.c+' in corso':'')+'</span></section>'+
+      '<div class="st-piani" role="group" aria-label="Piano">'+viste.map(function(v,i){return '<button type="button" data-sp="'+i+'" aria-pressed="'+(i===team.stPiano)+'">'+esc(v.titolo)+'</button>';}).join("")+'</div>'+
+      '<div class="st-mappa">'+stDisegno(pv,team.stPiano,sc)+'<ul class="st-elenco">'+pv.aree.map(function(a,i){var f=stFasi(ev,a.nome),k=stConta(f);
+        return '<li><button type="button" data-sa="'+i+'" aria-pressed="'+(sc.v===team.stPiano&&sc.a===i)+'"><span class="st-num" style="--c:'+a.col+'">'+(i+1)+'</span><span><b>'+esc(a.nome)+'</b><small>'+(f.length?f.length+(f.length===1?' fase':' fasi'):'nessuna fase')+'</small></span><span class="st-conta">'+(k.n?k.d+' di '+k.n:'')+'</span></button></li>';}).join("")+'</ul></div>'+
+      stStanza(ev,viste[sc.v].aree[sc.a],sc.a)+
+      (ev.archivio&&ev.il&&ev.il<new Date().toLocaleDateString("sv-SE",{timeZone:"Europe/Rome"})?'<div id="st-arch"><button type="button" class="st-apri" id="st-arch-b">Archivia l\'evento</button></div>':'')+
+      '<p class="st-err" id="st-err" aria-live="polite"></p></div>';
+  }
+  box.innerHTML=h;
+  box.querySelectorAll("[data-st]").forEach(function(b){b.onclick=function(){team.stanzeSu=b.getAttribute("data-st")==="1";disegnaStanze(id);
+    if(team.stanzeSu)window.scrollTo(0,0);else window.scrollTo(0,document.body.scrollHeight);};});
+  box.querySelectorAll("[data-sp]").forEach(function(b){b.onclick=function(){team.stPiano=+b.getAttribute("data-sp");team.stScelta={v:team.stPiano,a:0};disegnaStanze(id);};});
+  box.querySelectorAll("[data-sa]").forEach(function(b){b.onclick=function(){team.stScelta={v:team.stPiano,a:+b.getAttribute("data-sa")};disegnaStanze(id);
+    var s=$("#st-stanza");if(s)s.scrollIntoView({behavior:"smooth",block:"start"});};});
+  box.querySelectorAll("[data-sx]").forEach(function(b){b.onclick=function(){b.disabled=true;var c=b.getAttribute("data-sx"),r=b.getAttribute("data-r");
+    (c==="lascio"?db.rpc("fm_passo_lascio",{p_riga:r}):db.rpc("fm_passo_cambia",{p_riga:r,p_cosa:c})).then(function(x){
+      if(x&&x.error){b.disabled=false;$("#st-err").textContent=errore(x.error);return;}
+      if(x&&typeof x.data==="string"&&x.data!=="ok"){b.disabled=false;$("#st-err").textContent=x.data;return;}
+      cache.obiettivi=null;stanzeTeam(id);},function(e){b.disabled=false;$("#st-err").textContent=errore(e);});};});
+  box.querySelectorAll("[data-sf]").forEach(function(b){b.onclick=function(){var f=(ev.fasi||[]).filter(function(x){return x.id===b.getAttribute("data-sf");})[0];if(!f)return;
+    var k=stConta([f]);apriObiettivo({id:f.id,titolo:f.titolo,team:f.team,stadio:f.stadio,entro_il:f.entro_il,passi:k.n,passi_fatti:k.d,presi:0,da_approvare:0},id);};});
+  var ab=$("#st-arch-b");if(ab)ab.onclick=function(){var a=$("#st-arch");
+    a.innerHTML='<p class="st-nota">Dopo l\'archivio la pagina Stanze esce dal team. Le fasi e la loro storia restano.</p><div class="st-tasti"><button type="button" class="pieno" id="st-arch-si">Archivia</button><button type="button" id="st-arch-no">Annulla</button></div>';
+    $("#st-arch-no").onclick=function(){disegnaStanze(id);};
+    $("#st-arch-si").onclick=function(){this.disabled=true;db.rpc("fm_evento_archivia",{p_evento:ev.id}).then(function(x){
+      if(x&&x.error){$("#st-err").textContent=errore(x.error);return;}if(x&&x.data!=="ok"){$("#st-err").textContent=x.data;return;}stanzeTeam(id);},function(e){$("#st-err").textContent=errore(e);});};};
+  box.querySelectorAll("svg .ar").forEach(function(g){g.addEventListener("click",function(){team.stScelta={v:team.stPiano,a:+g.getAttribute("data-a")};disegnaStanze(id);
+    var s=$("#st-stanza");if(s)s.scrollIntoView({behavior:"smooth",block:"start"});});});
+}
+function stDisegno(v,vi,sc){
+  var H=46,AC=Math.cos(0.42),AS=Math.sin(0.42);
+  var pr=function(x,y,z){return [x*AC-y*AS,(x*AS+y*AC)*0.62-z];},prof=function(x,y){return x*AS+y*AC;};
+  var pts=function(a){return a.map(function(p){return p.map(function(n){return n.toFixed(1);}).join(",");}).join(" ");};
+  function scatola(pol,h,col,fo,wo,extra){
+    var s='<g'+(extra||'')+'><polygon points="'+pts(pol.map(function(p){return pr(p[0],p[1],0);}))+'" fill="'+col+'" fill-opacity="'+fo+'" stroke="'+col+'" stroke-opacity=".95" stroke-width="2.5"/>';
+    if(h){var f=[];for(var i=0;i<pol.length;i++){var a=pol[i],b=pol[(i+1)%pol.length];
+        f.push({d:prof(a[0],a[1])+prof(b[0],b[1]),p:[pr(a[0],a[1],0),pr(b[0],b[1],0),pr(b[0],b[1],h),pr(a[0],a[1],h)]});}
+      f.sort(function(u,w){return u.d-w.d;}).forEach(function(x){s+='<polygon points="'+pts(x.p)+'" fill="'+col+'" fill-opacity="'+wo+'" stroke="'+col+'" stroke-opacity=".6" stroke-width="1.5"/>';});
+      s+='<polygon points="'+pts(pol.map(function(p){return pr(p[0],p[1],h);}))+'" fill="none" stroke="#F5F0E6" stroke-opacity=".55" stroke-width="2"/>';}
+    return s+'</g>';}
+  var g='';v.neutre.forEach(function(r){g+=scatola(r,H,"#9aa0c8",.10,.06);});
+  v.aree.forEach(function(ar,i){var on=sc.v===vi&&sc.a===i;g+=scatola(ar.pol,ar.aperto?0:H,ar.col,on?(ar.aperto?.6:.8):(ar.aperto?.25:.35),on?.3:.12,' class="ar" data-a="'+i+'"');});
+  var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  v.neutre.concat(v.aree.map(function(x){return x.pol;})).forEach(function(pol){pol.forEach(function(p){[0,H].forEach(function(z){var q=pr(p[0],p[1],z);x0=Math.min(x0,q[0]);y0=Math.min(y0,q[1]);x1=Math.max(x1,q[0]);y1=Math.max(y1,q[1]);});});});
+  if(v.ingresso){var qi=pr(v.ingresso[0],v.ingresso[1],0);y1=Math.max(y1,qi[1]+30);}
+  var w=x1-x0,hh=y1-y0,pad=Math.max(w,hh)*0.08,r=Math.max(w,hh)/17;
+  v.aree.forEach(function(ar,i){var ce=ar.num;if(!ce){var cx=0,cy=0;ar.pol.forEach(function(p){cx+=p[0];cy+=p[1];});ce=[cx/ar.pol.length,cy/ar.pol.length];}
+    var q=pr(ce[0],ce[1],ar.aperto?0:H/2);
+    g+='<g class="ar" data-a="'+i+'"><circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="'+r.toFixed(1)+'" fill="'+ar.col+'" stroke="#0a1430" stroke-width="'+(r/8).toFixed(1)+'"/>'+
+       '<text x="'+q[0].toFixed(1)+'" y="'+q[1].toFixed(1)+'" text-anchor="middle" dominant-baseline="central" font-family="DM Sans,system-ui,sans-serif" font-weight="700" font-size="'+(r*1.15).toFixed(1)+'" fill="#0a1430">'+(i+1)+'</text></g>';});
+  if(v.ingresso){var q2=pr(v.ingresso[0],v.ingresso[1],0);
+    g+='<path d="M'+(q2[0]-r*.7)+','+(q2[1]-r*.2)+' L'+q2[0]+','+(q2[1]-r)+' L'+(q2[0]+r*.7)+','+(q2[1]-r*.2)+'" fill="none" stroke="#D4AF6A" stroke-width="'+(r/4).toFixed(1)+'" stroke-linecap="round" stroke-linejoin="round"/>';}
+  return '<svg viewBox="'+(x0-pad).toFixed(0)+' '+(y0-pad).toFixed(0)+' '+(w+2*pad).toFixed(0)+' '+(hh+2*pad).toFixed(0)+'" role="img" aria-label="'+esc(v.titolo)+'">'+g+'</svg>';
+}
+function stStanza(ev,ar,ai){
+  var f=stFasi(ev,ar.nome);
+  return '<section id="st-stanza" class="st-pag" style="margin-top:0"><div class="st-testa"><span class="st-num" style="--c:'+ar.col+'">'+(ai+1)+'</span><h2>'+esc(ar.nome)+'</h2></div>'+
+    (f.length?f.map(function(fa){var k=stConta([fa]),pa=fa.passi||[];
+      var at=pa.some(function(x){return x.stato==="da_approvare";});
+      var st=k.n&&k.d===k.n?["fatto","Fatto"]:at?["attesa","Da approvare"]:(k.d||k.c)?["corso","In corso"]:["","Da fare"];
+      var tit=String(fa.titolo||"");if(tit.indexOf(ar.nome+" · ")===0)tit=tit.slice(ar.nome.length+3);
+      return '<article class="st-fase"><div class="st-ft"><h3>'+esc(tit)+'</h3><span class="st-st '+st[0]+'">'+st[1]+'</span></div>'+
+        '<div class="st-barra" aria-hidden="true"><span style="width:'+(k.n?Math.round(k.d*100/k.n):0)+'%"></span></div>'+
+        '<span class="st-n">'+(k.n?k.d+' di '+k.n+' attività fatte'+(k.c?' · '+k.c+' in corso':''):'attività da scrivere')+(fa.entro_il?' · entro il '+esc(obData(fa.entro_il)):'')+'</span>'+
+        (pa.length?'<ul class="st-att">'+pa.map(function(x,i){
+          var cl=x.stato==="fatto"?"fatto":x.stato==="da_approvare"?"attesa":x.stato==="preso"?"corso":"";
+          var sotto=x.stato==="fatto"?"fatta da "+(x.chi||"una persona"):x.stato==="da_approvare"?"aspetta l'ok"+(x.chi?" · "+x.chi:""):x.stato==="preso"?(x.mio?"la stai facendo tu":"la sta facendo "+(x.chi||"una persona")):"libera";
+          var t="";
+          if(x.stato==="aperto"&&x.posso_lavorare)t='<button type="button" data-sx="prendo" data-r="'+esc(x.id)+'">Lo faccio io</button>';
+          else if(x.stato==="preso"&&x.mio)t='<button type="button" class="pieno" data-sx="fatto" data-r="'+esc(x.id)+'">Fatto</button><button type="button" data-sx="lascio" data-r="'+esc(x.id)+'">Lo lascio</button>';
+          else if(x.stato==="da_approvare"&&x.posso_approvare)t='<button type="button" class="pieno" data-sx="approvo" data-r="'+esc(x.id)+'">Approva</button><button type="button" data-sx="rimando" data-r="'+esc(x.id)+'">Rimanda indietro</button>';
+          return '<li class="'+cl+'"><span class="st-pal">'+(x.stato==="fatto"?"✓":x.stato==="da_approvare"?"!":(i+1))+'</span><div><span class="tx">'+esc(x.testo)+'</span><span class="chi">'+esc(sotto)+'</span>'+(t?'<div class="st-tasti">'+t+'</div>':'')+'</div></li>';}).join("")+'</ul>':'')+
+        '<button type="button" class="st-apri" data-sf="'+esc(fa.id)+'">Apri la fase ›</button></article>';}).join(""):'<p class="st-nota">Ancora nessuna fase in questa stanza.</p>')+'</section>';
+}
+
 
 /* ═══ Tasti a lato della bolla · 1 novembre 2026 · thread «Capire il Company brain con i team» ═══
    Gab 1/11 14:03: «puoi mettere i tasti rispondi, apri argomento, fai obiettivo, di lato al quadrante della chat, mettendo dei loghetti?»
