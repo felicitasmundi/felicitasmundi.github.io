@@ -1117,7 +1117,7 @@ function vAzione(){
   if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(iscr)iscritti();
   if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();
-    leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Felicitas Festival";}))bp.style.display="";
+    leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";}))bp.style.display="";
       var n=$("#esp-team-nomi");if(!n)return;
       if(!l||!l.length){n.textContent="Ancora nessun team";return;}
       var nl=l.reduce(function(a,t){return a+(+t.non_letti||0);},0);
@@ -1204,7 +1204,7 @@ function mieChat(){
 }
 /* I MIEI PRODOTTI · SQL 216 (8/11/2026). Gab 16:43: «potranno mettere quali sono i prodotti a disposizione, la quantità, tutto quanto».
    Elenco da fm_miei_prodotti (ognuno vede solo i suoi); quantità con fm_mia_quantita; «Aggiungi un prodotto» apre la voce «Produttori»
-   del team Felicitas Festival, dove la card diventa prodotto con «Rendi visibile a tutti» (SQL 184). */
+   del team Vicinati del Cibo (prima Felicitas Festival, SQL 226), dove la card diventa prodotto con «Rendi visibile a tutti» (SQL 184). */
 var PROD_STATI={pubblico:"nell'Emporio",proposto:"proposto",nel_team:"nel team",da_controllare:"da controllare",in_controllo:"in controllo",da_confermare:"da confermare",respinta:"respinta"};
 function mieiProdotti(){
   var f=document.createElement("div");f.id="tc-foglio";document.body.appendChild(f);
@@ -1213,8 +1213,8 @@ function mieiProdotti(){
     '<h2>I miei prodotti</h2><div id="mp-lista"><p>Un momento…</p></div>'+
     '<button type="button" class="tc-btn" id="mp-nuovo">Aggiungi un prodotto</button><p class="tc-nota" id="mp-esito" aria-live="polite"></p></div>';
   f.querySelector("[data-chiudi-f]").onclick=chiudi;
-  var fest=(team.lista||[]).filter(function(t){return t.nome==="Felicitas Festival";})[0];
-  $("#mp-nuovo").onclick=function(){var e=$("#mp-esito");if(!fest){e.textContent="Non sei nel team Felicitas Festival.";return;}
+  var fest=(team.lista||[]).filter(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";})[0];
+  $("#mp-nuovo").onclick=function(){var e=$("#mp-esito");if(!fest){e.textContent="Non sei nel team Vicinati del Cibo.";return;}
     db.from("cervello_capitoli").select("id").eq("squadra_id",fest.team_id).eq("titolo","Produttori").maybeSingle().then(function(r){
       if(r&&!r.error&&r.data){location.href="strumento.html?v=cervello&cap="+encodeURIComponent(r.data.id);return;}
       e.textContent=r&&r.error?errore(r.error):"La voce «Produttori» non c'è ancora.";},function(){e.textContent="Riprova tra poco.";});};
