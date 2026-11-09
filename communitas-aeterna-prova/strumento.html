@@ -15,7 +15,8 @@
 <script src="comune/fm-installa.js?v=11020740"></script>
 <script src="comune/fm-notifiche.js?v=11081800"></script>
 <link rel="stylesheet" href="comune/libro-cervello.css?v=11082225">
-<script src="comune/libro-cervello.js?v=11082225"></script>
+<script src="comune/libro-cervello.js?v=11091800"></script>
+<script src="comune/indice-link.js?v=11091800"></script>
 <style>
 :root{
   --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
@@ -958,6 +959,8 @@ function vCoscienza(){
     indice:function(){return db.rpc("fm_cervello_indice").then(function(r){return (r&&!r.error&&r.data)||[];});},
     carte:function(id){return db.rpc("fm_capitolo_indice",{p_capitolo:id}).then(function(r){if(r&&!r.error&&Array.isArray(r.data))return r.data;return righeCap(id);},function(){return righeCap(id);});},
     extra:function(sz){return /base filosofica/i.test(sz.sezione_nome||"")?'<div class="lc-mappa"><a class="lc-riga" data-mappa="1" href="coscienza.html?in=app" style="color:inherit;text-decoration:none"><span class="lc-tit">La mappa della Coscienza</span><span class="lc-punti"></span><span class="lc-freccia">›</span></a></div>':"";},
+    collegamenti:function(v){var t=String(v.titolo||"").toLowerCase();return (window.FM_INDICE_LINK||[]).filter(function(k){return k.voce&&t.indexOf(k.voce)>=0;});},
+    apri:function(k){c.innerHTML='<div style="max-width:680px;margin:0 auto;padding:10px 16px 0"><button class="btn" id="lc-link-torna">‹ Indice</button></div><iframe class="cos-in" src="'+esc(k.url)+'" title="'+esc(k.titolo)+'"></iframe>';$("#lc-link-torna").onclick=vCoscienza;window.scrollTo(0,0);},
     pagina:function(id){return db.from("cervello_righe").select("testo").eq("id",id).maybeSingle().then(function(q){return {testo:(q&&q.data&&q.data.testo)||"",media:[],uscite:[]};});}
   });
 }
