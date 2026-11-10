@@ -1622,6 +1622,7 @@ function vTeam(){
       function(e){b.disabled=false;$("#tc-err").textContent=errore(e);});};
   $("#tc-file").onchange=function(e){var f=e.target.files&&e.target.files[0];e.target.value="";if(f)mandaFoto(id,f);};
   $("#tc-doc").onchange=function(e){var f=e.target.files&&e.target.files[0];e.target.value="";if(f)mandaAllegato(id,f,"file",f.name);};
+  trascinaInChat();
   dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length||$("#tc-prat"))return;
     e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
   if(!duo)diretteTeam(id);team.evento=null;team.stanzeSu=false;if(!duo)stanzeTeam(id);
@@ -1643,7 +1644,7 @@ function ricaricaTeam(giu){
     Promise.all([
       ids.length?db.from("cervello_proposte").select("messaggio_id,stato").in("messaggio_id",ids).neq("stato","scartata").then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];}):Promise.resolve([]),
       fotoUrl(l.map(function(m){return m.foto;}).concat(l.map(function(m){return m.audio;}),l.map(function(m){return m.file;}))),
-      leggiNomi(l.map(function(m){return m.scritto_da;}))
+      nomiCerchio(id).then(function(){return leggiNomi(l.map(function(m){return m.scritto_da;}));})
     ]).then(function(v){
       if(vista!=="team"||team.id!==id)return;
       team.prop={};v[0].forEach(function(p){team.prop[p.messaggio_id]=p.stato;});
@@ -2026,6 +2027,16 @@ function legaAzioniMsg(e){
   var s=box.querySelector("select[data-az]");if(s)s.onchange=function(){if(!s.value)return;s.disabled=true;
     db.rpc("fm_messaggio_segna",{p_messaggio:m.id,p_tipo:s.value}).then(function(r){cache.obiettivi=null;esito(r);},function(){s.disabled=false;});};
 }
+/* 10/11 Gab: «un amico ha scritto nel team praticantato, ed io … non leggere il suo nome» → i nomi di chi è nel team, anche ospiti (SQL 237),
+   quelli scritti all'accesso. */
+var nomiFatti={};
+function nomiCerchio(id){
+  if(nomiFatti[id])return Promise.resolve();
+  return db.rpc("fm_nomi_cerchio",{p_cerchio:id}).then(function(r){
+    if(!r||r.error)return;nomiFatti[id]=1;
+    (r.data||[]).forEach(function(x){if(x.nome)nomi[x.persona_id]=x.nome;});
+  },function(){});
+}
 function foglioTeam(h){
   var f=$("#tc-foglio");if(!f)return null;
   f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+h+'</div>';
@@ -2267,6 +2278,28 @@ function riduciFoto(f){
     im.onerror=function(){URL.revokeObjectURL(u);ok(f);};
     im.src=u;
   });
+}
+/* 10/11 Gab: «ho preso un mio file da download e l ho trascinato nella barra, e non l ha inserito» → un file trascinato sulla chat del team parte da solo;
+   fuori dalla chat il browser non apre più il file in un'altra finestra. */
+var AUDIO_EST=/\.(m4a|mp3|ogg|oga|opus|webm|wav|aac|flac|amr|3gp)$/i;
+function mandaTrascinato(id,f){
+  if(/^image\//.test(f.type||""))return mandaFoto(id,f);
+  if(/^audio\//.test(f.type||"")||AUDIO_EST.test(f.name||""))return mandaAllegato(id,f,"audio",f.name);
+  return mandaAllegato(id,f,"file",f.name);
+}
+var trascinaPronto=false;
+function trascinaInChat(){
+  if(trascinaPronto)return;trascinaPronto=true;
+  function haFile(e){var t=e.dataTransfer&&e.dataTransfer.types;return !!t&&Array.prototype.indexOf.call(t,"Files")>=0;}
+  function zona(){return vista==="team"&&team.id?$("#tc-chatparte"):null;}
+  function spegni(){var z=$("#tc-chatparte");if(z)z.style.outline="";}
+  document.addEventListener("dragover",function(e){if(!haFile(e))return;e.preventDefault();var z=zona();
+    if(z&&z.contains(e.target)){e.dataTransfer.dropEffect="copy";z.style.outline="2px dashed #D4AF6A";}else{e.dataTransfer.dropEffect="none";spegni();}});
+  document.addEventListener("dragleave",function(e){if(!e.relatedTarget)spegni();});
+  document.addEventListener("drop",function(e){if(!haFile(e))return;e.preventDefault();spegni();
+    var z=zona();if(!z||!z.contains(e.target))return;
+    var id=team.id,l=Array.prototype.slice.call(e.dataTransfer.files||[]);
+    l.forEach(function(f,i){setTimeout(function(){if(team.id===id)mandaTrascinato(id,f);},i*1500);});});
 }
 function mandaFoto(id,f){
   var e=$("#tc-err"),ta=$("#tc-testo"),b=$("#tc-manda");
