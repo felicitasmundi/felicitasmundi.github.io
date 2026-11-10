@@ -1827,7 +1827,7 @@ function modificaMsg(box,m){
       if(file)su.push(db.storage.from("chat").upload(pd,file,{contentType:file.type||"application/octet-stream",upsert:false}).then(function(u){
         if(u&&u.error)return db.rpc("fm_modifica_messaggio",{p_messaggio:m.id,p_togli:"file"}).then(function(){throw {msg:"Il file non è stato caricato. Il testo è salvato: riprova il file."};});}));
       return Promise.all(su);
-    }).then(function(){team.scelto=null;ricaricaTeam(false);},function(x){b.disabled=false;e.textContent=(x&&x.msg)||errore(x);ricaricaTeam(false);});
+    }).then(function(){team.scelto=null;box.innerHTML="";disegnaTeam();ricaricaTeam(false);},function(x){b.disabled=false;e.textContent=(x&&x.msg)||errore(x);ricaricaTeam(false);});
   };
 }
 document.head.insertAdjacentHTML("beforeend","<style>"+MOD_CSS+"</style>");
