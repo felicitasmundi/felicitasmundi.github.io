@@ -1861,7 +1861,7 @@ var ST_CSS='#tc-stanze:empty{display:none}.st-via{display:none!important}'+
 '.st-pal{width:30px;height:30px;border-radius:50%;border:2px solid #c9cbe3;display:grid;place-items:center;font-size:15px;font-weight:700;color:#c9cbe3}'+
 '.st-att li.corso .st-pal{border-color:#6FA8D6;color:#6FA8D6}.st-att li.attesa .st-pal{border-color:#E0A955;color:#E0A955}.st-att li.fatto .st-pal{border-color:#8ED06B;background:#8ED06B;color:#0a1430}'+
 '.st-att li.fatto .tx{text-decoration:line-through;text-decoration-color:rgba(245,240,230,.4);color:#c9cbe3}'+
-'.st-att .tx{font-size:18px;overflow-wrap:anywhere}.st-att .chi{display:block;font-size:16px;color:#c9cbe3}'+
+'.st-att .tx{font-size:18px;overflow-wrap:anywhere}.st-att .chi{display:block;font-size:16px;color:#c9cbe3}.st-dett{margin:6px 0 2px;padding-left:20px;font-size:17px;line-height:1.45}.st-att .st-dett li{display:list-item;border:0;padding:2px 0;list-style:disc}.st-nx{display:block;font-size:16px;color:#c9cbe3;line-height:1.4;margin-top:2px}.st-nf{margin:0 0 4px;font-size:17px;color:#c9cbe3;line-height:1.45}.st-sp{border:1px solid rgba(212,175,106,.35);border-radius:14px;padding:10px 14px;margin:0 0 12px}.st-sp summary{cursor:pointer;color:#D4AF6A;font-weight:700}.st-sp p{margin:8px 0 0;font-size:17px;color:#c9cbe3;line-height:1.45}.st-el{margin:6px 0 4px;padding-left:22px;font-size:18px;line-height:1.5}'+
 '.st-tasti{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.st-tasti button{font:500 16px "DM Sans",system-ui,sans-serif;border-radius:20px;padding:7px 14px;cursor:pointer;border:1px solid #D4AF6A;background:transparent;color:#F5F0E6}'+
 '.st-tasti button.pieno{background:#D4AF6A;color:#0a1430;font-weight:700}'+
 '.st-apri{align-self:flex-start;font:500 16px "DM Sans",system-ui,sans-serif;color:#D4AF6A;background:none;border:0;padding:4px 0;cursor:pointer}'+
@@ -1948,14 +1948,14 @@ function stDisegno(v,vi,sc){
 }
 function stStanza(ev,ar,ai){
   var f=stFasi(ev,ar.nome);
-  return '<section id="st-stanza" class="st-pag" style="margin-top:0"><div class="st-testa"><span class="st-num" style="--c:'+ar.col+'">'+(ai+1)+'</span><h2>'+esc(ar.nome)+'</h2></div>'+
+  return '<section id="st-stanza" class="st-pag" style="margin-top:0"><div class="st-testa"><span class="st-num" style="--c:'+ar.col+'">'+(ai+1)+'</span><h2>'+esc(ar.nome)+'</h2></div>'+((ev.note&&ev.note[ar.nome]&&ev.note[ar.nome].length)?'<details class="st-sp"><summary>Note della stanza</summary>'+ev.note[ar.nome].map(function(t){return '<p>'+esc(t)+'</p>';}).join("")+'</details>':'')+
     (f.length?f.map(function(fa){var k=stConta([fa]),pa=fa.passi||[];
       var at=pa.some(function(x){return x.stato==="da_approvare";});
       var st=k.n&&k.d===k.n?["fatto","Fatto"]:at?["attesa","Da approvare"]:(k.d||k.c)?["corso","In corso"]:["","Da fare"];
       var tit=String(fa.titolo||"");if(tit.indexOf(ar.nome+" · ")===0)tit=tit.slice(ar.nome.length+3);
       return '<article class="st-fase"><div class="st-ft"><h3>'+esc(tit)+'</h3><span class="st-st '+st[0]+'">'+st[1]+'</span></div>'+
         '<div class="st-barra" aria-hidden="true"><span style="width:'+(k.n?Math.round(k.d*100/k.n):0)+'%"></span></div>'+
-        '<span class="st-n">'+(k.n?k.d+' di '+k.n+' attività fatte'+(k.c?' · '+k.c+' in corso':''):'attività da scrivere')+(fa.entro_il?' · entro il '+esc(obData(fa.entro_il)):'')+'</span>'+
+        '<span class="st-n">'+(k.n?k.d+' di '+k.n+' attività fatte'+(k.c?' · '+k.c+' in corso':''):((fa.elenco||[]).length?'':'attività da scrivere'))+(fa.entro_il?' · entro il '+esc(obData(fa.entro_il)):'')+'</span>'+(fa.note||[]).map(function(t){return '<p class="st-nf">'+esc(t)+'</p>';}).join("")+((fa.elenco||[]).length?'<ul class="st-el">'+fa.elenco.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul>':'')+
         (pa.length?'<ul class="st-att">'+pa.map(function(x,i){
           var cl=x.stato==="fatto"?"fatto":x.stato==="da_approvare"?"attesa":x.stato==="preso"?"corso":"";
           var sotto=x.stato==="fatto"?"fatta da "+(x.chi||"una persona"):x.stato==="da_approvare"?"aspetta l'ok"+(x.chi?" · "+x.chi:""):x.stato==="preso"?(x.mio?"la stai facendo tu":"la sta facendo "+(x.chi||"una persona")):"libera";
@@ -1963,7 +1963,7 @@ function stStanza(ev,ar,ai){
           if(x.stato==="aperto"&&x.posso_lavorare)t='<button type="button" data-sx="prendo" data-r="'+esc(x.id)+'">Lo faccio io</button>';
           else if(x.stato==="preso"&&x.mio)t='<button type="button" class="pieno" data-sx="fatto" data-r="'+esc(x.id)+'">Fatto</button><button type="button" data-sx="lascio" data-r="'+esc(x.id)+'">Lo lascio</button>';
           else if(x.stato==="da_approvare"&&x.posso_approvare)t='<button type="button" class="pieno" data-sx="approvo" data-r="'+esc(x.id)+'">Approva</button><button type="button" data-sx="rimando" data-r="'+esc(x.id)+'">Rimanda indietro</button>';
-          return '<li class="'+cl+'"><span class="st-pal">'+(x.stato==="fatto"?"✓":x.stato==="da_approvare"?"!":(i+1))+'</span><div><span class="tx">'+esc(x.testo)+'</span><span class="chi">'+esc(sotto)+'</span>'+(t?'<div class="st-tasti">'+t+'</div>':'')+'</div></li>';}).join("")+'</ul>':'')+
+          return '<li class="'+cl+'"><span class="st-pal">'+(x.stato==="fatto"?"✓":x.stato==="da_approvare"?"!":(i+1))+'</span><div><span class="tx">'+esc(x.testo)+'</span>'+((x.dettagli||[]).length?'<ul class="st-dett">'+x.dettagli.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul>':'')+(x.note||[]).map(function(t){return '<span class="st-nx">'+esc(t)+'</span>';}).join("")+'<span class="chi">'+esc(sotto)+'</span>'+(t?'<div class="st-tasti">'+t+'</div>':'')+'</div></li>';}).join("")+'</ul>':'')+
         '<button type="button" class="st-apri" data-sf="'+esc(fa.id)+'">Apri la fase ›</button></article>';}).join(""):'<p class="st-nota">Ancora nessuna fase in questa stanza.</p>')+'</section>';
 }
 
