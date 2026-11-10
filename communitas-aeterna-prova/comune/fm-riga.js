@@ -28,7 +28,7 @@
      della stampante», leggermente staccato. Vicinati non sta qui: è la Bacheca, nel piede, col cubo. */
   var VOCI = [
     ["emporio",  "Emporio",     "icosaedro",  "acqua", "stanze-bozza.html?s=emporio"],
-    ["mutuo",    "Mutuo aiuto", "tetraedro",  "fuoco", "stanze-bozza.html?s=mutuo"],
+    ["mutuo",    "Assistenza comunitaria integrata", "tetraedro",  "fuoco", "stanze-bozza.html?s=mutuo"],
     ["edizione", "Edizione",    "ottaedro",   "aria",  "stanze-bozza.html?s=edizione"],
     ["scuola",   "Scuola",      "dodecaedro", "etere", "stanze-bozza.html?s=scuola"],
     ["stampa",   "Stampa",      "stampante",  "aria",  "stampa-bozza.html"]
@@ -85,7 +85,7 @@
       ".fm-stanze .voci a svg{width:26px;height:26px}.fm-stanze .voci a span{font-size:min(11px,2.7vw)}" +
       ".fm-app{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:#0A0C1A radial-gradient(120% 140% at 50% 0%,#1a1440 0%,#0d1026 60%,#0A0C1A 100%);border-top:1px solid rgba(212,175,106,.25);padding-bottom:env(safe-area-inset-bottom,0px)}" +
       ".fm-app a{font:600 12.5px 'DM Sans',system-ui,sans-serif;color:#A8A49B;text-decoration:none;padding:11px 1px 13px;display:flex;flex-direction:column;align-items:center;gap:4px}" +
-      ".fm-app a .ic{font-size:22px;line-height:1}" +
+      ".fm-app a .ic{font-size:22px;line-height:1}.fm-app a .ic svg{width:22px;height:22px;display:block}" +
       ".fm-app a.console .ic{background:#D4AF6A;color:#1A1405;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin-top:-22px;box-shadow:0 0 0 3px rgba(212,175,106,.18),0 3px 12px rgba(212,175,106,.45)}" +
       "body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}" +
       "@media (min-width:700px){.fm-stanze .capo .marca{font-size:18px}.fm-stanze .voci a svg{width:28px;height:28px}.fm-stanze .voci a span{font-size:13.5px}.fm-app a{font-size:15px;padding:13px 1px 15px}.fm-app a .ic{font-size:28px}.fm-app a.console .ic{width:50px;height:50px;margin-top:-26px}}";
@@ -102,11 +102,13 @@
      il piede in ogni pagina. La Bacheca ha già il suo (coi due tasti che cambiano vista): lì non si aggiunge. */
   if (APP) {
     var menu = document.createElement("nav"); menu.className = "fm-app"; menu.setAttribute("aria-label", "Parti dell'app");
-    menu.innerHTML = '<a href="strumento.html?v=oggi&' + C + '"><span class="ic">☼</span>Oggi</a>' +
-      '<a href="strumento.html?v=obiettivi&' + C + '"><span class="ic">☐</span>Obiettivi</a>' +
-      '<a href="strumento.html?v=megafono&' + C + '" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</a>' +
-      '<a href="strumento.html?v=giornale&' + C + '"><span class="ic">❡</span>Giornale</a>' +
-      '<a href="cervello.html?' + C + '"><span class="ic">✺</span>Cervello</a>';
+    /* 10/11, Gab: «da dove arrivava quel rimando vecchio? … fai un chek completo» → il menu era una copia del 18/10 (Oggi · Obiettivi · Megafono · Giornale · Cervello):
+       ora è lo stesso di strumento.html: Giornale · Oggi · Espandi · Obiettivi · Coscienza */
+    menu.innerHTML = '<a href="strumento.html?v=giornale&' + C + '">' + "<span class=\"ic\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" fill=\"currentColor\"><g transform=\"translate(0.599 17.067) scale(0.01431)\"><path d=\"M587 -708Q583 -658 581.5 -611.5Q580 -565 580 -540Q580 -519 581.0 -500.0Q582 -481 583 -468H560Q543 -551 513.0 -598.5Q483 -646 447.5 -665.5Q412 -685 376 -685H363Q337 -685 324.0 -680.5Q311 -676 306.5 -663.0Q302 -650 302 -622V-116Q302 -76 310.5 -55.5Q319 -35 343.0 -29.0Q367 -23 413 -23V0Q379 -1 324.0 -2.0Q269 -3 207 -3Q161 -3 115.0 -2.0Q69 -1 28 0V-20Q59 -22 74.0 -28.0Q89 -34 94.0 -52.0Q99 -70 99 -106V-602Q99 -639 94.0 -656.5Q89 -674 73.5 -680.5Q58 -687 28 -688V-708Q72 -707 121.5 -706.5Q171 -706 219.5 -705.5Q268 -705 309.5 -705.0Q351 -705 378 -705Q424 -705 482.5 -705.5Q541 -706 587 -708ZM442 -366Q442 -366 442.0 -356.0Q442 -346 442 -346H272Q272 -346 272.0 -356.0Q272 -366 272 -366ZM471 -498Q467 -441 467.5 -411.0Q468 -381 468 -356Q468 -331 469.0 -301.0Q470 -271 474 -214H451Q445 -251 426.5 -281.0Q408 -311 379.0 -328.5Q350 -346 312 -346V-366Q340 -366 363.0 -378.0Q386 -390 403.5 -410.0Q421 -430 432.5 -453.0Q444 -476 448 -498Z M1565 -708V-688Q1535 -687 1519.5 -680.5Q1504 -674 1499.0 -656.5Q1494 -639 1494 -602V-106Q1494 -70 1499.5 -52.0Q1505 -34 1520.0 -28.0Q1535 -22 1565 -20V0Q1534 -2 1486.0 -2.5Q1438 -3 1388 -3Q1334 -3 1286.5 -2.5Q1239 -2 1210 0V-20Q1244 -22 1261.5 -28.0Q1279 -34 1285.0 -52.0Q1291 -70 1291 -106V-641L1301 -643L1050 -1H1034L752 -643V-196Q752 -129 757.5 -93.5Q763 -58 784.5 -42.5Q806 -27 853 -20V0Q833 -2 801.0 -2.5Q769 -3 741 -3Q719 -3 696.0 -2.5Q673 -2 658 0V-20Q689 -27 704.0 -41.5Q719 -56 724.0 -88.0Q729 -120 729 -176V-602Q729 -639 724.0 -656.5Q719 -674 703.5 -680.5Q688 -687 658 -688V-708Q673 -707 696.0 -706.0Q719 -705 741 -705Q799 -705 852.0 -706.0Q905 -707 948 -708L1146 -262L1116 -229L1301 -705Q1321 -705 1344.0 -705.0Q1367 -705 1388 -705Q1438 -705 1486.0 -706.0Q1534 -707 1565 -708Z\"/></g></svg></span>Giornale" + '</a>' +
+      '<a href="strumento.html?v=oggi&' + C + '">' + "<span class=\"ic\">☼</span>Oggi" + '</a>' +
+      '<a href="strumento.html?v=azione&' + C + '" class="console">' + "<span class=\"ic\">✦</span>Espandi" + '</a>' +
+      '<a href="strumento.html?v=obiettivi&' + C + '">' + "<span class=\"ic\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\" opacity=\".45\"/><path d=\"M12 12V7.3M12 12l4.1 2.4M12 12l-4.1 2.4\"/><circle cx=\"12\" cy=\"5.2\" r=\"2.1\"/><circle cx=\"17.9\" cy=\"15.4\" r=\"2.1\"/><circle cx=\"6.1\" cy=\"15.4\" r=\"2.1\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\" fill=\"currentColor\" stroke=\"none\"/></svg></span>Obiettivi" + '</a>' +
+      '<a href="strumento.html?v=cervello&' + C + '">' + "<span class=\"ic\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M11 3.2C8.6 2.4 6.3 3.4 5.6 5.4 3.7 5.9 2.8 7.8 3.4 9.6 2.2 11 2.4 13.3 3.8 14.4 3.4 16.6 4.8 18.6 7 18.8 7.8 20.6 9.6 21.4 11 20.8Z\"/><path d=\"M13 3.2C15.4 2.4 17.7 3.4 18.4 5.4 20.3 5.9 21.2 7.8 20.6 9.6 21.8 11 21.6 13.3 20.2 14.4 20.6 16.6 19.2 18.6 17 18.8 16.2 20.6 14.4 21.4 13 20.8Z\"/><path d=\"M5.6 5.4C7 6 8 7.2 8 8.6M3.6 11.8C5.4 11.4 7.4 12 8.4 13.4M7 18.8C7.2 17 8.4 15.8 9.8 15.6\" opacity=\".75\"/><path d=\"M18.4 5.4C17 6 16 7.2 16 8.6M20.4 11.8C18.6 11.4 16.6 12 15.6 13.4M17 18.8C16.8 17 15.6 15.8 14.2 15.6\" opacity=\".75\"/></svg></span>Coscienza" + '</a>';
     document.body.appendChild(menu);
   } else if (!document.querySelector(".piede")) {
     var cssP = ".fm-piede{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;pointer-events:none}" +
