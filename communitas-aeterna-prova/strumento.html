@@ -807,7 +807,7 @@ function lezioni(){
 /* 8/11 · dirette del team (SQL 221): fm_dirette_del_team, fm_attiva_diretta, fm_cancella_diretta. Senza le funzioni il riquadro non compare. */
 var DT_CSS='#tc-dt:empty{display:none}#tc-dt{margin:10px 0 0;display:grid;gap:8px}'+
 '.dt-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-radius:14px;background:#1a2148;border:1px solid rgba(212,175,106,.45);color:#F5F0E6;font-size:17px}'+
-'.dt-r .dt-t{flex:1;min-width:0;overflow-wrap:anywhere}.dt-r small{display:block;opacity:.75;font-size:15px}.dt-on{color:#ff6b6b;font-weight:600}'+
+'.dt-r .dt-t{flex:1 1 180px;min-width:0;overflow-wrap:anywhere}.dt-r small{display:block;opacity:.75;font-size:15px}.dt-on{color:#ff6b6b;font-weight:600}'+
 '.dt-r a{color:#0a1430;background:#D4AF6A;border-radius:12px;padding:6px 12px;font-weight:600;text-decoration:none}'+
 '.dt-b{justify-self:start;padding:8px 14px;border-radius:12px;border:1px solid rgba(212,175,106,.6);background:none;color:#D4AF6A;font:600 16px "DM Sans",system-ui,sans-serif;cursor:pointer}'+
 '.dt-f{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;background:#1a2148;border:1px solid rgba(212,175,106,.45);color:#F5F0E6;font-size:17px}'+
@@ -822,12 +822,33 @@ function diretteTeam(id){
     var l=r.data||[];
     box.innerHTML=(l.length?'<h3 class="dt-pa">Prossimo appuntamento</h3>':'')+l.map(function(d){var q=d.inizio_il?new Date(d.inizio_il).toLocaleString("it-IT",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
       return '<div class="dt-r"><span class="dt-t">'+(d.in_onda?'<span class="dt-on">● in onda</span> · ':'')+'<b>'+esc(d.titolo||"")+'</b>'+(d.sottotitolo?'<small>'+esc(d.sottotitolo)+'</small>':'')+(!d.in_onda&&q?'<small>'+esc(q)+'</small>':'')+'</span>'+
-        '<a href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'">Entra ›</a>'+(d.mia&&!d.in_onda?'<button type="button" class="dt-b" data-dt-canc="'+esc(d.id)+'">Cancella</button>':'')+'</div>';}).join("")+
+        '<a href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'">Entra ›</a>'+((io.nucleo||(io.ruoli||[]).length)?'<button type="button" class="dt-b" data-dt-inv="'+esc(d.id)+'">Invita</button>':'')+(d.mia&&!d.in_onda?'<button type="button" class="dt-b" data-dt-canc="'+esc(d.id)+'">Cancella</button>':'')+'</div>';}).join("")+
       '<button type="button" class="dt-b" id="dt-attiva">Attiva diretta</button>';
     box.querySelectorAll("[data-dt-canc]").forEach(function(b){b.onclick=function(){if(!confirm("Cancellare la diretta?"))return;b.disabled=true;
       db.rpc("fm_cancella_diretta",{p_id:b.getAttribute("data-dt-canc")}).then(function(x){if(x&&x.error){b.disabled=false;$("#tc-err").textContent=dtErr(x.error);return;}cache.dirette=null;diretteTeam(id);},function(z){b.disabled=false;$("#tc-err").textContent=errore(z);});};});
+    box.querySelectorAll("[data-dt-inv]").forEach(function(b){b.onclick=function(){var d=l.filter(function(x){return x.id===b.getAttribute("data-dt-inv");})[0];if(d)dtInvita(id,d,b);};});
     $("#dt-attiva").onclick=function(){diretteForm(id);};
   },function(){var box=$("#tc-dt");if(box)box.innerHTML="";});
+}
+function dtInvita(id,d,b){
+  var vec=document.getElementById("dt-inv");if(vec){var era=vec.getAttribute("data-d");vec.remove();if(era===d.id)return;}
+  var riga=b.closest(".dt-r"),w=document.createElement("div");w.className="dt-f";w.id="dt-inv";w.setAttribute("data-d",d.id);
+  w.innerHTML='<p class="dt-e">Un momento…</p>';riga.insertAdjacentElement("afterend",w);b.disabled=true;
+  var t=(team.lista||[]).filter(function(x){return x.team_id===id;})[0],nome=t?t.nome:"";
+  var q=d.inizio_il?new Date(d.inizio_il).toLocaleString("it-IT",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}):"adesso";
+  var ld=new URL("diretta-bozza.html?puntata="+encodeURIComponent(d.id),location.href).href;
+  db.rpc("fm_link_team",{p_squadra:id,p_funzione:null,p_ruolo:null,p_karma:true}).then(function(r){b.disabled=false;
+    var lt=(r&&!r.error&&r.data)?new URL("../communitas-aeterna/invito-ruolo.html?c="+encodeURIComponent(r.data),location.href).href:"";
+    var msg=(d.titolo||"")+(d.sottotitolo?"\n"+d.sottotitolo:"")+"\n"+q+" · diretta nel team "+nome+
+      (lt?"\n\nEntra nel team: "+lt:"")+"\n"+(lt?"Poi entra nella diretta: ":"Entra nella diretta: ")+ld;
+    w.innerHTML='<label for="dt-inv-t">Il messaggio</label><textarea id="dt-inv-t" rows="7" style="font:inherit;font-size:17px;width:100%;box-sizing:border-box;border-radius:10px;padding:10px;background:#0a1430;color:#F5F0E6;border:1px solid rgba(212,175,106,.35);resize:vertical"></textarea>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">'+(navigator.share?'<button type="button" class="dt-b" id="dt-inv-c">Condividi</button>':'')+'<button type="button" class="dt-b" id="dt-inv-w">WhatsApp</button><button type="button" class="dt-b" id="dt-inv-k">Copia</button></div>'+
+      (lt?'<p class="dt-e" style="color:#c9cbe3">Il link del team vale per chiunque lo riceva: entra come karma yoga.</p>':'<p class="dt-e">'+esc(r&&r.error?dtErr(r.error):"")+'</p>');
+    var ta=$("#dt-inv-t");ta.value=msg;
+    $("#dt-inv-w").onclick=function(){window.open("https://wa.me/?text="+encodeURIComponent(ta.value),"_blank","noopener");};
+    var k=$("#dt-inv-k");k.onclick=function(){var v=ta.value;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(function(){k.textContent="Copiato";},function(){prompt("Copia il messaggio",v);});};
+    var c=$("#dt-inv-c");if(c)c.onclick=function(){navigator.share({text:ta.value}).catch(function(){});};
+  },function(z){b.disabled=false;w.innerHTML='<p class="dt-e">'+esc(errore(z))+'</p>';});
 }
 function dtErr(e){var m=String((e&&e.message)||"");return m&&!/PGRST|function|schema|JWT/i.test(m)?m:errore(e);}
 function diretteForm(id){
