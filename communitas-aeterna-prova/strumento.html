@@ -820,7 +820,7 @@ function diretteTeam(id){
     var box=$("#tc-dt");if(!box||vista!=="team"||team.id!==id)return;
     if(!r||r.error){box.innerHTML="";return;}
     var l=r.data||[];
-    box.innerHTML=l.map(function(d){var q=d.inizio_il?new Date(d.inizio_il).toLocaleString("it-IT",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+    box.innerHTML=(l.length?'<h3 class="dt-pa">Prossimo appuntamento</h3>':'')+l.map(function(d){var q=d.inizio_il?new Date(d.inizio_il).toLocaleString("it-IT",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
       return '<div class="dt-r"><span class="dt-t">'+(d.in_onda?'<span class="dt-on">● in onda</span> · ':'')+'<b>'+esc(d.titolo||"")+'</b>'+(d.sottotitolo?'<small>'+esc(d.sottotitolo)+'</small>':'')+(!d.in_onda&&q?'<small>'+esc(q)+'</small>':'')+'</span>'+
         '<a href="diretta-bozza.html?puntata='+encodeURIComponent(d.id)+'">Entra ›</a>'+(d.mia&&!d.in_onda?'<button type="button" class="dt-b" data-dt-canc="'+esc(d.id)+'">Cancella</button>':'')+'</div>';}).join("")+
       '<button type="button" class="dt-b" id="dt-attiva">Attiva diretta</button>';
@@ -1604,7 +1604,7 @@ function vTeam(){
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
       '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div>'+
       '<button type="button" class="tc-menu" id="tc-menu" aria-label="Argomenti e notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
-    '<div id="tc-stanze"></div><div id="tc-chatparte">'+(t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div id="tc-dt"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
+    '<div id="tc-stanze"></div><div id="tc-chatparte"><div id="tc-pres"></div><div id="tc-dt"></div>'+(t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-stfiss"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
     '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
       '<input type="file" id="tc-doc" accept=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf" hidden>'+
@@ -1625,7 +1625,7 @@ function vTeam(){
   trascinaInChat();
   dirette().then(function(d){var e=$("#tc-dir");if(!e||!d||!d.length||$("#tc-prat"))return;
     e.innerHTML=d.map(function(x){return '<a class="sp-diretta" href="diretta-bozza.html?puntata='+encodeURIComponent(x.id)+'"><span class="sp-punto" aria-hidden="true"></span><span><b>In diretta</b> · '+esc(x.titolo||"")+'</span><span>entra ›</span></a>';}).join("");});
-  if(!duo)diretteTeam(id);team.evento=null;team.stanzeSu=false;if(!duo)stanzeTeam(id);
+  if(!duo)diretteTeam(id);team.evento=null;team.stanzeSu=false;team.inAlto=false;if(!duo){stanzeTeam(id);presTeam(id);}
   team.msg=[];team.prop={};
   ricaricaTeam(true);team.guido=false;guidoChat(id);agendaTeam(id);ass.rispondo=null;ass.stat=false;assTeam(id);
   /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
@@ -1650,9 +1650,9 @@ function ricaricaTeam(giu){
       team.prop={};v[0].forEach(function(p){team.prop[p.messaggio_id]=p.stato;});
       var basso=window.innerHeight+window.scrollY>=document.body.scrollHeight-120;
       team.msg=l;if(!document.getElementById("md-t")&&!document.getElementById("tc-arg-t"))disegnaTeam();
-      if((giu||(nuovi&&basso))&&!team.stanzeSu){window.scrollTo(0,document.body.scrollHeight);
+      if(((giu&&!team.inAlto)||(nuovi&&basso))&&!team.stanzeSu){window.scrollTo(0,document.body.scrollHeight);
         /* le foto arrivano dopo: quando si caricano, si torna in fondo */
-        [].forEach.call(document.querySelectorAll("#tc-msg img"),function(im){if(!im.complete)im.addEventListener("load",function(){if(!team.scelto&&!team.stanzeSu)window.scrollTo(0,document.body.scrollHeight);},{once:true});});}
+        [].forEach.call(document.querySelectorAll("#tc-msg img"),function(im){if(!im.complete)im.addEventListener("load",function(){if(!team.scelto&&!team.stanzeSu&&!team.inAlto)window.scrollTo(0,document.body.scrollHeight);},{once:true});});}
       if(nuovi||giu)segnaLetto(id);if(nuovi)assAperte();
     });
   },function(){});
@@ -1868,6 +1868,13 @@ var ST_CSS='#tc-stanze:empty{display:none}.st-via{display:none!important}'+
 '.st-tasti{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.st-tasti button{font:500 16px "DM Sans",system-ui,sans-serif;border-radius:20px;padding:7px 14px;cursor:pointer;border:1px solid #D4AF6A;background:transparent;color:#F5F0E6}'+
 '.st-tasti button.pieno{background:#D4AF6A;color:#0a1430;font-weight:700}'+
 '.st-apri{align-self:flex-start;font:500 16px "DM Sans",system-ui,sans-serif;color:#D4AF6A;background:none;border:0;padding:4px 0;cursor:pointer}'+
+'.tp-pres{background:#1a2148;border:1px solid rgba(212,175,106,.35);border-radius:16px;padding:16px 18px;margin:0 0 12px;display:flex;flex-direction:column;gap:10px}'+
+'.tp-pres p{margin:0;font:400 19px/1.45 "Cormorant Garamond",Georgia,serif;color:#F5F0E6;white-space:pre-line}'+
+'.tp-pres p.tp-frase{font-size:21px;color:#D4AF6A}'+
+'.tp-esp{border-top:1px solid rgba(212,175,106,.3);padding-top:10px}.tp-esp summary{cursor:pointer;font:600 15px "DM Sans",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#D4AF6A;padding:4px 0}'+
+'.tp-esp p{margin-top:10px}'+
+'.dt-pa{margin:0 0 6px;font:600 15px "DM Sans",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#D4AF6A}'+
+'.st-fs{cursor:pointer}.st-indietro{font:600 17px "DM Sans",system-ui,sans-serif;color:#D4AF6A;background:none;border:0;padding:6px 0 10px;cursor:pointer}'+
 '.st-nota{font-size:16px;color:#c9cbe3;margin:0}.st-err{font-size:16px;color:#E07A5F;margin:0;min-height:1em}';
 document.head.insertAdjacentHTML("beforeend","<style>"+ST_CSS+"</style>");
 
@@ -1876,10 +1883,20 @@ function stanzeTeam(id){
   db.rpc("fm_evento_pagina",{p_team:id}).then(function(r){
     if(vista!=="team"||team.id!==id)return;
     var ev=(r&&!r.error&&r.data)||null,box=$("#tc-stanze");if(!box)return;
-    if(!ev||!ST_PIANTE[ev.planimetria]){var era=team.stanzeSu;team.evento=null;team.stanzeSu=false;box.innerHTML="";
+    if(!ev||!ST_PIANTE[ev.planimetria]){var era=team.stanzeSu;team.evento=null;team.stanzeSu=false;box.innerHTML="";var sf0=$("#tc-stfiss");if(sf0)sf0.innerHTML="";
       var cp=$("#tc-chatparte");if(cp)cp.classList.remove("st-via");if(era)window.scrollTo(0,document.body.scrollHeight);return;}
-    if(!team.evento||team.evento.id!==ev.id){team.stanzeSu=true;team.stPiano=null;team.stScelta=null;}
+    if(!team.evento||team.evento.id!==ev.id){team.stanzeSu=false;team.stPiano=null;team.stScelta=null;stInAlto();}
     team.evento=ev;disegnaStanze(id);
+  },function(){});
+}
+function stInAlto(){if(!team.inAlto){team.inAlto=true;window.scrollTo(0,0);}}
+function presTeam(id){
+  var box=$("#tc-pres");if(!box||!db)return;
+  db.rpc("fm_team_presentazione",{p_team:id}).then(function(r){
+    var box=$("#tc-pres");if(!box||vista!=="team"||team.id!==id)return;
+    var l=(r&&!r.error&&r.data)||[];
+    box.innerHTML=l.length?'<section class="tp-pres"><p class="tp-frase">'+esc(l[0])+'</p>'+(l.length>2?'<details class="tp-esp"><summary>'+esc(l[1])+'</summary>'+l.slice(2).map(function(t){var k=String(t).split("\n");return '<p>'+(k.length>1?'<b>'+esc(k[0])+'</b>\n'+esc(k.slice(1).join("\n")):esc(t))+'</p>';}).join("")+'</details>':'')+'</section>':'';
+    if(l.length)stInAlto();
   },function(){});
 }
 function stFasi(ev,nome){return (ev.fasi||[]).filter(function(f){return f.stanza===nome;});}
@@ -1890,7 +1907,9 @@ function disegnaStanze(id){
   if(team.stPiano==null){team.stPiano=0;team.stScelta={v:0,a:0};
     viste.some(function(v,vi){return v.aree.some(function(a,ai){if(stFasi(ev,a.nome).length){team.stPiano=vi;team.stScelta={v:vi,a:ai};return true;}});});}
   var cp=$("#tc-chatparte");if(cp)cp.classList.toggle("st-via",su);
-  var h='<div class="st-schede" role="group" aria-label="Stanze o chat"><button type="button" data-st="1" aria-pressed="'+su+'">Stanze</button><button type="button" data-st="0" aria-pressed="'+(!su)+'">Chat</button></div>';
+  var h=su?'<button type="button" class="st-indietro" data-st="0">‹ Chat</button>':'';
+  var sf=$("#tc-stfiss"),tt=stConta(ev.fasi||[]);
+  if(sf)sf.innerHTML=su?'':'<div class="tc-fs st-fs" role="button" tabindex="0" data-st="1"><span class="pin" aria-hidden="true">📌</span><span class="tx">Le stanze del festival · '+tt.d+' di '+tt.n+' fatte</span><span class="ap">Apri ›</span></div>';
   if(su){
     var tot=stConta(ev.fasi||[]),pv=viste[team.stPiano],sc=team.stScelta;
     h+='<div class="st-pag"><section class="st-ev"><h2>'+esc(ev.nome)+'</h2>'+(ev.il?'<span class="d">'+esc(obData(ev.il))+'</span>':'')+
@@ -1904,8 +1923,8 @@ function disegnaStanze(id){
       '<p class="st-err" id="st-err" aria-live="polite"></p></div>';
   }
   box.innerHTML=h;
-  box.querySelectorAll("[data-st]").forEach(function(b){b.onclick=function(){team.stanzeSu=b.getAttribute("data-st")==="1";disegnaStanze(id);
-    if(team.stanzeSu)window.scrollTo(0,0);else window.scrollTo(0,document.body.scrollHeight);};});
+  document.querySelectorAll("#tc-stanze [data-st],#tc-stfiss [data-st]").forEach(function(b){b.onclick=function(){team.stanzeSu=b.getAttribute("data-st")==="1";disegnaStanze(id);window.scrollTo(0,0);};
+    b.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();b.click();}};});
   box.querySelectorAll("[data-sp]").forEach(function(b){b.onclick=function(){team.stPiano=+b.getAttribute("data-sp");team.stScelta={v:team.stPiano,a:0};disegnaStanze(id);};});
   box.querySelectorAll("[data-sa]").forEach(function(b){b.onclick=function(){team.stScelta={v:team.stPiano,a:+b.getAttribute("data-sa")};disegnaStanze(id);
     var s=$("#st-stanza");if(s)s.scrollIntoView({behavior:"smooth",block:"start"});};});
