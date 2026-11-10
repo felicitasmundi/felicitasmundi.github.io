@@ -840,7 +840,9 @@ function diretteForm(id){
     '<fieldset><label><input type="radio" name="dt-v" value="team" checked> Solo il team</label><label><input type="radio" name="dt-v" value="pubblica"> Pubblica</label></fieldset>'+
     '<div style="display:flex;gap:10px"><button type="button" class="dt-b" id="dt-ok">Attiva diretta</button><button type="button" class="dt-b" id="dt-no">Annulla</button></div><p class="dt-e" id="dt-e" aria-live="polite"></p>';
   b.replaceWith(f);$("#dt-tit").focus();
-  f.querySelectorAll('input[name="dt-q"]').forEach(function(x){x.onchange=function(){$("#dt-quando").hidden=f.querySelector('input[name="dt-q"]:checked').value!=="poi";};});
+  f.querySelectorAll('input[name="dt-q"]').forEach(function(x){x.onchange=function(){var poi=f.querySelector('input[name="dt-q"]:checked').value==="poi",w=$("#dt-quando");w.hidden=!poi;
+    /* 10/11 09:57, Gab: «fai in modo che in tutte le dirette se le programmo, mi dia di default il giorno d oggi e io da li poi posso cambiare la data» → oggi, alla prossima ora piena */
+    if(poi&&!w.value){var d=new Date(),g=d.getDate();d.setMinutes(0,0,0);d.setHours(d.getHours()+1);if(d.getDate()!==g){d.setDate(g);d.setHours(23,59);}var z=function(n){return String(n).padStart(2,"0");};w.value=d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())+"T"+z(d.getHours())+":"+z(d.getMinutes());}};});
   $("#dt-no").onclick=function(){diretteTeam(id);};
   $("#dt-ok").onclick=function(){var s=this,e=$("#dt-e"),t=$("#dt-tit").value.trim(),poi=f.querySelector('input[name="dt-q"]:checked').value==="poi",q=$("#dt-quando").value,pub=f.querySelector('input[name="dt-v"]:checked').value==="pubblica";
     if(!t){e.textContent="Scrivi il titolo.";return;}
