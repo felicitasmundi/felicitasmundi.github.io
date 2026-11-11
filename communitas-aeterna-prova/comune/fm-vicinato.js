@@ -37,7 +37,7 @@
     function crea(){ db = window.supabase.createClient(URL_SB, CHIAVE, {auth:{flowType:"implicit"}}); return db; }
     if(window.supabase && window.supabase.createClient) return attesa().then(crea);
     return new Promise(function(ok, no){
-      var s = document.createElement('script'); s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
+      var s = document.createElement('script'); s.src = "/communitas-aeterna-prova/comune/lib/supabase-js-2.45.4.js";
       s.onload = function(){ attesa().then(function(){ ok(crea()); }); }; s.onerror = no; document.head.appendChild(s);
     });
   }

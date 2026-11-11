@@ -16,7 +16,7 @@
   /* ── le due librerie, caricate quando servono ──────────────────────── */
 
   var LIB_QR   = "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js";
-  var LIB_LEGGI= "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js";
+  var LIB_LEGGI= "/communitas-aeterna-prova/comune/lib/jsqr-1.4.0.js";
   var caricate = {};
 
   function carica(url, poi){
