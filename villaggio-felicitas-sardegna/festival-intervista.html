@@ -15,11 +15,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <base href="/communitas-aeterna-prova/">
-<!-- 3 nov 2026 13:50, Gab: rinominarlo adesso. COPIA della sala (diretta-bozza.html) con indirizzo pulito; parte sulla puntata «Felicitas Festival Intervista». Si rigenera da diretta-bozza.html: non correggerla a mano. -->
+<!-- 3 nov 2026 13:50, Gab: rinominarlo adesso. COPIA GENERATA della sala (diretta-bozza.html) con indirizzo pulito; parte sulla puntata «Felicitas Festival Intervista». Si rigenera con strumenti/genera_festival_intervista.py: non correggerla a mano. -->
 <meta property="og:title" content="Felicitas Festival Intervista, la diretta audio">
 <meta property="og:description" content="La diretta audio di FelicitasMundi: entri con il tuo accesso.">
 <meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna/inviti/felicitas.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="fm-pagina" content="festival-intervista">
+<script src="comune/matrice.js?v=11112000"></script>
 <title>Felicitas Festival Intervista</title>
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="comune/caratteri.css">
@@ -218,7 +220,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
 
   <!-- ═══ la consolle ═══ -->
   <div class="onda fuori" id="onda">
-    <div class="riga1"><span class="live" id="live" style="color:var(--grigio)"><i style="background:var(--grigio);animation:none"></i><span id="live-t">LA DIRETTA DEL VILLAGGIO</span></span><span style="display:flex;align-items:center;gap:8px"><button id="pausa" hidden title="pausa" aria-label="pausa" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--riga);color:var(--avorio);font-size:11px;display:flex;align-items:center;justify-content:center">❚❚</button><span class="tempo" id="tempo">00:00</span></span></div>
+    <div class="riga1"><span class="live" id="live" style="color:var(--grigio)"><i style="background:var(--grigio);animation:none"></i><span id="live-t">FELICITASMUNDI</span></span><span style="display:flex;align-items:center;gap:8px"><button id="pausa" hidden title="pausa" aria-label="pausa" style="width:26px;height:26px;border-radius:50%;border:1px solid var(--riga);color:var(--avorio);font-size:11px;display:flex;align-items:center;justify-content:center">❚❚</button><span class="tempo" id="tempo">00:00</span></span></div>
     <div class="cerchio" aria-hidden="true"><span><i style="height:30%"></i><i style="height:60%"></i><i style="height:100%"></i><i style="height:70%"></i><i style="height:40%"></i><i style="height:80%"></i><i style="height:35%"></i></span></div>
     <h1 id="titolo">La diretta</h1>
     <div class="sot" id="chi"></div>
@@ -331,12 +333,12 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     'mutuo-credito':{titolo:'Mutuo credito cooperativo', chi:'giovedì 16 ottobre · ore 19 · con Guido Grossi e Vittorino Crivello · a cura di Gabriele Dettori e Marco Caddeo'}
   };
   var CH='fm_diretta', CHIAVE_PUNTATA='mutuo-credito', lasciando=false, actx=null, analizza=null, spettroVivo=false;
-  function mostraPuntata(p){ document.getElementById('titolo').textContent=p.titolo; document.getElementById('chi').textContent=p.chi; try{ if(typeof scriviGiorno==='function') scriviGiorno(); }catch(e){} document.title=p.titolo+' · la diretta del villaggio'; }
+  function mostraPuntata(p){ document.getElementById('titolo').textContent=p.titolo; document.getElementById('chi').textContent=p.chi; try{ if(typeof scriviGiorno==='function') scriviGiorno(); }catch(e){} document.title=(p.titolo===FM_MATRICE.marchio?p.titolo:p.titolo+' · '+FM_MATRICE.marchio); }
   function quando(t){ try{ var d=new Date(t); return d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'})+' · ore '+d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
   /* 15 ott 09:14, Gab: «io voglio pubblicare una diretta radio … senza passare per te» → le dirette nuove stanno nel database (SQL 67): ?puntata=<id dell'orma> */
-  var PUNTATA=(function(){ try{ var k=new URLSearchParams(location.search).get('puntata')||'festival-intervista';
+  var PUNTATA=(function(){ try{ var k=new URLSearchParams(location.search).get('puntata')||FM_MATRICE.qui().puntata;
       if(k&&PUNTATE[k]){ CHIAVE_PUNTATA=k; mostraPuntata(PUNTATE[k]); return PUNTATE[k]; }
-      if(k&&/^[0-9a-f-]{36}$/i.test(k)){ CHIAVE_PUNTATA=k; var p={titolo:'la diretta del villaggio', chi:''}; mostraPuntata(p);
+      if(k&&/^[0-9a-f-]{36}$/i.test(k)){ CHIAVE_PUNTATA=k; var p={titolo:FM_MATRICE.qui().nome, chi:''}; mostraPuntata(p);
         db.rpc('fm_diretta_annuncio',{p_id:k}).then(function(r){ var a=r.data&&r.data[0]; if(!a) return; p.titolo=a.titolo; p.chi=quando(a.inizio_il)+(a.sottotitolo?' · '+a.sottotitolo:''); mostraPuntata(p); if(a.inizio_il&&typeof giornoDel==='function') giornoDel(new Date(a.inizio_il)); try{ var s=JSON.parse(localStorage.getItem(CH)||'null'); if(s&&s.puntata===k){ s.titolo=p.titolo; localStorage.setItem(CH,JSON.stringify(s)); } }catch(e){} });
         return p; }
     }catch(e){} return PUNTATE['mutuo-credito']; })();
@@ -364,7 +366,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     if(stanza){ if(si){ if(stanza.localParticipant.isMicrophoneEnabled) stanza.localParticipant.setMicrophoneEnabled(false).then(function(){ $('b-mic').classList.remove('on'); tessere(); }).catch(function(){}); } else { stanza.startAudio().catch(function(){}); } }
     try{ if(navigator.mediaSession) navigator.mediaSession.playbackState=si?'paused':'playing'; }catch(e){} }
   function lettore(){ try{ if(!navigator.mediaSession) return;
-      navigator.mediaSession.metadata=new MediaMetadata({title:PUNTATA.titolo, artist:'FelicitasMundi · la diretta del villaggio', album:'Civiltà Sarda'});
+      navigator.mediaSession.metadata=new MediaMetadata({title:PUNTATA.titolo, artist:FM_MATRICE.marchio, album:FM_MATRICE.marchio});
       navigator.mediaSession.setActionHandler('play',function(){ pausaSala(false); }); navigator.mediaSession.setActionHandler('pause',function(){ pausaSala(true); });
       navigator.mediaSession.setActionHandler('stop',function(){ cancellaSegno(); fuori(''); }); navigator.mediaSession.playbackState='playing'; }catch(e){} }
 
@@ -474,7 +476,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
       });
     }).catch(function(e){ $('entra').disabled=false; var t=e&&e.message?e.message:'—'; dice(/^Questa diretta/.test(t)?t+'.':'La sala non si apre: '+t,true); });
   }
-  function fuori(t){ giorno.inizio=''; scriviGiorno(); if(rec&&rec.state==='recording') ferma(); lasciando=true; if(stanza){ try{ stanza.disconnect(); }catch(e){} } stanza=null; lasciando=false; $('suono').hidden=true; $('pausa').hidden=true; try{ if(navigator.mediaSession) navigator.mediaSession.playbackState='none'; }catch(e){} if(actx){ try{ actx.close(); }catch(e){} actx=null; analizza=null; } clearInterval(orologio2); $('suoni').innerHTML=''; $('onda').classList.add('fuori'); $('live-t').textContent='LA DIRETTA DEL VILLAGGIO'; document.body.classList.add('soglia'); document.body.classList.remove('coordina'); $('live').style.color='var(--grigio)'; var i=$('live').querySelector('i'); i.style.background='var(--grigio)'; i.style.animation='none'; $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; $('chiudi').hidden=true; if(entrato===false) $('ospite-dati').hidden=false; ['b-mic','b-mano','b-rec','b-file'].forEach(function(k){ $(k).disabled=true; $(k).classList.remove('on'); }); document.querySelector('.griglia').innerHTML=''; document.getElementById('app').classList.remove('coordina'); dice(t||''); }
+  function fuori(t){ giorno.inizio=''; scriviGiorno(); if(rec&&rec.state==='recording') ferma(); lasciando=true; if(stanza){ try{ stanza.disconnect(); }catch(e){} } stanza=null; lasciando=false; $('suono').hidden=true; $('pausa').hidden=true; try{ if(navigator.mediaSession) navigator.mediaSession.playbackState='none'; }catch(e){} if(actx){ try{ actx.close(); }catch(e){} actx=null; analizza=null; } clearInterval(orologio2); $('suoni').innerHTML=''; $('onda').classList.add('fuori'); $('live-t').textContent=FM_MATRICE.marchio.toUpperCase(); document.body.classList.add('soglia'); document.body.classList.remove('coordina'); $('live').style.color='var(--grigio)'; var i=$('live').querySelector('i'); i.style.background='var(--grigio)'; i.style.animation='none'; $('entra').hidden=false; $('entra').disabled=false; $('esci').hidden=true; $('chiudi').hidden=true; if(entrato===false) $('ospite-dati').hidden=false; ['b-mic','b-mano','b-rec','b-file'].forEach(function(k){ $(k).disabled=true; $(k).classList.remove('on'); }); document.querySelector('.griglia').innerHTML=''; document.getElementById('app').classList.remove('coordina'); dice(t||''); }
   $('esci').onclick=function(){ cancellaSegno(); fuori(''); };
   $('b-esci').onclick=function(){ $('esci').onclick(); };
   /* Muto / Parli / In ascolto: il tasto dice sempre com'è il tuo microfono (regola fissa 3) */
@@ -496,7 +498,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
     navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){ var C=window.AudioContext||window.webkitAudioContext, c=new C(), an=c.createAnalyser(), dati=new Uint8Array(256); an.fftSize=512; c.createMediaStreamSource(st).connect(an); var fine=Date.now()+6000;
       (function giro(){ an.getByteTimeDomainData(dati); var m=0; for(var i=0;i<dati.length;i++){ m=Math.max(m,Math.abs(dati[i]-128)); } $('imp-livello').style.width=Math.min(100,m*1.6)+'%'; if(Date.now()<fine&&!$('imp').hidden) requestAnimationFrame(giro); else { st.getTracks().forEach(function(t){t.stop();}); c.close(); $('imp-livello').style.width='0'; b.disabled=false; b.textContent='Prova'; permesso(); } })(); })
     .catch(function(){ b.disabled=false; b.textContent='Prova'; $('imp-perm').textContent='Negato: il telefono non ti fa parlare.'; $('imp-come').hidden=false; }); };
-  $('imp-invita').onclick=function(){ var u=location.origin+location.pathname+location.search, t=(PUNTATA&&PUNTATA.titolo?PUNTATA.titolo:'La diretta del villaggio')+': entra con il tuo accesso.';
+  $('imp-invita').onclick=function(){ var u=location.origin+location.pathname+location.search, t=(PUNTATA&&PUNTATA.titolo?PUNTATA.titolo:FM_MATRICE.qui().nome)+': entra con il tuo accesso.';
     if(navigator.share){ (SALVA_VERO||navigator.share.bind(navigator))({title:t, text:t, url:u}).catch(function(){}); return; }
     try{ navigator.clipboard.writeText(u).then(function(){ $('imp-perm').textContent='Link copiato: incollalo dove vuoi.'; },function(){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); }); }catch(e){ window.open('https://wa.me/?text='+encodeURIComponent(t+' '+u),'_blank'); } };
   $('imp-silenzia').onclick=function(){ $('silenzia').onclick(); $('imp').hidden=true; };
@@ -597,7 +599,7 @@ body.ospite #b-mano,body.ospite #b-file,body:not(.coordina) #b-rec{display:none!
   /* la Diretta in Bacheca (SQL 55) */
   $('pubblica').onclick=function(){ if(!ultimo) return; var e=$('pub-esito'); e.textContent='Carico il file…'; $('pubblica').disabled=true; var via='dirette/'+VILLAGGIO+'/'+ultimo.nome;
     db.storage.from('dirette').upload(VILLAGGIO+'/'+ultimo.nome, ultimo.blob,{contentType:ultimo.tipo,upsert:false}).then(function(r){ if(r.error&&!/already exists|duplicate/i.test(r.error.message||'')) throw r.error; e.textContent='Scrivo la Diretta in Bacheca…';   /* 23:14: se il file era già salito al primo tentativo, si va avanti */
-      return db.rpc('fm_pubblica_diretta',{p_villaggio:VILLAGGIO,p_titolo:PUNTATA.titolo,p_descrizione:$('chi').textContent+' · registrazione della diretta del villaggio · trascrizione: la fai tu',p_indirizzo:via,p_dimensione:ultimo.blob.size,p_secondi:ultimo.secondi}); })
+      return db.rpc('fm_pubblica_diretta',{p_villaggio:VILLAGGIO,p_titolo:PUNTATA.titolo,p_descrizione:$('chi').textContent+' · registrazione della diretta · trascrizione: la fai tu',p_indirizzo:via,p_dimensione:ultimo.blob.size,p_secondi:ultimo.secondi}); })
     .then(function(r){ if(r.error) throw r.error; e.textContent='Pubblicata in Bacheca come Diretta.'; $('pubblica').textContent='Pubblicata ✓'; })
     .catch(function(err){ $('pubblica').disabled=false; e.textContent='Non pubblicata: '+(err&&err.message?err.message:'—'); }); };
 
