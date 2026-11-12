@@ -1106,7 +1106,7 @@ function espSolidi(c){
 var ESP_BLOCCHI=[
   {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto"]]},
   {tit:"Assistenza comunitaria integrata",voci:[["Praticantato","prat"],["Spiritualità"],["Percorsi"],["Trattamenti"],["Consulenze"]]},
-  {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["26 al mese","","per integrarsi al cervello felicitas"],["da 1500","","per attivare il sistema autonomo della propria azienda, che possa poi interagire col cervello felicitas"]],link:"cervello-digitale-evoluto.html"}
+  {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["Azienda col proprio sistema gestionale interno, collegato a Felicitas","","dichiara il tuo interesse"]],link:"cervello-digitale-evoluto.html"}
 ];
 var ESP_STAMPA=[["carta","Carta stampata","volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi","volantino.jpg"],
   ["libri","Libri e cataloghi","libri, riviste, cataloghi, fascicoli","rivista.jpg"],["agende","Agende e calendari","agende, calendari, quaderni e taccuini","agenda.jpg"],
@@ -2388,7 +2388,7 @@ function vCompra(){
    in chat e che poi rispondendo lì gli arriva in automatico» · «non scrivere i motivi come obblico, ma come possibilità» ·
    «il team può avere i messaggi fissati come richieste d assistenza a cui rispondere , ma mano che qualcuno risponde ,qieste vengono archiviate».
    Chi scrive non entra nel team: vede solo le sue richieste. Il team risponde dalla sua chat (richieste in cima, «Rispondi»). */
-var ASS_MOTIVI=[["vicinati","Vicinati"],["produttore","Produttore"],["operatore","Operatore"],["eventi","Prossimi eventi"],["interviste","Interviste"],["praticantato","Praticantato"]];
+var ASS_MOTIVI=[["vicinati","Vicinati"],["produttore","Produttore"],["operatore","Operatore"],["eventi","Prossimi eventi"],["interviste","Interviste"],["praticantato","Praticantato"],["karma_yoga","Partecipare al karma yoga"],["coscienza_tecnologia","Ricevere assistenza tra coscienza e tecnologia"],["azienda","Attivare la propria azienda"]]; /* 12/11 Gab, SQL 246 */
 function assMotivo(m){var x=ASS_MOTIVI.filter(function(a){return a[0]===m;})[0];return x?x[1]:"Senza motivo";}
 function assQuando(t){return giornoTm(t)+" · "+hhmm(t);}
 var ass={motivo:null,aperta:null,team:null,stat:false,rispondo:null};
@@ -2398,6 +2398,11 @@ function vAssistenza(){
      chi non è entrato scrive anche la mail; il messaggio aspetta sul server 7 giorni e parte quando entra con quella mail. */
   var fuori=!io.id;
   ass.motivo=null;
+  /* 12/11/2026, Gab: «tutti i tasti che portano verso assistenza devono portare quindi verso l'accesso» → chi non è entrato
+     passa dall'accesso e torna qui con la voce già scelta (?motivo=). */
+  var qm0=null;try{qm0=new URLSearchParams(location.search).get("motivo");}catch(e){}
+  if(qm0&&!ASS_MOTIVI.some(function(a){return a[0]===qm0;}))qm0=null;
+  if(fuori){location.replace("accesso.html?torna="+encodeURIComponent("strumento.html?v=assistenza"+(qm0?"&motivo="+qm0:"")));return;}
   c.innerHTML='<h2 class="az-tit">Assistenza</h2><div class="az-filo"></div>'+
     '<p class="ass-int">Ti risponde il team Assistenza comunitaria integrata.</p>'+
     '<p class="az-l" id="ass-ml">Di cosa vuoi sapere? <span class="ass-fac">(facoltativo)</span></p>'+
@@ -2411,6 +2416,8 @@ function vAssistenza(){
   legaVai(c);
   c.querySelectorAll("[data-mot]").forEach(function(b){b.onclick=function(){var m=b.getAttribute("data-mot");ass.motivo=ass.motivo===m?null:m;
     c.querySelectorAll("[data-mot]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-mot")===ass.motivo));});};});
+  /* 12/11: dai tasti di home, Piani e Praticantato la voce arriva già scelta (strumento.html?v=assistenza&motivo=…) */
+  if(qm0){ass.motivo=qm0;c.querySelectorAll("[data-mot]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-mot")===qm0));});}
   $("#ass-invia").onclick=function(){var b=this,e=$("#ass-esito"),t=$("#ass-t").value.trim();if(!t){e.textContent="Scrivi il messaggio.";return;}
     if(fuori){var ml=$("#ass-mail").value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ml)){e.textContent="Scrivi la tua mail.";return;}
       b.disabled=true;e.textContent="Un momento…";
@@ -2420,7 +2427,12 @@ function vAssistenza(){
         e.textContent=(r&&r.data)||"Non è partito. Si può riprovare.";},function(){b.disabled=false;e.textContent="Non è partito. Si può riprovare.";});
       return;}
     b.disabled=true;e.textContent="Un momento…";
-    db.rpc("fm_assistenza_scrivi",{p_testo:t,p_motivo:ass.motivo}).then(function(r){b.disabled=false;
+    /* 12/11: finché il database non conosce le voci nuove (SQL 246) la richiesta parte lo stesso, con la voce scritta nel testo */
+    var nuovi=["karma_yoga","coscienza_tecnologia","azienda"],mo=ass.motivo;
+    function manda(tt,mm){return db.rpc("fm_assistenza_scrivi",{p_testo:tt,p_motivo:mm});}
+    manda(t,mo).then(function(r){
+      if(mo&&nuovi.indexOf(mo)>-1&&(!r||r.error||r.data!=="ok")){var et=(ASS_MOTIVI.filter(function(a){return a[0]===mo;})[0]||[,""])[1];return manda("["+et+"] "+t,null);}
+      return r;}).then(function(r){b.disabled=false;
       if(r&&r.error){e.textContent="Non è partita. Si può riprovare.";return;}
       if(r&&r.data==="ok"){e.textContent="Inviata. Quando ti rispondiamo arriva una notifica.";$("#ass-t").value="";ass.motivo=null;
         c.querySelectorAll("[data-mot]").forEach(function(x){x.setAttribute("aria-pressed","false");});assMie();}
@@ -3616,18 +3628,7 @@ function vCervello(){
     '<p class="nota" style="margin:6px 2px 0"><b>Sistema di coscienza</b>: «il contesto che integra il cosa e il perché».</p>';
   var libroH=''+
     '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
-    '<p class="et" style="margin-top:14px">Cosa puoi fare nel Cervello</p>'+
-    '<div class="due-col">'+
-      '<div class="card"><b>Senza AI</b>'+
-        '<ol class="punti"><li><b>Ordine:</b> un indice e le regole su dove sta cosa, quindi trova subito il capitolo giusto senza rileggere tutto.</li>'+
-        '<li><b>Collegamenti:</b> vede quello che cambia ogni giorno (ordini, compiti, giornale), non solo i file fermi.</li>'+
-        '<li><b>Decisioni col perché:</b> se qualcuno va contro una cosa decisa, se ne accorge.</li>'+
-        '<li><b>Lavora da solo:</b> manda le mail delle 9 e delle 22, a ciascuno la sua parte.</li></ol></div>'+
-      '<div class="card"><b>Con AI</b>'+
-        '<span class="t" style="margin-top:6px">In più l\'AI lavora con la memoria Felicitas: trascrive, scrive, impagina, «detta e organizza».</span></div>'+
-    '</div>'+
-    '<div class="card" style="margin-top:10px"><b>Il percorso · praticantato Antaḥkaraṇa</b><span class="m">80 € al mese, oppure karma yoga</span></div>'+
-    '<p class="nota" style="margin:8px 2px 0">Leggere il libro Felicitas e il proprio vicinato è gratis.</p>';
+    '<p class="nota" style="margin:10px 2px 0"><a href="piani.html" style="color:#D4AF6A">I prezzi sono nella pagina Piani.</a></p>';
   c.innerHTML='<p class="et">Cervello</p>'+videoHTML("cervello")+ricTasti()+
     (io.id?
       '<div id="ce-onda"></div>'+

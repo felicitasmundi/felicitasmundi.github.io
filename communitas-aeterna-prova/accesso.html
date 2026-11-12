@@ -34,6 +34,19 @@
   "use strict";
   if(window.SpazioVivo && SpazioVivo.accesso) SpazioVivo.accesso(document.body);
 </script>
+<!-- 12/11/2026, Gab: chi tocca «Assistenza» entra già nell'ambito che ha chiesto → qui si legge per cosa sta entrando -->
+<script>
+  (function(){ try{
+    var t=new URLSearchParams(location.search).get("torna")||""; if(t.indexOf("v=assistenza")<0) return;
+    var m=(t.match(/[?&]motivo=([a-z_]+)/)||[])[1]||"";
+    var V={karma_yoga:"Partecipare al karma yoga",coscienza_tecnologia:"Ricevere assistenza tra coscienza e tecnologia",azienda:"Attivare la propria azienda",praticantato:"Praticantato",vicinati:"Vicinati",produttore:"Produttore",operatore:"Operatore",eventi:"Prossimi eventi",interviste:"Interviste"};
+    var d=document.createElement("div");
+    d.style.cssText="max-width:520px;width:calc(100% - 32px);margin:16px auto 0;padding:14px 16px;border:1px solid rgba(212,175,106,.45);border-radius:14px;background:#1a2148;color:#F5F0E6;font:500 18px/1.45 'DM Sans',system-ui,sans-serif;text-align:center";
+    var b=document.createElement("b"); b.style.color="#D4AF6A"; b.textContent=V[m]||"Assistenza comunitaria integrata";
+    d.appendChild(document.createTextNode("Entra per continuare: ")); d.appendChild(b);
+    document.body.insertBefore(d, document.body.firstChild);
+  }catch(e){} })();
+</script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 <!-- 24/10, Gab: «nell'accesso […] l'utente possa scaricare l'app» → il tasto «Metti l'app sullo schermo» in fondo, sotto il piatto dell'accesso -->
 <script src="comune/fm-installa.js?v=11020740"></script>

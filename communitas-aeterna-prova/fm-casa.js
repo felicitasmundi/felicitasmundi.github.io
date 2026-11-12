@@ -999,15 +999,7 @@ var CASA = `
         <span style="color:var(--oro)">›</span><span>Quanto costa?</span>
       </summary>
       <div style="padding:0 0.1rem 1.1rem 1.4rem;font-family:'Cormorant Garamond',serif;font-size:var(--t-cor);line-height:1.62;color:rgba(245,240,230,0.9);display:flex;flex-direction:column;gap:0.7rem;text-shadow:0 2px 14px rgba(2,4,12,0.95)">
-        <p style="margin:0">Entrare e servire la comunità è gratuito, sempre. Leggi, scrivi in bacheca, dichiari un ruolo e ti metti all'opera. Hai gli strumenti per collegare la tua orma: i contatti che incontri, le idee e le note, i racconti, le testimonianze, i bisogni che apri, quello che scambi e quello che doni, le spese, le ore di lavoro, i link e gli obiettivi. Nell'emporio puoi offrire quello che fai in scambio o in dono. Questo non scade e non è una prova: è la porta che resta aperta.</p>
-        <p style="margin:0">Il praticantato costa 26 € al mese, e lo compri quando vuoi, un mese alla volta. Non è un abbonamento che si rinnova da solo.</p>
-        <p style="margin:0">Cosa apre.</p>
-        <p style="margin:0">Il tuo cammino diventa registrabile. Il filo del percorso lo vedono tutti — le pratiche, i passaggi, i momenti del ciclo. Con il praticantato cominci a segnarlo: quello che fai lungo il filo resta scritto, ed è tuo.</p>
-        <p style="margin:0">Il tuo progetto prende forma. Qui sei accompagnato nella focalizzazione del tuo talento, e in come seguire direzioni chiare per portare a termine la tua opera. Trovi gli strumenti di scrittura strutturata, utili per i prodotti, le formazioni e i progetti che porti nella comunità — con la stessa cura di una pagina stampata, senza saper programmare.</p>
-        <p style="margin:0">Quello che offri diventa vendibile. Nell'emporio si apre la vendita, e la scheda del tuo prodotto si veste: capitoli, porte, stampa. Vale per ciò che produci, per l'assistenza che dai, per il tuo insegnamento, per la gestione del tuo luogo.</p>
-        <p style="margin:0">Gli approfondimenti del cammino. Gli esercizi, i materiali, i contatti con chi tiene le classi, gli spazi di confronto.</p>
-        <p style="margin:0">Il metodo per usare l'intelligenza artificiale in maniera consapevole, e la formazione per diventare operatore.</p>
-        <p style="margin:0">E il team, da tre persone in su. 26 € a persona, minimo tre. Un team può essere il team di un vicinato, il team che organizza un incontro, un evento, un ritiro, un festival, oppure il team degli operatori di un territorio. Quello che cambia è che gli strumenti diventano condivisi: quello che uno segna, gli altri lo vedono.</p>
+        <p style="margin:0"><a href="piani.html" style="color:var(--oro)">I prezzi sono nella pagina Piani.</a></p>
       </div>
     </details>
 
