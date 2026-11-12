@@ -1106,7 +1106,7 @@ function espSolidi(c){
 var ESP_BLOCCHI=[
   {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto"]]},
   {tit:"Assistenza comunitaria integrata",voci:[["Praticantato","prat"],["Spiritualità"],["Percorsi"],["Trattamenti"],["Consulenze"]]},
-  {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["26 al mese","","per integrarsi al cervello felicitas"],["da 1500","","per attivare il sistema autonomo della propria azienda, che possa poi interagire col cervello felicitas"]],link:"cervello-digitale-evoluto.html"}
+  {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["Azienda col proprio sistema gestionale interno, collegato a Felicitas","","dichiara il tuo interesse"]],link:"cervello-digitale-evoluto.html"}
 ];
 var ESP_STAMPA=[["carta","Carta stampata","volantini, manifesti, locandine, biglietti da visita, cartelline, adesivi","volantino.jpg"],
   ["libri","Libri e cataloghi","libri, riviste, cataloghi, fascicoli","rivista.jpg"],["agende","Agende e calendari","agende, calendari, quaderni e taccuini","agenda.jpg"],
@@ -3616,18 +3616,7 @@ function vCervello(){
     '<p class="nota" style="margin:6px 2px 0"><b>Sistema di coscienza</b>: «il contesto che integra il cosa e il perché».</p>';
   var libroH=''+
     '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
-    '<p class="et" style="margin-top:14px">Cosa puoi fare nel Cervello</p>'+
-    '<div class="due-col">'+
-      '<div class="card"><b>Senza AI</b>'+
-        '<ol class="punti"><li><b>Ordine:</b> un indice e le regole su dove sta cosa, quindi trova subito il capitolo giusto senza rileggere tutto.</li>'+
-        '<li><b>Collegamenti:</b> vede quello che cambia ogni giorno (ordini, compiti, giornale), non solo i file fermi.</li>'+
-        '<li><b>Decisioni col perché:</b> se qualcuno va contro una cosa decisa, se ne accorge.</li>'+
-        '<li><b>Lavora da solo:</b> manda le mail delle 9 e delle 22, a ciascuno la sua parte.</li></ol></div>'+
-      '<div class="card"><b>Con AI</b>'+
-        '<span class="t" style="margin-top:6px">In più l\'AI lavora con la memoria Felicitas: trascrive, scrive, impagina, «detta e organizza».</span></div>'+
-    '</div>'+
-    '<div class="card" style="margin-top:10px"><b>Il percorso · praticantato Antaḥkaraṇa</b><span class="m">80 € al mese, oppure karma yoga</span></div>'+
-    '<p class="nota" style="margin:8px 2px 0">Leggere il libro Felicitas e il proprio vicinato è gratis.</p>';
+    '<p class="nota" style="margin:10px 2px 0"><a href="piani.html" style="color:#D4AF6A">I prezzi sono nella pagina Piani.</a></p>';
   c.innerHTML='<p class="et">Cervello</p>'+videoHTML("cervello")+ricTasti()+
     (io.id?
       '<div id="ce-onda"></div>'+

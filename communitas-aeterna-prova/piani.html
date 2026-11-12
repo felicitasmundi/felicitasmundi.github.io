@@ -33,7 +33,15 @@ h1{font-family:var(--tit);font-weight:500;font-size:clamp(40px,9vw,56px);letter-
 .lista{list-style:none;margin:6px 0 0;padding:0;width:100%;display:flex;flex-direction:column;gap:10px}
 .lista li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--riga);padding-top:10px;font-size:18px;text-align:left}
 .lista b{font-family:var(--tit);font-weight:600;font-size:22px;color:var(--oro);white-space:nowrap}
-@media (min-width:900px){.carte{grid-template-columns:repeat(6,1fr)}.carta{grid-column:span 2}.carta:nth-child(n+4){grid-column:span 3}}
+@media (min-width:900px){.carte{grid-template-columns:repeat(2,1fr)}}
+.cosa{border:1px solid var(--riga);border-radius:28px;padding:22px 24px;margin:0 0 22px;background:#0b0d1e}
+.cosa h2{font-family:var(--voce);font-weight:600;font-size:32px;margin:0 0 10px;text-align:center}
+.cosa-lista{text-align:left;width:100%;margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px;font-size:19px}
+.cosa-lista .dopo{color:var(--fioco)}.cosa-lista .dopo span{border:1px solid var(--riga);border-radius:999px;padding:2px 10px;font-size:15px;margin-left:6px;white-space:nowrap}
+a.chip{text-decoration:none}
+.testo{text-align:left;font-size:18px;line-height:1.5;margin:8px 0 0;width:100%}.testo p{margin:0 0 10px}
+.tasto{margin-top:14px;background:var(--oro);color:#0b0d1e;text-decoration:none;font-weight:600;border-radius:999px;padding:12px 22px;font-size:18px}
+.tasto:focus-visible,a.chip:focus-visible{outline:2px solid var(--avorio);outline-offset:3px}
 .nota{text-align:center;font-size:16px;color:var(--fioco);margin:26px 0 0}
 </style>
 </head>
@@ -46,44 +54,65 @@ h1{font-family:var(--tit);font-weight:500;font-size:clamp(40px,9vw,56px);letter-
 <div class="carte">
 
 <section class="carta" style="--e:var(--terra)">
-<h2>Libro e scrittura a mano</h2>
-<p class="cifra parola">Gratis</p>
-<p class="unita">&nbsp;</p>
-<p class="riga">Leggi il libro Felicitas e il tuo vicinato.</p>
+<h2>Karma yoga</h2>
+<p class="unita">supporto alla comunità</p>
+<div class="testo">
+<p>Mettersi al servizio, superando l'attaccamento ai frutti dell'azione.</p>
+<p>Offrire sapendo che il destinatario è la fonte, la Coscienza Cosmica.</p>
+<p>Questa attitudine purifica ed apre le possibilità che offre la Comunità Eterna.</p>
+</div>
+<p class="riga" style="max-width:none;margin-top:10px"><b>Ricevere ospitalità in comunità spirituali, rurali, contadine, in cui poter far esperienze, laboratori e connettersi con persone che risuonano.</b></p>
+<ul class="cosa-lista" style="margin-top:12px">
+<li>fare mutuo aiuto, donare e scambiare il proprio talento</li>
+<li>ricevere gratuitamente le lezioni del praticantato, che accompagna verso il progetto senso, che diventa un ingranaggio della comunità</li>
+<li>fare servizio usando il gestionale, che permette di gestire obiettivi, scadenze, inserimento di prodotti, dirette ed articoli culturali</li>
+<li>dare supporto nei punti ritiro, nel trasporto, nella produzione, nella comunicazione di tutto ciò che riguarda i Vicinati del Cibo</li>
+<li>ricevere la mail giornaliera con il giornale e le novità di tutti i vicinati coinvolti, con approfondimenti, cultura e vicinati del cibo</li>
+<li>ricevere la mail serale che ti informa di tutto ciò che hai sviluppato durante tutta la giornata</li>
+</ul>
+<a class="tasto" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Assistenza</a>
 </section>
 
 <section class="carta prima" style="--e:var(--etere)">
 <h2>Praticantato</h2>
 <p class="cifra">80 €</p>
-<p class="unita">ogni 4 settimane</p>
-<p class="riga">Introspezione e uso dell'app. Lezioni gratuite.</p>
-<span class="chip">oppure karma yoga</span>
-</section>
-
-<section class="carta" style="--e:var(--acqua)">
-<h2>Cervello con l'AI</h2>
-<p class="cifra">26 €</p>
 <p class="unita">al mese</p>
-<p class="riga">L'integrazione AI nel tuo Cervello.</p>
+<p class="riga" style="max-width:none"><b>Dal progetto senso alla cooperazione per una civiltà evoluta</b></p>
+<div class="testo"><p>Una guida al ritorno a sé, attraverso strumenti, letture, percorsi di gruppo, che unisce l'aspetto introspettivo e l'utilizzo di FelicitasMundi, per la valorizzazione del talento intrinseco di ogni individuo in ogni fascia d'età.</p></div>
+<p class="riga" style="margin-top:8px">Un incontro di gruppo alla settimana, un'ora online.</p>
+<span class="chip">oppure karma yoga</span>
+<a class="tasto" href="https://buy.stripe.com/5kQdRaffm7gCdsW2MN5EY0c">Inizia il praticantato</a>
 </section>
 
 <section class="carta" style="--e:var(--fuoco)">
-<h2>Assistenza personale</h2>
+<h2>Percorso personale tra coscienza e tecnologia</h2>
 <p class="cifra">80 €</p>
 <p class="unita">all'ora</p>
-<p class="riga">Dal progetto senso alla cooperazione.</p>
+<p class="riga" style="max-width:none"><b>Prima di scegliere uno strumento, capire chi lo usa e perché.</b></p>
+<div class="testo">
+<p>Siamo in una società in cui i costanti stimoli del mondo esterno, la fretta, la competitività cronica, ci portano a spostare l'attenzione da ciò che siamo nel profondo, dalla relazione sana con la mente, le emozioni, il corpo, e da una comunicazione empatica con l'altro. Avere metodi e strumenti per guardarsi dentro e dirigere con coerenza i pensieri, le azioni e le parole, è il primo passo per la realizzazione e per la leadership positiva.</p>
+<p>Capire perché si mette la propria energia in un progetto: riconoscere i propri bisogni per sviluppare il proprio sogno, il proprio progetto-senso.</p>
+<p>Riconoscere gli strumenti e le risorse a disposizione per raggiungere l'obiettivo.</p>
+</div>
+<a class="chip" href="../felicitas-festival-21-novembre-baratili/">Al Festival il workshop: 50 € a persona ›</a>
+<a class="tasto" href="strumento.html?v=assistenza&amp;motivo=coscienza_tecnologia">Assistenza</a>
 </section>
 
 <section class="carta" style="--e:var(--aria)">
-<h2>Aziende</h2>
+<h2>Aziende col proprio sistema gestionale interno, collegato a Felicitas</h2>
+<p class="unita" style="margin-top:14px">una volta</p>
 <p class="cifra">1.500 €</p>
 <p class="unita">avvio, a partire da</p>
+<p class="riga">Dipende da ore di sviluppo, archivio, dipendenti, ambiente logistico e gestionale. Si definisce dopo l'incontro.</p>
+<p class="unita" style="margin-top:16px">ogni mese</p>
 <ul class="lista">
 <li><span>Licenza</span><b>30 € a persona</b></li>
 <li><span>Infrastruttura</span><b>50 €</b></li>
 <li><span>Assistenza, 2 ore</span><b>160 €</b></li>
 </ul>
-<p class="unita" style="margin:10px 0 0">al mese · IVA esclusa</p>
+<p class="unita" style="margin:10px 0 0">IVA esclusa</p>
+<p class="riga" style="margin-top:12px">Database, mail, repository, ruoli dei team e formazione.</p>
+<a class="tasto" href="strumento.html?v=assistenza&amp;motivo=azienda">Assistenza</a>
 </section>
 
 </div>
