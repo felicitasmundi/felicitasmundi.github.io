@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Praticantato · FelicitasMundi</title>
+<meta name="description" content="Il Praticantato FelicitasMundi: cosa facciamo e come iscriversi al percorso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;600;700&family=Josefin+Sans:wght@600&display=swap">
+<!-- 12/11/2026 Gab: pagina che dice cosa succede e «paga e partecipa»; testi sintetici come chiesto per i Piani («avrebbe bisogno di un po' più di sintesi»):
+     sono gli stessi della carta Praticantato di piani.html (pubblicata 12/11, commit 05471f1). Prezzo e link Stripe uguali ai Piani. -->
+<style>
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9c6d8;--riga:rgba(212,175,106,.3);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--c1),var(--c2) 40%,var(--c3));background-color:var(--c3);min-height:100svh;color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;font-size:20px;line-height:1.55}
+a{color:inherit}
+.testa{position:sticky;top:0;z-index:5;display:flex;align-items:center;padding:12px 16px;background:rgba(10,20,48,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--riga)}
+.testa a{text-decoration:none;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:18px;color:var(--oro)}
+main{max-width:640px;margin:0 auto;padding:28px 16px 64px;display:flex;flex-direction:column;gap:22px}
+.occhio{margin:0;text-align:center;font-family:'Josefin Sans',sans-serif;font-size:16px;letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
+h1{margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:46px;line-height:1.05}
+h2{margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--oro)}
+.carta{background:var(--carta);border:1px solid var(--riga);border-radius:24px;padding:22px 20px}
+.carta p{margin:0}
+.carta h3{margin:18px 0 6px;font-size:21px;font-weight:600;color:var(--oro)}
+.carta .intro{font-style:italic;color:var(--fioco)}
+.lista{margin:14px 0 0;padding-left:22px}.lista li{margin:6px 0}
+details{margin-top:14px}summary{cursor:pointer;color:var(--oro);font-weight:600}details p{margin-top:10px!important}
+.prezzo{text-align:center;font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--oro);margin:0}.prezzo span{font-family:'DM Sans',sans-serif;font-size:18px;color:var(--fioco)}
+.tasto{display:block;text-align:center;text-decoration:none;font-weight:600;font-size:21px;padding:18px 22px;border-radius:999px;background:var(--oro);color:#1A1405;margin-top:16px}
+.tasto.vuoto{background:none;color:var(--oro);border:2px solid var(--oro)}
+</style>
+</head>
+<body>
+<header class="testa"><a href="accoglienza.html">‹ FelicitasMundi</a></header>
+<main>
+  <p class="occhio">FelicitasMundi</p>
+  <h1>Praticantato</h1>
+
+  <section class="carta">
+    <h2>Dal progetto senso alla cooperazione per una civiltà evoluta.</h2>
+    <p>Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</p>
+    <ul class="lista">
+      <li>Lezione dal vivo ogni lunedì alle 19 con Gabriele Dettori</li>
+      <li>Tematiche del ciclo lunare, pratiche ed esercizi</li>
+      <li>La registrazione resta a chi non c'era</li>
+      <li>Compreso per chi fa karma yoga</li>
+    </ul>
+    <details><summary>Scopri di più</summary>
+      <p>Il praticantato FelicitasMundi, definito Antaḥkaraṇa, è un progetto che punta alla valorizzazione del talento intrinseco di ogni individuo in ogni fascia d'età, in modo che possa valorizzare, riconoscere e portare a terra la propria capacità intrinseca, la propria creatività, riconoscere i propri bisogni per poter poi sviluppare il proprio sogno, il proprio progetto senso. E trovare attraverso la comunità, attraverso gli strumenti di FelicitasMundi, la strada per poter poi rendere distribuibile, vendibile o proponibile alla comunità ciò che porta.</p>
+    </details>
+  </section>
+
+  <section class="carta">
+    <h2>Il percorso</h2>
+    <p class="intro">Prima di scegliere uno strumento, capire chi lo usa e perché.</p>
+    <h3>1 · Se stessi</h3>
+    <h3>2 · Il perché</h3>
+    <h3>3 · Gli strumenti</h3>
+  </section>
+
+  <section class="carta">
+    <p class="prezzo">80 € <span>al mese</span></p>
+    <a class="tasto" href="https://buy.stripe.com/5kQdRaffm7gCdsW2MN5EY0c">Paga e partecipa ›</a>
+    <a class="tasto vuoto" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Partecipa con il karma yoga ›</a>
+    <a class="tasto vuoto" href="piani.html">I piani ›</a>
+  </section>
+</main>
+<script src="comune/fm-assistenza.js?v=11051200"></script>
+</body>
+</html>
