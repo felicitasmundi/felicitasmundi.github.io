@@ -28,7 +28,7 @@
   function salva() { try { localStorage.setItem(CH, JSON.stringify(segno)); } catch (e) { } }
   function dove() { return "diretta-bozza.html" + (segno && segno.puntata ? "?puntata=" + encodeURIComponent(segno.puntata) : ""); }
   function $(c) { return pill ? pill.querySelector("." + c) : null; }
-  function dice(t) { var a = $("tit"); if (!a) return; a.textContent = t || segno.titolo || "la diretta del villaggio"; a.classList.toggle("esito", !!t); }
+  function dice(t) { var a = $("tit"); if (!a) return; a.textContent = t || segno.titolo || "FelicitasMundi"; a.classList.toggle("esito", !!t); }
 
   /* avvia(): all'apertura della pagina, e quando torna dalla cache del navigatore — il segno può essere nato dopo */
   window.FM_DIRETTA = { ferma: function () { lasciando = true; if (stanza) { try { stanza.disconnect(); } catch (e) { } } stanza = null; if (pill) { pill.remove(); pill = null; } },   /* la cornice: la sala si apre dentro, la striscia si fa da parte senza spegnere il segno */
@@ -58,7 +58,7 @@
       '<button class="b mic" type="button" disabled title="microfono" aria-label="microfono">🎙</button>' +
       '<button class="b esci" type="button" title="esci dalla diretta" aria-label="esci dalla diretta">✕</button>' +
       '<div class="suoni" hidden></div>';
-    pill.querySelector(".tit").textContent = segno.titolo || "la diretta del villaggio";
+    pill.querySelector(".tit").textContent = segno.titolo || "FelicitasMundi";
     var capo = document.querySelector(".fm-stanze .capo");
     if (capo && capo.parentNode) { capo.parentNode.insertBefore(pill, capo.nextSibling); }   /* la sua riga, sotto il capo e sopra le stanze */
     else { pill.classList.add("fissa"); document.body.appendChild(pill); }
@@ -96,7 +96,7 @@
   function lettore() {
     try {
       if (!navigator.mediaSession) return;
-      navigator.mediaSession.metadata = new MediaMetadata({ title: segno.titolo || "la diretta del villaggio", artist: "FelicitasMundi · la diretta del villaggio", album: "Civiltà Sarda" });
+      navigator.mediaSession.metadata = new MediaMetadata({ title: segno.titolo || "FelicitasMundi", artist: "FelicitasMundi", album: "FelicitasMundi" });
       navigator.mediaSession.setActionHandler("play", function () { pausa(false); });
       navigator.mediaSession.setActionHandler("pause", function () { pausa(true); });
       navigator.mediaSession.setActionHandler("stop", function () { spegni(""); });
