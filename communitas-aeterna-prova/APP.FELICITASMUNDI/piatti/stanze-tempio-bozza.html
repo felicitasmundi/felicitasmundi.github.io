@@ -287,7 +287,7 @@ legaPorte();
     try { db = window.parent !== window && window.parent.db; } catch (e) {}
     if (!db) {
       if (!window.supabase) await new Promise(function(ok, ko){ var t = document.createElement("script");
-        t.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"; t.onload = ok; t.onerror = ko; document.head.appendChild(t); });
+        t.src = "/communitas-aeterna-prova/comune/lib/supabase-js-2.119.0.js"; t.onload = ok; t.onerror = ko; document.head.appendChild(t); });
       db = window.supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co", "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU");
     }
     var porte = {};

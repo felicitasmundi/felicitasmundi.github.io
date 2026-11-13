@@ -302,7 +302,7 @@
       smonta(box);
       var f = document.createElement("iframe");
       f.className = "fm-piatto";
-      f.setAttribute("title", "");
+      f.setAttribute("title", document.title || "FelicitasMundi"); /* 11 nov: nome per i lettori di schermo (WCAG) */
       fmpAltezza(box, f);
       var chiuso = false, ro = null;
       f._fmpChiudi = function () { chiuso = true; if (ro) { ro.disconnect(); ro = null; } };

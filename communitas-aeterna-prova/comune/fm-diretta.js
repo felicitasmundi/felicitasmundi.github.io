@@ -19,7 +19,7 @@
   try { if (window.top !== window && window.top.FM_CORNICE) return; } catch (e) { }
   if (window.FM_DIRETTA) { window.FM_DIRETTA.avvia(); return; }
   var CH = "fm_diretta", FM_URL = "https://gfnveesogkfvkrdudpfg.supabase.co", FM_CHIAVE = "sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU";
-  var LK = "https://cdn.jsdelivr.net/npm/livekit-client@2.22.0/dist/livekit-client.umd.min.js";
+  var LK = "/communitas-aeterna-prova/comune/lib/livekit-client-2.22.0.js";
   var qui = location.pathname.split("/").pop();
   if (qui === "diretta-bozza.html") return;              /* la sala si governa da sola */
   var stanza = null, lasciando = false, tentativi = 0, parla = false, suoni = [], pill = null, segno = null, cssFatto = false;

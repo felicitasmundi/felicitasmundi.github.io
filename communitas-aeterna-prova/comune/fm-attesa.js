@@ -2,7 +2,7 @@
    Ogni richiesta al database che non risponde entro 20 secondi viene interrotta: la pagina mostra il suo messaggio d'errore
    e il tasto torna libero. Foto, file e funzioni: 3 minuti. Chat e dirette in tempo reale non passano di qui.
    Si carica SUBITO DOPO supabase-js e PRIMA degli script della pagina:
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   <script src="/communitas-aeterna-prova/comune/lib/supabase-js-2.119.0.js"></script>
    <script src="comune/fm-attesa.js?v=11082140"></script> */
 (function(){
   var sb=window.supabase;
