@@ -42,6 +42,23 @@ h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px
 .sotto{font-family:'Cinzel',serif;font-size:20px;letter-spacing:.22em;margin-top:-8px;text-transform:uppercase;color:var(--oro)}
 .tasti{display:flex;flex-direction:column;gap:12px;width:100%;max-width:440px}
 .sotto-entra{margin:-8px 0 0;max-width:440px;font-size:19px;line-height:1.4;color:var(--fioco)}
+.intervista{display:flex;flex-direction:column;gap:14px;width:100%;max-width:440px;margin-top:4px;text-align:left}
+.video-int{position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;border:2px solid var(--oro);border-radius:22px;overflow:hidden;background:#000;cursor:pointer}
+.video-int img,.video-int iframe{display:block;width:100%;height:100%;object-fit:cover;border:0}
+.video-int .play{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;background:var(--oro);box-shadow:0 6px 24px rgba(0,0,0,.45)}
+.video-int .play:after{content:"";position:absolute;left:29px;top:22px;border-left:22px solid #1A1405;border-top:14px solid transparent;border-bottom:14px solid transparent}
+.intervista .occhio{text-align:center}
+.articolo{border:2px solid var(--riga);border-radius:22px;background:rgba(10,20,48,.55);padding:4px 20px}
+.articolo summary{cursor:pointer;padding:14px 0;font-weight:600;font-size:20px;color:var(--oro);list-style:none}
+.articolo summary::-webkit-details-marker{display:none}
+.articolo summary:after{content:" ↓"}
+.articolo[open] summary:after{content:" ↑"}
+.art-testo{display:flex;flex-direction:column;gap:12px;padding-bottom:18px}
+.art-testo h3{font-size:30px}
+.art-testo h4{margin:10px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:25px;color:var(--oro)}
+.art-testo p{margin:0;font-size:19px;line-height:1.5}
+.art-testo .firma{color:var(--fioco);font-size:18px}
+.intervista .tasto.vuoto{font-size:19px;line-height:1.35;overflow-wrap:anywhere}
 .tasto{display:block;text-align:center;font-weight:600;font-size:21px;padding:18px 22px;border-radius:999px;background:var(--oro);color:#1A1405;box-shadow:0 8px 30px rgba(0,0,0,.3)}
 .tasto.vuoto{background:none;color:var(--oro);border:2px solid var(--oro);box-shadow:none}
 .porte{display:flex;flex-direction:column;gap:14px;width:100%;max-width:440px;margin-top:6px}
@@ -168,6 +185,36 @@ footer a{text-decoration:underline}
     </div>
     <!-- 31/10 09:52, Gab: «quando dici entra non si capisce cosa succede schiacciando entra»; 09:59 frase scelta: «per ora questo» -->
     <p class="sotto-entra">Sistema di Coscienza per aziende, gruppi di lavoro e Individui in cammino</p>
+    <!-- 13/11/2026, Gab: «metti il video sotto / Sistema di Coscienza per aziende, gruppi di lavoro e Individui in cammino»; articolo fisso sotto il video con tasto Praticantato -->
+    <div class="intervista">
+      <button type="button" class="video-int" id="video-int" aria-label="Guarda l'intervista su YouTube">
+        <img src="https://i.ytimg.com/vi/C1olLOzgd6g/hqdefault.jpg" alt="" loading="lazy">
+        <span class="play" aria-hidden="true"></span>
+      </button>
+      <p class="occhio">L'intervista su Border Nights</p>
+      <details class="articolo">
+        <summary>Leggi l'articolo</summary>
+        <div class="art-testo">
+          <h3>Coscienza, tecnologia e vicinati</h3>
+          <p class="firma">Gabriele Dettori · fondatore FelicitasMundi</p>
+          <h4>Da dove nasce</h4>
+          <p>Trovare nel proprio territorio persone che parlano la stessa lingua è difficile, e sono in tanti a viverlo. Dal 2019 Gabriele sente ognuno di noi come una parte individualizzata della Coscienza Cosmica, una visione che arriva dalla conoscenza dei Veda. Da qui la scelta di cercare le comunità che esistono già: spirituali, rurali, contadine, artigiane. La comunità eterna esiste già attorno a noi.</p>
+          <h4>Il problema: informazioni che si perdono</h4>
+          <p>Ciò che le realtà locali comunicano ogni giorno resta sparso tra Facebook, Instagram, WhatsApp e YouTube. Dopo una settimana non si ritrova più, e dei video lunghi resta solo il titolo.</p>
+          <h4>Il Cervello Digitale Evoluto</h4>
+          <p>È un database comune, condiviso dai gruppi locali. I video vengono trascritti e indicizzati per temi, ogni giorno un giornale mostra cosa succede in ogni vicinato, e ogni gruppo organizza obiettivi, scadenze, prodotti, consegne e comunicazione nello stesso strumento. Un indice raccoglie chi fa cosa in ogni territorio, e viene anche stampato, così resta utile in caso di emergenza.</p>
+          <h4>Come si partecipa</h4>
+          <p>Come ospite: si entra, si acquistano prodotti e formazioni, si viene agli eventi. Con il karma yoga: azioni offerte alla comunità, senza cercare un tornaconto immediato.</p>
+          <h4>I Vicinati del Cibo</h4>
+          <p>Un punto di ritiro entro circa 20 km, dove famiglie, produttori e aziende si ritrovano una volta a settimana. Conoscendo in anticipo il fabbisogno si fanno accordi con i produttori, si rimettono a coltura terreni incolti e si sostiene chi produce, con un contributo economico o con le mani. Il punto di ritiro diventa anche luogo d'incontro: laboratori, musica, cibo condiviso.</p>
+          <h4>Una rete tra regioni</h4>
+          <p>Sapere cosa si produce e dove permette di sostenere le realtà di regioni diverse. Come ricorda Guido Grossi, il passo successivo è passare dalla materia prima al prodotto trasformato, che porta con sé storia e autenticità.</p>
+          <h4>Dove siamo e come entrare</h4>
+          <p>In Sardegna (Oristanese, Quartu, Olbia, Sassari-Alghero) e a Firenze, Bergamo, Cuneo, Ferrara. Il 21 novembre c'è il Felicitas Festival a Baratili San Pietro, con Randaccio sulla Zona Franca Extradoganale e Rimondini. Puoi venire al Festival, unirti a un vicinato, aprirne uno o proporre un festival nella tua zona.</p>
+        </div>
+      </details>
+      <a class="tasto vuoto" href="praticantato.html" data-conta="tasto:praticantato_intervista">Prossimo incontro con Gabriele - Praticantato del lunedì ore 19, in diretta</a>
+    </div>
     <div class="porte">
       <a class="porta" href="praticantato.html" data-conta="tasto:praticantato_accoglienza"><b>Praticantato</b><small>Una guida al ritorno a sé, attraverso strumenti, letture, percorsi di gruppo.</small><span class="dove">Apri la pagina ›</span></a>
       <a class="porta" href="#vicinati" data-conta="tasto:vicinati_accoglienza"><b>I Vicinati del Cibo</b><small>Ogni vicinato porta nel villaggio la propria identità, autonomia, competenze, produzioni, specificità e bisogni.</small><span class="dove">Leggi qui sotto ↓</span></a>
@@ -299,5 +346,6 @@ f.addEventListener('scroll',function(){var a=f.querySelectorAll('a'),w=a[0].offs
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
 <script>try{sessionStorage.setItem("fm_origine","home")}catch(e){}</script>
 <script src="comune/fm-assistenza.js?v=11051200" defer></script>
+<script>(function(){var b=document.getElementById("video-int");if(!b)return;b.addEventListener("click",function(){b.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/C1olLOzgd6g?autoplay=1&rel=0" title="Intervista su Border Nights" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';},{once:true});})();</script>
 </body>
 </html>
