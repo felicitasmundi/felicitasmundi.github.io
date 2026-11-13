@@ -4,67 +4,128 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Praticantato · FelicitasMundi</title>
-<meta name="description" content="Il Praticantato FelicitasMundi: cosa facciamo e come iscriversi al percorso.">
+<meta name="description" content="Il Praticantato FelicitasMundi: ogni lunedì alle 19 in diretta con Gabriele Dettori. Cosa succede, il percorso e come partecipare.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;600;700&family=Josefin+Sans:wght@600&display=swap">
-<!-- 12/11/2026 Gab: pagina che dice cosa succede e «paga e partecipa»; testi sintetici come chiesto per i Piani («avrebbe bisogno di un po' più di sintesi»):
-     sono gli stessi della carta Praticantato di piani.html (pubblicata 12/11, commit 05471f1). Prezzo e link Stripe uguali ai Piani. -->
+<!-- 13/11/2026 15:58, Gab: «in praticantato questo non si capisce … perchè non mettiamo piu info? lascia poi il testo visibile senza scopri di piu
+     … secondo me dovrebbero esserci piu card visive che invitano al fare». 13/11 21:47: «aumentare le informazioni di praticantato … lo voglio scritto bene, mostramelo».
+     Testi dalle fonti, verbatim: carta Praticantato di piani.html (12/11); «Lunedì 16 novembre…» (home 13/11); testo Antaḥkaraṇa di Gab 27/10;
+     pagina Praticantato 31/10 (diretta, karma yoga); 13/11 22:06 Gab «Non è lezione ma percorso», «La lezione è online»; workshop «Tra Coscienza e Tecnologia» (pagina del Felicitas Festival). Dove manca la fonte: [ ] visibile. -->
 <style>
-:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9c6d8;--riga:rgba(212,175,106,.3);color-scheme:dark}
+:root{--c1:#1d2f66;--c2:#122050;--c3:#0a1430;--carta:#1a2148;--oro:#D4AF6A;--avorio:#F5F0E6;--fioco:#c9c6d8;--riga:rgba(212,175,106,.3);
+  --terra:#C9A15A;--acqua:#6FA8D6;--fuoco:#E07A55;--aria:#8DBF5E;--etere:#B08AE0;color-scheme:dark}
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;background:linear-gradient(180deg,var(--c1),var(--c2) 40%,var(--c3));background-color:var(--c3);min-height:100svh;color:var(--avorio);font-family:'DM Sans',system-ui,sans-serif;font-size:20px;line-height:1.55}
 a{color:inherit}
 .testa{position:sticky;top:0;z-index:5;display:flex;align-items:center;padding:12px 16px;background:rgba(10,20,48,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--riga)}
 .testa a{text-decoration:none;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:18px;color:var(--oro)}
-main{max-width:640px;margin:0 auto;padding:28px 16px 64px;display:flex;flex-direction:column;gap:22px}
+main{max-width:680px;margin:0 auto;padding:28px 16px 72px;display:flex;flex-direction:column;gap:22px}
 .occhio{margin:0;text-align:center;font-family:'Josefin Sans',sans-serif;font-size:16px;letter-spacing:.24em;text-transform:uppercase;color:var(--oro)}
-h1{margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:46px;line-height:1.05}
-h2{margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--oro)}
+h1{margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:50px;line-height:1.02}
+.motto{margin:0;text-align:center;font-family:'Cormorant Garamond',serif;font-size:27px;line-height:1.2;color:var(--oro)}
+.sotto{margin:0;text-align:center;color:var(--fioco)}
+h2{margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-size:34px;line-height:1.1;color:var(--avorio)}
 .carta{background:var(--carta);border:1px solid var(--riga);border-radius:24px;padding:22px 20px}
 .carta p{margin:0}
-.carta h3{margin:18px 0 6px;font-size:21px;font-weight:600;color:var(--oro)}
-.carta .intro{font-style:italic;color:var(--fioco)}
-.lista{margin:14px 0 0;padding-left:22px}.lista li{margin:6px 0}
-details{margin-top:14px}summary{cursor:pointer;color:var(--oro);font-weight:600}details p{margin-top:10px!important}
-.prezzo{text-align:center;font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--oro);margin:0}.prezzo span{font-family:'DM Sans',sans-serif;font-size:18px;color:var(--fioco)}
-.tasto{display:block;text-align:center;text-decoration:none;font-weight:600;font-size:21px;padding:18px 22px;border-radius:999px;background:var(--oro);color:#1A1405;margin-top:16px}
-.tasto.vuoto{background:none;color:var(--oro);border:2px solid var(--oro)}
+.carta p+p{margin-top:12px}
+.prossimo{border:2px solid var(--oro);background:linear-gradient(160deg,#24306a,var(--carta))}
+.prossimo .quando{font-family:'Josefin Sans',sans-serif;font-size:16px;letter-spacing:.18em;text-transform:uppercase;color:var(--oro)}
+.prossimo .tema{margin-top:8px!important;font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1.15}
+.elementi{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.elementi span{font-size:16px;padding:4px 12px;border-radius:999px;border:1px solid currentColor}
+.griglia{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.griglia{grid-template-columns:1fr}.passo{flex-direction:column;gap:6px}}
+.mini{background:var(--carta);border:1px solid var(--riga);border-left:6px solid var(--c);border-radius:20px;padding:18px}
+.mini .ic{font-size:30px;line-height:1;color:var(--c)}
+.mini b{display:block;margin-top:8px;font-size:21px;line-height:1.3}
+.mini small{display:block;margin-top:6px;font-size:18px;color:var(--fioco);line-height:1.45}
+.passo{display:flex;gap:16px;align-items:flex-start}
+.num{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:28px;color:#1A1405;background:var(--c)}
+.passo>div{flex:1;min-width:0}
+.passo h3{margin:4px 0 6px;font-family:'Cormorant Garamond',serif;font-size:28px;line-height:1.1;color:var(--c)}
+.intro{margin:0;font-style:italic;color:var(--fioco);font-size:22px;text-align:center}
+.parola{border-left:6px solid var(--oro)}
+.prezzo{font-family:'Cormorant Garamond',serif;font-size:44px;color:var(--oro);margin:0}.prezzo span{font-family:'DM Sans',sans-serif;font-size:19px;color:var(--fioco)}
+.tasto{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:21px;padding:18px 22px;border-radius:999px;background:var(--oro);color:#1A1405;margin-top:16px}
+.tasto.vuoto{background:none;color:var(--oro);border:2px solid var(--oro);font-weight:600}
+.vuoto-seg{color:var(--oro);font-style:italic}
 </style>
 </head>
 <body>
 <header class="testa"><a href="accoglienza.html">‹ FelicitasMundi</a></header>
 <main>
-  <p class="occhio">FelicitasMundi</p>
+  <p class="occhio">Praticantato FelicitasMundi · Antaḥkaraṇa</p>
   <h1>Praticantato</h1>
+  <p class="motto">Dal progetto senso alla cooperazione per una civiltà evoluta.</p>
+  <p class="sotto">Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</p>
 
-  <section class="carta">
-    <h2>Dal progetto senso alla cooperazione per una civiltà evoluta.</h2>
-    <p>Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</p>
-    <ul class="lista">
-      <li>Lezione dal vivo ogni lunedì alle 19 con Gabriele Dettori</li>
-      <li>Tematiche del ciclo lunare, pratiche ed esercizi</li>
-      <li>La registrazione resta a chi non c'era</li>
-      <li>Compreso per chi fa karma yoga</li>
-    </ul>
-    <details><summary>Scopri di più</summary>
-      <p>Il praticantato FelicitasMundi, definito Antaḥkaraṇa, è un progetto che punta alla valorizzazione del talento intrinseco di ogni individuo in ogni fascia d'età, in modo che possa valorizzare, riconoscere e portare a terra la propria capacità intrinseca, la propria creatività, riconoscere i propri bisogni per poter poi sviluppare il proprio sogno, il proprio progetto senso. E trovare attraverso la comunità, attraverso gli strumenti di FelicitasMundi, la strada per poter poi rendere distribuibile, vendibile o proponibile alla comunità ciò che porta.</p>
-    </details>
+  <!-- 13/11, home: «Lunedì 16 novembre: fare assieme gli intenti del ciclo lunare legato ai 5 elementi» -->
+  <section class="carta prossimo">
+    <p class="quando">Prossimo incontro · lunedì ore 19 · in diretta</p>
+    <p class="tema">Lunedì 16 novembre: fare assieme gli intenti del ciclo lunare legato ai 5 elementi</p>
+    <div class="elementi"><span style="color:var(--terra)">Terra</span><span style="color:var(--acqua)">Acqua</span><span style="color:var(--fuoco)">Fuoco</span><span style="color:var(--aria)">Aria</span><span style="color:var(--etere)">Etere</span></div>
+    <a class="tasto" href="#partecipa">Partecipa lunedì ›</a>
   </section>
 
-  <section class="carta">
-    <h2>Il percorso</h2>
-    <p class="intro">Prima di scegliere uno strumento, capire chi lo usa e perché.</p>
-    <h3>1 · Se stessi</h3>
-    <h3>2 · Il perché</h3>
-    <h3>3 · Gli strumenti</h3>
+  <h2>Cosa succede ogni lunedì</h2>
+  <div class="griglia">
+    <div class="mini" style="--c:var(--fuoco)"><span class="ic">◉</span><b>Percorso online ogni lunedì alle 19 con Gabriele Dettori</b><small>In diretta nell'app.</small></div>
+    <div class="mini" style="--c:var(--etere)"><span class="ic">☾</span><b>Tematiche del ciclo lunare, pratiche ed esercizi</b></div>
+    <div class="mini" style="--c:var(--acqua)"><span class="ic">▶</span><b>La registrazione resta a chi non c'era</b></div>
+    <div class="mini" style="--c:var(--aria)"><span class="ic">✦</span><b>Compreso per chi fa karma yoga</b><small>«inizia il karma yoga e poi segue lo studentato»</small></div>
+  </div>
+
+  <!-- 13/11/2026 22:06, Gab (brainstorming, «arriviamo al ragionamento e poi scriviamo cosa ricevi»): sintesi dei suoi punti, da approvare -->
+  <h2>Cosa ricevi</h2>
+  <p class="intro">Inizi a lavorare sulle tue intenzioni: per te, per il vicinato, per il luogo in cui vivi e per quello che fai ogni giorno.</p>
+  <div class="griglia">
+    <div class="mini" style="--c:var(--terra)"><span class="ic">◆</span><b>Strumenti pratici</b><small>Per cambiare il modo in cui affronti la vita e le cose di ogni giorno, e l'attenzione che metti in ciò che fai.</small></div>
+    <div class="mini" style="--c:var(--aria)"><span class="ic">✎</span><b>Scrivi sul Giornale di FelicitasMundi</b><small>Racconti il tuo percorso quotidiano, le realizzazioni interiori e le tue opere, fuori da ogni pubblicità.</small></div>
+    <div class="mini" style="--c:var(--etere)"><span class="ic">☾</span><b>Obiettivi e ritmi della natura</b><small>Scrivi a mano obiettivi e idee, e tieni l'attenzione sui ritmi della natura.</small></div>
+    <div class="mini" style="--c:var(--acqua)"><span class="ic">❀</span><b>Chi crea intorno a te</b><small>Scopri le persone che sviluppano il proprio talento e lo manifestano in ciò che producono: cibo, prodotti dell'Emporio, strumenti per la propria evoluzione.</small></div>
+    <div class="mini" style="--c:var(--fuoco);grid-column:1/-1"><span class="ic">✦</span><b>Un metodo da portare a casa</b><small>Ti avvicina a chi può insegnarti, a chi può ospitarti e a chi incontri nei punti di ritiro, nei giorni in cui ci si ritrova.</small></div>
+  </div>
+
+  <!-- workshop «Tra Coscienza e Tecnologia», testi verbatim dalla pagina del Felicitas Festival -->
+  <h2>Il percorso</h2>
+  <p class="intro">Prima di scegliere uno strumento, capire chi lo usa e perché.</p>
+  <section class="carta passo" style="--c:var(--terra)">
+    <span class="num">1</span>
+    <div><h3>Se stessi</h3>
+    <p>Siamo in una società in cui i costanti stimoli del mondo esterno, la fretta, la competitività cronica, ci portano a spostare l'attenzione da ciò che siamo nel profondo, dalla relazione sana con la mente, le emozioni, il corpo, e da una comunicazione empatica con l'altro. Avere metodi e strumenti per guardarsi dentro e dirigere con coerenza i pensieri, le azioni e le parole, è il primo passo per la realizzazione e per la leadership positiva.</p></div>
+  </section>
+  <section class="carta passo" style="--c:var(--fuoco)">
+    <span class="num">2</span>
+    <div><h3>Il perché</h3>
+    <p>Capire perché si mette la propria energia in un progetto: riconoscere i propri bisogni per sviluppare il proprio sogno, il proprio progetto-senso.</p></div>
+  </section>
+  <section class="carta passo" style="--c:var(--acqua)">
+    <span class="num">3</span>
+    <div><h3>Gli strumenti</h3>
+    <p>Riconoscere gli strumenti e le risorse a disposizione per raggiungere l'obiettivo. Tra questi il Cervello Digitale Evoluto, un sistema di gestione attento che unisce il funzionamento della coscienza, gli aspetti dell'attenzione e lo sviluppo di un progetto. È un cervello digitale comunitario: funziona come internet, ma dentro il mondo di FelicitasMundi. Il tuo cervello è connesso alle realtà coinvolte, e le informazioni si parlano tra loro.</p></div>
   </section>
 
-  <section class="carta">
+  <!-- testo di Gab del 27/10, verbatim, visibile (13/11: «lascia poi il testo visibile senza scopri di piu») -->
+  <h2>Cos'è il Praticantato</h2>
+  <section class="carta parola">
+    <p>Il praticantato FelicitasMundi, definito Antaḥkaraṇa, è un progetto che punta alla valorizzazione del talento intrinseco di ogni individuo in ogni fascia d'età, in modo che possa valorizzare, riconoscere e portare a terra la propria capacità intrinseca, la propria creatività, riconoscere i propri bisogni per poter poi sviluppare il proprio sogno, il proprio progetto senso. E trovare attraverso la comunità, attraverso gli strumenti di FelicitasMundi, la strada per poter poi rendere distribuibile, vendibile o proponibile alla comunità ciò che porta.</p>
+  </section>
+
+  <h2 id="partecipa">Come partecipare</h2>
+  <section class="carta passo" style="--c:var(--oro)">
+    <span class="num">1</span>
+    <div><h3>Scegli come entrare</h3>
     <p class="prezzo">80 € <span>al mese</span></p>
     <a class="tasto" href="https://buy.stripe.com/5kQdRaffm7gCdsW2MN5EY0c">Paga e partecipa ›</a>
-    <a class="tasto vuoto" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Partecipa con il karma yoga ›</a>
-    <a class="tasto vuoto" href="piani.html">I piani ›</a>
+    <a class="tasto vuoto" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Oppure con il karma yoga ›</a></div>
   </section>
+  <section class="carta passo" style="--c:var(--oro)">
+    <span class="num">2</span>
+    <div><h3>Lunedì alle 19</h3>
+    <p>Percorso online con Gabriele Dettori, in diretta nell'app.</p></div>
+  </section>
+  <a class="tasto vuoto" href="piani.html">Tutti i piani ›</a>
 </main>
 <script src="comune/fm-assistenza.js?v=11051200"></script>
 </body>
