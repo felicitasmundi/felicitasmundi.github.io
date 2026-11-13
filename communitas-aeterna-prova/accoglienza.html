@@ -58,6 +58,7 @@ h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px
 .art-testo h4{margin:10px 0 0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:25px;color:var(--oro)}
 .art-testo p{margin:0;font-size:19px;line-height:1.5}
 .art-testo .firma{color:var(--fioco);font-size:18px}
+.intervista .prossimo{margin:6px 0 -4px;text-align:center;font-size:19px;line-height:1.4;color:var(--avorio)}
 .intervista .tasto.vuoto{font-size:19px;line-height:1.35;overflow-wrap:anywhere}
 .tasto{display:block;text-align:center;font-weight:600;font-size:21px;padding:18px 22px;border-radius:999px;background:var(--oro);color:#1A1405;box-shadow:0 8px 30px rgba(0,0,0,.3)}
 .tasto.vuoto{background:none;color:var(--oro);border:2px solid var(--oro);box-shadow:none}
@@ -186,7 +187,7 @@ footer a{text-decoration:underline}
     <!-- 31/10 09:52, Gab: «quando dici entra non si capisce cosa succede schiacciando entra»; 09:59 frase scelta: «per ora questo» -->
     <p class="sotto-entra">Sistema di Coscienza per aziende, gruppi di lavoro e Individui in cammino</p>
     <!-- 13/11/2026, Gab: «metti il video sotto / Sistema di Coscienza per aziende, gruppi di lavoro e Individui in cammino»; articolo fisso sotto il video con tasto Praticantato -->
-    <div class="intervista">
+    <div class="intervista" id="intervista">
       <button type="button" class="video-int" id="video-int" aria-label="Guarda l'intervista su YouTube">
         <img src="https://i.ytimg.com/vi/C1olLOzgd6g/hqdefault.jpg" alt="" loading="lazy">
         <span class="play" aria-hidden="true"></span>
@@ -213,6 +214,7 @@ footer a{text-decoration:underline}
           <p>In Sardegna (Oristanese, Quartu, Olbia, Sassari-Alghero) e a Firenze, Bergamo, Cuneo, Ferrara. Il 21 novembre c'è il Felicitas Festival a Baratili San Pietro, con Randaccio sulla Zona Franca Extradoganale e Rimondini. Puoi venire al Festival, unirti a un vicinato, aprirne uno o proporre un festival nella tua zona.</p>
         </div>
       </details>
+      <p class="prossimo">Lunedì 16 novembre: fare assieme gli intenti del ciclo lunare legato ai 5 elementi</p>
       <a class="tasto vuoto" href="praticantato.html" data-conta="tasto:praticantato_intervista">Prossimo incontro con Gabriele - Praticantato del lunedì ore 19, in diretta</a>
     </div>
     <div class="porte">
@@ -347,5 +349,6 @@ f.addEventListener('scroll',function(){var a=f.querySelectorAll('a'),w=a[0].offs
 <script>try{sessionStorage.setItem("fm_origine","home")}catch(e){}</script>
 <script src="comune/fm-assistenza.js?v=11051200" defer></script>
 <script>(function(){var b=document.getElementById("video-int");if(!b)return;b.addEventListener("click",function(){b.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/C1olLOzgd6g?autoplay=1&rel=0" title="Intervista su Border Nights" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';},{once:true});})();</script>
+<script>(function(){if(location.hash==="#articolo"){var a=document.querySelector(".articolo");if(a){a.open=true;var i=document.getElementById("intervista");if(i)setTimeout(function(){i.scrollIntoView({block:"start"})},300);}}})();</script>
 </body>
 </html>
