@@ -7,19 +7,9 @@
      · «rendila operativa, nessun link non funzionante». La prova di stamattina (lo strumento su claude.ai) diventa l'app:
      Oggi · Giornale · Megafono · Obiettivi, con i dati veri su Supabase. Le regole d'accesso le decide il database (RLS). -->
 <title>FelicitasMundi</title>
-<!-- 11 nov 2026 · anteprima del link su WhatsApp e social (Open Graph), titolo della pagina e icona dell'app -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="FelicitasMundi">
-<meta property="og:title" content="FelicitasMundi">
-<meta property="og:url" content="https://app.felicitasmundi.com/communitas-aeterna-prova/strumento.html">
-<meta property="og:image" content="https://app.felicitasmundi.com/communitas-aeterna-prova/icona-felicitas-512.png?v=1102">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
-<meta name="twitter:card" content="summary">
-
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icona-felicitas-ios-180.png?v=1102"><link rel="icon" type="image/png" sizes="48x48" href="favicon-felicitas-48.png?v=1024"><meta name="theme-color" content="#F5F0E6"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="comune/caratteri.css">
-<script src="/communitas-aeterna-prova/comune/lib/supabase-js-2.119.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="comune/fm-attesa.js?v=11082140"></script>
 <script src="comune/fm-video.js?v=10221330"></script>
 <script src="comune/fm-installa.js?v=11020740"></script>
@@ -3348,7 +3338,8 @@ var g4CimaT=null;
 document.addEventListener("visibilitychange",function(){if(!document.hidden&&vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();});
 function g4VideoOggi(){
   var B=$("#g4-oggi");if(!B||!db)return;clearTimeout(g4CimaT);
-  var vid=db.from("giornale_video").select("id,link,audio,testo,capitolo_id,riga_id,link_titolo,link_canale,titolo_corretto").order("messo_il",{ascending:false}).limit(1).then(function(r){
+  var vid=db.from("giornale_video").select("id,link,audio,testo,capitolo_id,riga_id,link_titolo,link_canale,titolo_corretto,link_descrizione").order("messo_il",{ascending:false}).limit(1).then(function(r){
+    if(r&&r.error)return db.from("giornale_video").select("id,link,audio,testo,capitolo_id,riga_id,link_titolo,link_canale,titolo_corretto").order("messo_il",{ascending:false}).limit(1);return r;}).then(function(r){
     if(r&&r.error)return db.from("giornale_video").select("link,audio,testo,capitolo_id,riga_id").order("messo_il",{ascending:false}).limit(1);return r;}).then(function(r){
     if(r&&r.error)return db.from("giornale_video").select("link,audio,testo,capitolo_id").order("messo_il",{ascending:false}).limit(1);return r;}).then(function(r){
     if(r&&r.error)return db.from("giornale_video").select("link").order("messo_il",{ascending:false}).limit(1);return r;});
@@ -3366,7 +3357,8 @@ function g4VideoOggi(){
       B.innerHTML=(y?'<div class="video" style="margin:0 0 10px"><iframe src="https://www.youtube-nocookie.com/embed/'+y+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>':'')+
       (y&&(tit||io.nucleo)&&x.id?'<div id="g4-oggi-yt" style="margin:0 0 10px">'+(tit?'<p style="margin:0;font-size:18px"><b>'+esc(tit)+'</b>'+(x.link_canale?' · '+esc(x.link_canale):'')+'</p>':'')+
         (io.nucleo?'<button type="button" class="mini" id="g4-oggi-ct" style="margin-top:6px">Correggi titolo</button>':'')+'</div>':'')+
-      '<div id="g4-oggi-f"></div><div id="g4-oggi-a"></div>'+(x.testo?'<p id="g4-oggi-t" style="margin:0 0 6px;font-size:18px;line-height:1.55">'+esc(x.testo).replace(/\n/g,"<br>")+'</p>':'')+'<p class="nota" id="g4-oggi-v" style="margin:0 0 14px" hidden></p>'+tasto;
+      '<div id="g4-oggi-f"></div><div id="g4-oggi-a"></div>'+((x.testo||x.link_descrizione)?'<div id="g4-oggi-t" style="margin:0 0 6px">'+g4Desc(x.testo||x.link_descrizione)+'</div>':'')+'<p class="nota" id="g4-oggi-v" style="margin:0 0 14px" hidden></p>'+
+      '<div id="g4-pass" style="margin:0 0 14px"><button type="button" class="mini" id="g4-pass-b">Video passati</button><div id="g4-pass-l"></div></div>'+tasto;
       if(x.audio&&io.id)db.storage.from("chat").createSignedUrl(x.audio,3600).then(function(u){var A=$("#g4-oggi-a");if(A&&u&&u.data&&u.data.signedUrl)A.innerHTML='<audio controls preload="none" src="'+esc(u.data.signedUrl)+'" style="width:100%;margin:0 0 10px"></audio>';},function(){});
       if(x.riga_id&&io.id)db.from("cervello_righe").select("foto").eq("id",x.riga_id).maybeSingle().then(function(q){var ft=q&&q.data&&q.data.foto;if(!ft)return;
         return db.storage.from("chat").createSignedUrl(ft,3600).then(function(u){var Fo=$("#g4-oggi-f");if(Fo&&u&&u.data&&u.data.signedUrl)Fo.innerHTML='<img class="foto" src="'+esc(u.data.signedUrl)+'" alt="" style="margin:0 0 10px">';});}).catch(function(){});
@@ -3379,6 +3371,7 @@ function g4VideoOggi(){
       $("#g4-ct-s").onclick=function(){var s2=this,e=$("#g4-ct-e");s2.disabled=true;e.textContent="Un momento…";
         db.rpc("fm_giornale_video_titolo",{p_id:x.id,p_titolo:$("#g4-ct-t").value.trim()}).then(function(q){if(q&&q.error){s2.disabled=false;e.textContent=(q.error.message&&!/PGRST|function|schema/i.test(q.error.message))?q.error.message:errore(q.error);return;}
           var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();},function(z){s2.disabled=false;e.textContent=errore(z);});};};
+    var pb=$("#g4-pass-b");if(pb)pb.onclick=function(){g4Passati(x.id);};
     var b=$("#g4-oggi-b");if(b)b.onclick=g4CimaForm;
     var bc=$("#g4-oggi-dc");if(bc)bc.onclick=g4DalCervello;
     g4CimaT=setTimeout(function(){if(vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();},60000);
@@ -3413,11 +3406,16 @@ function g4DalCervello(){
 function g4CimaForm(){
   var w=$("#g4-oggi-c");if(!w)return;clearTimeout(g4CimaT);
   w.innerHTML='<div id="g4-cima-f" style="display:flex;flex-direction:column;gap:8px">'+
+    '<label for="g4-cima-g">Giorno</label><input type="date" id="g4-cima-g" style="font-size:18px;padding:10px 12px;border-radius:12px">'+
     '<label for="g4-cima-l">Link YouTube</label><input type="url" id="g4-cima-l" placeholder="https://www.youtube.com/…" style="font-size:18px;padding:10px 12px;border-radius:12px">'+
+    '<div id="g4-cima-oggi" style="display:flex;flex-direction:column;gap:8px">'+
     '<label for="g4-cima-au">oppure un file audio</label><input type="file" id="g4-cima-au" accept="audio/*">'+
     '<label for="g4-cima-t">Testo che lo descrive</label><textarea id="g4-cima-t" rows="4" maxlength="4000" style="font-size:18px;padding:10px 12px;border-radius:12px"></textarea>'+
-    '<label for="g4-cima-v">Voce dell\'indice</label><select id="g4-cima-v" style="font-size:18px;padding:10px 12px;border-radius:12px"><option value="">Un momento…</option></select>'+
-    '<div style="display:flex;gap:10px"><button type="button" class="btn" id="g4-cima-s">Metti in cima</button><button type="button" class="mini" id="g4-cima-x">Annulla</button></div><p class="nota" id="g4-cima-e" aria-live="polite"></p></div>';
+    '<label for="g4-cima-v">Voce dell\'indice</label><select id="g4-cima-v" style="font-size:18px;padding:10px 12px;border-radius:12px"><option value="">Un momento…</option></select></div>'+
+    '<div style="display:flex;gap:10px"><button type="button" class="btn" id="g4-cima-s">Metti in cima</button><button type="button" class="mini" id="g4-cima-x">Annulla</button></div><p class="nota" id="g4-cima-e" aria-live="polite"></p><div id="g4-prog"></div></div>';
+  var oggiG=g4Oggi();$("#g4-cima-g").value=oggiG;$("#g4-cima-g").min=oggiG;
+  $("#g4-cima-g").onchange=function(){var altro=this.value&&this.value!==oggiG;$("#g4-cima-oggi").hidden=altro;$("#g4-cima-s").textContent=altro?"Programma":"Metti in cima";};
+  g4Programmati();
   db.rpc("fm_cervello_indice").then(function(r){var S=$("#g4-cima-v");if(!S)return;var l=(r&&!r.error&&r.data)||[],per={},ord=[];
     l.forEach(function(c){var k=c.sezione_nome||"Altre voci";if(!per[k]){per[k]=[];ord.push([k,c.sezione_ordine||99]);}per[k].push(c);});
     ord.sort(function(a,b){return a[1]-b[1];});
@@ -3425,6 +3423,11 @@ function g4CimaForm(){
   },function(){});
   $("#g4-cima-x").onclick=function(){var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();};
   $("#g4-cima-s").onclick=function(){var s=this,e=$("#g4-cima-e"),link=$("#g4-cima-l").value.trim(),fl=$("#g4-cima-au").files[0],t=$("#g4-cima-t").value.trim(),cap=$("#g4-cima-v").value;
+    var gg=$("#g4-cima-g").value||oggiG;
+    if(gg!==oggiG){if(!link){e.textContent="Metti il link YouTube.";return;}
+      s.disabled=true;e.textContent="Un momento…";
+      db.rpc("fm_giornale_programma_video",{p_link:link,p_giorno:gg}).then(function(r){if(r&&r.error){s.disabled=false;e.textContent=errore(r.error);return;}
+        var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();},function(x){s.disabled=false;e.textContent=errore(x);});return;}
     if(!link&&!fl){e.textContent="Metti un link YouTube o scegli un file audio.";return;}
     if(!t){e.textContent="Scrivi il testo che lo descrive.";return;}
     if(!cap){e.textContent="Scegli la voce dell'indice.";return;}
@@ -3437,6 +3440,37 @@ function g4CimaForm(){
     su.then(function(path){return db.rpc("fm_giornale_metti_in_cima",{p_link:link||null,p_audio:path,p_testo:t,p_capitolo:cap});})
       .then(function(r){if(r&&r.error){s.disabled=false;e.textContent=errore(r.error);return;}var f=$("#g4-cima-f");if(f)f.remove();g4VideoOggi();},
         function(x){s.disabled=false;e.textContent=errore(x);});};
+}
+/* 10/11 · Video passati e programmati (SQL 240). Gab 9/11 «archivia i video che mettiamo nel giornale, poi mi confermi dove» · 10/11 «ok» */
+function g4Oggi(){try{return new Date().toLocaleDateString("sv-SE",{timeZone:"Europe/Rome"});}catch(e){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}}
+function g4Giorno(g){var p=String(g||"").split("-");if(p.length<3)return "";return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"});}
+function g4VideoTit(v){return v.link_titolo?(v.link_titolo+(v.link_canale?" · "+v.link_canale:"")):(v.link||"");}
+/* 12/11 · descrizione (SQL 248): il testo di YouTube non è fidato, va solo come testo */
+function g4Desc(t){t=String(t||"").trim();if(!t)return "";var lungo=t.length>220||t.split("\n").length>3;
+  return '<p class="g4-desc" style="margin:0;font-size:18px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere'+(lungo?';display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden':'')+'">'+esc(t)+'</p>'+
+    (lungo?'<button type="button" class="mini g4-altro" style="margin-top:4px">altro</button>':'');}
+document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".g4-altro");if(!b)return;var p=b.previousElementSibling;if(!p)return;
+  var aperto=p.style.display!=="-webkit-box";p.style.display=aperto?"-webkit-box":"block";p.style.overflow=aperto?"hidden":"visible";b.textContent=aperto?"altro":"meno";});
+function g4Passati(inCima){
+  var L=$("#g4-pass-l");if(!L)return;if(L.innerHTML){L.innerHTML="";return;}clearTimeout(g4CimaT);
+  L.innerHTML='<p class="nota">Un momento…</p>';
+  db.from("giornale_video").select("id,link,link_titolo,link_canale,mostra_dal,testo,link_descrizione").order("mostra_dal",{ascending:false}).order("messo_il",{ascending:false}).limit(61).then(function(r){
+    if(r&&r.error)return db.from("giornale_video").select("id,link,link_titolo,link_canale,mostra_dal,testo").order("mostra_dal",{ascending:false}).order("messo_il",{ascending:false}).limit(61);return r;}).then(function(r){
+    var L=$("#g4-pass-l");if(!L)return;
+    if(!r||r.error){L.innerHTML='<p class="nota">I video passati non si leggono adesso.</p>';return;}
+    var l=(r.data||[]).filter(function(v){return v.id!==inCima&&ytId(v.link);}).slice(0,60);
+    if(!l.length){L.innerHTML='<p class="nota">Non ci sono ancora video passati.</p>';return;}
+    L.innerHTML='<div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">'+l.map(function(v,i){
+      return '<div><button type="button" class="mini" data-pv="'+i+'" style="text-align:left;width:100%"><small>'+esc(g4Giorno(v.mostra_dal))+'</small><br>'+esc(g4VideoTit(v))+'</button><div data-pv-box="'+i+'"></div>'+((v.testo||v.link_descrizione)?'<div style="margin:6px 4px 0">'+g4Desc(v.testo||v.link_descrizione)+'</div>':'')+'</div>';}).join("")+'</div>';
+    L.querySelectorAll("[data-pv]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-pv"),W=L.querySelector('[data-pv-box="'+i+'"]');
+      if(W.innerHTML){W.innerHTML="";return;}
+      W.innerHTML='<div class="video" style="margin:8px 0 4px"><iframe src="https://www.youtube-nocookie.com/embed/'+ytId(l[+i].link)+'" title="video" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>';};});
+  },function(){var L=$("#g4-pass-l");if(L)L.innerHTML='<p class="nota">I video passati non si leggono adesso.</p>';});
+}
+function g4Programmati(){
+  db.rpc("fm_giornale_video_programmati").then(function(r){var P=$("#g4-prog");if(!P||!r||r.error)return;var l=r.data||[];if(!l.length)return;
+    P.innerHTML='<p style="margin:10px 0 4px"><b>Programmati</b></p>'+l.map(function(v){return '<p style="margin:0 0 6px;font-size:17px"><small>'+esc(g4Giorno(v.mostra_dal))+'</small><br>'+esc(g4VideoTit(v))+'</p>';}).join("");
+  },function(){});
 }
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
@@ -5062,12 +5096,5 @@ segui();window.addEventListener("pageshow",function(e){if(e.persisted)segui();})
 (function(){try{if(/[?&]da=home(&|$)/.test(location.search)){sessionStorage.setItem("fm_origine","home");var t=document.createElement("script");t.src="comune/fm-torna.js?v=10281800";document.head.appendChild(t);}else sessionStorage.setItem("fm_origine","app");}catch(e){}})();
 </script>
 <script src="comune/fm-numeri.js?v=10221400" defer></script>
-<style>
-/* 11 nov 2026 · controllo standard (WCAG 2.2 AA): tasti oro con testo blu scuro leggibile, testi almeno 16 px */
-.btn.pieno{color:#0a1430}
-.mini,.btn,.modulo label.btn{font-size:16px}
-.esp-nm{font-size:14px}
-.esp-el small{font-size:16px}
-</style>
 </body>
 </html>
