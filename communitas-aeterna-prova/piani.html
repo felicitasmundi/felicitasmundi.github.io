@@ -33,57 +33,111 @@ h1{font-family:var(--tit);font-weight:500;font-size:clamp(40px,9vw,56px);letter-
 .lista{list-style:none;margin:6px 0 0;padding:0;width:100%;display:flex;flex-direction:column;gap:10px}
 .lista li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:1px solid var(--riga);padding-top:10px;font-size:18px;text-align:left}
 .lista b{font-family:var(--tit);font-weight:600;font-size:22px;color:var(--oro);white-space:nowrap}
-@media (min-width:900px){.carte{grid-template-columns:repeat(6,1fr)}.carta{grid-column:span 2}.carta:nth-child(n+4){grid-column:span 3}}
+@media (min-width:900px){.carte{grid-template-columns:repeat(2,1fr)}}
+.cosa{border:1px solid var(--riga);border-radius:28px;padding:22px 24px;margin:0 0 22px;background:#0b0d1e}
+.cosa h2{font-family:var(--voce);font-weight:600;font-size:32px;margin:0 0 10px;text-align:center}
+.cosa-lista{text-align:left;width:100%;margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px;font-size:19px}
+.cosa-lista .dopo{color:var(--fioco)}.cosa-lista .dopo span{border:1px solid var(--riga);border-radius:999px;padding:2px 10px;font-size:15px;margin-left:6px;white-space:nowrap}
+a.chip{text-decoration:none}
+.testo{text-align:left;font-size:18px;line-height:1.5;margin:8px 0 0;width:100%}.testo p{margin:0 0 10px}
+.tasto{margin-top:14px;background:var(--oro);color:#0b0d1e;text-decoration:none;font-weight:600;border-radius:999px;padding:12px 22px;font-size:18px}
+.tasto:focus-visible,a.chip:focus-visible{outline:2px solid var(--avorio);outline-offset:3px}
 .nota{text-align:center;font-size:16px;color:var(--fioco);margin:26px 0 0}
+.vantaggi{list-style:none;margin:14px 0 0;padding:0;width:100%;display:flex;flex-direction:column;gap:9px;text-align:left;font-size:19px}
+.vantaggi li{padding-left:28px;position:relative}.vantaggi li::before{content:"✓";position:absolute;left:0;color:var(--e);font-weight:600}
+.vantaggi a{color:var(--avorio)}
+.di-piu{width:100%;margin-top:14px;text-align:left}.di-piu summary{cursor:pointer;color:var(--oro);font-size:18px;list-style:none;text-align:center}
+.di-piu summary::-webkit-details-marker{display:none}.di-piu summary::after{content:" ›"}.di-piu[open] summary::after{content:" ‹"}
+.di-piu summary:focus-visible{outline:2px solid var(--oro);outline-offset:3px;border-radius:6px}
+.carta .tasto{margin-top:auto;padding-top:12px}.carta>.tasto{margin-top:18px}
 </style>
 </head>
 <body>
 <div class="pagina">
 <a class="torna" id="torna" href="strumento.html">‹ Torna all'app</a>
 <p class="marchio">FELICITASMUNDI</p>
-<h1>Piani</h1>
+<h1>Scegli come partecipare</h1>
 
 <div class="carte">
 
-<section class="carta" style="--e:var(--terra)">
-<h2>Libro e scrittura a mano</h2>
-<p class="cifra parola">Gratis</p>
-<p class="unita">&nbsp;</p>
-<p class="riga">Leggi il libro Felicitas e il tuo vicinato.</p>
+<section class="carta" id="karma-yoga" style="--e:var(--terra)">
+<h2>Karma yoga</h2>
+<p class="unita">il tuo servizio alla comunità</p>
+<p class="riga" style="max-width:none"><b>Dai il tuo tempo alla comunità: ricevi ospitalità, formazione e una rete di persone.</b></p>
+<ul class="vantaggi">
+<li>Ospitalità in comunità spirituali, rurali e contadine</li>
+<li>Lezioni del praticantato comprese</li>
+<li>Servizio con il gestionale e nei Vicinati del Cibo</li>
+<li>Il giornale ogni mattina, il riepilogo della tua giornata ogni sera</li>
+</ul>
+<details class="di-piu"><summary>Scopri di più</summary>
+<div class="testo">
+<p>Mettersi al servizio, superando l'attaccamento ai frutti dell'azione.</p>
+<p>Offrire sapendo che il destinatario è la fonte, la Coscienza Cosmica.</p>
+<p>Questa attitudine purifica ed apre le possibilità che offre la Comunità Eterna.</p>
+</div>
+</details>
+<a class="tasto" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Partecipa al karma yoga</a>
 </section>
 
 <section class="carta prima" style="--e:var(--etere)">
 <h2>Praticantato</h2>
 <p class="cifra">80 €</p>
-<p class="unita">ogni 4 settimane</p>
-<p class="riga">Introspezione e uso dell'app. Lezioni gratuite.</p>
-<span class="chip">oppure karma yoga</span>
-</section>
-
-<section class="carta" style="--e:var(--acqua)">
-<h2>Cervello con l'AI</h2>
-<p class="cifra">26 €</p>
 <p class="unita">al mese</p>
-<p class="riga">L'integrazione AI nel tuo Cervello.</p>
+<p class="riga" style="max-width:none"><b>Dal progetto senso alla cooperazione per una civiltà evoluta.</b></p>
+<p class="riga" style="max-width:none;margin-top:8px">Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</p>
+<ul class="vantaggi">
+<li>Lezione dal vivo ogni lunedì alle 19 con Gabriele Dettori</li>
+<li>Tematiche del ciclo lunare, pratiche ed esercizi</li>
+<li>La registrazione resta a chi non c'era</li>
+<li>Compreso per chi fa <a href="#karma-yoga">karma yoga</a></li>
+</ul>
+<details class="di-piu"><summary>Scopri di più</summary>
+<div class="testo">
+<p>Il praticantato FelicitasMundi, definito Antaḥkaraṇa, è un progetto che punta alla valorizzazione del talento intrinseco di ogni individuo in ogni fascia d'età, in modo che possa valorizzare, riconoscere e portare a terra la propria capacità intrinseca, la propria creatività, riconoscere i propri bisogni per poter poi sviluppare il proprio sogno, il proprio progetto senso. E trovare attraverso la comunità, attraverso gli strumenti di FelicitasMundi, la strada per poter poi rendere distribuibile, vendibile o proponibile alla comunità ciò che porta.</p>
+</div>
+</details>
+<a class="tasto" href="https://buy.stripe.com/5kQdRaffm7gCdsW2MN5EY0c">Paga e partecipa</a>
 </section>
 
 <section class="carta" style="--e:var(--fuoco)">
-<h2>Assistenza personale</h2>
+<h2>Percorso personale tra coscienza e tecnologia</h2>
 <p class="cifra">80 €</p>
 <p class="unita">all'ora</p>
-<p class="riga">Dal progetto senso alla cooperazione.</p>
+<p class="riga" style="max-width:none"><b>Prima di scegliere uno strumento, capire chi lo usa e perché.</b></p>
+<ul class="vantaggi">
+<li>Coerenza tra pensieri, parole e azioni</li>
+<li>Chiarezza sul perché del tuo progetto</li>
+<li>Gli strumenti giusti per realizzarlo</li>
+</ul>
+<a class="chip" href="../felicitas-festival-21-novembre-baratili/">Al Festival, il workshop di gruppo a 50 € ›</a>
+<details class="di-piu"><summary>Scopri di più</summary>
+<div class="testo">
+<p>Siamo in una società in cui i costanti stimoli del mondo esterno, la fretta, la competitività cronica, ci portano a spostare l'attenzione da ciò che siamo nel profondo, dalla relazione sana con la mente, le emozioni, il corpo, e da una comunicazione empatica con l'altro. Avere metodi e strumenti per guardarsi dentro e dirigere con coerenza i pensieri, le azioni e le parole, è il primo passo per la realizzazione e per la leadership positiva.</p>
+<p>Capire perché si mette la propria energia in un progetto: riconoscere i propri bisogni per sviluppare il proprio sogno, il proprio progetto-senso.</p>
+<p>Riconoscere gli strumenti e le risorse a disposizione per raggiungere l'obiettivo.</p>
+</div>
+</details>
+<a class="tasto" href="strumento.html?v=assistenza&amp;motivo=coscienza_tecnologia">Prenota un incontro</a>
 </section>
 
 <section class="carta" style="--e:var(--aria)">
 <h2>Aziende</h2>
 <p class="cifra">1.500 €</p>
 <p class="unita">avvio, a partire da</p>
+<p class="riga" style="max-width:none"><b>Il tuo gestionale, collegato a FelicitasMundi.</b></p>
+<ul class="vantaggi">
+<li>Database, mail, archivio e ruoli dei team su misura</li>
+<li>Formazione per chi lo usa</li>
+</ul>
+<p class="unita" style="margin-top:16px">poi ogni mese</p>
 <ul class="lista">
 <li><span>Licenza</span><b>30 € a persona</b></li>
 <li><span>Infrastruttura</span><b>50 €</b></li>
 <li><span>Assistenza, 2 ore</span><b>160 €</b></li>
 </ul>
-<p class="unita" style="margin:10px 0 0">al mese · IVA esclusa</p>
+<p class="unita" style="margin:10px 0 0">IVA esclusa</p>
+<a class="tasto" href="strumento.html?v=assistenza&amp;motivo=azienda">Richiedi un incontro</a>
 </section>
 
 </div>
