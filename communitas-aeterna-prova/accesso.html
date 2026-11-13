@@ -49,7 +49,7 @@
   (function(){ try{
     var t=new URLSearchParams(location.search).get("torna")||""; if(t.indexOf("v=assistenza")<0) return;
     var m=(t.match(/[?&]motivo=([a-z_]+)/)||[])[1]||"";
-    var V={karma_yoga:"Partecipare al karma yoga",coscienza_tecnologia:"Ricevere assistenza tra coscienza e tecnologia",azienda:"Attivare la propria azienda",praticantato:"Praticantato",vicinati:"Vicinati",produttore:"Produttore",operatore:"Operatore",eventi:"Prossimi eventi",interviste:"Interviste"};
+    var V={karma_yoga:"Mettiti al servizio col Karma Yoga",coscienza_tecnologia:"Ricevere assistenza tra coscienza e tecnologia",azienda:"Attivare la propria azienda",praticantato:"Praticantato",vicinati:"Vicinati",produttore:"Produttore",operatore:"Operatore",eventi:"Prossimi eventi",interviste:"Interviste"};
     var d=document.createElement("div");
     d.style.cssText="max-width:520px;width:calc(100% - 32px);margin:16px auto 0;padding:14px 16px;border:1px solid rgba(212,175,106,.45);border-radius:14px;background:#1a2148;color:#F5F0E6;font:500 18px/1.45 'DM Sans',system-ui,sans-serif;text-align:center";
     var b=document.createElement("b"); b.style.color="#D4AF6A"; b.textContent=V[m]||"Assistenza comunitaria integrata";

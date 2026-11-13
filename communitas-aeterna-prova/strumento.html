@@ -2398,7 +2398,7 @@ function vCompra(){
    in chat e che poi rispondendo lì gli arriva in automatico» · «non scrivere i motivi come obblico, ma come possibilità» ·
    «il team può avere i messaggi fissati come richieste d assistenza a cui rispondere , ma mano che qualcuno risponde ,qieste vengono archiviate».
    Chi scrive non entra nel team: vede solo le sue richieste. Il team risponde dalla sua chat (richieste in cima, «Rispondi»). */
-var ASS_MOTIVI=[["vicinati","Vicinati"],["produttore","Produttore"],["operatore","Operatore"],["eventi","Prossimi eventi"],["interviste","Interviste"],["praticantato","Praticantato"],["karma_yoga","Partecipare al karma yoga"],["coscienza_tecnologia","Ricevere assistenza tra coscienza e tecnologia"],["azienda","Attivare la propria azienda"]]; /* 12/11 Gab, SQL 246 */
+var ASS_MOTIVI=[["vicinati","Vicinati"],["produttore","Produttore"],["operatore","Operatore"],["eventi","Prossimi eventi"],["interviste","Interviste"],["praticantato","Praticantato"],["karma_yoga","Mettiti al servizio col Karma Yoga"],["coscienza_tecnologia","Ricevere assistenza tra coscienza e tecnologia"],["azienda","Attivare la propria azienda"]]; /* 12/11 Gab, SQL 246 */
 function assMotivo(m){var x=ASS_MOTIVI.filter(function(a){return a[0]===m;})[0];return x?x[1]:"Senza motivo";}
 function assQuando(t){return giornoTm(t)+" · "+hhmm(t);}
 var ass={motivo:null,aperta:null,team:null,stat:false,rispondo:null};
