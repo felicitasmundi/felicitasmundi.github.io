@@ -1,0 +1,6 @@
+# Link gia' rotti il 14/11/2026, prima dei controlli automatici.
+# Stanno in pezzi interni dell'app che non si aprono da soli: non bloccano la pubblicazione.
+# Quando uno viene sistemato, si toglie la sua riga.
+communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/barra-piatto.html  -> antahkarana-soglia.html
+communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/dentro-orma-esempio.html  -> La%20Mia%20Orma.dc.html
+communitas-aeterna-prova/APP.FELICITASMUNDI/piatti/la-mia-orma-piatto.html  -> invito.html
