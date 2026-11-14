@@ -1,0 +1,24 @@
+name: Controlli prima di pubblicare
+
+# Gira a ogni modifica su main e su ogni proposta di modifica (pull request).
+# Non cambia nulla del sito: guarda soltanto e segnala con una X rossa se trova problemi.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  controlli:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Link interni e script
+        run: python3 .github/controlli/controlla.py
