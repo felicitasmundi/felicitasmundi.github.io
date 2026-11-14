@@ -22,3 +22,5 @@ jobs:
           node-version: 22
       - name: Link interni e script
         run: python3 .github/controlli/controlla.py
+      - name: L'app e' uguale ai suoi pezzi?
+        run: python3 .github/controlli/pezzi.py verifica

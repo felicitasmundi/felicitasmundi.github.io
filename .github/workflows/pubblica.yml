@@ -41,6 +41,9 @@ jobs:
       - name: Controlli (link interni e script)
         if: github.event_name != 'schedule'
         run: python3 .github/controlli/controlla.py
+      - name: L'app e' uguale ai suoi pezzi?
+        if: github.event_name != 'schedule'
+        run: python3 .github/controlli/pezzi.py verifica
       - name: Pages e' impostato su GitHub Actions?
         id: modo
         env:
@@ -64,9 +67,21 @@ jobs:
       - name: Prepara il sito e le pagine degli articoli
         run: |
           mkdir -p _sito
-          git ls-files -z | grep -zv '^\.github/' | xargs -0 cp --parents -t _sito
+          git ls-files -z | grep -zvE '^(\.github|sorgenti)/' | xargs -0 cp --parents -t _sito
           export FM_SUPABASE_CHIAVE=$(grep -oE 'sb_publishable_[A-Za-z0-9_-]+' "$FM_SUPABASE_CHIAVE_FILE" | head -1)
           python3 .github/controlli/giornale.py _sito
+
+      - name: Sito prova (ramo sito-prova, nascosto in /sito-prova/)
+        run: |
+          if git fetch --depth=1 origin sito-prova 2>/dev/null; then
+            mkdir -p _prova _sito/sito-prova
+            git --work-tree=_prova checkout FETCH_HEAD -- .
+            (cd _prova && find . -type f ! -path './.github/*' ! -path './sorgenti/*' ! -name CNAME -print0 | xargs -0 cp --parents -t ../_sito/sito-prova)
+            find _sito/sito-prova -name '*.html' -exec sed -i -E '0,/<head( [^>]*)?>/s##&<meta name="robots" content="noindex,nofollow">#' {} +
+            echo "Sito prova pubblicato in /sito-prova/"
+          else
+            echo "Nessun ramo sito-prova: niente sito prova"
+          fi
 
       - name: Serve pubblicare?
         id: serve

@@ -32,7 +32,8 @@ class Pagina(HTMLParser):
 
 def file_del_sito():
     out = subprocess.check_output(["git", "ls-files"]).decode().splitlines()
-    return [f for f in out if not f.startswith(".github/")]
+    # sorgenti/ sono i pezzi dell'app: da soli non sono pagine complete, si controllano rimessi insieme
+    return [f for f in out if not f.startswith((".github/", "sorgenti/"))]
 
 
 def link_noti():
