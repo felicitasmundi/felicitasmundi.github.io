@@ -1,0 +1,47 @@
+name: Sentinella
+
+# Ogni 2 ore guarda che le pagine principali si aprano e chiede al database
+# se qualche lavoro automatico o qualche mail e' fallita (funzione fm_salute, SQL 261).
+# Se qualcosa non va, il lavoro finisce con la X rossa e GitHub manda la mail «Run failed».
+on:
+  schedule:
+    - cron: "15 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guarda:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: communitas-aeterna-prova/comune/fm-statistiche.js
+          sparse-checkout-cone-mode: false
+      - name: Pagine principali e database
+        env:
+          FM_SUPABASE_URL: https://gfnveesogkfvkrdudpfg.supabase.co
+        run: |
+          problemi=0
+          for p in / /communitas-aeterna-prova/accoglienza.html /communitas-aeterna-prova/accesso.html \
+                   /communitas-aeterna-prova/strumento.html /communitas-aeterna-prova/piani.html \
+                   /communitas-aeterna-prova/praticantato.html /felicitas-festival-21-novembre-baratili/; do
+            c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "https://app.felicitasmundi.com$p")
+            echo "$c  $p"
+            [ "$c" = "200" ] || { echo "::error::La pagina $p non si apre ($c)"; problemi=1; }
+          done
+          chiave=$(grep -oE 'sb_publishable_[A-Za-z0-9_-]+' communitas-aeterna-prova/comune/fm-statistiche.js | head -1)
+          r=$(curl -s --max-time 30 -X POST "$FM_SUPABASE_URL/rest/v1/rpc/fm_salute" \
+                -H "apikey: $chiave" -H "Authorization: Bearer $chiave" -H "Content-Type: application/json" -d '{}')
+          echo "database: $r"
+          l=$(echo "$r" | python3 -c "import json,sys;d=json.load(sys.stdin);d=d[0] if isinstance(d,list) else d;print(d['lavori_falliti'])" 2>/dev/null || echo "?")
+          c=$(echo "$r" | python3 -c "import json,sys;d=json.load(sys.stdin);d=d[0] if isinstance(d,list) else d;print(d['chiamate_fallite'])" 2>/dev/null || echo "?")
+          if [ "$l" = "?" ]; then
+            echo "::warning::Il database non ha risposto alla sentinella (SQL 261 lanciata?)"
+          else
+            [ "$l" = "0" ] || { echo "::error::Lavori automatici falliti nelle ultime 2 ore: $l"; problemi=1; }
+            [ "$c" = "0" ] || { echo "::error::Mail o chiamate automatiche fallite nelle ultime 2 ore: $c"; problemi=1; }
+          fi
+          exit $problemi
