@@ -3216,8 +3216,14 @@ function gzArticolo(x,firme,apre){
   var occ=(el?el.charAt(0).toUpperCase()+el.slice(1)+" · ":"")+(o.orma_madre_id===FEST_ID?"Felicitas Festival · ":"")+(o.visibilita==="pubblico"?"🌐 Per tutti":"🏡 Solo per i vicinati");
   var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="gz-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
   var t=par.map(function(p){return '<p class="gz-t">'+esc(p).replace(/«([^«»]{1,800})»/g,"<strong>«$1»</strong>")+'</p>';}).join("");
-  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+apriCerv(o)+visHTML(o)+'</article>';
+  return '<article class="gz-lastra"'+(el?' style="--el:'+GZ_EL[el]+'"':'')+'><p class="gz-occ"><i></i>'+esc(occ)+'</p>'+(o.titolo?(apre?'<h2>':'<h3>')+esc(o.titolo)+(apre?'</h2>':'</h3>'):'')+imm+t+linkHTML(link)+mediaHTML(o,firme)+apriCerv(o)+gzCondividiB(o)+visHTML(o)+'</article>';
 }
+/* 14/11 · «Condividi» solo sugli articoli per tutti: la pagina giornale/<id>.html (SQL 260, si rigenera ogni mezz'ora) */
+function gzCondividiB(o){return o&&o.id&&o.visibilita==="pubblico"?'<button type="button" class="mini" data-gz-cond="'+esc(o.id)+'" data-gz-cond-t="'+esc(o.titolo||"")+'" style="margin-top:8px">Condividi</button>':'';}
+function gzCondividi(id,tit){var u="https://app.felicitasmundi.com/giornale/"+encodeURIComponent(id)+".html";
+  if(navigator.share){navigator.share({title:tit||"FelicitasMundi",url:u}).catch(function(){});return;}
+  window.open("https://wa.me/?text="+encodeURIComponent((tit?tit+" ":"")+u),"_blank","noopener");}
+document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-gz-cond]");if(!b)return;gzCondividi(b.getAttribute("data-gz-cond"),b.getAttribute("data-gz-cond-t"));});
 /* elemento e Festival si leggono a parte: se lo SQL 163 non c'è ancora, restano oro */
 function gzDettagli(tutti,firme){
   var ids=tutti.map(function(x){return x.o.id;});if(!db||!ids.length||tutti.gzLetti)return;tutti.gzLetti=1;
