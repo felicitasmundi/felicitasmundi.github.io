@@ -3299,12 +3299,12 @@ function g4Riempi(da,a,questo){
   db.from("orme").select(CAMPI+",link").eq("tipo","diretta").lt("momento",new Date(a).toISOString()).order("momento",{ascending:false}).limit(1).then(function(r){
     var o=r&&!r.error&&r.data&&r.data[0];if(!o||!ok())return;
     var au=(o.orma_file||[]).filter(function(f){return /audio/.test(f.tipo||"")||/\.(m4a|mp3|ogg|webm|wav|aac)$/i.test(f.nome||"");});
-    return firmaURL(au).then(function(fm){if(!ok())return;var u=au.length&&fm[au[0].indirizzo];
+    return firmaURL(au).then(function(fm){if(!ok())return;var u=au.length&&fm[au[0].indirizzo];if(!u){$("#g4-radio").innerHTML="";return;}
       var onda='<div class="g4-onda" aria-hidden="true">'+[30,60,45,90,70,40,80,55,35,75,50,65,30,85,45,60].map(function(h){return '<i style="height:'+h+'%"></i>';}).join("")+'</div>';
       $("#g4-radio").innerHTML='<div class="g4-t g4-radio g4-sale"><div class="in"><div class="g4-occ">Radio Felicitas · '+esc(new Date(o.inizio_il||o.momento).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</div>'+
         (o.titolo?'<h2>'+esc(o.titolo)+'</h2>':'')+(o.contenuto?'<p>'+esc(String(o.contenuto).slice(0,600))+'</p>':'')+onda+
         (u?'<audio controls preload="none" src="'+esc(u)+'"></audio>':'')+
-        '<a class="g4-tasto" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'&c=10182300">▶ Ascolta</a>'+visCanc(o)+'</div></div>';legaVis($("#g4-radio"));g4Sale();});
+        visCanc(o)+'</div></div>';legaVis($("#g4-radio"));g4Sale();});
   },function(){});
   /* il Festival: cosa serve, dagli articoli pubblici del Festival (SQL 76) */
   if($("#g4-serve"))db.from("orme").select("id").eq("tipo","articolo").eq("visibilita","pubblico").eq("orma_madre_id",FEST_ID).limit(5).then(function(r){
@@ -3504,7 +3504,7 @@ function vGiornale(){
   c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
   var questo=giorno;
   var artRpc=db?db.rpc("fm_giornale_articoli",{p_da:new Date(da).toISOString(),p_a:new Date(a).toISOString()}).then(function(r){return r&&!r.error&&Array.isArray(r.data)?r.data:null;},function(){return null;}):Promise.resolve(null);
-  Promise.all([ormeDelGiorno(da,a),lezioni(),artRpc]).then(function(v){
+  Promise.all([ormeDelGiorno(da,a),lezioni(),artRpc,dirette()]).then(function(v){
     if(vista!=="giornale"||giorno!==questo)return;
     var voci=v[0].map(function(o){return {o:o,t:new Date(o.inizio_il||o.momento).getTime()};}).filter(function(x){return x.t>=da&&x.t<a;});
     v[1].forEach(function(l){var t=new Date(l.inizio_il).getTime();if(t>=da&&t<a)voci.push({l:l,t:t});});
@@ -3559,12 +3559,15 @@ function legaVis(c){c.querySelectorAll("[data-vis]").forEach(function(b){b.oncli
   q.then(function(r){if(r&&r.error){alert(errore(r.error));b.disabled=false;return;}cache.obiettivi=null;disegna();},function(x){b.disabled=false;alert(errore(x));});};});
   c.querySelectorAll("[data-canc]").forEach(function(b){b.onclick=function(){if(!confirm("Cancellare? Non si torna indietro."))return;b.disabled=true;
     db.rpc("fm_giornale_elimina",{p_id:b.getAttribute("data-canc")}).then(function(r){if(r&&r.error){alert(errore(r.error));b.disabled=false;return;}disegna();},function(x){b.disabled=false;alert(errore(x));});};});}
+function direttaInOnda(id){var ora=Date.now();return (cache.dirette||[]).some(function(d){return d.id===id&&(!d.inizio_il||new Date(d.inizio_il).getTime()<=ora);});}
 function voce(x,firme){
   if(x.l){var l=x.l;return '<div class="onda"><b>Lezione · ore '+hhmm(l.inizio_il)+'</b><p>'+esc(l.titolo)+'</p>'+(l.sottotitolo?'<span>'+esc(l.sottotitolo)+'</span>':'')+(l.luogo?'<span>'+esc(l.luogo)+'</span>':'')+(l.link?linkHTML(l.link):'')+'</div>';}
   var o=x.o,chi=nomi[o.persona_id]||"",link=o.link||primoLink(o.contenuto),testo=String(o.contenuto||"");
   if(!o.link&&link)testo=testo.replace(link,"").trim();
   var firma=hhmm(x.t)+" · "+esc(TIPO_NOME[o.tipo]||o.tipo)+(chi?" · "+esc(chi):"");
-  if(o.tipo==="diretta")return '<a class="onda" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'"><b>Diretta · ore '+hhmm(x.t)+'</b><p>'+esc(o.titolo||testo)+'</p>'+(o.titolo&&testo?'<span>'+esc(testo)+'</span>':'')+'<span>entra ›</span></a>';
+  if(o.tipo==="diretta"&&direttaInOnda(o.id))return '<a class="onda" href="diretta-bozza.html?puntata='+encodeURIComponent(o.id)+'"><b>Diretta · ore '+hhmm(x.t)+'</b><p>'+esc(o.titolo||testo)+'</p>'+(o.titolo&&testo?'<span>'+esc(testo)+'</span>':'')+'<span>entra ›</span></a>';
+  /* 14/11 Gab: «rimane la diretta non la stanza dove si è fatta la diretta» → finita: titolo, testo e registrazione, senza la sala */
+  if(o.tipo==="diretta")return '<div class="onda"><b>Diretta · ore '+hhmm(x.t)+'</b><p>'+esc(o.titolo||testo)+'</p>'+(o.titolo&&testo?'<span>'+esc(testo)+'</span>':'')+mediaHTML(o,firme)+visHTML(o)+'</div>';
   if(o.tipo==="articolo"){var lungo=testo.length>320,tutto=apriA[o.id];
     var imm=o.immagine_url&&/^(https:\/\/|giornale\/img\/)[^\s"'<>]+$/.test(o.immagine_url)?'<img class="art-img" src="'+esc(o.immagine_url)+'" alt="'+esc(o.immagine_alt||"")+'" decoding="async">':'';
     return '<article class="art">'+imm+(o.titolo?'<h5>'+esc(o.titolo)+'</h5>':'')+'<p class="firma">'+firma+'</p>'+linkHTML(link)+mediaHTML(o,firme)+
