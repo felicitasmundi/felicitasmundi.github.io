@@ -1,0 +1,87 @@
+name: Pubblica il sito
+
+# Quando GitHub Pages e' impostato su «GitHub Actions» (Settings › Pages › Source),
+# questo lavoro pubblica il sito: prima i controlli, poi le pagine degli articoli
+# pubblici del Giornale, poi la pubblicazione.
+# Finche' Pages resta su «Deploy from a branch», controlla soltanto e non pubblica nulla.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "7,37 * * * *"   # ogni mezz'ora: articoli resi pubblici nel frattempo
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  FM_SUPABASE_URL: https://gfnveesogkfvkrdudpfg.supabase.co
+  # chiave PUBBLICA, la stessa che l'app usa gia' nelle pagine; non da' accesso a nulla di riservato
+  FM_SUPABASE_CHIAVE_FILE: communitas-aeterna-prova/comune/fm-statistiche.js
+
+jobs:
+  controlla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      modo: ${{ steps.modo.outputs.modo }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        if: github.event_name != 'schedule'
+        with:
+          node-version: 22
+      # i controlli girano a ogni modifica; quelli della mezz'ora guardano solo gli articoli
+      - name: Controlli (link interni e script)
+        if: github.event_name != 'schedule'
+        run: python3 .github/controlli/controlla.py
+      - name: Pages e' impostato su GitHub Actions?
+        id: modo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          modo=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq .build_type 2>/dev/null || echo sconosciuto)
+          echo "Pages: $modo"
+          echo "modo=$modo" >> "$GITHUB_OUTPUT"
+
+  pubblica:
+    needs: controlla
+    if: needs.controlla.outputs.modo == 'workflow'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepara il sito e le pagine degli articoli
+        run: |
+          mkdir -p _sito
+          git ls-files -z | grep -zv '^\.github/' | xargs -0 cp --parents -t _sito
+          export FM_SUPABASE_CHIAVE=$(grep -oE 'sb_publishable_[A-Za-z0-9_-]+' "$FM_SUPABASE_CHIAVE_FILE" | head -1)
+          python3 .github/controlli/giornale.py _sito
+
+      - name: Serve pubblicare?
+        id: serve
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "si=1" >> "$GITHUB_OUTPUT"; exit 0; fi
+          nuova=$(python3 -c "import json;print(json.load(open('_sito/giornale/elenco.json'))['impronta'])" 2>/dev/null || echo nessuna)
+          online=$(curl -fsS https://app.felicitasmundi.com/giornale/elenco.json 2>/dev/null | python3 -c "import json,sys;print(json.load(sys.stdin)['impronta'])" 2>/dev/null || echo nessuna)
+          echo "articoli: nuova=$nuova online=$online"
+          if [ "$nuova" != "$online" ]; then echo "si=1" >> "$GITHUB_OUTPUT"; fi
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.serve.outputs.si == '1'
+        with:
+          path: _sito
+
+      - id: deploy
+        if: steps.serve.outputs.si == '1'
+        uses: actions/deploy-pages@v4
