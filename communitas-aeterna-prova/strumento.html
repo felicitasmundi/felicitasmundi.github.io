@@ -2478,21 +2478,43 @@ function vAssistenza(){
   var qm0=null;try{qm0=new URLSearchParams(location.search).get("motivo");}catch(e){}
   if(qm0&&!ASS_MOTIVI.some(function(a){return a[0]===qm0;}))qm0=null;
   if(fuori){location.replace("accesso.html?torna="+encodeURIComponent("strumento.html?v=assistenza"+(qm0?"&motivo="+qm0:"")));return;}
-  c.innerHTML='<h2 class="az-tit">Assistenza</h2><div class="az-filo"></div>'+
-    '<p class="ass-int">Ti risponde il team Assistenza comunitaria integrata.</p>'+
-    '<p class="az-l" id="ass-ml">Di cosa vuoi sapere? <span class="ass-fac">(facoltativo)</span></p>'+
-    '<div class="ass-chips" role="group" aria-labelledby="ass-ml">'+ASS_MOTIVI.map(function(a){return '<button type="button" class="ass-chip" data-mot="'+a[0]+'" aria-pressed="false">'+esc(a[1])+'</button>';}).join("")+'</div>'+
+  /* 15/11 Gab: una finestra per ogni voce, con le altre scelte sotto. Righe verbatim da Piani e accoglienza. */
+  var RIGHE={karma_yoga:"Dai il tuo tempo alla comunità: ricevi ospitalità, formazione e una rete di persone.",
+    praticantato:"Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere. Percorso online ogni lunedì alle 19 con Gabriele Dettori.",
+    coscienza_tecnologia:"Prima di scegliere uno strumento, capire chi lo usa e perché.",
+    azienda:"Il tuo gestionale, collegato a FelicitasMundi.",
+    vicinati:"Aderisci col vicinato in cui vivi, oppure proponiti per entrare in un vicinato."};
+  var ORDINE=["karma_yoga","praticantato","coscienza_tecnologia","azienda","vicinati","produttore","operatore","eventi","interviste"];
+  c.innerHTML='<div id="ass-testa"></div><div id="ass-form" hidden>'+
     '<label class="az-l" for="ass-t">Il tuo messaggio</label><textarea id="ass-t" maxlength="2000" style="min-height:160px"></textarea>'+
     (fuori?'<label class="az-l" for="ass-mail">La tua mail</label><input type="email" id="ass-mail" maxlength="254" autocomplete="email" inputmode="email">'+
       '<p class="ass-nota">Dopo «Invia» entri in Felicitas con questa mail: il messaggio parte quando sei dentro.</p>':'')+
-    '<p style="margin-top:18px"><button class="btn pieno az-invia" type="button" id="ass-invia">Invia all’Assistenza comunitaria integrata</button></p><p class="az-esito" id="ass-esito" aria-live="polite"></p>'+
+    '<p style="margin-top:18px"><button class="btn pieno az-invia" type="button" id="ass-invia">Invia all’Assistenza comunitaria integrata</button></p><p class="az-esito" id="ass-esito" aria-live="polite"></p></div>'+
+    '<div id="ass-coda"></div>'+
     (fuori?'':'<h3 class="ass-h">Le mie richieste</h3><div id="ass-mie"><p class="nota">Un momento…</p></div>')+
     '<p><button class="mini" data-vai="azione">‹ Espandi</button></p>';
   legaVai(c);
-  c.querySelectorAll("[data-mot]").forEach(function(b){b.onclick=function(){var m=b.getAttribute("data-mot");ass.motivo=ass.motivo===m?null:m;
-    c.querySelectorAll("[data-mot]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-mot")===ass.motivo));});};});
-  /* 12/11: dai tasti di home, Piani e Praticantato la voce arriva già scelta (strumento.html?v=assistenza&motivo=…) */
-  if(qm0){ass.motivo=qm0;c.querySelectorAll("[data-mot]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-mot")===qm0));});}
+  function scelta(){
+    var t=$("#ass-testa"),f=$("#ass-form"),k=$("#ass-coda"),m=ass.motivo;
+    if(!m){
+      t.innerHTML='<h2 class="az-tit">Di cosa hai bisogno?</h2><div class="az-filo"></div><p class="ass-int">Tocca una scelta: si apre la sua finestra.</p>'+
+        '<div class="ass-griglia"><button type="button" class="ass-sc su" data-vai="azione"><b>Sei già in un team?</b><span>Scrivi nella chat del tuo team ›</span></button>'+
+        ORDINE.map(function(x){return '<button type="button" class="ass-sc" data-mot="'+x+'"><b>'+esc(assMotivo(x))+'</b>'+(RIGHE[x]?'<span>'+esc(RIGHE[x])+'</span>':'')+'</button>';}).join("")+'</div>';
+      f.hidden=true;k.innerHTML="";
+    }else{
+      t.innerHTML='<p><button type="button" class="mini" id="ass-tutte">‹ Tutte le scelte</button></p><h2 class="az-tit">'+esc(assMotivo(m))+'</h2><div class="az-filo"></div>'+
+        (RIGHE[m]?'<p class="ass-int">'+esc(RIGHE[m])+'</p>':'')+'<p class="ass-int">Ti risponde il team Assistenza comunitaria integrata.</p>';
+      f.hidden=false;
+      k.innerHTML=(m==="karma_yoga"?'<button type="button" class="ass-gia" data-vai="azione"><b>Sei già nel Karma Yoga?</b> Scrivi nella chat del tuo team ›</button>':'')+
+        '<p class="az-l">Altre scelte</p><div class="ass-chips">'+ORDINE.filter(function(x){return x!==m;}).map(function(x){return '<button type="button" class="ass-chip" data-mot="'+x+'">'+esc(assMotivo(x))+'</button>';}).join("")+'</div>';
+    }
+    legaVai(t);legaVai(k);
+    c.querySelectorAll("#ass-testa [data-mot],#ass-coda [data-mot]").forEach(function(b){b.onclick=function(){ass.motivo=b.getAttribute("data-mot");scelta();window.scrollTo(0,0);};});
+    var tu=$("#ass-tutte");if(tu)tu.onclick=function(){ass.motivo=null;scelta();window.scrollTo(0,0);};
+  }
+  /* 12/11: dai tasti di home, Piani e Praticantato la voce arriva già scelta (?motivo=): si apre la sua finestra */
+  if(qm0)ass.motivo=qm0;
+  scelta();
   $("#ass-invia").onclick=function(){var b=this,e=$("#ass-esito"),t=$("#ass-t").value.trim();if(!t){e.textContent="Scrivi il messaggio.";return;}
     if(fuori){var ml=$("#ass-mail").value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ml)){e.textContent="Scrivi la tua mail.";return;}
       b.disabled=true;e.textContent="Un momento…";
@@ -2509,8 +2531,7 @@ function vAssistenza(){
       if(mo&&nuovi.indexOf(mo)>-1&&(!r||r.error||r.data!=="ok")){var et=(ASS_MOTIVI.filter(function(a){return a[0]===mo;})[0]||[,""])[1];return manda("["+et+"] "+t,null);}
       return r;}).then(function(r){b.disabled=false;
       if(r&&r.error){e.textContent="Non è partita. Si può riprovare.";return;}
-      if(r&&r.data==="ok"){e.textContent="Inviata. Quando ti rispondiamo arriva una notifica.";$("#ass-t").value="";ass.motivo=null;
-        c.querySelectorAll("[data-mot]").forEach(function(x){x.setAttribute("aria-pressed","false");});assMie();}
+      if(r&&r.data==="ok"){e.textContent="Inviata. Quando ti rispondiamo arriva una notifica.";$("#ass-t").value="";assMie();}
       else e.textContent=(r&&r.data)||"";},function(){b.disabled=false;e.textContent="Non è partita. Si può riprovare.";});};
   if(fuori)return;
   /* appena entrati: i messaggi scritti prima di entrare (SQL 167) partono adesso */
@@ -2625,6 +2646,7 @@ var ASS_CSS='.ass-nota{font-size:16px;color:#c9c3d6;margin:8px 0 0}#ass-mail{wid
 '#ass-risp{width:100%;box-sizing:border-box;min-height:110px;background:#232c5c;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px "DM Sans",system-ui,sans-serif}'+
 '.ass-tab{overflow-x:auto}.ass-tab table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}.ass-tab th,.ass-tab td{text-align:left;padding:6px 4px;border-bottom:1px solid rgba(212,175,106,.3)}.ass-tab th{color:#D4AF6A;font-weight:600}'+
 /* 15/11 card scorrevoli */'.ass-seg{display:flex;background:rgba(245,240,230,.08);border-radius:12px;padding:3px;margin:10px 0 14px}.ass-seg button{flex:1;border:0;background:none;color:#c9c3d6;font:600 17px "DM Sans",system-ui,sans-serif;padding:10px 6px;border-radius:10px;cursor:pointer}.ass-seg button[aria-selected="true"]{background:#D4AF6A;color:#1A1405}.ass-seg button:focus-visible{outline:2px solid #D4AF6A;outline-offset:2px}.ass-giro{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -4px;padding:0 4px 4px}.ass-giro::-webkit-scrollbar{display:none}.ass-c{flex:0 0 88%;scroll-snap-align:center;background:#1a2148;border:1px solid rgba(212,175,106,.35);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;min-width:0}.ass-giro .ass-c:only-child{flex-basis:100%}.ass-st{align-self:flex-start;font-size:15px;font-weight:700;padding:4px 12px;border-radius:99px;color:#1A1405;text-transform:none;letter-spacing:0}.ass-st.da{background:#E07A55}.ass-st.ok{background:#8DBF5E}.ass-chi b{display:block;font-size:21px;line-height:1.2}.ass-chi small{display:block;font-size:16px;color:#c9c3d6;margin-top:3px}.ass-mo{align-self:flex-start;font-size:15px;border:1px solid #D4AF6A;color:#D4AF6A;padding:3px 11px;border-radius:99px}.ass-tx{font-size:19px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;flex:1}.ass-rx{border-left:4px solid #8DBF5E;padding:8px 12px;background:rgba(141,191,94,.08);border-radius:8px;font-size:18px;white-space:pre-wrap;overflow-wrap:anywhere}.ass-bt{border:0;border-radius:99px;padding:14px;font:700 19px "DM Sans",system-ui,sans-serif;background:#D4AF6A;color:#1A1405;cursor:pointer}.ass-bt.vuoto{background:none;border:2px solid #D4AF6A;color:#D4AF6A}.ass-bt:focus-visible{outline:2px solid #F5F0E6;outline-offset:2px}.ass-punti{display:flex;justify-content:center;gap:7px;margin-top:12px}.ass-punti i{width:8px;height:8px;border-radius:50%;background:rgba(245,240,230,.3)}.ass-punti i.on{background:#D4AF6A}'+
+'.ass-griglia{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 18px}.ass-sc{display:flex;flex-direction:column;gap:6px;text-align:left;background:#1a2148;border:1px solid rgba(214,181,108,.35);border-radius:18px;padding:14px;color:#F5F0E6;cursor:pointer;font:inherit;min-height:84px}.ass-sc b{font-size:18px;line-height:1.25}.ass-sc span{font-size:16px;line-height:1.35;color:#c9c3d6}.ass-sc.su{grid-column:1/-1;border-color:#6FA8D6;background:rgba(111,168,214,.12)}.ass-sc.su b{color:#6FA8D6}.ass-sc:focus-visible,.ass-gia:focus-visible{outline:2px solid #D4AF6A;outline-offset:2px}.ass-gia{display:block;width:100%;text-align:left;background:rgba(111,168,214,.12);border:1px solid #6FA8D6;border-radius:14px;padding:12px 14px;margin:18px 0 6px;color:#F5F0E6;font:inherit;font-size:17px;line-height:1.35;cursor:pointer}.ass-gia b{color:#6FA8D6}'+
 '/* 15/11 riordino */.ass-st.pr{background:#6FA8D6}.ass-bis{font-size:20px;font-weight:700;color:#D4AF6A;line-height:1.3}.ass-seg-da{font-size:17px;color:#6FA8D6;font-weight:600}.ass-mia{margin:0 0 14px}.ass-dopo{display:block;font-size:16px;color:#c9c3d6}';
 document.head.insertAdjacentHTML("beforeend","<style>"+ASS_CSS+"</style>");
 
