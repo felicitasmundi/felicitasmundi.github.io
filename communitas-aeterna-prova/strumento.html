@@ -2488,19 +2488,35 @@ function assTeam(id){
   .then(function(t){if(t!==id||team.id!==id)return;assAperte();});
 }
 function assAperte(){
+  /* 15/11/2026, Gab: «card su slide.. scorrevole con le scritte da rispondere, risposto» → due schede e una card per richiesta */
   var f=$("#tc-ass");if(!f||ass.team!==team.id)return;
   if(ass.rispondo&&document.activeElement&&document.activeElement.id==="ass-risp")return;
-  db.rpc("fm_assistenza_aperte").then(function(r){var f=$("#tc-ass");if(!f||ass.team!==team.id)return;
+  if(!ass.scheda)ass.scheda="da";
+  Promise.all([db.rpc("fm_assistenza_aperte"),ass.scheda==="fatte"?db.rpc("fm_assistenza_risposte",{p_quante:30}):Promise.resolve(null)]).then(function(v){
+    var f=$("#tc-ass");if(!f||ass.team!==team.id)return;
     if(ass.rispondo&&document.activeElement&&document.activeElement.id==="ass-risp")return;
-    var l=(r&&!r.error&&r.data)||[];
-    f.innerHTML='<div class="ass-cima"><b>Richieste d\'assistenza · '+l.length+'</b><button type="button" class="mini" id="ass-stat-b">Statistiche</button></div>'+
-      (l.length?'':'<p class="nota">Nessuna richiesta in attesa.</p>')+
-      l.map(function(x){var ri=ass.rispondo===x.richiesta_id;
-        return '<div class="ass-q" data-q="'+esc(x.richiesta_id)+'"><div class="ass-qt"><b>'+esc(x.nome||"Una persona")+'</b>'+(x.motivo?' · '+esc(assMotivo(x.motivo)):'')+'<small>'+esc(assQuando(x.ultima_il))+'</small></div>'+
-          '<div class="ass-qx">'+esc(x.ultimo_testo||"")+'</div>'+
-          (ri?'<textarea id="ass-risp" maxlength="2000" aria-label="La risposta"></textarea><div class="ass-qb"><button type="button" class="btn pieno" id="ass-risp-b">Manda la risposta</button><button type="button" class="mini" id="ass-risp-no">Annulla</button></div><p class="tc-err" id="ass-risp-e" aria-live="polite"></p>'
-              :'<button type="button" class="btn pieno ass-rb" data-risp="'+esc(x.richiesta_id)+'">Rispondi</button>')+'</div>';}).join("")+
+    var r=v[0],l=(r&&!r.error&&r.data)||[],rr=v[1],lf=(rr&&!rr.error&&rr.data)||[];
+    var da=ass.scheda==="da",lista=da?l:lf;
+    function card(x){
+      if(!da)return '<div class="ass-c"><span class="ass-st ok">Risposto</span><div class="ass-chi"><b>'+esc(x.nome||"Una persona")+'</b><small>'+esc(assQuando(x.risposto_il))+'</small></div>'+
+        (x.motivo?'<span class="ass-mo">'+esc(assMotivo(x.motivo))+'</span>':'')+
+        '<div class="ass-tx">'+esc(x.richiesta||"")+'</div>'+(x.risposta?'<div class="ass-rx">'+esc(x.risposta)+'</div>':'')+'</div>';
+      var ri=ass.rispondo===x.richiesta_id;
+      return '<div class="ass-c" data-q="'+esc(x.richiesta_id)+'"><span class="ass-st da">Da rispondere</span><div class="ass-chi"><b>'+esc(x.nome||"Una persona")+'</b><small>'+esc(assQuando(x.ultima_il))+'</small></div>'+
+        (x.motivo?'<span class="ass-mo">'+esc(assMotivo(x.motivo))+'</span>':'')+
+        '<div class="ass-tx">'+esc(x.ultimo_testo||"")+'</div>'+
+        (ri?'<textarea id="ass-risp" maxlength="2000" aria-label="La risposta" placeholder="La risposta"></textarea><button type="button" class="ass-bt" id="ass-risp-b">Manda la risposta</button><button type="button" class="ass-bt vuoto" id="ass-risp-no">Annulla</button><p class="tc-err" id="ass-risp-e" aria-live="polite"></p>'
+            :'<button type="button" class="ass-bt" data-risp="'+esc(x.richiesta_id)+'">Rispondi</button>')+'</div>';
+    }
+    f.innerHTML='<div class="ass-cima"><b>Assistenza comunitaria integrata</b><button type="button" class="mini" id="ass-stat-b">Statistiche</button></div>'+
+      '<div class="ass-seg" role="tablist"><button type="button" role="tab" data-sch="da" aria-selected="'+da+'">Da rispondere · '+l.length+'</button><button type="button" role="tab" data-sch="fatte" aria-selected="'+(!da)+'">Risposte</button></div>'+
+      (lista.length?'<div class="ass-giro" id="ass-giro">'+lista.map(card).join("")+'</div>'+(lista.length>1?'<div class="ass-punti" aria-hidden="true">'+lista.map(function(x,k){return '<i'+(k===0?' class="on"':'')+'></i>';}).join("")+'</div>':'')
+        :'<p class="nota">'+(da?'Nessuna richiesta in attesa.':'Nessuna risposta ancora.')+'</p>')+
       (ass.stat?'<div id="ass-stat"><p class="nota">Un momento…</p></div>':'');
+    f.querySelectorAll("[data-sch]").forEach(function(b){b.onclick=function(){ass.scheda=b.getAttribute("data-sch");ass.rispondo=null;assAperte();};});
+    var g=$("#ass-giro");if(g){var pu=f.querySelectorAll(".ass-punti i");
+      g.addEventListener("scroll",function(){var w=g.firstElementChild?g.firstElementChild.offsetWidth+12:1,k=Math.round(g.scrollLeft/w);pu.forEach(function(p,n){p.className=n===k?"on":"";});},{passive:true});
+      if(ass.rispondo){var c=g.querySelector('[data-q="'+ass.rispondo+'"]');if(c)g.scrollLeft=c.offsetLeft-g.offsetLeft-18;}}
     f.querySelectorAll("[data-risp]").forEach(function(b){b.onclick=function(){ass.rispondo=b.getAttribute("data-risp");assAperte();setTimeout(function(){var t=$("#ass-risp");if(t)t.focus();},300);};});
     var no=$("#ass-risp-no");if(no)no.onclick=function(){ass.rispondo=null;if(document.activeElement)document.activeElement.blur();assAperte();};
     var ok=$("#ass-risp-b");if(ok)ok.onclick=function(){var t=$("#ass-risp").value.trim(),e=$("#ass-risp-e");if(!t){e.textContent="Scrivi la risposta.";return;}
@@ -2531,7 +2547,8 @@ var ASS_CSS='.ass-nota{font-size:16px;color:#c9c3d6;margin:8px 0 0}#ass-mail{wid
 '.ass-q{border-top:1px solid rgba(212,175,106,.3);padding-top:10px;display:grid;gap:6px}.ass-qt{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}.ass-qt small{margin-left:auto}'+
 '.ass-qx{white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px}.ass-rb{justify-self:start}.ass-qb{display:flex;gap:10px;align-items:center;flex-wrap:wrap}'+
 '#ass-risp{width:100%;box-sizing:border-box;min-height:110px;background:#232c5c;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px "DM Sans",system-ui,sans-serif}'+
-'.ass-tab{overflow-x:auto}.ass-tab table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}.ass-tab th,.ass-tab td{text-align:left;padding:6px 4px;border-bottom:1px solid rgba(212,175,106,.3)}.ass-tab th{color:#D4AF6A;font-weight:600}';
+'.ass-tab{overflow-x:auto}.ass-tab table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}.ass-tab th,.ass-tab td{text-align:left;padding:6px 4px;border-bottom:1px solid rgba(212,175,106,.3)}.ass-tab th{color:#D4AF6A;font-weight:600}'+
+/* 15/11 card scorrevoli */'.ass-seg{display:flex;background:rgba(245,240,230,.08);border-radius:12px;padding:3px;margin:10px 0 14px}.ass-seg button{flex:1;border:0;background:none;color:#c9c3d6;font:600 17px "DM Sans",system-ui,sans-serif;padding:10px 6px;border-radius:10px;cursor:pointer}.ass-seg button[aria-selected="true"]{background:#D4AF6A;color:#1A1405}.ass-seg button:focus-visible{outline:2px solid #D4AF6A;outline-offset:2px}.ass-giro{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -4px;padding:0 4px 4px}.ass-giro::-webkit-scrollbar{display:none}.ass-c{flex:0 0 88%;scroll-snap-align:center;background:#1a2148;border:1px solid rgba(212,175,106,.35);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;min-width:0}.ass-giro .ass-c:only-child{flex-basis:100%}.ass-st{align-self:flex-start;font-size:15px;font-weight:700;padding:4px 12px;border-radius:99px;color:#1A1405;text-transform:none;letter-spacing:0}.ass-st.da{background:#E07A55}.ass-st.ok{background:#8DBF5E}.ass-chi b{display:block;font-size:21px;line-height:1.2}.ass-chi small{display:block;font-size:16px;color:#c9c3d6;margin-top:3px}.ass-mo{align-self:flex-start;font-size:15px;border:1px solid #D4AF6A;color:#D4AF6A;padding:3px 11px;border-radius:99px}.ass-tx{font-size:19px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;flex:1}.ass-rx{border-left:4px solid #8DBF5E;padding:8px 12px;background:rgba(141,191,94,.08);border-radius:8px;font-size:18px;white-space:pre-wrap;overflow-wrap:anywhere}.ass-bt{border:0;border-radius:99px;padding:14px;font:700 19px "DM Sans",system-ui,sans-serif;background:#D4AF6A;color:#1A1405;cursor:pointer}.ass-bt.vuoto{background:none;border:2px solid #D4AF6A;color:#D4AF6A}.ass-bt:focus-visible{outline:2px solid #F5F0E6;outline-offset:2px}.ass-punti{display:flex;justify-content:center;gap:7px;margin-top:12px}.ass-punti i{width:8px;height:8px;border-radius:50%;background:rgba(245,240,230,.3)}.ass-punti i.on{background:#D4AF6A}';
 document.head.insertAdjacentHTML("beforeend","<style>"+ASS_CSS+"</style>");
 
 /* OGGI */
