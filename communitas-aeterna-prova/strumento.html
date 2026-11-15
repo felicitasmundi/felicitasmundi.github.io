@@ -23,7 +23,7 @@
 <script src="comune/fm-attesa.js?v=11082140"></script>
 <script src="comune/fm-video.js?v=10221330"></script>
 <script src="comune/fm-installa.js?v=11020740"></script>
-<script src="comune/fm-notifiche.js?v=11081800"></script>
+<script src="comune/fm-notifiche.js?v=11150300"></script>
 <link rel="stylesheet" href="comune/libro-cervello.css?v=11082225">
 <script src="comune/libro-cervello.js?v=11092100"></script>
 <script src="comune/indice-link.js?v=11150020"></script>
@@ -5094,10 +5094,77 @@ function finestraPraticantato(){
   v.querySelector("a.t").onclick=segna;
   try{v.querySelector("#fp-chiudi").focus();}catch(e){}
 }
+/* 15/11 · la campanella con il numerino (Gab 15/11 01:54Z: «Si campanella con numerino»). Gli avvisi sono quelli di notifiche_coda (SQL 117),
+   letti con fm_miei_avvisi / fm_avvisi_da_leggere / fm_avvisi_letti (SQL 267). Finché la 267 non c'è, la campanella non si vede.
+   Solo per chi è entrato. Aprendo l'elenco gli avvisi si segnano letti e il numerino sparisce; i nuovi restano col punto d'oro. */
+var cmp={timer:null,ok:false};
+function campanella(){
+  var alto=document.getElementById("alto");
+  if(!alto)return;
+  var b=document.getElementById("cmp-b");
+  if(!io.id||!db){if(b)b.remove();return;}
+  if(!document.getElementById("cmp-css")){var st=document.createElement("style");st.id="cmp-css";st.textContent='#cmp-b{position:relative;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(212,175,106,.6);background:#1a2148;color:#D4AF6A;cursor:pointer;display:grid;place-items:center;padding:0}#cmp-b[hidden]{display:none}#cmp-b svg{width:22px;height:22px;stroke:#D4AF6A;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}#cmp-n{position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#E07A55;color:#fff;font:700 13px/22px "DM Sans",system-ui,sans-serif;text-align:center;box-sizing:border-box}#cmp-n[hidden]{display:none}'+
+    '#cmp-velo{position:fixed;inset:0;background:rgba(10,20,48,.72);z-index:30}#cmp-f{position:fixed;left:0;right:0;bottom:0;max-height:85vh;overflow-y:auto;background:#122050;border-top:2px solid #D4AF6A;border-radius:22px 22px 0 0;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));z-index:31;color:#F5F0E6;max-width:720px;margin:0 auto;box-sizing:border-box}#cmp-f h2{font-family:Georgia,serif;font-size:24px;font-weight:600;margin:0 0 10px}'+
+    '.cmp-l{list-style:none;margin:0;padding:0}.cmp-l li{border-top:1px solid rgba(212,175,106,.22)}.cmp-l a,.cmp-l div.cmp-i{display:block;padding:14px 4px 14px 22px;color:#F5F0E6;text-decoration:none;position:relative;overflow-wrap:anywhere}.cmp-l .nuovo::before{content:"";position:absolute;left:4px;top:22px;width:9px;height:9px;border-radius:50%;background:#D4AF6A}.cmp-l b{display:block;font-size:18px;font-weight:600}.cmp-l span{display:block;font-size:17px;line-height:1.45;color:rgba(245,240,230,.78);margin-top:2px}.cmp-l small{display:block;font-size:15px;color:rgba(245,240,230,.55);margin-top:4px}.cmp-vuoto{font-size:18px;color:rgba(245,240,230,.72);padding:14px 0}#cmp-chiudi{display:block;width:100%;margin-top:14px;padding:14px;border-radius:999px;background:transparent;border:1px solid rgba(245,240,230,.35);color:#F5F0E6;font-size:18px;font-family:inherit;cursor:pointer}';document.head.appendChild(st);}
+  if(!b){
+    alto.insertAdjacentHTML("afterbegin",'<button type="button" id="cmp-b" hidden aria-label="Notifiche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg><span id="cmp-n" hidden></span></button>');
+    b=document.getElementById("cmp-b");
+  }
+  b.onclick=function(ev){ev.stopPropagation();campanellaApri();};
+  campanellaConta();
+  if(!cmp.timer){
+    cmp.timer=setInterval(function(){if(document.visibilityState==="visible")campanellaConta();},180000);
+    document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")campanellaConta();});
+  }
+}
+function campanellaConta(){
+  if(!io.id||!db)return;
+  db.rpc("fm_avvisi_da_leggere").then(function(r){
+    var b=document.getElementById("cmp-b"),n=document.getElementById("cmp-n");
+    if(!b||!n)return;
+    if(!r||r.error){if(!cmp.ok)b.hidden=true;return;}
+    cmp.ok=true;b.hidden=false;
+    var k=+r.data||0;
+    n.hidden=k<1;n.textContent=k>99?"99+":String(k);
+    b.setAttribute("aria-label",k>0?"Notifiche, "+k+" da leggere":"Notifiche");
+  },function(){});
+}
+function campanellaLink(u){
+  u=String(u||"");
+  if(/^[a-z0-9\-]+\.html([?#][^"'<>\s]*)?$/i.test(u))return u;
+  if(/^https:\/\/app\.felicitasmundi\.com\/[^"'<>\s]*$/i.test(u))return u;
+  return "";
+}
+function campanellaApri(){
+  if(document.getElementById("cmp-f"))return;
+  var v=document.createElement("div");v.id="cmp-velo";
+  var f=document.createElement("div");f.id="cmp-f";f.setAttribute("role","dialog");f.setAttribute("aria-modal","true");f.setAttribute("aria-labelledby","cmp-tit");
+  f.innerHTML='<div class="tc-presa"></div><h2 id="cmp-tit">Notifiche</h2><div id="cmp-c"><p class="cmp-vuoto">Un momento…</p></div><button type="button" id="cmp-chiudi">Chiudi</button>';
+  document.body.appendChild(v);document.body.appendChild(f);
+  var esc1=function(e){if(e.key==="Escape")chiudi();};
+  var chiudi=function(){v.remove();f.remove();document.removeEventListener("keydown",esc1);};
+  v.onclick=chiudi;f.querySelector("#cmp-chiudi").onclick=chiudi;document.addEventListener("keydown",esc1);
+  try{f.querySelector("#cmp-chiudi").focus();}catch(e){}
+  db.rpc("fm_miei_avvisi").then(function(r){
+    var c=document.getElementById("cmp-c");if(!c)return;
+    var l=(r&&!r.error&&r.data)||[];
+    if(!l.length){c.innerHTML='<p class="cmp-vuoto">Nessuna notifica.</p>';}
+    else c.innerHTML='<ul class="cmp-l">'+l.map(function(a){
+      var u=campanellaLink(a.indirizzo),cl=a.letta?'':' nuovo';
+      var d=(a.creata_il?quandoTm(a.creata_il):'');
+      var dentro='<b>'+esc(a.titolo)+'</b>'+(a.testo?'<span>'+esc(a.testo)+'</span>':'')+(d?'<small>'+esc(d)+'</small>':'');
+      return '<li>'+(u?'<a class="cmp-i'+cl+'" href="'+esc(u)+'">'+dentro+'</a>':'<div class="cmp-i'+cl+'">'+dentro+'</div>')+'</li>';
+    }).join("")+'</ul>';
+    if(l.some(function(a){return !a.letta;}))db.rpc("fm_avvisi_letti",{p_id:null}).then(function(){campanellaConta();},function(){});
+  },function(){var c=document.getElementById("cmp-c");if(c)c.innerHTML='<p class="cmp-vuoto">Non si riesce a leggere adesso. Si può riprovare.</p>';});
+}
 /* avvio */
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
+  campanella();
+  /* 15/11: qui db non è window.db, quindi la domanda automatica delle notifiche (fm-notifiche.js, 8/11) non partiva mai da sola: la si avvia da qui */
+  if(io.id&&window.fmNotifiche)fmNotifiche(db);
   benvenutoKarma();
   finestraPraticantato();
   try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff|persone)$/.test(q))vista=q;}catch(e){}
@@ -5117,7 +5184,7 @@ chiSono().then(function(){
 });
 db.auth.onAuthStateChange(function(ev){
   if(ev==="SIGNED_OUT"&&io.id){location.href="strumento.html";return;}
-  if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();disegna();finestraPraticantato();}});}
+  if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();campanella();if(window.fmNotifiche)fmNotifiche(db);disegna();finestraPraticantato();}});}
 });
 })();
 </script>
