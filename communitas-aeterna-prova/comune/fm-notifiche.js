@@ -1,6 +1,7 @@
 /* Le notifiche sul telefono · 24/10/2026, Gab: «crea anche le notifiche dell'app» (SQL 117, funzione «notifiche», sw.js).
    8/11/2026, Gab: «voglio che sia di default un utente al massimo può toglierla, ma non possiamo aspettare che uno pensi di volersi attivare una notifica».
    Da ora: chi è entrato, al primo tocco sulla pagina, riceve la domanda del telefono (al massimo una volta al giorno finché non risponde).
+   15/11: prima della domanda del sistema si apre una finestrella dell'app con «Attiva le notifiche» e «Non ora».
    Detto sì, il telefono resta iscritto da solo. In I miei dati: «Notifiche attive · prova» e «Spegni le notifiche».
    Uso: <div data-fm-notifiche></div> (il tasto in I miei dati), fmNotifiche(db). La domanda automatica parte da sola dove c'è window.db.
    Su iPhone le notifiche esistono solo con l'app messa sullo schermo (iOS 16.4 o più). Dentro l'apk vecchio (webview) il telefono non le permette. */
@@ -73,16 +74,37 @@
     if(Notification.permission !== 'default') return;
     var ultima = +leggi(CHIESTO) || 0;
     if(Date.now() - ultima < 864e5) return;                     /* chi ha chiuso la domanda senza rispondere la rivede domani */
-    function tocco(){
-      ['pointerup','keydown'].forEach(function(t){ document.removeEventListener(t, tocco, true); });
+    /* 15/11 (Gab: «Ok richiesta pemesso»): prima una finestrella dell'app che dice a cosa servono, poi la domanda del telefono o del computer.
+       La finestrella aspetta che non ci sia un'altra finestra aperta (Praticantato, benvenuto). «Non ora» = si rivede domani. */
+    function altraAperta(){ return !!document.querySelector('#fp-velo,.tc-foglio,#cmp-f,#fn-velo'); }
+    function finestra(){
       if(Notification.permission !== 'default' || leggi(SPENTE)) return;
+      if(altraAperta()){ setTimeout(finestra, 2000); return; }
+      if(!document.getElementById('fn-css2')){ var st=document.createElement('style'); st.id='fn-css2'; st.textContent=
+        '#fn-velo{position:fixed;inset:0;z-index:9998;background:rgba(5,10,30,.72);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;overflow-y:auto}#fn-velo *{box-sizing:border-box}'+
+        '.fn-f{width:100%;max-width:420px;background:#1a2148;border:1px solid rgba(212,175,106,.7);border-radius:22px;padding:26px 22px 22px;color:#F5F0E6;margin:auto;text-align:center;font-family:DM Sans,system-ui,sans-serif}'+
+        '.fn-f svg{width:46px;height:46px;stroke:#D4AF6A;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 10px;display:block}'+
+        '.fn-f h2{font-family:Georgia,serif;font-size:24px;line-height:1.25;font-weight:600;margin:0 0 12px;color:#F5F0E6}.fn-f p{font-size:18px;line-height:1.5;margin:0 0 8px;color:rgba(245,240,230,.85)}'+
+        '.fn-si{display:block;width:100%;margin-top:18px;padding:15px;border-radius:999px;background:#D4AF6A;color:#0a1430;font-weight:700;font-size:18px;border:0;cursor:pointer;font-family:inherit}'+
+        '.fn-no{display:block;width:100%;margin-top:10px;padding:14px;border-radius:999px;background:transparent;border:1px solid rgba(245,240,230,.35);color:#F5F0E6;font-size:18px;cursor:pointer;font-family:inherit}';
+        document.head.appendChild(st); }
       scrivi(CHIESTO, String(Date.now()));
-      Notification.requestPermission().then(function(p){
-        if(p !== 'granted') return;
-        return iscrivi().then(function(s){ return salva(db, s); });
-      }).then(aggiornaTasti, aggiornaTasti);
+      var v = document.createElement('div'); v.id = 'fn-velo';
+      v.innerHTML = '<div class="fn-f" role="dialog" aria-modal="true" aria-labelledby="fn-tit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>'+
+        '<h2 id="fn-tit">Attiva le notifiche</h2><p>Gli avvisi dell\'app arrivano anche sul telefono e sul computer.</p><p>Si spengono da I miei dati.</p>'+
+        '<button type="button" class="fn-si">Attiva le notifiche</button><button type="button" class="fn-no">Non ora</button></div>';
+      document.body.appendChild(v);
+      v.querySelector('.fn-no').onclick = function(){ v.remove(); };
+      v.querySelector('.fn-si').onclick = function(){
+        v.remove();
+        Notification.requestPermission().then(function(p){       /* il tocco sul tasto è il gesto che il sistema vuole */
+          if(p !== 'granted') return;
+          return iscrivi().then(function(s){ return salva(db, s); });
+        }).then(aggiornaTasti, aggiornaTasti);
+      };
+      try{ v.querySelector('.fn-si').focus(); }catch(e){}
     }
-    ['pointerup','keydown'].forEach(function(t){ document.addEventListener(t, tocco, true); });   /* il telefono chiede il permesso solo dopo un gesto */
+    setTimeout(finestra, 2500);
   }
   function partiDaSolo(){
     var db = window.db;
