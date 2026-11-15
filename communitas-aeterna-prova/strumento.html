@@ -577,6 +577,17 @@ header.top{position:relative}
 .esp-testa{display:flex;gap:14px;align-items:center}.esp-testa canvas{width:64px;height:64px;flex:none}
 .esp-nm{margin:0;font-size:13px;letter-spacing:.2em;color:var(--e)}.esp-el h2{margin:0;font:600 22px "DM Sans",system-ui,sans-serif;color:#F5F0E6}.esp-d{margin:2px 0 0;color:#c9c3d6;font-size:16px}
 .esp-gg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+/* VOCI DELL'INDICE · SQL 274 (15/11): le card in attesa da scorrere, Conferma · Modifica · Elimina */
+.vi-scorri{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 2px 6px;-webkit-overflow-scrolling:touch}
+.vi-card{flex:0 0 88%;max-width:520px;scroll-snap-align:center;background:#122050;border:1px solid rgba(212,175,106,.45);border-radius:16px;padding:14px;display:flex;flex-direction:column;box-sizing:border-box}
+.vi-card .m{font-size:15px;color:#D4AF6A;margin:0 0 6px}.vi-card .m em{font-style:normal;color:#8DBF5E}
+.vi-card b.t{display:block;color:#D4AF6A;font-size:19px;margin:0 0 6px;overflow-wrap:anywhere}
+.vi-card .x{margin:0;font-size:18px;line-height:1.5;white-space:pre-line;overflow-wrap:anywhere;max-height:46vh;overflow-y:auto;flex:1}
+.vi-card textarea{width:100%;box-sizing:border-box;min-height:40vh;font:18px/1.5 "DM Sans",system-ui,sans-serif;background:#0a1430;color:#F5F0E6;border:1px solid rgba(212,175,106,.5);border-radius:12px;padding:10px}
+.vi-card select{width:100%;margin:8px 0 0;font:17px "DM Sans",system-ui,sans-serif;background:#0a1430;color:#F5F0E6;border:1px solid rgba(212,175,106,.5);border-radius:12px;padding:10px;min-height:48px}
+.vi-card .vi-corpo{flex:1}.vi-card .tc-az{margin:12px 0 0}.vi-card .tc-az button{flex:1 1 0;min-width:0}.vi-card .tc-az .cerv{flex-basis:100%}.vi-card .tc-az .el{border-color:#E07A55;color:#E07A55}
+.vi-esito{font-size:16px;margin:6px 0 0;color:#F5F0E6}
+@media (min-width:900px){.vi-card{flex-basis:46%}}
 .esp-g{display:block;text-align:left;background:rgba(255,255,255,.04);border:1px solid color-mix(in srgb,var(--e) 55%,transparent);color:#F5F0E6;border-radius:12px;padding:12px;font:inherit;cursor:pointer;position:relative;text-decoration:none}
 .esp-g b{display:block;font:600 17px "DM Sans",system-ui,sans-serif}.esp-g small{display:block;color:#c9c3d6;font-size:14px;margin-top:2px}
 .esp-g.r{border-style:dashed;padding-top:22px}.esp-g i{position:absolute;top:6px;right:8px;font-style:normal;font-size:11px;letter-spacing:.1em;color:var(--e);text-transform:uppercase}
@@ -1143,6 +1154,9 @@ function vAzione(){
   var iscr=!!(io.id&&(io.nucleo||(io.ruoli||[]).some(function(r){return r.ruolo==="eventi";})));
   var iscrH=iscr?'<section class="esp-el" id="esp-iscr-s" style="--e:#8DBF5E"><p class="esp-nm">FELICITAS FESTIVAL</p><h2>Iscritti Felicitas Festival</h2>'+
       '<div id="esp-iscr"><p class="esp-d">Un momento…</p></div><div id="esp-iscr-l"></div></section>':'';
+  /* VOCI DELL'INDICE · SQL 274 · Gab 15/11: «una nuova voce in espandi dove vedo slide card scorrevoli, dove poi posso confermare o modificare o eliminare» ·
+     «voci dell indice, va bene come nome». Solo il nucleo; si vede quando ci sono card in attesa (ponte e card della sera). */
+  var vociH=io.nucleo?'<section class="esp-el" id="esp-voci-s" style="--e:#D4AF6A" hidden><p class="esp-nm">VOCI DELL\'INDICE <span id="esp-voci-n"></span></p><div id="esp-voci"></div></section>':'';
   /* l'Emporio: oggi i prodotti sono la Stampa; ogni famiglia apre il configuratore della pagina Emporio (emporio.html#famiglia) */
   var empH='<section class="esp-el esp-emp" style="--e:#6FA8D6"><p class="esp-nm">EMPORIO</p><h2>2000 prodotti ed espositori fieristici</h2>'+
       '<p class="esp-d">Oltre alla stampa proponiamo supporti per l\'esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</p>'+
@@ -1153,7 +1167,7 @@ function vAzione(){
       k.voci.map(function(v,j){return '<button type="button" class="esp-v" data-esp-v="'+i+'.'+j+'"><span><b>'+esc(v[0])+'</b>'+(v[2]?'<small>'+esc(v[2])+'</small>':'')+'</span><em>Scegli</em></button>';}).join("")+
       (k.link?'<p class="esp-d" style="margin-top:10px"><a href="'+k.link+'" style="color:#D4AF6A">Il Cervello Digitale Evoluto ›</a></p>':'')+'</section>';}).join("");
   c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+(io.id?'':'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>')+
-    (ruolo?team+iscrH+empH+'<p class="esp-nm" style="margin:22px 0 10px;color:#D4AF6A">DI COSA HAI BISOGNO?</p>'+blocchi:empH+blocchi+team+iscrH)+
+    (ruolo?vociH+team+iscrH+empH+'<p class="esp-nm" style="margin:22px 0 10px;color:#D4AF6A">DI COSA HAI BISOGNO?</p>'+blocchi:empH+blocchi+team+iscrH)+
     /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
     '<div data-fm-installa></div>';
   legaVai(c);
@@ -1168,6 +1182,7 @@ function vAzione(){
     vai("assistenza");var t=$("#ass-t");if(t){t.value=k.tit+" · "+v[0]+"\n\n";try{t.focus();t.setSelectionRange(t.value.length,t.value.length);}catch(e){}}};});
   if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(iscr)iscritti();
+  if(io.nucleo)vociIndice();
   if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();
     leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";}))bp.style.display="";
       var n=$("#esp-team-nomi");if(!n)return;
@@ -1357,8 +1372,8 @@ function mieiTeam(){
 function daApprovare(){
   var box=$("#tm-attesa");if(!box)return;
   var CAMPI="id,squadra_id,capitolo_id,capitolo_nuovo,testo,foto,autore_id,proposta_il";
-  db.from("cervello_proposte").select(CAMPI+",agente_stato,agente_capitolo_id,agente_capitolo_nuovo,agente_card,agente_nota").eq("stato","in_attesa").order("proposta_il").limit(30).then(function(r){
-    if(r&&r.error)return db.from("cervello_proposte").select(CAMPI).eq("stato","in_attesa").order("proposta_il").limit(30);return r;}).then(function(r){
+  db.from("cervello_proposte").select(CAMPI+",agente_stato,agente_capitolo_id,agente_capitolo_nuovo,agente_card,agente_nota").eq("stato","in_attesa").not("squadra_id","is",null).order("proposta_il").limit(30).then(function(r){
+    if(r&&r.error)return db.from("cervello_proposte").select(CAMPI).eq("stato","in_attesa").not("squadra_id","is",null).order("proposta_il").limit(30);return r;}).then(function(r){
     var l=(r&&!r.error&&r.data)||[];if(!l.length||!box.isConnected){box.innerHTML="";return;}
     var caps=l.map(function(p){return p.capitolo_id;}).concat(l.map(function(p){return p.agente_capitolo_id;})).filter(Boolean);
     Promise.all([
@@ -1381,6 +1396,54 @@ function daApprovare(){
         db.rpc("fm_proposta_decidi",{p_proposta:b.getAttribute("data-decidi"),p_si:b.hasAttribute("data-si")}).then(function(x){
           if(x&&!x.error&&x.data==="ok"){daApprovare();return;}b.disabled=false;$("#tm-att-esito").textContent=(x&&x.data)||errore(x&&x.error);},
           function(){b.disabled=false;});};});
+    });
+  },function(){});
+}
+/* VOCI DELL'INDICE · SQL 274 (15/11/2026, thread «Costruire il ponte verso il Cervello»).
+   Le card senza team in attesa: quelle del ponte (controllo-ai, azione «card») e le card della sera (azione «cervello»).
+   Conferma → fm_ponte_decidi: la card entra nel Cervello; se la voce non c'è, nasce nella sua sezione.
+   Modifica → il testo si cambia prima di confermare (e per una voce nuova senza sezione si sceglie la sezione). Elimina → scartata. */
+var VI_SEZ=[["base_filosofica","Base filosofica"],["tecnologia","Tecnologia"],["comunita","Comunità"],["logistica","Logistica"]];
+function vociIndice(){
+  var sec=$("#esp-voci-s"),box=$("#esp-voci");if(!sec||!box)return;
+  db.from("cervello_proposte").select("id,capitolo_id,capitolo_nuovo,testo,proposta_il,sera,ponte,voce_sezione").eq("stato","in_attesa").is("squadra_id",null).order("proposta_il").limit(60).then(function(r){
+    var l=(r&&!r.error&&r.data)||[];if(!box.isConnected)return;
+    if(!l.length){sec.hidden=true;box.innerHTML="";return;}
+    var caps=l.map(function(p){return p.capitolo_id;}).filter(Boolean);
+    (caps.length?db.from("cervello_capitoli").select("id,titolo,sezione").in("id",caps).then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];}):Promise.resolve([])).then(function(cv){
+      var tit={};cv.forEach(function(x){tit[x.id]=x;});
+      var sez={};VI_SEZ.forEach(function(z){sez[z[0]]=z[1];});
+      function righe(t){var i=String(t||"").indexOf("\n");return i<0?[t||"",""]:[t.slice(0,i),t.slice(i+1).replace(/^\n+/,"")];}
+      sec.hidden=false;$("#esp-voci-n").textContent="· "+l.length;
+      box.innerHTML='<div class="vi-scorri">'+l.map(function(p){
+        var c=p.capitolo_id&&tit[p.capitolo_id],nuova=!p.capitolo_id,z=nuova?p.voce_sezione:(c&&c.sezione);
+        var meta=esc(c?c.titolo:p.capitolo_nuovo)+(z&&sez[z]?' · '+esc(sez[z]):'')+(nuova?' · <em>voce nuova</em>':'')+(p.sera?' · card della sera':'');
+        var rr=righe(p.testo);
+        return '<div class="vi-card" data-vi="'+esc(p.id)+'" data-nuova="'+(nuova&&!p.voce_sezione?'1':'')+'"><p class="m">'+meta+'</p>'+
+          '<div class="vi-corpo"><b class="t">'+esc(rr[0])+'</b><p class="x">'+esc(rr[1])+'</p></div>'+
+          '<div class="tc-az"><button type="button" class="cerv" data-vi-si="1">Conferma</button><button type="button" data-vi-mod="1">Modifica</button><button type="button" class="el" data-vi-no="1">Elimina</button></div>'+
+          '<p class="vi-esito" aria-live="polite"></p></div>';}).join("")+'</div>';
+      box.querySelectorAll(".vi-card").forEach(function(k){
+        var id=k.getAttribute("data-vi"),p=l.filter(function(x){return x.id===id;})[0],esito=k.querySelector(".vi-esito");
+        function manda(si){
+          var bb=k.querySelectorAll("button");bb.forEach(function(b){b.disabled=true;});esito.textContent="";
+          var ta=k.querySelector("textarea"),se=k.querySelector("select");
+          var arg={p_proposta:id,p_conferma:si};
+          if(si&&ta&&ta.value.trim()&&ta.value!==p.testo)arg.p_testo=ta.value;
+          if(si&&se&&se.value)arg.p_sezione=se.value;
+          db.rpc("fm_ponte_decidi",arg).then(function(x){
+            if(x&&!x.error&&x.data==="ok"){vociIndice();return;}
+            bb.forEach(function(b){b.disabled=false;});esito.textContent=(x&&x.data)||errore(x&&x.error);},
+            function(){bb.forEach(function(b){b.disabled=false;});});
+        }
+        k.querySelector("[data-vi-si]").onclick=function(){manda(true);};
+        k.querySelector("[data-vi-no]").onclick=function(){manda(false);};
+        k.querySelector("[data-vi-mod]").onclick=function(){
+          var corpo=k.querySelector(".vi-corpo");if(k.querySelector("textarea"))return;
+          corpo.innerHTML='<textarea aria-label="Testo della card">'+esc(p.testo)+'</textarea>'+
+            (!p.capitolo_id?'<select aria-label="Sezione"><option value="">'+esc(p.voce_sezione&&sez[p.voce_sezione]||"Sezione")+'</option>'+VI_SEZ.map(function(z){return '<option value="'+z[0]+'"'+(z[0]===p.voce_sezione?' selected':'')+'>'+esc(z[1])+'</option>';}).join("")+'</select>':'');
+          var ta=corpo.querySelector("textarea");try{ta.focus();}catch(e){}};
+      });
     });
   },function(){});
 }
