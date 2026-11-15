@@ -4591,7 +4591,7 @@ function vDati(){
     e.innerHTML='<div class="card"><b>Chi sono</b>'+campo("nome","Nome")+campo("cognome","Cognome")+campo("biografia","Biografia","area")+campo("telefono","Telefono","tel")+campo("lingua","Che lingua parli")+
       '<div class="azioni" style="margin-top:10px"><button class="btn pieno" id="d-salva">Salva</button><span class="m" id="d-esito"></span></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Il mio villaggio e il mio vicinato</b><span class="t" id="d-luoghi">Un momento…</span><div class="fine"><a class="mini" href="cervello.html?c=10182300#ingresso">Come si entra in un vicinato</a></div></div>'+
-      '<div class="card" style="margin-top:10px"><b>Avvisi per mail</b><label class="t" style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-avvisi"'+(d.avvisi_mail===false?'':' checked')+'> Ricevo gli avvisi per mail</label><span class="m" id="d-avvisi-esito"></span></div>'+
+      '<div class="card" style="margin-top:10px"><b>Mail</b><label class="t" style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-avvisi"'+(d.avvisi_mail===false?'':' checked')+'> Avvisi</label><label class="t" id="d-mg-r" hidden style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-mg" checked> Giornale la mattina</label><label class="t" id="d-ms-r" hidden style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-ms" checked> Resoconto serale</label><span class="m" id="d-avvisi-esito"></span></div>'+
       /* 31/10: le notifiche del telefono stanno qui, non più in fondo a Espandi */'<div data-fm-notifiche style="margin-top:10px"></div>'+
       '<div class="card" style="margin-top:10px"><b>Segnala un problema tecnico</b><span class="m">Un pagamento che non si vede, una pagina che non si apre, una cosa che non funziona.</span><textarea id="d-segnala" style="min-height:70px"></textarea><div class="azioni"><button class="btn" id="d-manda">Manda</button><span class="m" id="d-segnala-esito"></span></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Account</b><span class="t">Entri con la tua mail e un codice.</span><div class="fine"><a class="mini" href="privacy.html" target="_blank">Privacy</a><a class="mini" href="privacy.html#condizioni" target="_blank">Condizioni</a><a class="mini" href="privacy.html#cookie" target="_blank">Cookie</a><button class="mini" id="d-esci">Esci</button></div></div>';
@@ -4601,6 +4601,15 @@ function vDati(){
       b.disabled=true;db.from("persone").update(riga).eq("id",io.id).then(function(x){b.disabled=false;
         if(x&&x.error){$("#d-esito").textContent=errore(x.error);return;}io.nome=riga.nome;nomi[io.id]=riga.nome;$("#d-esito").textContent="Salvato.";});};
     $("#d-avvisi").onchange=function(){var v=this.checked;db.from("persone").update({avvisi_mail:v}).eq("id",io.id).then(function(x){$("#d-avvisi-esito").textContent=x&&x.error?errore(x.error):"Salvato.";});};
+    /* 15/11 · Gab: «puoi anche mettere in impostazioni la possibilità che uno possa disattivare i singoli componenti mail» (SQL 268: mail_giornale, mail_sera). Senza la 268 le due righe restano nascoste. */
+    db.from("persone").select("mail_giornale,mail_sera").eq("id",io.id).maybeSingle().then(function(m){
+      if(!m||m.error||!m.data)return;
+      [["d-mg","mail_giornale"],["d-ms","mail_sera"]].forEach(function(x){
+        var c=document.getElementById(x[0]);if(!c)return;
+        c.checked=m.data[x[1]]!==false;document.getElementById(x[0]+"-r").hidden=false;
+        c.onchange=function(){var o={};o[x[1]]=c.checked;db.from("persone").update(o).eq("id",io.id).then(function(y){$("#d-avvisi-esito").textContent=y&&y.error?errore(y.error):"Salvato.";});};
+      });
+    },function(){});
     $("#d-manda").onclick=function(){var t=$("#d-segnala").value.trim(),b=this;if(!t)return;b.disabled=true;
       db.from("segnalazioni").insert({persona_id:io.id,tipo:"tecnico",testo:t,riferimento:"i miei dati · "+new Date().toISOString().slice(0,10),stato:"aperta"}).then(function(x){b.disabled=false;
         if(x&&x.error){$("#d-segnala-esito").textContent=errore(x.error);return;}$("#d-segnala").value="";$("#d-segnala-esito").textContent="Mandata. Arriva a chi tiene Felicitas.";});};
