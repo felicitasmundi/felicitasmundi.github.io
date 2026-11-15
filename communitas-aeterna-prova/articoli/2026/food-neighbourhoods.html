@@ -40,6 +40,7 @@ a{color:var(--oro);word-break:break-word}
 .tasti{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
 .tasto{font:600 19px system-ui,sans-serif;border-radius:999px;padding:13px 22px;text-decoration:none;border:0;cursor:pointer}
 .entra{background:var(--oro);color:#0a1430}
+.su{margin:0 0 18px}
 .condividi{background:transparent;color:var(--oro);border:1px solid var(--oro)}
 </style>
 </head><body><main>
@@ -47,6 +48,7 @@ a{color:var(--oro);word-break:break-word}
 <article>
 <h1>I Vicinati del Cibo · Food Neighbourhoods</h1>
 <p class="firma">Gabriele Dettori · fondatore FelicitasMundi</p>
+<div class="tasti su"><button class="tasto condividi" type="button" data-condividi>Share</button></div>
 <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/C1olLOzgd6g" title="I Vicinati del Cibo · Food Neighbourhoods" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div>
 <p class="fonte">This article was first published in Italian by Sovranità Popolare: <a href="https://www.sovranita-popolare.org/3449591_i-vicinati-del-cibo-di-gabriele-dettori" rel="noopener" target="_blank">«I Vicinati del Cibo di Gabriele Dettori»</a></p>
 <h2>Finding people who speak the same language</h2>
@@ -79,15 +81,15 @@ a{color:var(--oro);word-break:break-word}
 </div>
 <div class="tasti">
 <a class="tasto entra" href="/communitas-aeterna-prova/accoglienza.html">Entra su FelicitasMundi ›</a>
-<button class="tasto condividi" type="button" id="condividi">Share</button>
+<button class="tasto condividi" type="button" data-condividi>Share</button>
 </div>
 </article>
 </main>
 <script>
-document.getElementById("condividi").onclick=function(){
+document.querySelectorAll("[data-condividi]").forEach(function(b){b.onclick=function(){
   var d={title:'I Vicinati del Cibo · Food Neighbourhoods',url:'https://app.felicitasmundi.com/communitas-aeterna-prova/articoli/2026/food-neighbourhoods.html'};
   if(navigator.share){navigator.share(d).catch(function(){});return;}
   location.href="https://wa.me/?text="+encodeURIComponent(d.title+" "+d.url);
-};
+};});
 </script>
 </body></html>
