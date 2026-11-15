@@ -5073,11 +5073,33 @@ function benvenutoKarma(){
   },function(){});
 }
 
+/* 15/11 · finestra del Praticantato all'accesso, una volta per persona (Gab 15/11 00:30Z) */
+function finestraPraticantato(){
+  if(!io.id||document.getElementById("fp-velo"))return;
+  var k="fm-praticantato-finestra-1";try{if(localStorage.getItem(k))return;}catch(e){return;}
+  if(document.getElementById("tc-foglio")){setTimeout(finestraPraticantato,1500);return;}
+  var oggi="";try{oggi=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Rome",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());}catch(e){}
+  var prima=!oggi||oggi<="2026-11-16";
+  if(!document.getElementById("fp-css")){var st=document.createElement("style");st.id="fp-css";st.textContent='#fp-velo{position:fixed;inset:0;z-index:9999;background:rgba(5,10,30,.72);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;overflow-y:auto}#fp-velo *{box-sizing:border-box}.fp{width:100%;max-width:420px;background:#1a2148;border:1px solid rgba(212,175,106,.7);border-radius:22px;padding:28px 22px 24px;color:#F5F0E6;margin:auto}.fp .et{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#D4AF6A;margin:0 0 12px}.fp h2{font-family:Georgia,serif;font-size:26px;line-height:1.2;font-weight:600;margin:0 0 16px;color:#F5F0E6}.fp p{font-size:18px;line-height:1.5;margin:0 0 12px}.fp a.t{display:block;text-align:center;margin-top:20px;padding:15px;border-radius:999px;background:#D4AF6A;color:#0a1430;font-weight:700;font-size:18px;text-decoration:none}.fp button{display:block;width:100%;margin-top:12px;padding:14px;border-radius:999px;background:transparent;border:1px solid rgba(245,240,230,.35);color:#F5F0E6;font-size:18px;font-family:inherit;cursor:pointer}';document.head.appendChild(st);}
+  var v=document.createElement("div");v.id="fp-velo";
+  v.innerHTML='<div class="fp" role="dialog" aria-modal="true" aria-labelledby="fp-tit"><p class="et">Praticantato</p>'+
+    (prima?'<h2 id="fp-tit">Lunedì parte il Praticantato</h2><p>Lunedì 16 novembre, ore 19, in diretta: fare assieme gli intenti del ciclo lunare legato ai 5 elementi.</p>':'<h2 id="fp-tit">Il praticantato ogni lunedì in diretta, ore 19</h2>')+
+    '<p>Percorso online ogni lunedì alle 19 con Gabriele Dettori.</p><a class="t" href="praticantato.html#partecipa">Partecipa lunedì &gt;</a><button type="button" id="fp-chiudi">Chiudi</button></div>';
+  var segna=function(){try{localStorage.setItem(k,"1");}catch(e){}};
+  var esc1=function(e){if(e.key==="Escape")chiudi();};
+  var chiudi=function(){segna();v.remove();document.removeEventListener("keydown",esc1);};
+  document.body.appendChild(v);document.addEventListener("keydown",esc1);
+  v.onclick=function(e){if(e.target===v)chiudi();};
+  v.querySelector("#fp-chiudi").onclick=chiudi;
+  v.querySelector("a.t").onclick=segna;
+  try{v.querySelector("#fp-chiudi").focus();}catch(e){}
+}
 /* avvio */
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
   testa();
   benvenutoKarma();
+  finestraPraticantato();
   try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff|persone)$/.test(q))vista=q;}catch(e){}
   /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
   try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;team.tipo="team";vista="team";}}catch(e){}
@@ -5095,7 +5117,7 @@ chiSono().then(function(){
 });
 db.auth.onAuthStateChange(function(ev){
   if(ev==="SIGNED_OUT"&&io.id){location.href="strumento.html";return;}
-  if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();disegna();}});}
+  if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();disegna();finestraPraticantato();}});}
 });
 })();
 </script>
