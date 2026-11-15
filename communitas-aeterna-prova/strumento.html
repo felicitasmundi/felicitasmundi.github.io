@@ -3463,7 +3463,7 @@ function g4Oggi(){try{return new Date().toLocaleDateString("sv-SE",{timeZone:"Eu
 function g4Giorno(g){var p=String(g||"").split("-");if(p.length<3)return "";return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString("it-IT",{day:"numeric",month:"long",year:"numeric"});}
 function g4VideoTit(v){return v.link_titolo?(v.link_titolo+(v.link_canale?" · "+v.link_canale:"")):(v.link||"");}
 /* 12/11 · descrizione (SQL 248): il testo di YouTube non è fidato, va solo come testo */
-function g4Desc(t){t=String(t||"").trim();if(!t)return "";var lungo=t.length>220||t.split("\n").length>3;
+function g4Desc(t){t=String(t||"").trim();if(!t)return "";var lk=t.match(/^([^\n]{1,120})\n(https:\/\/[^\s"<>]+)$/);if(lk)return '<p class="g4-desc" style="margin:0;font-size:18px;line-height:1.55"><a href="'+esc(lk[2])+'" target="_blank" rel="noopener noreferrer" style="color:#D4AF6A;text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere">'+esc(lk[1])+' &gt;</a></p>';var lungo=t.length>220||t.split("\n").length>3;
   return '<p class="g4-desc" style="margin:0;font-size:18px;line-height:1.55;white-space:pre-line;overflow-wrap:anywhere'+(lungo?';display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden':'')+'">'+esc(t)+'</p>'+
     (lungo?'<button type="button" class="mini g4-altro" style="margin-top:4px">altro</button>':'');}
 document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest(".g4-altro");if(!b)return;var p=b.previousElementSibling;if(!p)return;
