@@ -73,6 +73,7 @@ h3{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1;margi
 .appunt .ora{font-weight:600;white-space:nowrap}
 .appunt .rosso{color:var(--err);font-weight:600}
 .rimando{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--oro-chiaro);border-radius:12px;padding:12px 14px;cursor:pointer;border:0;font:600 14px var(--sans);color:var(--inchiostro);text-align:left;text-decoration:none}
+.sett-v{flex-direction:row!important;align-items:center;justify-content:space-between;gap:10px}.sett-tt{display:flex;flex-direction:column;gap:2px;min-width:0}.sett-v .t,.sett-r .t{font-size:1.1em}.sett-v.fatto{opacity:.7}.sett-v.fatto .t{text-decoration:line-through}.sett-r{display:flex;justify-content:space-between;align-items:center;gap:10px}.sett-r b{font-size:1.1em;white-space:nowrap}
 .pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap;align-self:flex-start}
 .v-pubblico{background:var(--ok-chiaro);color:var(--ok)}
 .v-vicinato{background:var(--blu-chiaro);color:var(--blu)}
@@ -973,7 +974,7 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){window.fmObTutti=false;if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 /* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");vai(v==="cervello"?"coscienza":v);};});
 /* 31/10, Gab: «coscienza è una pagina che esce fuori» → Coscienza si apre dentro l'app, con la barra in basso che resta */
@@ -2645,7 +2646,7 @@ function treOggi(){
     return Promise.all([ids.length?db.from("registro").select("id,tipo").in("id",ids).then(function(r){return (r&&!r.error&&r.data)||[];},function(){return [];}):Promise.resolve([]),
       leggiObiettivi().catch(function(){return [];})]).then(function(w){tre.tipi={};w[0].forEach(function(x){tre.tipi[x.id]=x.tipo;});return v;});
   }).then(function(v){
-    var box=$("#o-tre");if(!box||vista!=="oggi")return;
+    var box=$("#o-tre");if(!box||(vista!=="oggi"&&vista!=="obiettivi"))return;
     if(v[3]===null&&v[1]===null){box.innerHTML=io.nucleo?'<p class="nota" style="margin:0 2px 10px">I tre piani di Oggi si aprono con l\'SQL 168.</p>':'';return;}
     var area=v[1]||[],stanze=v[2]||[],mie=(v[3]||[]),n=v[0],h="";
     /* 5 nov 14:54, Gab: «sarebbe molto piu bello avere delle card che scorrono» · 15:06 «è il nuove senza soggetto che mi crea disagio […] questi sono obiettivi» · 15:08 «per me è ok» → bacheca a colonne, card che scorrono di lato */
@@ -2726,7 +2727,7 @@ function vOggi(){
   var c=$("#corpo"),l=luna(),d=new Date();
   /* 5 nov 15:15, Gab: «a me oggi sembra confusionario» · 15:47 «ok tutto / oggi e obiettivo confermo» → per chi è entrato Oggi è solo il lavoro (i tre piani).
      Festival, Come funziona, Di cosa hai bisogno passano a Espandi (thread Espandi). L'ospite trova Oggi come prima. */
-  if(io.id){c.innerHTML='<div id="o-agenda"></div><div id="o-tre"><p class="nota">Un momento…</p></div>';agendaOggi();treOggi();return;}
+  if(io.id){oggiSemplice();return;}
   var prima=false;try{prima=!localStorage.getItem("fm-come-visto");localStorage.setItem("fm-come-visto","1");}catch(e){}
   setTimeout(function(){var d=$("#o-come");if(d&&prima)d.open=true;},0);
   var g0=new Date();g0.setHours(0,0,0,0);var da=g0.getTime(),a=da+864e5;
@@ -4542,11 +4543,85 @@ function legaObiettivi(c){
     db.rpc("fm_cambia_stadio",{p_orma:id,p_stadio:DOPO[o.stadio||"in_coda"]}).then(dopo,dopo);};});
   c.querySelectorAll("[data-bisogno]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_prendi_bisogno",{p_bisogno:b.getAttribute("data-bisogno")}).then(dopoPreso,dopo);};});
 }
+/* ═══ OBIETTIVI E OGGI SEMPLICI · thread «Semplificare la pagina Obiettivi» ═══
+   Gab 14/11: «un muro di roba che mette ansia» · «troppo difficile anche per me che sono il fondatore» · 15/11 «intanto costruisci» · «ok oggi».
+   Ognuno vede le sue cose della settimana (3 in vista) con «Fatto»; chi guida vede una riga per persona, fatte su quante (SQL 278).
+   Tutto il resto (bacheca dell'area, stanze, numeri, elenco di tutti, Lo prendo) sta in «Tutti gli obiettivi ›». */
+function settGuido(){return !!(io.nucleo||io.coordina||(io.ruoli||[]).length);}
+function settMie(){
+  return Promise.all([db.rpc("fm_mie_cose").then(function(r){return r&&!r.error?(r.data||[]):[];},function(){return [];}),
+    leggiObiettivi().catch(function(){return [];})]).then(function(v){
+    var l=v[0].map(function(x){return {fonte:x.fonte,id:x.id,titolo:x.titolo,entro_il:x.entro_il,ferma:x.ferma};});
+    (cache.obiettivi||[]).filter(function(o){return o.stadio!=="sviluppato"&&dentroO(o).some(function(p){return p.persona_id===io.id;});})
+      .forEach(function(o){l.push({fonte:"orma",id:o.id,titolo:o.titolo||o.contenuto,entro_il:o.entro_il,ferma:false});});
+    l.sort(function(a,b){var x=a.entro_il||"9999",y=b.entro_il||"9999";return x<y?-1:x>y?1:0;});
+    return l;});
+}
+function settPersone(){
+  return db.rpc("fm_obiettivi_settimana").then(function(r){if(r&&!r.error)return {l:r.data||[],conta:true};throw 0;}).catch(function(){
+    /* senza l'SQL 278: le persone con quante cose hanno in corso */
+    return db.rpc("fm_la_mia_area").then(function(r){var m={};((r&&!r.error&&r.data)||[]).forEach(function(x){if(!x.preso_da)return;
+        var k=m[x.preso_da]||(m[x.preso_da]={persona_id:x.preso_da,nome:x.chi,fatte:0,totale:0,ferme:0});k.totale++;if(x.ferma)k.ferme++;});
+      return {l:Object.keys(m).map(function(k){return m[k];}),conta:false};},function(){return {l:[],conta:false};});});
+}
+function settVoce(x){
+  var tasto=x.fonte==="assistenza"?'<button class="mini" data-vai="azione">Rispondi</button>':'<button class="btn pieno" style="flex:none" data-sett-fatto="'+esc(x.fonte+"|"+x.id)+'">Fatto</button>';
+  return '<div class="card sett-v"><div class="sett-tt"><span class="t">'+esc(x.titolo||"")+'</span>'+(x.entro_il?'<span class="m"'+(x.ferma?' style="color:#E07A55"':'')+'>entro il '+esc(dataBreve(x.entro_il))+'</span>':'')+'</div>'+tasto+'</div>';
+}
+function settLista(box,l,tre){
+  if(!box)return;
+  if(!l.length){box.innerHTML='<div class="card"><span class="m">Nessun obiettivo preso, per ora. In Obiettivi c\'è quello di cui il villaggio ha bisogno.</span></div>';return;}
+  box.innerHTML=(tre?l.slice(0,3):l).map(settVoce).join("")+(tre&&l.length>3?'<button class="mini" data-sett-tutte style="margin-top:4px">I miei obiettivi · '+l.length+' ›</button>':'');
+  legaVai(box);
+  var t=box.querySelector("[data-sett-tutte]");if(t)t.onclick=function(){settLista(box,l,false);};
+  box.querySelectorAll("[data-sett-fatto]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-sett-fatto").split("|");b.disabled=true;
+    var q=p[0]==="registro"?db.rpc("fm_registro_fatto",{p_riga:p[1]}):p[0]==="logistica"?db.rpc("fm_compito_fatto",{p_compito:p[1]}):db.rpc("fm_cambia_stadio",{p_orma:p[1],p_stadio:"sviluppato"});
+    q.then(function(r){if(r&&r.error){b.disabled=false;alert(errore(r.error));return;}
+      var cd=b.closest(".sett-v");if(cd)cd.classList.add("fatto");b.outerHTML='<span class="pill s-sviluppato">fatto ✓</span>';cache.obiettivi=null;},
+      function(e){b.disabled=false;alert(errore(e));});};});
+}
+function settRiga(x,conta){
+  return '<div class="card"><div class="sett-r"><span class="t">'+esc(x.nome||"")+'</span><b>'+(conta?(+x.fatte)+' su '+(+x.totale):(+x.totale)+' in corso')+'</b></div>'+
+    (conta?'<div class="barra-ob"><i style="width:'+Math.round(100*(+x.fatte)/Math.max(1,+x.totale))+'%"></i></div>':'')+
+    (x.ferme?'<span class="m" style="color:#E07A55">in ritardo · '+(+x.ferme)+'</span>':'')+'</div>';
+}
+function settApriTutti(crea){window.fmObTutti=true;vObiettiviTutti();window.scrollTo(0,0);if(crea)setTimeout(function(){var b=$("#cr-apri");if(b)b.click();},50);}
 function vObiettivi(){
+  if(!io.id||window.fmObTutti){vObiettiviTutti();return;}
+  var c=$("#corpo"),guido=settGuido();
+  c.innerHTML='<p class="et">Obiettivi</p><h3>Questa settimana</h3>'+
+    (guido?'<div class="card"><button class="btn pieno" id="sett-crea" style="align-self:flex-start">Crea un obiettivo</button></div><p class="et" style="margin-top:8px">Persone</p><div id="sett-pers"><p class="nota">Un momento…</p></div>':'')+
+    (guido?'<button class="mini" id="sett-mie-b" style="margin-top:4px">I miei obiettivi ›</button><div id="sett-mie" hidden></div>':'<div id="sett-mie"><p class="nota">Un momento…</p></div>')+
+    '<div class="fine" style="margin-top:8px"><button class="mini" id="sett-tutti">Tutti gli obiettivi ›</button></div>';
+  $("#sett-tutti").onclick=function(){settApriTutti(false);};
+  if(guido){$("#sett-crea").onclick=function(){settApriTutti(true);};
+    settPersone().then(function(v){var e=$("#sett-pers");if(!e||vista!=="obiettivi")return;
+      e.innerHTML=v.l.length?v.l.map(function(x){return settRiga(x,v.conta);}).join(""):'<div class="card"><span class="m">Niente qui.</span></div>';});}
+  settMie().then(function(l){var e=$("#sett-mie");if(!e||vista!=="obiettivi")return;settLista(e,l,!guido);
+    var b=$("#sett-mie-b");if(b){b.textContent="I miei obiettivi · "+l.length+" ›";b.onclick=function(){e.hidden=!e.hidden;};}});
+}
+function oggiSemplice(){
+  var c=$("#corpo"),guido=settGuido(),d=new Date(),oggi=d.toLocaleDateString("sv-SE",{timeZone:"Europe/Rome"});
+  c.innerHTML='<p class="et">Oggi</p><h3>'+esc(d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",timeZone:"Europe/Rome"}))+'</h3><div id="sett-app"></div>'+
+    (guido?'<div id="sett-team"></div>':'')+
+    '<p class="et" style="margin:14px 0 6px">Questa settimana</p><div id="sett-mie"><p class="nota">Un momento…</p></div>'+
+    '<div class="fine" style="margin-top:6px"><button class="mini" id="sett-7">Prossimi 7 giorni ›</button></div><div id="o-agenda" hidden></div>';
+  var a7=$("#sett-7"),visto=false;a7.onclick=function(){var g=$("#o-agenda");g.hidden=!g.hidden;if(!visto){visto=true;agendaOggi();}};
+  agLeggi().then(function(l){var e=$("#sett-app");if(!e||vista!=="oggi"||!l)return;var q=l.filter(function(x){return x.giorno===oggi;});
+    e.innerHTML=q.length?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p>'+q.map(agRiga).join(""):'';agLegaAnnulla(e,oggiSemplice);});
+  if(guido)settPersone().then(function(v){var e=$("#sett-team");if(!e||vista!=="oggi"||!v.l.length)return;
+    var t={nome:"Tutti",fatte:0,totale:0,ferme:0};v.l.forEach(function(x){t.fatte+=+x.fatte;t.totale+=+x.totale;t.ferme+=+x.ferme;});
+    var h=settRiga(t,v.conta).replace(/<\/div>$/,'<div class="fine"><button class="mini oro" data-vai="obiettivi">Obiettivi ›</button>'+(io.nucleo?'<button class="mini" id="sett-rt">Ruoli e team ›</button>':'')+'</div>'+
+      (io.nucleo?'<div class="fine" id="sett-rt-l" hidden><button class="mini oro" data-vai="persone">Persone</button><button class="mini oro" data-vai="staff">Aggiungi una persona</button><button class="mini" data-vai="createam">Crea un team</button><button class="mini" data-vai="plancia">Chi vede cosa</button></div>':'')+'</div>');
+    e.innerHTML='<p class="et" style="margin:14px 0 6px">Persone</p>'+h;legaVai(e);
+    var rt=$("#sett-rt");if(rt)rt.onclick=function(){var l=$("#sett-rt-l");l.hidden=!l.hidden;};});
+  settMie().then(function(l){var e=$("#sett-mie");if(!e||vista!=="oggi")return;settLista(e,l,true);});
+}
+function vObiettiviTutti(){
   var c=$("#corpo");
   /* 19 ott 23:29, Gab: «Obiettivi è pieno di roba, ma non si capisce come funziona obiettivi. Non c'è nulla che identifichi lo stato delle cose.»
      Come funziona: la frase già approvata della bacheca (bacheca-bozza.html). Lo stato: quanti da fare, in corso, fatti; ogni obiettivo con quanti l'hanno preso su quanti servono. */
-  c.innerHTML='<p class="et">Obiettivi</p><h3>Quello di cui il villaggio ha bisogno</h3>'+
+  c.innerHTML=(io.id?'<button class="mini" id="ob-indietro">‹ Questa settimana</button><div id="o-tre" style="margin-top:10px"></div>':'')+'<p class="et">Obiettivi</p><h3>Quello di cui il villaggio ha bisogno</h3>'+
     '<div class="card"><span class="t">Quello di cui il villaggio ha bisogno, per chi può fare. Si tocca «lo prendo» e la cosa entra tra le tue cose da fare.</span><span class="m">Chi l\'ha preso tocca lo stato per spostarlo avanti: da fare, in corso, fatto.</span></div>'+
     '<div class="stato-ob" id="ob-stato"></div>'+(io.id&&(io.nucleo||io.coordina||(io.ruoli||[]).length)?'<div class="card" id="cr-ob"><button class="btn pieno" id="cr-apri" style="align-self:flex-start">Crea un obiettivo</button><div id="cr-form" hidden>'+
       '<label class="m" for="cr-tit">Cosa c\'è da fare</label><input type="text" id="cr-tit" maxlength="200">'+
@@ -4555,8 +4630,9 @@ function vObiettivi(){
       '<label class="m" for="cr-quanti" style="margin-top:6px">Quante persone servono (facoltativo)</label><input type="number" id="cr-quanti" min="1" max="999" inputmode="numeric">'+
       '<label class="m" for="cr-entro" style="margin-top:6px">Entro il (facoltativo)</label><input type="date" id="cr-entro">'+
       '<label class="m" for="cr-link" style="margin-top:6px">Un link (facoltativo)</label><input type="url" id="cr-link">'+
-      '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="cr-ok">Crea</button><button class="btn" id="cr-annulla">Annulla</button><span class="m" id="cr-esito" role="status"></span></div></div></div>':'')+(io.id?'<div class="card"><span class="m">Quello che hai preso e il lavoro della tua area sono in Oggi.</span><div class="fine"><button class="mini" data-vai="oggi">Oggi ›</button></div></div>':'')+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
+      '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="cr-ok">Crea</button><button class="btn" id="cr-annulla">Annulla</button><span class="m" id="cr-esito" role="status"></span></div></div></div>':'')+cardInvitoPrat()+'<div id="ob" style="margin-top:10px"><p class="nota">Un momento…</p></div>';
   invitoPrat=false;
+  var obi=$("#ob-indietro");if(obi)obi.onclick=function(){window.fmObTutti=false;vObiettivi();window.scrollTo(0,0);};if(io.id)treOggi();
   /* 5 nov 15:47, Gab conferma: il banco dei compiti si fonde nella bacheca di Oggi */
   legaVai(c);
   /* 5 nov, Gab: «allora crea sql nuova, è importante dare autonomia a chi ha un ruolo e lavora in questo» (SQL 173 fm_crea_obiettivo) */
