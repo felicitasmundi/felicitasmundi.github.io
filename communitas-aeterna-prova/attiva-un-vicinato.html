@@ -75,6 +75,9 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,
 .zona{display:flex;flex-direction:column;gap:12px}
 .zona label{font-size:20px;display:block;margin-bottom:4px}
 .gruppo[hidden]{display:none}
+section[hidden]{display:none}
+.arrivate{display:flex;flex-direction:column;gap:14px}
+.arrivate b{color:var(--oro);font-weight:600}
 button{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:.06em;color:var(--cosmo3);background:var(--oro);border:0;border-radius:12px;padding:16px 20px;cursor:pointer}
 #esito{font-size:19px}
 
@@ -275,8 +278,6 @@ button{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:
 
       <fieldset>
         <legend>Chi sei</legend>
-        <div><label class="titolo" for="nome">Nome e cognome, o nome spirituale</label><input type="text" id="nome" autocomplete="name"></div>
-        <div><label class="titolo" for="mail">Email</label><input type="email" id="mail" autocomplete="email"></div>
         <div><label class="titolo" for="tel">Telefono</label><input type="tel" id="tel" autocomplete="tel"></div>
         <div><label class="titolo" for="amici">Sei già in connessione con altri amici di Felicitas?</label><input type="text" id="amici"></div>
         <div><label class="titolo" for="chi">Due righe su di te</label><textarea id="chi"></textarea></div>
@@ -321,21 +322,106 @@ button{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:
 
       <div><label class="titolo" for="note">Altro che vuoi dirci</label><textarea id="note"></textarea></div>
       <button type="submit">Invia la proposta</button>
-      <p id="esito" class="nota" role="status">Anteprima: il modulo vero sarà nell'app.</p>
+      <p id="esito" class="nota" role="status"></p>
     </form>
+  </section>
+
+  <section id="arrivate" aria-labelledby="t-arrivate" hidden>
+    <h2 id="t-arrivate">Proposte arrivate</h2>
+    <div id="lista-arrivate" class="arrivate"></div>
   </section>
 </div>
 
+<script src="/communitas-aeterna-prova/comune/lib/supabase-js-2.119.0.js"></script>
+<script src="comune/fm-attesa.js?v=11082140"></script>
 <script>
 (function(){
   var box=document.getElementById('box-gruppo');
   document.querySelectorAll('input[name="gruppo"]').forEach(function(r){
     r.addEventListener('change',function(){ box.hidden = !document.querySelector('input[name="gruppo"][value="gruppo"]').checked; });
   });
-  document.getElementById('modulo').addEventListener('submit',function(e){
+  /* SQL 266: salva con fm_attiva_vicinato; serve essere entrati (l'ospite passa dall'accesso e torna qui, la bozza resta) */
+  var BOZZA='fm_attiva_vicinato_bozza';
+  var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}):null;
+  var f=document.getElementById('modulo'),esito=document.getElementById('esito'),manda=f.querySelector('button[type=submit]');
+  var TESTI={dove:'dove',vicinato:'vicinato',telefono:'tel',amici:'amici',chi:'chi',nomi_gruppo:'nomi',note:'note'};
+  var ZONA=['ritiro','magazzino','mensa','produttori','operatori','studio','assistenza'];
+  function val(id){var e=document.getElementById(id);return e?(e.value||'').trim():'';}
+  function scelta(n){var x=f.querySelector('input[name="'+n+'"]:checked');return x?x.value:null;}
+  function dati(){
+    var d={modo:scelta('modo'),gruppo:scelta('gruppo'),nome_pubblico:scelta('pubblico'),laboratorio:document.getElementById('lab').checked,zona:{}},k;
+    for(k in TESTI)d[k]=val(TESTI[k]);
+    ZONA.forEach(function(z){var v=val('z-'+z);if(v)d.zona[z]=v;});
+    return d;
+  }
+  function rimetti(d){
+    var k;for(k in TESTI){var e=document.getElementById(TESTI[k]);if(e&&d[k])e.value=d[k];}
+    ZONA.forEach(function(z){var e=document.getElementById('z-'+z);if(e&&d.zona&&d.zona[z])e.value=d.zona[z];});
+    [['modo',d.modo],['gruppo',d.gruppo],['pubblico',d.nome_pubblico]].forEach(function(c){
+      var x=c[1]&&f.querySelector('input[name="'+c[0]+'"][value="'+c[1]+'"]');if(x)x.checked=true;});
+    document.getElementById('lab').checked=!!d.laboratorio;
+    box.hidden=d.gruppo!=='gruppo';
+  }
+  function di(t){esito.textContent=t;}
+  try{var b=localStorage.getItem(BOZZA);if(b)rimetti(JSON.parse(b));}catch(e){}
+
+  f.addEventListener('submit',function(e){
     e.preventDefault();
-    document.getElementById('esito').textContent='Anteprima: il modulo vero sarà nell\'app.';
+    var d=dati();
+    if(!d.dove){di('Scrivi il paese o la città.');document.getElementById('dove').focus();return;}
+    if(!d.chi){di('Scrivi due righe su di te.');document.getElementById('chi').focus();return;}
+    if(!db){di('La pagina non riesce a collegarsi. Controlla la connessione e riprova.');return;}
+    manda.disabled=true;di('Un momento…');
+    db.auth.getSession().then(function(s){
+      var u=s&&s.data&&s.data.session&&s.data.session.user;
+      if(!u){
+        try{localStorage.setItem(BOZZA,JSON.stringify(d));}catch(_){}
+        location.href='accesso.html?torna='+encodeURIComponent(location.pathname+'#serve');return;
+      }
+      return db.rpc('fm_attiva_vicinato',{p:d}).then(function(r){
+        manda.disabled=false;
+        if(r.error){var m=String(r.error.message||'');
+          di(/does not exist|schema cache|Could not find/i.test(m)?'Il modulo non è ancora aperto: riprova tra poco.':'Non è stato mandato. Si può riprovare.');return;}
+        if(r.data!=='ok'){di(r.data||'Non è stato mandato. Si può riprovare.');return;}
+        try{localStorage.removeItem(BOZZA);}catch(_){}
+        di('Ricevuto: la proposta è arrivata.');
+        leggi();
+      });
+    }).catch(function(){manda.disabled=false;di('Non è stato mandato. Si può riprovare.');});
   });
+
+  /* Proposte arrivate: le mostra solo a chi il database le fa leggere (nucleo e ruoli tutte, gli altri le proprie) */
+  var NOMI_ZONA={ritiro:'Punto di ritiro',magazzino:'Magazzino',mensa:'Mensa',produttori:'Produttori',operatori:'Operatori',studio:'Luoghi di studio e di cultura',assistenza:'Assistenza comunitaria integrata'};
+  function el(tag,cls,testo){var x=document.createElement(tag);if(cls)x.className=cls;if(testo!=null)x.textContent=testo;return x;}
+  function riga(c,etichetta,v){if(!v)return;var p=el('p');p.appendChild(el('b',null,etichetta+': '));p.appendChild(document.createTextNode(v));c.appendChild(p);}
+  function leggi(){
+    if(!db)return;
+    db.auth.getSession().then(function(s){
+      if(!(s&&s.data&&s.data.session))return;
+      return db.rpc('fm_attivazioni_vicinato').then(function(r){
+        if(r.error||!Array.isArray(r.data)||!r.data.length)return;
+        var lista=document.getElementById('lista-arrivate');lista.textContent='';
+        r.data.forEach(function(a){
+          var c=el('div','card');
+          c.appendChild(el('h3',null,a.dove+(a.vicinato?' · '+a.vicinato:'')));
+          c.appendChild(el('p','nota',new Date(a.il).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'})+' · '+a.nome));
+          riga(c,'Come aderisce',a.modo==='mio'?'Aderisco col vicinato in cui vivo':'Mi propongo per entrare in un vicinato');
+          riga(c,'Telefono',a.telefono);
+          riga(c,'Sei già in connessione con altri amici di Felicitas?',a.amici);
+          riga(c,'Due righe su di te',a.chi);
+          riga(c,'Sei solo a proporre o c\'è già un gruppo?',a.gruppo?'C\'è già un gruppo':'Sono solo a proporre');
+          riga(c,'Chi c\'è nel gruppo',a.nomi_gruppo);
+          Object.keys(NOMI_ZONA).forEach(function(z){riga(c,NOMI_ZONA[z],a.zona&&a.zona[z]);});
+          if(a.laboratorio)riga(c,'Laboratorio di attivazione del vicinato','Voglio fare il laboratorio di attivazione del vicinato');
+          riga(c,'Il tuo nome',a.nome_pubblico?'Sì, il mio nome può essere pubblico.':'No, solo dentro vicinati e villaggi.');
+          riga(c,'Altro che vuoi dirci',a.note);
+          lista.appendChild(c);
+        });
+        document.getElementById('arrivate').hidden=false;
+      });
+    }).catch(function(){});
+  }
+  leggi();
 })();
 </script>
 </body>
