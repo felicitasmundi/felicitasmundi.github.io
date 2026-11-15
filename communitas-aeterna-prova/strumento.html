@@ -2592,7 +2592,7 @@ function assAperte(){
       g.addEventListener("scroll",function(){var w=g.firstElementChild?g.firstElementChild.offsetWidth+12:1,k=Math.round(g.scrollLeft/w);pu.forEach(function(p,n){p.className=n===k?"on":"";});},{passive:true});
       if(ass.rispondo){var c=g.querySelector('[data-q="'+ass.rispondo+'"]');if(c)g.scrollLeft=c.offsetLeft-g.offsetLeft-18;}}
     f.querySelectorAll("[data-prendo]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_assistenza_prendo",{p_richiesta:b.getAttribute("data-prendo")}).then(function(r){
-      b.disabled=false;if(r&&!r.error&&r.data==="ok"){ass.scheda="prese";assAperte();return;}b.textContent=(r&&r.data)||"Si può riprovare.";},function(){b.disabled=false;b.textContent="Si può riprovare.";});};});
+      b.disabled=false;if(r&&!r.error&&(r.data==null||r.data==="ok")){ass.scheda="prese";assAperte();return;}b.textContent=(r&&r.error&&r.error.message)||(r&&r.data)||"Si può riprovare.";},function(){b.disabled=false;b.textContent="Si può riprovare.";});};});
     f.querySelectorAll("[data-risp]").forEach(function(b){b.onclick=function(){ass.rispondo=b.getAttribute("data-risp");assAperte();setTimeout(function(){var t=$("#ass-risp");if(t)t.focus();},300);};});
     var no=$("#ass-risp-no");if(no)no.onclick=function(){ass.rispondo=null;if(document.activeElement)document.activeElement.blur();assAperte();};
     var ok=$("#ass-risp-b");if(ok)ok.onclick=function(){var t=$("#ass-risp").value.trim(),e=$("#ass-risp-e");if(!t){e.textContent="Scrivi la risposta.";return;}
