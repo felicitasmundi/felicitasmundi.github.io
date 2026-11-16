@@ -75,9 +75,6 @@ input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,
 .zona{display:flex;flex-direction:column;gap:12px}
 .zona label{font-size:20px;display:block;margin-bottom:4px}
 .gruppo[hidden]{display:none}
-section[hidden]{display:none}
-.arrivate{display:flex;flex-direction:column;gap:14px}
-.arrivate b{color:var(--oro);font-weight:600}
 button{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:.06em;color:var(--cosmo3);background:var(--oro);border:0;border-radius:12px;padding:16px 20px;cursor:pointer}
 #esito{font-size:19px}
 
@@ -325,11 +322,6 @@ button{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:
       <p id="esito" class="nota" role="status"></p>
     </form>
   </section>
-
-  <section id="arrivate" aria-labelledby="t-arrivate" hidden>
-    <h2 id="t-arrivate">Proposte arrivate</h2>
-    <div id="lista-arrivate" class="arrivate"></div>
-  </section>
 </div>
 
 <script src="/communitas-aeterna-prova/comune/lib/supabase-js-2.119.0.js"></script>
@@ -385,43 +377,10 @@ button{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:
         if(r.data!=='ok'){di(r.data||'Non è stato mandato. Si può riprovare.');return;}
         try{localStorage.removeItem(BOZZA);}catch(_){}
         di('Ricevuto: la proposta è arrivata.');
-        leggi();
       });
     }).catch(function(){manda.disabled=false;di('Non è stato mandato. Si può riprovare.');});
   });
 
-  /* Proposte arrivate: le mostra solo a chi il database le fa leggere (nucleo e ruoli tutte, gli altri le proprie) */
-  var NOMI_ZONA={ritiro:'Punto di ritiro',magazzino:'Magazzino',mensa:'Mensa',produttori:'Produttori',operatori:'Operatori',studio:'Luoghi di studio e di cultura',assistenza:'Assistenza comunitaria integrata'};
-  function el(tag,cls,testo){var x=document.createElement(tag);if(cls)x.className=cls;if(testo!=null)x.textContent=testo;return x;}
-  function riga(c,etichetta,v){if(!v)return;var p=el('p');p.appendChild(el('b',null,etichetta+': '));p.appendChild(document.createTextNode(v));c.appendChild(p);}
-  function leggi(){
-    if(!db)return;
-    db.auth.getSession().then(function(s){
-      if(!(s&&s.data&&s.data.session))return;
-      return db.rpc('fm_attivazioni_vicinato').then(function(r){
-        if(r.error||!Array.isArray(r.data)||!r.data.length)return;
-        var lista=document.getElementById('lista-arrivate');lista.textContent='';
-        r.data.forEach(function(a){
-          var c=el('div','card');
-          c.appendChild(el('h3',null,a.dove+(a.vicinato?' · '+a.vicinato:'')));
-          c.appendChild(el('p','nota',new Date(a.il).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'})+' · '+a.nome));
-          riga(c,'Come aderisce',a.modo==='mio'?'Aderisco col vicinato in cui vivo':'Mi propongo per entrare in un vicinato');
-          riga(c,'Telefono',a.telefono);
-          riga(c,'Sei già in connessione con altri amici di Felicitas?',a.amici);
-          riga(c,'Due righe su di te',a.chi);
-          riga(c,'Sei solo a proporre o c\'è già un gruppo?',a.gruppo?'C\'è già un gruppo':'Sono solo a proporre');
-          riga(c,'Chi c\'è nel gruppo',a.nomi_gruppo);
-          Object.keys(NOMI_ZONA).forEach(function(z){riga(c,NOMI_ZONA[z],a.zona&&a.zona[z]);});
-          if(a.laboratorio)riga(c,'Laboratorio di attivazione del vicinato','Voglio fare il laboratorio di attivazione del vicinato');
-          riga(c,'Il tuo nome',a.nome_pubblico?'Sì, il mio nome può essere pubblico.':'No, solo dentro vicinati e villaggi.');
-          riga(c,'Altro che vuoi dirci',a.note);
-          lista.appendChild(c);
-        });
-        document.getElementById('arrivate').hidden=false;
-      });
-    }).catch(function(){});
-  }
-  leggi();
 })();
 </script>
 </body>
