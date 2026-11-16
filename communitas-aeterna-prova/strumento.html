@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="comune/libro-cervello.css?v=11082225">
 <script src="comune/libro-cervello.js?v=11092100"></script>
 <script src="comune/indice-link.js?v=11150020"></script>
+<script src="comune/fm-proposte-vicinato.js?v=11161200"></script>
 <style>
 :root{
   --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
@@ -1794,7 +1795,7 @@ function vTeam(){
   c.innerHTML='<div class="tc-testa"><button type="button" class="tc-ind" id="tc-ind" aria-label="Torna ad Azione">‹</button><span class="tm-seg" aria-hidden="true">'+esc(iniziale(t.nome))+'</span>'+
       '<div class="tc-nome"><b>'+esc(t.nome)+'</b><small>'+(duo?"chat a due":"chat del team")+'</small></div>'+
       '<button type="button" class="tc-menu" id="tc-menu" aria-label="Argomenti e notifiche'+(duo?' e chiusura':'')+'">⋯</button></div>'+
-    '<div id="tc-stanze"></div><div id="tc-chatparte"><div id="tc-pres"></div><div id="tc-dt"></div>'+(t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-stfiss"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
+    '<div id="tc-stanze"></div><div id="tc-chatparte"><div id="tc-pres"></div><div id="tc-dt"></div>'+(t.nome==="Praticantato"?PRAT_TASTO:"")+'<div id="tc-agenda"></div><div id="tc-ass"></div><div id="tc-stfiss"></div><div id="tc-pv"></div><div id="tc-fiss"></div><div id="tc-dir"></div><div class="tc-msg" id="tc-msg"><p class="nota" style="text-align:center">Un momento…</p></div>'+
     '<p class="tc-err" id="tc-err" aria-live="polite"></p>'+
     '<div class="tc-piede"><button type="button" class="tc-piu" id="tc-piu" aria-label="Foto, vocale, file o posizione">+</button><input type="file" id="tc-file" accept="image/*" hidden>'+
       '<input type="file" id="tc-doc" accept=".pdf,.txt,.rtf,.doc,.docx,.odt,.xls,.xlsx,.ods,.ppt,.pptx,.odp,application/pdf" hidden>'+
@@ -1818,6 +1819,8 @@ function vTeam(){
   if(!duo)diretteTeam(id);team.evento=null;team.stanzeSu=false;team.inAlto=false;if(!duo){stanzeTeam(id);presTeam(id);}
   team.msg=[];team.prop={};
   ricaricaTeam(true);team.guido=false;guidoChat(id);agendaTeam(id);ass.rispondo=null;ass.stat=false;assTeam(id);
+  /* 16/11 SQL 283: proposte di vicinato come card nel team Vicinati del Cibo */
+  if(!duo&&t.nome==="Vicinati del Cibo"&&window.fmProposteVicinato)fmProposteVicinato(db,id);
   /* la chat si aggiorna da sola: realtime se c'è, altrimenti ogni 20 secondi */
   try{if(db.channel){team.sub=db.channel("team-"+id).on("postgres_changes",{event:"*",schema:"public",table:"gruppo_messaggi",filter:"cerchio_id=eq."+id},function(){ricaricaTeam(false);}).subscribe();}}catch(e){}
   team.timer=setInterval(function(){ricaricaTeam(false);},20000);
