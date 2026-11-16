@@ -624,6 +624,15 @@ body.notte .corpo{--carta:#1a2148;--carta2:#232b5e;--foglio:#1a2148;--linea:#2f3
 .tm-giro .tm-ch{align-items:flex-start}
 .esp-riga>.esp-g{flex:0 0 auto;min-width:150px;scroll-snap-align:start}
 @media(min-width:760px){.esp-scorri>.esp-b{flex:1 1 0;max-width:none}}
+.tm-giro{align-items:flex-start}
+.tm-giro>.tm-ch{flex-direction:column;align-items:flex-start;gap:10px}
+.tm-giro .tm-seg{flex:0 0 auto;width:46px;height:46px}
+.tm-giro .tm-mezzo{width:100%}
+.tm-giro .tm-mezzo b{white-space:normal;overflow-wrap:anywhere}
+.tm-giro .tm-de,.tm-giro .tm-ul{white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:18px}
+.tm-giro .tm-ul{-webkit-line-clamp:2}
+.tm-giro .tm-dx{text-align:left}
+@media(min-width:760px){.tm-giro{flex-wrap:wrap;overflow:visible}.tm-giro>*{flex:1 1 220px;max-width:none}.esp-riga{flex-wrap:wrap;overflow:visible}}
 </style></head>
 <body>
 <style>/* 31/10 stelle v2 (Gab «ok 2», «ok pubblica nell app»): il cielo sta su html, il corpo diventa trasparente così il canvas delle stelle si vede */
