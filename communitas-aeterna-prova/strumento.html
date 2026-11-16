@@ -526,7 +526,7 @@ button.cs-carta{cursor:pointer}
 .tc-foglio select,.tc-foglio input[type=text],.tc-foglio input[type=email],.tc-foglio input[type=tel],.tc-campo{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}
 .tc-campo{color:rgba(245,240,230,.65)}
 .tc-btn{width:100%;margin-top:18px;height:54px;border-radius:27px;border:0;background:#D4AF6A;color:#0a1430;font:600 18px 'DM Sans',system-ui,sans-serif;cursor:pointer}
-.tc-btn[disabled]{opacity:.6;cursor:wait}.pd-foto{display:flex;align-items:center;justify-content:center;min-height:56px;border:1px dashed rgba(212,175,106,.6);border-radius:12px;color:#D4AF6A;font-size:18px;cursor:pointer;overflow:hidden}.pd-foto img{display:block;width:100%;max-height:200px;object-fit:cover}.tc-foglio textarea.pd-t{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif;min-height:56px;resize:vertical}.tc-foglio input[type=number]{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}.pd-marg{display:flex;align-items:center;gap:10px}.pd-marg button{width:48px;height:48px;border-radius:24px;border:1px solid rgba(212,175,106,.6);background:transparent;color:#D4AF6A;font-size:26px;cursor:pointer}.pd-marg b{flex:1;text-align:center;font-size:24px}.pd-c img{display:block;width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-bottom:8px}.pd-c p{margin:6px 0;font-size:17px;white-space:pre-wrap;overflow-wrap:anywhere}.tc-foglio label.pd-sw{display:flex;justify-content:space-between;align-items:center;font-size:18px;letter-spacing:0;text-transform:none;color:#F5F0E6;margin:0;padding:10px 0;border-top:1px solid rgba(212,175,106,.2);cursor:pointer}.pd-sw input{width:26px;height:26px;accent-color:#D4AF6A}.pd-nota{border-left:3px solid #E07A55;padding:6px 10px;margin:8px 0;font-size:17px}.pd-due{display:flex;gap:10px}.pd-due .tc-btn{margin-top:12px}.tc-btn.sec{background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.6)}
+.tc-btn[disabled]{opacity:.6;cursor:wait}.pd-foto{display:flex;align-items:center;justify-content:center;min-height:56px;border:1px dashed rgba(212,175,106,.6);border-radius:12px;color:#D4AF6A;font-size:18px;cursor:pointer;overflow:hidden}.pd-foto img{display:block;width:100%;max-height:200px;object-fit:cover}.tc-foglio textarea.pd-t{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif;min-height:56px;resize:vertical}.tc-foglio input[type=number]{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}.pd-marg{display:flex;align-items:center;gap:10px}.pd-marg button{width:48px;height:48px;border-radius:24px;border:1px solid rgba(212,175,106,.6);background:transparent;color:#D4AF6A;font-size:26px;cursor:pointer}.pd-marg b{flex:1;text-align:center;font-size:24px}.pd-c img{display:block;width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-bottom:8px}.pd-c p{margin:6px 0;font-size:17px;white-space:pre-wrap;overflow-wrap:anywhere}.tc-foglio label.pd-sw{display:flex;justify-content:space-between;align-items:center;font-size:18px;letter-spacing:0;text-transform:none;color:#F5F0E6;margin:0;padding:10px 0;border-top:1px solid rgba(212,175,106,.2);cursor:pointer}.pd-sw input{width:26px;height:26px;accent-color:#D4AF6A}.pd-nota{border-left:3px solid #E07A55;padding:6px 10px;margin:8px 0;font-size:17px}.pd-due{display:flex;gap:10px}.pd-due .tc-btn{margin-top:12px}.pd-cond{background:none;border:0;padding:0;color:#D4AF6A;font:500 18px 'DM Sans',system-ui,sans-serif;cursor:pointer}.tc-btn.sec{background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.6)}
 .tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
 /* SQL 129 · 29/10: audio, file, posizione, chat a due, notifiche a scelta */
 .tc-piu{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);background:transparent;color:#D4AF6A;font-size:30px;line-height:1;cursor:pointer}
@@ -1136,7 +1136,7 @@ function espSolidi(c){
    Gab 12:15: «c'è una differenza tra ciò che si comunica e il modo in cui i dati vengono archiviati»: ogni scelta apre una richiesta d'assistenza
    con la voce già scritta; il team che la riceve lo decide la tavola dei motivi nel database. */
 var ESP_BLOCCHI=[
-  {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto","prod"]]},
+  {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi il tuo prodotto","prod"]]},
   {tit:"Assistenza comunitaria integrata",voci:[["Praticantato","prat"],["Spiritualità"],["Percorsi"],["Trattamenti"],["Consulenze"]]},
   {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["Azienda col proprio sistema gestionale interno, collegato a Felicitas","","dichiara il tuo interesse"]],link:"cervello-digitale-evoluto.html"}
 ];
@@ -1177,6 +1177,7 @@ function vAzione(){
   var blocchi=ESP_BLOCCHI.map(function(k,i){
     return '<section class="esp-el esp-b" style="--e:#D4AF6A">'+(k.sopra?'<p class="esp-nm">'+esc(k.sopra)+'</p>':'')+'<h2>'+esc(k.tit)+'</h2>'+(k.d?'<p class="esp-d">'+esc(k.d)+'</p>':'')+
       k.voci.map(function(v,j){return '<button type="button" class="esp-v" data-esp-v="'+i+'.'+j+'"><span><b>'+esc(v[0])+'</b>'+(v[2]?'<small>'+esc(v[2])+'</small>':'')+'</span><em>Scegli</em></button>';}).join("")+
+      (k.voci.some(function(v){return v[1]==="prod";})?'<p class="esp-d" style="margin-top:10px"><button type="button" class="pd-cond" data-pd-cond>Condividi ›</button></p>':'')+
       (k.link?'<p class="esp-d" style="margin-top:10px"><a href="'+k.link+'" style="color:#D4AF6A">Il Cervello Digitale Evoluto ›</a></p>':'')+'</section>';}).join("");
   c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+(io.id?'':'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>')+
     (ruolo?vociH+team+iscrH+empH:'<div class="esp-scorri">'+blocchi+'</div>'+empH+team+iscrH)+
@@ -1189,10 +1190,11 @@ function vAzione(){
   var bfi=c.querySelector("[data-esp-fissa]");if(bfi)bfi.onclick=function(){agFissa(null,null);};
   var bpr=c.querySelector("[data-esp-prod]");if(bpr)bpr.onclick=function(){mieiProdotti();};
   var bcf=c.querySelector("[data-esp-conf]");if(bcf)bcf.onclick=function(){prodottiDaConfermare();};
+  c.querySelectorAll("[data-pd-cond]").forEach(function(b){b.onclick=function(){pdCondividi(b);};});
   c.querySelectorAll("[data-esp-v]").forEach(function(b){b.onclick=function(){var ij=b.getAttribute("data-esp-v").split("."),k=ESP_BLOCCHI[+ij[0]],v=k.voci[+ij[1]];
     if(v[1]==="emporio"){location.href="emporio.html?c=10182300";return;}
     if(v[1]==="prat"&&io.id){apriPrat();return;}
-    if(v[1]==="prod"&&io.id){formProdotto(null);return;}
+    if(v[1]==="prod"){if(io.id)formProdotto(null);else location.href="accesso.html?torna="+encodeURIComponent("strumento.html?prodotto=1");return;}
     vai("assistenza");var t=$("#ass-t");if(t){t.value=k.tit+" · "+v[0]+"\n\n";try{t.focus();t.setSelectionRange(t.value.length,t.value.length);}catch(e){}}};});
   if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(iscr)iscritti();
@@ -1293,6 +1295,19 @@ var PD_CAT=[["alimenti","Alimenti",5],["rimedi","Rimedi",8],["cosmesi","Cosmesi"
   ["arredo","Arredo",10],["oggetti sacri","Oggetti sacri",10],["libri e stampati","Libri e stampati",25],["strumenti di coscienza","Strumenti di coscienza",0],["digitale","Digitale",20]];
 function pdMin(c){var x=PD_CAT.filter(function(k){return k[0]===c;})[0];return x?x[2]:0;}
 function pdNomeCat(c){var x=PD_CAT.filter(function(k){return k[0]===c;})[0];return x?x[1]:(c||"");}
+var PD_LINK="https://app.felicitasmundi.com/communitas-aeterna-prova/strumento.html?prodotto=1";
+function pdCondividi(b){
+  var dopo=function(t){if(!b)return;var v=b.textContent;b.textContent=t;setTimeout(function(){b.textContent=v;},2500);};
+  if(navigator.share){navigator.share({title:"Proponi il tuo prodotto",url:PD_LINK}).catch(function(){});return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(PD_LINK).then(function(){dopo("Link copiato");},function(){prompt("",PD_LINK);});return;}
+  prompt("",PD_LINK);
+}
+function prodottoDaLink(){
+  var q=null;try{q=new URLSearchParams(location.search).get("prodotto");}catch(e){}
+  if(q!=="1")return;
+  if(!io.id){location.replace("accesso.html?torna="+encodeURIComponent("strumento.html?prodotto=1"));return;}
+  setTimeout(function(){if(!document.getElementById("tc-foglio"))formProdotto(null);},700);
+}
 function contaProposte(){
   db.rpc("fm_prodotti_proposte").then(function(r){var b=$("[data-esp-conf]");if(!b)return;
     var l=(r&&!r.error&&r.data)||[];if(!l.length){b.style.display="none";return;}
@@ -1303,7 +1318,7 @@ function formProdotto(p){
   function chiudi(){f.remove();}
   var marg=p.margine!=null?+p.margine:pdMin(p.categoria||"alimenti"),foto=p.foto||"",blob=null;
   f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+
-    '<h2>'+(p.id?'Correggi il prodotto':'Aggiungi un prodotto')+'</h2>'+(p.nota?'<p class="pd-nota">'+esc(p.nota)+'</p>':'')+
+    '<h2>'+(p.id?'Correggi il prodotto':'Aggiungi un prodotto')+'</h2>'+(p.id?'':'<p><button type="button" class="pd-cond" id="pd-cond">Condividi ›</button></p>')+(p.nota?'<p class="pd-nota">'+esc(p.nota)+'</p>':'')+
     '<label>Foto</label><div class="pd-foto" id="pd-foto">'+(foto?'<img src="'+esc(foto)+'" alt="">':'+ Aggiungi foto')+'</div><input type="file" id="pd-file" accept="image/*" hidden>'+
     '<label for="pd-nome">Nome</label><input type="text" id="pd-nome" maxlength="200" value="'+esc(p.nome||"")+'">'+
     '<label for="pd-desc">Descrizione</label><textarea class="pd-t" id="pd-desc" maxlength="4000">'+esc(p.descrizione||"")+'</textarea>'+
@@ -1315,6 +1330,7 @@ function formProdotto(p){
     '<label>Margine riconosciuto a Felicitas</label><div class="pd-marg"><button type="button" id="pd-meno" aria-label="Meno">−</button><b id="pd-m"></b><button type="button" id="pd-piu" aria-label="Più">+</button></div>'+
     '<button type="button" class="tc-btn" id="pd-invia">Proponi</button><p class="tc-nota" id="pd-esito" aria-live="polite"></p></div>';
   f.querySelector("[data-chiudi-f]").onclick=chiudi;
+  if($("#pd-cond"))$("#pd-cond").onclick=function(){pdCondividi(this);};
   function mostra(){var m=pdMin($("#pd-cat").value);if(marg<m)marg=m;if(marg>100)marg=100;$("#pd-m").textContent=marg+"%";$("#pd-meno").disabled=marg<=m;}
   $("#pd-cat").onchange=function(){marg=pdMin(this.value);mostra();};
   $("#pd-meno").onclick=function(){marg-=1;mostra();};$("#pd-piu").onclick=function(){marg+=1;mostra();};mostra();
@@ -5470,6 +5486,7 @@ chiSono().then(function(){
   if(io.id&&window.fmNotifiche)fmNotifiche(db);
   benvenutoKarma();
   finestraPraticantato();
+  prodottoDaLink();
   try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff|persone)$/.test(q))vista=q;}catch(e){}
   /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
   try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;team.tipo="team";vista="team";}}catch(e){}
