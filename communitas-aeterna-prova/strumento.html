@@ -525,7 +525,7 @@ button.cs-carta{cursor:pointer}
 .tc-foglio select,.tc-foglio input[type=text],.tc-foglio input[type=email],.tc-foglio input[type=tel],.tc-campo{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}
 .tc-campo{color:rgba(245,240,230,.65)}
 .tc-btn{width:100%;margin-top:18px;height:54px;border-radius:27px;border:0;background:#D4AF6A;color:#0a1430;font:600 18px 'DM Sans',system-ui,sans-serif;cursor:pointer}
-.tc-btn[disabled]{opacity:.6;cursor:wait}
+.tc-btn[disabled]{opacity:.6;cursor:wait}.pd-foto{display:flex;align-items:center;justify-content:center;min-height:56px;border:1px dashed rgba(212,175,106,.6);border-radius:12px;color:#D4AF6A;font-size:18px;cursor:pointer;overflow:hidden}.pd-foto img{display:block;width:100%;max-height:200px;object-fit:cover}.tc-foglio textarea.pd-t{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif;min-height:56px;resize:vertical}.tc-foglio input[type=number]{width:100%;box-sizing:border-box;background:#1a2148;color:#F5F0E6;border:1px solid rgba(212,175,106,.4);border-radius:12px;padding:12px;font:400 18px 'DM Sans',system-ui,sans-serif}.pd-marg{display:flex;align-items:center;gap:10px}.pd-marg button{width:48px;height:48px;border-radius:24px;border:1px solid rgba(212,175,106,.6);background:transparent;color:#D4AF6A;font-size:26px;cursor:pointer}.pd-marg b{flex:1;text-align:center;font-size:24px}.pd-c img{display:block;width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-bottom:8px}.pd-c p{margin:6px 0;font-size:17px;white-space:pre-wrap;overflow-wrap:anywhere}.tc-foglio label.pd-sw{display:flex;justify-content:space-between;align-items:center;font-size:18px;letter-spacing:0;text-transform:none;color:#F5F0E6;margin:0;padding:10px 0;border-top:1px solid rgba(212,175,106,.2);cursor:pointer}.pd-sw input{width:26px;height:26px;accent-color:#D4AF6A}.pd-nota{border-left:3px solid #E07A55;padding:6px 10px;margin:8px 0;font-size:17px}.pd-due{display:flex;gap:10px}.pd-due .tc-btn{margin-top:12px}.tc-btn.sec{background:transparent;color:#F5F0E6;border:1px solid rgba(212,175,106,.6)}
 .tc-nota{text-align:center;font-size:16px;color:rgba(245,240,230,.72);margin-top:10px}
 /* SQL 129 · 29/10: audio, file, posizione, chat a due, notifiche a scelta */
 .tc-piu{flex:0 0 52px;height:52px;border-radius:26px;border:1px solid rgba(212,175,106,.5);background:transparent;color:#D4AF6A;font-size:30px;line-height:1;cursor:pointer}
@@ -1135,7 +1135,7 @@ function espSolidi(c){
    Gab 12:15: «c'è una differenza tra ciò che si comunica e il modo in cui i dati vengono archiviati»: ogni scelta apre una richiesta d'assistenza
    con la voce già scritta; il team che la riceve lo decide la tavola dei motivi nel database. */
 var ESP_BLOCCHI=[
-  {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto"]]},
+  {sopra:"FelicitasFestival",tit:"Vicinati del cibo",voci:[["Attiva punto di ritiro"],["Attiva vicinato"],["Proponi prodotto","prod"]]},
   {tit:"Assistenza comunitaria integrata",voci:[["Praticantato","prat"],["Spiritualità"],["Percorsi"],["Trattamenti"],["Consulenze"]]},
   {tit:"Cervello Digitale Evoluto",d:"attiva per azienda, associazione, organizzazione, ente",voci:[["Azienda col proprio sistema gestionale interno, collegato a Felicitas","","dichiara il tuo interesse"]],link:"cervello-digitale-evoluto.html"}
 ];
@@ -1153,7 +1153,9 @@ function vAzione(){
   var gr=[].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
     .concat(log?[g("Cassa",'data-vai="cassa"',true)]:[]).concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]).concat(io.id?[g("Fissa un incontro",'data-esp-fissa="1"',false)]:[])
     /* 8/11 Gab: «Produttore è karma yoga» · «No I prodotti li metterei in espandi» (SQL 216) */
-    .concat(io.id?[g("I miei prodotti",'data-esp-prod="1" style="display:none"',false)]:[]);
+    .concat(io.id?[g("I miei prodotti",'data-esp-prod="1" style="display:none"',false)]:[])
+    /* 16/11 Gab: proposte di prodotti, le vedono karma yoga e ruoli dei Vicinati del Cibo; confermano nucleo e ruoli Logistica (SQL 282) */
+    .concat(io.id?[g("Da confermare",'data-esp-conf="1" style="display:none"',false,'<span id="esp-conf-n"></span>')]:[]);
   var team=io.id?'<section class="esp-el" style="--e:#D4AF6A"><p class="esp-nm">'+(ruolo?'I TUOI TEAM':'LE TUE CHAT')+'</p>'+
       (ruolo?'':'<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+'</div>')+
       '<div id="esp-team"'+(ruolo?'':' hidden')+'><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>'+
@@ -1185,14 +1187,16 @@ function vAzione(){
   var bc=c.querySelector("[data-esp-chat]");if(bc)bc.onclick=function(){nuovaChat();};
   var bfi=c.querySelector("[data-esp-fissa]");if(bfi)bfi.onclick=function(){agFissa(null,null);};
   var bpr=c.querySelector("[data-esp-prod]");if(bpr)bpr.onclick=function(){mieiProdotti();};
+  var bcf=c.querySelector("[data-esp-conf]");if(bcf)bcf.onclick=function(){prodottiDaConfermare();};
   c.querySelectorAll("[data-esp-v]").forEach(function(b){b.onclick=function(){var ij=b.getAttribute("data-esp-v").split("."),k=ESP_BLOCCHI[+ij[0]],v=k.voci[+ij[1]];
     if(v[1]==="emporio"){location.href="emporio.html?c=10182300";return;}
     if(v[1]==="prat"&&io.id){apriPrat();return;}
+    if(v[1]==="prod"&&io.id){formProdotto(null);return;}
     vai("assistenza");var t=$("#ass-t");if(t){t.value=k.tit+" · "+v[0]+"\n\n";try{t.focus();t.setSelectionRange(t.value.length,t.value.length);}catch(e){}}};});
   if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(iscr)iscritti();
   if(io.nucleo)vociIndice();
-  if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();
+  if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();contaProposte();
     leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";}))bp.style.display="";
       var n=$("#esp-team-nomi");if(!n)return;
       if(!l||!l.length){n.textContent="Ancora nessun team";return;}
@@ -1281,7 +1285,93 @@ function mieChat(){
 /* I MIEI PRODOTTI · SQL 216 (8/11/2026). Gab 16:43: «potranno mettere quali sono i prodotti a disposizione, la quantità, tutto quanto».
    Elenco da fm_miei_prodotti (ognuno vede solo i suoi); quantità con fm_mia_quantita; «Aggiungi un prodotto» apre la voce «Produttori»
    del team Vicinati del Cibo (prima Felicitas Festival, SQL 226), dove la card diventa prodotto con «Rendi visibile a tutti» (SQL 184). */
-var PROD_STATI={pubblico:"nell'Emporio",proposto:"proposto",nel_team:"nel team",da_controllare:"da controllare",in_controllo:"in controllo",da_confermare:"da confermare",respinta:"respinta"};
+/* GESTIONE PRODOTTI · SQL 282 (16/11/2026). Gab 11:22: «un contesto di passaggio da quando un produttore propone il prodotto,
+   che permette ai responsabili di confermare e mettere su emporio/giornale/cervello» · 11:38 confermano nucleo e ruoli Logistica ·
+   11:44 margine e processo di produzione · 11:45 il margine può essere aumentato · 11:50 libri 25, oggettistica 15 (le altre dalla R74). */
+var PD_CAT=[["alimenti","Alimenti",5],["rimedi","Rimedi",8],["cosmesi","Cosmesi",10],["oggettistica","Oggettistica",15],["abbigliamento","Abbigliamento",10],
+  ["arredo","Arredo",10],["oggetti sacri","Oggetti sacri",10],["libri e stampati","Libri e stampati",25],["strumenti di coscienza","Strumenti di coscienza",0],["digitale","Digitale",20]];
+function pdMin(c){var x=PD_CAT.filter(function(k){return k[0]===c;})[0];return x?x[2]:0;}
+function pdNomeCat(c){var x=PD_CAT.filter(function(k){return k[0]===c;})[0];return x?x[1]:(c||"");}
+function contaProposte(){
+  db.rpc("fm_prodotti_proposte").then(function(r){var b=$("[data-esp-conf]");if(!b)return;
+    var l=(r&&!r.error&&r.data)||[];if(!l.length){b.style.display="none";return;}
+    b.style.display="";var n=$("#esp-conf-n");if(n)n.innerHTML='<em class="esp-nl">'+l.length+'</em>';},function(){});
+}
+function formProdotto(p){
+  p=p||{};var f=document.createElement("div");f.id="tc-foglio";document.body.appendChild(f);
+  function chiudi(){f.remove();}
+  var marg=p.margine!=null?+p.margine:pdMin(p.categoria||"alimenti"),foto=p.foto||"",blob=null;
+  f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+
+    '<h2>'+(p.id?'Correggi il prodotto':'Aggiungi un prodotto')+'</h2>'+(p.nota?'<p class="pd-nota">'+esc(p.nota)+'</p>':'')+
+    '<label>Foto</label><div class="pd-foto" id="pd-foto">'+(foto?'<img src="'+esc(foto)+'" alt="">':'+ Aggiungi foto')+'</div><input type="file" id="pd-file" accept="image/*" hidden>'+
+    '<label for="pd-nome">Nome</label><input type="text" id="pd-nome" maxlength="200" value="'+esc(p.nome||"")+'">'+
+    '<label for="pd-desc">Descrizione</label><textarea class="pd-t" id="pd-desc" maxlength="4000">'+esc(p.descrizione||"")+'</textarea>'+
+    '<label for="pd-cat">Categoria</label><select id="pd-cat">'+PD_CAT.map(function(k){return '<option value="'+k[0]+'"'+((p.categoria||"alimenti")===k[0]?' selected':'')+'>'+k[1]+'</option>';}).join("")+'</select>'+
+    '<label for="pd-proc">Processo di produzione</label><textarea class="pd-t" id="pd-proc" maxlength="4000">'+esc(p.processo||"")+'</textarea>'+
+    '<div class="ag-due"><div><label for="pd-prezzo">Prezzo €</label><input type="number" id="pd-prezzo" min="0" step="0.01" inputmode="decimal" value="'+(p.prezzo!=null?esc(String(p.prezzo)):'')+'"></div>'+
+    '<div><label for="pd-q">Quantità</label><div class="ag-due"><input type="number" id="pd-q" min="0" step="1" inputmode="numeric" value="'+(p.quantita!=null?esc(String(p.quantita)):'')+'">'+
+    '<select id="pd-u" aria-label="Unità">'+["pz","kg","g","l","conf"].map(function(u){return '<option'+(p.unita===u?' selected':'')+'>'+u+'</option>';}).join("")+'</select></div></div></div>'+
+    '<label>Margine riconosciuto a Felicitas</label><div class="pd-marg"><button type="button" id="pd-meno" aria-label="Meno">−</button><b id="pd-m"></b><button type="button" id="pd-piu" aria-label="Più">+</button></div>'+
+    '<button type="button" class="tc-btn" id="pd-invia">Proponi</button><p class="tc-nota" id="pd-esito" aria-live="polite"></p></div>';
+  f.querySelector("[data-chiudi-f]").onclick=chiudi;
+  function mostra(){var m=pdMin($("#pd-cat").value);if(marg<m)marg=m;if(marg>100)marg=100;$("#pd-m").textContent=marg+"%";$("#pd-meno").disabled=marg<=m;}
+  $("#pd-cat").onchange=function(){marg=pdMin(this.value);mostra();};
+  $("#pd-meno").onclick=function(){marg-=1;mostra();};$("#pd-piu").onclick=function(){marg+=1;mostra();};mostra();
+  $("#pd-foto").onclick=function(){$("#pd-file").click();};
+  $("#pd-file").onchange=function(){var x=this.files&&this.files[0];if(!x)return;
+    riduciFoto(x).then(function(b){blob=b;$("#pd-foto").innerHTML='<img src="'+URL.createObjectURL(b)+'" alt="">';});};
+  $("#pd-invia").onclick=function(){var b=this,e=$("#pd-esito");
+    if(!foto&&!blob){e.textContent="Manca: foto.";return;}
+    b.disabled=true;e.textContent="Un momento…";
+    var su=blob?db.storage.from("vetrina").upload("proposte/"+io.id+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+".jpg",blob,{contentType:blob.type||"image/jpeg",upsert:false}).then(function(u){
+        if(u&&u.error)throw {msg:"La foto non è stata caricata. Riprova."};
+        return db.storage.from("vetrina").getPublicUrl(u.data.path).data.publicUrl;}):Promise.resolve(foto);
+    su.then(function(url){foto=url;blob=null;
+      return db.rpc("fm_prodotto_proponi",{p:{id:p.id||null,nome:$("#pd-nome").value,descrizione:$("#pd-desc").value,foto:url,categoria:$("#pd-cat").value,
+        processo:$("#pd-proc").value,prezzo:$("#pd-prezzo").value,quantita:$("#pd-q").value,unita:$("#pd-u").value,margine:marg}});
+    }).then(function(r){b.disabled=false;
+      if(r&&r.error){e.textContent=errore(r.error);return;}
+      if(r.data!=="ok"){e.textContent=r.data;return;}
+      chiudi();contaProposte();mieiProdotti();
+    },function(x){b.disabled=false;e.textContent=(x&&x.msg)||errore(x);});
+  };
+}
+function prodottiDaConfermare(){
+  var f=document.createElement("div");f.id="tc-foglio";document.body.appendChild(f);
+  function chiudi(){f.remove();contaProposte();}
+  f.innerHTML='<div class="tc-velo" data-chiudi-f></div><div class="tc-foglio" role="dialog" aria-modal="true"><div class="tc-presa"></div>'+
+    '<h2>Da confermare</h2><div id="pd-lista"><p>Un momento…</p></div></div>';
+  f.querySelector("[data-chiudi-f]").onclick=chiudi;
+  function disegna(){
+    db.rpc("fm_prodotti_proposte").then(function(r){var box=$("#pd-lista");if(!box)return;
+      if(!r||r.error){box.innerHTML='<p>'+esc(errore(r&&r.error))+'</p>';return;}
+      var l=r.data||[];if(!l.length){box.innerHTML='<p>Niente da confermare.</p>';return;}
+      box.innerHTML=l.map(function(p,i){
+        return '<div class="tm-ric pd-c">'+(p.foto?'<img src="'+esc(p.foto)+'" alt="" loading="lazy">':'')+'<b>'+esc(p.nome)+'</b>'+
+          '<span class="m">'+esc(p.produttore)+' · '+esc(String(p.prezzo))+' € · '+esc(String(p.quantita))+' '+esc(p.unita||"")+'</span>'+
+          '<p>'+esc(p.descrizione||"")+'</p><p class="m">'+esc(pdNomeCat(p.categoria))+' · margine a Felicitas '+esc(String(p.margine))+'%</p>'+
+          '<p>'+esc(p.processo||"")+'</p>'+(p.nota?'<p class="pd-nota">'+esc(p.nota)+'</p>':'')+
+          (p.conferma?'<label class="pd-sw">Nell\'Emporio<input type="checkbox" data-pd-e="'+i+'" checked></label>'+
+            '<label class="pd-sw">Nel Cervello, visibile a tutti<input type="checkbox" data-pd-c="'+i+'" checked></label>':'')+
+          '<div class="pd-due">'+(p.conferma?'<button type="button" class="tc-btn" data-pd-ok="'+i+'">Conferma</button>':'')+
+          (p.risponde?'<button type="button" class="tc-btn sec" data-pd-no="'+i+'">Da correggere</button>':'')+
+          (p.mio&&p.nota?'<button type="button" class="tc-btn sec" data-pd-mio="'+i+'">Correggi</button>':'')+'</div>'+
+          '<div data-pd-box="'+i+'"></div><p class="tc-nota" data-pd-es="'+i+'" aria-live="polite"></p></div>';}).join("");
+      box.querySelectorAll("[data-pd-ok]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-pd-ok"),p=l[i],es=box.querySelector('[data-pd-es="'+i+'"]');
+        b.disabled=true;es.textContent="Un momento…";
+        db.rpc("fm_prodotto_conferma",{p_id:p.id,p_emporio:box.querySelector('[data-pd-e="'+i+'"]').checked,p_cervello:box.querySelector('[data-pd-c="'+i+'"]').checked}).then(function(x){b.disabled=false;
+          if(x&&x.error){es.textContent=errore(x.error);return;}if(x.data!=="ok"){es.textContent=x.data;return;}disegna();},function(){b.disabled=false;es.textContent="Riprova tra poco.";});};});
+      box.querySelectorAll("[data-pd-no]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-pd-no"),p=l[i],c=box.querySelector('[data-pd-box="'+i+'"]');
+        c.innerHTML='<textarea class="pd-t" maxlength="1000" aria-label="Cosa va corretto"></textarea><button type="button" class="tc-btn">Invia</button>';
+        var t=c.querySelector("textarea"),bi=c.querySelector("button"),es=box.querySelector('[data-pd-es="'+i+'"]');t.focus();
+        bi.onclick=function(){bi.disabled=true;db.rpc("fm_prodotto_correggi",{p_id:p.id,p_nota:t.value}).then(function(x){bi.disabled=false;
+          if(x&&x.error){es.textContent=errore(x.error);return;}if(x.data!=="ok"){es.textContent=x.data;return;}disegna();},function(){bi.disabled=false;es.textContent="Riprova tra poco.";});};};});
+      box.querySelectorAll("[data-pd-mio]").forEach(function(b){b.onclick=function(){var p=l[b.getAttribute("data-pd-mio")];f.remove();formProdotto(p);};});
+    },function(){var box=$("#pd-lista");if(box)box.innerHTML='<p>Riprova tra poco.</p>';});
+  }
+  disegna();
+}
+var PROD_STATI={pubblico:"nell'Emporio",proposto:"da confermare",nel_team:"nel team",da_controllare:"da controllare",in_controllo:"in controllo",da_confermare:"da confermare",respinta:"respinta"};
 function mieiProdotti(){
   var f=document.createElement("div");f.id="tc-foglio";document.body.appendChild(f);
   function chiudi(){f.remove();}
@@ -1290,10 +1380,7 @@ function mieiProdotti(){
     '<button type="button" class="tc-btn" id="mp-nuovo">Aggiungi un prodotto</button><p class="tc-nota" id="mp-esito" aria-live="polite"></p></div>';
   f.querySelector("[data-chiudi-f]").onclick=chiudi;
   var fest=(team.lista||[]).filter(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";})[0];
-  $("#mp-nuovo").onclick=function(){var e=$("#mp-esito");if(!fest){e.textContent="Non sei nel team Vicinati del Cibo.";return;}
-    db.from("cervello_capitoli").select("id").eq("squadra_id",fest.team_id).eq("titolo","Produttori").maybeSingle().then(function(r){
-      if(r&&!r.error&&r.data){location.href="strumento.html?v=cervello&cap="+encodeURIComponent(r.data.id);return;}
-      e.textContent=r&&r.error?errore(r.error):"La voce «Produttori» non c'è ancora.";},function(){e.textContent="Riprova tra poco.";});};
+  $("#mp-nuovo").onclick=function(){chiudi();formProdotto(null);};
   function disegna(){
     db.rpc("fm_miei_prodotti").then(function(r){var box=$("#mp-lista");if(!box)return;
       if(!r||r.error){box.innerHTML='<p>'+esc(errore(r&&r.error))+'</p>';return;}
