@@ -38,7 +38,17 @@
   }
   function collegaApp(db){
     if(!APP || !db || !db.auth || collegaApp.fatto) return; collegaApp.fatto = 1;
-    db.auth.getSession().then(function(x){ passaAllApp(x && x.data && x.data.session); }).catch(function(){});
+    db.auth.getSession().then(function(x){
+      var s = x && x.data && x.data.session;
+      passaAllApp(s);
+      /* 16/11 (Gab: «se installo whatsapp quello inizia di default a dirmi che ci sono dei messaggi»): su Android 13 e oltre ogni app
+         deve chiedere una volta il permesso delle notifiche. L'apk lo chiede solo dentro promemoria(): con un'ora già passata
+         chiede il permesso e non programma niente. Se il permesso c'è già, il telefono non mostra nulla. Al massimo una volta al giorno. */
+      if(s && typeof APP.promemoria === 'function'){
+        var ult = +leggi('fm_apk_permesso') || 0;
+        if(Date.now() - ult > 864e5){ scrivi('fm_apk_permesso', String(Date.now())); try{ APP.promemoria('fm-permesso-notifiche', '', '0'); }catch(e){} }
+      }
+    }).catch(function(){});
     try{ db.auth.onAuthStateChange(function(ev, s){
       if(ev === 'SIGNED_OUT'){ ultimoPassato = ''; try{ APP.filoVia(); }catch(e){} return; }
       passaAllApp(s);
@@ -117,6 +127,10 @@
 
   /* il tasto in I miei dati */
   window.fmNotifiche = function(db){
+    /* 16/11: in strumento.html db non è window.db, quindi partiDaSolo non passava mai l'accesso all'app Android scaricata
+       e il suo servizio degli avvisi non partiva (Gab: «continuo a non vedere notifica e numerino»). Si collega qui, prima di tutto:
+       dentro l'app scaricata il telefono non ha PushManager, e la riga dopo uscirebbe subito. */
+    collegaApp(db);
     if(!VAPID || !ok || !db) return;
     if(!document.getElementById('fn-css')){ var st=document.createElement('style'); st.id='fn-css'; st.textContent=CSS; document.head.appendChild(st); }
     try{ db.auth.getSession().then(function(x){ if(x && x.data && x.data.session) auto(db); }).catch(function(){}); }catch(e){}
