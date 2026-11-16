@@ -615,7 +615,15 @@ body.notte .corpo{--carta:#1a2148;--carta2:#232b5e;--foglio:#1a2148;--linea:#2f3
 .nav{background-color:#0a1430!important;background-image:none!important}
 
 </style>
-</head>
+<style id="riordino-15-11">
+.esp-scorri,.tm-giro,.esp-riga{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:6px;scrollbar-width:none}
+.esp-scorri::-webkit-scrollbar,.tm-giro::-webkit-scrollbar,.esp-riga::-webkit-scrollbar{display:none}
+.esp-scorri>.esp-b{flex:0 0 86%;max-width:420px;scroll-snap-align:start;margin:0 0 16px}
+.tm-giro>*{flex:0 0 80%;max-width:360px;scroll-snap-align:start;margin:0!important;border:1px solid rgba(212,175,106,.35);border-radius:18px;background:#1a2148;padding:16px!important;text-align:left;display:flex;flex-direction:column;gap:6px}
+.tm-giro .tm-ch{align-items:flex-start}
+.esp-riga>.esp-g{flex:0 0 auto;min-width:150px;scroll-snap-align:start}
+@media(min-width:760px){.esp-scorri>.esp-b{flex:1 1 0;max-width:none}}
+</style></head>
 <body>
 <style>/* 31/10 stelle v2 (Gab «ok 2», «ok pubblica nell app»): il cielo sta su html, il corpo diventa trasparente così il canvas delle stelle si vede */
 html:has(body.cosmo-az) body.notte.cosmo-az{background:transparent!important}
@@ -1147,10 +1155,10 @@ function vAzione(){
     /* 8/11 Gab: «Produttore è karma yoga» · «No I prodotti li metterei in espandi» (SQL 216) */
     .concat(io.id?[g("I miei prodotti",'data-esp-prod="1" style="display:none"',false)]:[]);
   var team=io.id?'<section class="esp-el" style="--e:#D4AF6A"><p class="esp-nm">'+(ruolo?'I TUOI TEAM':'LE TUE CHAT')+'</p>'+
-      '<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+(ruolo?g("Nuova chat",'data-esp-chat="1"'):'')+'</div>'+
+      (ruolo?'':'<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+'</div>')+
       '<div id="esp-team"'+(ruolo?'':' hidden')+'><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>'+
-      (ruolo?'<p class="esp-d" style="margin-top:12px">I tuoi obiettivi e le scadenze sono in Oggi.</p>':'')+
-      (gr.length?'<div class="esp-gg" style="margin-top:12px">'+gr.join("")+'</div>':'')+'</section>':'';
+      
+      ((gr.length||ruolo)?'<div class="esp-riga">'+(ruolo?g("Nuova chat",'data-esp-chat="1"'):'')+gr.join("")+'</div>':'')+'</section>':'';
   /* 8/11 Gab: «dovrei avere un quadrante con "iscritti festival felicitas"» · «lo vede anche chi ha l ruolo eventi» (SQL 224) */
   var iscr=!!(io.id&&(io.nucleo||(io.ruoli||[]).some(function(r){return r.ruolo==="eventi";})));
   var iscrH=iscr?'<section class="esp-el" id="esp-iscr-s" style="--e:#8DBF5E"><p class="esp-nm">FELICITAS FESTIVAL</p><h2>Iscritti Felicitas Festival</h2>'+
@@ -1168,7 +1176,7 @@ function vAzione(){
       k.voci.map(function(v,j){return '<button type="button" class="esp-v" data-esp-v="'+i+'.'+j+'"><span><b>'+esc(v[0])+'</b>'+(v[2]?'<small>'+esc(v[2])+'</small>':'')+'</span><em>Scegli</em></button>';}).join("")+
       (k.link?'<p class="esp-d" style="margin-top:10px"><a href="'+k.link+'" style="color:#D4AF6A">Il Cervello Digitale Evoluto ›</a></p>':'')+'</section>';}).join("");
   c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+(io.id?'':'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>')+
-    (ruolo?vociH+team+iscrH+empH+'<p class="esp-nm" style="margin:22px 0 10px;color:#D4AF6A">DI COSA HAI BISOGNO?</p>'+blocchi:empH+blocchi+team+iscrH)+
+    (ruolo?vociH+team+iscrH+empH:'<div class="esp-scorri">'+blocchi+'</div>'+empH+team+iscrH)+
     /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
     '<div data-fm-installa></div>';
   legaVai(c);
@@ -1353,11 +1361,10 @@ function mieiTeam(){
       if(!qu){box.innerHTML='<div class="tm-lista">'+l.map(riga).join("")+'</div>';}
       else{
         var pr=l.filter(function(t){return t.quadrante==="praticantato";}),fm=l.filter(function(t){return t.quadrante==="felicitasmundi";}),sp=l.filter(function(t){return t.quadrante!=="praticantato"&&t.quadrante!=="felicitasmundi";});
-        box.innerHTML=pr.map(function(t){return '<button type="button" class="tm-pr" data-team="'+esc(t.team_id)+'"><b>'+esc(t.nome)+'</b>'+(t.descrizione?'<span class="tm-def">'+esc(t.descrizione)+'</span>':'')+
+        box.innerHTML='<div class="tm-giro">'+pr.map(function(t){return '<button type="button" class="tm-pr" data-team="'+esc(t.team_id)+'"><b>'+esc(t.nome)+'</b>'+(t.descrizione?'<span class="tm-def">'+esc(t.descrizione)+'</span>':'')+
             '<span class="tm-def" style="font-size:17px;color:#cfc8b8">Ognuno è invitato ad accedere: ci sono contenuti gratuiti, mentre gli incontri settimanali sono a pagamento o si accede col karma yoga.</span>'+
             '<span class="tm-ul">'+esc(ulT(t))+(t.non_letti?' · <em aria-label="'+t.non_letti+' da leggere">'+t.non_letti+'</em>':'')+'</span><span class="tm-entra">Entra nel Praticantato ›</span></button>';}).join("")+
-          (fm.length?'<p class="tm-et">Team FelicitasMundi</p><div class="tm-lista">'+fm.map(riga).join("")+'</div>':'')+
-          (sp.length?'<p class="tm-et">Team specifici</p><div class="tm-lista">'+sp.map(riga).join("")+'</div>':'');
+          fm.map(riga).join("")+sp.map(riga).join("")+'</div>';
       }
       box.querySelectorAll("[data-tm-desc]").forEach(function(d){function scrivi(e){e.stopPropagation();e.preventDefault();
         var id=d.getAttribute("data-tm-desc"),v=prompt("La descrizione del team, con le tue parole");if(v==null||!v.trim())return;
@@ -1384,11 +1391,11 @@ function daApprovare(){
     ]).then(function(v){
       var tit={};v[0].forEach(function(x){tit[x.id]=x.titolo;});
       var nt={};(team.lista||[]).forEach(function(t){nt[t.team_id]=t.nome;});
-      box.innerHTML='<p class="tm-et">Da mettere nel Cervello</p>'+l.map(function(p){
+      box.innerHTML='<p class="tm-et">Da mettere nel Cervello</p><div class="tm-giro">'+l.map(function(p){
         var pronta=p.agente_stato==="pronta"&&Array.isArray(p.agente_card)&&p.agente_card.length,lavora=p.agente_stato==="da_fare"||p.agente_stato==="in_corso";
         var cap=pronta&&(p.agente_capitolo_id||p.agente_capitolo_nuovo)?(p.agente_capitolo_id?tit[p.agente_capitolo_id]:p.agente_capitolo_nuovo+" · capitolo nuovo"):(p.capitolo_id?tit[p.capitolo_id]:(p.capitolo_nuovo?p.capitolo_nuovo+" · capitolo nuovo":""));
         return '<div class="tm-prop"><span class="m">'+esc([nt[p.squadra_id],cap,nomi[p.autore_id]].filter(Boolean).join(" · "))+'</span>'+
-          (pronta?p.agente_card.map(function(c){return '<div class="ag-card">'+(c&&c.titolo?'<b>'+esc(c.titolo)+'</b>':'')+'<p>'+esc((c&&c.testo)||"")+'</p></div>';}).join(""):(p.testo?'<div class="tc-citato">'+esc(p.testo)+'</div>':''))+
+          (pronta?p.agente_card.map(function(c){return '<div class="ag-card">'+(c&&c.titolo?'<b>'+esc(c.titolo)+'</b>':'')+'<p>'+esc((c&&c.testo)||"")+'</p></div>';}).join("")+'</div>':(p.testo?'<div class="tc-citato">'+esc(p.testo)+'</div>':''))+
           (p.foto&&team.url[p.foto]?'<img src="'+esc(team.url[p.foto])+'" alt="">':'')+
           (lavora?'<p class="ag-nota">L\'agente la sta lavorando.</p>':'')+
           ((p.agente_stato==="errore"||pronta)&&p.agente_nota?'<p class="ag-nota">'+esc(p.agente_nota)+'</p>':'')+
@@ -1735,7 +1742,7 @@ function ricaricaTeam(giu){
   q.order("scritto_il",{ascending:false}).limit(team.dal?500:80).then(function(r){
     if(vista!=="team"||team.id!==id)return;
     if(!r||r.error){var e=$("#tc-msg");if(e&&!team.msg.length)e.innerHTML='<p class="nota" style="text-align:center">La chat non si apre adesso. Si può riprovare.</p>';return;}
-    var l=(r.data||[]).reverse(),ids=l.map(function(m){return m.id;});
+    var l=(r.data||[]).reverse();if(ass.team&&id===ass.team)l=l.filter(function(m){return !m.assistenza_id;});var ids=l.map(function(m){return m.id;});
     var nuovi=l.length&&(!team.msg.length||l[l.length-1].id!==team.msg[team.msg.length-1].id);
     Promise.all([
       ids.length?db.from("cervello_proposte").select("messaggio_id,stato").in("messaggio_id",ids).neq("stato","scartata").then(function(x){return (x&&!x.error&&x.data)||[];},function(){return [];}):Promise.resolve([]),
@@ -1746,7 +1753,7 @@ function ricaricaTeam(giu){
       team.prop={};v[0].forEach(function(p){team.prop[p.messaggio_id]=p.stato;});
       var basso=window.innerHeight+window.scrollY>=document.body.scrollHeight-120;
       team.msg=l;if(!document.getElementById("md-t")&&!document.getElementById("tc-arg-t"))disegnaTeam();
-      if(((giu&&!team.inAlto)||(nuovi&&basso))&&!team.stanzeSu){window.scrollTo(0,document.body.scrollHeight);
+      if(((giu&&!team.inAlto)||(nuovi&&basso))&&!team.stanzeSu&&id!==ass.team){window.scrollTo(0,document.body.scrollHeight);
         /* le foto arrivano dopo: quando si caricano, si torna in fondo */
         [].forEach.call(document.querySelectorAll("#tc-msg img"),function(im){if(!im.complete)im.addEventListener("load",function(){if(!team.scelto&&!team.stanzeSu&&!team.inAlto)window.scrollTo(0,document.body.scrollHeight);},{once:true});});}
       if(nuovi||giu)segnaLetto(id);if(nuovi)assAperte();
@@ -2576,7 +2583,7 @@ function assConv(id){
 function assTeam(id){
   if(!$("#tc-ass"))return;
   (ass.team?Promise.resolve(ass.team):db.rpc("fm_team_mutuo_aiuto").then(function(r){ass.team=(r&&!r.error&&r.data)||"-";return ass.team;},function(){return "-";}))
-  .then(function(t){if(t!==id||team.id!==id)return;assAperte();});
+  .then(function(t){if(t!==id||team.id!==id)return;assAperte();ricaricaTeam();});
 }
 function assAperte(){
   /* 15/11/2026 19:22, Gab: una coda sola, card con tre stati: Nuova · Presa in carico · Chiusa; in cima le più vecchie */
@@ -2599,7 +2606,8 @@ function assAperte(){
       var ri=ass.rispondo===x.richiesta_id,presa=!!x.seguita_da;
       return '<div class="ass-c" data-q="'+esc(x.richiesta_id)+'">'+(presa?'<span class="ass-st pr">Presa in carico</span>':'<span class="ass-st da">Nuova</span>')+testa+
         (presa?'<div class="ass-seg-da">'+(x.seguita_da_me?'La segui tu':'La segue '+esc(x.seguita_da))+'</div>':'')+
-        '<div class="ass-tx">'+esc(x.ultimo_testo||"")+'</div>'+
+        (ass.tconv===x.richiesta_id?'<div class="ass-conv" id="ass-tconv"><p class="nota">Un momento…</p></div>':'<div class="ass-tx">'+esc(x.ultimo_testo||"")+'</div>')+
+        '<button type="button" class="ass-bt vuoto" data-tconv="'+esc(x.richiesta_id)+'">'+(ass.tconv===x.richiesta_id?'Chiudi la conversazione':'Apri la conversazione')+'</button>'+
         (ri?'<textarea id="ass-risp" maxlength="2000" aria-label="La risposta" placeholder="La risposta"></textarea><button type="button" class="ass-bt" id="ass-risp-b">Manda la risposta</button><button type="button" class="ass-bt vuoto" id="ass-risp-no">Annulla</button><p class="tc-err" id="ass-risp-e" aria-live="polite"></p>'
             :(presa?'':'<button type="button" class="ass-bt vuoto" data-prendo="'+esc(x.richiesta_id)+'">Prendo io</button>')+'<button type="button" class="ass-bt" data-risp="'+esc(x.richiesta_id)+'">Rispondi</button>')+'</div>';
     }
@@ -2608,7 +2616,12 @@ function assAperte(){
       (lista.length?'<div class="ass-giro" id="ass-giro">'+lista.map(card).join("")+'</div>'+(lista.length>1?'<div class="ass-punti" aria-hidden="true">'+lista.map(function(x,k){return '<i'+(k===0?' class="on"':'')+'></i>';}).join("")+'</div>':'')
         :'<p class="nota">'+(sch==="nuove"?'Nessuna richiesta nuova.':sch==="prese"?'Nessuna richiesta in carico.':'Nessuna richiesta chiusa.')+'</p>')+
       (ass.stat?'<div id="ass-stat"><p class="nota">Un momento…</p></div>':'');
-    f.querySelectorAll("[data-sch]").forEach(function(b){b.onclick=function(){ass.scheda=b.getAttribute("data-sch");ass.rispondo=null;assAperte();};});
+    f.querySelectorAll("[data-sch]").forEach(function(b){b.onclick=function(){ass.scheda=b.getAttribute("data-sch");ass.rispondo=null;ass.tconv=null;assAperte();};});
+    /* 16/11/2026, Gab: la risposta resta collegata alla richiesta di chi ha scritto, non nella chat del team */
+    f.querySelectorAll("[data-tconv]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-tconv");ass.tconv=ass.tconv===i?null:i;assAperte();};});
+    if(ass.tconv&&$("#ass-tconv")){var tq=ass.tconv;db.rpc("fm_assistenza_conversazione",{p_richiesta:tq}).then(function(r){var e=$("#ass-tconv");if(!e||ass.tconv!==tq)return;
+      var l=(r&&!r.error&&r.data)||[];
+      e.innerHTML=l.length?l.map(function(m){return '<div class="ass-f '+(m.dal_team?"mio":"team")+'">'+testoLink(m.testo,"t","div")+'<small>'+esc(m.chi||"")+" · "+esc(assQuando(m.scritto_il))+'</small></div>';}).join(""):'<p class="nota">La conversazione non si apre adesso.</p>';},function(){});}
     var g=$("#ass-giro");if(g){var pu=f.querySelectorAll(".ass-punti i");
       g.addEventListener("scroll",function(){var w=g.firstElementChild?g.firstElementChild.offsetWidth+12:1,k=Math.round(g.scrollLeft/w);pu.forEach(function(p,n){p.className=n===k?"on":"";});},{passive:true});
       if(ass.rispondo){var c=g.querySelector('[data-q="'+ass.rispondo+'"]');if(c)g.scrollLeft=c.offsetLeft-g.offsetLeft-18;}}
