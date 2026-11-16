@@ -28,6 +28,7 @@
 <script src="comune/libro-cervello.js?v=11092100"></script>
 <script src="comune/indice-link.js?v=11150020"></script>
 <script src="comune/fm-proposte-vicinato.js?v=11161200"></script>
+<script src="comune/fm-vicinati-espandi.js?v=11161600"></script>
 <style>
 :root{
   --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
@@ -1178,6 +1179,8 @@ function vAzione(){
   /* VOCI DELL'INDICE · SQL 274 · Gab 15/11: «una nuova voce in espandi dove vedo slide card scorrevoli, dove poi posso confermare o modificare o eliminare» ·
      «voci dell indice, va bene come nome». Solo il nucleo; si vede quando ci sono card in attesa (ponte e card della sera). */
   var vociH=io.nucleo?'<section class="esp-el" id="esp-voci-s" style="--e:#D4AF6A" hidden><p class="esp-nm">VOCI DELL\'INDICE <span id="esp-voci-n"></span></p><div id="esp-voci"></div></section>':'';
+  /* 16/11 SQL 287 · Gab: «li vedono tutti dal karma yoga in poi» · «su espandi trovi il riflesso» (comune/fm-vicinati-espandi.js) */
+  var vicH=io.id?'<section class="esp-el" id="esp-vic-s" style="--e:#8DBF5E" hidden><p class="esp-nm">VICINATI <span id="esp-vic-n"></span></p><div id="esp-vic"></div></section>':'';
   /* l'Emporio: oggi i prodotti sono la Stampa; ogni famiglia apre il configuratore della pagina Emporio (emporio.html#famiglia) */
   var empH='<section class="esp-el esp-emp" style="--e:#6FA8D6"><p class="esp-nm">EMPORIO</p><h2>2000 prodotti ed espositori fieristici</h2>'+
       '<p class="esp-d">Oltre alla stampa proponiamo supporti per l\'esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</p>'+
@@ -1189,7 +1192,7 @@ function vAzione(){
       (k.voci.some(function(v){return v[1]==="prod";})?'<p class="esp-d" style="margin-top:10px"><button type="button" class="pd-cond" data-pd-cond>Condividi ›</button></p>':'')+
       (k.link?'<p class="esp-d" style="margin-top:10px"><a href="'+k.link+'" style="color:#D4AF6A">Il Cervello Digitale Evoluto ›</a></p>':'')+'</section>';}).join("");
   c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+(io.id?'':'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>')+
-    (ruolo?vociH+team+iscrH+empH:'<div class="esp-scorri">'+blocchi+'</div>'+empH+team+iscrH)+
+    (ruolo?vociH+team+vicH+iscrH+empH:'<div class="esp-scorri">'+blocchi+'</div>'+empH+team+vicH+iscrH)+
     /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
     '<div data-fm-installa></div>';
   legaVai(c);
@@ -1208,6 +1211,7 @@ function vAzione(){
   if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(iscr)iscritti();
   if(io.nucleo)vociIndice();
+  if(io.id&&window.fmVicinatiEspandi)fmVicinatiEspandi(db);
   if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();contaProposte();
     leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";}))bp.style.display="";
       var n=$("#esp-team-nomi");if(!n)return;
