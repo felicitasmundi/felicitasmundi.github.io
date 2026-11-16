@@ -1476,8 +1476,9 @@ function mieiTeam(){
       if(!qu){box.innerHTML='<div class="tm-lista">'+l.map(riga).join("")+'</div>';}
       else{
         var pr=l.filter(function(t){return t.quadrante==="praticantato";}),fm=l.filter(function(t){return t.quadrante==="felicitasmundi";}),sp=l.filter(function(t){return t.quadrante!=="praticantato"&&t.quadrante!=="felicitasmundi";});
-        box.innerHTML='<div class="tm-giro">'+pr.map(function(t){return '<button type="button" class="tm-pr" data-team="'+esc(t.team_id)+'"><b>'+esc(t.nome)+'</b>'+(t.descrizione?'<span class="tm-def">'+esc(t.descrizione)+'</span>':'')+
-            '<span class="tm-def" style="font-size:17px;color:#cfc8b8">Ognuno è invitato ad accedere: ci sono contenuti gratuiti, mentre gli incontri settimanali sono a pagamento o si accede col karma yoga.</span>'+
+        box.innerHTML='<div class="tm-giro">'+pr.map(function(t){return '<button type="button" class="tm-pr" data-team="'+esc(t.team_id)+'"><b>'+esc(t.nome)+'</b>'+
+            /* 16/11/2026, Gab: «in espandi non serve avere tutta la presentazione di cosa sia praticantato.. bastano 2 frasi» (frasi di praticantato.html) */
+            '<span class="tm-def">Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</span><span class="tm-def">Percorso online ogni lunedì alle 19 con Gabriele Dettori.</span>'+
             '<span class="tm-ul">'+esc(ulT(t))+(t.non_letti?' · <em aria-label="'+t.non_letti+' da leggere">'+t.non_letti+'</em>':'')+'</span><span class="tm-entra">Entra nel Praticantato ›</span></button>';}).join("")+
           fm.map(riga).join("")+sp.map(riga).join("")+'</div>';
       }
