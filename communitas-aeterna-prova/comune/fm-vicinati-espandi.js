@@ -16,11 +16,13 @@
   '.vx-esito{color:#c9c2b3;font-size:14px;min-height:1em;margin:0}';
   var ZONA=[['ritiro','Punto di ritiro'],['magazzino','Magazzino'],['mensa','Mensa'],['produttori','Produttori'],['operatori','Operatori'],['studio','Luoghi di studio e di cultura'],['assistenza','Assistenza comunitaria integrata']];
   function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  /* SQL 290 · Gab 16/11: «di dove sono, l'orario in cui è stato scritto il messaggio e il giorno» */
+  function quando(t){try{var d=new Date(t),z={timeZone:"Europe/Rome"};return d.toLocaleDateString("it-IT",Object.assign({weekday:"short",day:"2-digit",month:"2-digit"},z))+" · "+d.toLocaleTimeString("it-IT",Object.assign({hour:"2-digit",minute:"2-digit"},z));}catch(e){return "";}}
   function riga(et,v){return v?'<div class="vx-r"><b>'+esc(et)+'</b>'+esc(v)+'</div>':'';}
   function card(a,d){
     var att=a.stato==="attivato";
     return '<div class="vx-card" data-vx="'+esc(a.id)+'"><span class="vx-st '+(att?'att':'in')+'">'+(att?'Attivato':'In attivazione')+'</span>'+
-      '<h3>'+esc(a.vicinato||a.dove)+'</h3><div class="vx-sub">'+esc(a.vicinato?a.dove+' · '+a.nome:a.nome)+'</div>'+
+      '<h3>'+esc(a.vicinato||a.dove)+'</h3><div class="vx-sub">'+esc((a.vicinato?a.dove+' · ':'')+a.nome+(a.luogo&&a.luogo!==a.dove?' · '+a.luogo:'')+(a.il?' · '+quando(a.il):''))+'</div>'+
       riga("Telefono",a.telefono)+riga("Sei già in connessione con altri amici di Felicitas?",a.amici)+
       riga("Due righe su di te",a.chi)+riga("Chi c'è nel gruppo",a.gruppo?a.nomi_gruppo:"")+
       ZONA.map(function(z){return riga(z[1],a.zona&&a.zona[z[0]]);}).join("")+
