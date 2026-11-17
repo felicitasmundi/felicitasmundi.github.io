@@ -28,7 +28,7 @@
 <script src="comune/libro-cervello.js?v=11092100"></script>
 <script src="comune/indice-link.js?v=11150020"></script>
 <script src="comune/fm-proposte-vicinato.js?v=11161200"></script>
-<script src="comune/fm-vicinati-espandi.js?v=11161600"></script>
+<script src="comune/fm-vicinati-espandi.js?v=11171000"></script>
 <style>
 :root{
   --carta:#F5F0E6; --carta2:#ECE4D3; --foglio:#FFFCF5; --inchiostro:#2B2620; --tenue:#6E6457;
@@ -963,6 +963,8 @@ function chiSono(){
     setTimeout(function(){ytChiedi(null);},4000); /* i video già inseriti senza titolo (SQL 98) */
     return Promise.all([
       db.from("persone").select("id,nome,grado,nucleo").eq("id",u.id).maybeSingle().then(function(r){if(r&&r.data){io.nome=r.data.nome||"";io.grado=r.data.grado||"ospite";io.nucleo=!!r.data.nucleo;nomi[io.id]=io.nome;}}).catch(function(){}),
+      /* SQL 290 · 17/11/2026, Gab: «dobbiamo mettere obbligo di nome e cognome» · «Esatto» (anche «Di dove sei», alla prossima entrata) */
+      db.from("persone").select("cognome,luogo").eq("id",u.id).maybeSingle().then(function(r){if(r&&!r.error){io.luogoC=true;io.cognome=(r.data&&r.data.cognome)||"";io.luogo=(r.data&&r.data.luogo)||"";}}).catch(function(){}),
       db.rpc("fm_coordina",{p_villaggio:VILLAGGIO}).then(function(r){io.coordina=!!(r&&!r.error&&r.data===true);}).catch(function(){}),
       db.rpc("fm_miei_ruoli").then(function(r){io.ruoli=(r&&!r.error&&r.data)||[];}).catch(function(){})
     ]);
@@ -1380,7 +1382,7 @@ function prodottiDaConfermare(){
       var l=r.data||[];if(!l.length){box.innerHTML='<p>Niente da confermare.</p>';return;}
       box.innerHTML=l.map(function(p,i){
         return '<div class="tm-ric pd-c">'+(p.foto?'<img src="'+esc(p.foto)+'" alt="" loading="lazy">':'')+'<b>'+esc(p.nome)+'</b>'+
-          '<span class="m">'+esc(p.produttore)+' · '+esc(String(p.prezzo))+' € · '+esc(String(p.quantita))+' '+esc(p.unita||"")+'</span>'+
+          '<span class="m">'+esc(p.produttore)+(p.luogo?' · '+esc(p.luogo):'')+(p.il?' · '+esc(assQuando(p.il)):'')+' · '+esc(String(p.prezzo))+' € · '+esc(String(p.quantita))+' '+esc(p.unita||"")+'</span>'+
           '<p>'+esc(p.descrizione||"")+'</p><p class="m">'+esc(pdNomeCat(p.categoria))+' · margine a Felicitas '+esc(String(p.margine))+'%</p>'+
           '<p>'+esc(p.processo||"")+'</p>'+(p.nota?'<p class="pd-nota">'+esc(p.nota)+'</p>':'')+
           (p.conferma?'<label class="pd-sw">Nell\'Emporio<input type="checkbox" data-pd-e="'+i+'" checked></label>'+
@@ -1786,7 +1788,7 @@ function karmaPrat(){
     var h=mio==="puoi"?'':mio==="chiesto"?'<p class="tc-nota">Hai chiesto di entrare nel karma yoga: aspetta «Accolto» dal nucleo.</p>':
       '<button type="button" class="pr-paga" id="pr-chiedo" style="border:0;cursor:pointer">Chiedo di entrare nel karma yoga</button>';
     if(ri.length)h+='<h2 style="margin-top:22px">Chiedono di entrare nel karma yoga</h2>'+ri.map(function(x){
-      return '<div class="ob-c"><b>'+esc(x.nome)+'</b><small>'+esc(new Date(x.chiesto_il).toLocaleDateString("it-IT",{day:"numeric",month:"long"}))+'</small><div class="fine"><button type="button" data-acc="'+esc(x.persona_id)+'">Accolto</button></div></div>';}).join("");
+      return '<div class="ob-c"><b>'+esc(x.nome)+'</b><small>'+esc(assQuando(x.chiesto_il))+'</small><div class="fine"><button type="button" data-acc="'+esc(x.persona_id)+'">Accolto</button></div></div>';}).join("");
     k.innerHTML=h;
     var c=$("#pr-chiedo");if(c)c.onclick=function(){c.disabled=true;db.rpc("fm_karma_chiedo").then(function(){karmaPrat();},function(){c.disabled=false;});};
     k.querySelectorAll("[data-acc]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_karma_accolgo",{p_persona:b.getAttribute("data-acc")}).then(function(){karmaPrat();},function(){b.disabled=false;});};});
@@ -2594,6 +2596,26 @@ function vCompra(){
    Chi scrive non entra nel team: vede solo le sue richieste. Il team risponde dalla sua chat (richieste in cima, «Rispondi»). */
 var ASS_MOTIVI=[["vicinati","Vicinati"],["produttore","Produttore"],["operatore","Operatore"],["eventi","Prossimi eventi"],["interviste","Interviste"],["praticantato","Praticantato"],["karma_yoga","Mettiti al servizio col Karma Yoga"],["coscienza_tecnologia","Ricevere assistenza tra coscienza e tecnologia"],["azienda","Attivare la propria azienda"]]; /* 12/11 Gab, SQL 246 */
 function assMotivo(m){var x=ASS_MOTIVI.filter(function(a){return a[0]===m;})[0];return x?x[1]:"Senza motivo";}
+/* SQL 290 · nome, cognome e «Di dove sei» obbligatori: chi non li ha ancora scritti li scrive qui, una volta, prima di tutto il resto */
+function datiObbligatori(){
+  if(!io.id||!io.luogoC||document.getElementById("do-velo"))return;
+  if(String(io.nome||"").trim()&&String(io.cognome||"").trim()&&String(io.luogo||"").trim())return;
+  if(!document.getElementById("do-css")){var st=document.createElement("style");st.id="do-css";st.textContent='#do-velo{position:fixed;inset:0;z-index:10050;background:rgba(5,10,30,.85);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;overflow-y:auto}#do-velo *{box-sizing:border-box}.do{width:100%;max-width:420px;background:#1a2148;border:1px solid rgba(212,175,106,.7);border-radius:22px;padding:26px 22px 22px;color:#F5F0E6;margin:auto}.do h2{font-family:Georgia,serif;font-size:26px;font-weight:600;margin:0 0 6px;color:#F5F0E6}.do label{display:block;font-size:18px;margin:14px 0 6px;color:#D4AF6A}.do input{width:100%;font:inherit;font-size:18px;padding:12px 14px;border-radius:12px;border:1px solid rgba(245,240,230,.3);background:#0f1638;color:#F5F0E6}.do button{display:block;width:100%;margin-top:20px;padding:15px;border-radius:999px;background:#D4AF6A;color:#0a1430;font-weight:700;font-size:18px;border:0;font-family:inherit;cursor:pointer}.do p{font-size:17px;min-height:1em;margin:10px 0 0;color:#f0b8a6}';document.head.appendChild(st);}
+  var v=document.createElement("div");v.id="do-velo";
+  v.innerHTML='<div class="do" role="dialog" aria-modal="true" aria-labelledby="do-tit"><h2 id="do-tit">I miei dati</h2>'+
+    '<label for="do-nome">Nome</label><input id="do-nome" autocomplete="given-name" maxlength="80" value="'+esc(io.nome||"")+'">'+
+    '<label for="do-cognome">Cognome</label><input id="do-cognome" autocomplete="family-name" maxlength="80" value="'+esc(io.cognome||"")+'">'+
+    '<label for="do-luogo">Di dove sei</label><input id="do-luogo" autocomplete="address-level2" maxlength="120" value="'+esc(io.luogo||"")+'">'+
+    '<button type="button" id="do-salva">Salva</button><p id="do-esito" aria-live="polite"></p></div>';
+  document.body.appendChild(v);
+  try{v.querySelector(String(io.nome||"").trim()?(String(io.cognome||"").trim()?"#do-luogo":"#do-cognome"):"#do-nome").focus();}catch(e){}
+  $("#do-salva").onclick=function(){var b=this,e=$("#do-esito"),riga={nome:$("#do-nome").value.trim(),cognome:$("#do-cognome").value.trim(),luogo:$("#do-luogo").value.trim()};
+    if(!riga.nome||!riga.cognome||!riga.luogo){e.textContent="Servono nome, cognome e di dove sei.";return;}
+    b.disabled=true;e.textContent="";
+    db.from("persone").update(riga).eq("id",io.id).then(function(x){b.disabled=false;
+      if(x&&x.error){e.textContent=errore(x.error);return;}
+      io.nome=riga.nome;io.cognome=riga.cognome;io.luogo=riga.luogo;nomi[io.id]=io.nome;v.remove();},function(x){b.disabled=false;e.textContent=errore(x);});};
+}
 function assQuando(t){return giornoTm(t)+" · "+hhmm(t);}
 var ass={motivo:null,aperta:null,team:null,stat:false,rispondo:null};
 function vAssistenza(){
@@ -2722,7 +2744,8 @@ function assAperte(){
     function aspetta(t){var m=Math.max(0,Math.round((Date.now()-new Date(t))/60000));
       return m<60?"aspetta da "+m+" min":m<1440?"aspetta da "+Math.round(m/60)+(Math.round(m/60)===1?" ora":" ore"):"aspetta da "+Math.round(m/1440)+(Math.round(m/1440)===1?" giorno":" giorni");}
     function card(x){
-      var testa='<div class="ass-chi"><b>'+esc(x.nome||"Una persona")+'</b><small>'+esc(sch==="chiuse"?assQuando(x.risposto_il):aspetta(x.ultima_il))+'</small></div>'+
+      var testa='<div class="ass-chi"><b>'+esc(x.nome||"Una persona")+'</b>'+(x.luogo?'<small>'+esc(x.luogo)+'</small>':'')+
+        '<small>'+esc(sch==="chiuse"?assQuando(x.aperta_il||x.risposto_il):assQuando(x.ultima_il)+" · "+aspetta(x.ultima_il))+'</small></div>'+
         '<div class="ass-bis">'+esc(x.motivo?assMotivo(x.motivo):"Senza motivo")+'</div>';
       if(sch==="chiuse")return '<div class="ass-c"><span class="ass-st ok">Chiusa</span>'+testa+'<div class="ass-tx">'+esc(x.richiesta||"")+'</div>'+(x.risposta?'<div class="ass-rx">'+esc(x.risposta)+'</div>':'')+'</div>';
       var ri=ass.rispondo===x.richiesta_id,presa=!!x.seguita_da;
@@ -4913,10 +4936,10 @@ function vDati(){
   var c=$("#corpo");
   if(!io.id){c.innerHTML='<p class="et">I miei dati</p><div class="card"><span class="t">I tuoi dati si vedono dopo l\'accesso.</span><div class="fine"><a class="mini oro" href="'+ENTRA+'">Entra con il codice via mail</a></div></div>';return;}
   c.innerHTML='<p class="et">I miei dati</p><div id="d-corpo"><p class="nota">Un momento…</p></div>';
-  db.from("persone").select("nome,cognome,biografia,telefono,lingua,avvisi_mail,vicinato_id,radice_id").eq("id",io.id).maybeSingle().then(function(r){
+  db.from("persone").select("nome,cognome,biografia,telefono,lingua,avvisi_mail,vicinato_id,radice_id"+(io.luogoC?",luogo":"")).eq("id",io.id).maybeSingle().then(function(r){
     var d=(r&&r.data)||{},e=$("#d-corpo");if(!e||vista!=="dati")return;
     function campo(k,et,tipo){return '<label class="m" for="d-'+k+'" style="display:block;margin-top:8px">'+et+'</label>'+(tipo==="area"?'<textarea id="d-'+k+'">'+esc(d[k]||"")+'</textarea>':'<input type="'+(tipo||"text")+'" id="d-'+k+'" value="'+esc(d[k]||"")+'">');}
-    e.innerHTML='<div class="card"><b>Chi sono</b>'+campo("nome","Nome")+campo("cognome","Cognome")+campo("biografia","Biografia","area")+campo("telefono","Telefono","tel")+campo("lingua","Che lingua parli")+
+    e.innerHTML='<div class="card"><b>Chi sono</b>'+campo("nome","Nome")+campo("cognome","Cognome")+(io.luogoC?campo("luogo","Di dove sei"):"")+campo("biografia","Biografia","area")+campo("telefono","Telefono","tel")+campo("lingua","Che lingua parli")+
       '<div class="azioni" style="margin-top:10px"><button class="btn pieno" id="d-salva">Salva</button><span class="m" id="d-esito"></span></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Il mio villaggio e il mio vicinato</b><span class="t" id="d-luoghi">Un momento…</span><div class="fine"><a class="mini" href="cervello.html?c=10182300#ingresso">Come si entra in un vicinato</a></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Mail</b><label class="t" style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-avvisi"'+(d.avvisi_mail===false?'':' checked')+'> Avvisi</label><label class="t" id="d-mg-r" hidden style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-mg" checked> Giornale la mattina</label><label class="t" id="d-ms-r" hidden style="display:flex;gap:8px;align-items:center;cursor:pointer"><input type="checkbox" id="d-ms" checked> Resoconto serale</label><span class="m" id="d-avvisi-esito"></span></div>'+
@@ -4924,8 +4947,9 @@ function vDati(){
       '<div class="card" style="margin-top:10px"><b>Segnala un problema tecnico</b><span class="m">Un pagamento che non si vede, una pagina che non si apre, una cosa che non funziona.</span><textarea id="d-segnala" style="min-height:70px"></textarea><div class="azioni"><button class="btn" id="d-manda">Manda</button><span class="m" id="d-segnala-esito"></span></div></div>'+
       '<div class="card" style="margin-top:10px"><b>Account</b><span class="t">Entri con la tua mail e un codice.</span><div class="fine"><a class="mini" href="privacy.html" target="_blank">Privacy</a><a class="mini" href="privacy.html#condizioni" target="_blank">Condizioni</a><a class="mini" href="privacy.html#cookie" target="_blank">Cookie</a><button class="mini" id="d-esci">Esci</button></div></div>';
     if(window.fmNotifiche)fmNotifiche(db);
-    $("#d-salva").onclick=function(){var b=this,riga={};["nome","cognome","biografia","telefono","lingua"].forEach(function(k){riga[k]=$("#d-"+k).value.trim()||null;});
+    $("#d-salva").onclick=function(){var b=this,riga={};["nome","cognome","biografia","telefono","lingua"].concat(io.luogoC?["luogo"]:[]).forEach(function(k){riga[k]=$("#d-"+k).value.trim()||null;});
       if(!riga.nome){$("#d-esito").textContent="Il nome serve.";return;}
+      if(io.luogoC&&(!riga.cognome||!riga.luogo)){$("#d-esito").textContent="Servono nome, cognome e di dove sei.";return;}
       b.disabled=true;db.from("persone").update(riga).eq("id",io.id).then(function(x){b.disabled=false;
         if(x&&x.error){$("#d-esito").textContent=errore(x.error);return;}io.nome=riga.nome;nomi[io.id]=riga.nome;$("#d-esito").textContent="Salvato.";});};
     $("#d-avvisi").onchange=function(){var v=this.checked;db.from("persone").update({avvisi_mail:v}).eq("id",io.id).then(function(x){$("#d-avvisi-esito").textContent=x&&x.error?errore(x.error):"Salvato.";});};
@@ -5502,6 +5526,7 @@ chiSono().then(function(){
   campanella();
   /* 15/11: qui db non è window.db, quindi la domanda automatica delle notifiche (fm-notifiche.js, 8/11) non partiva mai da sola: la si avvia da qui */
   if(io.id&&window.fmNotifiche)fmNotifiche(db);
+  datiObbligatori();
   benvenutoKarma();
   finestraPraticantato();
   prodottoDaLink();
@@ -5522,7 +5547,7 @@ chiSono().then(function(){
 });
 db.auth.onAuthStateChange(function(ev){
   if(ev==="SIGNED_OUT"&&io.id){location.href="strumento.html";return;}
-  if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();campanella();if(window.fmNotifiche)fmNotifiche(db);disegna();finestraPraticantato();}});}
+  if(ev==="SIGNED_IN"){var prima=io.id;chiSono().then(function(){if(io.id!==prima){cache.obiettivi=null;testa();campanella();if(window.fmNotifiche)fmNotifiche(db);disegna();datiObbligatori();finestraPraticantato();}});}
 });
 })();
 </script>
