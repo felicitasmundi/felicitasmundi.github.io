@@ -85,6 +85,14 @@ h1{font-family:'Cinzel',serif;font-weight:500;font-size:34px;margin:2px 0 4px}
 .foglio .msg{background:var(--carta);border-radius:14px;padding:14px;font-size:18px;line-height:1.5;white-space:pre-wrap}
 .foglio .tasti{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .foglio .chiudi{width:100%;margin-top:10px;min-height:48px;background:transparent;color:var(--testo);border:1px solid var(--riga);border-radius:14px;font:500 17px 'DM Sans',sans-serif}
+.gest{display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px}
+.g-btn{min-height:44px;border-radius:12px;border:1px solid var(--riga);background:transparent;color:var(--testo);font:500 16px 'DM Sans',sans-serif;padding:0 6px}
+.g-btn.no{border-color:rgba(224,122,85,.6);color:#E8A58C}
+.foglio label.g-l{display:block;font-size:17px;color:var(--tenue);margin:12px 0 4px}
+.foglio .g-i{width:100%;box-sizing:border-box;background:var(--carta);border:1px solid var(--riga);border-radius:12px;color:var(--testo);font:400 18px 'DM Sans',sans-serif;padding:12px}
+.foglio textarea.g-i{min-height:110px;resize:vertical}
+.foglio .g-foto{width:100%;height:170px;border-radius:14px;border:1px dashed rgba(212,175,106,.55);background:var(--carta) center/cover no-repeat;color:var(--tenue);font:500 17px 'DM Sans',sans-serif}
+.foglio .compra.no{background:#E07A55;color:#0a1430}
 .esito{font-size:17px;color:#E8C77A;margin:8px 0 0;min-height:1px}
 .barra{position:fixed;left:0;right:0;bottom:0;background:#0f1a44;border-top:1px solid rgba(212,175,106,.3);display:flex;justify-content:space-around;padding:8px 4px calc(10px + env(safe-area-inset-bottom,0px));z-index:10}
 .barra a{font-size:13px;color:var(--tenue);text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;min-width:56px}
@@ -174,7 +182,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return
 function euro(n){return (+n||0).toLocaleString("it-IT",{style:"currency",currency:"EUR"});}
 function maiuscola(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1);}
 function foto(p){if(!p.foto)return "";return /^https?:\/\//.test(p.foto)?p.foto:FOTO_BASE+p.foto;}
-var stato={prodotti:[],vicinati:[],dentro:false,nome:"",vicino:true};
+var stato={prodotti:[],vicinati:[],dentro:false,nome:"",vicino:true,gestisce:false,uid:null};
 
 function tastoCompra(p){
   return p.link_pagamento?'<a class="compra" href="'+esc(p.link_pagamento)+'" target="_blank" rel="noopener">Acquista</a>'
@@ -184,7 +192,8 @@ function carta(p){
   var f=foto(p);
   return '<div class="prod">'+(f?'<img src="'+esc(f)+'" alt="" loading="lazy"'+(p.scaffale==="libri e stampati"?' class="libro"':'')+'>':'')+
     '<div class="dentro"><b>'+esc(p.nome)+'</b>'+(p.autore?'<span class="chi">'+esc(p.autore)+'</span>':'')+
-    '<span class="prezzo">'+euro(p.prezzo)+'</span>'+tastoCompra(p)+'</div></div>';
+    '<span class="prezzo">'+euro(p.prezzo)+'</span>'+tastoCompra(p)+
+    (stato.gestisce?'<div class="gest"><button type="button" class="g-btn" data-mod="'+esc(p.id)+'">Modifica</button><button type="button" class="g-btn no" data-canc="'+esc(p.id)+'">Cancella</button></div>':'')+'</div></div>';
 }
 function cartaInvita(titolo,frase,corta){
   return '<div class="invita'+(corta?' corta':'')+'"><b>'+esc(titolo)+'</b>'+(frase?'<p>'+esc(frase)+'</p>':'')+'<button type="button" class="inv" data-invita>Invita un produttore</button></div>';
@@ -221,6 +230,8 @@ function disegna(){
   $("#corpo").innerHTML=h;
   document.querySelectorAll("[data-vic]").forEach(function(b){b.onclick=function(){stato.vicino=b.getAttribute("data-vic")==="1";disegna();};});
   document.querySelectorAll("[data-invita]").forEach(function(b){b.onclick=invita;});
+  document.querySelectorAll("[data-mod]").forEach(function(b){b.onclick=function(){modifica(trova(b.getAttribute("data-mod")));};});
+  document.querySelectorAll("[data-canc]").forEach(function(b){b.onclick=function(){cancella(trova(b.getAttribute("data-canc")));};});
 }
 /* l'invito: testo dalla pagina «Partecipa coi tuoi prodotti», da mandare con WhatsApp o da copiare */
 function testoInvito(){
@@ -263,17 +274,79 @@ window.addEventListener("popstate",function(){var k=location.hash.slice(1),b=k&&
 (function(){var k=location.hash.slice(1),b=k&&document.querySelector('[data-fam="'+k+'"]');if(b)apriFamiglia(b,true);})();
 
 
+/* nucleo e ruoli Logistica: Modifica e Cancella */
+function trova(id){return stato.prodotti.filter(function(p){return String(p.id)===String(id);})[0];}
+function ricarica(){
+  leggiProdotti(true).then(function(x){if(x&&x.error)return leggiProdotti(false);return x;}).then(function(x){
+    if(x&&!x.error){stato.prodotti=(x.data||[]).map(function(p){p.scaffale=String(p.scaffale||"").trim().toLowerCase();return p;});disegna();}
+  });
+}
+function spegniLink(p){
+  if(!p.link_pagamento)return Promise.resolve("");
+  return db.functions.invoke("fm-prodotto-stripe",{body:{azione:"disattiva",id:p.id}}).then(function(x){var d=x&&x.data;
+    return d&&d.ok?"":((d&&d.msg)||"Stripe non risponde. Riprova tra poco.");},function(){return "Stripe non risponde. Riprova tra poco.";});
+}
+function foglio(html){
+  chiudiFoglio();var f=document.createElement("div");f.id="foglio";
+  f.innerHTML='<div class="velo" data-chiudi></div><div class="foglio" role="dialog" aria-modal="true"><div class="presa"></div>'+html+
+    '<p class="esito" id="g-esito" aria-live="polite"></p><button type="button" class="chiudi" data-chiudi>Annulla</button></div>';
+  document.body.appendChild(f);f.querySelectorAll("[data-chiudi]").forEach(function(x){x.onclick=chiudiFoglio;});return f;
+}
+function cancella(p){
+  if(!p)return;
+  foglio('<h3>Cancello «'+esc(p.nome)+'»?</h3><div class="msg">Sparisce dall\'Emporio'+(p.link_pagamento?' e il suo link di pagamento si spegne':'')+'.</div>'+
+    '<button type="button" class="compra no" style="width:100%;margin-top:12px" id="g-si">Cancella</button>');
+  $("#g-si").onclick=function(){var b=this,e=$("#g-esito");b.disabled=true;e.textContent="Un momento…";
+    spegniLink(p).then(function(err){if(err)throw {m:err};return db.rpc("fm_prodotto_cancella",{p_id:p.id});}).then(function(x){
+      if(x&&x.error)throw {m:"Non riesco a cancellarlo. Riprova tra poco."};
+      if(x.data!=="cancellato"&&x.data!=="tolto")throw {m:x.data};
+      chiudiFoglio();ricarica();
+    }).catch(function(z){b.disabled=false;e.textContent=z&&z.m||"Riprova tra poco.";});};
+}
+function riduci(file){return new Promise(function(ok){var i=new Image();i.onload=function(){var m=1600,w=i.width,h=i.height,k=Math.min(1,m/Math.max(w,h)),c=document.createElement("canvas");
+  c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);c.toBlob(function(b){ok(b||file);},"image/jpeg",.85);};
+  i.onerror=function(){ok(file);};i.src=URL.createObjectURL(file);});}
+function modifica(p){
+  if(!p)return;var blob=null,f=foto(p);
+  foglio('<h3>Modifica</h3>'+
+    '<button type="button" class="g-foto" id="g-foto"'+(f?' style="background-image:url(\''+esc(f)+'\')"':'')+'>'+(f?'':'Aggiungi la foto')+'</button><input type="file" id="g-file" accept="image/*" hidden>'+
+    '<label class="g-l" for="g-nome">Nome</label><input class="g-i" id="g-nome" maxlength="200" value="'+esc(p.nome)+'">'+
+    '<label class="g-l" for="g-desc">Descrizione</label><textarea class="g-i" id="g-desc" maxlength="4000"></textarea>'+
+    '<label class="g-l" for="g-prezzo">Prezzo in euro</label><input class="g-i" id="g-prezzo" inputmode="decimal" value="'+esc(String(p.prezzo).replace(".",","))+'">'+
+    '<label class="g-l" for="g-cat">Categoria</label><select class="g-i" id="g-cat">'+SCAFFALI.map(function(s){return '<option value="'+esc(s)+'"'+(s===p.scaffale?' selected':'')+'>'+esc(maiuscola(s))+'</option>';}).join("")+'</select>'+
+    '<button type="button" class="compra" style="width:100%;margin-top:14px" id="g-salva">Salva</button>');
+  db.from("prodotti").select("racconto").eq("id",p.id).maybeSingle().then(function(x){if(x&&x.data&&$("#g-desc")&&!$("#g-desc").value)$("#g-desc").value=x.data.racconto||"";});
+  $("#g-foto").onclick=function(){$("#g-file").click();};
+  $("#g-file").onchange=function(){var x=this.files&&this.files[0];if(!x)return;riduci(x).then(function(b){blob=b;var g=$("#g-foto");g.textContent="";g.style.backgroundImage="url('"+URL.createObjectURL(b)+"')";});};
+  $("#g-salva").onclick=function(){var b=this,e=$("#g-esito");
+    var prezzo=String($("#g-prezzo").value||"").trim().replace(",","."),cambia=+prezzo!==+p.prezzo;
+    if(!$("#g-nome").value.trim()){e.textContent="Manca: nome.";return;}
+    if(!(+prezzo>0)){e.textContent="Il prezzo deve essere più di zero.";return;}
+    b.disabled=true;e.textContent="Un momento…";
+    var su=blob?db.storage.from("vetrina").upload("proposte/"+stato.uid+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,8)+".jpg",blob,{contentType:"image/jpeg",upsert:false}).then(function(u){
+        if(u&&u.error)throw {m:"La foto non è stata caricata. Riprova."};return db.storage.from("vetrina").getPublicUrl(u.data.path).data.publicUrl;}):Promise.resolve("");
+    su.then(function(url){return (cambia?spegniLink(p):Promise.resolve("")).then(function(err){if(err)throw {m:err};
+        return db.rpc("fm_prodotto_modifica",{p_id:p.id,p:{nome:$("#g-nome").value,descrizione:$("#g-desc").value,prezzo:prezzo,categoria:$("#g-cat").value,foto:url}});});
+    }).then(function(x){
+      if(x&&x.error)throw {m:"Non riesco a salvarlo. Riprova tra poco."};
+      if(x.data==="torna"){e.textContent="Prezzo cambiato: il prodotto torna in Espandi › Da confermare per il nuovo link Stripe.";setTimeout(function(){chiudiFoglio();ricarica();},2500);return;}
+      if(x.data!=="ok")throw {m:x.data};
+      chiudiFoglio();ricarica();
+    }).catch(function(z){b.disabled=false;e.textContent=z&&z.m||"Riprova tra poco.";});};
+}
+
 function leggiProdotti(conLink){
   var campi="id,nome,autore,prezzo,foto,scaffale,praticantato,vicinato_id,creato_il"+(conLink?",link_pagamento":"");
   return db.from("prodotti").select(campi).eq("stato","pubblico").eq("si_compra",true).not("prezzo","is",null).order("creato_il",{ascending:false});
 }
 if(!db){$("#corpo").innerHTML='<p class="nota">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</p>';return;}
 db.auth.getSession().then(function(r){
-  var u=r&&r.data&&r.data.session&&r.data.session.user;stato.dentro=!!u;
+  var u=r&&r.data&&r.data.session&&r.data.session.user;stato.dentro=!!u;stato.uid=u?u.id:null;
   var passi=[
     leggiProdotti(true).then(function(x){if(x&&x.error)return leggiProdotti(false);return x;}),
     u?db.rpc("fm_miei_vicinati").then(function(x){return x;},function(){return null;}):Promise.resolve(null),
-    u?db.from("persone_pubbliche").select("nome").eq("id",u.id).then(function(x){return x;},function(){return null;}):Promise.resolve(null)
+    u?db.from("persone_pubbliche").select("nome").eq("id",u.id).then(function(x){return x;},function(){return null;}):Promise.resolve(null),
+    u?db.rpc("fm_conferma_prodotti").then(function(x){return x;},function(){return null;}):Promise.resolve(null)
   ];
   return Promise.all(passi);
 }).then(function(v){
@@ -282,6 +355,7 @@ db.auth.getSession().then(function(r){
   stato.prodotti=(x.data||[]).map(function(p){p.scaffale=String(p.scaffale||"").trim().toLowerCase();return p;});
   var vv=v[1]&&!v[1].error&&v[1].data||[];stato.vicinati=vv.map(function(y){return typeof y==="string"?y:(y.fm_miei_vicinati||y.id||y.vicinato_id);}).filter(Boolean);
   var n=v[2]&&!v[2].error&&v[2].data&&v[2].data[0];stato.nome=n&&n.nome||"";
+  stato.gestisce=!!(v[3]&&!v[3].error&&v[3].data===true);
   if(!stato.dentro)stato.vicino=false;
   disegna();
 },function(){$("#corpo").innerHTML='<p class="nota">I prodotti non si caricano. Ricarica la pagina.</p>';});

@@ -1381,7 +1381,7 @@ function prodottiDaConfermare(){
       if(!r||r.error){box.innerHTML='<p>'+esc(errore(r&&r.error))+'</p>';return;}
       var l=r.data||[];if(!l.length){box.innerHTML='<p>Niente da confermare.</p>';return;}
       box.innerHTML=l.map(function(p,i){
-        return '<div class="tm-ric pd-c">'+(p.foto?'<img src="'+esc(p.foto)+'" alt="" loading="lazy">':'')+'<b>'+esc(p.nome)+'</b>'+
+        return '<div class="tm-ric pd-c">'+(p.foto?'<img src="'+esc(/^https?:/.test(p.foto)?p.foto:"../communitas-aeterna/"+p.foto)+'" alt="" loading="lazy">':'')+'<b>'+esc(p.nome)+'</b>'+
           '<span class="m">'+esc(p.produttore)+(p.luogo?' · '+esc(p.luogo):'')+(p.il?' · '+esc(assQuando(p.il)):'')+' · '+esc(String(p.prezzo))+' € · '+esc(String(p.quantita))+' '+esc(p.unita||"")+'</span>'+
           '<p>'+esc(p.descrizione||"")+'</p><p class="m">'+esc(pdNomeCat(p.categoria))+' · margine a Felicitas '+esc(String(p.margine))+'%</p>'+
           '<p>'+esc(p.processo||"")+'</p>'+(p.nota?'<p class="pd-nota">'+esc(p.nota)+'</p>':'')+
@@ -1392,9 +1392,13 @@ function prodottiDaConfermare(){
           (p.mio&&p.nota?'<button type="button" class="tc-btn sec" data-pd-mio="'+i+'">Correggi</button>':'')+'</div>'+
           '<div data-pd-box="'+i+'"></div><p class="tc-nota" data-pd-es="'+i+'" aria-live="polite"></p></div>';}).join("");
       box.querySelectorAll("[data-pd-ok]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-pd-ok"),p=l[i],es=box.querySelector('[data-pd-es="'+i+'"]');
-        b.disabled=true;es.textContent="Un momento…";
-        db.rpc("fm_prodotto_conferma",{p_id:p.id,p_emporio:box.querySelector('[data-pd-e="'+i+'"]').checked,p_cervello:box.querySelector('[data-pd-c="'+i+'"]').checked}).then(function(x){b.disabled=false;
-          if(x&&x.error){es.textContent=errore(x.error);return;}if(x.data!=="ok"){es.textContent=x.data;return;}disegna();},function(){b.disabled=false;es.textContent="Riprova tra poco.";});};});
+        var em=box.querySelector('[data-pd-e="'+i+'"]').checked,ce=box.querySelector('[data-pd-c="'+i+'"]').checked;
+        if(!em&&!ce){es.textContent="Scegli Emporio, Cervello o tutti e due.";return;}
+        b.disabled=true;es.textContent=em?"Creo il pagamento su Stripe…":"Un momento…";
+        var fine=function(t){b.disabled=false;if(t)es.textContent=t;else disegna();};
+        var cerv=function(){return ce?db.rpc("fm_prodotto_conferma",{p_id:p.id,p_emporio:false,p_cervello:true}).then(function(x){if(x&&x.error)return errore(x.error);return x.data==="ok"?"":x.data;}):Promise.resolve("");};
+        (em?db.functions.invoke("fm-prodotto-stripe",{body:{azione:"conferma",id:p.id}}).then(function(x){var d=x&&x.data;
+            if(!d||!d.ok)return (d&&d.msg)||"Stripe non risponde. Riprova tra poco.";return cerv();}):cerv()).then(fine,function(){fine("Riprova tra poco.");});};});
       box.querySelectorAll("[data-pd-no]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-pd-no"),p=l[i],c=box.querySelector('[data-pd-box="'+i+'"]');
         c.innerHTML='<textarea class="pd-t" maxlength="1000" aria-label="Cosa va corretto"></textarea><button type="button" class="tc-btn">Invia</button>';
         var t=c.querySelector("textarea"),bi=c.querySelector("button"),es=box.querySelector('[data-pd-es="'+i+'"]');t.focus();
