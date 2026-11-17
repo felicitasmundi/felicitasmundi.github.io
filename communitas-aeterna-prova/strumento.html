@@ -4838,8 +4838,10 @@ function oggiSemplice(){
   c.innerHTML='<p class="et">Oggi</p><h3>'+esc(d.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",timeZone:"Europe/Rome"}))+'</h3><div id="sett-app"></div>'+
     (guido?'<div id="sett-team"></div>':'')+
     '<p class="et" style="margin:14px 0 6px">Questa settimana</p><div id="sett-mie"><p class="nota">Un momento…</p></div>'+
-    '<div class="fine" style="margin-top:6px"><button class="mini" id="sett-7">Prossimi 7 giorni ›</button></div><div id="o-agenda" hidden></div>';
+    '<div class="fine" style="margin-top:6px"><button class="mini oro" id="sett-fissa">Fissa un incontro</button><button class="mini" id="sett-7">Prossimi 7 giorni ›</button></div><div id="o-agenda" hidden></div>';
   var a7=$("#sett-7"),visto=false;a7.onclick=function(){var g=$("#o-agenda");g.hidden=!g.hidden;if(!visto){visto=true;agendaOggi();}};
+  /* 17/11/2026, Gab: «hai tolto la possibilità che io possa aggiungere … delle informazioni all'agenda … Prima avevo quel tasto» (dal 15/11 era dentro «Prossimi 7 giorni ›») */
+  $("#sett-fissa").onclick=function(){agFissa(null,oggiSemplice);};
   agLeggi().then(function(l){var e=$("#sett-app");if(!e||vista!=="oggi"||!l)return;var q=l.filter(function(x){return x.giorno===oggi;});
     e.innerHTML=q.length?'<p class="et" style="margin:4px 0 6px">Appuntamenti di oggi</p>'+q.map(agRiga).join(""):'';agLegaAnnulla(e,oggiSemplice);});
   if(guido)settPersone().then(function(v){var e=$("#sett-team");if(!e||vista!=="oggi"||!v.l.length)return;
