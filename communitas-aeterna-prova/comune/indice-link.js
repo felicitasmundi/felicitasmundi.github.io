@@ -7,5 +7,6 @@ window.FM_INDICE_LINK=[
   {voce:"beggiato",              titolo:"Company brain e team",  url:"/communitas-aeterna-prova/company-brain-team.html"},
   {voce:"second brain e indice", titolo:"Second brain e indice", url:"/communitas-aeterna/second-brain-e-indice.html"},
   /* Comunità › Villaggi e vicinati (Gab 15/11 00:19 «segna queste info nel cervello e anche le immagini generate.. poi fammi il link, quindi pubblica») */
-  {voce:"villaggi e vicinati",   titolo:"Attiva un vicinato",    url:"/communitas-aeterna-prova/attiva-un-vicinato.html"}
+  {voce:"villaggi e vicinati",   titolo:"Attiva un vicinato",    url:"/communitas-aeterna-prova/attiva-un-vicinato.html"},
+  {voce:"villaggi e vicinati",   titolo:"Dichiarazione di intenti dei vicinati",    url:"/communitas-aeterna-prova/dichiarazione-intenti-vicinato.pdf"}
 ];
