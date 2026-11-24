@@ -24,6 +24,12 @@
       var g = localStorage.getItem(CHIAVE_SB); if(!g) return;      /* nel sito nessuno è entrato: non si crea niente */
       g = JSON.parse(g); if(!g || g.refresh_token === a.refresh_token) return;
       var exp = scadenza(a.access_token); if(!exp) return;
+      /* 24/11 (Gab: «ho messo la password ma mi ha rifatto entrare nella schermata dicendomi ancora entra»): l'apk teneva un accesso
+         vecchio, già spento, e qui prendeva il posto di quello appena fatto col codice: si restava ospiti a ogni ingresso.
+         Ora si prende quello dell'apk solo se è più nuovo di quello del sito. Se è più vecchio resta quello del sito,
+         che poco dopo passa all'apk (passaAllApp) e prende il posto del suo vecchio. */
+      var expSito = scadenza(g.access_token || '') || +g.expires_at || 0;
+      if(exp <= expSito) return;
       g.access_token = a.access_token; g.refresh_token = a.refresh_token; g.expires_at = exp; g.expires_in = Math.max(0, exp - Math.floor(Date.now()/1000));
       localStorage.setItem(CHIAVE_SB, JSON.stringify(g)); ultimoPassato = a.refresh_token;
     }catch(e){}
