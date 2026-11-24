@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Distribuzione</title>
+<!--
+  Pagina «Distribuzione» (24/11/2026). Gab: «ok bacheca» · «esatto solo team e nucleo».
+  Passi e frasi presi pari pari dal canvas «I Vicinati del Cibo» del 24/11 (discorso-modello-business/).
+  «Chi»: ruoli che esistono già, abbinati da Claude; il passo 6 aspetta Gab ([ ]).
+  Stati salvati nel database con la SQL 312 (fm_distribuzione, fm_distribuzione_stato): li legge e li cambia solo chi è nel nucleo o ha un ruolo.
+  Vicinati: quelli in Sardegna nominati da Gab il 24/11.
+-->
+<link rel="stylesheet" href="comune/caratteri.css">
+<style>
+:root{--cosmo1:#1d2f66;--cosmo2:#122050;--cosmo3:#0a1430;--oro:#D4AF6A;--testo:#F5F0E6;--carta:#1a2148;--fioco:rgba(245,240,230,.72);color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--cosmo3)}
+body{min-height:100vh;background:linear-gradient(180deg,var(--cosmo1),var(--cosmo2) 45%,var(--cosmo3));background-color:var(--cosmo3);color:var(--testo);font-family:'DM Sans',system-ui,sans-serif;font-size:24px;line-height:1.35;overflow-x:hidden}
+.wrap{max-width:1360px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+h1{font-family:Cinzel,serif;font-weight:600;font-size:40px;letter-spacing:.04em;color:var(--oro)}
+.vicinati{display:flex;gap:10px;overflow-x:auto;margin:20px 0 26px;padding-bottom:4px;scrollbar-width:none}
+.vicinati::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;font:inherit;font-size:20px;padding:10px 18px;border-radius:999px;border:1px solid rgba(245,240,230,.25);color:var(--fioco);background:none;white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--oro);color:var(--cosmo3);border-color:var(--oro);font-weight:600}
+.fascia{margin-bottom:28px}
+.fascia h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;margin-bottom:12px}
+.riga{display:grid;gap:16px}
+.f1 .riga{grid-template-columns:repeat(3,1fr)}
+.f2 .riga{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--carta);border:1px solid rgba(212,175,106,.22);border-radius:22px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:10px;min-height:250px}
+.n{font-family:Cinzel,serif;color:var(--oro);font-size:20px}
+.card h3{font-family:Cinzel,serif;font-weight:500;font-size:25px;line-height:1.2}
+.cosa{color:var(--fioco);flex:1}
+.chi{font-size:18px;color:var(--fioco)}
+.chi b{color:var(--testo);font-weight:500}
+.ph{color:var(--oro)}
+.giu{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+.stato{font-size:18px;font-weight:600;padding:6px 14px;border-radius:999px}
+.s-da_fare{background:rgba(245,240,230,.10);color:var(--fioco)}
+.s-in_corso{background:rgba(212,175,106,.18);color:var(--oro)}
+.s-attivo{background:rgba(141,191,94,.22);color:#B9E08F}
+.cambia{font:inherit;font-size:18px;color:var(--oro);border:1px solid rgba(212,175,106,.5);border-radius:999px;padding:6px 14px;background:none;cursor:pointer}
+.cambia:disabled{opacity:.5}
+.esito{font-size:18px;color:var(--fioco);min-height:1.3em;text-align:center}
+.avviso{background:var(--carta);border:1px solid rgba(212,175,106,.3);border-radius:22px;padding:24px;margin-top:24px;max-width:640px}
+.avviso a{color:var(--oro)}
+button:focus-visible{outline:3px solid var(--oro);outline-offset:2px}
+@media (max-width:1100px){.f2 .riga{grid-template-columns:repeat(2,1fr)}.card{min-height:0}}
+.card{min-width:0;overflow-wrap:break-word}
+@media (max-width:760px){
+  .wrap{padding-top:22px}
+  h1{font-size:32px}
+  .riga{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-right:-16px;padding-right:16px;scrollbar-width:none}
+  .riga::-webkit-scrollbar{display:none}
+  .card{flex:0 0 82%;scroll-snap-align:start;min-height:0}
+  .fascia{margin-bottom:22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Distribuzione</h1>
+  <div id="box"><p class="esito">Un momento…</p></div>
+</div>
+<script src="/communitas-aeterna-prova/comune/lib/supabase-js-2.119.0.js"></script>
+<script src="comune/fm-attesa.js?v=11082140"></script>
+<script>
+(function(){
+  var VICINATI=["Oristano","Quartu Sant'Elena","Porto Torres–Sassari","Olbia","Alghero"];
+  var FASCE=[
+    {titolo:"Il percorso",cls:"f1",passi:[
+      {n:1,titolo:"Festival",cosa:"Ogni stagione, in ogni regione: i gruppi locali si ritrovano.",chi:"Eventi e Festival"},
+      {n:2,titolo:"Intento",cosa:"Nasce l'intento di diventare un vicinato.",chi:"Coordinatori di vicinato"},
+      {n:3,titolo:"Laboratorio",cosa:"Incontro di attivazione su tecnologia e coscienza.",chi:"Formazione e scuola"}]},
+    {titolo:"Impianto logistico",cls:"f2",passi:[
+      {n:4,titolo:"Produttori",cosa:"Quali sono i produttori e che tipo di accordi fare con loro.",chi:"Produttori"},
+      {n:5,titolo:"Comunicare l'incontro",cosa:"Dove viene fatto, che tipo di incontro c'è.",chi:"Edizione e programmazione"},
+      {n:6,titolo:"Farlo sapere",cosa:"Aziende, reti di imprese, associazioni, cooperative sanno che c'è questo luogo, in questo tempo.",chi:""},
+      {n:7,titolo:"Attività settimanali",cosa:"Distribuzione, laboratori e mensa.",chi:"Punti di ritiro e magazzino · Cucina"}]}];
+  var NOMI={da_fare:"Da fare",in_corso:"In corso",attivo:"Attivo"},DOPO={da_fare:"in_corso",in_corso:"attivo",attivo:"da_fare"};
+  var box=document.getElementById("box"),stati={},scelto=VICINATI[0];
+  try{var m=localStorage.getItem("fm_distribuzione_vicinato");if(m&&VICINATI.indexOf(m)>=0)scelto=m;}catch(e){}
+  function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function stato(n){return stati[scelto+"|"+n]||"da_fare";}
+  function avviso(h){box.innerHTML='<div class="avviso">'+h+'</div>';}
+  var db=(window.supabase&&supabase.createClient)?supabase.createClient("https://gfnveesogkfvkrdudpfg.supabase.co","sb_publishable_4_kJlYwWuqsahMBw7Um2mg_lsYH9ogU",{auth:{flowType:"implicit"}}):null;
+  function disegna(){
+    box.innerHTML='<div class="vicinati">'+VICINATI.map(function(v){return '<button type="button" class="chip'+(v===scelto?' on':'')+'" data-v="'+esc(v)+'">'+esc(v)+'</button>';}).join("")+'</div>'+
+      FASCE.map(function(f){return '<section class="fascia '+f.cls+'"><h2>'+esc(f.titolo)+'</h2><div class="riga">'+f.passi.map(function(p){var s=stato(p.n);
+        return '<div class="card"><span class="n">'+p.n+'</span><h3>'+esc(p.titolo)+'</h3><p class="cosa">'+esc(p.cosa)+'</p>'+
+          '<p class="chi">Chi: '+(p.chi?'<b>'+esc(p.chi)+'</b>':'<b class="ph">[ ]</b>')+'</p>'+
+          '<div class="giu"><span class="stato s-'+s+'">'+NOMI[s]+'</span><button type="button" class="cambia" data-p="'+p.n+'">Cambia</button></div></div>';}).join("")+'</div></section>';}).join("")+
+      '<p class="esito" id="esito" aria-live="polite"></p>';
+    box.querySelectorAll("[data-v]").forEach(function(b){b.onclick=function(){scelto=b.getAttribute("data-v");try{localStorage.setItem("fm_distribuzione_vicinato",scelto);}catch(e){}disegna();};});
+    box.querySelectorAll("[data-p]").forEach(function(b){b.onclick=function(){
+      var n=+b.getAttribute("data-p"),nuovo=DOPO[stato(n)],es=document.getElementById("esito");
+      b.disabled=true;es.textContent="Un momento…";
+      db.rpc("fm_distribuzione_stato",{p_vicinato:scelto,p_passo:n,p_stato:nuovo}).then(function(r){
+        if(r.error||r.data!=="ok"){b.disabled=false;es.textContent=(!r.error&&r.data)||"Non è stato salvato. Si può riprovare.";return;}
+        stati[scelto+"|"+n]=nuovo;disegna();
+      },function(){b.disabled=false;es.textContent="Non è stato salvato. Si può riprovare.";});};});
+  }
+  if(!db){avviso("La pagina non riesce a collegarsi. Controlla la connessione e riprova.");return;}
+  db.auth.getSession().then(function(s){
+    var u=s&&s.data&&s.data.session&&s.data.session.user;
+    if(!u){avviso('Questa pagina la vedono team e nucleo. <a href="accesso.html?torna='+encodeURIComponent(location.pathname)+'" target="_top">Entra ›</a>');return;}
+    return db.rpc("fm_distribuzione").then(function(r){
+      if(r.error){avviso(/does not exist|schema cache|Could not find/i.test(String(r.error.message||""))?"La pagina non è ancora aperta: riprova tra poco.":"Non si legge adesso. Riprova tra poco.");return;}
+      if(!r.data){avviso("Questa pagina la vedono team e nucleo.");return;}
+      (r.data.stati||[]).forEach(function(x){stati[x.vicinato+"|"+x.passo]=x.stato;});
+      disegna();
+    });
+  }).catch(function(){avviso("Non si legge adesso. Riprova tra poco.");});
+})();
+</script>
+</body>
+</html>
