@@ -243,6 +243,58 @@ a{color:var(--blu)}
 .lb-commenta{font:600 12.5px var(--sans);background:none;border:0;padding:2px 0;color:var(--oro);cursor:pointer;text-align:left}
 .lb-cnuovo{display:flex;flex-direction:column;gap:8px}.lb-cnuovo textarea{min-height:70px}
 .gq{margin:14px 0;padding:22px 20px;border-radius:18px;background:#1a2148;border:1px solid rgba(212,175,106,.55);color:#F5F0E6} .gq .et{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#D4AF6A;margin:0 0 10px} .gq h3{font-family:Georgia,serif;font-size:23px;line-height:1.25;font-weight:600;margin:0 0 12px} .gq p{font-size:18px;line-height:1.5;margin:0 0 10px} .gq .pz{color:#D4AF6A;font-weight:600} .gq a.t{display:block;text-align:center;margin-top:14px;padding:14px;border-radius:999px;background:#D4AF6A;color:#0a1430;font-weight:700;font-size:18px;text-decoration:none} .gq a.s{display:block;text-align:center;margin-top:10px;color:#D4AF6A;font-size:17px;text-decoration:none}
+/* 24/11 · la tendina «FelicitasMundi» in cima al Giornale, per chi non è entrato: legge dal Cervello (SQL 313, fm_casa_voci) */
+#g4-casa .cs{margin:6px 0 14px;border-radius:20px;background:#1a2148;border:1px solid rgba(212,175,106,.55);color:#F5F0E6;overflow:hidden}
+#g4-casa .cs-bar{display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;background:none;border:0;color:inherit;text-align:left;cursor:pointer;font:inherit}
+#g4-casa .cs-nx{flex:none;width:52px;height:52px;border-radius:50%;background:#fff url(casa/nexus-centrato.jpg) center/cover;border:2px solid #D4AF6A;box-shadow:0 0 0 6px rgba(212,175,106,.08),0 0 40px rgba(212,175,106,.35);animation:csRespira 5s ease-in-out infinite}
+@keyframes csRespira{50%{box-shadow:0 0 0 12px rgba(212,175,106,.06),0 0 70px rgba(212,175,106,.55)}}
+#g4-casa .cs-bar b{display:block;font-family:Georgia,serif;font-size:22px;font-weight:600;letter-spacing:.02em}
+#g4-casa .cs-bar small{display:block;font-size:16px;opacity:.8;margin-top:3px;line-height:1.35}
+#g4-casa .cs-fr{margin-left:auto;flex:none;color:#D4AF6A;font-size:24px;transition:transform .25s}
+#g4-casa .cs.ap .cs-fr{transform:rotate(180deg)}
+#g4-casa .cs-in{display:none;padding:0 0 16px}
+#g4-casa .cs.ap .cs-in{display:block}
+#g4-casa .cs-sch{display:flex;gap:8px;padding:2px 16px 12px;overflow-x:auto;scrollbar-width:none}
+#g4-casa .cs-sch button{flex:none;padding:10px 15px;border-radius:999px;border:1px solid rgba(212,175,106,.5);background:none;color:#D4AF6A;font:inherit;font-size:16px;white-space:nowrap;cursor:pointer}
+#g4-casa .cs-sch button.on{background:#D4AF6A;color:#0a1430;font-weight:700}
+#g4-casa .cs-fila{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;padding:2px 16px 8px;scrollbar-width:none}
+#g4-casa .cs-c{flex:0 0 min(78%,300px);scroll-snap-align:start;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:linear-gradient(160deg,#1d2f66,#122050);border:1px solid color-mix(in srgb,var(--c,#D4AF6A) 55%,transparent);color:#F5F0E6;text-align:left;padding:0;font:inherit;cursor:pointer}
+#g4-casa .cs-v{height:150px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--c,#D4AF6A) 22%,#1a2148) 0%,#122050 72%)}
+#g4-casa .cs-v img{max-height:126px;max-width:88%;filter:drop-shadow(0 0 18px rgba(212,175,106,.25))}
+#g4-casa .cs-v .nx{width:110px;height:110px;border-radius:50%;background:#fff url(casa/nexus-centrato.jpg) center/cover;border:2px solid #D4AF6A;animation:csRespira 5s ease-in-out infinite}
+#g4-casa .cs-v i{display:block;width:64px;height:64px;border-radius:50%;border:3px solid var(--c,#D4AF6A);box-shadow:0 0 30px var(--c,#D4AF6A),inset 0 0 16px color-mix(in srgb,var(--c,#D4AF6A) 50%,transparent);animation:csAnello 4s ease-in-out infinite}
+#g4-casa .cs-v.anelli{gap:10px}#g4-casa .cs-v.anelli i{width:36px;height:36px;border-width:2px}
+#g4-casa .cs-v.anelli i:nth-child(2){animation-delay:.4s}#g4-casa .cs-v.anelli i:nth-child(3){animation-delay:.8s}#g4-casa .cs-v.anelli i:nth-child(4){animation-delay:1.2s}#g4-casa .cs-v.anelli i:nth-child(5){animation-delay:1.6s}#g4-casa .cs-v.anelli i:nth-child(6){animation-delay:2s}
+@keyframes csAnello{50%{transform:scale(1.08);box-shadow:0 0 46px var(--c,#D4AF6A),inset 0 0 20px color-mix(in srgb,var(--c,#D4AF6A) 60%,transparent)}}
+#g4-casa .cs-v .km{font-family:Georgia,serif;font-size:52px;white-space:nowrap;color:#D4AF6A;text-shadow:0 0 30px rgba(212,175,106,.5)}
+#g4-casa .cs-t{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+#g4-casa .cs-t b{font-family:Georgia,serif;font-size:21px;font-weight:600;line-height:1.2}
+#g4-casa .cs-t span{font-size:18px;line-height:1.4;opacity:.9;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#g4-casa .cs-t em{margin-top:auto;padding-top:6px;font-style:normal;font-weight:600;color:#D4AF6A;font-size:17px}
+#g4-casa .cs-pt{display:flex;justify-content:center;gap:6px;margin-top:6px}#g4-casa .cs-pt i{width:7px;height:7px;border-radius:50%;background:rgba(212,175,106,.35)}#g4-casa .cs-pt i.on{background:#D4AF6A}
+.cs-velo{position:fixed;inset:0;z-index:9000;background:rgba(5,10,30,.72);display:flex;align-items:flex-end;justify-content:center}
+.cs-foglio{width:100%;max-width:720px;max-height:88vh;overflow-y:auto;background:#122050;border:1px solid rgba(212,175,106,.55);border-bottom:0;border-radius:22px 22px 0 0;color:#F5F0E6;padding:0 0 28px}
+@media(min-width:760px){.cs-velo{align-items:center}.cs-foglio{border-radius:22px;border-bottom:1px solid rgba(212,175,106,.55)}}
+.cs-foglio .cs-v{height:190px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--c,#D4AF6A) 22%,#1a2148) 0%,#122050 72%)}
+.cs-foglio .cs-v img{max-height:166px;max-width:88%}
+.cs-foglio .cs-v i{display:block;width:72px;height:72px;border-radius:50%;border:3px solid var(--c,#D4AF6A);box-shadow:0 0 30px var(--c,#D4AF6A)}
+.cs-foglio .cs-v .nx{width:130px;height:130px;border-radius:50%;background:#fff url(casa/nexus-centrato.jpg) center/cover;border:2px solid #D4AF6A}
+.cs-foglio .cs-v .km{font-family:Georgia,serif;font-size:72px;white-space:nowrap;color:#D4AF6A}
+.cs-foglio .cs-v.anelli{gap:10px}.cs-foglio .cs-v.anelli i{width:38px;height:38px;border-width:2px}
+.cs-foglio .cs-chiudi{position:sticky;top:0;display:flex;justify-content:flex-end;padding:10px 12px 0;background:linear-gradient(#122050,rgba(18,32,80,0))}
+.cs-foglio .cs-chiudi button{background:#1a2148;border:1px solid rgba(212,175,106,.55);color:#D4AF6A;border-radius:999px;padding:8px 16px;font:inherit;font-size:16px;cursor:pointer}
+.cs-foglio .cs-cp{padding:4px 22px 0}
+.cs-foglio h3{font-family:Georgia,serif;font-size:25px;font-weight:600;margin:14px 0 12px}
+.cs-foglio h4{font-family:Georgia,serif;font-size:20px;font-weight:600;color:#D4AF6A;margin:20px 0 8px}
+.cs-foglio p{font-size:18px;line-height:1.55;margin:0 0 12px}
+.cs-foglio ul{margin:0 0 12px;padding-left:20px}.cs-foglio li{font-size:18px;line-height:1.5;margin:0 0 6px}
+.cs-foglio .cs-amb{display:flex;flex-direction:column;gap:10px;padding:6px 16px 0}
+.cs-foglio .cs-amb button{display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;border-radius:16px;background:#1a2148;border:1px solid color-mix(in srgb,var(--c) 60%,transparent);color:#F5F0E6;font:inherit;cursor:pointer}
+.cs-foglio .cs-amb i{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--c);box-shadow:0 0 16px var(--c)}
+.cs-foglio .cs-amb b{font-family:Georgia,serif;font-size:20px;font-weight:600}
+.cs-foglio .cs-amb small{display:block;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+@media(min-width:900px){#g4-casa .cs-c{flex-basis:calc((100% - 36px)/4)}}
+@media(prefers-reduced-motion:reduce){#g4-casa *,.cs-foglio *{animation:none!important}}
 </style>
 <style>
 /* ═══ La cornice cosmo (18 ott 22:24, Gab: «prefestisco a / trovo che le barre blu siano molto belle e nel caso possiamo rendere di quel colore le finestre attive come la diretta»).
@@ -3767,6 +3819,58 @@ function g4Programmati(){
     P.innerHTML='<p style="margin:10px 0 4px"><b>Programmati</b></p>'+l.map(function(v){return '<p style="margin:0 0 6px;font-size:17px"><small>'+esc(g4Giorno(v.mostra_dal))+'</small><br>'+esc(g4VideoTit(v))+'</p>';}).join("");
   },function(){});
 }
+/* 24/11 · la tendina «FelicitasMundi» in cima al Giornale, per chi non è entrato.
+   I testi arrivano dal Cervello (voci «Cos'è FelicitasMundi», «I Vicinati del Cibo», «Le linee del progetto in sei ambiti»,
+   «Cervello Digitale Evoluto», SQL 313 fm_casa_voci); qui stanno solo i disegni e le animazioni della home.
+   Senza la SQL 313, o senza card confermate, la tendina non compare. */
+var CASA_VOCI=["Cos'è FelicitasMundi","I Vicinati del Cibo","Cervello Digitale Evoluto"],CASA_AMBITI="Le linee del progetto in sei ambiti";
+var CASA_ORDINE=["Cos'è FelicitasMundi","Il sogno","A chi è rivolto","Da dove nasce","Come si partecipa","Le origini","Dai cerchi ai vicinati","Il fondatore · Le radici","Il fondatore · Giovani per Olbia","Il fondatore · La svolta","Invito alla partecipazione",
+  "I villaggi diffusi","Il vicinato","Il raggio del vicinato","Con i produttori","Il punto di raccolta","Ordinare e ritirare","La vita nel punto di ritiro","Gli intenti del 21 novembre","Il percorso dei vicinati","I luoghi in cui iniziare","Una rete tra regioni","La base del progetto","Cosa proponiamo",
+  "La rete e il Cervello Digitale Evoluto","Il problema: informazioni che si perdono","Un database comune","Il supporto tecnico all'innovazione","Un unico strumento di condivisione","Un sistema di gestione attento"];
+var CASA_VIS={"Cos'è FelicitasMundi":"nx","Il sogno":"sogno","I villaggi diffusi":"casa/home/disegno-01.png","Il vicinato":"casa/home/disegno-03.png","Il raggio del vicinato":"km","Con i produttori":"casa/home/disegno-04.png","Il punto di raccolta":"casa/home/disegno-05.png","Ordinare e ritirare":"casa/home/disegno-06.png","La vita nel punto di ritiro":"casa/home/disegno-08.png","La rete e il Cervello Digitale Evoluto":"casa/home/disegno-10.png"};
+var CASA_SOGNO=["#D4AF6A","#8DBF5E","#9b7ff0","#E07A5F","#2BB3C9"],CASA_AMB_C=["#8DBF5E","#F39A3A","#E0498A","#F5D27A","#2BB3C9","#9B8CFF"];
+var casaDati=null,casaScheda=0;
+function casaCard(t){var i=t.indexOf("\n\n");return i<0?{t:t.split("\n")[0],x:t.split("\n").slice(1).join("\n")}:{t:t.slice(0,i).trim(),x:t.slice(i+2).trim()};}
+function casaVis(c,col){var v=CASA_VIS[c.t];
+  if(v==="nx")return '<div class="cs-v"><div class="nx"></div></div>';
+  if(v==="km")return '<div class="cs-v"><span class="km">20 km</span></div>';
+  if(v==="sogno")return '<div class="cs-v anelli">'+CASA_SOGNO.map(function(k){return '<i style="--c:'+k+'"></i>';}).join("")+'</div>';
+  if(v)return '<div class="cs-v"><img src="'+v+'" alt="" loading="lazy"></div>';
+  return '<div class="cs-v" style="--c:'+(col||"#D4AF6A")+'"><i></i></div>';}
+function casaTesto(x){return x.split(/\n\s*\n/).map(function(b){var r=b.split("\n").filter(function(l){return l.trim();});if(!r.length)return "";var h="";
+  if(r.length>1&&r[0].length<70&&!/[.:;!?»]$/.test(r[0])&&!/^· /.test(r[0])){h='<h4>'+esc(r[0])+'</h4>';r=r.slice(1);}
+  var out="",lista=[];r.forEach(function(l){if(/^(· |\d+\. )/.test(l))lista.push(l.replace(/^· /,""));else{if(lista.length){out+='<ul>'+lista.map(function(z){return '<li>'+esc(z)+'</li>';}).join("")+'</ul>';lista=[];}out+='<p>'+esc(l)+'</p>';}});
+  if(lista.length)out+='<ul>'+lista.map(function(z){return '<li>'+esc(z)+'</li>';}).join("")+'</ul>';return h+out;}).join("");}
+function casaPrimo(x){var l=x.split("\n").filter(function(z){return z.trim()&&!/^(Obiettivi|Impatto|Attuazione)$/.test(z.trim());});return (l[0]||"").replace(/^· /,"");}
+function casaApri(c,col){var v=document.createElement("div");v.className="cs-velo";
+  v.innerHTML='<div class="cs-foglio" role="dialog" aria-label="'+esc(c.t)+'" style="--c:'+(col||"#D4AF6A")+'"><div class="cs-chiudi"><button type="button">Chiudi</button></div>'+casaVis(c,col)+'<div class="cs-cp"><h3>'+esc(c.t)+'</h3>'+casaTesto(c.x)+'</div></div>';
+  document.body.appendChild(v);document.body.style.overflow="hidden";
+  function chiudi(){v.remove();document.body.style.overflow="";}
+  v.onclick=function(e){if(e.target===v)chiudi();};v.querySelector(".cs-chiudi button").onclick=chiudi;return v;}
+function casaAmbiti(){var l=casaDati[CASA_AMBITI]||[];var v=casaApri({t:CASA_AMBITI,x:""},"#D4AF6A");
+  var g={};l.forEach(function(c){var k=c.t.replace(/ \(\d di \d\)$/,"");(g[k]=g[k]||[]).push(c);});
+  var ks=Object.keys(g).sort(function(a,b){return a.localeCompare(b,"it",{numeric:true});});
+  v.querySelector(".cs-v").outerHTML='<div class="cs-v anelli">'+CASA_AMB_C.map(function(k){return '<i style="--c:'+k+'"></i>';}).join("")+'</div>';
+  v.querySelector(".cs-cp").insertAdjacentHTML("afterend",'<div class="cs-amb">'+ks.map(function(k,i){var p=k.split(" · ");return '<button type="button" data-k="'+i+'" style="--c:'+CASA_AMB_C[i%6]+'"><i></i><span><small>'+esc(p[0])+'</small><b>'+esc(p.slice(1).join(" · ")||k)+'</b></span></button>';}).join("")+'</div>');
+  v.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){var k=ks[+b.getAttribute("data-k")];casaApri({t:k,x:g[k].map(function(c){return c.x;}).join("\n\n")},CASA_AMB_C[+b.getAttribute("data-k")%6]);};});}
+function casaDisegna(box,aperta){var voci=CASA_VOCI.filter(function(k){return (casaDati[k]||[]).length;});if(!voci.length){box.innerHTML="";return;}
+  if(casaScheda>=voci.length)casaScheda=0;var k=voci[casaScheda],l=casaDati[k].slice(),amb=k==="I Vicinati del Cibo"&&(casaDati[CASA_AMBITI]||[]).length;
+  var schede='<div class="cs-sch">'+voci.map(function(v,i){return '<button type="button" data-s="'+i+'" class="'+(i===casaScheda?"on":"")+'">'+esc(v)+'</button>';}).join("")+'</div>';
+  var carte=l.map(function(c,i){return '<button type="button" class="cs-c" data-c="'+i+'">'+casaVis(c)+'<span class="cs-t"><b>'+esc(c.t)+'</b><span>'+esc(casaPrimo(c.x))+'</span><em>Leggi ›</em></span></button>';}).join("")+
+    (amb?'<button type="button" class="cs-c" data-amb="1"><div class="cs-v anelli">'+CASA_AMB_C.map(function(z){return '<i style="--c:'+z+'"></i>';}).join("")+'</div><span class="cs-t"><b>'+esc(CASA_AMBITI)+'</b><span>'+esc(casaPrimo((casaDati[CASA_AMBITI][0]||{x:""}).x))+'</span><em>Leggi ›</em></span></button>':"");
+  var n=l.length+(amb?1:0);
+  box.innerHTML='<div class="cs'+(aperta?" ap":"")+'"><button type="button" class="cs-bar" aria-expanded="'+(aperta?"true":"false")+'"><span class="cs-nx"></span><span><b>FelicitasMundi</b><small>Comunità Eterna · Rete di villaggi diffusi, il primo è la Sardegna</small></span><span class="cs-fr">⌄</span></button><div class="cs-in">'+schede+'<div class="cs-fila">'+carte+'</div><div class="cs-pt">'+Array.apply(null,Array(Math.min(n,8))).map(function(_,i){return '<i class="'+(i?"":"on")+'"></i>';}).join("")+'</div></div></div>';
+  box.querySelector(".cs-bar").onclick=function(){casaDisegna(box,!aperta);};
+  box.querySelectorAll("[data-s]").forEach(function(b){b.onclick=function(){casaScheda=+b.getAttribute("data-s");casaDisegna(box,true);};});
+  box.querySelectorAll("[data-c]").forEach(function(b){b.onclick=function(){casaApri(l[+b.getAttribute("data-c")]);};});
+  var a=box.querySelector("[data-amb]");if(a)a.onclick=casaAmbiti;
+  var f=box.querySelector(".cs-fila"),pt=box.querySelectorAll(".cs-pt i");if(f&&pt.length)f.addEventListener("scroll",function(){var i=Math.round(f.scrollLeft/Math.max(1,f.scrollWidth-f.clientWidth)*(pt.length-1));pt.forEach(function(p,j){p.className=j===i?"on":"";});},{passive:true});}
+function g4Casa(box){if(!box||!db)return;
+  if(casaDati){casaDisegna(box,false);return;}
+  db.rpc("fm_casa_voci").then(function(r){if(!r||r.error||!Array.isArray(r.data)||!document.body.contains(box))return;
+    var d={};r.data.forEach(function(x){var k=String(x.voce||"").trim();var nome=CASA_VOCI.concat([CASA_AMBITI]).filter(function(v){return v.toLowerCase()===k.toLowerCase();})[0];if(!nome)return;(d[nome]=d[nome]||[]).push(casaCard(String(x.testo||"")));});
+    Object.keys(d).forEach(function(k){if(k===CASA_AMBITI)return;d[k].sort(function(a,b){var i=CASA_ORDINE.indexOf(a.t),j=CASA_ORDINE.indexOf(b.t);return (i<0?999:i)-(j<0?999:j);});});
+    casaDati=d;casaDisegna(box,false);},function(){});}
 /* GIORNALE: l'edizione del giorno, a tre fasce, che finisce */
 var FASCE=[["Mattina",0,13],["Pomeriggio",13,19],["Sera",19,24]];
 var apriF={},apriA={};
@@ -3775,11 +3879,12 @@ function vGiornale(){
   var da=g.getTime(),a=da+864e5;
   var nome=giorno===0?"Oggi":giorno===-1?"Ieri":giorno===1?"Domani":"";
   var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  c.innerHTML='<div id="g4-oggi"></div><div id="g4-fissi"><div class="gq"><p class="et">Praticantato</p><h3>Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</h3><p>Percorso online ogni lunedì alle 19 con Gabriele Dettori. In diretta nell\'app.</p><p><span class="pz">80 € al mese</span></p><a class="t" href="praticantato.html">Praticantato &gt;</a><a class="s" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Oppure mettiti al servizio col Karma Yoga &gt;</a></div><div class="gq"><p class="et">Attiva un vicinato</p><h3>Aderisci col vicinato in cui vivi, oppure proponiti per entrare in un vicinato.</h3><p>Il vicinato è un\'area di circa 20 km di raggio attorno al punto di ritiro.</p><a class="t" href="attiva-un-vicinato.html#serve">Attiva un vicinato &gt;</a></div></div>'+g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
+  c.innerHTML=(io.id?'':'<div id="g4-casa"></div>')+'<div id="g4-oggi"></div><div id="g4-fissi"><div class="gq"><p class="et">Praticantato</p><h3>Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</h3><p>Percorso online ogni lunedì alle 19 con Gabriele Dettori. In diretta nell\'app.</p><p><span class="pz">80 € al mese</span></p><a class="t" href="praticantato.html">Praticantato &gt;</a><a class="s" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Oppure mettiti al servizio col Karma Yoga &gt;</a></div><div class="gq"><p class="et">Attiva un vicinato</p><h3>Aderisci col vicinato in cui vivi, oppure proponiti per entrare in un vicinato.</h3><p>Il vicinato è un\'area di circa 20 km di raggio attorno al punto di ritiro.</p><a class="t" href="attiva-un-vicinato.html#serve">Attiva un vicinato &gt;</a></div></div>'+g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
     (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
     '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>'+
     '<div class="g4-vid" style="margin-top:18px">'+videoHTML("villaggi")+videoHTML("cervello")+'</div>';
   c.querySelectorAll("[data-giorno]").forEach(function(b){b.onclick=function(){var n=+b.getAttribute("data-giorno");giorno=n===0?0:giorno+n;vGiornale();window.scrollTo(0,0);};});
+  if(!io.id)g4Casa($("#g4-casa"));
   var questo=giorno;
   var artRpc=db?db.rpc("fm_giornale_articoli",{p_da:new Date(da).toISOString(),p_a:new Date(a).toISOString()}).then(function(r){return r&&!r.error&&Array.isArray(r.data)?r.data:null;},function(){return null;}):Promise.resolve(null);
   Promise.all([ormeDelGiorno(da,a),lezioni(),artRpc,dirette()]).then(function(v){
