@@ -116,7 +116,7 @@ function vCervello(){
   var libroH=''+
     '<a class="rimando" href="cervello.html?c=10182300"><span><b style="font-family:var(--serif);font-size:22px">Il cervello Felicitas</b><br><small style="font-weight:400;color:var(--tenue)">Il libro che resta.</small></span><span>›</span></a>'+
     '<p class="nota" style="margin:10px 2px 0"><a href="piani.html" style="color:#D4AF6A">I prezzi sono nella pagina Piani.</a></p>';
-  c.innerHTML='<p class="et">Cervello</p>'+videoHTML("cervello")+ricTasti()+
+  c.innerHTML='<p class="et">Cervello</p>'+cercaHTML()+videoHTML("cervello")+ricTasti()+
     (io.id?
       '<div id="ce-onda"></div>'+
       '<p class="et" style="margin-top:10px">I tuoi gruppi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'+
@@ -135,6 +135,7 @@ function vCervello(){
       '<label class="m" for="az-terr" style="margin-top:6px">Territorio</label><input type="text" id="az-terr">'+
       '<label class="m" for="az-ref" style="margin-top:6px">Mail del referente (deve essere già entrato)</label><input type="email" id="az-ref">'+
       '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="az-vai">Apri lo spazio dell\'azienda</button><span class="m" id="az-esito"></span></div></div>':'');
+  cercaLega();
   if(!io.id)return;
   cerchiCache={io:{id:"io",tipo:"io",nome:"Il percorso del talento",dentro:true}};
   legaCerchi(c);
@@ -188,6 +189,54 @@ function vCervello(){
       (altri?'<details class="ce-altri"><summary>Gli altri gruppi'+(io.nucleo?' · li vedi perché sei nel nucleo':'')+'</summary><div class="cerchi">'+altri+'</div></details>':'');
     legaCerchi(e);
   });
+}
+/* 25/11/2026 · Gab: «ok partiamo dalle parole» · «chi non è entrato vede le cose pubbliche» ·
+   «quello degli elementi è il primo strato di suddivisione / poi abbiamo gli ambiti».
+   Ricerca per parole nel Cervello (SQL 315, fm_cervello_cerca_parole): ognuno trova solo ciò che può leggere.
+   Elementi con i nomi delle stanze (regola 19 ott 16:14) e il simbolo del menu; ambiti = i sei della home. */
+var CERCA_EL=[["terra","obiettivi"],["acqua","emporio"],["fuoco","azione"],["aria","giornale"],["etere","cervello"]];
+var CERCA_AMB=[["rete_territorio","Rete e territorio"],["produzione_lavoro","Produzione e lavoro"],["alimentazione","Alimentazione consapevole"],["comunita","Comunità"],["conoscenza_formazione","Conoscenza e formazione"],["innovazione_cervello","Innovazione e Cervello Digitale Evoluto"]];
+var cercaStato={el:null,amb:null,testo:""};
+function cercaHTML(){
+  function ico(v){var b=document.querySelector('nav [data-v="'+v+'"] .ic');return b?b.innerHTML:"";}
+  return '<div class="ce-cerca"><form id="cc-f" role="search"><label for="cc-q" class="cc-lab">Cerca nel Cervello</label>'+
+    '<div class="cc-riga"><input type="search" id="cc-q" placeholder="Una o più parole" autocomplete="off" value="'+esc(cercaStato.testo)+'"><button class="btn pieno" type="submit">Cerca</button></div></form>'+
+    '<div class="cc-filtri" id="cc-el">'+CERCA_EL.map(function(e){var n=(ELEMENTI.filter(function(x){return x[0]===e[0];})[0]||[e[0],e[0]])[1];
+      return '<button type="button" class="cc-ch" data-el="'+e[0]+'" aria-pressed="'+(cercaStato.el===e[0])+'"><span class="cc-ic" aria-hidden="true">'+ico(e[1])+'</span>'+esc(n)+'</button>';}).join("")+'</div>'+
+    '<div class="cc-filtri" id="cc-amb"'+(cercaStato.el?'':' hidden')+'>'+CERCA_AMB.map(function(a){
+      return '<button type="button" class="cc-ch" data-amb="'+a[0]+'" aria-pressed="'+(cercaStato.amb===a[0])+'">'+esc(a[1])+'</button>';}).join("")+'</div>'+
+    '<div id="cc-esito" aria-live="polite"></div></div>';
+}
+function cercaLega(){
+  var f=$("#cc-f");if(!f)return;
+  f.onsubmit=function(e){e.preventDefault();cercaStato.testo=$("#cc-q").value.trim();cercaVai();};
+  $("#cc-el").querySelectorAll("[data-el]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-el");
+    cercaStato.el=cercaStato.el===v?null:v;if(!cercaStato.el)cercaStato.amb=null;
+    $("#cc-el").querySelectorAll("[data-el]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-el")===cercaStato.el));});
+    $("#cc-amb").querySelectorAll("[data-amb]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-amb")===cercaStato.amb));});
+    $("#cc-amb").hidden=!cercaStato.el;if(cercaStato.testo)cercaVai();};});
+  $("#cc-amb").querySelectorAll("[data-amb]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-amb");
+    cercaStato.amb=cercaStato.amb===v?null:v;
+    $("#cc-amb").querySelectorAll("[data-amb]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-amb")===cercaStato.amb));});
+    if(cercaStato.testo)cercaVai();};});
+  if(cercaStato.testo)cercaVai();
+}
+function cercaVai(){
+  var e=$("#cc-esito");if(!e)return;var t=cercaStato.testo;
+  if(t.length<2){e.innerHTML='<p class="nota">Scrivi almeno due lettere.</p>';return;}
+  if(!db){e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';return;}
+  e.innerHTML='<p class="nota">Un momento…</p>';
+  db.rpc("fm_cervello_cerca_parole",{p_testo:t,p_elemento:cercaStato.el,p_ambito:cercaStato.amb,p_quanti:40}).then(function(r){
+    if(!document.body.contains(e)||t!==cercaStato.testo)return;
+    if(!r||r.error){e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';return;}
+    var ord=[],per={};
+    (r.data||[]).forEach(function(x){if(!per[x.voce_id]){per[x.voce_id]={id:x.voce_id,titolo:x.voce,fr:[]};ord.push(per[x.voce_id]);}
+      if(x.riga_id&&x.frammento&&per[x.voce_id].fr.length<2)per[x.voce_id].fr.push(x.frammento);});
+    if(!ord.length){e.innerHTML='<p class="nota">Nessuna voce trovata.</p>';return;}
+    e.innerHTML=ord.map(function(v){return '<button type="button" class="cc-voce" data-cc-voce="'+esc(v.id)+'"><b>'+esc(v.titolo)+'</b>'+
+      v.fr.map(function(f){return '<span>'+esc(f).replace(/\n+/g," · ")+'</span>';}).join("")+'</button>';}).join("");
+    e.querySelectorAll("[data-cc-voce]").forEach(function(b){b.onclick=function(){var v=per[b.getAttribute("data-cc-voce")];leggiCapLivello({id:v.id,titolo:v.titolo});};});
+  },function(){if(document.body.contains(e))e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';});
 }
 function legaCerchi(e){e.querySelectorAll("[data-cerchio]").forEach(function(b){b.onclick=function(){cerchio=b.getAttribute("data-cerchio");vai("cerchio");};});}
 /* in fondo a ogni cerchio, il ritorno ben visibile (Gab 20:16: «non c e il bottone per tornare indietro») */
