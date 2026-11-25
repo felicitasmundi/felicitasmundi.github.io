@@ -3727,6 +3727,15 @@ function g4VideoOggi(){
     g4CimaT=setTimeout(function(){if(vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();},60000);
   },function(){});
 }
+/* 25/11 · video per argomento sotto l'intervista (SQL 316). Gab 25/11: «no l intervista è la prima cosa, questi 3 sono contenuti che rispondono a degli argomenti» */
+function g4Argomenti(){
+  var A=$("#g4-arg");if(!A||!db)return;
+  db.from("giornale_video_argomenti").select("link,argomento").order("ordine").order("messo_il").limit(12).then(function(r){
+    var A=$("#g4-arg");if(!A)return;var l=((r&&!r.error&&r.data)||[]).filter(function(v){return ytId(v.link);});
+    A.innerHTML=l.map(function(v){return '<div class="g4-arg" style="margin:0 0 18px"><p style="margin:0 0 8px;font-size:18px;color:var(--oro,#D4AF6A)"><b>'+esc(v.argomento)+'</b></p>'+
+      '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/'+ytId(v.link)+'" title="'+esc(v.argomento)+'" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div></div>';}).join("");
+  },function(){});
+}
 /* 8/11 · Dal Cervello al Giornale (SQL 213): una card scelta va in cima o tra gli articoli di oggi, per i vicinati o per tutti */
 function g4DalCervello(){
   var w=$("#g4-oggi-c");if(!w)return;clearTimeout(g4CimaT);
@@ -3830,7 +3839,7 @@ function vGiornale(){
   var da=g.getTime(),a=da+864e5;
   var nome=giorno===0?"Oggi":giorno===-1?"Ieri":giorno===1?"Domani":"";
   var data=g.toLocaleDateString("it-IT",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
-  c.innerHTML='<div id="g4-oggi"></div><div id="g4-fissi"><div class="gq"><p class="et">Praticantato</p><h3>Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</h3><p>Percorso online ogni lunedì alle 19 con Gabriele Dettori. In diretta nell\'app.</p><p><span class="pz">80 € al mese</span></p><a class="t" href="praticantato.html">Praticantato &gt;</a><a class="s" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Oppure mettiti al servizio col Karma Yoga &gt;</a></div><div class="gq"><p class="et">Attiva un vicinato</p><h3>Aderisci col vicinato in cui vivi, oppure proponiti per entrare in un vicinato.</h3><p>Il vicinato è un\'area di circa 20 km di raggio attorno al punto di ritiro.</p><a class="t" href="attiva-un-vicinato.html#serve">Attiva un vicinato &gt;</a></div></div>'+g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
+  c.innerHTML='<div id="g4-oggi"></div><div id="g4-arg"></div><div id="g4-fissi"><div class="gq"><p class="et">Praticantato</p><h3>Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere.</h3><p>Percorso online ogni lunedì alle 19 con Gabriele Dettori. In diretta nell\'app.</p><p><span class="pz">80 € al mese</span></p><a class="t" href="praticantato.html">Praticantato &gt;</a><a class="s" href="strumento.html?v=assistenza&amp;motivo=karma_yoga">Oppure mettiti al servizio col Karma Yoga &gt;</a></div><div class="gq"><p class="et">Attiva un vicinato</p><h3>Aderisci col vicinato in cui vivi, oppure proponiti per entrare in un vicinato.</h3><p>Il vicinato è un\'area di circa 20 km di raggio attorno al punto di ritiro.</p><a class="t" href="attiva-un-vicinato.html#serve">Attiva un vicinato &gt;</a></div></div>'+g4Testa(g)+'<p class="g4-occ" style="margin:8px 6px 0">La giornata</p><div class="foglio-g"><div class="testata"><h4>GIORNALE FELICITAS</h4><p>'+(nome?esc(nome)+" · ":"")+esc(data)+'</p></div><div id="g-corpo"><p class="nota" style="padding:14px 0;text-align:center">Un momento…</p></div></div>'+
     (io.id?'':'<div class="chiuso">Il nexus apre la piazza: qui si legge quello che è per tutti. Le notizie dei vicinati si aprono dopo l\'ingresso nel vicinato.</div>')+
     '<div class="giro"><button class="btn" data-giorno="-1">← Giorno prima</button>'+(giorno!==0?'<button class="mini" data-giorno="0">Oggi</button>':'')+'<button class="btn" data-giorno="1" '+(giorno>=14?"disabled":"")+'>Giorno dopo →</button></div>'+
     '<div class="g4-vid" style="margin-top:18px">'+videoHTML("villaggi")+videoHTML("cervello")+'</div>';
@@ -3868,7 +3877,7 @@ function vGiornale(){
     });
   });
   g4Riempi(da,a,questo);
-  g4VideoOggi();
+  g4VideoOggi();g4Argomenti();
 }
 function mediaHTML(o,firme){
   return (o.orma_file||[]).map(function(f){var u=firme[f.indirizzo];if(!u)return "";
