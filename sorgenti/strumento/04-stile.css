@@ -255,6 +255,8 @@ button.cs-carta{cursor:pointer}
 .ag-filtri{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;-webkit-overflow-scrolling:touch}
 .ag-filtri button{flex:0 0 auto;border:1px solid var(--linea);background:transparent;color:var(--inchiostro);border-radius:16px;padding:6px 12px;font:inherit;font-size:15px;cursor:pointer}
 .ag-filtri button[aria-pressed=true]{background:var(--oro);border-color:var(--oro);color:#0a1430}
+.ag-chi button{font-size:18px;padding:8px 14px;color:#F5F0E6;border-color:rgba(212,175,106,.5)}
+.ag-chi button[aria-pressed=true]{color:#0a1430}
 .ag-g{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--oro);margin:10px 2px 6px}
 .ag-r{display:flex;align-items:flex-start;gap:12px;background:var(--foglio);border:1px solid var(--linea);border-left:4px solid var(--tc,var(--oro));border-radius:12px;padding:10px 12px;margin:0 0 8px}
 .ag-ora{flex:0 0 auto;min-width:3.6em;font-weight:600;font-size:17px;font-variant-numeric:tabular-nums}
