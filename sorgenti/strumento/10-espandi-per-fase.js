@@ -13,67 +13,49 @@ var ESP_STAMPA=[["carta","Carta stampata","volantini, manifesti, locandine, bigl
   ["fiere","Esposizione e fiere","totem, roll-up, striscioni, stand, insegne, pellicole per vetrine","rollup.jpg"],["confezioni","Confezioni e imballaggi","shopper, imballaggi, bicchieri, tovaglioli, confezioni regalo","scatola.jpg"],
   ["gadget","Gadget e regali","penne, cordini, portabadge, borse, borracce","penne.jpg"],["abiti","Abbigliamento","magliette, felpe, tessuti personalizzati","tshirt.jpg"],
   ["foto","Album fotografico","fotolibri, foto da parete, calendari fotografici","rivista.jpg"]];
-function vAzione(){
+/* 25/11/2026, Gab 17:14 «esatto» sull'anteprima del menu nuovo: «Espandi diventa l'Assistenza comunitaria integrata» · 21:15 «si per espandi».
+   Espandi ora è la pagina dell'Assistenza comunitaria integrata (vAssistenza dentro Espandi). Quello che c'era prima (chat, gesti dei ruoli,
+   vicinati, iscritti) è in «Chat e strumenti» (vista "strumenti", da Obiettivi); le Voci dell'indice sono una riga di «Chat e strumenti»; l'Emporio ha la sua voce nel menu. */
+function vAzione(){vAssistenza(true);}
+function vStrumenti(){
+  /* 25/11/2026 21:45, Gab: «chat e strumenti continua ad aver troppi testi. non è piu necessario mettere la descrizione di praticantato ecc.. meflio un elenco da aprire»
+     → un elenco di righe: ogni riga si apre toccandola; i team solo col nome. */
+  if(!io.id){vai("azione");return;}
   var c=$("#corpo");
-  function g(t,attr,ruolo,sotto){var a=attr.indexOf("href=")===0;
-    return '<'+(a?'a ':'button type="button" ')+'class="esp-g'+(ruolo?' r':'')+'" '+attr+'><b>'+esc(t)+'</b>'+(sotto?'<small>'+sotto+'</small>':'')+(ruolo?'<i>ruolo</i>':'')+'</'+(a?'a':'button')+'>';}
-  var ruolo=!!(io.id&&(io.nucleo||(io.ruoli||[]).length));
+  var ruolo=!!(io.nucleo||(io.ruoli||[]).length);
   var log=io.coordina||(io.ruoli||[]).some(function(r){return r.funzione==="logistica";});
-  var gr=[].concat(io.nucleo||(io.ruoli||[]).length?[g("Aggiungi una persona",'data-vai="staff"',true)]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"',true)]:[])
-    .concat(log?[g("Cassa",'data-vai="cassa"',true)]:[]).concat(io.id?[g("Scrivi un articolo",'data-mega="articolo"',true)]:[]).concat(io.coordina?[g("Crea diretta",'data-mega="diretta"',true)]:[]).concat(io.id?[g("Fissa un incontro",'data-esp-fissa="1"',false)]:[])
-    /* 8/11 Gab: «Produttore è karma yoga» · «No I prodotti li metterei in espandi» (SQL 216) */
-    .concat(io.id?[g("I miei prodotti",'data-esp-prod="1" style="display:none"',false)]:[])
-    /* 16/11 Gab: proposte di prodotti, le vedono karma yoga e ruoli dei Vicinati del Cibo; confermano nucleo e ruoli Logistica (SQL 282) */
-    .concat(io.id?[g("Da confermare",'data-esp-conf="1" style="display:none"',false,'<span id="esp-conf-n"></span>')]:[]);
-  var team=io.id?'<section class="esp-el" style="--e:#D4AF6A"><p class="esp-nm">'+(ruolo?'I TUOI TEAM':'LE TUE CHAT')+'</p>'+
-      (ruolo?'':'<div class="esp-gg">'+g("I team",'data-esp-team="1"',false,'<span id="esp-team-nomi">Un momento…</span>')+'</div>')+
-      '<div id="esp-team"'+(ruolo?'':' hidden')+'><div id="tm-box"></div><div id="tm-attesa"></div><div id="tm-chat"></div></div>'+
-      
-      ((gr.length||ruolo)?'<div class="esp-riga">'+(ruolo?g("Nuova chat",'data-esp-chat="1"'):'')+gr.join("")+'</div>':'')+'</section>':'';
-  /* 8/11 Gab: «dovrei avere un quadrante con "iscritti festival felicitas"» · «lo vede anche chi ha l ruolo eventi» (SQL 224) */
-  var iscr=!!(io.id&&(io.nucleo||(io.ruoli||[]).some(function(r){return r.ruolo==="eventi";})));
-  var iscrH=iscr?'<section class="esp-el" id="esp-iscr-s" style="--e:#8DBF5E"><p class="esp-nm">FELICITAS FESTIVAL</p><h2>Iscritti Felicitas Festival</h2>'+
-      '<div id="esp-iscr"><p class="esp-d">Un momento…</p></div><div id="esp-iscr-l"></div></section>':'';
-  /* VOCI DELL'INDICE · SQL 274 · Gab 15/11: «una nuova voce in espandi dove vedo slide card scorrevoli, dove poi posso confermare o modificare o eliminare» ·
-     «voci dell indice, va bene come nome». Solo il nucleo; si vede quando ci sono card in attesa (ponte e card della sera). */
-  var vociH=io.nucleo?'<section class="esp-el" id="esp-voci-s" style="--e:#D4AF6A" hidden><p class="esp-nm">VOCI DELL\'INDICE <span id="esp-voci-n"></span></p><div id="esp-voci"></div></section>':'';
-  /* 16/11 SQL 287 · Gab: «li vedono tutti dal karma yoga in poi» · «su espandi trovi il riflesso» (comune/fm-vicinati-espandi.js) */
-  var vicH=io.id?'<section class="esp-el" id="esp-vic-s" style="--e:#8DBF5E" hidden><p class="esp-nm">VICINATI <span id="esp-vic-n"></span></p><div id="esp-vic"></div></section>':'';
-  /* l'Emporio: oggi i prodotti sono la Stampa; ogni famiglia apre il configuratore della pagina Emporio (emporio.html#famiglia) */
-  var empH='<section class="esp-el esp-emp" style="--e:#6FA8D6"><p class="esp-nm">EMPORIO</p><h2>2000 prodotti ed espositori fieristici</h2>'+
-      '<p class="esp-d">Oltre alla stampa proponiamo supporti per l\'esposizione fieristica e altri prodotti utili alla comunicazione. Scegli la famiglia, poi il formato, la carta e quante copie.</p>'+
-      '<div class="esp-fam">'+ESP_STAMPA.map(function(f){return '<a href="emporio.html?c=10182300#'+f[0]+'"><img src="stampa/'+f[3]+'?v=10132030" alt="" loading="lazy"><span><b>'+esc(f[1])+'</b><small>'+esc(f[2])+'</small></span></a>';}).join("")+'</div>'+
-      '<p class="esp-d" style="margin-top:10px"><a href="emporio.html?c=10182300" style="color:#6FA8D6">Tutto l\'Emporio ›</a></p></section>';
-  var blocchi=ESP_BLOCCHI.map(function(k,i){
-    return '<section class="esp-el esp-b" style="--e:#D4AF6A">'+(k.sopra?'<p class="esp-nm">'+esc(k.sopra)+'</p>':'')+'<h2>'+esc(k.tit)+'</h2>'+(k.d?'<p class="esp-d">'+esc(k.d)+'</p>':'')+
-      k.voci.map(function(v,j){return '<button type="button" class="esp-v" data-esp-v="'+i+'.'+j+'"><span><b>'+esc(v[0])+'</b>'+(v[2]?'<small>'+esc(v[2])+'</small>':'')+'</span><em>Scegli</em></button>';}).join("")+
-      (k.voci.some(function(v){return v[1]==="prod";})?'<p class="esp-d" style="margin-top:10px"><button type="button" class="pd-cond" data-pd-cond>Condividi ›</button></p>':'')+
-      (k.link?'<p class="esp-d" style="margin-top:10px"><a href="'+k.link+'" style="color:#D4AF6A">Il Cervello Digitale Evoluto ›</a></p>':'')+'</section>';}).join("");
-  c.innerHTML='<h1 class="esp-tit">Espandi</h1>'+(io.id?'':'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>')+
-    (ruolo?vociH+team+vicH+iscrH+empH:'<div class="esp-scorri">'+blocchi+'</div>'+empH+team+vicH+iscrH)+
-    /* 24/10, Gab: l'utente possa «scaricare l'app» · su iPhone un tasto coi gesti di Safari (comune/fm-installa.js) */
-    '<div data-fm-installa></div>';
+  var iscr=!!(io.nucleo||(io.ruoli||[]).some(function(r){return r.ruolo==="eventi";}));
+  function g(t,attr,sotto){return '<button type="button" class="st-g" '+attr+'><b>'+esc(t)+'</b>'+(sotto||'')+'<span aria-hidden="true">›</span></button>';}
+  function apri(id,tit,dentro,nascosta){return '<details class="st-r" id="'+id+'"'+(nascosta?' hidden':'')+'><summary><b>'+tit+'</b><span aria-hidden="true">›</span></summary><div class="st-in">'+dentro+'</div></details>';}
+  var gesti=[].concat(ruolo?[g("Aggiungi una persona",'data-vai="staff"')]:[]).concat(io.nucleo?[g("Crea team",'data-vai="createam"')]:[])
+    .concat(ruolo?[g("Nuova chat",'data-esp-chat="1"')]:[]).concat([g("Fissa un incontro",'data-esp-fissa="1"'),g("Scrivi un articolo",'data-mega="articolo"')])
+    .concat(io.coordina?[g("Crea diretta",'data-mega="diretta"')]:[]).concat(log?[g("Cassa",'data-vai="cassa"')]:[])
+    /* 8/11 Gab: «No I prodotti li metterei in espandi» (SQL 216) · 16/11 proposte di prodotti (SQL 282) */
+    .concat([g("I miei prodotti",'data-esp-prod="1" style="display:none"'),g("Da confermare",'data-esp-conf="1" style="display:none"',' <span id="esp-conf-n"></span>')]);
+  c.innerHTML='<p><button class="mini" data-vai="obiettivi">‹ Obiettivi</button></p><h1 class="esp-tit">Chat e strumenti</h1><div class="st-el" style="padding:0;margin:0;width:100%;max-width:none;box-sizing:border-box">'+
+    apri("st-team",'I tuoi team <span id="st-team-n"></span>','<div id="st-team-l"><p class="nota">Un momento…</p></div>')+
+    apri("st-chat",'Le tue chat','<div id="tm-chat"><p class="nota">Un momento…</p></div>')+
+    (io.nucleo?apri("st-att",'Da mettere nel Cervello','<div id="tm-attesa"></div>',true):'')+
+    /* Voci dell'indice (SQL 274, solo nucleo): le card del ponte e della sera da confermare; la riga c'è solo quando ce ne sono */
+    (io.nucleo?'<details class="st-r" id="esp-voci-s" hidden><summary><b>Voci dell\'indice <span id="esp-voci-n"></span></b><span aria-hidden="true">›</span></summary><div class="st-in" id="esp-voci"></div></details>':'')+
+    '<section id="esp-vic-s" hidden>'+apri("st-vic",'Vicinati <span id="esp-vic-n"></span>','<div id="esp-vic"></div>')+'</section>'+
+    (iscr?apri("st-iscr",'Iscritti Felicitas Festival','<div id="esp-iscr"><p class="nota">Un momento…</p></div><div id="esp-iscr-l"></div>'):'')+
+    gesti.join("")+'</div>';
   legaVai(c);
   c.querySelectorAll("[data-mega]").forEach(function(b){b.onclick=function(){M.tipo=b.getAttribute("data-mega");M.msg="";vai("megafono");};});
-  var bt=c.querySelector("[data-esp-team]");if(bt){if(ruolo)bt.classList.add("aperto");bt.onclick=function(){var p=$("#esp-team");p.hidden=!p.hidden;bt.classList.toggle("aperto",!p.hidden);if(!p.hidden)p.scrollIntoView({behavior:"smooth",block:"start"});};}
   var bc=c.querySelector("[data-esp-chat]");if(bc)bc.onclick=function(){nuovaChat();};
   var bfi=c.querySelector("[data-esp-fissa]");if(bfi)bfi.onclick=function(){agFissa(null,null);};
   var bpr=c.querySelector("[data-esp-prod]");if(bpr)bpr.onclick=function(){mieiProdotti();};
   var bcf=c.querySelector("[data-esp-conf]");if(bcf)bcf.onclick=function(){prodottiDaConfermare();};
-  c.querySelectorAll("[data-pd-cond]").forEach(function(b){b.onclick=function(){pdCondividi(b);};});
-  c.querySelectorAll("[data-esp-v]").forEach(function(b){b.onclick=function(){var ij=b.getAttribute("data-esp-v").split("."),k=ESP_BLOCCHI[+ij[0]],v=k.voci[+ij[1]];
-    if(v[1]==="emporio"){location.href="emporio.html?c=10182300";return;}
-    if(v[1]==="prat"&&io.id){apriPrat();return;}
-    if(v[1]==="prod"){if(io.id)formProdotto(null);else location.href="accesso.html?torna="+encodeURIComponent("strumento.html?prodotto=1");return;}
-    vai("assistenza");var t=$("#ass-t");if(t){t.value=k.tit+" · "+v[0]+"\n\n";try{t.focus();t.setSelectionRange(t.value.length,t.value.length);}catch(e){}}};});
-  if(window.fmInstallaAvvia)fmInstallaAvvia();
   if(iscr)iscritti();
-  if(io.nucleo)vociIndice();
-  if(io.id&&window.fmVicinatiEspandi)fmVicinatiEspandi(db);
-  if(io.id){mieiTeam();mieChat();numerini();if(io.nucleo)daApprovare();contaProposte();
-    leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";}))bp.style.display="";
-      var n=$("#esp-team-nomi");if(!n)return;
-      if(!l||!l.length){n.textContent="Ancora nessun team";return;}
-      var nl=l.reduce(function(a,t){return a+(+t.non_letti||0);},0);
-      n.innerHTML=(l.length===1?"1 team":l.length+" team")+(nl?' <em class="esp-nl" aria-label="'+nl+' da leggere">'+nl+'</em>':'');});}
+  if(window.fmVicinatiEspandi)fmVicinatiEspandi(db);
+  mieChat();numerini();contaProposte();
+  if(io.nucleo){vociIndice();daApprovare();var at=$("#tm-attesa");if(at&&window.MutationObserver)new MutationObserver(function(){var d=$("#st-att");if(d)d.hidden=!at.innerHTML.trim();}).observe(at,{childList:true});}
+  leggiTeam().then(function(l){var bp=$("[data-esp-prod]");if(bp&&(l||[]).some(function(t){return t.nome==="Vicinati del Cibo"||t.nome==="Felicitas Festival";}))bp.style.display="";
+    var e=$("#st-team-l");if(!e||vista!=="strumenti")return;
+    if(!l||!l.length){e.innerHTML='<p class="nota">Ancora nessun team.</p>';return;}
+    var nl=l.reduce(function(a,t){return a+(+t.non_letti||0);},0);$("#st-team-n").innerHTML='· '+l.length+(nl?' <em class="esp-nl" aria-label="'+nl+' da leggere">'+nl+'</em>':'');
+    e.innerHTML=l.map(function(t){return '<button type="button" class="st-g" data-team="'+esc(t.team_id)+'"><b>'+esc(t.nome)+'</b>'+(t.non_letti?' <em class="esp-nl" aria-label="'+t.non_letti+' da leggere">'+t.non_letti+'</em>':'')+'<span aria-hidden="true">›</span></button>';}).join("");
+    e.querySelectorAll("[data-team]").forEach(function(b){b.onclick=function(){team.id=b.getAttribute("data-team");team.tipo="team";vai("team");};});});
 }
+document.head.insertAdjacentHTML("beforeend","<style>.st-el{display:grid;gap:8px;padding:0;margin:0}.st-r{background:#1a2148;border:1px solid rgba(212,175,106,.35);border-radius:14px}.st-r>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;font-size:18px;color:#F5F0E6}.st-r>summary::-webkit-details-marker{display:none}.st-r>summary>span{color:#D4AF6A;transition:transform .2s}.st-r[open]>summary>span{transform:rotate(90deg)}.st-r>summary:focus-visible,.st-g:focus-visible{outline:2px solid #D4AF6A;outline-offset:2px}.st-in{padding:0 12px 12px;display:grid;gap:6px}.st-in .tm-et{display:none}.st-g{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:#1a2148;border:1px solid rgba(212,175,106,.35);border-radius:14px;padding:14px 16px;color:#F5F0E6;font:inherit;font-size:18px;cursor:pointer}.st-g>b{font-weight:500;flex:1}.st-g>span[aria-hidden]{color:#D4AF6A}.st-in .st-g{background:#232c5c;border-color:transparent}</style>");

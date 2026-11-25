@@ -236,10 +236,10 @@ function vCoscienza(){
 }
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
-  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||((vista==="cerchio"||vista==="coscienza")&&v==="cervello")||((vista==="team"||vista==="cassa")&&v==="azione"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  document.querySelectorAll("#nav button,[data-alto]").forEach(function(b){var v=b.getAttribute("data-v")||b.getAttribute("data-alto");if(v===vista||((vista==="cerchio"||vista==="coscienza")&&v==="cervello")||((vista==="team"||vista==="cassa"||vista==="strumenti")&&v==="obiettivi")||(vista==="assistenza"&&v==="azione"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
   /* 31/10, Gab: «mentre vedo espandi blu le altrre pagine sono bianche» → tutte le pagine in blu cosmo, come Espandi */
   document.body.classList.add("notte");
   document.body.classList.add("cosmo-az");
-  ({coscienza:vCoscienza,azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina,createam:vCreaTeam,plancia:vPlancia,persone:vPersone})[vista]();
+  ({coscienza:vCoscienza,azione:vAzione,team:vTeam,cassa:vCassa,compra:vCompra,assistenza:vAssistenza,oggi:vOggi,giornale:vGiornale,megafono:vMegafono,obiettivi:vObiettivi,cartelle:vCartelle,dati:vDati,cervello:vCervello,cerchio:vCerchio,staff:vStaffPagina,createam:vCreaTeam,plancia:vPlancia,persone:vPersone,strumenti:vStrumenti})[vista]();
 }
 

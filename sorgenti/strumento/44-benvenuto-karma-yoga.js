@@ -117,7 +117,7 @@ chiSono().then(function(){
   benvenutoKarma();
   finestraPraticantato();
   prodottoDaLink();
-  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff|persone)$/.test(q))vista=(q==="oggi"?"obiettivi":q);}catch(e){}
+  try{var q=new URLSearchParams(location.search).get("v");if(q&&/^(oggi|giornale|megafono|obiettivi|cartelle|dati|cervello|coscienza|azione|compra|assistenza|staff|persone|strumenti)$/.test(q))vista=(q==="oggi"?"obiettivi":q);}catch(e){}
   /* le notifiche della chat aprono strumento.html?v=azione&team=<id> (SQL 128) */
   try{var tq=new URLSearchParams(location.search).get("team");if(io.id&&tq&&/^[0-9a-f-]{36}$/i.test(tq)){team.id=tq;team.tipo="team";vista="team";}}catch(e){}
   /* 8 nov · il link di una chat a due (SQL 223): chi lo apre entra, e si trova in chat con chi l'ha creato */

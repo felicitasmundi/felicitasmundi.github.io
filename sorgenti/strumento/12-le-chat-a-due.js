@@ -5,7 +5,7 @@ function leggiChat(){
 }
 function mieChat(){
   leggiChat().then(function(l){
-    var box=$("#tm-chat");if(!box||vista!=="azione")return;
+    var box=$("#tm-chat");if(!box||vista!=="strumenti")return;
     if(!l){box.innerHTML="";return;}
     leggiNomi(l.map(function(c){return c.altra_persona;}).concat(l.map(function(c){return c.ultimo_da;}))).then(function(){
       if(!box.isConnected)return;
