@@ -27,7 +27,8 @@ function datiObbligatori(){
 }
 function assQuando(t){return giornoTm(t)+" · "+hhmm(t);}
 var ass={motivo:null,aperta:null,team:null,stat:false,rispondo:null};
-function vAssistenza(){
+/* 25/11/2026: Espandi è l'Assistenza comunitaria integrata → vAzione() chiama vAssistenza(true): chi non è entrato vede le scelte e passa dall'accesso quando ne tocca una */
+function vAssistenza(inEsp){
   var c=$("#corpo");
   /* 5/11 10:54, Gab: «gli possiamo prima far toccare e segnare di cosa ha bisogna e schiacciando invia, entra col nexus» (SQL 167):
      chi non è entrato scrive anche la mail; il messaggio aspetta sul server 7 giorni e parte quando entra con quella mail. */
@@ -37,7 +38,7 @@ function vAssistenza(){
      passa dall'accesso e torna qui con la voce già scelta (?motivo=). */
   var qm0=null;try{qm0=new URLSearchParams(location.search).get("motivo");}catch(e){}
   if(qm0&&!ASS_MOTIVI.some(function(a){return a[0]===qm0;}))qm0=null;
-  if(fuori){location.replace("accesso.html?torna="+encodeURIComponent("strumento.html?v=assistenza"+(qm0?"&motivo="+qm0:"")));return;}
+  if(fuori&&!inEsp){location.replace("accesso.html?torna="+encodeURIComponent("strumento.html?v=assistenza"+(qm0?"&motivo="+qm0:"")));return;}
   /* 15/11 Gab: una finestra per ogni voce, con le altre scelte sotto. Righe verbatim da Piani e accoglienza. */
   var RIGHE={karma_yoga:"Dai il tuo tempo alla comunità: ricevi ospitalità, formazione e una rete di persone.",
     praticantato:"Riconosci il tuo talento e trasformalo in un progetto che la comunità può accogliere. Percorso online ogni lunedì alle 19 con Gabriele Dettori.",
@@ -45,31 +46,40 @@ function vAssistenza(){
     azienda:"Il tuo gestionale, collegato a FelicitasMundi.",
     vicinati:"Aderisci col vicinato in cui vivi, oppure proponiti per entrare in un vicinato."};
   var ORDINE=["karma_yoga","praticantato","coscienza_tecnologia","azienda","vicinati","produttore","operatore","eventi","interviste"];
-  c.innerHTML='<div id="ass-testa"></div><div id="ass-form" hidden>'+
+  c.innerHTML=(inEsp?'<h1 class="esp-tit">Assistenza comunitaria integrata</h1>'+(fuori?'<p style="margin:0 0 14px"><a class="btn pieno" href="'+ENTRA+'">Entra</a></p>':'<div id="ass-op"></div>'):'')+'<div id="ass-testa"></div><div id="ass-form" hidden>'+
     '<label class="az-l" for="ass-t">Il tuo messaggio</label><textarea id="ass-t" maxlength="2000" style="min-height:160px"></textarea>'+
     (fuori?'<label class="az-l" for="ass-mail">La tua mail</label><input type="email" id="ass-mail" maxlength="254" autocomplete="email" inputmode="email">'+
       '<p class="ass-nota">Dopo «Invia» entri in Felicitas con questa mail: il messaggio parte quando sei dentro.</p>':'')+
     '<p style="margin-top:18px"><button class="btn pieno az-invia" type="button" id="ass-invia">Invia all’Assistenza comunitaria integrata</button></p><p class="az-esito" id="ass-esito" aria-live="polite"></p></div>'+
     '<div id="ass-coda"></div>'+
     (fuori?'':'<h3 class="ass-h">Le mie richieste</h3><div id="ass-mie"><p class="nota">Un momento…</p></div>')+
-    '<p><button class="mini" data-vai="azione">‹ Espandi</button></p>';
+    (inEsp?'':'<p><button class="mini" data-vai="azione">‹ Espandi</button></p>');
   legaVai(c);
+  /* chi risponde (team dell'Assistenza comunitaria integrata e nucleo): in cima le richieste da seguire, apre la coda del team */
+  if(inEsp&&!fuori&&db)Promise.all([db.rpc("fm_team_mutuo_aiuto"),leggiTeam()]).then(function(v){var tid=v[0]&&!v[0].error&&v[0].data,l=v[1]||[];
+    if(!tid||!(io.nucleo||l.some(function(t){return t.team_id===tid;})))return;ass.team=tid;
+    return db.rpc("fm_assistenza_coda").then(function(r){var e=$("#ass-op");if(!e||vista!=="azione")return;var q=(r&&!r.error&&r.data)||[];
+      var nu=q.filter(function(x){return !x.seguita_da;}).length,pr=q.length-nu;
+      e.innerHTML='<button type="button" class="ass-gia" id="ass-op-b" style="margin:0 0 14px"><b>[Le richieste da seguire]</b> Nuove · '+nu+' · In carico · '+pr+' ›</button>';
+      $("#ass-op-b").onclick=function(){team.id=tid;team.tipo="team";vai("team");};});}).catch(function(){});
   function scelta(){
     var t=$("#ass-testa"),f=$("#ass-form"),k=$("#ass-coda"),m=ass.motivo;
     if(!m){
       t.innerHTML='<h2 class="az-tit">Di cosa hai bisogno?</h2><div class="az-filo"></div><p class="ass-int">Tocca una scelta: si apre la sua finestra.</p>'+
-        '<div class="ass-griglia"><button type="button" class="ass-sc su" data-vai="azione"><b>Sei già in un team?</b><span>Scrivi nella chat del tuo team ›</span></button>'+
+        '<div class="ass-griglia">'+(fuori?'':'<button type="button" class="ass-sc su" data-vai="obiettivi"><b>Sei già in un team?</b><span>Scrivi nella chat del tuo team ›</span></button>')+
         ORDINE.map(function(x){return '<button type="button" class="ass-sc" data-mot="'+x+'"><b>'+esc(assMotivo(x))+'</b>'+(RIGHE[x]?'<span>'+esc(RIGHE[x])+'</span>':'')+'</button>';}).join("")+'</div>';
       f.hidden=true;k.innerHTML="";
     }else{
       t.innerHTML='<p><button type="button" class="mini" id="ass-tutte">‹ Tutte le scelte</button></p><h2 class="az-tit">'+esc(assMotivo(m))+'</h2><div class="az-filo"></div>'+
         (RIGHE[m]?'<p class="ass-int">'+esc(RIGHE[m])+'</p>':'')+'<p class="ass-int">Ti risponde il team Assistenza comunitaria integrata.</p>';
       f.hidden=false;
-      k.innerHTML=(m==="karma_yoga"?'<button type="button" class="ass-gia" data-vai="azione"><b>Sei già nel Karma Yoga?</b> Scrivi nella chat del tuo team ›</button>':'')+
+      k.innerHTML=(m==="karma_yoga"?'<button type="button" class="ass-gia" data-vai="obiettivi"><b>Sei già nel Karma Yoga?</b> Scrivi nella chat del tuo team ›</button>':'')+
         '<p class="az-l">Altre scelte</p><div class="ass-chips">'+ORDINE.filter(function(x){return x!==m;}).map(function(x){return '<button type="button" class="ass-chip" data-mot="'+x+'">'+esc(assMotivo(x))+'</button>';}).join("")+'</div>';
     }
     legaVai(t);legaVai(k);
-    c.querySelectorAll("#ass-testa [data-mot],#ass-coda [data-mot]").forEach(function(b){b.onclick=function(){ass.motivo=b.getAttribute("data-mot");scelta();window.scrollTo(0,0);};});
+    c.querySelectorAll("#ass-testa [data-mot],#ass-coda [data-mot]").forEach(function(b){b.onclick=function(){
+      if(fuori){location.href="accesso.html?torna="+encodeURIComponent("strumento.html?v=assistenza&motivo="+b.getAttribute("data-mot"));return;}
+      ass.motivo=b.getAttribute("data-mot");scelta();window.scrollTo(0,0);};});
     var tu=$("#ass-tutte");if(tu)tu.onclick=function(){ass.motivo=null;scelta();window.scrollTo(0,0);};
   }
   /* 12/11: dai tasti di home, Piani e Praticantato la voce arriva già scelta (?motivo=): si apre la sua finestra */
@@ -103,7 +113,7 @@ function assMie(){
   var box=$("#ass-mie");if(!box)return;
   db.rpc("fm_mie_richieste_stato").then(function(r){if(r&&!r.error)return r;
     return db.rpc("fm_mie_richieste").then(function(q){if(q&&!q.error&&q.data)q.data=q.data.map(function(x){x.stato=x.stato==="aperta"?"ricevuta":"risolta";return x;});return q;});
-  }).then(function(r){if(vista!=="assistenza"||!$("#ass-mie"))return;
+  }).then(function(r){if((vista!=="assistenza"&&vista!=="azione")||!$("#ass-mie"))return;
     if(!r||r.error){box.innerHTML='<p class="nota">Le richieste non si aprono adesso. Si può riprovare.</p>';return;}
     var l=r.data||[];
     if(!l.length){box.innerHTML='<p class="nota">Ancora nessuna richiesta.</p>';return;}

@@ -121,6 +121,8 @@ function vCervello(){
       '<div id="ce-onda"></div>'+
       '<p class="et" style="margin-top:10px">I tuoi gruppi</p><div class="cerchi" id="ce-lista"><p class="nota">Un momento…</p></div>'+
       '<div id="ce-voci"></div>'+'<div id="ce-livello"></div>'+
+      /* 25/11/2026, Gab 21:15 «si per espandi»: le Voci dell'indice passano da Espandi a Coscienza, chiuse in una riga (si aprono toccandole) */
+      (io.nucleo?'<section class="esp-el" id="esp-voci-s" style="--e:#D4AF6A;margin-top:14px" hidden><button type="button" class="esp-nm" id="esp-voci-t" aria-expanded="false" style="background:none;border:0;padding:0;cursor:pointer;font:inherit;font-size:13px;letter-spacing:.2em;color:#D4AF6A">VOCI DELL\'INDICE <span id="esp-voci-n"></span> ›</button><div id="esp-voci" hidden></div></section>':'')+
       '<p class="et" style="margin-top:14px">Il cervello digitale</p>'+
       '<button class="cerchio-b" data-cerchio="io"><span><b>Il percorso del talento</b><small>i capitoli di '+esc(io.nome||"chi entra")+' · li legge solo chi li scrive</small></span><span>›</span></button>'+
       /* 20 ott 12:00, Gab: «i prodotti e le stanze vanno resi visibili in cervello» */
@@ -136,6 +138,7 @@ function vCervello(){
       '<label class="m" for="az-ref" style="margin-top:6px">Mail del referente (deve essere già entrato)</label><input type="email" id="az-ref">'+
       '<div class="azioni" style="margin-top:8px"><button class="btn pieno" id="az-vai">Apri lo spazio dell\'azienda</button><span class="m" id="az-esito"></span></div></div>':'');
   if(!io.id)return;
+  if(io.nucleo&&typeof vociIndice==="function"){vociIndice();var vt=$("#esp-voci-t");if(vt)vt.onclick=function(){var b=$("#esp-voci");b.hidden=!b.hidden;vt.setAttribute("aria-expanded",String(!b.hidden));};}
   cerchiCache={io:{id:"io",tipo:"io",nome:"Il percorso del talento",dentro:true}};
   legaCerchi(c);
   vVociRegistro($("#ce-voci"));

@@ -165,7 +165,7 @@ function leggiTeam(){
 }
 function mieiTeam(){
   leggiTeam().then(function(l){
-    var box=$("#tm-box");if(!box||vista!=="azione")return;
+    var box=$("#tm-box");if(!box||vista!=="strumenti")return;
     if(!l){box.innerHTML="";var h=$(".tm-tit");if(h)h.remove();return;}
     leggiNomi(l.map(function(t){return t.ultimo_da;})).then(function(){
       if(!box.isConnected)return;
