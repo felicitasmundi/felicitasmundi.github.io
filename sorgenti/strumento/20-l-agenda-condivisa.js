@@ -38,7 +38,7 @@ function agendaOggi(){
     box.innerHTML='<p class="et" style="margin:4px 0 6px">Prossimi 7 giorni</p>'+
       (tl.length>1?'<div class="ag-filtri">'+[["","Tutti"]].concat(tl.map(function(t){return [t.team_id,t.nome];})).map(function(t){
         return '<button type="button" data-ag-f="'+esc(t[0])+'" aria-pressed="'+(ag.filtro===t[0])+'">'+esc(t[1])+'</button>';}).join("")+'</div>':'')+
-      '<div id="ag-lista"></div><div class="fine" style="margin:0 0 12px">'+(tl.length?'<button class="mini oro" id="ag-fissa">Fissa un incontro</button>':'')+'<button class="mini" id="ag-cal">Aggiungi al calendario</button></div>';
+      '<div id="ag-lista"></div><div class="fine" style="margin:0 0 12px">'+'<button class="mini oro" id="ag-fissa">Fissa un incontro</button>'+'<button class="mini" id="ag-cal">Aggiungi al calendario</button></div>';
     function disegna(){var e=$("#ag-lista");if(!e)return;
       e.innerHTML=agElenco(ag.filtro?ag.dati.filter(function(x){return x.cerchio_id===ag.filtro;}):ag.dati);agLegaAnnulla(e,agendaOggi);}
     disegna();
@@ -86,23 +86,29 @@ function agendaTeam(id){
     $("#tc-ag-fissa").onclick=function(){agFissa(id,function(){agendaTeam(id);ricaricaTeam(true);});};
   });
 }
+/* 25 nov 22:23, Gab: «io ho bisogno di segnare un agenda, che mi manda la mail e che possa decidere quale team la riceva, segnando un tasto».
+   22:28 sull'anteprima: «ok pubblica». Tasti «Solo io» o un team (uno solo); la mail un'ora prima arriva sempre a chi fissa (SQL 321). */
 function agFissa(cerchio,dopo){
   agTeam().then(function(tl){
-    tl=(tl||[]).filter(function(t){return !cerchio||t.team_id===cerchio;});
+    tl=tl||[];var scelto=cerchio&&tl.some(function(t){return t.team_id===cerchio;})?cerchio:"";
     var w=document.createElement("div");w.className="ag-foglio-w";document.body.appendChild(w);
     function chiudi(){w.remove();}
     var dom=new Date(Date.now()+864e5),dd=dom.getFullYear()+"-"+String(dom.getMonth()+1).padStart(2,"0")+"-"+String(dom.getDate()).padStart(2,"0");
     w.innerHTML='<div class="tc-velo" data-ag-chiudi></div><div class="tc-foglio" role="dialog" aria-modal="true" aria-labelledby="ag-h"><div class="tc-presa"></div>'+
-      '<h2 id="ag-h">Fissa un incontro</h2><p>L\'avviso arriva nella chat del team, e l\'incontro compare nell\'agenda di Oggi.</p>'+
-      (tl.length?'<label for="ag-tm">Team</label><select id="ag-tm">'+tl.map(function(t){return '<option value="'+esc(t.team_id)+'">'+esc(t.nome)+'</option>';}).join("")+'</select>'+
+      '<h2 id="ag-h">Fissa un incontro</h2><p>A te arriva la mail un\'ora prima.</p>'+
+      '<label id="ag-chi">Chi lo riceve</label><div class="ag-filtri ag-chi" role="radiogroup" aria-labelledby="ag-chi" style="flex-wrap:wrap">'+
+      [["","Solo io"]].concat(tl.map(function(t){return [t.team_id,t.nome];})).map(function(t){
+        return '<button type="button" role="radio" data-ag-chi="'+esc(t[0])+'" aria-pressed="'+(scelto===t[0])+'" aria-checked="'+(scelto===t[0])+'">'+esc(t[1])+'</button>';}).join("")+'</div>'+
       '<label for="ag-t">Di cosa si parla</label><input type="text" id="ag-t" maxlength="120" autocomplete="off">'+
       '<div class="ag-due"><div><label for="ag-g">Giorno</label><input type="date" id="ag-g" value="'+dd+'"></div><div><label for="ag-o">Ora</label><input type="time" id="ag-o"></div></div>'+
       '<label for="ag-d">Quanto dura</label><select id="ag-d"><option value="30">mezz\'ora</option><option value="60" selected>un\'ora</option><option value="90">un\'ora e mezza</option><option value="120">due ore</option><option value="240">mezza giornata</option></select>'+
       '<label for="ag-l">Dove</label><input type="text" id="ag-l" maxlength="200" placeholder="Posto o stanza, niente indirizzi di casa" autocomplete="off">'+
       '<label for="ag-k">Link, se è online</label><input type="text" id="ag-k" maxlength="300" placeholder="https://" autocomplete="off" inputmode="url">'+
-      '<button type="button" class="tc-btn" id="ag-ok">Fissa l\'incontro</button>':'<p>Per fissare un incontro serve essere in un team.</p>')+
+      '<button type="button" class="tc-btn" id="ag-ok">Fissa l\'incontro</button>'+
       '<p class="tc-nota" id="ag-esito" aria-live="polite"></p></div>';
     w.querySelector("[data-ag-chiudi]").onclick=chiudi;
+    w.querySelectorAll("[data-ag-chi]").forEach(function(b){b.onclick=function(){scelto=b.getAttribute("data-ag-chi");
+      w.querySelectorAll("[data-ag-chi]").forEach(function(x){var on=String(x===b);x.setAttribute("aria-pressed",on);x.setAttribute("aria-checked",on);});};});
     var ok=w.querySelector("#ag-ok");if(!ok)return;
     ok.onclick=function(){
       var g=$("#ag-g").value,o=$("#ag-o").value,es=$("#ag-esito");
@@ -110,7 +116,7 @@ function agFissa(cerchio,dopo){
       if(!g||!o){es.textContent="Scegli il giorno e l'ora.";return;}
       var t=new Date(g+"T"+o);if(isNaN(t)){es.textContent="Il giorno o l'ora non si leggono.";return;}
       ok.disabled=true;es.textContent="";
-      db.rpc("fm_agenda_fissa",{p_cerchio:$("#ag-tm").value,p_titolo:$("#ag-t").value,p_inizio:t.toISOString(),p_durata:+$("#ag-d").value,
+      db.rpc("fm_agenda_fissa",{p_cerchio:scelto||null,p_titolo:$("#ag-t").value,p_inizio:t.toISOString(),p_durata:+$("#ag-d").value,
         p_luogo:$("#ag-l").value||null,p_link:$("#ag-k").value||null}).then(function(r){ok.disabled=false;
         if(r&&!r.error&&r.data==="ok"){chiudi();if(dopo)dopo();return;}
         es.textContent=(r&&r.data)||errore(r&&r.error);},function(e){ok.disabled=false;es.textContent=errore(e);});
