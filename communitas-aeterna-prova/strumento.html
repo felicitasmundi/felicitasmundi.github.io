@@ -1176,7 +1176,7 @@ function vStrumenti(){
     .concat(io.coordina?[g("Crea diretta",'data-mega="diretta"')]:[]).concat(log?[g("Cassa",'data-vai="cassa"')]:[])
     /* 8/11 Gab: «No I prodotti li metterei in espandi» (SQL 216) · 16/11 proposte di prodotti (SQL 282) */
     .concat([g("I miei prodotti",'data-esp-prod="1" style="display:none"'),g("Da confermare",'data-esp-conf="1" style="display:none"',' <span id="esp-conf-n"></span>')]);
-  c.innerHTML='<p><button class="mini" data-vai="obiettivi">‹ Obiettivi</button></p><h1 class="esp-tit">[Chat e strumenti]</h1><div class="st-el" style="padding:0;margin:0;width:100%;max-width:none;box-sizing:border-box">'+
+  c.innerHTML='<p><button class="mini" data-vai="obiettivi">‹ Obiettivi</button></p><h1 class="esp-tit">Chat e strumenti</h1><div class="st-el" style="padding:0;margin:0;width:100%;max-width:none;box-sizing:border-box">'+
     apri("st-team",'I tuoi team <span id="st-team-n"></span>','<div id="st-team-l"><p class="nota">Un momento…</p></div>')+
     apri("st-chat",'Le tue chat','<div id="tm-chat"><p class="nota">Un momento…</p></div>')+
     (io.nucleo?apri("st-att",'Da mettere nel Cervello','<div id="tm-attesa"></div>',true):'')+
@@ -2637,7 +2637,7 @@ function vAssistenza(inEsp){
     if(!tid||!(io.nucleo||l.some(function(t){return t.team_id===tid;})))return;ass.team=tid;
     return db.rpc("fm_assistenza_coda").then(function(r){var e=$("#ass-op");if(!e||vista!=="azione")return;var q=(r&&!r.error&&r.data)||[];
       var nu=q.filter(function(x){return !x.seguita_da;}).length,pr=q.length-nu;
-      e.innerHTML='<button type="button" class="ass-gia" id="ass-op-b" style="margin:0 0 14px"><b>[Le richieste da seguire]</b> Nuove · '+nu+' · In carico · '+pr+' ›</button>';
+      e.innerHTML='<button type="button" class="ass-gia" id="ass-op-b" style="margin:0 0 14px"><b>Le richieste da seguire</b> Nuove · '+nu+' · In carico · '+pr+' ›</button>';
       $("#ass-op-b").onclick=function(){team.id=tid;team.tipo="team";vai("team");};});}).catch(function(){});
   function scelta(){
     var t=$("#ass-testa"),f=$("#ass-form"),k=$("#ass-coda"),m=ass.motivo;
@@ -4851,7 +4851,7 @@ function vObiettivi(){
       (io.nucleo?'<div class="fine"><button class="mini" id="sett-rt">Ruoli e team ›</button></div><div class="fine" id="sett-rt-l" hidden><button class="mini oro" data-vai="persone">Persone</button><button class="mini oro" data-vai="staff">Aggiungi una persona</button><button class="mini" data-vai="createam">Crea un team</button><button class="mini" data-vai="plancia">Chi vede cosa</button></div>':''):'')+
     '<div class="fine" style="margin-top:12px">'+(guido?'<button class="mini oro" id="sett-crea">Crea un obiettivo</button>':'')+'<button class="mini" id="sett-tutti">Tutti gli obiettivi ›</button>'+
     /* 25/11/2026: quello che stava in Espandi (chat, gesti dei ruoli, vicinati, iscritti) ora è qui */
-    '<button class="mini" data-vai="strumenti">[Chat e strumenti] ›</button></div>';
+    '<button class="mini" data-vai="strumenti">Chat e strumenti ›</button></div>';
   legaVai(c);
   var a7=$("#sett-7"),visto=false;a7.onclick=function(){var g=$("#o-agenda");g.hidden=!g.hidden;if(!visto){visto=true;agendaOggi();}};
   $("#sett-fissa").onclick=function(){agFissa(null,vObiettivi);};

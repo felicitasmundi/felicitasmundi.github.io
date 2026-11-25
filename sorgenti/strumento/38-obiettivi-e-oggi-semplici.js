@@ -54,7 +54,7 @@ function vObiettivi(){
       (io.nucleo?'<div class="fine"><button class="mini" id="sett-rt">Ruoli e team ›</button></div><div class="fine" id="sett-rt-l" hidden><button class="mini oro" data-vai="persone">Persone</button><button class="mini oro" data-vai="staff">Aggiungi una persona</button><button class="mini" data-vai="createam">Crea un team</button><button class="mini" data-vai="plancia">Chi vede cosa</button></div>':''):'')+
     '<div class="fine" style="margin-top:12px">'+(guido?'<button class="mini oro" id="sett-crea">Crea un obiettivo</button>':'')+'<button class="mini" id="sett-tutti">Tutti gli obiettivi ›</button>'+
     /* 25/11/2026: quello che stava in Espandi (chat, gesti dei ruoli, vicinati, iscritti) ora è qui */
-    '<button class="mini" data-vai="strumenti">[Chat e strumenti] ›</button></div>';
+    '<button class="mini" data-vai="strumenti">Chat e strumenti ›</button></div>';
   legaVai(c);
   var a7=$("#sett-7"),visto=false;a7.onclick=function(){var g=$("#o-agenda");g.hidden=!g.hidden;if(!visto){visto=true;agendaOggi();}};
   $("#sett-fissa").onclick=function(){agFissa(null,vObiettivi);};

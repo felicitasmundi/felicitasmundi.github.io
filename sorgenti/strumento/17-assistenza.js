@@ -60,7 +60,7 @@ function vAssistenza(inEsp){
     if(!tid||!(io.nucleo||l.some(function(t){return t.team_id===tid;})))return;ass.team=tid;
     return db.rpc("fm_assistenza_coda").then(function(r){var e=$("#ass-op");if(!e||vista!=="azione")return;var q=(r&&!r.error&&r.data)||[];
       var nu=q.filter(function(x){return !x.seguita_da;}).length,pr=q.length-nu;
-      e.innerHTML='<button type="button" class="ass-gia" id="ass-op-b" style="margin:0 0 14px"><b>[Le richieste da seguire]</b> Nuove · '+nu+' · In carico · '+pr+' ›</button>';
+      e.innerHTML='<button type="button" class="ass-gia" id="ass-op-b" style="margin:0 0 14px"><b>Le richieste da seguire</b> Nuove · '+nu+' · In carico · '+pr+' ›</button>';
       $("#ass-op-b").onclick=function(){team.id=tid;team.tipo="team";vai("team");};});}).catch(function(){});
   function scelta(){
     var t=$("#ass-testa"),f=$("#ass-form"),k=$("#ass-coda"),m=ass.motivo;
