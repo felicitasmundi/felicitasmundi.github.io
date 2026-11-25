@@ -3933,7 +3933,7 @@ function leggiCapLivello(k,daTeam){
   $("#cl-invia").onclick=function(){
     if(navigator.share){navigator.share({title:k.titolo,url:lk}).catch(function(){});return;}
     (navigator.clipboard?navigator.clipboard.writeText(lk):Promise.reject()).then(function(){$("#cl-fatto").hidden=false;},function(){prompt("Copia il link",lk);});};
-  db.from("cervello_righe").select("id,testo,scritta_il,da_correggere").eq("capitolo_id",k.id).order("scritta_il").then(function(q){
+  db.from("cervello_righe").select("id,testo,scritta_il,da_correggere,file,file_nome").eq("capitolo_id",k.id).order("scritta_il").then(function(q){
     if(q&&q.error)return db.from("cervello_righe").select("id,testo,scritta_il").eq("capitolo_id",k.id).order("scritta_il");return q;}).then(function(q){
     var box=$("#cl-righe");if(!box)return;
     if(!q||q.error){box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';return;}
@@ -3941,7 +3941,9 @@ function leggiCapLivello(k,daTeam){
       var p=String(g.testo||"").split(/\n\s*\n/),h=p.shift();
       return '<section class="card" style="padding:18px;border-color:var(--oro);border-radius:18px">'+
         '<h2 style="font-family:var(--display);font-weight:600;font-size:21px;color:var(--oro);margin:0 0 8px">'+esc(h)+'</h2>'+
-        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+corrTasto(g)+'<div data-ver-box="'+esc(g.id)+'"></div></section>';}).join("");
+        p.map(function(x){return '<p style="margin:0 0 10px;font-size:18px;line-height:1.55">'+esc(x).replace(/\n/g,"<br>")+'</p>';}).join("")+
+        /* 25/11/2026, Gab: «e mettere dentro proprio il pdf» · solo documenti del sito (cartella documenti/) */
+        (g.file&&/^documenti\/[a-z0-9-]+\.pdf$/.test(g.file)?'<div class="fine"><a class="mini oro" href="'+esc(g.file)+'" target="_blank" rel="noopener">Apri il PDF</a></div>':'')+corrTasto(g)+'<div data-ver-box="'+esc(g.id)+'"></div></section>';}).join("");
     corrLega(box);verLega(box,k,daTeam);
   },function(){var box=$("#cl-righe");if(box)box.innerHTML='<p class="nota">Il capitolo non si legge adesso.</p>';});
 }
