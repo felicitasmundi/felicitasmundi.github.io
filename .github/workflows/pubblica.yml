@@ -60,7 +60,7 @@ jobs:
     timeout-minutes: 15
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy2.outputs.page_url || steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -97,6 +97,18 @@ jobs:
         with:
           path: _sito
 
+      # La consegna a GitHub Pages a volte fallisce per un intoppo di GitHub
+      # («No artifacts named github-pages», «Deployment failed, try again later»):
+      # si aspetta 30 secondi e si ritenta una volta da soli (Gab 25/11).
       - id: deploy
         if: steps.serve.outputs.si == '1'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Aspetta 30 secondi prima di ritentare
+        if: steps.serve.outputs.si == '1' && steps.deploy.outcome == 'failure'
+        run: sleep 30
+
+      - id: deploy2
+        if: steps.serve.outputs.si == '1' && steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
