@@ -1,0 +1,27 @@
+</script>
+<style>
+/* 18 ott 20:54, Gab: «la diretta non rimane se mi sposto altrove» → la striscia della diretta (comune/fm-diretta.js) sta sopra il menu */
+.fm-dir.fissa{top:auto!important;bottom:calc(76px + env(safe-area-inset-bottom,0px))!important;background-color:#0A0C1A!important;background-image:var(--cosmo-cielo)!important;border:1px solid rgba(212,175,106,.35)!important;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.fm-dir .tit,.fm-dir .b{color:#F5F0E6!important}
+.fm-dir .b{border-color:rgba(245,240,230,.25)!important}
+.fm-dir .b.on{background:#D4AF6A!important;color:#1A1405!important}
+body.con-diretta{padding-bottom:130px}
+</style>
+<script>
+(function(){function segui(){try{if(!localStorage.getItem("fm_diretta"))return;document.body.classList.add("con-diretta");if(window.FM_DIRETTA){window.FM_DIRETTA.avvia();return;}var sd=document.createElement("script");sd.src="comune/fm-diretta.js?v=10182055";document.head.appendChild(sd);}catch(e){}}
+segui();window.addEventListener("pageshow",function(e){if(e.persisted)segui();});})();
+</script>
+<script>
+/* 28/10/2026 Gab: chi entra dalla home torna alla home, chi entra nell'app torna all'app (vedi comune/fm-torna.js). */
+(function(){try{if(/[?&]da=home(&|$)/.test(location.search)){sessionStorage.setItem("fm_origine","home");var t=document.createElement("script");t.src="comune/fm-torna.js?v=10281800";document.head.appendChild(t);}else sessionStorage.setItem("fm_origine","app");}catch(e){}})();
+</script>
+<script src="comune/fm-numeri.js?v=10221400" defer></script>
+<style>
+/* 11 nov 2026 · controllo standard (WCAG 2.2 AA): tasti oro con testo blu scuro leggibile, testi almeno 16 px */
+.btn.pieno{color:#0a1430}
+.mini,.btn,.modulo label.btn{font-size:16px}
+.esp-nm{font-size:14px}
+.esp-el small{font-size:16px}
+</style>
+</body>
+</html>
