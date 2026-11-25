@@ -139,6 +139,15 @@ function g4VideoOggi(){
     g4CimaT=setTimeout(function(){if(vista==="giornale"&&$("#g4-oggi")&&!$("#g4-cima-f"))g4VideoOggi();},60000);
   },function(){});
 }
+/* 25/11 · video per argomento sotto l'intervista (SQL 316). Gab 25/11: «no l intervista è la prima cosa, questi 3 sono contenuti che rispondono a degli argomenti» */
+function g4Argomenti(){
+  var A=$("#g4-arg");if(!A||!db)return;
+  db.from("giornale_video_argomenti").select("link,argomento").order("ordine").order("messo_il").limit(12).then(function(r){
+    var A=$("#g4-arg");if(!A)return;var l=((r&&!r.error&&r.data)||[]).filter(function(v){return ytId(v.link);});
+    A.innerHTML=l.map(function(v){return '<div class="g4-arg" style="margin:0 0 18px"><p style="margin:0 0 8px;font-size:18px;color:var(--oro,#D4AF6A)"><b>'+esc(v.argomento)+'</b></p>'+
+      '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/'+ytId(v.link)+'" title="'+esc(v.argomento)+'" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe></div></div>';}).join("");
+  },function(){});
+}
 /* 8/11 · Dal Cervello al Giornale (SQL 213): una card scelta va in cima o tra gli articoli di oggi, per i vicinati o per tutti */
 function g4DalCervello(){
   var w=$("#g4-oggi-c");if(!w)return;clearTimeout(g4CimaT);
