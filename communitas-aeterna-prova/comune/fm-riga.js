@@ -102,7 +102,7 @@
      il piede in ogni pagina. La Bacheca ha già il suo (coi due tasti che cambiano vista): lì non si aggiunge. */
   if (APP) {
     var menu = document.createElement("nav"); menu.className = "fm-app"; menu.setAttribute("aria-label", "Parti dell'app");
-    menu.innerHTML = '<a href="strumento.html?v=oggi&' + C + '"><span class="ic">☼</span>Oggi</a>' +
+    menu.innerHTML = '<a href="emporio.html?' + C + '"><span class="ic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 2l8.7 5v10L12 22l-8.7-5V7z"/><path d="M12 7.5l4.8 8.3H7.2z"/><path d="M12 2v5.5M3.3 7l8.7.5 8.7-.5M3.3 7l3.9 8.8M20.7 7l-3.9 8.8M3.3 17l3.9-1.2M20.7 17l-3.9-1.2M12 22l-4.8-6.2M12 22l4.8-6.2" opacity=".7"/></svg></span>Emporio</a>' +
       '<a href="strumento.html?v=obiettivi&' + C + '"><span class="ic">☐</span>Obiettivi</a>' +
       '<a href="strumento.html?v=megafono&' + C + '" class="console" aria-label="Megafono"><span class="ic">＋</span>Megafono</a>' +
       '<a href="strumento.html?v=giornale&' + C + '"><span class="ic">❡</span>Giornale</a>' +
