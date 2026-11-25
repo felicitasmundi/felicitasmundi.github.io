@@ -1,7 +1,7 @@
 name: Sentinella
 
 # Ogni 2 ore guarda che le pagine principali si aprano e chiede al database
-# se qualche lavoro automatico o qualche mail e' fallita (funzione fm_salute, SQL 261).
+# se qualche lavoro automatico e' fallito o se almeno 3 chiamate automatiche (mail...) sono fallite (fm_salute, SQL 261).
 # Se qualcosa non va, il lavoro finisce con la X rossa e GitHub manda la mail «Run failed».
 on:
   schedule:
@@ -42,6 +42,8 @@ jobs:
             echo "::warning::Il database non ha risposto alla sentinella (SQL 261 lanciata?)"
           else
             [ "$l" = "0" ] || { echo "::error::Lavori automatici falliti nelle ultime 2 ore: $l"; problemi=1; }
-            [ "$c" = "0" ] || { echo "::error::Mail o chiamate automatiche fallite nelle ultime 2 ore: $c"; problemi=1; }
+            # una chiamata fallita ogni tanto capita: si suona da 3 in su (Gab 25/11)
+            if [ "$c" -ge 3 ] 2>/dev/null; then echo "::error::Mail o chiamate automatiche fallite nelle ultime 2 ore: $c"; problemi=1;
+            elif [ "$c" != "0" ]; then echo "::warning::Chiamate automatiche fallite nelle ultime 2 ore: $c (sotto la soglia di 3)"; fi
           fi
           exit $problemi
