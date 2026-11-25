@@ -2639,7 +2639,7 @@ function vAssistenza(inEsp){
   if(inEsp&&!fuori&&db)Promise.all([db.rpc("fm_team_mutuo_aiuto"),leggiTeam()]).then(function(v){var tid=v[0]&&!v[0].error&&v[0].data,l=v[1]||[];
     if(!tid||!(io.nucleo||l.some(function(t){return t.team_id===tid;})))return;ass.team=tid;
     return db.rpc("fm_assistenza_coda").then(function(r){var e=$("#ass-op");if(!e||vista!=="azione")return;var q=(r&&!r.error&&r.data)||[];
-      var nu=q.filter(function(x){return !x.seguita_da;}).length,pr=q.length-nu;
+      var nu=q.filter(function(x){return !x.seguita_da&&!x.letta;}).length,pr=q.filter(function(x){return !!x.seguita_da;}).length;
       e.innerHTML='<button type="button" class="ass-gia" id="ass-op-b" style="margin:0 0 14px"><b>Le richieste da seguire</b> Nuove · '+nu+' · In carico · '+pr+' ›</button>';
       $("#ass-op-b").onclick=function(){team.id=tid;team.tipo="team";vai("team");};});}).catch(function(){});
   function scelta(){
@@ -2726,7 +2726,7 @@ function assConv(id){
 function assTeam(id){
   if(!$("#tc-ass"))return;
   (ass.team?Promise.resolve(ass.team):db.rpc("fm_team_mutuo_aiuto").then(function(r){ass.team=(r&&!r.error&&r.data)||"-";return ass.team;},function(){return "-";}))
-  .then(function(t){if(t!==id||team.id!==id)return;assAperte();ricaricaTeam();});
+  .then(function(t){if(t!==id||team.id!==id)return;ass.rank=null;assAperte();ricaricaTeam();});
 }
 function assAperte(){
   /* 15/11/2026 19:22, Gab: una coda sola, card con tre stati: Nuova · Presa in carico · Chiusa; in cima le più vecchie */
@@ -2738,7 +2738,13 @@ function assAperte(){
     var f=$("#tc-ass");if(!f||ass.team!==team.id)return;
     if(ass.rispondo&&document.activeElement&&document.activeElement.id==="ass-risp")return;
     var tutte=(v[0]&&!v[0].error&&v[0].data)||[],lf=(v[1]&&!v[1].error&&v[1].data)||[];
+    /* 25/11/2026 21:59, Gab: «si in cima la piu recente» (SQL 318): prima quelle che non hai ancora letto, poi dalla più recente; aprendo una richiesta diventa «Letta» per te */
+    tutte.sort(function(a,b){return ((a.letta?1:0)-(b.letta?1:0))||(new Date(b.ultima_il)-new Date(a.ultima_il));});
+    /* mentre la coda è aperta l'ordine resta fermo (una richiesta appena letta non salta in fondo sotto gli occhi); quelle arrivate dopo vanno in cima */
+    if(ass.rank){var rk=ass.rank;tutte.forEach(function(x,k){x._k=rk[x.richiesta_id]!=null?rk[x.richiesta_id]:k-1e6;});tutte.sort(function(a,b){return a._k-b._k;});}
+    ass.rank={};tutte.forEach(function(x,k){ass.rank[x.richiesta_id]=k;});
     var nuove=tutte.filter(function(x){return !x.seguita_da;}),prese=tutte.filter(function(x){return !!x.seguita_da;});
+    var nonLette=nuove.filter(function(x){return !x.letta;}).length;
     var sch=ass.scheda,lista=sch==="nuove"?nuove:sch==="prese"?prese:lf;
     function aspetta(t){var m=Math.max(0,Math.round((Date.now()-new Date(t))/60000));
       return m<60?"aspetta da "+m+" min":m<1440?"aspetta da "+Math.round(m/60)+(Math.round(m/60)===1?" ora":" ore"):"aspetta da "+Math.round(m/1440)+(Math.round(m/1440)===1?" giorno":" giorni");}
@@ -2748,7 +2754,7 @@ function assAperte(){
         '<div class="ass-bis">'+esc(x.motivo?assMotivo(x.motivo):"Senza motivo")+'</div>';
       if(sch==="chiuse")return '<div class="ass-c"><span class="ass-st ok">Chiusa</span>'+testa+'<div class="ass-tx">'+esc(x.richiesta||"")+'</div>'+(x.risposta?'<div class="ass-rx">'+esc(x.risposta)+'</div>':'')+'</div>';
       var ri=ass.rispondo===x.richiesta_id,presa=!!x.seguita_da;
-      return '<div class="ass-c" data-q="'+esc(x.richiesta_id)+'">'+(presa?'<span class="ass-st pr">Presa in carico</span>':'<span class="ass-st da">Nuova</span>')+testa+
+      return '<div class="ass-c" data-q="'+esc(x.richiesta_id)+'">'+(presa?'<span class="ass-st pr">Presa in carico</span>':x.letta?'<span class="ass-st le">Letta</span>':'<span class="ass-st da">Nuova</span>')+testa+
         (presa?'<div class="ass-seg-da">'+(x.seguita_da_me?'La segui tu':'La segue '+esc(x.seguita_da))+'</div>':'')+
         (ass.tconv===x.richiesta_id?'<div class="ass-conv" id="ass-tconv"><p class="nota">Un momento…</p></div>':'<div class="ass-tx">'+esc(x.ultimo_testo||"")+'</div>')+
         '<button type="button" class="ass-bt vuoto" data-tconv="'+esc(x.richiesta_id)+'">'+(ass.tconv===x.richiesta_id?'Chiudi la conversazione':'Apri la conversazione')+'</button>'+
@@ -2756,13 +2762,15 @@ function assAperte(){
             :(presa?'':'<button type="button" class="ass-bt vuoto" data-prendo="'+esc(x.richiesta_id)+'">Prendo io</button>')+'<button type="button" class="ass-bt" data-risp="'+esc(x.richiesta_id)+'">Rispondi</button>')+'</div>';
     }
     f.innerHTML='<div class="ass-cima"><b>Assistenza comunitaria integrata</b><button type="button" class="mini" id="ass-stat-b">Statistiche</button></div>'+
-      '<div class="ass-seg" role="tablist"><button type="button" role="tab" data-sch="nuove" aria-selected="'+(sch==="nuove")+'">Nuove · '+nuove.length+'</button><button type="button" role="tab" data-sch="prese" aria-selected="'+(sch==="prese")+'">In carico · '+prese.length+'</button><button type="button" role="tab" data-sch="chiuse" aria-selected="'+(sch==="chiuse")+'">Chiuse</button></div>'+
+      '<div class="ass-seg" role="tablist"><button type="button" role="tab" data-sch="nuove" aria-selected="'+(sch==="nuove")+'">Nuove · '+nonLette+'</button><button type="button" role="tab" data-sch="prese" aria-selected="'+(sch==="prese")+'">In carico · '+prese.length+'</button><button type="button" role="tab" data-sch="chiuse" aria-selected="'+(sch==="chiuse")+'">Chiuse</button></div>'+
       (lista.length?'<div class="ass-giro" id="ass-giro">'+lista.map(card).join("")+'</div>'+(lista.length>1?'<div class="ass-punti" aria-hidden="true">'+lista.map(function(x,k){return '<i'+(k===0?' class="on"':'')+'></i>';}).join("")+'</div>':'')
         :'<p class="nota">'+(sch==="nuove"?'Nessuna richiesta nuova.':sch==="prese"?'Nessuna richiesta in carico.':'Nessuna richiesta chiusa.')+'</p>')+
       (ass.stat?'<div id="ass-stat"><p class="nota">Un momento…</p></div>':'');
     f.querySelectorAll("[data-sch]").forEach(function(b){b.onclick=function(){ass.scheda=b.getAttribute("data-sch");ass.rispondo=null;ass.tconv=null;assAperte();};});
     /* 16/11/2026, Gab: la risposta resta collegata alla richiesta di chi ha scritto, non nella chat del team */
-    f.querySelectorAll("[data-tconv]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-tconv");ass.tconv=ass.tconv===i?null:i;assAperte();};});
+    function segnaLetta(i){var x=tutte.filter(function(q){return q.richiesta_id===i;})[0];if(!x||x.letta)return;x.letta=true;
+      db.rpc("fm_assistenza_letta",{p_richiesta:i}).then(function(){},function(){});}
+    f.querySelectorAll("[data-tconv]").forEach(function(b){b.onclick=function(){var i=b.getAttribute("data-tconv");ass.tconv=ass.tconv===i?null:i;if(ass.tconv)segnaLetta(i);assAperte();};});
     if(ass.tconv&&$("#ass-tconv")){var tq=ass.tconv;db.rpc("fm_assistenza_conversazione",{p_richiesta:tq}).then(function(r){var e=$("#ass-tconv");if(!e||ass.tconv!==tq)return;
       var l=(r&&!r.error&&r.data)||[];
       e.innerHTML=l.length?l.map(function(m){return '<div class="ass-f '+(m.dal_team?"mio":"team")+'">'+testoLink(m.testo,"t","div")+'<small>'+esc(m.chi||"")+" · "+esc(assQuando(m.scritto_il))+'</small></div>';}).join(""):'<p class="nota">La conversazione non si apre adesso.</p>';},function(){});}
@@ -2771,7 +2779,7 @@ function assAperte(){
       if(ass.rispondo){var c=g.querySelector('[data-q="'+ass.rispondo+'"]');if(c)g.scrollLeft=c.offsetLeft-g.offsetLeft-18;}}
     f.querySelectorAll("[data-prendo]").forEach(function(b){b.onclick=function(){b.disabled=true;db.rpc("fm_assistenza_prendo",{p_richiesta:b.getAttribute("data-prendo")}).then(function(r){
       b.disabled=false;if(r&&!r.error&&(r.data==null||r.data==="ok")){ass.scheda="prese";assAperte();return;}b.textContent=(r&&r.error&&r.error.message)||(r&&r.data)||"Si può riprovare.";},function(){b.disabled=false;b.textContent="Si può riprovare.";});};});
-    f.querySelectorAll("[data-risp]").forEach(function(b){b.onclick=function(){ass.rispondo=b.getAttribute("data-risp");assAperte();setTimeout(function(){var t=$("#ass-risp");if(t)t.focus();},300);};});
+    f.querySelectorAll("[data-risp]").forEach(function(b){b.onclick=function(){ass.rispondo=b.getAttribute("data-risp");segnaLetta(ass.rispondo);assAperte();setTimeout(function(){var t=$("#ass-risp");if(t)t.focus();},300);};});
     var no=$("#ass-risp-no");if(no)no.onclick=function(){ass.rispondo=null;if(document.activeElement)document.activeElement.blur();assAperte();};
     var ok=$("#ass-risp-b");if(ok)ok.onclick=function(){var t=$("#ass-risp").value.trim(),e=$("#ass-risp-e");if(!t){e.textContent="Scrivi la risposta.";return;}
       ok.disabled=true;db.rpc("fm_assistenza_rispondi",{p_richiesta:ass.rispondo,p_testo:t}).then(function(r){ok.disabled=false;
@@ -2804,7 +2812,7 @@ var ASS_CSS='.ass-nota{font-size:16px;color:#c9c3d6;margin:8px 0 0}#ass-mail{wid
 '.ass-tab{overflow-x:auto}.ass-tab table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}.ass-tab th,.ass-tab td{text-align:left;padding:6px 4px;border-bottom:1px solid rgba(212,175,106,.3)}.ass-tab th{color:#D4AF6A;font-weight:600}'+
 /* 15/11 card scorrevoli */'.ass-seg{display:flex;background:rgba(245,240,230,.08);border-radius:12px;padding:3px;margin:10px 0 14px}.ass-seg button{flex:1;border:0;background:none;color:#c9c3d6;font:600 17px "DM Sans",system-ui,sans-serif;padding:10px 6px;border-radius:10px;cursor:pointer}.ass-seg button[aria-selected="true"]{background:#D4AF6A;color:#1A1405}.ass-seg button:focus-visible{outline:2px solid #D4AF6A;outline-offset:2px}.ass-giro{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -4px;padding:0 4px 4px}.ass-giro::-webkit-scrollbar{display:none}.ass-c{flex:0 0 88%;scroll-snap-align:center;background:#1a2148;border:1px solid rgba(212,175,106,.35);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;box-sizing:border-box;min-width:0}.ass-giro .ass-c:only-child{flex-basis:100%}.ass-st{align-self:flex-start;font-size:15px;font-weight:700;padding:4px 12px;border-radius:99px;color:#1A1405;text-transform:none;letter-spacing:0}.ass-st.da{background:#E07A55}.ass-st.ok{background:#8DBF5E}.ass-chi b{display:block;font-size:21px;line-height:1.2}.ass-chi small{display:block;font-size:16px;color:#c9c3d6;margin-top:3px}.ass-mo{align-self:flex-start;font-size:15px;border:1px solid #D4AF6A;color:#D4AF6A;padding:3px 11px;border-radius:99px}.ass-tx{font-size:19px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;flex:1}.ass-rx{border-left:4px solid #8DBF5E;padding:8px 12px;background:rgba(141,191,94,.08);border-radius:8px;font-size:18px;white-space:pre-wrap;overflow-wrap:anywhere}.ass-bt{border:0;border-radius:99px;padding:14px;font:700 19px "DM Sans",system-ui,sans-serif;background:#D4AF6A;color:#1A1405;cursor:pointer}.ass-bt.vuoto{background:none;border:2px solid #D4AF6A;color:#D4AF6A}.ass-bt:focus-visible{outline:2px solid #F5F0E6;outline-offset:2px}.ass-punti{display:flex;justify-content:center;gap:7px;margin-top:12px}.ass-punti i{width:8px;height:8px;border-radius:50%;background:rgba(245,240,230,.3)}.ass-punti i.on{background:#D4AF6A}'+
 '.ass-griglia{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 18px}.ass-sc{display:flex;flex-direction:column;gap:6px;text-align:left;background:#1a2148;border:1px solid rgba(214,181,108,.35);border-radius:18px;padding:14px;color:#F5F0E6;cursor:pointer;font:inherit;min-height:84px}.ass-sc b{font-size:18px;line-height:1.25}.ass-sc span{font-size:16px;line-height:1.35;color:#c9c3d6}.ass-sc.su{grid-column:1/-1;border-color:#6FA8D6;background:rgba(111,168,214,.12)}.ass-sc.su b{color:#6FA8D6}.ass-sc:focus-visible,.ass-gia:focus-visible{outline:2px solid #D4AF6A;outline-offset:2px}.ass-gia{display:block;width:100%;text-align:left;background:rgba(111,168,214,.12);border:1px solid #6FA8D6;border-radius:14px;padding:12px 14px;margin:18px 0 6px;color:#F5F0E6;font:inherit;font-size:17px;line-height:1.35;cursor:pointer}.ass-gia b{color:#6FA8D6}'+
-'/* 15/11 riordino */.ass-st.pr{background:#6FA8D6}.ass-bis{font-size:20px;font-weight:700;color:#D4AF6A;line-height:1.3}.ass-seg-da{font-size:17px;color:#6FA8D6;font-weight:600}.ass-mia{margin:0 0 14px}.ass-dopo{display:block;font-size:16px;color:#c9c3d6}';
+'/* 15/11 riordino */.ass-st.pr{background:#6FA8D6}.ass-st.le{background:#c9c3d6}.ass-bis{font-size:20px;font-weight:700;color:#D4AF6A;line-height:1.3}.ass-seg-da{font-size:17px;color:#6FA8D6;font-weight:600}.ass-mia{margin:0 0 14px}.ass-dopo{display:block;font-size:16px;color:#c9c3d6}';
 document.head.insertAdjacentHTML("beforeend","<style>"+ASS_CSS+"</style>");
 
 /* OGGI */
