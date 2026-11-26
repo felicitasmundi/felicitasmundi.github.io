@@ -43,5 +43,6 @@
 41-persone.js
 42-staff-del-festival.js
 43-persone-e-ruoli.js
+43a-conta-sezioni.js
 44-benvenuto-karma-yoga.js
 45-pagina.html
