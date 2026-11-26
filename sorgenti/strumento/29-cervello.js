@@ -80,7 +80,7 @@ function leggiCapLivello(k,daTeam){
   c.innerHTML='<div style="margin-bottom:4px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="ce-indietro">'+(daTeam?'← Torna al team':'← Torna al Cervello')+'</button><button class="btn pieno" id="cl-invia">Invia</button></div><p class="nota" id="cl-fatto" hidden>Link copiato.</p>'+
     '<p class="et">Cervello</p><h1 style="font-family:var(--display);font-weight:400;font-size:28px;letter-spacing:.05em;margin:4px 2px 12px">'+esc(k.titolo)+'</h1>'+
     '<div id="cl-righe" style="display:flex;flex-direction:column;gap:12px"><p class="nota">Un momento…</p></div>';
-  $("#ce-indietro").onclick=function(){vai(daTeam?"team":"cervello");};
+  $("#ce-indietro").onclick=function(){vai(daTeam?"team":(window.fmCapDa||"cervello"));};
   /* 1 nov, Gab: il link da mandare a chi è nel team; lo apre solo chi può leggere il capitolo */
   $("#cl-invia").onclick=function(){
     if(navigator.share){navigator.share({title:k.titolo,url:lk}).catch(function(){});return;}

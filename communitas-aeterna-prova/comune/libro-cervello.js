@@ -103,6 +103,7 @@ window.libroCervello=function(box,fonte){
     var d=m.didascalia?'<figcaption>'+esc(m.didascalia)+'</figcaption>':'';
     if(m.tipo==="foto")return '<figure class="lc-media">'+(m.url?'<img src="'+esc(m.url)+'" alt="'+esc(m.didascalia||"")+'" loading="lazy">':'<div class="lc-segna">[ foto ]</div>')+d+'</figure>';
     if(m.tipo==="video"){var id=yt(m.url);return '<figure class="lc-media">'+(id?'<div class="lc-video"><iframe src="https://www.youtube-nocookie.com/embed/'+id+'" allowfullscreen loading="lazy" title="video"></iframe></div>':'<div class="lc-segna">[ video ]</div>')+d+'</figure>';}
+    if(m.tipo==="pdf")return '<p class="lc-media"><a class="mini oro" href="'+esc(m.url)+'" target="_blank" rel="noopener">Apri il PDF</a></p>'; /* 25/11: SINTOS col PDF anche nel libro */
     if(m.tipo==="audio")return '<figure class="lc-media">'+(m.url?'<audio controls preload="none" src="'+esc(m.url)+'"></audio>':'<div class="lc-segna lc-segna-b">[ audio ]</div>')+d+'</figure>';
     return '';
   }

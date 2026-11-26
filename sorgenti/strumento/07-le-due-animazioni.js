@@ -194,7 +194,7 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){window.fmObTutti=false;if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+function vai(v){window.fmObTutti=false;window.fmCapDa=v==="coscienza"?"coscienza":"cervello";if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 /* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");if(v==="emporio"){location.href="emporio.html?c=10182300";return;}vai(v==="cervello"?"coscienza":v);};});
 /* 31/10, Gab: «coscienza è una pagina che esce fuori» → Coscienza si apre dentro l'app, con la barra in basso che resta */
@@ -202,7 +202,8 @@ document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(
 function vCoscienza(){
   var c=$("#corpo");
   if(typeof libroCervello!=="function"||!db){c.innerHTML='<iframe class="cos-in" src="coscienza.html?in=app" title="Coscienza"></iframe>';return;}
-  c.innerHTML='<div id="lc-box"></div>';
+  /* 25/11 23:28, Gab: «dove è l motore di ricerca» → la casella Cerca in cima alla pagina che apre il tasto «Coscienza» */
+  c.innerHTML=(typeof cercaHTML==="function"?cercaHTML():'')+'<div id="lc-box"></div>';
   /* la mappa della Coscienza dentro Base filosofica: si apre dentro l'app, con «‹ Indice» per tornare */
   $("#lc-box").addEventListener("click",function(ev){var m=ev.target.closest("[data-mappa]");if(!m)return;ev.preventDefault();
     c.innerHTML='<div style="max-width:680px;margin:0 auto;padding:10px 16px 0"><button class="btn" id="lc-mappa-torna">‹ Indice</button></div><iframe class="cos-in" src="coscienza.html?in=app" title="La mappa della Coscienza"></iframe>';
@@ -210,7 +211,7 @@ function vCoscienza(){
   function righeCap(id){return db.from("cervello_righe").select("id,testo,scritta_il").eq("capitolo_id",id).order("scritta_il").then(function(q){
     return ((q&&!q.error&&q.data)||[]).map(function(g){return {id:g.id,titolo:String(g.testo||"").trim().split("\n")[0],scritta_il:g.scritta_il};});});}
   libroCervello($("#lc-box"),{
-    avviso:!!io.id, /* Gab 8/11: l'avviso dell'autunno «lo si fa vedere solo con accesso» */
+    avviso:false, /* 25/11: l'avviso dell'autunno è superato (indice e ricerca sono online) */
     indice:function(){return db.rpc("fm_cervello_indice").then(function(r){return (r&&!r.error&&r.data)||[];});},
     carte:function(id){return db.rpc("fm_capitolo_indice",{p_capitolo:id}).then(function(r){if(r&&!r.error&&Array.isArray(r.data))return r.data;return righeCap(id);},function(){return righeCap(id);});},
     extra:function(sz){return /base filosofica/i.test(sz.sezione_nome||"")?'<div class="lc-mappa"><a class="lc-riga" data-mappa="1" href="coscienza.html?in=app" style="color:inherit;text-decoration:none"><span class="lc-tit">La mappa della Coscienza</span><span class="lc-punti"></span><span class="lc-freccia">›</span></a></div>':"";},
@@ -231,8 +232,11 @@ function vCoscienza(){
               b.disabled=false;b.insertAdjacentHTML("afterend",'<p class="corr-e">'+esc((r&&!r.error&&r.data)||errore(r&&r.error))+'</p>');},
               function(x){b.disabled=false;alert(errore(x));});};});
         },function(){L.innerHTML='<p class="nota">Le versioni non si leggono adesso.</p>';});};},
-    pagina:function(id){return db.from("cervello_righe").select("testo").eq("id",id).maybeSingle().then(function(q){return {testo:(q&&q.data&&q.data.testo)||"",media:[],uscite:[]};});}
+    pagina:function(id){return db.from("cervello_righe").select("testo,file").eq("id",id).maybeSingle().then(function(q){
+      if(q&&q.error)return db.from("cervello_righe").select("testo").eq("id",id).maybeSingle();return q;}).then(function(q){var d=(q&&q.data)||{};
+      return {testo:d.testo||"",media:/^documenti\/[a-z0-9-]+\.pdf$/.test(d.file||"")?[{tipo:"pdf",url:d.file}]:[],uscite:[]};});}
   });
+  if(typeof cercaLega==="function")cercaLega();
 }
 function legaVai(c){c.querySelectorAll("[data-vai]").forEach(function(b){b.onclick=function(){vai(b.getAttribute("data-vai"));};});}
 function disegna(){
