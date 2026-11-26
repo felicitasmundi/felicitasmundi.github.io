@@ -2776,7 +2776,7 @@ function assAperte(){
         (ap?'<div class="ass-det">'+schedaH(x)+'</div>':'')+'</div>';}
     /* la scheda (SQL 324): conversazione già aperta, in fondo la casella; «Rispondi» va alla persona e la prende in carico,
        «Nota interna» resta tra operatori, «Chiudi» chiede l'esito. Esiti tra [ ]: parole da far approvare a Gab. */
-    var ESITI=["[Risolta]","[Passata a un altro team]","[Non serve risposta]"];
+    var ESITI=["Risolta","Passata a un altro team","Non serve risposta"];
     function schedaH(x){var chiusa=sch==="chiuse";
       return (x.luogo?'<small class="ass-luogo">'+esc(x.luogo)+'</small>':'')+
         (x.seguita_da&&!chiusa?'<div class="ass-seg-da">'+(x.seguita_da_me?'La segui tu':'La segue '+esc(x.seguita_da))+'</div>':'')+
@@ -2804,7 +2804,7 @@ function assAperte(){
       var bn=$("#ass-sk-n");if(bn)bn.onclick=function(){manda("fm_assistenza_nota",null,bn);};
       var bc=$("#ass-sk-c");if(bc)bc.onclick=function(){var e=$("#ass-sk-e");e.hidden=!e.hidden;};
       document.querySelectorAll("#ass-sk-e [data-esito]").forEach(function(b){b.onclick=function(){b.disabled=true;
-        db.rpc("fm_assistenza_chiudi",{p_richiesta:id,p_esito:b.getAttribute("data-esito").replace(/^\[|\]$/g,"")}).then(function(r){b.disabled=false;
+        db.rpc("fm_assistenza_chiudi",{p_richiesta:id,p_esito:b.getAttribute("data-esito")}).then(function(r){b.disabled=false;
           if(r&&!r.error&&r.data==="ok"){ass.sel=null;ass.rispondo=null;assAperte();return;}x.textContent=(r&&r.data)||errore(r&&r.error);},function(y){b.disabled=false;x.textContent=errore(y);});};});
     }
     f.innerHTML='<div class="ass-cima"><b>Assistenza comunitaria integrata</b><button type="button" class="mini" id="ass-stat-b">Statistiche</button></div>'+
