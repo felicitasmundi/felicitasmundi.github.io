@@ -19,7 +19,7 @@
     var q = new URLSearchParams(location.search), solo = true;
     q.forEach(function(v, k){ if(k !== "avvio") solo = false; });
     if(q.has("avvio") && solo && !location.hash && localStorage.getItem("sb-gfnveesogkfvkrdudpfg-auth-token"))
-      dove = "/communitas-aeterna-prova/strumento.html?v=azione&c=10182300";
+      dove = "/communitas-aeterna-prova/strumento.html?v=azione&c=10182300&dallapp=1";
   }catch(e){}
   location.replace(dove);
 })();

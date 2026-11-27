@@ -109,6 +109,10 @@ function campanellaApri(){
 /* avvio */
 if(!db){$("#corpo").innerHTML='<div class="vuoto">La pagina non riesce a collegarsi. Controlla la connessione e ricarica.</div>';return;}
 chiSono().then(function(){
+  /* 27/11/2026, Gab «Si»: l'app Android arriva qui dritta (?dallapp=1) solo se sul telefono c'era un accesso salvato.
+     Se quell'accesso non vale più, si va al modulo del codice invece di restare su Espandi da ospite.
+     Chi è ospite per scelta non ha mai un accesso salvato, quindi non passa di qui. */
+  try{var qa=new URLSearchParams(location.search);if(qa.get("dallapp")==="1"){if(!io.id){location.replace("accesso.html?torna="+encodeURIComponent("strumento.html?v=azione"));return;}qa.delete("dallapp");history.replaceState(history.state,"",location.pathname+"?"+qa.toString());}}catch(e){}
   testa();
   campanella();
   /* 15/11: qui db non è window.db, quindi la domanda automatica delle notifiche (fm-notifiche.js, 8/11) non partiva mai da sola: la si avvia da qui */
