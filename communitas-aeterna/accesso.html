@@ -8,4 +8,19 @@
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta name="twitter:card" content="summary">
-<link rel="canonical" href="https://app.felicitasmundi.com/communitas-aeterna-prova/accesso.html"><meta http-equiv="refresh" content="0;url=/communitas-aeterna-prova/accesso.html"><script>location.replace("/communitas-aeterna-prova/accesso.html"+location.search+location.hash);</script></head><body style="background:#122050;color:#F5F0E6;font:18px system-ui,sans-serif;padding:24px"><a href="/communitas-aeterna-prova/accesso.html" style="color:#D4AF6A">FelicitasMundi</a></body></html>
+<link rel="canonical" href="https://app.felicitasmundi.com/communitas-aeterna-prova/accesso.html"><script>
+/* 27/11/2026, Gab: «inizialmente mi mostra la pagina accesso e poi entro / ci mette molti secondi / come migliorare?» → «Vai».
+   L'app Android si apre sempre qui (accesso.html?avvio=…). Se su questo telefono c'è già un accesso salvato, si va dritti
+   nella piattaforma, senza caricare la pagina d'accesso e i suoi controlli. Solo per l'app (nell'indirizzo c'è soltanto «avvio»);
+   dai link e dal browser resta tutto come prima. */
+(function(){
+  var dove = "/communitas-aeterna-prova/accesso.html" + location.search + location.hash;
+  try{
+    var q = new URLSearchParams(location.search), solo = true;
+    q.forEach(function(v, k){ if(k !== "avvio") solo = false; });
+    if(q.has("avvio") && solo && !location.hash && localStorage.getItem("sb-gfnveesogkfvkrdudpfg-auth-token"))
+      dove = "/communitas-aeterna-prova/strumento.html?v=azione&c=10182300";
+  }catch(e){}
+  location.replace(dove);
+})();
+</script><noscript><meta http-equiv="refresh" content="0;url=/communitas-aeterna-prova/accesso.html"></noscript></head><body style="background:#122050;color:#F5F0E6;font:18px system-ui,sans-serif;padding:24px"><a href="/communitas-aeterna-prova/accesso.html" style="color:#D4AF6A">FelicitasMundi</a></body></html>
