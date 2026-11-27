@@ -32,7 +32,7 @@ function vStrumenti(){
     .concat(io.coordina?[g("Crea diretta",'data-mega="diretta"')]:[]).concat(log?[g("Cassa",'data-vai="cassa"')]:[])
     /* 8/11 Gab: «No I prodotti li metterei in espandi» (SQL 216) · 16/11 proposte di prodotti (SQL 282) */
     .concat([g("I miei prodotti",'data-esp-prod="1" style="display:none"'),g("Da confermare",'data-esp-conf="1" style="display:none"',' <span id="esp-conf-n"></span>')]);
-  c.innerHTML='<p><button class="mini" data-vai="obiettivi">‹ Obiettivi</button></p><h1 class="esp-tit">Chat e strumenti</h1><div class="st-el" style="padding:0;margin:0;width:100%;max-width:none;box-sizing:border-box">'+
+  c.innerHTML='<p><button class="mini" data-vai="obiettivi">‹ Abitare</button></p><h1 class="esp-tit">Chat e strumenti</h1><div class="st-el" style="padding:0;margin:0;width:100%;max-width:none;box-sizing:border-box">'+
     apri("st-team",'I tuoi team <span id="st-team-n"></span>','<div id="st-team-l"><p class="nota">Un momento…</p></div>')+
     apri("st-chat",'Le tue chat','<div id="tm-chat"><p class="nota">Un momento…</p></div>')+
     (io.nucleo?apri("st-att",'Da mettere nel Cervello','<div id="tm-attesa"></div>',true):'')+

@@ -2,7 +2,7 @@
 function leggiObiettivi(){
   if(cache.obiettivi||!db)return Promise.resolve(cache.obiettivi||[]);
   return Promise.all([
-    db.from("orme").select("id,titolo,contenuto,stadio,entro_il,quanti_servono,persona_id,visibilita,orma_persone(persona_id,preso_il,lasciato_il)").eq("tipo","obiettivo").order("momento",{ascending:false}).limit(120)
+    db.from("orme").select("id,titolo,contenuto,stadio,entro_il,dorme_dal,quanti_servono,persona_id,visibilita,orma_persone(persona_id,preso_il,lasciato_il)").eq("tipo","obiettivo").order("momento",{ascending:false}).limit(120)
       .then(function(r){if(r&&!r.error)return r.data||[];
         /* se il legame con orma_persone non si legge, gli obiettivi si vedono lo stesso */
         return db.from("orme").select("id,titolo,contenuto,stadio,entro_il,quanti_servono,persona_id,visibilita").eq("tipo","obiettivo").order("momento",{ascending:false}).limit(120)
