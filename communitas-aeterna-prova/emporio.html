@@ -177,6 +177,9 @@ var PARTECIPA="https://app.felicitasmundi.com/communitas-aeterna-prova/partecipa
 /* gli scaffali dell'Emporio (stessi nomi della pagina di prima) */
 var SCAFFALI=["alimenti","rimedi","cosmesi","oggettistica","abbigliamento","arredo","oggetti sacri","libri e stampati","strumenti di coscienza","digitale"];
 var db=null;try{db=window.supabase.createClient(URL_SB,KEY,{auth:{flowType:"implicit"}});}catch(e){}
+/* 26/11/2026 (SQL 326, thread «Contare letture e ingressi»): l'Emporio si conta come sezione del menu, per livello. Solo il numero, una volta per fascia del giorno e per sessione. */
+(function(){if(!db)return;try{var h=+new Date().toLocaleString("en-GB",{timeZone:"Europe/Rome",hour:"2-digit",hour12:false})%24,k="fm-liv:sezione:emporio:"+(h>=5&&h<12?"m":h>=12&&h<18?"p":"s");if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1");}catch(e){}
+  try{db.rpc("fm_conta_livello",{p_tipo:"sezione",p_cosa:"emporio"}).then(function(){},function(){});}catch(e){}})();
 var $=function(s){return document.querySelector(s);};
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 function euro(n){return (+n||0).toLocaleString("it-IT",{style:"currency",currency:"EUR"});}
