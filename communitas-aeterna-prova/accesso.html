@@ -25,6 +25,22 @@
 </head>
 <body>
 <script>
+  /* 27/11/2026, Gab: «in due giorni che apro l app mi chiede sempre il codice» (app Android). L'app si apre sempre qui, e intanto
+     rinnova l'accesso da sola anche a pagina chiusa: Supabase cambia la chiave di rinnovo a ogni rinnovo, quindi quella salvata
+     nella pagina restava vecchia e qui si chiedeva il codice. Come in strumento.html (fm-notifiche.js, 24/11): prima di collegarsi
+     a Supabase si prende l'accesso dell'app, solo se è più nuovo di quello della pagina. Fuori dall'app non fa nulla. */
+  (function(){ try{
+    var A = window.FelicitasApp; if(!A || typeof A.sessione !== "function") return;
+    var K = "sb-gfnveesogkfvkrdudpfg-auth-token";
+    function exp(j){ try{ var p = String(j).split(".")[1].replace(/-/g,"+").replace(/_/g,"/"); return JSON.parse(atob(p + "===".slice((p.length + 3) % 4))).exp || 0; }catch(e){ return 0; } }
+    var a = A.sessione(); if(!a) return; a = JSON.parse(a); if(!a || !a.access_token || !a.refresh_token) return;
+    var g = localStorage.getItem(K); if(!g) return; g = JSON.parse(g); if(!g || g.refresh_token === a.refresh_token) return;
+    var ea = exp(a.access_token); if(!ea || ea <= (exp(g.access_token || "") || +g.expires_at || 0)) return;
+    g.access_token = a.access_token; g.refresh_token = a.refresh_token; g.expires_at = ea; g.expires_in = Math.max(0, ea - Math.floor(Date.now()/1000));
+    localStorage.setItem(K, JSON.stringify(g));
+  }catch(e){} })();
+</script>
+<script>
   "use strict";
   /* la casa: indirizzo e chiave pubblicabile — pubblici per natura.
      fm-accesso.js legge `db` da qui (globale, come ogni fm-*.js). */

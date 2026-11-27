@@ -194,7 +194,12 @@ function testa(){
 }
 
 /* ── disegno ── */
-function vai(v){window.fmObTutti=false;window.fmCapDa=v==="coscienza"?"coscienza":"cervello";if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
+/* 27/11/2026, Gab: «sistema anche il problema del tasto per tornare indietro che mi fa uscire dall app» → ogni cambio di pagina
+   lascia una traccia nella cronologia (history.pushState), così il tasto indietro del telefono (e del browser) torna alla pagina
+   di prima; dalla prima pagina aperta esce come prima. L'app Android usa già canGoBack/goBack della pagina. */
+var fmIndietro=false;
+window.addEventListener("popstate",function(e){var v=e.state&&e.state.fmv;if(!v)return;fmIndietro=true;try{vai(v);}finally{fmIndietro=false;}});
+function vai(v){if(!fmIndietro&&v!==vista){try{if(!(history.state&&history.state.fmv))history.replaceState({fmv:vista},"",location.href);history.pushState({fmv:v},"",location.href);}catch(e){}}window.fmObTutti=false;window.fmCapDa=v==="coscienza"?"coscienza":"cervello";if(typeof spazioFerma==="function")spazioFerma();if(typeof cassaFerma==="function")cassaFerma();if(typeof teamFerma==="function")teamFerma();vista=v;if(v!=="cerchio")cerchio=null;if(v==="giornale")giorno=0;disegna();window.scrollTo(0,0);}
 /* 25/10, Gab: «coscienza non ha l'impostazione visiva su cui avevamo lavorato» → il menu Coscienza apre la pagina della Coscienza; il suo tasto porta al Cervello */
 document.querySelectorAll("#nav button").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-v");if(v==="emporio"){location.href="emporio.html?c=10182300";return;}vai(v==="cervello"?"coscienza":v);};});
 /* 31/10, Gab: «coscienza è una pagina che esce fuori» → Coscienza si apre dentro l'app, con la barra in basso che resta */
