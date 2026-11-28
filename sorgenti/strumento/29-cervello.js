@@ -197,7 +197,7 @@ function vCervello(){
    Ricerca per parole nel Cervello (SQL 315, fm_cervello_cerca_parole): ognuno trova solo ciò che può leggere.
    Elementi con i nomi delle stanze (regola 19 ott 16:14) e il simbolo del menu; ambiti = i sei della home. */
 var CERCA_EL=[["terra","obiettivi"],["acqua","emporio"],["fuoco","azione"],["aria","giornale"],["etere","cervello"]];
-var cercaStato={el:null,amb:null,cat:null,testo:""};
+var cercaStato={el:null,amb:null,cat:null,testo:""};/* elementi nascosti dal 28/11: el resta sempre null */
 /* 28/11/2026, Gab: «no non credo siano questi gli ambiti … per ora mettiamo la voce categorie di ricerca» →
    al posto dei sei ambiti, le voci della parte «Categorie di ricerca» del Cervello (SQL 328, p_categoria) */
 var cercaCat=null;
@@ -208,7 +208,8 @@ function cercaHTML(){
   function ico(v){var b=document.querySelector('nav [data-v="'+v+'"] .ic');return b?b.innerHTML:"";}
   return '<div class="ce-cerca"><form id="cc-f" role="search"><label for="cc-q" class="cc-lab">Cerca nel Cervello</label>'+
     '<div class="cc-riga"><input type="search" id="cc-q" placeholder="Una o più parole" autocomplete="off" value="'+esc(cercaStato.testo)+'"><button class="btn pieno" type="submit">Cerca</button></div></form>'+
-    '<div class="cc-filtri" id="cc-el">'+CERCA_EL.map(function(e){var n=(ELEMENTI.filter(function(x){return x[0]===e[0];})[0]||[e[0],e[0]])[1];
+    /* 28/11 12:19, Gab: «non so se ha senso mettere sia i 5 elementi e le categorie di ricerca / mi crea confusione» → restano solo le categorie */
+    '<div class="cc-filtri" id="cc-el" hidden>'+CERCA_EL.map(function(e){var n=(ELEMENTI.filter(function(x){return x[0]===e[0];})[0]||[e[0],e[0]])[1];
       return '<button type="button" class="cc-ch" data-el="'+e[0]+'" aria-pressed="'+(cercaStato.el===e[0])+'"><span class="cc-ic" aria-hidden="true">'+ico(e[1])+'</span>'+esc(n)+'</button>';}).join("")+'</div>'+
     '<div class="cc-filtri" id="cc-cat" hidden></div>'+
     '<div id="cc-esito" aria-live="polite"></div></div>';
