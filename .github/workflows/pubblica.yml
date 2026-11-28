@@ -2,7 +2,7 @@ name: Pubblica il sito
 
 # Quando GitHub Pages e' impostato su «GitHub Actions» (Settings › Pages › Source),
 # questo lavoro pubblica il sito: prima i controlli, poi le pagine degli articoli
-# pubblici del Giornale, poi la pubblicazione.
+# pubblici del Giornale e delle voci del Cervello (/voci/), poi la pubblicazione.
 # Finche' Pages resta su «Deploy from a branch», controlla soltanto e non pubblica nulla.
 on:
   push:
@@ -70,6 +70,8 @@ jobs:
           git ls-files -z | grep -zvE '^(\.github|sorgenti)/' | xargs -0 cp --parents -t _sito
           export FM_SUPABASE_CHIAVE=$(grep -oE 'sb_publishable_[A-Za-z0-9_-]+' "$FM_SUPABASE_CHIAVE_FILE" | head -1)
           python3 .github/controlli/giornale.py _sito
+          # 28/11: una pagina fissa per ogni pagina del Cervello visibile a tutti (/voci/), con sitemap
+          python3 .github/controlli/voci.py _sito
 
       - name: Sito prova (ramo sito-prova, nascosto in /sito-prova/)
         run: |
@@ -91,6 +93,10 @@ jobs:
           online=$(curl -fsS https://app.felicitasmundi.com/giornale/elenco.json 2>/dev/null | python3 -c "import json,sys;print(json.load(sys.stdin)['impronta'])" 2>/dev/null || echo nessuna)
           echo "articoli: nuova=$nuova online=$online"
           if [ "$nuova" != "$online" ]; then echo "si=1" >> "$GITHUB_OUTPUT"; fi
+          vnuova=$(python3 -c "import json;print(json.load(open('_sito/voci/elenco.json'))['impronta'])" 2>/dev/null || echo nessuna)
+          vonline=$(curl -fsS https://app.felicitasmundi.com/voci/elenco.json 2>/dev/null | python3 -c "import json,sys;print(json.load(sys.stdin)['impronta'])" 2>/dev/null || echo nessuna)
+          echo "voci: nuova=$vnuova online=$vonline"
+          if [ "$vnuova" != "$vonline" ]; then echo "si=1" >> "$GITHUB_OUTPUT"; fi
 
       - uses: actions/upload-pages-artifact@v3
         if: steps.serve.outputs.si == '1'

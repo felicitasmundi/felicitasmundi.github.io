@@ -18,6 +18,9 @@ function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return
 function nuovo(r){return r.ultima&&(Date.now()-new Date(r.ultima).getTime())<7*864e5;}
 function yt(u){var m=/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/.exec(u||"");return m?m[1]:null;}
 
+var fissiP=null;
+window.fmIndirizziFissi=function(){if(!fissiP)fissiP=fetch("/voci/elenco.json",{cache:"no-cache"}).then(function(r){return r.ok?r.json():{};}).catch(function(){return {};});return fissiP;};
+var indirizziFissi=window.fmIndirizziFissi;
 window.libroCervello=function(box,fonte){
   box.classList.add("lc");
   box.innerHTML='<div class="lc-indice"><p class="lc-vuoto">Un momento…</p></div><div class="lc-pagina" hidden></div>';
@@ -110,6 +113,10 @@ window.libroCervello=function(box,fonte){
           '<span class="lc-orn">❦</span>'+(i<l.length-1?'<button data-s="'+(i+1)+'">pagina dopo ›</button>':'<span></span>')+'</nav>';
         pag.querySelector(".lc-torna").onclick=chiudiPagina;
         pag.querySelectorAll("[data-esp]").forEach(function(b){b.onclick=function(){esporta([{id:k.id,capId:capId,titolo:k.titolo,p:p}],b.getAttribute("data-esp"),b);};});
+        /* 28/11 Gab: ogni pagina visibile a tutti ha il suo indirizzo fisso (/voci/…), come un'enciclopedia */
+        indirizziFissi().then(function(m){var u=m.righe&&m.righe[k.id],az=pag.querySelector(".lc-azioni");if(!u||!az||!document.body.contains(az))return;
+          var b=document.createElement("button");b.type="button";b.className="mini";b.textContent="Copia il link";
+          b.onclick=function(){copiaLink("https://app.felicitasmundi.com"+u,b);};az.appendChild(b);});
         /* 9/11 Gab «si»: il tasto «Versioni» anche nelle pagine del libro */
         if(fonte.versioni)fonte.versioni(pag.querySelector(".lc-ver"),k.id,function(){delete cacheCarte[capId];apriPagina(capId,i);});
         pag.querySelectorAll("[data-s]").forEach(function(b){b.onclick=function(){apriPagina(capId,+b.getAttribute("data-s"));};});
@@ -169,6 +176,8 @@ window.libroCervello=function(box,fonte){
     Promise.all(imgs.map(function(im){return im.complete?1:new Promise(function(r){im.onload=im.onerror=r;});})).then(function(){
       var via=function(){document.body.classList.remove("lc-stampa-su");s.remove();window.removeEventListener("afterprint",via);};
       window.addEventListener("afterprint",via);setTimeout(function(){try{window.print();}catch(e){}ok();setTimeout(via,60000);},50);});});}
+  function copiaLink(u,b){var ok=function(){var l=b.textContent;b.textContent="Link copiato";setTimeout(function(){b.textContent=l;},2000);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(ok,function(){prompt("Link",u);});}else{prompt("Link",u);}}
   function chiudiPagina(){pag.hidden=true;ind.hidden=false;window.scrollTo(0,sy);sy=0;}
   return {apriPagina:apriPagina,apriVoce:function(id){var d=box.querySelector('[data-voce="'+id+'"] > .lc-riga');if(d&&d.getAttribute("aria-expanded")!=="true")d.click();}};
 };

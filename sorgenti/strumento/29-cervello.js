@@ -245,9 +245,13 @@ function cercaVai(){
     (r.data||[]).filter(function(x){return !solo||x.sezione===solo;}).forEach(function(x){if(!per[x.voce_id]){per[x.voce_id]={id:x.voce_id,titolo:x.voce,fr:[]};ord.push(per[x.voce_id]);}
       if(x.riga_id&&x.frammento&&per[x.voce_id].fr.length<2)per[x.voce_id].fr.push(x.frammento);});
     if(!ord.length){e.innerHTML='<p class="nota">Nessuna voce trovata.</p>';return;}
-    e.innerHTML=ord.map(function(v){return '<button type="button" class="cc-voce" data-cc-voce="'+esc(v.id)+'"><b>'+esc(v.titolo)+'</b>'+
-      v.fr.map(function(f){return '<span>'+esc(f).replace(/\n+/g," · ")+'</span>';}).join("")+'</button>';}).join("");
+    e.innerHTML=ord.map(function(v){return '<div class="cc-ris"><button type="button" class="cc-voce" data-cc-voce="'+esc(v.id)+'"><b>'+esc(v.titolo)+'</b>'+
+      v.fr.map(function(f){return '<span>'+esc(f).replace(/\n+/g," · ")+'</span>';}).join("")+'</button></div>';}).join("");
     e.querySelectorAll("[data-cc-voce]").forEach(function(b){b.onclick=function(){var v=per[b.getAttribute("data-cc-voce")];leggiCapLivello({id:v.id,titolo:v.titolo});};});
+    /* 28/11 Gab «come la treccani»: il link diretto alla pagina fissa della voce, quando è visibile a tutti */
+    if(window.fmIndirizziFissi)window.fmIndirizziFissi().then(function(m){if(!document.body.contains(e))return;
+      e.querySelectorAll("[data-cc-voce]").forEach(function(b){var u=m.voci&&m.voci[b.getAttribute("data-cc-voce")];if(!u)return;
+        b.insertAdjacentHTML("afterend",'<a class="cc-link" href="'+esc(u)+'" target="_blank" rel="noopener">Link diretto ›</a>');});});
   },function(){if(document.body.contains(e))e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';});
 }
 function legaCerchi(e){e.querySelectorAll("[data-cerchio]").forEach(function(b){b.onclick=function(){cerchio=b.getAttribute("data-cerchio");vai("cerchio");};});}
