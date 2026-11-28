@@ -202,8 +202,12 @@ var cercaStato={el:null,amb:null,cat:null,testo:""};/* elementi nascosti dal 28/
    al posto dei sei ambiti, le voci della parte «Categorie di ricerca» del Cervello (SQL 328, p_categoria) */
 var cercaCat=null;
 function cercaCategorie(){if(cercaCat)return Promise.resolve(cercaCat);if(!db)return Promise.resolve([]);
-  return db.from("cervello_capitoli").select("id,titolo,ordine").eq("sezione","categorie").is("padre_id",null).not("livello","is",null).order("ordine").then(function(q){
-    if(q&&!q.error&&q.data){cercaCat=q.data;return cercaCat;}return [];},function(){return [];});}
+  /* 28/11 12:22, Gab: «così sembra ci siano solo le cose di riti e celebrazioni / manca tutto il lavorato» → Tutto · le parti del Cervello · le categorie */
+  var sez=db.from("cervello_sezioni").select("codice,nome,ordine").order("ordine").then(function(q){return (q&&!q.error&&q.data)||[];},function(){return [];});
+  var cat=db.from("cervello_capitoli").select("id,titolo,ordine").eq("sezione","categorie").is("padre_id",null).not("livello","is",null).order("ordine").then(function(q){return (q&&!q.error&&q.data)||[];},function(){return [];});
+  return Promise.all([sez,cat]).then(function(r){
+    cercaCat=[{k:"",t:"Tutto"}].concat(r[0].filter(function(x){return x.codice!=="categorie";}).map(function(x){return {k:"s:"+x.codice,t:x.nome};}),r[1].map(function(x){return {k:"c:"+x.id,t:x.titolo};}));
+    return cercaCat;});}
 function cercaHTML(){
   function ico(v){var b=document.querySelector('nav [data-v="'+v+'"] .ic');return b?b.innerHTML:"";}
   return '<div class="ce-cerca"><form id="cc-f" role="search"><label for="cc-q" class="cc-lab">Cerca nel Cervello</label>'+
@@ -221,11 +225,11 @@ function cercaLega(){
     cercaStato.el=cercaStato.el===v?null:v;
     $("#cc-el").querySelectorAll("[data-el]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-el")===cercaStato.el));});
     if(cercaStato.testo)cercaVai();};});
-  cercaCategorie().then(function(l){var w=$("#cc-cat");if(!w||!l.length)return;
-    w.innerHTML='<span class="cc-cat-et">Categorie di ricerca</span>'+l.map(function(c){return '<button type="button" class="cc-ch" data-cat="'+esc(c.id)+'" aria-pressed="'+(cercaStato.cat===c.id)+'">'+esc(c.titolo)+'</button>';}).join("");
+  cercaCategorie().then(function(l){var w=$("#cc-cat");if(!w||l.length<2)return;var sel=cercaStato.cat||"";
+    w.innerHTML='<span class="cc-cat-et">Categorie di ricerca</span>'+l.map(function(c){return '<button type="button" class="cc-ch" data-cat="'+esc(c.k)+'" aria-pressed="'+(sel===c.k)+'">'+esc(c.t)+'</button>';}).join("");
     w.hidden=false;
-    w.querySelectorAll("[data-cat]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-cat");cercaStato.cat=cercaStato.cat===v?null:v;
-      w.querySelectorAll("[data-cat]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-cat")===cercaStato.cat));});
+    w.querySelectorAll("[data-cat]").forEach(function(b){b.onclick=function(){cercaStato.cat=b.getAttribute("data-cat")||null;var sel=cercaStato.cat||"";
+      w.querySelectorAll("[data-cat]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-cat")===sel));});
       if(cercaStato.testo)cercaVai();};});});
   if(cercaStato.testo)cercaVai();
 }
@@ -234,11 +238,11 @@ function cercaVai(){
   if(t.length<2){e.innerHTML='<p class="nota">Scrivi almeno due lettere.</p>';return;}
   if(!db){e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';return;}
   e.innerHTML='<p class="nota">Un momento…</p>';
-  db.rpc("fm_cervello_cerca_parole",cercaStato.cat?{p_testo:t,p_elemento:cercaStato.el,p_ambito:null,p_quanti:40,p_categoria:cercaStato.cat}:{p_testo:t,p_elemento:cercaStato.el,p_ambito:null,p_quanti:40}).then(function(r){
+  db.rpc("fm_cervello_cerca_parole",/^c:/.test(cercaStato.cat||"")?{p_testo:t,p_elemento:cercaStato.el,p_ambito:null,p_quanti:40,p_categoria:cercaStato.cat.slice(2)}:{p_testo:t,p_elemento:cercaStato.el,p_ambito:null,p_quanti:/^s:/.test(cercaStato.cat||"")?100:40}).then(function(r){
     if(!document.body.contains(e)||t!==cercaStato.testo)return;
     if(!r||r.error){e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';return;}
-    var ord=[],per={};
-    (r.data||[]).forEach(function(x){if(!per[x.voce_id]){per[x.voce_id]={id:x.voce_id,titolo:x.voce,fr:[]};ord.push(per[x.voce_id]);}
+    var ord=[],per={},solo=/^s:/.test(cercaStato.cat||"")?cercaStato.cat.slice(2):null;
+    (r.data||[]).filter(function(x){return !solo||x.sezione===solo;}).forEach(function(x){if(!per[x.voce_id]){per[x.voce_id]={id:x.voce_id,titolo:x.voce,fr:[]};ord.push(per[x.voce_id]);}
       if(x.riga_id&&x.frammento&&per[x.voce_id].fr.length<2)per[x.voce_id].fr.push(x.frammento);});
     if(!ord.length){e.innerHTML='<p class="nota">Nessuna voce trovata.</p>';return;}
     e.innerHTML=ord.map(function(v){return '<button type="button" class="cc-voce" data-cc-voce="'+esc(v.id)+'"><b>'+esc(v.titolo)+'</b>'+
