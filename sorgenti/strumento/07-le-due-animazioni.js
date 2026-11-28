@@ -237,9 +237,11 @@ function vCoscienza(){
               b.disabled=false;b.insertAdjacentHTML("afterend",'<p class="corr-e">'+esc((r&&!r.error&&r.data)||errore(r&&r.error))+'</p>');},
               function(x){b.disabled=false;alert(errore(x));});};});
         },function(){L.innerHTML='<p class="nota">Le versioni non si leggono adesso.</p>';});};},
-    pagina:function(id){return db.from("cervello_righe").select("testo,file").eq("id",id).maybeSingle().then(function(q){
+    pagina:function(id){return db.from("cervello_righe").select("testo,file,foto").eq("id",id).maybeSingle().then(function(q){
       if(q&&q.error)return db.from("cervello_righe").select("testo").eq("id",id).maybeSingle();return q;}).then(function(q){var d=(q&&q.data)||{};
-      return {testo:d.testo||"",media:/^documenti\/[a-z0-9-]+\.pdf$/.test(d.file||"")?[{tipo:"pdf",url:d.file}]:[],uscite:[]};});}
+      /* 28/11: le foto delle pagine del libro (es. l'Avvento di Roberta) stanno in documenti/, separate da uno spazio */
+      var fo=String(d.foto||"").split(/\s+/).filter(function(u){return /^documenti\/[a-z0-9-]+\.jpg$/.test(u);}).map(function(u){return {tipo:"foto",url:u};});
+      return {testo:d.testo||"",media:fo.concat(/^documenti\/[a-z0-9-]+\.pdf$/.test(d.file||"")?[{tipo:"pdf",url:d.file}]:[]),uscite:[]};});}
   });
   if(typeof cercaLega==="function")cercaLega();
 }

@@ -58,3 +58,31 @@
 .lc-vuota>.lc-riga .lc-tit{color:rgba(245,240,230,.42)}
 .lc-vuota>.lc-riga .lc-el{opacity:.35;box-shadow:none}
 .lc-vuota>.lc-riga .lc-punti{border-bottom-color:rgba(212,175,106,.18)}
+/* 28/11: scarica, stampa, raccolta */
+.lc-gloss li{display:flex;align-items:center;gap:10px}
+.lc-gloss li button{flex:1}
+.lc-sp{position:relative;display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;cursor:pointer}
+.lc-sp input{width:24px;height:24px;accent-color:#D4AF6A;margin:0}
+.lc-sp-n{position:absolute;right:0;top:2px;font-size:13px;color:var(--oro);font-family:var(--tit)}
+.lc-azioni{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0}
+.lc-esp-e{display:block;color:var(--tenue);font-size:17px;margin-top:6px}
+.lc-racc{position:sticky;bottom:calc(var(--nav-h,72px) + 8px);z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 0;padding:10px 14px;background:#1a2148;border:1px solid var(--oro);border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.lc-racc[hidden]{display:none}
+.lc-racc-n{flex:1 1 100%;color:var(--oro);font-family:var(--tit);font-size:18px}
+#lc-stampa{display:none}
+@media print{
+  @page{size:A5;margin:16mm}
+  body.lc-stampa-su>*:not(#lc-stampa){display:none!important}
+  body.lc-stampa-su{background:#fff!important;color:#111!important}
+  body.lc-stampa-su #lc-stampa{display:block;font-family:Georgia,"Times New Roman",serif;font-size:11.5pt;line-height:1.5;color:#111}
+  #lc-stampa .lcs-cop,#lc-stampa .lcs-pag{page-break-after:always;break-after:page}
+  #lc-stampa .lcs-pag:last-child{page-break-after:auto;break-after:auto}
+  #lc-stampa h1{font-size:18pt;line-height:1.2;margin:0 0 12pt;color:#111}
+  #lc-stampa .lcs-cop h1{font-size:22pt;margin-top:40mm}
+  #lc-stampa .lcs-via,#lc-stampa .lcs-et{font-style:italic;color:#7a5f28;font-size:10pt;margin:0 0 4pt}
+  #lc-stampa p{margin:0 0 8pt}
+  #lc-stampa img{display:block;max-width:100%;max-height:120mm;margin:10pt auto;page-break-inside:avoid}
+}
+.lc-racc button,.lc-azioni button{font-family:var(--sans,system-ui)!important;font-size:18px!important;font-style:normal!important;padding:10px 16px!important;min-height:44px;border-radius:12px!important;border:1px solid var(--oro)!important;color:var(--oro)!important;background:transparent!important;cursor:pointer}
+.lc-racc button.oro,.lc-azioni button.oro{background:var(--oro)!important;color:#0a1430!important;font-weight:600}
+.lc-firma{font-style:italic;color:var(--tenue);font-size:18px;margin:8px 0 0}

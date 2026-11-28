@@ -197,30 +197,35 @@ function vCervello(){
    Ricerca per parole nel Cervello (SQL 315, fm_cervello_cerca_parole): ognuno trova solo ciò che può leggere.
    Elementi con i nomi delle stanze (regola 19 ott 16:14) e il simbolo del menu; ambiti = i sei della home. */
 var CERCA_EL=[["terra","obiettivi"],["acqua","emporio"],["fuoco","azione"],["aria","giornale"],["etere","cervello"]];
-var CERCA_AMB=[["rete_territorio","Rete e territorio"],["produzione_lavoro","Produzione e lavoro"],["alimentazione","Alimentazione consapevole"],["comunita","Comunità"],["conoscenza_formazione","Conoscenza e formazione"],["innovazione_cervello","Innovazione e Cervello Digitale Evoluto"]];
-var cercaStato={el:null,amb:null,testo:""};
+var cercaStato={el:null,amb:null,cat:null,testo:""};
+/* 28/11/2026, Gab: «no non credo siano questi gli ambiti … per ora mettiamo la voce categorie di ricerca» →
+   al posto dei sei ambiti, le voci della parte «Categorie di ricerca» del Cervello (SQL 328, p_categoria) */
+var cercaCat=null;
+function cercaCategorie(){if(cercaCat)return Promise.resolve(cercaCat);if(!db)return Promise.resolve([]);
+  return db.from("cervello_capitoli").select("id,titolo,ordine").eq("sezione","categorie").is("padre_id",null).not("livello","is",null).order("ordine").then(function(q){
+    if(q&&!q.error&&q.data){cercaCat=q.data;return cercaCat;}return [];},function(){return [];});}
 function cercaHTML(){
   function ico(v){var b=document.querySelector('nav [data-v="'+v+'"] .ic');return b?b.innerHTML:"";}
   return '<div class="ce-cerca"><form id="cc-f" role="search"><label for="cc-q" class="cc-lab">Cerca nel Cervello</label>'+
     '<div class="cc-riga"><input type="search" id="cc-q" placeholder="Una o più parole" autocomplete="off" value="'+esc(cercaStato.testo)+'"><button class="btn pieno" type="submit">Cerca</button></div></form>'+
     '<div class="cc-filtri" id="cc-el">'+CERCA_EL.map(function(e){var n=(ELEMENTI.filter(function(x){return x[0]===e[0];})[0]||[e[0],e[0]])[1];
       return '<button type="button" class="cc-ch" data-el="'+e[0]+'" aria-pressed="'+(cercaStato.el===e[0])+'"><span class="cc-ic" aria-hidden="true">'+ico(e[1])+'</span>'+esc(n)+'</button>';}).join("")+'</div>'+
-    '<div class="cc-filtri" id="cc-amb"'+(cercaStato.el?'':' hidden')+'>'+CERCA_AMB.map(function(a){
-      return '<button type="button" class="cc-ch" data-amb="'+a[0]+'" aria-pressed="'+(cercaStato.amb===a[0])+'">'+esc(a[1])+'</button>';}).join("")+'</div>'+
+    '<div class="cc-filtri" id="cc-cat" hidden></div>'+
     '<div id="cc-esito" aria-live="polite"></div></div>';
 }
 function cercaLega(){
   var f=$("#cc-f");if(!f)return;
   f.onsubmit=function(e){e.preventDefault();cercaStato.testo=$("#cc-q").value.trim();cercaVai();};
   $("#cc-el").querySelectorAll("[data-el]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-el");
-    cercaStato.el=cercaStato.el===v?null:v;if(!cercaStato.el)cercaStato.amb=null;
+    cercaStato.el=cercaStato.el===v?null:v;
     $("#cc-el").querySelectorAll("[data-el]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-el")===cercaStato.el));});
-    $("#cc-amb").querySelectorAll("[data-amb]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-amb")===cercaStato.amb));});
-    $("#cc-amb").hidden=!cercaStato.el;if(cercaStato.testo)cercaVai();};});
-  $("#cc-amb").querySelectorAll("[data-amb]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-amb");
-    cercaStato.amb=cercaStato.amb===v?null:v;
-    $("#cc-amb").querySelectorAll("[data-amb]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-amb")===cercaStato.amb));});
     if(cercaStato.testo)cercaVai();};});
+  cercaCategorie().then(function(l){var w=$("#cc-cat");if(!w||!l.length)return;
+    w.innerHTML='<span class="cc-cat-et">Categorie di ricerca</span>'+l.map(function(c){return '<button type="button" class="cc-ch" data-cat="'+esc(c.id)+'" aria-pressed="'+(cercaStato.cat===c.id)+'">'+esc(c.titolo)+'</button>';}).join("");
+    w.hidden=false;
+    w.querySelectorAll("[data-cat]").forEach(function(b){b.onclick=function(){var v=b.getAttribute("data-cat");cercaStato.cat=cercaStato.cat===v?null:v;
+      w.querySelectorAll("[data-cat]").forEach(function(x){x.setAttribute("aria-pressed",String(x.getAttribute("data-cat")===cercaStato.cat));});
+      if(cercaStato.testo)cercaVai();};});});
   if(cercaStato.testo)cercaVai();
 }
 function cercaVai(){
@@ -228,7 +233,7 @@ function cercaVai(){
   if(t.length<2){e.innerHTML='<p class="nota">Scrivi almeno due lettere.</p>';return;}
   if(!db){e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';return;}
   e.innerHTML='<p class="nota">Un momento…</p>';
-  db.rpc("fm_cervello_cerca_parole",{p_testo:t,p_elemento:cercaStato.el,p_ambito:cercaStato.amb,p_quanti:40}).then(function(r){
+  db.rpc("fm_cervello_cerca_parole",cercaStato.cat?{p_testo:t,p_elemento:cercaStato.el,p_ambito:null,p_quanti:40,p_categoria:cercaStato.cat}:{p_testo:t,p_elemento:cercaStato.el,p_ambito:null,p_quanti:40}).then(function(r){
     if(!document.body.contains(e)||t!==cercaStato.testo)return;
     if(!r||r.error){e.innerHTML='<p class="nota">La ricerca non risponde adesso.</p>';return;}
     var ord=[],per={};
